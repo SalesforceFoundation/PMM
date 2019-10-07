@@ -1,0 +1,11 @@
+{
+  "orgName": "Program Management Data Model - Dev Org",
+  "edition": "Developer",
+  "settings": {
+    "orgPreferenceSettings": {
+      "s1DesktopEnabled": true
+      , "chatterEnabled": true
+      , "translation": true 
+    }
+  }
+}

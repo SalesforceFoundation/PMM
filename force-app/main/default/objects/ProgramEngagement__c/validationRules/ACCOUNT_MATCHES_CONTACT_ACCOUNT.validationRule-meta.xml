@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ACCOUNT_MATCHES_CONTACT_ACCOUNT</fullName>
+    <active>true</active>
+    <description>Account lookup must match the related Contact&#39;s Account.</description>
+    <errorConditionFormula>Contact__r.AccountId !=  Account__c</errorConditionFormula>
+    <errorMessage>Selected Account does not match the related Contact&#39;s Account</errorMessage>
+</ValidationRule>

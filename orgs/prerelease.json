@@ -1,0 +1,12 @@
+{
+  "orgName": "Program Management Data Model - Prerelease Dev Org",
+  "edition": "Developer",
+  "instance": "cs46",
+  "settings": {
+    "orgPreferenceSettings": {
+      "s1DesktopEnabled": true
+      , "chatterEnabled": true
+      , "translation": true 
+    }
+  }
+}

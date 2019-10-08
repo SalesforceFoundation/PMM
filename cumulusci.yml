@@ -7,6 +7,23 @@ project:
         api_version: '46.0'
     source_format: sfdx
 
+orgs:
+    scratch:
+        dev_namespaced:
+            config_file: orgs/dev.json
+            days: 7
+            namespaced: True
+        prerelease:
+            config_file: orgs/prerelease.json
+            days: 7
+        npsp:
+            config_file: orgs/npsp.json
+            days: 7
+        npsp_namespaced:
+            config_file: orgs/npsp.json
+            days: 7
+            namespaced: True
+
 tasks:
     robot:
         options:
@@ -18,6 +35,25 @@ tasks:
         options:
             path: robot/pmdm/tests
             output: robot/pmdm/doc/pmdm_tests.html
+
+    run_all_local_tests:
+        group: 'Tests'
+        description: 'Runs all local Apex Tests including code coverage'
+        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+        options:
+            command: 'force:apex:test:run --codecoverage --testlevel RunLocalTests --resultformat human'
+
+    dx:
+        group: 'Salesforce DX'
+        description: 'Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option'
+        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+
+    dx_status:
+        group: 'Salesforce DX'
+        description: 'Calls sfdx force:source:status for cci Org User'
+        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+        options:
+            command: 'force:source:status'
 
 flows:
     config_qa:

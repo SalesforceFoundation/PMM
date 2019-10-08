@@ -36,6 +36,25 @@ tasks:
             path: robot/pmdm/tests
             output: robot/pmdm/doc/pmdm_tests.html
 
+    run_all_local_tests:
+        group: 'Tests'
+        description: 'Runs all local Apex Tests including code coverage'
+        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+        options:
+            command: 'force:apex:test:run --codecoverage --testlevel RunLocalTests --resultformat human'
+
+    dx:
+        group: 'Salesforce DX'
+        description: 'Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option'
+        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+
+    dx_status:
+        group: 'Salesforce DX'
+        description: 'Calls sfdx force:source:status for cci Org User'
+        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+        options:
+            command: 'force:source:status'
+
 flows:
     config_qa:
         1.1:

@@ -26,9 +26,9 @@
                 <label>Education</label>
             </value>
             <value>
-                <fullName>Legal,</fullName>
+                <fullName>Legal</fullName>
                 <default>false</default>
-                <label>Legal,</label>
+                <label>Legal</label>
             </value>
             <value>
                 <fullName>Counseling</fullName>
@@ -36,9 +36,9 @@
                 <label>Counseling</label>
             </value>
             <value>
-                <fullName>Food &amp; Nutrition</fullName>
+                <fullName>Food and Nutrition</fullName>
                 <default>false</default>
-                <label>Food &amp; Nutrition</label>
+                <label>Food and Nutrition</label>
             </value>
             <value>
                 <fullName>Advocacy</fullName>

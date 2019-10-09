@@ -3,6 +3,10 @@
     <fullName>ACCOUNT_MATCHES_CONTACT_ACCOUNT</fullName>
     <active>true</active>
     <description>Account lookup must match the related Contact&#39;s Account.</description>
-    <errorConditionFormula>Contact__r.AccountId !=  Account__c</errorConditionFormula>
+    <errorConditionFormula>AND(
+!ISBLANK(Contact__c),
+!ISBLANK(Account__c),
+Contact__r.AccountId !=  Account__c
+)</errorConditionFormula>
     <errorMessage>Selected Account does not match the related Contact&#39;s Account</errorMessage>
 </ValidationRule>

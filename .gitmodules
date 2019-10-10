@@ -1,0 +1,3 @@
+[submodule "CaseMan"]
+	path = CaseMan
+	url = git@github.com:SalesforceFoundation/CaseMan.git

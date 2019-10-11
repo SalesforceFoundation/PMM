@@ -16,7 +16,7 @@
     <referenceTo>Program__c</referenceTo>
     <relationshipLabel>Program Engagements</relationshipLabel>
     <relationshipName>Program_Engagements</relationshipName>
-    <required>false</required>
+    <required>true</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

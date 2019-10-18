@@ -30,6 +30,10 @@
                 <behavior>Required</behavior>
                 <field>Stage__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>ProgramCohort__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

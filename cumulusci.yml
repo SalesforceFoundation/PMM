@@ -55,7 +55,62 @@ tasks:
         options:
             command: 'force:source:status'
 
+    insert_bulk_data:
+        group: "Data: Bulk"
+        description: "Inserts bulk data at sql_path into org.  Implmementations need to specify mappings beyond base mapping."
+        class_path: tasks.BulkData.InsertData
+        options:
+            ignore_row_errors: True
+            sql_path: data/bulk/data.sql
+            pre_mappings: 
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            mapping_directories: 
+                - data/bulk/mapping/packages
+            log_mapping: True
+
+    log_bulk_data_mapping:
+        group: "Data: Bulk"
+        description: "Logs generated mapping"
+        class_path: tasks.BulkData.LogMapping
+        options:
+            pre_mappings: 
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            mapping_directories: 
+                - data/bulk/mapping/packages
+            log_mapping: True
+
 flows:
+    
+    config_unmanaged:
+        steps:
+            200:
+                task: insert_bulk_data
+            301:
+                task: execute_anon
+                options:
+                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+
+    config_unmanaged_namespaced:
+        steps:
+            200:
+                task: insert_bulk_data
+            301:
+                task: execute_anon
+                options:
+                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+
     config_qa:
-        1.1:
+        100:
             task: deploy_qa_config
+        200:
+            flow: config_unmanaged
+
+    config_dev:
+        steps:
+            200:
+                flow: config_unmanaged
+

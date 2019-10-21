@@ -66,7 +66,7 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            mapping_directories: 
+            package_mapping_directories: 
                 - data/bulk/mapping/packages
             log_mapping: True
 
@@ -79,7 +79,7 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            mapping_directories: 
+            package_mapping_directories: 
                 - data/bulk/mapping/packages
             log_mapping: True
 

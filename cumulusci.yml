@@ -83,8 +83,31 @@ tasks:
                 - data/bulk/mapping/packages
             log_mapping: True
 
+    add_caseman_dependency:
+        group: Impact Engineering
+        description: Installs CaseMan with dependencies
+        class_path: cumulusci.tasks.salesforce.UpdateDependencies
+        options:
+            dependencies:
+                - github: "https://github.com/SalesforceFoundation/caseman"
+            include_beta: True
+
 flows:
     
+    caseman_org:
+        steps:
+            100:
+                task: add_caseman_depedency
+            200:
+                flow: dev_org
+
+    caseman_org_namspaced:
+        steps:
+            100:
+                task: add_caseman_depedency
+            200:
+                flow: dev_org
+
     config_unmanaged:
         steps:
             200:
@@ -113,4 +136,20 @@ flows:
         steps:
             200:
                 flow: config_unmanaged
+
+    config_dev_namespaced:
+        steps:
+            200:
+                flow: config_unmanaged_namespaced
+
+    dev_org_namespaced:
+        steps:
+            1:
+                flow: dependencies
+            2:
+                flow: deploy_unmanaged
+            3:
+                flow: config_dev_namespaced
+            4:
+                task: snapshot_changes
 

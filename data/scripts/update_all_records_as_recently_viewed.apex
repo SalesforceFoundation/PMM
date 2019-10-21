@@ -2,7 +2,8 @@
 Set<Schema.SObjectType> sObjectTypes = new Set<Schema.SObjectType> {
     Schema.Account.SObjectType,
     Schema.Contact.SObjectType,
-    Schema.Case.SObjectType
+    Schema.Case.SObjectType,
+    Schema.Opportunity.SObjectType
 };
 
 {

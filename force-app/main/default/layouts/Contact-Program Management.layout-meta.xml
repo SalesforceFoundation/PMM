@@ -161,6 +161,14 @@
     </relatedContent>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>DeliveryDate__c</fields>
+        <fields>Quantity__c</fields>
+        <fields>UnitOfMeasure__c</fields>
+        <fields>HouseholdBenefit__c</fields>
+        <relatedList>ServiceDelivery__c.Contact__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
         <fields>Program__c</fields>
         <fields>Account__c</fields>
         <fields>Role__c</fields>

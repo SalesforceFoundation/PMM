@@ -117,14 +117,14 @@ flows:
     caseman_org:
         steps:
             100:
-                task: add_caseman_depedency
+                task: add_caseman_dependency
             200:
                 flow: dev_org
 
     caseman_org_namspaced:
         steps:
             100:
-                task: add_caseman_depedency
+                task: add_caseman_dependency
             200:
                 flow: dev_org_namespaced
 

@@ -55,34 +55,6 @@ tasks:
         options:
             command: 'force:source:status'
 
-    insert_bulk_data:
-        group: "Data: Bulk"
-        description: "Inserts bulk data at sql_path into org.  Implmementations need to specify mappings beyond base mapping."
-        class_path: tasks.BulkData.InsertData
-        options:
-            ignore_row_errors: True
-            sql_path: data/bulk/data.sql
-            pre_mappings: 
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
-            package_mapping_directories: 
-                - data/bulk/mapping/packages
-            log_mapping: True
-
-    log_bulk_data_mapping:
-        group: "Data: Bulk"
-        description: "Logs generated mapping"
-        class_path: tasks.BulkData.LogMapping
-        options:
-            pre_mappings: 
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
-            package_mapping_directories: 
-                - data/bulk/mapping/packages
-            log_mapping: True
-
     add_caseman_dependency:
         group: Impact Engineering
         description: Installs CaseMan with dependencies
@@ -91,6 +63,54 @@ tasks:
             dependencies:
                 - github: "https://github.com/SalesforceFoundation/caseman"
             include_beta: True
+
+    log_bulk_data_mapping:
+        group: "Data: Bulk"
+        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
+        class_path: tasks.BulkData.LogMapping
+        options:
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+
+    capture_bulk_data:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            log_mapping: True
+
+    insert_bulk_data:
+        group: "Data: Bulk"
+        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
+        class_path: tasks.BulkData.InsertData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            log_mapping: True
 
 flows:
     
@@ -106,7 +126,7 @@ flows:
             100:
                 task: add_caseman_depedency
             200:
-                flow: dev_org
+                flow: dev_org_namespaced
 
     config_unmanaged:
         steps:

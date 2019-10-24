@@ -1,67 +1,62 @@
-import subprocess
-import json
 import os
 from collections import OrderedDict
+from cumulusci.core.config import TaskConfig
 from cumulusci.core.tasks import BaseTask
 from cumulusci.core.utils import process_bool_arg, ordered_yaml_load
 from cumulusci.utils import os_friendly_path
 from cumulusci.tasks.bulkdata import LoadData, ExtractData
+from cumulusci.tasks.salesforce import GetInstalledPackages
 
 class MappingGenerator(BaseTask):
     task_options = {
         "package_mapping_directories": {
-            "description": "List of directory paths containing mapping YAML files for a package, in the form of [namespace].yml, used to automatically add mappings for cci project and installed packages.",
+            "description": "List of directory paths containing package mapping files.  Package mappings have file names are in the form '[namespace].yml' and are used to automatically include mapping configs for the CumulusCI project and installed managed packages in the org with the namespaced injected if applicable.",
             "required": True,
         },
-        "pre_mappings": {
-            "description": "List of (path, namespace) objects of mapping .yml files added before project, install pacakges, and post mappings.  Use to initialize mapping for Bulk Data Task.  Path is required.  Namespace is optional and is injected into the mapping.",
+        "pre_mapping_configs": {
+            "description": "List of mapping config objects added to the combined mapping before project, installed pacakges, and post-mapping configs are added.  Use to initialize combined mapping for Bulk Data Tasks.  Mapping configs are Dicts that (1) contain a required 'path' attribute containing the path to the mapping file and (2) an optional 'namespace' attribute that is injected into the mapping.",
             "required": False,
         },
         "skip_mapping_project": {
-            "description": "If True, skips trying to add namespaced mapping for the project's namespace.  Default: False",
+            "description": "If True, skips adding the project's mapping config.  Default: False",
             "required": False,
             "default": True
         },
-        "skip_mapping_installed_packages": {
-            "description": "If True, skips trying to add namespaced mapping for the org's installed packages.  Default: False",
+        "skip_mapping_installed_managed_packages": {
+            "description": "If True, skips adding mapping configs for the org's installed managed packages.  Default: False",
             "required": False
         },
-        "post_mappings": {
-            "description": "List of (path, namespace) objects of mapping .yml files added after pre, project, and install pacakges mappings.  Use to override mapping before executing BulkLoad Task.  Path is required.  Namespace is optional and is injected into the mapping.",
+        "post_mapping_cnofigs": {
+            "description": "List of mapping config objects added to the combined mapping after adding pre-, project, installed pacakges configs.  Use to override any mappings before creating the combined mapping for Bulk Data Tasks.  Mapping configs are Dicts that (1) contain a required 'path' attribute containing the path to the mapping file and (2) an optional 'namespace' attribute that is injected into the mapping.",
             "required": False,
         },
         "log_mapping": {
-            "description": "If to log mapping after creating file",
+            "description": "If True, logs the combined mapping in the terminal",
             "required": False,
         },
         "mapping_tab_size": {
-            "description": "Tab size to indent file.  Default: 4",
+            "description": "Tab size to indent the combined mapping.  Default: 4",
             "required": False
         }
     }
 
-    mapping_message_format = "        {} with namespace '{}'"
-    none_message           = "        --None--"
-    skipped_message        = "        Skipped!"
-
     def get_project_namespace(self):
-        return self.project_config.config["project"]["package"]["namespace"]
+        return self.project_config.project__package__namespace
 
-    def get_is_namespaced(self):
+    def is_project_namespaced(self):
         return self.org_config and process_bool_arg(self.org_config.config.get("namespaced"))
 
     def get_installed_package_namespaces(self):
+        self.log_title("Get Installed Packages")
+        installed_packages = GetInstalledPackages(self.project_config, TaskConfig({}), self.org_config)()
+
+        self.log_title("Installed Packages")
         namespaces = []
-        
-        command = "sfdx force:package:installed:list -u {} --json".format(self.org_config.config.get("username"))
-        packages_response = json.loads(subprocess.check_output(command, shell=True))
-
-        if packages_response.get("result"):
-            for package in packages_response.get("result"):
-                namespace = package.get("SubscriberPackageNamespace")
-                if (namespace):
-                    namespaces.append(namespace)
-
+        for package in installed_packages.items():
+            namespace = package[0]
+            self.logger.info("    {}".format(namespace))
+            namespaces.append(namespace)
+            
         return namespaces
 
     def log_title(self, title):
@@ -70,15 +65,14 @@ class MappingGenerator(BaseTask):
             self.logger.info(title)
             self.logger.info("-" * len(title))
 
-    def get_available_namespace_mappings(self):
-        self.log_title("Namespaced mappings in package_mapping_directories")
-        
-        available_mappings = OrderedDict()
+    def get_available_package_mappings(self):
+        self.log_title("Package mapping configs")
+        available_mappings = OrderedDict() 
         for directory in self.options["package_mapping_directories"]:
             root = os_friendly_path(directory)
-            self.logger.info(root)
             items = os.listdir(root)
             items.sort()
+            self.logger.info("    {}".format(root))
             for item in items:
                 path = os.path.join(root, item)
                 if os.path.isfile(os.path.join(root, item)) and item.endswith(".yml"):
@@ -87,7 +81,7 @@ class MappingGenerator(BaseTask):
                     mapping["path"] = path
                     mapping["namespace"] = namespace
                     available_mappings[namespace] = mapping
-                    self.logger.info("    {}".format(namespace))
+                    self.logger.info("        {}".format(namespace))
         
         return available_mappings
 
@@ -100,66 +94,130 @@ class MappingGenerator(BaseTask):
             
         self.logger.info("")
 
-    def log_mapping(self, mapping):
-        if mapping:
-            self.logger.info(self.mapping_message_format.format(
-                mapping.get("path"),
-                "" if not mapping.get("namespace") else mapping.get("namespace"),
-            ))
-
-    def add_mappings(self, combined_mappings, option, title):
-        self.logger.info("    {}".format(title))
-        mappings = self.options.get(option)
-        if mappings and 0 < len(mappings):
-            for mapping in mappings:
-                combined_mappings.append(mapping)
-                self.log_mapping(mapping)
-        else:
-            self.logger.info(self.none_message)
+    def get_mapping_configs_from_option(self, option):
+        option_mapping_configs = []
+        mapping_configs = self.options.get(option)
+        if mapping_configs and 0 < len(mapping_configs):
+            for mapping_config in mapping_configs:
+                option_mapping_configs.append(mapping_config)
+        return option_mapping_configs
 
     def get_combined_mapping(self):
-        available_namespace_mappings = self.get_available_namespace_mappings()
-        combined_mappings = []
+        available_package_mappings = self.get_available_package_mappings()
 
-        self.log_title("Combining mappings")
+        mapping_configs_by_step = OrderedDict()
+        max_path_length = len("PATH")
+        max_namespace_length = len("NAMESPACE")
 
-        # Pre mappings
-        self.add_mappings(combined_mappings, "pre_mappings", "Pre:")
+        # Pre mapping configs
+        mapping_configs_by_step["Pre"] = self.get_mapping_configs_from_option("pre_mapping_configs")
+        for mapping_config in mapping_configs_by_step["Pre"]:
+            max_path_length = max(max_path_length, len(mapping_config.get("path")))
+            max_namespace_length = max(max_namespace_length, len(Util.get_namespace(mapping_config)))
 
-        # Add project's mapping
-        self.logger.info("    Project:")
+        # Project mapping config
+        mapping_configs_by_step["Project"] = []
         if not process_bool_arg(self.options.get("skip_mapping_project")):
             project_namespace = self.get_project_namespace()
-            project_mapping = available_namespace_mappings.get(project_namespace)
-            if project_mapping:
-                if not self.get_is_namespaced():
-                    project_mapping["namespace"] = ""
-                self.log_mapping(project_mapping)
-                combined_mappings.append(project_mapping)
-            else:
-                self.logger.info(self.none_message)
-        else:
-            self.logger.info(self.skipped_message)
+            project_mapping_config = available_package_mappings.get(project_namespace)
+            if project_mapping_config:
+                if not self.is_project_namespaced():
+                    project_mapping_config["namespace"] = ""
+                mapping_configs_by_step["Project"].append(project_mapping_config)
+                max_path_length = max(max_path_length, len(project_mapping_config.get("path")))
+                max_namespace_length = max(max_namespace_length, len(Util.get_namespace(project_mapping_config)))
         
-        # Add installed packages' mappings
-        self.logger.info("    Installed package mappings:")
-        if not process_bool_arg(self.options.get("skip_mapping_installed_packages")):
-            added_installed_package_mapping = False
+        # Installed managed package mapping configs
+        mapping_configs_by_step["Managed packages"] = []
+        if not process_bool_arg(self.options.get("skip_mapping_installed_managed_packages")):
             for namespace in self.get_installed_package_namespaces():
-                if available_namespace_mappings.get(namespace):
-                    combined_mappings.append(available_namespace_mappings.get(namespace))
-                    self.log_mapping(available_namespace_mappings.get(namespace))
-                    added_installed_package_mapping = True
-            if not added_installed_package_mapping:
-                self.logger.info(self.none_message)
-        else:
-            self.logger.info(self.skipped_message)
+                if available_package_mappings.get(namespace):
+                    mapping_config = available_package_mappings.get(namespace)
+                    mapping_configs_by_step["Managed packages"].append(mapping_config)
+                    max_path_length = max(max_path_length, len(mapping_config.get("path")))
+                    max_namespace_length = max(max_namespace_length, len(Util.get_namespace(mapping_config)))
 
-        # Post mappings
-        self.add_mappings(combined_mappings, "post_mappings", "Post:")
+        # Post mapping configs
+        mapping_configs_by_step["Post"] = self.get_mapping_configs_from_option("post_mapping_configs")
+        for mapping_config in mapping_configs_by_step["Post"]:
+            max_path_length = max(max_path_length, len(mapping_config.get("path")))
+            max_namespace_length = max(max_namespace_length, len(Util.get_namespace(mapping_config)))
+
+        # Log mapping configs
+        max_step_length = len("STEP")
+        for step in mapping_configs_by_step.keys():
+            max_step_length = max(max_step_length, len(step))
+        
+        self.log_title("Mapping configs")
+        self.logger.info("┌─{}─┬─{}─┬─{}─┐".format(
+            "─" * max_step_length,
+            "─" * max_path_length,
+            "─" * max_namespace_length,
+        ))
+        self.logger.info("│ STEP{} │ PATH{} | NAMESPACE{} │".format(
+            " " * (max_step_length - len("STEP")),
+            " " * (max_path_length - len("PATH")),
+            " " * (max_namespace_length - len("NAMESPACE")),
+        ))
+        line_break = "├─{}─┼─{}─┼─{}─┤".format(
+            "─" * max_step_length,
+            "─" * max_path_length,
+            "─" * max_namespace_length,
+        )
+        step_line_break = "│ {} ├─{}─┼─{}─┤".format(
+            " " * max_step_length,
+            "─" * max_path_length,
+            "─" * max_namespace_length,
+        )
+
+        all_mapping_configs = []
+
+        for step, mapping_configs in mapping_configs_by_step.items():
+            if mapping_configs:
+                all_mapping_configs.extend(mapping_configs)
+                is_first = True
+                for mapping_config in mapping_configs:
+                    path = mapping_config.get("path")
+                    namespace = Util.get_namespace(mapping_config)
+                    self.logger.info(line_break if is_first else step_line_break)
+                    self.logger.info("│ {} │ {} │ {} │".format(
+                        "{}{}".format(
+                            step,
+                            " " * (max_step_length - len(step)),
+                        ) if is_first else " " * max_step_length,
+                        "{}{}".format(
+                            path,
+                            " " * (max_path_length - len(path)),
+                        ),
+                        "{}{}".format(
+                            namespace,
+                            " " * (max_namespace_length - len(namespace)),
+                        ),
+                    ))
+                    is_first = False
+            else:
+                self.logger.info(line_break)
+                self.logger.info("│ {} │ {} │ {} │".format(
+                    "{}{}".format(
+                        step,
+                        " " * (max_step_length - len(step)),
+                    ),
+                    "{}{}".format(
+                        "SKIPPED",
+                        " " * (max_path_length - len("SKIPPED")),
+                    ),
+                    " " * max_namespace_length,
+                ))
+
+
+        self.logger.info("└─{}─┴─{}─┴─{}─┘".format(
+            "─" * max_step_length,
+            "─" * max_path_length,
+            "─" * max_namespace_length,
+        ))
 
         # Combine mappings
-        mapping = Util.get_combined_mapping(combined_mappings)
+        mapping = Util.get_combined_mapping(all_mapping_configs)
 
         if process_bool_arg(self.options.get("log_mapping")):
             self.log_title("Combined mapping")
@@ -169,6 +227,13 @@ class MappingGenerator(BaseTask):
 
 class LogMapping(MappingGenerator):
     
+    task_options = {
+        **MappingGenerator.task_options,
+        "log_mapping": {
+            "description": "Logs the combined mapping in the terminal.  Always True.",
+        },
+    }
+
     def _run_task(self):
         self.options["log_mapping"] = True
         self.get_combined_mapping()
@@ -179,35 +244,7 @@ class CreateMapping(MappingGenerator):
             "description": "Path to save combined mapping",
             "required": True,
         },
-        "package_mapping_directories": {
-            "description": "List of directory paths containing mapping YAML files for a package, in the form of [namespace].yml, used to automatically add mappings for cci project and installed packages.",
-            "required": True,
-        },
-        "pre_mappings": {
-            "description": "List of (path, namespace) objects of mapping .yml files added before project, install pacakges, and post mappings.  Use to initialize mapping for Bulk Data Task.  Path is required.  Namespace is optional and is injected into the mapping.",
-            "required": False,
-        },
-        "skip_mapping_project": {
-            "description": "If True, skips trying to add namespaced mapping for the project's namespace.  Default: False",
-            "required": False,
-            "default": True
-        },
-        "skip_mapping_installed_packages": {
-            "description": "If True, skips trying to add namespaced mapping for the org's installed packages.  Default: False",
-            "required": False
-        },
-        "post_mappings": {
-            "description": "List of (path, namespace) objects of mapping .yml files added after pre, project, and install pacakges mappings.  Use to override mapping before executing BulkLoad Task.  Path is required.  Namespace is optional and is injected into the mapping.",
-            "required": False,
-        },
-        "log_mapping": {
-            "description": "If to log mapping after creating file",
-            "required": False,
-        },
-        "mapping_tab_size": {
-            "description": "Tab size to indent file.  Default: 4",
-            "required": False
-        }
+        **MappingGenerator.task_options,
     }
 
     def _run_task(self):
@@ -227,41 +264,13 @@ class InsertData(LoadData, MappingGenerator):
             "description": "If set, an SQL script will be generated at the path provided "
             + "This is useful for keeping data in the repository and allowing diffs."
         },
-        "package_mapping_directories": {
-            "description": "List of directory paths containing mapping YAML files for a package, in the form of [namespace].yml, used to automatically add mappings for cci project and installed packages.",
-            "required": True,
-        },
-        "pre_mappings": {
-            "description": "List of (path, namespace) objects of mapping .yml files added before project, install pacakges, and post mappings.  Use to initialize mapping for Bulk Data Task.  Path is required.  Namespace is optional and is injected into the mapping.",
-            "required": False,
-        },
-        "skip_mapping_project": {
-            "description": "If True, skips trying to add namespaced mapping for the project's namespace.  Default: False",
-            "required": False,
-            "default": True
-        },
-        "skip_mapping_installed_packages": {
-            "description": "If True, skips trying to add namespaced mapping for the org's installed packages.  Default: False",
-            "required": False
-        },
-        "post_mappings": {
-            "description": "List of (path, namespace) objects of mapping .yml files added after pre, project, and install pacakges mappings.  Use to override mapping before executing BulkLoad Task.  Path is required.  Namespace is optional and is injected into the mapping.",
-            "required": False,
-        },
-        "log_mapping": {
-            "description": "If to log mapping after creating file",
-            "required": False,
-        },
-        "mapping_tab_size": {
-            "description": "Tab size to indent file.  Default: 4",
-            "required": False
-        }
+        **MappingGenerator.task_options,
     }
 
     def _init_mapping(self):
         self.mapping = self.get_combined_mapping()
 
-class WriteData(ExtractData, MappingGenerator):
+class CaptureData(ExtractData, MappingGenerator):
 
     task_options = {
         "database_url": {
@@ -275,41 +284,17 @@ class WriteData(ExtractData, MappingGenerator):
             "description": "If specified, skip steps before this one in the mapping",
             "required": False,
         },
-        "package_mapping_directories": {
-            "description": "List of directory paths containing mapping YAML files for a package, in the form of [namespace].yml, used to automatically add mappings for cci project and installed packages.",
-            "required": True,
-        },
-        "pre_mappings": {
-            "description": "List of (path, namespace) objects of mapping .yml files added before project, install pacakges, and post mappings.  Use to initialize mapping for Bulk Data Task.  Path is required.  Namespace is optional and is injected into the mapping.",
-            "required": False,
-        },
-        "skip_mapping_project": {
-            "description": "If True, skips trying to add namespaced mapping for the project's namespace.  Default: False",
-            "required": False,
-            "default": True
-        },
-        "skip_mapping_installed_packages": {
-            "description": "If True, skips trying to add namespaced mapping for the org's installed packages.  Default: False",
-            "required": False
-        },
-        "post_mappings": {
-            "description": "List of (path, namespace) objects of mapping .yml files added after pre, project, and install pacakges mappings.  Use to override mapping before executing BulkLoad Task.  Path is required.  Namespace is optional and is injected into the mapping.",
-            "required": False,
-        },
-        "log_mapping": {
-            "description": "If to log mapping after creating file",
-            "required": False,
-        },
-        "mapping_tab_size": {
-            "description": "Tab size to indent file.  Default: 4",
-            "required": False
-        }
+        **MappingGenerator.task_options,
     }
 
     def _init_mapping(self):
         self.mappings = self.get_combined_mapping()
 
 class Util:
+
+    @staticmethod
+    def get_namespace(mapping_config):
+        return "" if not mapping_config.get("namespace") else mapping_config.get("namespace")
 
     @staticmethod
     def get_api_name(namespace, api_name):
@@ -377,16 +362,16 @@ class Util:
                         mapping[step_name][step_config] = step[step_config]
 
     @staticmethod
-    def get_combined_mapping(mappings):
+    def get_combined_mapping(mapping_configs):
         combined_mapping = OrderedDict()
         
-        if mappings:
-            for mapping in mappings:
-                if "path" in mapping:
+        if mapping_configs:
+            for mapping_config in mapping_configs:
+                if "path" in mapping_config:
                     Util.combine_mapping(
                         combined_mapping,
-                        mapping["path"],
-                        mapping.get("namespace")
+                        mapping_config["path"],
+                        mapping_config.get("namespace")
                     )
 
         Util.add_sf_id(combined_mapping)

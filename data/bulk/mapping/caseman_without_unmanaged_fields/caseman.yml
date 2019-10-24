@@ -47,7 +47,6 @@ Contacts:
         AgeCategory__c: AgeCategory__c
         ClientID__c: ClientID__c
         EmergencyContactRole__c: EmergencyContactRole__c
-        Gender__c: Gender__c
         PhotoFileID__c: PhotoFileID__c
         PreferredCommunicationMethod__c: PreferredCommunicationMethod__c
         LegalName__c: LegalName__c

@@ -103,7 +103,7 @@ tasks:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
             package_mapping_directories:
-                - data/bulk/mapping/caseman
+                - data/bulk/mapping/caseman_without_unmanaged_fields
                 - data/bulk/mapping/npsp
                 - data/bulk/mapping/pmdm
             pre_mapping_configs:

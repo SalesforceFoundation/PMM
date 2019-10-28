@@ -1,30 +1,28 @@
 
-Set<Schema.SObjectType> sObjectTypes = new Set<Schema.SObjectType> {
-    Schema.Account.SObjectType,
-    Schema.Contact.SObjectType,
-    Schema.Case.SObjectType,
-    Schema.Opportunity.SObjectType
+Set<String> sObjectNames = new Set<String> {
+    Schema.SObjectType.Account.getName(),
+    Schema.SObjectType.Contact.getName(),
+    Schema.SObjectType.Case.getName(),
+    Schema.SObjectType.Opportunity.getName()
 };
 
-{
-    final Map<String, SObjectType> sObjectTypesByName = Schema.getGlobalDescribe();
-
-    for (Schema.DescribeTabSetResult tabSet : Schema.describeTabs()) {
-        for (Schema.DescribeTabResult tab : tabSet.getTabs()) {
-            if (tab.isCustom()) {
-                sObjectTypes.add(sObjectTypesByName.get(tab.getSObjectName()));
-            }
-        }
+for (TabDefinition tab : [
+    SELECT SObjectName
+    FROM TabDefinition
+    WHERE IsCustom = true
+]) {
+    if (tab.SObjectName.endsWith('__c')) {
+        sObjectNames.add(tab.SObjectName);
     }
 }
 
 // Add the Schema.DescribeSObjectResult for each tab in Case Management App
-for (Schema.SObjectType sObjectType : sObjectTypes) {
+for (String sObjectName : sObjectNames) {
     try {
         Database.query(String.format(
             'SELECT Id FROM {0} FOR VIEW',
             new List<String> {
-                sObjectType.getDescribe().getName()
+                sObjectName
             }
         ));
     } catch (Exception e) {

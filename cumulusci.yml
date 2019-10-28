@@ -136,6 +136,8 @@ flows:
                 task: add_caseman_dependency
             200:
                 flow: dev_org_namespaced
+            300:
+                task: upload_client_photos
 
     config_unmanaged:
         steps:

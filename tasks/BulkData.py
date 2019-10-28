@@ -1,13 +1,13 @@
 import os
-from collections import OrderedDict
-from tasks.TableLogger import TableLogger
+from tasks.logger import TableLogger
+from tasks.namespaces import NamespaceInfo
 from cumulusci.core.config import TaskConfig
 from cumulusci.core.utils import process_bool_arg, ordered_yaml_load
 from cumulusci.utils import os_friendly_path
 from cumulusci.tasks.bulkdata import LoadData, ExtractData
 from cumulusci.tasks.salesforce import GetInstalledPackages
 
-class MappingGenerator(TableLogger):
+class MappingGenerator(NamespaceInfo):
     task_options = {
         "package_mapping_directories": {
             "description": "List of directory paths containing package mapping files.  Package mappings have file names are in the form '[namespace].yml' and are used to automatically include mapping configs for the CumulusCI project and installed managed packages in the org with the namespaced injected if applicable.",
@@ -36,45 +36,7 @@ class MappingGenerator(TableLogger):
         },
     }
 
-    def get_project_namespace(self):
-        return self.project_config.project__package__namespace
-
-    def is_project_namespaced(self):
-        return self.org_config and process_bool_arg(self.org_config.config.get("namespaced"))
-
-    def get_project_namespace_to_inject(self):
-        return "" if not self.is_project_namespaced() else self.get_project_namespace()
-
-    def get_installed_package_namespaces(self):
-        self.log_title("Get Installed Packages")
-        installed_packages = GetInstalledPackages(self.project_config, TaskConfig({}), self.org_config)()
-
-        rows = [
-            [
-                "INSTALLED PACKAGES"
-            ]
-        ]
-        namespaces = []
-        for package in installed_packages.items():
-            namespace = package[0]
-            rows.append([
-                namespace
-            ])
-            namespaces.append(namespace)
-
-        self.log_table(rows)
-
-        return namespaces
-
-    def log_title(self, title):
-        if title:
-            self.logger.info("")
-            self.logger.info(title)
-            self.logger.info("─" * len(title))
-
     def get_available_package_mappings(self):
-        self.log_title("Package mapping configs")
-
         rows = [
             [
                 "PATH",
@@ -82,7 +44,7 @@ class MappingGenerator(TableLogger):
             ]
         ]
 
-        available_mappings = OrderedDict() 
+        available_mappings = {} 
         for directory in self.options["package_mapping_directories"]:
             root = os_friendly_path(directory)
             items = os.listdir(root)
@@ -92,9 +54,10 @@ class MappingGenerator(TableLogger):
                 path = os.path.join(root, item)
                 if os.path.isfile(os.path.join(root, item)) and item.endswith(".yml"):
                     namespace = item[:-4]
-                    mapping = OrderedDict()
-                    mapping["path"] = path
-                    mapping["namespace"] = namespace
+                    mapping = {
+                        "path": path,
+                        "namespace": namespace,
+                    }
                     available_mappings[namespace] = mapping
                     rows.append([
                         root if is_first else "",
@@ -124,20 +87,25 @@ class MappingGenerator(TableLogger):
                 ):
                     self.logger.info(row)
             elif log_option == "table":
-                self.log_table(Util.print_mapping_as_table(mapping), groupByBlankColumns=True)
+                self.log_table(
+                    Util.print_mapping_as_table(mapping), 
+                    groupByBlankColumns=True,
+                )
 
     def get_mapping_configs_from_option(self, option):
         mapping_configs = self.options.get(option, []).copy()
         if mapping_configs:
             for mapping_config in mapping_configs:
                 if process_bool_arg(mapping_config.get("inject_project_namespace")):
-                    mapping_config["namespace"] = self.get_project_namespace_to_inject()
+                    mapping_config["namespace"] = self.get_local_project_namespace()
         return mapping_configs
 
     def get_combined_mapping(self):
+        self.options["log_installed_packages"] = True
+
         available_package_mappings = self.get_available_package_mappings()
 
-        mapping_configs_by_step = OrderedDict()
+        mapping_configs_by_step = {}
 
         # Pre mapping configs
         mapping_configs_by_step["Pre"] = self.get_mapping_configs_from_option("pre_mapping_configs")
@@ -148,7 +116,7 @@ class MappingGenerator(TableLogger):
             project_namespace = self.get_project_namespace()
             project_mapping_config = available_package_mappings.get(project_namespace)
             if project_mapping_config:
-                project_mapping_config["namespace"] = self.get_project_namespace_to_inject()
+                project_mapping_config["namespace"] = self.get_local_project_namespace()
                 mapping_configs_by_step["Project"].append(project_mapping_config)
         
         # Installed managed package mapping configs
@@ -199,7 +167,7 @@ class MappingGenerator(TableLogger):
         mapping = Util.get_combined_mapping(all_mapping_configs)
 
         self.log_combined_mapping(mapping)
-        
+
         return mapping
 
 class LogMapping(MappingGenerator):
@@ -369,12 +337,12 @@ class Util:
         if new_mapping:
             for step_name, step in new_mapping.items():
                 if step_name not in mapping:
-                    mapping[step_name] = OrderedDict()
+                    mapping[step_name] = {}
 
                 for step_config in step.keys():
                     if step_config == "fields" or step_config == "lookups":
                         if step_config not in mapping[step_name]:
-                            mapping[step_name][step_config] = OrderedDict()
+                            mapping[step_name][step_config] = {}
                         for api_name, value in step[step_config].items():
                             mapping[step_name][step_config][Util.get_api_name(new_mapping_namespace, api_name)] = value
                     elif step_config == "sf_object" and step["sf_object"] and step["sf_object"].endswith("__c"):
@@ -384,7 +352,7 @@ class Util:
 
     @staticmethod
     def get_combined_mapping(mapping_configs):
-        combined_mapping = OrderedDict()
+        combined_mapping = {}
         
         if mapping_configs:
             for mapping_config in mapping_configs:

@@ -36,6 +36,26 @@ tasks:
             path: robot/pmdm/tests
             output: robot/pmdm/doc/pmdm_tests.html
 
+    update_admin_profile:
+        options:
+            package_xml: lib/admin_profile.xml
+
+    update_admin_profile_npsp:
+        class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
+        options:
+            package_xml: lib/npsp_admin_profile.xml
+            record_types:
+                - record_type: Account.HH_Account
+                - record_type: Account.Organization
+                  default: true
+                  person_account_default: true
+                - record_type: Opportunity.Donation
+                  default: true
+                - record_type: Campaign.Default
+                  default: true
+                - record_type: Case.None
+                  default: true
+
     run_all_local_tests:
         group: 'Tests'
         description: 'Runs all local Apex Tests including code coverage'
@@ -170,6 +190,10 @@ flows:
 
     config_dev_namespaced:
         steps:
+            100:
+                task: deploy_post
+            110:
+                task: update_admin_profile
             200:
                 flow: config_unmanaged_namespaced
 

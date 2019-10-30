@@ -10,15 +10,21 @@ class UploadClientPhotos(NamespaceInfo, BaseSalesforceApiTask):
             "description": "Path to the root directory of ContentVersions to upload",
             "required": True,
         },
-        "namespace_prefix": {
+        "namespace": {
             "description": "Namespace prefix to use with Contact.PhotoFileID__c if the namespace is used.  Default: 'caseman'"
         }
     }
 
     def _run_task(self):
-        namespace_prefix = self.options.get("namespace_prefix") or "caseman"
-        managed = self.is_namespace_used(namespace_prefix)
-        namespace = "{}__".format(namespace_prefix)
+        namespace = self.options.get("namespace") or "caseman"
+
+        # Skip uploading client photos if namespace is not used
+        if not self.is_namespace_used(namespace):
+            self.logger.info("Skipping uploading client photos.  Only uploads client photos is the project's package's namespace equals '{}' or '{}' is the namespace of an installed package".format(namespace, namespace))
+            return
+
+        managed = self.is_namespace_used_locally(namespace)
+        namespace_prefix = "{}__".format(namespace)
 
         # Iterate over our ContentVersion directory
         # It will contain subdirectories whose names are 068 Ids (ContentVersions)
@@ -90,7 +96,7 @@ class UploadClientPhotos(NamespaceInfo, BaseSalesforceApiTask):
             document_ids[content_version["Id"]] = content_version["ContentDocumentId"]
 
         # Now, query Contacts and update their PhotoFileID__c fields.
-        field_name = "{}PhotoFileID__c".format(namespace if managed else "")
+        field_name = "{}PhotoFileID__c".format(namespace_prefix if managed else "")
         
         contacts_updated_rows = []
         for old_id in created_versions:

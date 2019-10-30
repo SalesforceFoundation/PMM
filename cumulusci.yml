@@ -25,6 +25,12 @@ orgs:
             namespaced: True
 
 tasks:
+
+    namespace_execute_anonymous:
+        description: Execute anonymous apex via the tooling api if namespace is used.
+        class_path: tasks.namespaces.ExecuteAnonymousTask
+        group: Salesforce
+
     robot:
         options:
             suites: robot/pmdm/tests
@@ -39,6 +45,17 @@ tasks:
     update_admin_profile:
         options:
             package_xml: lib/admin_profile.xml
+
+    update_admin_profile_caseman:
+        class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
+        options:
+            package_xml: lib/admin_profile.xml
+            record_types:
+                - record_type: Account.caseman__Branch
+                  default: True
+                - record_type: Case.caseman__ClientCase
+                  default: True
+                - record_type: Case.caseman__Incident
 
     update_admin_profile_npsp:
         class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
@@ -97,7 +114,7 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-
+            log_mapping: table
     capture_bulk_data:
         group: "Data: Bulk"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
@@ -113,7 +130,7 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            log_mapping: True
+            log_mapping: table
 
     insert_bulk_data:
         group: "Data: Bulk"
@@ -130,7 +147,7 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            log_mapping: True
+            log_mapping: table
 
     upload_client_photos:
         group: "Data: Bulk: CaseMan"
@@ -141,41 +158,75 @@ tasks:
 
 flows:
     
+    log:
+        steps:
+            1:
+                task: log_bulk_data_mapping
+            2:
+                task: upload_client_photos
+
+    insert_data:
+        steps:
+            100:
+                flow: insert_bulk_data
+            999:
+                task: execute_anon
+                options:
+                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+
+    insert_caseman_data:
+        steps:
+            100:
+                task: upload_client_photos
+
+    insert_npsp_data:
+        steps:
+            100:
+                task: namespace_execute_anonymous
+                options:
+                    path: "data/scripts/npsp/de-duplicate_npsp_relationships.apex"
+                    namespace: npsp
+
+    insert_bulk_data:
+        steps:
+            100:
+                task: insert_bulk_data
+            200:
+                flow: insert_caseman_data
+            210:
+                flow: insert_npsp_data
+
     caseman_org:
         steps:
             100:
                 task: add_caseman_dependency
+            110:
+                task: update_admin_profile_caseman
             200:
                 flow: dev_org
-            300:
-                task: upload_client_photos
 
-    caseman_org_namspaced:
+    caseman_org_namespaced:
         steps:
             100:
                 task: add_caseman_dependency
+            110:
+                task: update_admin_profile_caseman
             200:
                 flow: dev_org_namespaced
-            300:
-                task: upload_client_photos
 
     config_unmanaged:
         steps:
+            100:
+                task: update_admin_profile
             200:
-                task: insert_bulk_data
-            301:
-                task: execute_anon
-                options:
-                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+                flow: insert_data
 
     config_unmanaged_namespaced:
         steps:
+            100:
+                task: update_admin_profile
             200:
-                task: insert_bulk_data
-            301:
-                task: execute_anon
-                options:
-                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+                flow: insert_data
 
     config_qa:
         100:

@@ -2,6 +2,7 @@ from tasks.logger import TableLogger
 from cumulusci.core.config import TaskConfig
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.tasks.salesforce import GetInstalledPackages
+from cumulusci.tasks.apex.anon import AnonymousApexTask
 
 class NamespaceInfo(TableLogger):
     installed_package_versions = None
@@ -58,8 +59,79 @@ class NamespaceInfo(TableLogger):
     def is_package_installed(self, namespace):
         return namespace in self.get_installed_package_namespaces()
 
+    def is_project_namespace(self, namespace):
+        return self.get_project_namespace() == namespace
+
     def is_namespace_used(self, namespace):
+        return self.is_project_namespace(namespace) or self.is_package_installed(namespace)
+
+    def is_namespace_used_locally(self, namespace):
         if self.get_project_namespace() == namespace:
             return self.is_org_namespaced()
         else:
             return self.is_package_installed(namespace)
+
+class ExecuteAnonymousTask(AnonymousApexTask, NamespaceInfo):
+
+    task_docs = """
+    Use the `apex` option to run a string of anonymous Apex.
+    Use the `path` option to run anonymous Apex from a file.
+    Or use both to concatenate the string to the file contents.
+    """
+
+    task_options = {
+        "path": {"description": "The path to an Apex file to run.", "required": False},
+        "apex": {
+            "description": "A string of Apex to run (after the file, if specified).",
+            "required": False,
+        },
+        "namespace": {
+            "description": (
+                "If the namespace is used in the org (as the project's package's namespace or as an installed package, the tokens %%%NAMESPACED_RT%%% and %%%namespaced%%% will get replaced with the namespace prefix for Record Types.   Automatically detects if the namespace is the project's package's namespace and whether or not the org is namespaced."
+            ),
+            "required": True,
+        },
+    }
+
+    def _run_task(self):
+        if not self.is_namespace_used(self.options.get("namespace")):
+            self.log_table([
+                [
+                    "ACTION",
+                    "MESSAGE",
+                    "NAMESPACE",
+                ],
+                [
+                    "💤  Skipping",
+                    "Namespace is not used in this org.",
+                    self.options.get("namespace")
+                ]
+            ])
+            return
+
+        AnonymousApexTask._run_task(self)
+
+    def _prepare_apex(self, apex):
+        # Process namespace tokens
+        namespace = self.options.get("namespace")
+        is_namespaced = self.is_namespace_used_locally(namespace)
+        
+        namespace_prefix = "" if not is_namespaced else "{}__".format(namespace)
+        record_type_prefix = "" if not is_namespaced else "{}.".format(namespace)
+
+        apex = apex.replace("%%%NAMESPACE%%%", namespace_prefix)
+        apex = apex.replace("%%%NAMESPACED_ORG%%%", namespace_prefix)
+        apex = apex.replace("%%%NAMESPACED_RT%%%", record_type_prefix)
+
+        self.log_table([
+            [
+                "TOKEN",
+                "REPLACEMENT"
+            ],
+            ["%%%NAMESPACE%%%", namespace_prefix],
+            ["%%%NAMESPACED_ORG%%%", namespace_prefix],
+            ["%%%NAMESPACED_RT%%%", record_type_prefix],
+        ])
+
+        return apex
+

@@ -1,12 +1,9 @@
 import os
-from tasks.logger import TableLogger
 from tasks.namespaces import NamespaceInfo
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
-from cumulusci.core.config import TaskConfig
 from cumulusci.core.utils import process_bool_arg, ordered_yaml_load
 from cumulusci.utils import os_friendly_path
 from cumulusci.tasks.bulkdata import LoadData, ExtractData
-from cumulusci.tasks.salesforce import GetInstalledPackages
 
 class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {

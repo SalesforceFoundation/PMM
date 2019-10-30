@@ -1,13 +1,14 @@
 import os
 from tasks.logger import TableLogger
 from tasks.namespaces import NamespaceInfo
+from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 from cumulusci.core.config import TaskConfig
 from cumulusci.core.utils import process_bool_arg, ordered_yaml_load
 from cumulusci.utils import os_friendly_path
 from cumulusci.tasks.bulkdata import LoadData, ExtractData
 from cumulusci.tasks.salesforce import GetInstalledPackages
 
-class MappingGenerator(NamespaceInfo):
+class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {
         "package_mapping_directories": {
             "description": "List of directory paths containing package mapping files.  Package mappings have file names are in the form '[namespace].yml' and are used to automatically include mapping configs for the CumulusCI project and installed managed packages in the org with the namespaced injected if applicable.",
@@ -100,6 +101,59 @@ class MappingGenerator(NamespaceInfo):
                     mapping_config["namespace"] = self.get_local_project_namespace()
         return mapping_configs
 
+    def keep_existing_record_types(self, mapping):
+        # Collect sobject_type and developer_name of Record Types used in mapping.
+        sobject_types = []
+        developer_names = []
+        
+        for step_name, step in mapping.items():
+            record_type = step.get("record_type")
+            sf_object = step.get("sf_object")
+            if record_type:
+                sobject_types.append(sf_object)
+                developer_names.append(record_type)
+
+        # Query org for Record Types that exist.  Sometimes a mapping says to use a Record Type that isn't installed with a dependency.
+        query = "SELECT SobjectType, DeveloperName FROM RecordType WHERE SObjectType IN ({}) and DeveloperName IN ({})".format(
+            "'" + "','".join(sobject_types) + "'",
+            "'" + "','".join(developer_names) + "'",
+        )
+
+        developer_names_by_object = {}
+        for record in self.sf.query_all(query).get("records"):
+            sobject_type = record.get("SobjectType")
+            developer_name = record.get("DeveloperName")
+
+            developer_names = developer_names_by_object.get(sobject_type) or {}
+            developer_names[developer_name] = None
+            developer_names_by_object[sobject_type] = developer_names
+
+        rows = [
+            [
+                "STEP",
+                "OBJECT",
+                "RECORD TYPE",
+                "EXISTS"
+            ]
+        ]
+
+        # Delete step's "record_type" key if values doesn't exist in developer_names_by_object.
+        for step_name, step in mapping.items():
+            developer_name = step.get("record_type")
+            sobject_type = step.get("sf_object")
+            if developer_name:
+                if not (developer_names_by_object.get(sobject_type) and developer_name in developer_names_by_object[sobject_type]):
+                    del step["record_type"]
+                rows.append([
+                    step_name,
+                    sobject_type,
+                    developer_name,
+                    "✅" if step.get("record_type") else "❌"
+                ])
+
+        self.log_title("Removing Record Types from mapping that don't exist in org")
+        self.log_table(rows)
+
     def get_combined_mapping(self):
         self.options["log_installed_packages"] = True
 
@@ -160,11 +214,13 @@ class MappingGenerator(NamespaceInfo):
                     ""
                 ])
 
-        #self.log_table(rows, groupByFirstColumnIfBlank=True)
+        # self.log_table(rows, groupByFirstColumnIfBlank=True)
         self.log_table(rows, groupByBlankColumns=True)
 
         # Combine mappings
         mapping = Util.get_combined_mapping(all_mapping_configs)
+
+        self.keep_existing_record_types(mapping)
 
         self.log_combined_mapping(mapping)
 

@@ -113,6 +113,9 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
                 sobject_types.append(sf_object)
                 developer_names.append(record_type)
 
+        if not sobject_types:
+            return
+
         # Query org for Record Types that exist.  Sometimes a mapping says to use a Record Type that isn't installed with a dependency.
         query = "SELECT SobjectType, DeveloperName FROM RecordType WHERE SObjectType IN ({}) and DeveloperName IN ({})".format(
             "'" + "','".join(sobject_types) + "'",

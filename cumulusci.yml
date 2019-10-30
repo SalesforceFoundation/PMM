@@ -115,6 +115,7 @@ tasks:
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
             log_mapping: table
+
     capture_bulk_data:
         group: "Data: Bulk"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
@@ -147,7 +148,6 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            log_mapping: table
 
     upload_client_photos:
         group: "Data: Bulk: CaseMan"

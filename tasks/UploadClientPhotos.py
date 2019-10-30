@@ -1,27 +1,24 @@
 import base64
 import os
 import re
+from tasks.namespaces import NamespaceInfo
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 
-
-class UploadClientPhotos(BaseSalesforceApiTask):
+class UploadClientPhotos(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {
         "directory_path": {
             "description": "Path to the root directory of ContentVersions to upload",
             "required": True,
         },
-        "managed": {
-            "description": (
-                "If True, will use the project's namespace prefix.  "
-                "Defaults to False or no namespace."
-            ),
-            "required": False,
-        },
+        "namespace_prefix": {
+            "description": "Namespace prefix to use with Contact.PhotoFileID__c if the namespace is used.  Default: 'caseman'"
+        }
     }
 
     def _run_task(self):
-        managed = self.options.get("managed") or False
-        namespace = self.project_config.project__package__namespace + "__"
+        namespace_prefix = self.options.get("namespace_prefix") or "caseman"
+        managed = self.is_namespace_used(namespace_prefix)
+        namespace = "{}__".format(namespace_prefix)
 
         # Iterate over our ContentVersion directory
         # It will contain subdirectories whose names are 068 Ids (ContentVersions)
@@ -38,6 +35,13 @@ class UploadClientPhotos(BaseSalesforceApiTask):
         created_versions = {}
         document_ids = {}
 
+        content_version_rows = [
+            [
+                "FILE",
+                "ORIGINAL ID",
+                "ERROR"
+            ]
+        ]
         for path, names, files in os.walk(top_dir):
             if (
                 path != top_dir
@@ -46,12 +50,18 @@ class UploadClientPhotos(BaseSalesforceApiTask):
             ):
                 # We're walking a subdirectory with a ContentVersion Id name
                 # and exactly one file inside.
+                
                 with open(os.path.join(path, files[0]), "rb") as version_data:
-                    self.logger.info(
-                        "Uploading ContentVersion for file {} (original Id {})".format(
-                            files[0], os.path.split(path)[-1]
-                        )
-                    )
+                    row = [
+                        files[0],
+                        os.path.split(path)[-1]
+                    ]
+                    content_version_rows.append(row)
+                    #self.logger.info(
+                        #"Uploading ContentVersion for file {} (original Id {})".format(
+                            #files[0], os.path.split(path)[-1]
+                        #)
+                    #)
                     result = self.sf.ContentVersion.create(
                         {
                             "PathOnClient": files[0],
@@ -62,13 +72,16 @@ class UploadClientPhotos(BaseSalesforceApiTask):
                         }
                     )
                     if not result["success"]:
-                        self.logger.error(
-                            "Failed to create ContentVersion: {}".format(
-                                result["errors"]
-                            )
-                        )
+                        row.append(result["errors"])
+                        #self.logger.error(
+                            #"Failed to create ContentVersion: {}".format(
+                                #result["errors"]
+                            #)
+                        #)
 
                     created_versions[os.path.split(path)[-1]] = result["id"]
+        self.log_title("Uploading ContentVerions")
+        self.log_table(content_version_rows)
 
         # Query the ContentDocumentIds for our created records.
         for content_version in self.sf.query(
@@ -78,6 +91,8 @@ class UploadClientPhotos(BaseSalesforceApiTask):
 
         # Now, query Contacts and update their PhotoFileID__c fields.
         field_name = "{}PhotoFileID__c".format(namespace if managed else "")
+        
+        contacts_updated_rows = []
         for old_id in created_versions:
             contacts = self.sf.query(
                 "SELECT Id, Name FROM Contact WHERE {} = '{}'".format(
@@ -85,19 +100,25 @@ class UploadClientPhotos(BaseSalesforceApiTask):
                 )
             )["records"]
             for contact in contacts:
-                self.logger.info(
-                    "Updating Photo File Id for {} to {}".format(
-                        contact["Name"], created_versions[old_id]
-                    )
-                )
+                row = [
+                    contact["Name"],
+                    created_versions[old_id]
+                ]
+                contacts_updated_rows.append(row)
+                #self.logger.info(
+                    #"Updating Photo File Id for {} to {}".format(
+                        #contact["Name"], created_versions[old_id]
+                    #)
+                #)
                 self.sf.Contact.update(
                     contact["Id"], {field_name: created_versions[old_id]}
                 )
 
                 # Add a ContentDocumentLink to share the file to the Contact's record page
-                self.logger.info(
-                    "Creating ContentDocumentLink to share file to Contact"
-                )
+                #self.logger.info(
+                    #"Creating ContentDocumentLink to share file to Contact"
+                #)
+                row.append("✅")
                 self.sf.ContentDocumentLink.create(
                     {
                         "LinkedEntityId": contact["Id"],
@@ -106,3 +127,12 @@ class UploadClientPhotos(BaseSalesforceApiTask):
                         "Visibility": "AllUsers",
                     }
                 )
+        if contacts_updated_rows:
+            self.log_title("Updated Contacts")
+            self.log_table([
+                [
+                    "CONTACT",
+                    field_name,
+                    "CREATED ContentDocumentLink"
+                ]
+            ] + contacts_updated_rows)

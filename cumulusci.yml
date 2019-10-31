@@ -90,8 +90,6 @@ tasks:
                   default: true
                 - record_type: Campaign.Default
                   default: true
-                - record_type: Case.None
-                  default: true
     
     update_admin_profile_caseman_npsp:
         class_path: cumulusci.tasks.salesforce.UpdateAdminProfile

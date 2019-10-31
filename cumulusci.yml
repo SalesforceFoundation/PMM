@@ -55,7 +55,27 @@ tasks:
         options:
             command: 'force:source:status'
 
+    deploy_dev_config:
+        group: 'pmdm: Config'
+        description: Deploys the post-install configuration for an unmanaged DE org
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/dev
+            namespace_inject: $project_config.project__package__namespace
+
 flows:
     config_qa:
         1.1:
             task: deploy_qa_config
+
+    config_dev:
+        steps:
+            3:
+                flow: config_unmanaged
+                
+    config_unmanaged:
+        steps:
+            100:
+                task: deploy_dev_config
+                options:
+                    unmanaged: True

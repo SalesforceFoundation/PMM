@@ -92,6 +92,25 @@ tasks:
                   default: true
                 - record_type: Case.None
                   default: true
+    
+    update_admin_profile_caseman_npsp:
+        class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
+        options:
+            package_xml: lib/npsp_admin_profile.xml
+            record_types:
+                - record_type: Account.HH_Account
+                - record_type: Account.Organization
+                  default: true
+                  person_account_default: true
+                - record_type: Account.caseman__Branch
+                - record_type: Opportunity.Donation
+                  default: true
+                - record_type: Campaign.Default
+                  default: true
+                - record_type: Case.caseman__ClientCase
+                  default: True
+                - record_type: Case.caseman__Incident
+                - record_type: Case.None
 
     run_all_local_tests:
         group: 'Tests'
@@ -228,12 +247,25 @@ flows:
             220:
                 flow: caseman_post_insert_bulk_data
 
+    update_admin_profile:
+        steps:
+            10:
+                task: update_admin_profile_caseman
+                when: "'npsp' not in org_config.namespaces and 'caseman' in org_config.namespaces"
+            20: 
+                task: update_admin_profile_npsp
+                when: "'npsp' in org_config.namespaces and 'caseman' not in org_config.namespaces"
+            30: 
+                task: update_admin_profile_caseman_npsp
+                when: "'npsp' in org_config.namespaces and 'caseman' in org_config.namespaces"
+            40: 
+                task: update_admin_profile
+                when: "'npsp' not in org_config.namespaces and 'caseman' not in org_config.namespaces"
+
     caseman_org:
         steps:
             100:
                 task: add_caseman_dependency
-            110:
-                task: update_admin_profile_caseman
             200:
                 flow: dev_org
 
@@ -241,22 +273,20 @@ flows:
         steps:
             100:
                 task: add_caseman_dependency
-            110:
-                task: update_admin_profile_caseman
             200:
                 flow: dev_org_namespaced
 
     config_unmanaged:
-        steps:
+        steps:           
             100:
-                task: update_admin_profile
+                flow: update_admin_profile
             200:
                 flow: insert_data
 
     config_unmanaged_namespaced:
         steps:
             100:
-                task: update_admin_profile
+                flow: update_admin_profile
             200:
                 flow: insert_data
 

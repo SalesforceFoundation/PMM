@@ -249,6 +249,8 @@ flows:
 
     update_admin_profile:
         steps:
+            01:
+                task: cache_namespaces_in_org_config
             10:
                 task: update_admin_profile_caseman
                 when: "'npsp' not in org_config.namespaces and 'caseman' in org_config.namespaces"

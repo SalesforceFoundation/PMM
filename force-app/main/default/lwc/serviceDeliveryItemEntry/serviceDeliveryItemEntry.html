@@ -1,0 +1,73 @@
+<template>
+    <lightning-record-edit-form
+        object-api-name={serviceDeliveryObject.objectApiName}
+        onsuccess={handleSuccess}
+        onsubmit={handleSubmit}
+        record-id={recordId}
+    >
+        <lightning-messages> </lightning-messages>
+
+        <lightning-layout multiple-rows="false" vertical-align="stretch">
+            <lightning-layout-item size="3" class="slds-p-around_x-small">
+                <lightning-input-field
+                    field-name={contactField.fieldApiName}
+                    variant="label-hidden"
+                ></lightning-input-field>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="3" class="slds-p-around_x-small">
+                <lightning-input-field
+                    field-name={serviceField.fieldApiName}
+                    onchange={handleInputChange}
+                    variant="label-hidden"
+                ></lightning-input-field>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="2" class="slds-p-around_x-small">
+                <lightning-input-field
+                    field-name={quantityField.fieldApiName}
+                    onchange={handleInputChange}
+                    variant="label-hidden"
+                ></lightning-input-field>
+            </lightning-layout-item>
+            <!-- TODO: make this accessibly labelled by the unit -->
+
+            <lightning-layout-item size="2" class="slds-p-around_x-small">
+                <div class="slds-p-top_x-small" id="unit">
+                    <lightning-output-field
+                        field-name={unitField.fieldApiName}
+                        onchange={handleInputChange}
+                        variant="label-hidden"
+                    ></lightning-output-field>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="2" class="slds-p-around_x-small">
+                <lightning-input-field
+                    field-name={dateField.fieldApiName}
+                    onchange={handleInputChange}
+                    variant="label-hidden"
+                ></lightning-input-field>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <div class="button-block slds-hide">
+            <lightning-button
+                class="item-submit"
+                variant="neutral"
+                type="submit"
+                name="save"
+                label="Save"
+            >
+            </lightning-button>
+        </div>
+
+        <template if:true={isSaving}>
+            <div class="button-block slds-m-right_large">
+                {saveMessage}
+            </div>
+        </template>
+    </lightning-record-edit-form>
+
+    <!-- TODO: create a form-on-top-push-to-table-below version -->
+</template>

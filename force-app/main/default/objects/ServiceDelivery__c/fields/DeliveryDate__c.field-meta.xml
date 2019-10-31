@@ -5,5 +5,5 @@
     <label>Delivery Date</label>
     <required>false</required>
     <trackTrending>false</trackTrending>
-    <type>DateTime</type>
+    <type>Date</type>
 </CustomField>

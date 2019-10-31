@@ -1,0 +1,52 @@
+<template>
+    <lightning-card>
+        <div>
+            <lightning-layout multiple-rows="false" class="slds-text-heading_label">
+                <lightning-layout-item
+                    size="3"
+                    padding="horizontal-small"
+                    id="contactLabel"
+                >
+                    Contact
+                </lightning-layout-item>
+                <lightning-layout-item
+                    size="3"
+                    padding="horizontal-small"
+                    id="serviceLabel"
+                >
+                    Service
+                </lightning-layout-item>
+                <lightning-layout-item
+                    size="2"
+                    padding="horizontal-small"
+                    id="quantityLabel"
+                >
+                    Quantity
+                </lightning-layout-item>
+                <lightning-layout-item size="2" padding="horizontal-small" id="unitLabel">
+                    Unit
+                </lightning-layout-item>
+                <lightning-layout-item size="2" padding="horizontal-small" id="dateLabel">
+                    Delivery Date
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <template for:each={serviceDeliveries} for:item="serviceDelivery">
+                <c-service-delivery-item-entry
+                    service-delivery={serviceDelivery}
+                    key={serviceDelivery.Id}
+                >
+                </c-service-delivery-item-entry>
+            </template>
+
+            <div class="slds-p-around_small">
+                <lightning-button
+                    variant="Neutral"
+                    onclick={createNewServiceDelivery}
+                    label="New Service Delivery"
+                    icon-name="utility:add"
+                ></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

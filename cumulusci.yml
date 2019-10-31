@@ -1,61 +1,70 @@
-minimum_cumulusci_version: '2.5.9'
+minimum_cumulusci_version: "2.5.9"
 project:
-    name: pmdm
-    package:
-        name:  Program Management Data Model
-        namespace: pmdm0
-        api_version: '46.0'
-    source_format: sfdx
+  name: pmdm
+  package:
+    name: Program Management Data Model
+    namespace: pmdm0
+    api_version: "46.0"
+  source_format: sfdx
 
 orgs:
-    scratch:
-        dev_namespaced:
-            config_file: orgs/dev.json
-            days: 7
-            namespaced: True
-        prerelease:
-            config_file: orgs/prerelease.json
-            days: 7
-        npsp:
-            config_file: orgs/npsp.json
-            days: 7
-        npsp_namespaced:
-            config_file: orgs/npsp.json
-            days: 7
-            namespaced: True
+  scratch:
+    dev_namespaced:
+      config_file: orgs/dev.json
+      days: 7
+      namespaced: True
+    prerelease:
+      config_file: orgs/prerelease.json
+      days: 7
+    npsp:
+      config_file: orgs/npsp.json
+      days: 7
+    npsp_namespaced:
+      config_file: orgs/npsp.json
+      days: 7
+      namespaced: True
 
 tasks:
-    robot:
-        options:
-            suites: robot/pmdm/tests
-            options:
-                outputdir: robot/pmdm/results
+  robot:
+    options:
+      suites: robot/pmdm/tests
+      options:
+        outputdir: robot/pmdm/results
 
-    robot_testdoc:
-        options:
-            path: robot/pmdm/tests
-            output: robot/pmdm/doc/pmdm_tests.html
+  robot_testdoc:
+    options:
+      path: robot/pmdm/tests
+      output: robot/pmdm/doc/pmdm_tests.html
 
-    run_all_local_tests:
-        group: 'Tests'
-        description: 'Runs all local Apex Tests including code coverage'
-        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
-        options:
-            command: 'force:apex:test:run --codecoverage --testlevel RunLocalTests --resultformat human'
+  run_all_local_tests:
+    group: "Tests"
+    description: "Runs all local Apex Tests including code coverage"
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: "force:apex:test:run --codecoverage --testlevel RunLocalTests --resultformat human"
 
-    dx:
-        group: 'Salesforce DX'
-        description: 'Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option'
-        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+  dx:
+    group: "Salesforce DX"
+    description: "Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option"
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
 
-    dx_status:
-        group: 'Salesforce DX'
-        description: 'Calls sfdx force:source:status for cci Org User'
-        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
-        options:
-            command: 'force:source:status'
+  dx_status:
+    group: "Salesforce DX"
+    description: "Calls sfdx force:source:status for cci Org User"
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: "force:source:status"
+
+  activate_flows:
+    description: This task activates all the process builder processes in the org
+    class_path: tasks.ActivateProcessBuilders.activateProcessBuilderProcesses
 
 flows:
-    config_qa:
-        1.1:
-            task: deploy_qa_config
+  dev_org:
+    steps:
+      4:
+        task: activate_flows
+
+  config_qa:
+    1.1:
+      task: deploy_qa_config

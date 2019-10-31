@@ -1,7 +1,6 @@
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
-import json
 
-class activateProcessBuilderProcesses(BaseSalesforceApiTask):
+class ActivateProcessBuilderProcesses(BaseSalesforceApiTask):
     def _run_task(self):
         res = self.tooling.query("SELECT Id,ActiveVersion.VersionNumber,LatestVersion.VersionNumber,DeveloperName FROM FlowDefinition") 
 

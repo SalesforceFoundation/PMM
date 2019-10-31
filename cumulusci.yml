@@ -66,5 +66,11 @@ flows:
         task: activate_flows
 
   config_qa:
-    1.1:
-      task: deploy_qa_config
+    steps:
+      3:
+        task: activate_flows
+
+  config_dev:
+    steps:
+      3:
+        task: activate_flows

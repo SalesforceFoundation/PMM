@@ -305,8 +305,6 @@ flows:
         steps:
             100:
                 task: deploy_post
-            110:
-                task: update_admin_profile
             200:
                 flow: config_unmanaged_namespaced
 

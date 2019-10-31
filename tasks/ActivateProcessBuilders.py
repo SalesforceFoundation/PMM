@@ -19,14 +19,3 @@ class activateProcessBuilderProcesses(BaseSalesforceApiTask):
                 urlpath, 
                 json = data
             )
-
-            #print(allflows["LatestVersion"]["VersionNumber"])
-            #try:
-            #response = self.sf.restful(
-                #path, 
-                #method="PATCH",
-                #json=data
-            #)
-            #self.logger.info()
-            #except:       
-                #print('Error')

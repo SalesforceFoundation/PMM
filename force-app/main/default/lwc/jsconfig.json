@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "c/bulkServiceDeliveryUI": [
+                "bulkServiceDeliveryUI/bulkServiceDeliveryUI.js"
+            ],
+            "c/serviceDeliveryRow": [
+                "serviceDeliveryRow/serviceDeliveryRow.js"
+            ],
+            "c/util": [
+                "util/util.js"
+            ]
+        },
+        "experimentalDecorators": true
+    },
+    "include": [
+        "**/*",
+        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+    ],
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    }
+}

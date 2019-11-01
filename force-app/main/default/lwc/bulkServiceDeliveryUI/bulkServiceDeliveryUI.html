@@ -1,0 +1,19 @@
+<template>
+    <lightning-card>
+        <div class="slds-p-around_medium">
+            <div class="slds-p-horizontal_small slds-text-heading_large">Manage Service Deliveries</div>
+            <template if:true={serviceDeliveries}>
+                <template for:each={serviceDeliveries} for:item="delivery">
+                    <div key={delivery.Id}>
+                        {delivery.sdid}
+                        <c-service-delivery-row index={delivery.sdid} ondelete={handleDelete}></c-service-delivery-row>
+                    </div>
+                </template>
+            </template>
+
+            <div class="slds-border_top slds-m-top_large slds-p-top_large">
+                <lightning-button label="Add Service Delivery" onclick={addDelivery}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

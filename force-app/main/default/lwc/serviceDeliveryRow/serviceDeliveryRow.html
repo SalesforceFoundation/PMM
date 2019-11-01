@@ -1,0 +1,38 @@
+<template>
+    <div class="style-target"></div>
+    <div class="slds-p-vertical_small">
+        <lightning-record-edit-form
+            onsuccess={handleSuccess}
+            onsubmit={handleSubmit}
+            onerror={handleError}
+            record-id={recordId}
+            object-api-name={serviceDeliveryObject}>
+
+            <lightning-layout class="slds-grid_vertical-align-end">
+                <!--FIELDSETS-->
+                <template for:each={fieldSet} for:item="field">
+                    <lightning-layout-item key={field.apiName}
+                                        flexibility="auto"
+                                        padding="horizontal-small">
+                        <div class="sd-input">
+                            <div class="slds-form-element__label">{field.label}</div>
+                            <lightning-input-field field-name={field.apiName} variant="label-hidden" onchange={handleInputChange}></lightning-input-field>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+                <lightning-layout-item
+                flexibility="auto, no-grow"
+                alignment-bump="left">
+                    <lightning-button-icon
+                            icon-name="utility:delete"
+                            alternative-text="delete"
+                            class="slds-m-left_x-small"
+                            onclick={handleDelete}>
+                    </lightning-button-icon>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-button class="sd-submit slds-hide" variant="neutral" type="submit" name="save">
+            </lightning-button>
+        </lightning-record-edit-form>
+    </div>
+</template>

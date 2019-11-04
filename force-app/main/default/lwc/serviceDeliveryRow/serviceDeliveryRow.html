@@ -7,9 +7,7 @@
             onerror={handleError}
             record-id={recordId}
             object-api-name={serviceDeliveryObject}>
-
             <lightning-layout class="slds-grid_vertical-align-end">
-                <!--FIELDSETS-->
                 <template for:each={fieldSet} for:item="field">
                     <lightning-layout-item key={field.apiName}
                                         flexibility="auto"
@@ -25,9 +23,9 @@
                 alignment-bump="left">
                     <lightning-button-icon
                             icon-name="utility:delete"
-                            alternative-text="delete"
+                            alternative-text={labels.deleteLabel}
                             class="slds-m-left_x-small"
-                            onclick={handleDelete}>
+                            onclick={handleShowModal}>
                     </lightning-button-icon>
                 </lightning-layout-item>
             </lightning-layout>
@@ -35,4 +33,19 @@
             </lightning-button>
         </lightning-record-edit-form>
     </div>
+    <c-modal header={labels.confirmDelete}>{labels.confirmDeleteMessage}
+        <div slot="footer">
+            <lightning-button
+                label={labels.cancel}
+                variant="neutral"
+                onclick={handleCloseModal}
+            ></lightning-button>
+            <lightning-button
+                label={labels.deleteLabel}
+                variant="brand"
+                onclick={handleDelete}
+                class="slds-p-left_medium"
+            ></lightning-button>
+        </div>
+    </c-modal>
 </template>

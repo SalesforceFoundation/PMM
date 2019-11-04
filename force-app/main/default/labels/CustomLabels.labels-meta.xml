@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Add_Service_Delivery</fullName>
+        <categories>Service Delivery</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Service Delivery</shortDescription>
+        <value>Add Service Delivery</value>
+    </labels>
+    <labels>
+        <fullName>Service_Deliveries</fullName>
+        <categories>Service Delivery</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service Deliveries</shortDescription>
+        <value>Service Deliveries</value>
+    </labels>
+    <labels>
+        <fullName>Delete</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete</shortDescription>
+        <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>Cancel</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Cancel</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>Confirm_Delete</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Confirm Delete</shortDescription>
+        <value>Confirm Delete</value>
+    </labels>
+    <labels>
+        <fullName>Confirm_Delete_Row</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Are you sure you want to delete this row?</shortDescription>
+        <value>Are you sure you want to delete this row?</value>
+    </labels>
+</CustomLabels>

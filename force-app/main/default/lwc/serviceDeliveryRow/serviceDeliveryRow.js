@@ -1,6 +1,12 @@
 import { LightningElement, track, wire, api } from 'lwc';
 import { showToast, handleError, debouncify } from 'c/util';
 import { deleteRecord } from 'lightning/uiRecordApi';
+
+import deleteLabel from "@salesforce/label/c.Delete";
+import cancel from "@salesforce/label/c.Cancel";
+import confirmDelete from "@salesforce/label/c.Confirm_Delete";
+import confirmDeleteMessage from "@salesforce/label/c.Confirm_Delete_Row";
+
 import SERVICEDEVLIERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import UNITMEASURE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasure__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
@@ -20,6 +26,12 @@ export default class ServiceDeliveryRow extends LightningElement {
         unitMeasureField : UNITMEASURE_FIELD,
         quantity : QUANTITY_FIELD
     }
+    labels = {
+        cancel,
+        confirmDelete,
+        confirmDeleteMessage,
+        deleteLabel
+    }
 
     @wire(getFieldSet)
     wiredFields({error, data}) {
@@ -37,24 +49,20 @@ export default class ServiceDeliveryRow extends LightningElement {
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY)
 
     autoSave() {
-        //To get all the data we need for save, we need to simulate clicking the submit button
         let deliverySubmit = this.template.querySelector('.sd-submit');
         if(deliverySubmit) {
             deliverySubmit.click();
         }
     }
     handleError(event) {
+        //TODO : handleError;
         console.log('Error', JSON.parse(JSON.stringify(event.detail)));
     }
     handleSuccess(event) {
-        console.log('Success');
         this.recordId = event.detail.id;
         showToast('Success', 'Success', 'success');
     }
-    handleSubmit(event) {
-        console.log('Handle Submit');
-        console.log(JSON.parse(JSON.stringify(event.detail)));
-    
+    handleSubmit(event) {    
         let fields = event.detail.fields;
 
         if(this.recordId) {
@@ -80,7 +88,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-        //Temporary CSS Overrides.
+    //Temporary CSS Overrides.
     //TODO : Update when shadow-dom styling options are available.
     renderedCallback() {
         if (this.hasRendered) return;
@@ -92,5 +100,15 @@ export default class ServiceDeliveryRow extends LightningElement {
             }
         `;
         this.template.querySelector('div.style-target').appendChild(style);
+    }
+
+    handleShowModal() {
+        const modal = this.template.querySelector('c-modal');
+        modal.show();
+    }
+
+    handleCloseModal() {
+        const modal = this.template.querySelector('c-modal');
+        modal.hide();
     }
 }

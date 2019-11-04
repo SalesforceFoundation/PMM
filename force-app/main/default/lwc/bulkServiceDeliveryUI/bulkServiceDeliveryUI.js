@@ -19,5 +19,8 @@ export default class BulkServiceDeliveryUI extends LightningElement {
         this.serviceDeliveries = this.serviceDeliveries.filter(function( obj ) {
             return obj.index !== event.detail;
         });
+        if(this.serviceDeliveries.length <= 0) {
+            this.addDelivery();
+        }
     }
 }

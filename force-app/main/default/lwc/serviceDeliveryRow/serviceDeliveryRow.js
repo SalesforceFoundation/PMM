@@ -6,6 +6,8 @@ import deleteLabel from "@salesforce/label/c.Delete";
 import cancel from "@salesforce/label/c.Cancel";
 import confirmDelete from "@salesforce/label/c.Confirm_Delete";
 import confirmDeleteMessage from "@salesforce/label/c.Confirm_Delete_Row";
+import success from "@salesforce/label/c.Success";
+import recordSaved from "@salesforce/label/c.Record_Saved";
 
 import SERVICEDEVLIERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import UNITMEASURE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasure__c";
@@ -30,7 +32,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         cancel,
         confirmDelete,
         confirmDeleteMessage,
-        deleteLabel
+        deleteLabel,
+        recordSaved,
+        success
     }
 
     @wire(getFieldSet)
@@ -40,6 +44,10 @@ export default class ServiceDeliveryRow extends LightningElement {
         } else if (error) {
             handleError(error);
         }
+    }
+
+    connectedCallback() {
+        console.log('fields', this.fields);
     }
 
     handleInputChange() {
@@ -60,7 +68,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
     handleSuccess(event) {
         this.recordId = event.detail.id;
-        showToast('Success', 'Success', 'success');
+        showToast(this.labels.success, this.labels.recordSaved, 'success');
     }
     handleSubmit(event) {    
         let fields = event.detail.fields;

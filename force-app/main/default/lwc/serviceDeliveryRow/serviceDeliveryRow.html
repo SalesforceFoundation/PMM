@@ -10,20 +10,15 @@
             <lightning-layout class="slds-grid_vertical-align-end">
                 <template for:each={fieldSet} for:item="field">
                     <lightning-layout-item key={field.apiName}
-                                        flexibility="auto"
+                                        size={field.size}
                                         padding="horizontal-small">
-                        <div class="sd-input">
-                            <div class="slds-form-element__label">{field.label}</div>
-                            <lightning-input-field field-name={field.apiName} variant="label-hidden" onchange={handleInputChange}></lightning-input-field>
+                        <div class="sd-input" data-field={field.apiName}>
+                            <lightning-input-field data-name={field.apiName} field-name={field.apiName} variant="label-hidden" onchange={handleInputChange}></lightning-input-field>
                         </div>
                     </lightning-layout-item>
                 </template>
-                <lightning-layout-item flexibility="auto, no-grow">
-                    <lightning-output-field field-name={fields.unitMeasureField.fieldApiName}></lightning-output-field>
-                </lightning-layout-item>
                 <lightning-layout-item
-                flexibility="auto, no-grow"
-                alignment-bump="left">
+                flexibility="auto, no-grow">
                     <lightning-button-icon
                             icon-name="utility:delete"
                             alternative-text={labels.deleteLabel}
@@ -32,7 +27,7 @@
                     </lightning-button-icon>
                 </lightning-layout-item>
             </lightning-layout>
-            <lightning-button class="sd-submit slds-hide" variant="neutral" type="submit" name="save">
+            <lightning-button class="slds-p-left_medium sd-submit slds-hide" variant="neutral" type="submit" name="save">
             </lightning-button>
         </lightning-record-edit-form>
     </div>

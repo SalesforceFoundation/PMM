@@ -7,25 +7,24 @@ import cancel from "@salesforce/label/c.Cancel";
 import confirmDelete from "@salesforce/label/c.Confirm_Delete";
 import confirmDeleteMessage from "@salesforce/label/c.Confirm_Delete_Row";
 import success from "@salesforce/label/c.Success";
-import recordSaved from "@salesforce/label/c.Record_Saved";
+import recordDeleted from "@salesforce/label/c.Record_Deleted";
 
 import SERVICEDEVLIERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
-import UNITMEASURE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasure__c";
+import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfService__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
-
-import getFieldSet from '@salesforce/apex/ServiceDeliveryController.getFieldSet';
 
 const DELAY = 750;
 
 export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
     @api index;
-
-    @track fieldSet;
+    @api fieldSet;
+    
+    @track hasQuantity = false;
     
     serviceDeliveryObject = SERVICEDEVLIERY_OBJECT;
     fields = {
-        unitMeasureField : UNITMEASURE_FIELD,
+        unitServiceField : UNITSERVICE_FIELD,
         quantity : QUANTITY_FIELD
     }
     labels = {
@@ -33,25 +32,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         confirmDelete,
         confirmDeleteMessage,
         deleteLabel,
-        recordSaved,
+        recordDeleted,
         success
-    }
-
-    @wire(getFieldSet)
-    wiredFields({error, data}) {
-        if (data) {
-            this.fieldSet = data;
-        } else if (error) {
-            handleError(error);
-        }
-    }
-
-    connectedCallback() {
-        console.log('fields', this.fields);
-    }
-
-    handleInputChange() {
-        this.autoSaveAfterDebounce();        
     }
 
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY)
@@ -62,14 +44,22 @@ export default class ServiceDeliveryRow extends LightningElement {
             deliverySubmit.click();
         }
     }
+
+    handleInputChange() {
+        this.autoSaveAfterDebounce();        
+    }
+
     handleError(event) {
         //TODO : handleError;
         console.log('Error', JSON.parse(JSON.stringify(event.detail)));
+        this.dispatchEvent(new CustomEvent("saveend"));
     }
+
     handleSuccess(event) {
         this.recordId = event.detail.id;
-        showToast(this.labels.success, this.labels.recordSaved, 'success');
+        this.dispatchEvent(new CustomEvent("saveend"));
     }
+
     handleSubmit(event) {    
         let fields = event.detail.fields;
 
@@ -78,6 +68,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         this.template.querySelector('lightning-record-edit-form').submit(fields);
+        this.dispatchEvent(new CustomEvent("savestart"));
     }
   
     handleDelete() {
@@ -85,7 +76,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             deleteRecord(this.recordId)
             .then(() => {
                 this.recordId = '';
-                showToast('Success', 'Deleted', 'success');
+                showToast(this.labels.success, this.labels.recordDeleted, 'success');
                 this.dispatchEvent(new CustomEvent("delete", {detail : this.index}));
             })
             .catch(error => {
@@ -94,6 +85,16 @@ export default class ServiceDeliveryRow extends LightningElement {
         } else {
             this.dispatchEvent(new CustomEvent("delete", {detail : this.index}));
         }
+    }
+
+    handleShowModal() {
+        const modal = this.template.querySelector('c-modal');
+        modal.show();
+    }
+
+    handleCloseModal() {
+        const modal = this.template.querySelector('c-modal');
+        modal.hide();
     }
 
     //Temporary CSS Overrides.
@@ -108,15 +109,5 @@ export default class ServiceDeliveryRow extends LightningElement {
             }
         `;
         this.template.querySelector('div.style-target').appendChild(style);
-    }
-
-    handleShowModal() {
-        const modal = this.template.querySelector('c-modal');
-        modal.show();
-    }
-
-    handleCloseModal() {
-        const modal = this.template.querySelector('c-modal');
-        modal.hide();
     }
 }

@@ -2,15 +2,36 @@
     <lightning-card>
         <div class="slds-p-around_medium">
             <div class="slds-p-horizontal_small slds-text-heading_large">{labels.serviceDeliveries}</div>
+            <div class="input-heading slds-text-title_caps slds-p-vertical_small">
+                <lightning-layout class="slds-grid_vertical-align-center">
+                    <template for:each={fieldSet} for:item="field">
+                        <lightning-layout-item size={field.size} key={field.apiName} class="slds-p-horizontal_small">
+                            {field.label}
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item size="1" class="slds-p-horizontal_small"></lightning-layout-item>
+                </lightning-layout>
+            </div>
             <template if:true={serviceDeliveries}>
                 <template for:each={serviceDeliveries} for:item="delivery">
                     <div key={delivery.index}>
-                        <c-service-delivery-row index={delivery.index} ondelete={handleDelete}></c-service-delivery-row>
+                        <c-service-delivery-row field-set={fieldSet} index={delivery.index} ondelete={handleDelete} onsavestart={handleSaveStart} onsaveend={handleSaveEnd}></c-service-delivery-row>
                     </div>
                 </template>
             </template>
             <div class="slds-border_top slds-m-top_large slds-p-top_large">
-                <lightning-button label={labels.addServiceDelivery} onclick={addDelivery}></lightning-button>
+                <lightning-layout class="slds-grid_vertical-align-center">
+                    <lightning-layout-item flexibility="auto, no-grow" class="slds-p-left_small">
+                        <lightning-button label={labels.addServiceDelivery} onclick={addDelivery}></lightning-button>
+                    </lightning-layout-item>
+                    <lightning-layout-item flexibility="auto, no-grow">
+                        <template if:true={isSaving}>
+                            <div class="slds-p-left_large">
+                                {saveMessage}
+                            </div>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
             </div>
         </div>
     </lightning-card>

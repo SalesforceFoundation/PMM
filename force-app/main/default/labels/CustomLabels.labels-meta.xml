@@ -56,12 +56,28 @@
         <shortDescription>Success</shortDescription>
         <value>Success</value>
     </labels>
-        <labels>
-        <fullName>Record_Saved</fullName>
+    <labels>
+        <fullName>Record_Deleted</fullName>
         <categories></categories>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Your record has been saved</shortDescription>
-        <value>Your record has been saved</value>
+        <shortDescription>Your record has been deleted</shortDescription>
+        <value>Your record has been deleted</value>
+    </labels>
+    <labels>
+        <fullName>Saving</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Saving</shortDescription>
+        <value>Saving</value>
+    </labels>
+    <labels>
+        <fullName>Saved</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Saved</shortDescription>
+        <value>Saved</value>
     </labels>
 </CustomLabels>

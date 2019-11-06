@@ -1,7 +1,8 @@
 import os
+import yaml
 from tasks.namespaces import NamespaceInfo
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
-from cumulusci.core.utils import process_bool_arg, ordered_yaml_load
+from cumulusci.core.utils import process_bool_arg
 from cumulusci.utils import os_friendly_path
 from cumulusci.tasks.bulkdata import LoadData, ExtractData
 
@@ -310,7 +311,7 @@ class Util:
     @staticmethod
     def get_mapping_from_file(mapping_path):
         with open(os_friendly_path(mapping_path), "r") as f:
-            return ordered_yaml_load(f)
+            return yaml.safe_load(f)
 
     @staticmethod
     def print_mapping_as_list(mapping, tabSize=4):

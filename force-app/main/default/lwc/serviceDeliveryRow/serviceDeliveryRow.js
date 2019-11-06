@@ -1,4 +1,4 @@
-import { LightningElement, track, wire, api } from 'lwc';
+import { LightningElement, track, api } from 'lwc';
 import { showToast, handleError, debouncify } from 'c/util';
 import { deleteRecord } from 'lightning/uiRecordApi';
 
@@ -13,7 +13,7 @@ import SERVICEDEVLIERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfService__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 
-const DELAY = 750;
+const DELAY = 1000;
 
 export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
@@ -50,9 +50,8 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleError(event) {
-        //TODO : handleError;
-        console.log('Error', JSON.parse(JSON.stringify(event.detail)));
         this.dispatchEvent(new CustomEvent("saveend"));
+        handleError(event.detail.message);
     }
 
     handleSuccess(event) {

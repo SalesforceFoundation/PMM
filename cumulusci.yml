@@ -57,7 +57,7 @@ tasks:
 
   activate_flows:
     description: This task activates all the process builder processes in the org
-    class_path: tasks.ActivateProcessBuilders.activateProcessBuilderProcesses
+    class_path: tasks.ActivateProcessBuilders.ActivateProcessBuilderProcesses
 
 flows:
   config_qa:

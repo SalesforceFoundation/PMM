@@ -23,8 +23,34 @@ orgs:
             config_file: orgs/npsp.json
             days: 7
             namespaced: True
+        caseman:
+            config_file: orgs/dev.json
+            days: 7
+        caseman_namespaced:
+            config_file: orgs/dev.json
+            days: 7
+            namespaced: True
+        caseman_npsp:
+            config_file: orgs/npsp.json
+            days: 7
+        caseman_npsp_namespaced:
+            config_file: orgs/npsp.json
+            days: 7
+            namespaced: True
+           
 
 tasks:
+
+    cache_namespaces_in_org_config:
+        description: Caches namespaces information in org_config
+        class_path: tasks.namespaces.CacheNamespaces
+        group: Namespaces
+
+    namespace_execute_anonymous:
+        description: Execute anonymous apex via the tooling api if namespace is used.
+        class_path: tasks.namespaces.ExecuteAnonymousTask
+        group: Salesforce
+
     robot:
         options:
             suites: robot/pmdm/tests
@@ -35,6 +61,54 @@ tasks:
         options:
             path: robot/pmdm/tests
             output: robot/pmdm/doc/pmdm_tests.html
+
+    update_admin_profile:
+        options:
+            package_xml: lib/admin_profile.xml
+
+    update_admin_profile_caseman:
+        class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
+        options:
+            package_xml: lib/admin_profile.xml
+            record_types:
+                - record_type: Account.caseman__Branch
+                  default: True
+                - record_type: Case.caseman__ClientCase
+                  default: True
+                - record_type: Case.caseman__Incident
+
+    update_admin_profile_npsp:
+        class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
+        options:
+            package_xml: lib/npsp_admin_profile.xml
+            record_types:
+                - record_type: Account.HH_Account
+                - record_type: Account.Organization
+                  default: true
+                  person_account_default: true
+                - record_type: Opportunity.Donation
+                  default: true
+                - record_type: Campaign.Default
+                  default: true
+    
+    update_admin_profile_caseman_npsp:
+        class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
+        options:
+            package_xml: lib/npsp_admin_profile.xml
+            record_types:
+                - record_type: Account.HH_Account
+                - record_type: Account.Organization
+                  default: true
+                  person_account_default: true
+                - record_type: Account.caseman__Branch
+                - record_type: Opportunity.Donation
+                  default: true
+                - record_type: Campaign.Default
+                  default: true
+                - record_type: Case.caseman__ClientCase
+                  default: True
+                - record_type: Case.caseman__Incident
+                - record_type: Case.None
 
     run_all_local_tests:
         group: 'Tests'
@@ -55,6 +129,70 @@ tasks:
         options:
             command: 'force:source:status'
 
+    add_caseman_dependency:
+        group: Impact Engineering
+        description: Installs CaseMan with dependencies
+        class_path: cumulusci.tasks.salesforce.UpdateDependencies
+        options:
+            dependencies:
+                - github: "https://github.com/SalesforceFoundation/caseman"
+            include_beta: True
+
+    log_bulk_data_mapping:
+        group: "Data: Bulk"
+        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
+        class_path: tasks.BulkData.LogMapping
+        options:
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            log_mapping: table
+
+    capture_bulk_data:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            log_mapping: table
+
+    insert_bulk_data:
+        group: "Data: Bulk"
+        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
+        class_path: tasks.BulkData.InsertData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+
+    upload_client_photos:
+        group: "Data: Bulk: CaseMan"
+        description: "Upload client photos and link to client records"
+        class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
+        options:
+            directory_path: "data/bulk/client-photos"
+    
     deploy_dev_config:
         group: 'pmdm: Config'
         description: Deploys the post-install configuration for an unmanaged DE org
@@ -64,18 +202,135 @@ tasks:
             namespace_inject: $project_config.project__package__namespace
 
 flows:
-    config_qa:
-        1.1:
-            task: deploy_qa_config
 
-    config_dev:
+    insert_data:
         steps:
-            3:
-                flow: config_unmanaged
-                
-    config_unmanaged:
+            010:
+                task: cache_namespaces_in_org_config
+            100:
+                flow: insert_bulk_data
+            999:
+                task: execute_anon
+                options:
+                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+
+    caseman_post_insert_bulk_data:
         steps:
             100:
+                task: upload_client_photos
+                when: "'caseman' in org_config.namespaces"
+
+    npsp_post_insert_bulk_data:
+        steps:
+            100:
+                task: namespace_execute_anonymous
+                options:
+                    path: "data/scripts/npsp/de-duplicate_npsp_relationships.apex"
+                    namespace: npsp
+                when: "'npsp' in org_config.namespaces"
+                
+    npsp_pre_insert_bulk_data:
+        steps:
+            010:
+                task: namespace_execute_anonymous
+                options:
+                    path: "data/scripts/npsp/set_npsp_gender_relationship_setting.apex"
+                    namespace: "'npsp' in org_config.namespaces"
+
+    #caseman_pre_insert_bulk_data:
+    #    steps:
+
+    insert_bulk_data:
+        steps:
+            010:
+                flow: npsp_pre_insert_bulk_data
+            #020:
+            #    flow: caseman_pre_insert_bulk_data
+            100:
+                task: insert_bulk_data
+            210:
+                flow: npsp_post_insert_bulk_data
+            220:
+                flow: caseman_post_insert_bulk_data
+
+    update_admin_profile:
+        steps:
+            01:
+                task: cache_namespaces_in_org_config
+            10:
+                task: update_admin_profile_caseman
+                when: "'npsp' not in org_config.namespaces and 'caseman' in org_config.namespaces"
+            20: 
+                task: update_admin_profile_npsp
+                when: "'npsp' in org_config.namespaces and 'caseman' not in org_config.namespaces"
+            30: 
+                task: update_admin_profile_caseman_npsp
+                when: "'npsp' in org_config.namespaces and 'caseman' in org_config.namespaces"
+            40: 
+                task: update_admin_profile
+                when: "'npsp' not in org_config.namespaces and 'caseman' not in org_config.namespaces"
+
+    caseman_org:
+        steps:
+            100:
+                task: add_caseman_dependency
+            200:
+                flow: dev_org
+
+    caseman_org_namespaced:
+        steps:
+            100:
+                task: add_caseman_dependency
+            200:
+                flow: dev_org_namespaced
+
+    config_unmanaged:
+        steps:           
+            100:
+                flow: update_admin_profile
+            101:
                 task: deploy_dev_config
                 options:
                     unmanaged: True
+            200:
+                flow: insert_data
+
+    config_unmanaged_namespaced:
+        steps:
+            100:
+                flow: update_admin_profile
+            101:
+                task: deploy_dev_config
+                options:
+                    unmanaged: False
+            200:
+                flow: insert_data
+
+    config_qa:
+        100:
+            task: deploy_qa_config
+        200:
+            flow: config_unmanaged
+
+    config_dev:
+        steps:
+            200:
+                flow: config_unmanaged
+
+    config_dev_namespaced:
+        steps:
+            100:
+                task: deploy_post
+            200:
+                flow: config_unmanaged_namespaced
+
+    dev_org_namespaced:
+        steps:
+            1:
+                flow: dependencies
+            2:
+                flow: deploy_unmanaged
+            3:
+                flow: config_dev_namespaced
+            4:
+                task: snapshot_changes

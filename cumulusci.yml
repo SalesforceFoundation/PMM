@@ -60,11 +60,6 @@ tasks:
     class_path: tasks.ActivateProcessBuilders.activateProcessBuilderProcesses
 
 flows:
-  dev_org:
-    steps:
-      4:
-        task: activate_flows
-
   config_qa:
     steps:
       3:

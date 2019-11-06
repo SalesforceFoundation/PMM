@@ -10,8 +10,6 @@ import success from "@salesforce/label/c.Success";
 import recordDeleted from "@salesforce/label/c.Record_Deleted";
 
 import SERVICEDEVLIERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
-import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfService__c";
-import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 
 const DELAY = 1000;
 
@@ -23,10 +21,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track hasQuantity = false;
     
     serviceDeliveryObject = SERVICEDEVLIERY_OBJECT;
-    fields = {
-        unitServiceField : UNITSERVICE_FIELD,
-        quantity : QUANTITY_FIELD
-    }
     labels = {
         cancel,
         confirmDelete,

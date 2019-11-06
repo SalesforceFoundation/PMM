@@ -59,13 +59,33 @@ tasks:
     description: This task activates all the process builder processes in the org
     class_path: tasks.ActivateProcessBuilders.ActivateProcessBuilderProcesses
 
-flows:
-  config_qa:
-    steps:
-      3:
-        task: activate_flows
+    deploy_dev_config:
+        group: 'pmdm: Config'
+        description: Deploys the post-install configuration for an unmanaged DE org
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/dev
+            namespace_inject: $project_config.project__package__namespace
 
-  config_dev:
-    steps:
-      3:
-        task: activate_flows
+flows:
+    config_qa:
+        steps:
+        3:
+            task: activate_flows
+        
+
+    config_dev:
+        steps:
+            3:
+                flow: config_unmanaged
+            4:
+                task: activate_flows
+                
+    config_unmanaged:
+        steps:
+            100:
+                task: deploy_dev_config
+                options:
+                    unmanaged: True
+                    
+                    

@@ -1,0 +1,28 @@
+# Development dependencies
+node_modules
+yarn.lock
+.cci
+.github
+.sfdx
+.vscode
+
+# README.md contains prettier-ignore examples
+README.md
+
+# Ignore files
+.gitignore
+.prettierignore
+.eslintignore
+
+# Images
+*.png
+*.jpg
+
+# Files with no parser
+*.xml
+*.py
+*.robot
+*.pdf
+
+# Files in Metadata API format
+unpackaged

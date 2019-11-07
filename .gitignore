@@ -21,3 +21,43 @@ robot/pmdm/results/
 
 # Misc
 .DS_Store
+
+# tool caches
+**/.sfdx/
+**/.vscode/
+**/.cci/
+**/.vscode
+**/.eslintcache
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Python
+__pycache__
+venv
+*.pyc
+
+# npm/yarn
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/test_results.json
+/test_results.xml
+
+# LWC
+**/lwc/jsconfig.json
+
+# SFDO Project Directories
+EDA
+Cumulus
+
+# cci
+force-app-bak

@@ -1,7 +1,9 @@
 {
   "orgName": "Program Management Data Model - Dev Org",
   "edition": "Developer",
-  "features": [],
+  "features": [
+    "ContactsToMultipleAccounts"
+  ],
   "settings": {
     "orgPreferenceSettings": {
         "chatterEnabled": true, 

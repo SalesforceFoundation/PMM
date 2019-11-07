@@ -1,0 +1,43 @@
+# Programs
+pmdm__Program__c:
+    sf_object: Program__c
+    table: pmdm__Program__c
+    fields:
+        # Standard Fields
+        Id: sf_id
+        Name: Name
+
+        # Custom Fields
+        Description__c: Description__c
+        EndDate__c: EndDate__c
+        ProgramIssueArea__c: ProgramIssueArea__c
+        StartDate__c: StartDate__c
+        Status__c: Status__c
+        Summary__c: Summary__c
+        TargetPopulation__c: TargetPopulation__c
+
+pmdm__ProgramEngagement__c:
+    sf_object: ProgramEngagement__c
+    table: pmdm__ProgramEngagement__c
+    fields:
+        # Standard Fields
+        Id: sf_id
+        Name: Name
+
+        # Custom Fields
+        ApplicationDate__c: ApplicationDate__c
+        EndDate__c: EndDate__c
+        Role__c: Role__c
+        Stage__c: Stage__c
+        StartDate__c: StartDate__c
+
+    lookups:
+        Account__c:
+            key_field: account__c
+            table: household_accounts
+        Contact__c:
+            key_field: contact__c
+            table: contacts
+        Program__c:
+            key_field: program__c
+            table: pmdm__Program__c

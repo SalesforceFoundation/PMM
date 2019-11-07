@@ -295,6 +295,8 @@ flows:
                 task: deploy_dev_config
                 options:
                     unmanaged: True
+            102:
+                task: activate_flows
             200:
                 flow: insert_data
 

@@ -1,0 +1,11 @@
+**/jsconfig.json
+**/.eslintrc.json
+**/__tests__/**
+
+# All Profiles
+*.profile
+
+# FlexiPages with %%%NAMESPACED_ORG%%% tokens
+# uncomment the flexipages below during active development to avoid pulling changes
+# force-app/main/default/flexipages/CaseManagementHome.flexipage
+# force-app/main/default/flexipages/Program_Engagement_Record_Page.flexipage

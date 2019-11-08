@@ -18,5 +18,4 @@
     <tabs>Service__c</tabs>
     <tabs>ServiceDelivery__c</tabs>
     <uiType>Lightning</uiType>
-    <utilityBar>Program_Management_UtilityBar</utilityBar>
 </CustomApplication>

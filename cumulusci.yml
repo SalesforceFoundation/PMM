@@ -116,7 +116,12 @@ tasks:
         class_path: cumulusci.tasks.sfdx.SFDXOrgTask
         options:
             command: 'force:apex:test:run --codecoverage --testlevel RunLocalTests --resultformat human'
-
+    run_tests:
+        options:
+            retry_failures:
+                - "unable to obtain exclusive access to this record"
+                - "UNABLE_TO_LOCK_ROW"
+            retry_always: True
     dx:
         group: 'Salesforce DX'
         description: 'Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option'

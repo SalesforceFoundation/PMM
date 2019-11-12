@@ -2,10 +2,18 @@
   "orgName": "Program Management Data Model - Prerelease Beta Test Org",
   "edition": "Developer",
   "instance": "cs46",
+  "features": [
+    "ContactsToMultipleAccounts"
+  ],
   "settings": {
-    "orgPreferenceSettings": {
-      "s1DesktopEnabled": true
-      , "chatterEnabled": true
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "chatterSettings": {
+      "enableChatter": true
+    },
+    "enhancedNotesSettings": {
+      "enableEnhancedNotes": true
     }
   }
 }

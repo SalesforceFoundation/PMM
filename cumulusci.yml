@@ -1,11 +1,11 @@
-minimum_cumulusci_version: '2.5.9'
+minimum_cumulusci_version: "2.5.9"
 project:
-    name: pmdm
-    package:
-        name:  Program Management Data Model
-        namespace: pmdm0
-        api_version: '46.0'
-    source_format: sfdx
+  name: pmdm
+  package:
+    name: Program Management Data Model
+    namespace: pmdm0
+    api_version: "46.0"
+  source_format: sfdx
 
 orgs:
     scratch:
@@ -58,9 +58,9 @@ tasks:
                 outputdir: robot/pmdm/results
 
     robot_testdoc:
-        options:
-            path: robot/pmdm/tests
-            output: robot/pmdm/doc/pmdm_tests.html
+      options:
+        path: robot/pmdm/tests
+        output: robot/pmdm/doc/pmdm_tests.html
 
     update_admin_profile:
         options:
@@ -123,16 +123,20 @@ tasks:
                 - "UNABLE_TO_LOCK_ROW"
             retry_always: True
     dx:
-        group: 'Salesforce DX'
-        description: 'Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option'
-        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+      group: "Salesforce DX"
+      description: "Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option"
+      class_path: cumulusci.tasks.sfdx.SFDXOrgTask
 
     dx_status:
-        group: 'Salesforce DX'
-        description: 'Calls sfdx force:source:status for cci Org User'
-        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
-        options:
-            command: 'force:source:status'
+      group: "Salesforce DX"
+      description: "Calls sfdx force:source:status for cci Org User"
+      class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+      options:
+        command: "force:source:status"
+
+    activate_flows:
+      description: This task activates all the process builder processes in the org
+      class_path: tasks.ActivateProcessBuilders.ActivateProcessBuilderProcesses
 
     add_caseman_dependency:
         group: Impact Engineering
@@ -207,7 +211,6 @@ tasks:
             namespace_inject: $project_config.project__package__namespace
 
 flows:
-
     insert_data:
         steps:
             010:
@@ -297,6 +300,8 @@ flows:
                 task: deploy_dev_config
                 options:
                     unmanaged: True
+            102:
+                task: activate_flows
             200:
                 flow: insert_data
 
@@ -314,6 +319,8 @@ flows:
     config_qa:
         100:
             task: deploy_qa_config
+        110:
+            task: activate_flows
         200:
             flow: config_unmanaged
 
@@ -339,3 +346,4 @@ flows:
                 flow: config_dev_namespaced
             4:
                 task: snapshot_changes
+

@@ -1,28 +1,53 @@
 <template>
     <lightning-card>
-        <div class="slds-p-around_medium slds-scrollable_x">
-            <div class="slds-p-horizontal_small slds-text-heading_large slds-m-bottom_x-large">{labels.serviceDeliveries}</div>
+        <div class="slds-p-around_medium">
+            <div
+                class="slds-p-horizontal_small slds-text-heading_large slds-m-bottom_x-large"
+            >
+                {labels.serviceDeliveries}
+            </div>
             <div class="slds-text-title_caps">
                 <lightning-layout class="slds-grid_vertical-align-center">
                     <template for:each={fieldSet} for:item="field">
-                        <lightning-layout-item size={field.size} key={field.apiName} class="slds-p-horizontal_small">
+                        <lightning-layout-item
+                            size={field.size}
+                            key={field.apiName}
+                            class="slds-p-horizontal_small"
+                        >
                             <strong>{field.label}</strong>
                         </lightning-layout-item>
                     </template>
-                    <lightning-layout-item size="1" class="slds-p-horizontal_small"></lightning-layout-item>
+                    <lightning-layout-item
+                        size="1"
+                        class="slds-p-horizontal_small"
+                    ></lightning-layout-item>
                 </lightning-layout>
             </div>
             <template if:true={serviceDeliveries}>
                 <template for:each={serviceDeliveries} for:item="delivery">
                     <div key={delivery.index}>
-                        <c-service-delivery-row field-set={fieldSet} index={delivery.index} ondelete={handleDelete} onsavestart={handleSaveStart} onsaveend={handleSaveEnd}></c-service-delivery-row>
+                        <c-service-delivery-row
+                            field-set={fieldSet}
+                            index={delivery.index}
+                            ondelete={handleDelete}
+                            onsavestart={handleSaveStart}
+                            onsaveend={handleSaveEnd}
+                        ></c-service-delivery-row>
                     </div>
                 </template>
             </template>
             <div class="slds-m-top_large slds-p-top_large">
                 <lightning-layout class="slds-grid_vertical-align-center">
-                    <lightning-layout-item flexibility="auto, no-grow" class="slds-p-left_small">
-                        <lightning-button variant="brand" icon-name="utility:add" label={labels.addServiceDelivery} onclick={addDelivery}></lightning-button>
+                    <lightning-layout-item
+                        flexibility="auto, no-grow"
+                        class="slds-p-left_small"
+                    >
+                        <lightning-button
+                            variant="brand"
+                            icon-name="utility:add"
+                            label={labels.addServiceDelivery}
+                            onclick={addDelivery}
+                        ></lightning-button>
                     </lightning-layout-item>
                     <lightning-layout-item flexibility="auto, no-grow">
                         <template if:true={isSaving}>

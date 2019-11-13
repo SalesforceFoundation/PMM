@@ -7,8 +7,8 @@ Library        DateTime
 *** Keywords ***
 Go To PMDM App
     Open App Launcher
-    Wait Until Element Is visible           //div[contains(@class,'slds-app-launcher__tile-body')]//a[ text()='PMDM']
-    Click Link                              //div[contains(@class,'slds-app-launcher__tile-body')]//a[ text()='PMDM']
+    Wait Until Element Is visible           //div[contains(@class,'slds-app-launcher__tile-body')]//a[ text()='Program Management']
+    Click Link                              //div[contains(@class,'slds-app-launcher__tile-body')]//a[ text()='Program Management']
 
 API Create Program
     [Arguments]      &{fields}
@@ -23,3 +23,4 @@ API Create Program
     &{program} =     Salesforce Get  Program__c  ${program_id}
     Store Session Record    Program__c  ${program_id}
     [Return]         &{program}
+    

@@ -936,11 +936,8 @@ CREATE TABLE "pmdm__ServiceDelivery__c" (
 	PRIMARY KEY (sf_id)
 );
 INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNUQA0','Tom Higgins - Subsidized Lunch','2019-11-05','1.0','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
-INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbrqQAC','Tom Higgins - Grade 1-8 Reading Tutoring','2019-11-12','','a191D0000015PZ5QAM','','0031D00000Pq21vQAB');
-INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNKQA0','Tom Higgins - Grade 1-8 Reading Tutoring','2019-11-12','','a191D0000015PZ5QAM','','0031D00000Pq21vQAB');
 INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNZQA0','Tom Higgins - Subsidized Lunch','2019-11-06','1.0','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
 INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNPQA0','Tom Higgins - Subsidized Lunch','2019-11-04','1.0','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
-INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000Rbs0QAC','Tom Higgins - Grade 1-8 Reading Tutoring','2019-11-12','','a191D0000015PZ5QAM','','0031D00000Pq21vQAB');
 CREATE TABLE "pmdm__Service__c" (
 	sf_id VARCHAR(255) NOT NULL, 
 	"Name" VARCHAR(255), 

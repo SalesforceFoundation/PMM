@@ -41,3 +41,42 @@ pmdm__ProgramEngagement__c:
         Program__c:
             key_field: program__c
             table: pmdm__Program__c
+
+pmdm__Service__c:
+    sf_object: Service__c
+    table: pmdm__Service__c
+    fields:
+        # Standard Fields
+        Id: sf_id
+        Name: Name
+
+        # Custom Fields
+        UnitOfService__c: UnitOfService__c
+
+    lookups:
+        Program__c:
+            key_field: program__c
+            table: pmdm__Program__c
+
+pmdm__ServiceDelivery__c:
+    sf_object: ServiceDelivery__c
+    table: pmdm__ServiceDelivery__c
+    fields:
+        # Standard Fields
+        Id: sf_id
+        Name: Name
+
+        # Custom Fields
+        DeliveryDate__c: DeliveryDate__c
+        Quantity__c: Quantity__c
+
+    lookups:
+        Service__c:
+            key_field: service__c
+            table: pmdm__Service__c
+        Account__c:
+            key_field: account__c
+            table: household_accounts
+        Contact__c:
+            key_field: contact__c
+            table: contacts

@@ -200,14 +200,6 @@ tasks:
         options:
             directory_path: "data/bulk/client-photos"
 
-    update_client_photo_directories:
-        group: "Data: Bulk: CaseMan"
-        description: "Update client photo directories after capture_test_data"
-        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
-        options:
-            directory_path: "data/bulk/client-photos"
-            sql_path: "data/bulk/data.sql"
-
     deploy_dev_config:
         group: "pmdm: Config"
         description: Deploys the post-install configuration for an unmanaged DE org
@@ -323,12 +315,11 @@ flows:
                 flow: insert_data
 
     config_qa:
-        100:
-            task: deploy_qa_config
-        110:
-            task: activate_flows
-        200:
-            flow: config_unmanaged
+        steps:
+            100:
+                task: activate_flows
+            200:
+                flow: config_unmanaged
 
     config_dev:
         steps:

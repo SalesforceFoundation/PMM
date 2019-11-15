@@ -1,18 +1,19 @@
 {
-  "orgName": "Program Management Data Model - Beta Test Org",
-  "edition": "Developer",
-  "features": [
-    "ContactsToMultipleAccounts"
-  ],
-  "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
-    },
-    "chatterSettings": {
-      "enableChatter": true
-    },
-    "enhancedNotesSettings": {
-      "enableEnhancedNotes": true
+    "orgName": "Program Management Data Model - Beta Test Org",
+    "edition": "Developer",
+    "features": ["ContactsToMultipleAccounts"],
+    "settings": {
+        "lightningExperienceSettings": {
+            "enableS1DesktopEnabled": true
+        },
+        "chatterSettings": {
+            "enableChatter": true
+        },
+        "enhancedNotesSettings": {
+            "enableEnhancedNotes": true
+        },
+        "pathAssistantSettings": {
+            "pathAssistantEnabled": true
+        }
     }
-  }
 }

@@ -15,7 +15,7 @@
                 <field>AutonameOverride__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>ProgramEngagement__c</field>
             </layoutItems>
             <layoutItems>

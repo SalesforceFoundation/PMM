@@ -162,6 +162,10 @@
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <tabSettings>
+        <tab>Bulk_Service_Deliveries</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
         <tab>ProgramCohort__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>

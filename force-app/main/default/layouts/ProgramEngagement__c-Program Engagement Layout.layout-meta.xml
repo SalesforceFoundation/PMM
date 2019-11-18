@@ -139,7 +139,8 @@
         <fields>NAME</fields>
         <fields>DeliveryDate__c</fields>
         <fields>Quantity__c</fields>
-        <fields>UnitOfMeasure__c</fields>
+        <fields>UnitOfService__c</fields>
+        <fields>HouseholdBenefit__c</fields>
         <relatedList>ServiceDelivery__c.ProgramEngagement__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

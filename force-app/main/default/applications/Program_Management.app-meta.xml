@@ -16,6 +16,7 @@
     <tabs>ProgramCohort__c</tabs>
     <tabs>standard-report</tabs>
     <tabs>Service__c</tabs>
+    <tabs>Bulk_Service_Deliveries</tabs>
     <tabs>ServiceDelivery__c</tabs>
     <uiType>Lightning</uiType>
 </CustomApplication>

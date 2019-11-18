@@ -34,6 +34,9 @@
                 <behavior>Edit</behavior>
                 <field>ProgramCohort__c</field>
             </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
+            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>

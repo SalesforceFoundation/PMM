@@ -3,7 +3,7 @@
     <fullName>Account__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
-    <label>Account</label>
+    <label>Household Account</label>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Program Engagements</relationshipLabel>
     <relationshipName>Program_Engagements</relationshipName>

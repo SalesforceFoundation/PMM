@@ -96,12 +96,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>ServiceDelivery__c.ProgramEngagement__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>ServiceDelivery__c.Quantity__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceDelivery__c.UnitOfMeasure__c</field>
+        <field>ServiceDelivery__c.UnitOfService__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -111,7 +116,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Service__c.UnitOfMeasure__c</field>
+        <field>Service__c.UnitOfService__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
@@ -161,6 +166,10 @@
         <object>Service__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <tabSettings>
+        <tab>Bulk_Service_Deliveries</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
     <tabSettings>
         <tab>ProgramCohort__c</tab>
         <visibility>Visible</visibility>

@@ -32,10 +32,10 @@ def check_js(paths, strings_dict):
                         and not item.value in strings_dict.get("ignorable_js_values")
                         and not item.value.endswith("__r")
                         and not item.value.endswith("__c")
-                        and not last_value in strings_dict.get("ignorable_js_last_values")
-                        and item.value[0:1].isupper()
-                        and not item.value.isupper()
-                        and not last_value.isupper()
+                        and not last_value in strings_dict.get("ignorable_js_last_values") # allows for lwc attributes that expect string values
+                        and item.value[0:1].isupper() # assumes title case in any user-exposed strings
+                        and not item.value.isupper() # allows for constants with ALLUPPER naming convention
+                        and not last_value.isupper() # allows for constants with ALLUPPER naming convention
                 ):
                     print(f"JS: {short_path} -- line {str(item.loc.start.line)} -- {last_value}: {item.value}")
                     js_offenses += 1

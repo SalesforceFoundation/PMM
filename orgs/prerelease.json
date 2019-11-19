@@ -1,22 +1,23 @@
 {
-  "orgName": "Program Management Data Model - Prerelease Dev Org",
-  "edition": "Developer",
-  "instance": "cs46",
-  "features": [
-    "ContactsToMultipleAccounts"
-  ],
-  "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
-    },
-    "chatterSettings": {
-      "enableChatter": true
-    },
-    "languageSettings": {
-      "enableTranslationWorkbench": true
-    },
-    "enhancedNotesSettings": {
-      "enableEnhancedNotes": true
+    "orgName": "Program Management Data Model - Prerelease Dev Org",
+    "edition": "Developer",
+    "instance": "cs46",
+    "features": ["ContactsToMultipleAccounts"],
+    "settings": {
+        "lightningExperienceSettings": {
+            "enableS1DesktopEnabled": true
+        },
+        "chatterSettings": {
+            "enableChatter": true
+        },
+        "languageSettings": {
+            "enableTranslationWorkbench": true
+        },
+        "enhancedNotesSettings": {
+            "enableEnhancedNotes": true
+        },
+        "pathAssistantSettings": {
+            "pathAssistantEnabled": true
+        }
     }
-  }
 }

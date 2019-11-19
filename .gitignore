@@ -54,6 +54,7 @@ yarn-error.log*
 
 # LWC
 **/lwc/jsconfig.json
+**/lwc/.eslintrc.json
 
 # SFDO Project Directories
 EDA

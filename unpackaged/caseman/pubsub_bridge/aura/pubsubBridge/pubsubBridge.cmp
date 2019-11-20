@@ -1,0 +1,11 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <%%%NAMESPACE_OR_C%%%:pubsub
+        aura:id="pubsub"
+        onGlobalPubsubEvent="{!c.onGlobalPubsubEvent}"
+    ></%%%NAMESPACE_OR_C%%%:pubsub>
+
+    <caseman:pubsub
+        aura:id="pubsub"
+        onglobalpubsubevent="{!c.onGlobalPubsubEvent}"
+    ></caseman:pubsub>
+</aura:component>

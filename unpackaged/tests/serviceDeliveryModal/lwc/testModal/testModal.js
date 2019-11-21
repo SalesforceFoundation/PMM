@@ -2,7 +2,7 @@ import { LightningElement, wire } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { fireEvent } from "c/pubsub";
 
-export default class testModal extends LightningElement {
+export default class TestModal extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
     handleOpenModal() {

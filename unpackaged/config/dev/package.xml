@@ -4,5 +4,9 @@
         <members>Admin</members>
         <name>Profile</name>
     </types>
+    <types>
+        <members>testModal</members>
+        <name>LightningComponentBundle</name>
+    </types>
     <version>47.0</version>
 </Package>

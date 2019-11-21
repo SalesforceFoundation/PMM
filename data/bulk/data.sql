@@ -935,9 +935,9 @@ CREATE TABLE "pmdm__ServiceDelivery__c" (
 	contact__c VARCHAR(255), 
 	PRIMARY KEY (sf_id)
 );
-INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNUQA0','Tom Higgins - Subsidized Lunch','2019-11-05','1.0','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
-INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNZQA0','Tom Higgins - Subsidized Lunch','2019-11-06','1.0','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
-INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNPQA0','Tom Higgins - Subsidized Lunch','2019-11-04','1.0','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
+INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNUQA0','Tom Higgins - Subsidized Lunch','2019-11-05','1.50','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
+INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNZQA0','Tom Higgins - Subsidized Lunch','2019-11-06','1.00','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
+INSERT INTO "pmdm__ServiceDelivery__c" VALUES('a181D000000RbNPQA0','Tom Higgins - Subsidized Lunch','2019-11-04','1.00','a191D0000015PZ0QAM','','0031D00000Pq21vQAB');
 CREATE TABLE "pmdm__Service__c" (
 	sf_id VARCHAR(255) NOT NULL, 
 	"Name" VARCHAR(255), 

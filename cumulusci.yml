@@ -114,6 +114,7 @@ tasks:
         class_path: cumulusci.tasks.sfdx.SFDXOrgTask
         options:
             command: "force:apex:test:run --codecoverage --testlevel RunLocalTests --resultformat human"
+
     run_tests:
         options:
             retry_failures:
@@ -207,6 +208,20 @@ tasks:
         options:
             path: unpackaged/config/dev
             namespace_inject: $project_config.project__package__namespace
+
+    uninstall_packaged_incremental:
+        description: Deletes any metadata from the package in the target org not in the local workspace
+        class_path: cumulusci.tasks.salesforce.UninstallPackagedIncremental
+        options:
+            ignore:
+                QuickAction:
+                    - NewEvent
+                    - NewCase
+                    - NewLead
+                    - NewContact
+                    - NewOpportunity
+                    - NewTask
+                    - LogACall
 
     deploy_service_delivery_modal_test:
         group: "pmdm: tests"

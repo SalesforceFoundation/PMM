@@ -4,7 +4,7 @@
         <field>Name</field>
         <formula>&quot;New Service Delivery&quot;</formula>
     </fieldOverrides>
-    <optionsCreateFeedItem>true</optionsCreateFeedItem>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
     <quickActionLayout>
         <layoutSectionStyle>TwoColumnsLeftToRight</layoutSectionStyle>
         <quickActionLayoutColumns>
@@ -28,6 +28,5 @@
     </quickActionLayout>
     <standardLabel>New</standardLabel>
     <targetObject>ServiceDelivery__c</targetObject>
-    <targetParentField>Service__c</targetParentField>
     <type>Create</type>
 </QuickAction>

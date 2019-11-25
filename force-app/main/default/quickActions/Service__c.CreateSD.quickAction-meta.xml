@@ -26,7 +26,7 @@
         </quickActionLayoutColumns>
         <quickActionLayoutColumns/>
     </quickActionLayout>
-    <standardLabel>CreateNew</standardLabel>
+    <standardLabel>New</standardLabel>
     <targetObject>ServiceDelivery__c</targetObject>
     <targetParentField>Service__c</targetParentField>
     <type>Create</type>

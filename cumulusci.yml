@@ -223,6 +223,14 @@ tasks:
                     - NewTask
                     - LogACall
 
+    deploy_service_delivery_modal_test:
+        group: "pmdm: tests"
+        description: Deploys a testModal component to test serviceDeliveryModal component
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/tests/serviceDeliveryModal
+            namespace_inject: $project_config.project__package__namespace
+
 flows:
     insert_data:
         steps:

@@ -194,6 +194,14 @@ tasks:
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
 
+    update_client_photo_directories:
+        group: "CaseMan: Test Data"
+        description: "Update client photo directories after capture_test_data"
+        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
+        options:
+            directory_path: "data/bulk/client-photos"
+            sql_path: "data/bulk/data.sql"
+
     upload_client_photos:
         group: "Data: Bulk: CaseMan"
         description: "Upload client photos and link to client records"
@@ -232,6 +240,13 @@ tasks:
             namespace_inject: $project_config.project__package__namespace
 
 flows:
+    capture_bulk_data:
+        steps:
+            100:
+                task: capture_bulk_data
+            200:
+                task: update_client_photo_directories
+
     insert_data:
         steps:
             010:

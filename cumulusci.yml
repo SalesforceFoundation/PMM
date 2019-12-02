@@ -253,6 +253,11 @@ flows:
                 task: cache_namespaces_in_org_config
             100:
                 flow: insert_bulk_data
+            210:
+                task: execute_anon
+                options:
+                    path: "data/scripts/delete_sample_contacts_and_accounts.apex"
+
             999:
                 task: execute_anon
                 options:

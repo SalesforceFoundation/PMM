@@ -43,12 +43,6 @@
             <operator>greaterThan</operator>
             <value>LAST_N_MONTHS:6</value>
         </criteriaItems>
-        <criteriaItems>
-            <column>FK_CUSTENT_ID</column>
-            <isUnlocked>false</isUnlocked>
-            <operator>equals</operator>
-            <value>a048A000001vHEc</value>
-        </criteriaItems>
         <language>en_US</language>
     </filter>
     <format>Summary</format>

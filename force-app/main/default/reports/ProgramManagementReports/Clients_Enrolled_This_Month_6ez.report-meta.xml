@@ -30,6 +30,15 @@
     <columns>
         <field>FK_NAME</field>
     </columns>
+    <filter>
+        <criteriaItems>
+            <column>ProgramEngagement__c.Stage__c</column>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Enrolled</value>
+        </criteriaItems>
+        <language>en_US</language>
+    </filter>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>

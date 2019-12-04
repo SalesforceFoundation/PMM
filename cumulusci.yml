@@ -272,19 +272,18 @@ flows:
     npsp_post_insert_bulk_data:
         steps:
             100:
-                task: namespace_execute_anonymous
+                task: execute_anon
                 options:
                     path: "data/scripts/npsp/de-duplicate_npsp_relationships.apex"
-                    namespace: npsp
                 when: "'npsp' in org_config.namespaces"
 
     npsp_pre_insert_bulk_data:
         steps:
             010:
-                task: namespace_execute_anonymous
+                task: execute_anon
                 options:
                     path: "data/scripts/npsp/set_npsp_gender_relationship_setting.apex"
-                    namespace: "'npsp' in org_config.namespaces"
+                when: "'npsp' in org_config.namespaces"
 
     #caseman_pre_insert_bulk_data:
     #    steps:

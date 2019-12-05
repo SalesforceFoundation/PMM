@@ -8,13 +8,13 @@ pmdm__Program__c:
         Name: Name
 
         # Custom Fields
-        Description__c: Description__c
-        EndDate__c: EndDate__c
-        ProgramIssueArea__c: ProgramIssueArea__c
-        StartDate__c: StartDate__c
-        Status__c: Status__c
-        Summary__c: Summary__c
-        TargetPopulation__c: TargetPopulation__c
+        Description__c: pmdm__Description__c
+        EndDate__c: pmdm__EndDate__c
+        ProgramIssueArea__c: pmdm__ProgramIssueArea__c
+        StartDate__c: pmdm__StartDate__c
+        Status__c: pmdm__Status__c
+        Summary__c: pmdm__Summary__c
+        TargetPopulation__c: pmdm__TargetPopulation__c
 
 pmdm__ProgramCohort__c:
     sf_object: ProgramCohort__c
@@ -25,11 +25,11 @@ pmdm__ProgramCohort__c:
         Name: Name
 
         # Custom Fields
-        Description__c: Description__c
-        EndDate__c: EndDate__c
-        StartDate__c: StartDate__c
-        Status__c: Status__c
-        Summary__c: Summary__c
+        Description__c: pmdm__Description__c
+        EndDate__c: pmdm__EndDate__c
+        StartDate__c: pmdm__StartDate__c
+        Status__c: pmdm__Status__c
+        Summary__c: pmdm__Summary__c
 
     lookups:
         Program__c:

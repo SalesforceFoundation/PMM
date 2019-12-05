@@ -8,13 +8,13 @@ pmdm__Program__c:
         Name: Name
 
         # Custom Fields
-        Description__c: pmdm__Description__c
-        EndDate__c: pmdm__EndDate__c
-        ProgramIssueArea__c: pmdm__ProgramIssueArea__c
-        StartDate__c: pmdm__StartDate__c
-        Status__c: pmdm__Status__c
-        Summary__c: pmdm__Summary__c
-        TargetPopulation__c: pmdm__TargetPopulation__c
+        Description__c: pmdm0__Description__c
+        EndDate__c: pmdm0__EndDate__c
+        ProgramIssueArea__c: pmdm0__ProgramIssueArea__c
+        StartDate__c: pmdm0__StartDate__c
+        Status__c: pmdm0__Status__c
+        Summary__c: pmdm0__Summary__c
+        TargetPopulation__c: pmdm0__TargetPopulation__c
 
 pmdm__ProgramCohort__c:
     sf_object: ProgramCohort__c
@@ -25,11 +25,11 @@ pmdm__ProgramCohort__c:
         Name: Name
 
         # Custom Fields
-        Description__c: pmdm__Description__c
-        EndDate__c: pmdm__EndDate__c
-        StartDate__c: pmdm__StartDate__c
-        Status__c: pmdm__Status__c
-        Summary__c: pmdm__Summary__c
+        Description__c: pmdm0__Description__c
+        EndDate__c: pmdm0__EndDate__c
+        StartDate__c: pmdm0__StartDate__c
+        Status__c: pmdm0__Status__c
+        Summary__c: pmdm0__Summary__c
 
     lookups:
         Program__c:
@@ -45,12 +45,12 @@ pmdm__ProgramEngagement__c:
         Name: Name
 
         # Custom Fields
-        ApplicationDate__c: ApplicationDate__c
-        AutoName_Override__c: AutoName_Override__c
-        EndDate__c: EndDate__c
-        Role__c: Role__c
-        Stage__c: Stage__c
-        StartDate__c: StartDate__c
+        ApplicationDate__c: pmdm0__ApplicationDate__c
+        AutoName_Override__c: pmdm0__AutoName_Override__c
+        EndDate__c: pmdm0__EndDate__c
+        Role__c: pmdm0__Role__c
+        Stage__c: pmdm0__Stage__c
+        StartDate__c: pmdm0__StartDate__c
 
     lookups:
         Account__c:
@@ -75,9 +75,9 @@ pmdm__Service__c:
         Name: Name
 
         # Custom Fields
-        Description__c: Description__c
-        Status__c: Status__c
-        UnitOfService__c: UnitOfService__c
+        Description__c: pmdm0__Description__c
+        Status__c: pmdm0__Status__c
+        UnitOfService__c: pmdm0__UnitOfService__c
 
     lookups:
         Program__c:
@@ -93,9 +93,9 @@ pmdm__ServiceDelivery__c:
         Name: Name
 
         # Custom Fields
-        AutonameOverride__c: AutonameOverride__c
-        DeliveryDate__c: DeliveryDate__c
-        Quantity__c: Quantity__c
+        AutonameOverride__c: pmdm0__AutonameOverride__c
+        DeliveryDate__c: pmdm0__DeliveryDate__c
+        Quantity__c: pmdm0__Quantity__c
 
     lookups:
         Service__c:

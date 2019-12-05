@@ -3,11 +3,11 @@ BEGIN TRANSACTION;
 CREATE TABLE "pmdm__ProgramCohort__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
-	"Description__c" VARCHAR(255), 
-	"EndDate__c" VARCHAR(255), 
-	"StartDate__c" VARCHAR(255), 
-	"Status__c" VARCHAR(255), 
-	"Summary__c" VARCHAR(255), 
+	"pmdm0__Description__c" VARCHAR(255), 
+	"pmdm0__EndDate__c" VARCHAR(255), 
+	"pmdm0__StartDate__c" VARCHAR(255), 
+	"pmdm0__Status__c" VARCHAR(255), 
+	"pmdm0__Summary__c" VARCHAR(255), 
 	program__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
@@ -20,12 +20,12 @@ INSERT INTO "pmdm__ProgramCohort__c" VALUES(5,'Highpoint','Highpoint neighborhoo
 CREATE TABLE "pmdm__ProgramEngagement__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
-	"ApplicationDate__c" VARCHAR(255), 
-	"AutoName_Override__c" VARCHAR(255), 
-	"EndDate__c" VARCHAR(255), 
-	"Role__c" VARCHAR(255), 
-	"Stage__c" VARCHAR(255), 
-	"StartDate__c" VARCHAR(255), 
+	"pmdm0__ApplicationDate__c" VARCHAR(255), 
+	"pmdm0__AutoName_Override__c" VARCHAR(255), 
+	"pmdm0__EndDate__c" VARCHAR(255), 
+	"pmdm0__Role__c" VARCHAR(255), 
+	"pmdm0__Stage__c" VARCHAR(255), 
+	"pmdm0__StartDate__c" VARCHAR(255), 
 	account__c VARCHAR(255), 
 	contact__c VARCHAR(255), 
 	program__c VARCHAR(255), 
@@ -74,13 +74,13 @@ INSERT INTO "pmdm__ProgramEngagement__c" VALUES(38,'Alia  Duarte - Mobile Middle
 CREATE TABLE "pmdm__Program__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
-	"Description__c" VARCHAR(255), 
-	"EndDate__c" VARCHAR(255), 
-	"ProgramIssueArea__c" VARCHAR(255), 
-	"StartDate__c" VARCHAR(255), 
-	"Status__c" VARCHAR(255), 
-	"Summary__c" VARCHAR(255), 
-	"TargetPopulation__c" VARCHAR(255), 
+	"pmdm0__Description__c" VARCHAR(255), 
+	"pmdm0__EndDate__c" VARCHAR(255), 
+	"pmdm0__ProgramIssueArea__c" VARCHAR(255), 
+	"pmdm0__StartDate__c" VARCHAR(255), 
+	"pmdm0__Status__c" VARCHAR(255), 
+	"pmdm0__Summary__c" VARCHAR(255), 
+	"pmdm0__TargetPopulation__c" VARCHAR(255), 
 	PRIMARY KEY (id)
 );
 INSERT INTO "pmdm__Program__c" VALUES(1,'Prenatal and Early Childhood Health Program','','','Food and Nutrition','','Active','','');
@@ -99,9 +99,9 @@ INSERT INTO "pmdm__Program__c" VALUES(12,'No More Food Deserts Advocacy','Advoca
 CREATE TABLE "pmdm__ServiceDelivery__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
-	"AutonameOverride__c" VARCHAR(255), 
-	"DeliveryDate__c" VARCHAR(255), 
-	"Quantity__c" VARCHAR(255), 
+	"pmdm0__AutonameOverride__c" VARCHAR(255), 
+	"pmdm0__DeliveryDate__c" VARCHAR(255), 
+	"pmdm0__Quantity__c" VARCHAR(255), 
 	service__c VARCHAR(255), 
 	account__c VARCHAR(255), 
 	contact__c VARCHAR(255), 
@@ -313,9 +313,9 @@ INSERT INTO "pmdm__ServiceDelivery__c" VALUES(201,'Alana Owen - Middle School ST
 CREATE TABLE "pmdm__Service__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
-	"Description__c" VARCHAR(255), 
-	"Status__c" VARCHAR(255), 
-	"UnitOfService__c" VARCHAR(255), 
+	"pmdm0__Description__c" VARCHAR(255), 
+	"pmdm0__Status__c" VARCHAR(255), 
+	"pmdm0__UnitOfService__c" VARCHAR(255), 
 	program__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );

@@ -149,7 +149,22 @@ tasks:
     log_bulk_data_mapping:
         group: "Data: Bulk"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData.LogMapping
+        class_path: tasks.BulkData.CreateMapping
+        options:
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            log_mapping: table
+
+    create_bulk_data_mapping:
+        group: "Data: Bulk"
+        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
+        class_path: tasks.BulkData.CreateMapping
         options:
             package_mapping_directories:
                 - data/bulk/mapping/caseman

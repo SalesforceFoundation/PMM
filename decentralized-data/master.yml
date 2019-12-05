@@ -1,0 +1,686 @@
+Household_Accounts:
+    sf_object: Account
+    table: household_accounts
+    record_type: HH_Account
+    fields:
+        Name: Name
+        Description: Description
+        BillingStreet: Street
+        BillingCity: City
+        BillingState: State
+        BillingPostalCode: PostalCode
+        BillingCountry: Country
+        ShippingStreet: Street
+        ShippingCity: City
+        ShippingState: State
+        ShippingPostalCode: PostalCode
+        ShippingCountry: Country
+        Phone: Phone
+        Fax: Fax
+        Website: Website
+        NumberOfEmployees: NumberOfEmployees
+        AccountNumber: AccountNumber
+        Site: Site
+        Type: Type
+
+        npe01__SYSTEM_AccountType__c: npe01__SYSTEM_AccountType__c
+        npe01__SYSTEMIsIndividual__c: npe01__SYSTEMIsIndividual__c
+
+        npo02__SYSTEM_CUSTOM_NAMING__c: npo02__SYSTEM_CUSTOM_NAMING__c
+        npo02__FirstCloseDate__c: npo02__FirstCloseDate__c
+        npo02__LastCloseDate__c: npo02__LastCloseDate__c
+        npo02__AverageAmount__c: npo02__AverageAmount__c
+        npo02__LastOppAmount__c: npo02__LastOppAmount__c
+        npo02__LargestAmount__c: npo02__LargestAmount__c
+        npo02__SmallestAmount__c: npo02__SmallestAmount__c
+        npo02__Best_Gift_Year__c: npo02__Best_Gift_Year__c
+        npo02__Best_Gift_Year_Total__c: npo02__Best_Gift_Year_Total__c
+        npo02__TotalOppAmount__c: npo02__TotalOppAmount__c
+        npo02__OppAmountLastNDays__c: npo02__OppAmountLastNDays__c
+        npo02__OppAmountThisYear__c: npo02__OppAmountThisYear__c
+        npo02__OppAmountLastYear__c: npo02__OppAmountLastYear__c
+        npo02__OppAmount2YearsAgo__c: npo02__OppAmount2YearsAgo__c
+        npo02__NumberOfClosedOpps__c: npo02__NumberOfClosedOpps__c
+        npo02__OppsClosedLastNDays__c: npo02__OppsClosedLastNDays__c
+        npo02__OppsClosedThisYear__c: npo02__OppsClosedThisYear__c
+        npo02__OppsClosedLastYear__c: npo02__OppsClosedLastYear__c
+        npo02__OppsClosed2YearsAgo__c: npo02__OppsClosed2YearsAgo__c
+        npo02__TotalMembershipOppAmount__c: npo02__TotalMembershipOppAmount__c
+        npo02__MembershipEndDate__c: npo02__MembershipEndDate__c
+        npo02__LastMembershipLevel__c: npo02__LastMembershipLevel__c
+        npo02__MembershipJoinDate__c: npo02__MembershipJoinDate__c
+        npo02__LastMembershipDate__c: npo02__LastMembershipDate__c
+        npo02__LastMembershipAmount__c: npo02__LastMembershipAmount__c
+        npo02__LastMembershipOrigin__c: npo02__LastMembershipOrigin__c
+        npo02__NumberOfMembershipOpps__c: npo02__NumberOfMembershipOpps__c
+
+        caseman__MaximumClientsServed__c: caseman__MaximumClientsServed__c
+
+Contacts:
+    sf_object: Contact
+    table: contacts
+    fields:
+        Salutation: salutation
+        FirstName: firstname
+        LastName: lastname
+        Email: email
+        Phone: phone
+        MobilePhone: mobile
+        OtherPhone: OtherPhone
+        HomePhone: HomePhone
+        Title: title
+        Birthdate: birthdate
+        MailingStreet: mailingstreet
+        MailingCity: mailingcity
+        MailingState: mailingstate
+        MailingPostalCode: mailingpostalcode
+        MailingCountry: mailingcountry
+
+        npsp__Deceased__c: npsp__Deceased__c
+        npsp__Do_Not_Contact__c: npsp__Do_Not_Contact__c
+        npsp__Exclude_from_Household_Formal_Greeting__c: npsp__Exclude_from_Household_Formal_Greeting__c
+        npsp__Exclude_from_Household_Informal_Greeting__c: npsp__Exclude_from_Household_Informal_Greeting__c
+        npsp__Exclude_from_Household_Name__c: npsp__Exclude_from_Household_Name__c
+        npsp__First_Soft_Credit_Amount__c: npsp__First_Soft_Credit_Amount__c
+        npsp__First_Soft_Credit_Date__c: npsp__First_Soft_Credit_Date__c
+        npsp__is_Address_Override__c: npsp__is_Address_Override__c
+        npsp__Largest_Soft_Credit_Amount__c: npsp__Largest_Soft_Credit_Amount__c
+        npsp__Largest_Soft_Credit_Date__c: npsp__Largest_Soft_Credit_Date__c
+        npsp__Last_Soft_Credit_Amount__c: npsp__Last_Soft_Credit_Amount__c
+        npsp__Last_Soft_Credit_Date__c: npsp__Last_Soft_Credit_Date__c
+        npsp__Number_of_Soft_Credits__c: npsp__Number_of_Soft_Credits__c
+        npsp__Number_of_Soft_Credits_Last_N_Days__c: npsp__Number_of_Soft_Credits_Last_N_Days__c
+        npsp__Number_of_Soft_Credits_Last_Year__c: npsp__Number_of_Soft_Credits_Last_Year__c
+        npsp__Number_of_Soft_Credits_This_Year__c: npsp__Number_of_Soft_Credits_This_Year__c
+        npsp__Number_of_Soft_Credits_Two_Years_Ago__c: npsp__Number_of_Soft_Credits_Two_Years_Ago__c
+        npsp__Soft_Credit_Last_N_Days__c: npsp__Soft_Credit_Last_N_Days__c
+
+        npe01__SystemAccountProcessor__c: npe01__SystemAccountProcessor__c
+        npe01__AlternateEmail__c: npe01__AlternateEmail__c
+        npe01__HomeEmail__c: npe01__HomeEmail__c
+        npe01__Preferred_Email__c: npe01__Preferred_Email__c
+        npe01__PreferredPhone__c: npe01__PreferredPhone__c
+        npe01__Primary_Address_Type__c: npe01__Primary_Address_Type__c
+        npe01__Private__c: npe01__Private__c
+        npe01__Secondary_Address_Type__c: npe01__Secondary_Address_Type__c
+        npe01__WorkEmail__c: npe01__WorkEmail__c
+        npe01__WorkPhone__c: npe01__WorkPhone__c
+
+        npo02__SystemHouseholdProcessor__c: npo02__SystemHouseholdProcessor__c
+        npo02__AverageAmount__c: npo02__AverageAmount__c
+        npo02__Best_Gift_Year__c: npo02__Best_Gift_Year__c
+        npo02__Best_Gift_Year_Total__c: npo02__Best_Gift_Year_Total__c
+        npo02__FirstCloseDate__c: npo02__FirstCloseDate__c
+        npo02__Household__c: npo02__Household__c
+        npo02__Household_Naming_Order__c: npo02__Household_Naming_Order__c
+        npo02__LargestAmount__c: npo02__LargestAmount__c
+        npo02__LastCloseDate__c: npo02__LastCloseDate__c
+        npo02__LastMembershipAmount__c: npo02__LastMembershipAmount__c
+        npo02__LastMembershipDate__c: npo02__LastMembershipDate__c
+        npo02__LastMembershipLevel__c: npo02__LastMembershipLevel__c
+        npo02__LastMembershipOrigin__c: npo02__LastMembershipOrigin__c
+        npo02__LastOppAmount__c: npo02__LastOppAmount__c
+        npo02__MembershipEndDate__c: npo02__MembershipEndDate__c
+        npo02__MembershipJoinDate__c: npo02__MembershipJoinDate__c
+        npo02__Naming_Exclusions__c: npo02__Naming_Exclusions__c
+        npo02__NumberOfClosedOpps__c: npo02__NumberOfClosedOpps__c
+        npo02__NumberOfMembershipOpps__c: npo02__NumberOfMembershipOpps__c
+        npo02__OppAmount2YearsAgo__c: npo02__OppAmount2YearsAgo__c
+        npo02__OppAmountLastNDays__c: npo02__OppAmountLastNDays__c
+        npo02__OppAmountLastYear__c: npo02__OppAmountLastYear__c
+        npo02__OppAmountThisYear__c: npo02__OppAmountThisYear__c
+        npo02__OppsClosed2YearsAgo__c: npo02__OppsClosed2YearsAgo__c
+        npo02__OppsClosedLastNDays__c: npo02__OppsClosedLastNDays__c
+        npo02__OppsClosedLastYear__c: npo02__OppsClosedLastYear__c
+        npo02__OppsClosedThisYear__c: npo02__OppsClosedThisYear__c
+        npo02__SmallestAmount__c: npo02__SmallestAmount__c
+        npo02__Soft_Credit_Last_Year__c: npo02__Soft_Credit_Last_Year__c
+        npo02__Soft_Credit_This_Year__c: npo02__Soft_Credit_This_Year__c
+        npo02__Soft_Credit_Total__c: npo02__Soft_Credit_Total__c
+        npo02__Soft_Credit_Two_Years_Ago__c: npo02__Soft_Credit_Two_Years_Ago__c
+        npo02__TotalMembershipOppAmount__c: npo02__TotalMembershipOppAmount__c
+        npo02__TotalOppAmount__c: npo02__TotalOppAmount__c
+
+        caseman__AgeCategory__c: caseman__AgeCategory__c
+        caseman__ClientID__c: caseman__ClientID__c
+        caseman__EmergencyContactRole__c: caseman__EmergencyContactRole__c
+        caseman__PhotoFileID__c: caseman__PhotoFileID__c
+        caseman__PreferredCommunicationMethod__c: caseman__PreferredCommunicationMethod__c
+        caseman__LegalName__c: caseman__LegalName__c
+        caseman__PreferredPhoneField__c: caseman__PreferredPhoneField__c
+        caseman__PreferredPhoneNumber__c: caseman__PreferredPhoneNumber__c
+        caseman__Pronouns__c: caseman__Pronouns__c
+        caseman__Roles__c: caseman__Roles__c
+        caseman__WatchList__c: caseman__WatchList__c
+        caseman__WatchListDate__c: caseman__WatchListDate__c
+
+    lookups:
+        AccountId:
+            table: household_accounts
+        caseman__EmergencyContact__c:
+            key_field: emergency_contact__c
+            table: contacts
+            after: Contacts
+Organization_Accounts:
+    sf_object: Account
+    table: organization_accounts
+    record_type: Organization
+    fields:
+        Name: Name
+        Description: Description
+        BillingStreet: Street
+        BillingCity: City
+        BillingState: State
+        BillingPostalCode: PostalCode
+        BillingCountry: Country
+        ShippingStreet: Street
+        ShippingCity: City
+        ShippingState: State
+        ShippingPostalCode: PostalCode
+        ShippingCountry: Country
+        Phone: Phone
+        Fax: Fax
+        Website: Website
+        NumberOfEmployees: NumberOfEmployees
+        AccountNumber: AccountNumber
+        Site: Site
+        Type: Type
+        npe01__SYSTEM_AccountType__c: SYSTEM_AccountType__c
+        npe01__SYSTEMIsIndividual__c: SYSTEMIsIndividual__c
+        npo02__SYSTEM_CUSTOM_NAMING__c: SYSTEM_CUSTOM_NAMING__c
+        npo02__FirstCloseDate__c: FirstCloseDate__c
+        npo02__LastCloseDate__c: LastCloseDate__c
+        npo02__AverageAmount__c: AverageAmount__c
+        npo02__LastOppAmount__c: LastOppAmount__c
+        npo02__LargestAmount__c: LargestAmount__c
+        npo02__SmallestAmount__c: SmallestAmount__c
+        npo02__Best_Gift_Year__c: Best_Gift_Year__c
+        npo02__Best_Gift_Year_Total__c: Best_Gift_Year_Total__c
+        npo02__TotalOppAmount__c: TotalOppAmount__c
+        npo02__OppAmountLastNDays__c: OppAmountLastNDays__c
+        npo02__OppAmountThisYear__c: OppAmountThisYear__c
+        npo02__OppAmountLastYear__c: OppAmountLastYear__c
+        npo02__OppAmount2YearsAgo__c: OppAmount2YearsAgo__c
+        npo02__NumberOfClosedOpps__c: NumberOfClosedOpps__c
+        npo02__OppsClosedLastNDays__c: OppsClosedLastNDays__c
+        npo02__OppsClosedThisYear__c: OppsClosedThisYear__c
+        npo02__OppsClosedLastYear__c: OppsClosedLastYear__c
+        npo02__OppsClosed2YearsAgo__c: OppsClosed2YearsAgo__c
+        npo02__TotalMembershipOppAmount__c: TotalMembershipOppAmount__c
+        npo02__MembershipEndDate__c: MembershipEndDate__c
+        npo02__LastMembershipLevel__c: LastMembershipLevel__c
+        npo02__MembershipJoinDate__c: MembershipJoinDate__c
+        npo02__LastMembershipDate__c: LastMembershipDate__c
+        npo02__LastMembershipAmount__c: LastMembershipAmount__c
+        npo02__LastMembershipOrigin__c: LastMembershipOrigin__c
+        npo02__NumberOfMembershipOpps__c: NumberOfMembershipOpps__c
+        caseman__MaximumClientsServed__c: MaximumClientsServed__c
+pmdm__Program__c:
+    sf_object: Program__c
+    table: pmdm__Program__c
+    fields:
+        Name: Name
+        Description__c: Description__c
+        EndDate__c: EndDate__c
+        ProgramIssueArea__c: ProgramIssueArea__c
+        StartDate__c: StartDate__c
+        Status__c: Status__c
+        Summary__c: Summary__c
+        TargetPopulation__c: TargetPopulation__c
+pmdm__ProgramCohort__c:
+    sf_object: ProgramCohort__c
+    table: pmdm__ProgramCohort__c
+    fields:
+        Name: Name
+        Description__c: Description__c
+        EndDate__c: EndDate__c
+        StartDate__c: StartDate__c
+        Status__c: Status__c
+        Summary__c: Summary__c
+    lookups:
+        Program__c:
+            key_field: program__c
+            table: pmdm__Program__c
+pmdm__ProgramEngagement__c:
+    sf_object: ProgramEngagement__c
+    table: pmdm__ProgramEngagement__c
+    fields:
+        Name: Name
+        ApplicationDate__c: ApplicationDate__c
+        AutoName_Override__c: AutoName_Override__c
+        EndDate__c: EndDate__c
+        Role__c: Role__c
+        Stage__c: Stage__c
+        StartDate__c: StartDate__c
+    lookups:
+        Account__c:
+            key_field: account__c
+            table: household_accounts
+        Contact__c:
+            key_field: contact__c
+            table: contacts
+        Program__c:
+            key_field: program__c
+            table: pmdm__Program__c
+        ProgramCohort__c:
+            key_field: program_cohort__c
+            table: pmdm__ProgramCohort__c
+pmdm__Service__c:
+    sf_object: Service__c
+    table: pmdm__Service__c
+    fields:
+        Name: Name
+        Description__c: Description__c
+        Status__c: Status__c
+        UnitOfService__c: UnitOfService__c
+    lookups:
+        Program__c:
+            key_field: program__c
+            table: pmdm__Program__c
+pmdm__ServiceDelivery__c:
+    sf_object: ServiceDelivery__c
+    table: pmdm__ServiceDelivery__c
+    fields:
+        Name: Name
+        AutonameOverride__c: AutonameOverride__c
+        DeliveryDate__c: DeliveryDate__c
+        Quantity__c: Quantity__c
+    lookups:
+        Service__c:
+            key_field: service__c
+            table: pmdm__Service__c
+        Account__c:
+            key_field: account__c
+            table: household_accounts
+        Contact__c:
+            key_field: contact__c
+            table: contacts
+        ProgramEngagement__c:
+            key_field: program_engagement__c
+            table: pmdm__ProgramEngagement__c
+npe4__Relationships:
+    sf_object: npe4__Relationship__c
+    table: npe4__relationships
+    fields:
+        npsp__Related_Opportunity_Contact_Role__c: Related_Opportunity_Contact_Role__c
+        npe4__SYSTEM_SystemCreated__c: SYSTEM_SystemCreated__c
+        npe4__Description__c: Description__c
+        npe4__Status__c: Status__c
+        npe4__Type__c: Type__c
+    lookups:
+        npe4__Contact__c:
+            table: contacts
+            key_field: contact__c
+        npe4__RelatedContact__c:
+            table: contacts
+            key_field: related_contact__c
+npsp__Donations:
+    sf_object: Opportunity
+    table: npsp__donations
+    fields:
+        Name: Name
+        NextStep: NextStep
+        Type: Type
+        StageName: StageName
+        LeadSource: LeadSource
+        ForecastCategoryName: ForecastCategoryName
+        Probability: Probability
+        TotalOpportunityQuantity: TotalOpportunityQuantity
+        Description: Description
+        CloseDate: CloseDate
+        Amount: Amount
+        IsPrivate: IsPrivate
+        npsp__Grant_Requirements_Website__c: Grant_Requirements_Website__c
+        npsp__Primary_Contact_Campaign_Member_Status__c: Primary_Contact_Campaign_Member_Status__c
+        npsp__Notification_Recipient_Name__c: Notification_Recipient_Name__c
+        npsp__Honoree_Name__c: Honoree_Name__c
+        npsp__Matching_Gift_Employer__c: Matching_Gift_Employer__c
+        npsp__Grant_Contract_Number__c: Grant_Contract_Number__c
+        npsp__Notification_Recipient_Information__c: Notification_Recipient_Information__c
+        npsp__Grant_Program_Area_s__c: Grant_Program_Area_s__c
+        npsp__In_Kind_Description__c: In_Kind_Description__c
+        npsp__Tribute_Type__c: Tribute_Type__c
+        npsp__Notification_Preference__c: Notification_Preference__c
+        npsp__Matching_Gift_Status__c: Matching_Gift_Status__c
+        npsp__In_Kind_Type__c: In_Kind_Type__c
+        npsp__Acknowledgment_Status__c: Acknowledgment_Status__c
+        npsp__Gift_Strategy__c: Gift_Strategy__c
+        npsp__Recurring_Donation_Installment_Number__c: Recurring_Donation_Installment_Number__c
+        npsp__Notification_Message__c: Notification_Message__c
+        npsp__Closed_Lost_Reason__c: Closed_Lost_Reason__c
+        npsp__Grant_Period_Start_Date__c: Grant_Period_Start_Date__c
+        npsp__Grant_Period_End_Date__c: Grant_Period_End_Date__c
+        npsp__Grant_Contract_Date__c: Grant_Contract_Date__c
+        npsp__Acknowledgment_Date__c: Acknowledgment_Date__c
+        npsp__Qualified_Date__c: Qualified_Date__c
+        npsp__Ask_Date__c: Ask_Date__c
+        npsp__Fair_Market_Value__c: Fair_Market_Value__c
+        npsp__Requested_Amount__c: Requested_Amount__c
+        npsp__DisableContactRoleAutomation__c: DisableContactRoleAutomation__c
+        npsp__In_Kind_Donor_Declared_Value__c: In_Kind_Donor_Declared_Value__c
+        npsp__Is_Grant_Renewal__c: Is_Grant_Renewal__c
+        npe01__Contact_Id_for_Role__c: Contact_Id_for_Role__c
+        npe01__Membership_Origin__c: Membership_Origin__c
+        npe01__Member_Level__c: Member_Level__c
+        npe01__Membership_Start_Date__c: Membership_Start_Date__c
+        npe01__Membership_End_Date__c: Membership_End_Date__c
+        npe01__Do_Not_Automatically_Create_Payment__c: Do_Not_Automatically_Create_Payment__c
+        npo02__systemHouseholdContactRoleProcessor__c: systemHouseholdContactRoleProcessor__c
+    lookups:
+        AccountId:
+            table: household_accounts
+            key_field: account_id
+        npsp__Primary_Contact__c:
+            table: contacts
+            key_field: primary_contact__c
+        npsp__Honoree_Contact__c:
+            table: contacts
+            key_field: honoree_contact__c
+        npsp__Notification_Recipient_Contact__c:
+            table: contacts
+            key_field: notification_recipient_contact__c
+npsp__OpportunityContactRole:
+    sf_object: OpportunityContactRole
+    table: npsp__OpportunityContactRole
+    fields:
+        Role: Role
+        IsPrimary: IsPrimary
+    lookups:
+        ContactId:
+            table: contacts
+            key_field: contact_id
+        OpportunityId:
+            table: npsp__donations
+            key_field: opportunity_id
+caseman__Branches:
+    sf_object: Account
+    table: caseman__branch_accounts
+    record_type: Branch
+    fields:
+        Name: Name
+        Description: Description
+        BillingStreet: Street
+        BillingCity: City
+        BillingState: State
+        BillingPostalCode: PostalCode
+        BillingCountry: Country
+        ShippingStreet: Street
+        ShippingCity: City
+        ShippingState: State
+        ShippingPostalCode: PostalCode
+        ShippingCountry: Country
+        Phone: Phone
+        Fax: Fax
+        Website: Website
+        NumberOfEmployees: NumberOfEmployees
+        AccountNumber: AccountNumber
+        Site: Site
+        Type: Type
+        caseman__MaximumClientsServed__c: MaximumClientsServed__c
+caseman__Branch_Contacts:
+    sf_object: AccountContactRelation
+    table: caseman__branch_contacts
+    fields:
+        Roles: Roles
+        IsActive: IsActive
+    lookups:
+        AccountId:
+            table: caseman__branch_accounts
+        ContactId:
+            table: contacts
+caseman__Client_Cases:
+    sf_object: Case
+    table: caseman__client_cases
+    record_type: ClientCase
+    fields:
+        Subject: subject
+        Priority: priority
+        Status: status
+        Origin: origin
+        Description: description
+        SuppliedCompany: SuppliedCompany
+        SuppliedEmail: SuppliedEmail
+        SuppliedName: SuppliedName
+        SuppliedPhone: SuppliedPhone
+        caseman__IncidentDateTime__c: IncidentDateTime__c
+        caseman__IncidentType__c: IncidentType__c
+        caseman__LocationNotes__c: LocationNotes__c
+        caseman__Severity__c: Severity__c
+    lookups:
+        caseman__Branch__c:
+            key_field: branch__c
+            table: caseman__branch_accounts
+        ContactId:
+            table: contacts
+caseman__Incidents:
+    sf_object: Case
+    table: caseman__incident_cases
+    record_type: Incident
+    fields:
+        Subject: subject
+        Priority: priority
+        Status: status
+        Origin: origin
+        Description: description
+        SuppliedCompany: SuppliedCompany
+        SuppliedEmail: SuppliedEmail
+        SuppliedName: SuppliedName
+        SuppliedPhone: SuppliedPhone
+        caseman__IncidentDateTime__c: IncidentDateTime__c
+        caseman__IncidentType__c: IncidentType__c
+        caseman__LocationNotes__c: LocationNotes__c
+        caseman__Severity__c: Severity__c
+    lookups:
+        caseman__Branch__c:
+            table: caseman__branch_accounts
+            key_field: branch__c
+        ContactId:
+            table: contacts
+caseman__Programs:
+    sf_object: caseman__Program__c
+    table: caseman__programs
+    fields:
+        Name: name
+        caseman__TargetPopulation__c: targetpopulation__c
+        caseman__ProgramDescription__c: programdescription__c
+        caseman__Summary__c: summary__c
+        caseman__Duration__c: duration__c
+        caseman__DurationUnit__c: durationunit__c
+        caseman__EndDate__c: enddate__c
+        caseman__StartDate__c: startdate__c
+        caseman__Status__c: status__c
+        caseman__FrequencyDescription__c: frequency_description__c
+caseman__Program_Offerings:
+    sf_object: caseman__ProgramOffering__c
+    table: caseman__program_offerings
+    fields:
+        Name: name
+        caseman__Description__c: description__c
+        caseman__Summary__c: summary__c
+        caseman__Duration__c: duration__c
+        caseman__DurationUnit__c: durationunit__c
+        caseman__StartDate__c: startdate__c
+        caseman__EndDate__c: enddate__c
+        caseman__Status__c: status__c
+    lookups:
+        caseman__Program__c:
+            key_field: program__c
+            table: caseman__programs
+caseman__Account_Program_Offerings:
+    sf_object: caseman__AccountProgramOffering__c
+    table: caseman__account_program_offerings
+    fields:
+        caseman__AccountRole__c: accountrole__c
+    lookups:
+        caseman__Account__c:
+            key_field: account__c
+            table: organization_accounts
+        caseman__ProgramOffering__c:
+            key_field: program_offering__c
+            table: caseman__program_offerings
+caseman__Program_Engagements:
+    sf_object: caseman__ProgramEngagement__c
+    table: caseman__program_engagements
+    fields:
+        caseman__Status__c: Status__c
+        caseman__StartDate__c: StartDate__c
+        caseman__EndDate__c: EndDate__c
+    lookups:
+        caseman__ProgramOffering__c:
+            table: caseman__program_offerings
+            key_field: program_offering__c
+        caseman__Contact__c:
+            key_field: contact__c
+            table: contacts
+        caseman__Case__c:
+            key_field: case__c
+            table: caseman__client_cases
+caseman__Appointments:
+    sf_object: caseman__Appointment__c
+    table: caseman__appointments
+    fields:
+        Name: name
+        caseman__Type__c: type__c
+        caseman__Location__c: location__c
+        caseman__StartDateTime__c: startdatetime__c
+        caseman__EndDateTime__c: enddatetime__c
+        caseman__Description__c: description__c
+caseman__Appointment_Attendees:
+    sf_object: caseman__AppointmentAttendee__c
+    table: caseman__appointment_attendees
+    fields:
+        caseman__Reason__c: reason__c
+        caseman__Role__c: role__c
+        caseman__Status__c: status__c
+    lookups:
+        caseman__Appointment__c:
+            key_field: appointment__c
+            table: caseman__appointments
+        caseman__Attendee__c:
+            key_field: attendee__c
+            table: contacts
+caseman__Client_Alerts:
+    sf_object: caseman__ClientAlert__c
+    table: caseman__client_alerts
+    fields:
+        Name: name
+        caseman__Active__c: active__c
+        caseman__Description__c: description__c
+    lookups:
+        caseman__Contact__c:
+            key_field: contact__c
+            table: contacts
+caseman__Client_Notes:
+    sf_object: caseman__ClientNote__c
+    table: caseman__client_notes
+    fields:
+        caseman__Content__c: content__c
+        caseman__Subject__c: subject__c
+        caseman__Status__c: status__c
+        caseman__InteractionDate__c: interactiondate__c
+        caseman__Draft__c: draft__c
+        caseman__MinutesSpentWithClient__c: minutes_spent_with_client__c
+    lookups:
+        caseman__Client__c:
+            key_field: client__c
+            table: contacts
+        caseman__ProgramEngagement__c:
+            key_field: program_engagement__c
+            table: caseman__program_engagements
+caseman__Client_Note_Relationships:
+    sf_object: caseman__ClientNoteRelationship__c
+    table: caseman__client_note_relationships
+    fields:
+        caseman__RelatedId__c: RelatedId__c
+        caseman__RelatedName__c: RelatedName__c
+        caseman__RelatedObject__c: RelatedObject__c
+    lookups:
+        caseman__Case__c:
+            key_field: case__c
+            table: caseman__client_cases
+        caseman__ClientNote__c:
+            key_field: client_note__c
+            table: caseman__client_notes
+        caseman__Contact__c:
+            key_field: contact__c
+            table: contacts
+        caseman__ProgramEngagement__c:
+            key_field: program_engagement__c
+            table: caseman__program_engagements
+caseman__Goal_Templates:
+    sf_object: caseman__GoalTemplate__c
+    table: caseman__goal_templates
+    fields:
+        Name: name
+caseman__Action_Item_Templates:
+    sf_object: caseman__ActionItemTemplate__c
+    table: caseman__action_item_templates
+    fields:
+        Name: name
+caseman__Goal_Action_Item_Templates:
+    sf_object: caseman__GoalActionItemTemplate__c
+    table: caseman__goal_action_item_templates
+    fields:
+    lookups:
+        caseman__GoalTemplate__c:
+            key_field: goal_template__c
+            table: caseman__goal_templates
+        caseman__ActionItemTemplate__c:
+            key_field: action_item_template__c
+            table: caseman__action_item_templates
+caseman__Program_Goal_Templates:
+    sf_object: caseman__ProgramGoalTemplate__c
+    table: caseman__program_goal_templates
+    fields:
+        caseman__IsRequired__c: IsRequired__c
+    lookups:
+        caseman__GoalTemplate__c:
+            key_field: goal_template__c
+            table: caseman__goal_templates
+        caseman__Program__c:
+            key_field: program__c
+            table: caseman__programs
+caseman__Case_Plans:
+    sf_object: caseman__CasePlan__c
+    table: caseman__case_plans
+    fields:
+        Name: Name
+    lookups:
+        caseman__Contact__c:
+            key_field: contact__c
+            table: contacts
+caseman__Goals:
+    sf_object: caseman__Goal__c
+    table: caseman__goals
+    fields:
+        Name: Name
+    lookups:
+        caseman__Contact__c:
+            key_field: contact__c
+            table: contacts
+        caseman__CasePlan__c:
+            key_field: case_plan__c
+            table: caseman__case_plans
+        caseman__GoalTemplate__c:
+            key_field: goal_template__c
+            table: caseman__goal_templates
+caseman__Action_Items:
+    sf_object: caseman__ActionItem__c
+    table: caseman__action_items
+    fields:
+        Name: Name
+        caseman__Status__c: Status__c
+        caseman__DueDate__c: DueDate__c
+    lookups:
+        caseman__Contact__c:
+            key_field: contact__c
+            table: contacts
+        caseman__CasePlan__c:
+            key_field: case_plan__c
+            table: caseman__case_plans
+        caseman__Goal__c:
+            key_field: goal__c
+            table: caseman__goals
+        caseman__ActionItemTemplate__c:
+            key_field: action_item_template__c
+            table: caseman__action_item_templates

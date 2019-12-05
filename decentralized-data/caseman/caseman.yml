@@ -2,12 +2,12 @@
 Household_Accounts:
     record_type: "HH_Account"
     fields:
-        MaximumClientsServed__c: MaximumClientsServed__c
+        MaximumClientsServed__c: caseman__MaximumClientsServed__c
 
 Organization_Accounts:
     record_type: "Organization"
     fields:
-        MaximumClientsServed__c: MaximumClientsServed__c
+        MaximumClientsServed__c: caseman__MaximumClientsServed__c
 
 caseman__Branches:
     sf_object: Account
@@ -37,25 +37,25 @@ caseman__Branches:
         Type: Type
 
         # Custom Fields
-        MaximumClientsServed__c: MaximumClientsServed__c
+        MaximumClientsServed__c: caseman__MaximumClientsServed__c
 
 # Contacts
 Contacts:
     sf_object: Contact
     table: contacts
     fields:
-        AgeCategory__c: AgeCategory__c
-        ClientID__c: ClientID__c
-        EmergencyContactRole__c: EmergencyContactRole__c
-        PhotoFileID__c: PhotoFileID__c
-        PreferredCommunicationMethod__c: PreferredCommunicationMethod__c
-        LegalName__c: LegalName__c
-        PreferredPhoneField__c: PreferredPhoneField__c
-        PreferredPhoneNumber__c: PreferredPhoneNumber__c
-        Pronouns__c: Pronouns__c
-        Roles__c: Roles__c
-        WatchList__c: WatchList__c
-        WatchListDate__c: WatchListDate__c
+        AgeCategory__c: caseman__AgeCategory__c
+        ClientID__c: caseman__ClientID__c
+        EmergencyContactRole__c: caseman__EmergencyContactRole__c
+        PhotoFileID__c: caseman__PhotoFileID__c
+        PreferredCommunicationMethod__c: caseman__PreferredCommunicationMethod__c
+        LegalName__c: caseman__LegalName__c
+        PreferredPhoneField__c: caseman__PreferredPhoneField__c
+        PreferredPhoneNumber__c: caseman__PreferredPhoneNumber__c
+        Pronouns__c: caseman__Pronouns__c
+        Roles__c: caseman__Roles__c
+        WatchList__c: caseman__WatchList__c
+        WatchListDate__c: caseman__WatchListDate__c
 
     lookups:
         EmergencyContact__c:

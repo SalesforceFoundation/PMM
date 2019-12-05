@@ -1,4 +1,5 @@
 BEGIN TRANSACTION;
+
 CREATE TABLE organization_accounts (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -15,37 +16,6 @@ CREATE TABLE organization_accounts (
 	"AccountNumber" VARCHAR(255), 
 	"Site" VARCHAR(255), 
 	"Type" VARCHAR(255), 
-	"SYSTEM_AccountType__c" VARCHAR(255), 
-	"SYSTEMIsIndividual__c" VARCHAR(255), 
-	"MaximumClientsServed__c" VARCHAR(255), 
-	"SYSTEM_CUSTOM_NAMING__c" VARCHAR(255), 
-	"FirstCloseDate__c" VARCHAR(255), 
-	"LastCloseDate__c" VARCHAR(255), 
-	"AverageAmount__c" VARCHAR(255), 
-	"LastOppAmount__c" VARCHAR(255), 
-	"LargestAmount__c" VARCHAR(255), 
-	"SmallestAmount__c" VARCHAR(255), 
-	"Best_Gift_Year__c" VARCHAR(255), 
-	"Best_Gift_Year_Total__c" VARCHAR(255), 
-	"TotalOppAmount__c" VARCHAR(255), 
-	"OppAmountLastNDays__c" VARCHAR(255), 
-	"OppAmountThisYear__c" VARCHAR(255), 
-	"OppAmountLastYear__c" VARCHAR(255), 
-	"OppAmount2YearsAgo__c" VARCHAR(255), 
-	"NumberOfClosedOpps__c" VARCHAR(255), 
-	"OppsClosedLastNDays__c" VARCHAR(255), 
-	"OppsClosedThisYear__c" VARCHAR(255), 
-	"OppsClosedLastYear__c" VARCHAR(255), 
-	"OppsClosed2YearsAgo__c" VARCHAR(255), 
-	"TotalMembershipOppAmount__c" VARCHAR(255), 
-	"MembershipEndDate__c" VARCHAR(255), 
-	"LastMembershipLevel__c" VARCHAR(255), 
-	"MembershipJoinDate__c" VARCHAR(255), 
-	"LastMembershipDate__c" VARCHAR(255), 
-	"LastMembershipAmount__c" VARCHAR(255), 
-	"LastMembershipOrigin__c" VARCHAR(255), 
-	"NumberOfMembershipOpps__c" VARCHAR(255), 
-	record_type VARCHAR(255), 
 	PRIMARY KEY (id)
 );
 INSERT INTO "organization_accounts" VALUES(
@@ -63,8 +33,7 @@ INSERT INTO "organization_accounts" VALUES(
     '',
     '',
     '',
-    'Foundation',
-    'Organization'
+    'Foundation'
 );
 INSERT INTO "organization_accounts" VALUES(
     2,
@@ -81,8 +50,7 @@ INSERT INTO "organization_accounts" VALUES(
     '',
     '',
     '',
-    'Foundation',
-    'Organization'
+    'Foundation'
 );
 INSERT INTO "organization_accounts" VALUES(
     3,
@@ -99,7 +67,7 @@ INSERT INTO "organization_accounts" VALUES(
     '',
     '',
     '',
-    'Government',
-    'Organization'
+    'Government'
 );
+
 COMMIT;

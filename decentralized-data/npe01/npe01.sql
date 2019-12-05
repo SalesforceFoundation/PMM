@@ -2,547 +2,3351 @@ BEGIN TRANSACTION;
 
 CREATE TABLE contacts (
 	id INTEGER NOT NULL, 
-	salutation VARCHAR(255), 
-	firstname VARCHAR(255), 
-	lastname VARCHAR(255), 
-	email VARCHAR(255), 
-	phone VARCHAR(255), 
-	mobile VARCHAR(255), 
-	"OtherPhone" VARCHAR(255), 
-	"HomePhone" VARCHAR(255), 
-	title VARCHAR(255), 
-	birthdate VARCHAR(255), 
-	mailingstreet VARCHAR(255), 
-	mailingcity VARCHAR(255), 
-	mailingstate VARCHAR(255), 
-	mailingpostalcode VARCHAR(255), 
-	mailingcountry VARCHAR(255), 
-	"SystemAccountProcessor__c" VARCHAR(255), 
-	"AlternateEmail__c" VARCHAR(255), 
-	"HomeEmail__c" VARCHAR(255), 
-	"Preferred_Email__c" VARCHAR(255), 
-	"PreferredPhone__c" VARCHAR(255), 
-	"Primary_Address_Type__c" VARCHAR(255), 
-	"Private__c" VARCHAR(255), 
-	"Secondary_Address_Type__c" VARCHAR(255), 
-	"WorkEmail__c" VARCHAR(255), 
-	"WorkPhone__c" VARCHAR(255), 
-	"AgeCategory__c" VARCHAR(255), 
-	"ClientID__c" VARCHAR(255), 
-	"EmergencyContactRole__c" VARCHAR(255), 
-	"PhotoFileID__c" VARCHAR(255), 
-	"PreferredCommunicationMethod__c" VARCHAR(255), 
-	"LegalName__c" VARCHAR(255), 
-	"PreferredPhoneField__c" VARCHAR(255), 
-	"PreferredPhoneNumber__c" VARCHAR(255), 
-	"Pronouns__c" VARCHAR(255), 
-	"Roles__c" VARCHAR(255), 
-	"WatchList__c" VARCHAR(255), 
-	"WatchListDate__c" VARCHAR(255), 
-	"Deceased__c" VARCHAR(255), 
-	"Do_Not_Contact__c" VARCHAR(255), 
-	"Exclude_from_Household_Formal_Greeting__c" VARCHAR(255), 
-	"Exclude_from_Household_Informal_Greeting__c" VARCHAR(255), 
-	"Exclude_from_Household_Name__c" VARCHAR(255), 
-	"First_Soft_Credit_Amount__c" VARCHAR(255), 
-	"First_Soft_Credit_Date__c" VARCHAR(255), 
-	"is_Address_Override__c" VARCHAR(255), 
-	"Largest_Soft_Credit_Amount__c" VARCHAR(255), 
-	"Largest_Soft_Credit_Date__c" VARCHAR(255), 
-	"Last_Soft_Credit_Amount__c" VARCHAR(255), 
-	"Last_Soft_Credit_Date__c" VARCHAR(255), 
-	"Number_of_Soft_Credits__c" VARCHAR(255), 
-	"Number_of_Soft_Credits_Last_N_Days__c" VARCHAR(255), 
-	"Number_of_Soft_Credits_Last_Year__c" VARCHAR(255), 
-	"Number_of_Soft_Credits_This_Year__c" VARCHAR(255), 
-	"Number_of_Soft_Credits_Two_Years_Ago__c" VARCHAR(255), 
-	"Soft_Credit_Last_N_Days__c" VARCHAR(255), 
-	"SystemHouseholdProcessor__c" VARCHAR(255), 
-	"AverageAmount__c" VARCHAR(255), 
-	"Best_Gift_Year__c" VARCHAR(255), 
-	"Best_Gift_Year_Total__c" VARCHAR(255), 
-	"FirstCloseDate__c" VARCHAR(255), 
-	"Household__c" VARCHAR(255), 
-	"Household_Naming_Order__c" VARCHAR(255), 
-	"LargestAmount__c" VARCHAR(255), 
-	"LastCloseDate__c" VARCHAR(255), 
-	"LastMembershipAmount__c" VARCHAR(255), 
-	"LastMembershipDate__c" VARCHAR(255), 
-	"LastMembershipLevel__c" VARCHAR(255), 
-	"LastMembershipOrigin__c" VARCHAR(255), 
-	"LastOppAmount__c" VARCHAR(255), 
-	"MembershipEndDate__c" VARCHAR(255), 
-	"MembershipJoinDate__c" VARCHAR(255), 
-	"Naming_Exclusions__c" VARCHAR(255), 
-	"NumberOfClosedOpps__c" VARCHAR(255), 
-	"NumberOfMembershipOpps__c" VARCHAR(255), 
-	"OppAmount2YearsAgo__c" VARCHAR(255), 
-	"OppAmountLastNDays__c" VARCHAR(255), 
-	"OppAmountLastYear__c" VARCHAR(255), 
-	"OppAmountThisYear__c" VARCHAR(255), 
-	"OppsClosed2YearsAgo__c" VARCHAR(255), 
-	"OppsClosedLastNDays__c" VARCHAR(255), 
-	"OppsClosedLastYear__c" VARCHAR(255), 
-	"OppsClosedThisYear__c" VARCHAR(255), 
-	"SmallestAmount__c" VARCHAR(255), 
-	"Soft_Credit_Last_Year__c" VARCHAR(255), 
-	"Soft_Credit_This_Year__c" VARCHAR(255), 
-	"Soft_Credit_Total__c" VARCHAR(255), 
-	"Soft_Credit_Two_Years_Ago__c" VARCHAR(255), 
-	"TotalMembershipOppAmount__c" VARCHAR(255), 
-	"TotalOppAmount__c" VARCHAR(255), 
-	account_id VARCHAR(255), 
-	emergency_contact__c VARCHAR(255), 
+	"npe01__SystemAccountProcessor__c" VARCHAR(255), 
+	"npe01__AlternateEmail__c" VARCHAR(255), 
+	"npe01__HomeEmail__c" VARCHAR(255), 
+	"npe01__Preferred_Email__c" VARCHAR(255), 
+	"npe01__PreferredPhone__c" VARCHAR(255), 
+	"npe01__Primary_Address_Type__c" VARCHAR(255), 
+	"npe01__Private__c" VARCHAR(255), 
+	"npe01__Secondary_Address_Type__c" VARCHAR(255), 
+	"npe01__WorkEmail__c" VARCHAR(255), 
+	"npe01__WorkPhone__c" VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "contacts" VALUES(1,'','Joe','Salinas','joesalinas@example.com','','','','','','','','','','','','','','joesalinas@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','88','');
-INSERT INTO "contacts" VALUES(2,'','Maleah','Bullock','maleahbullock@example.com','','','','','','','','','','','','','','maleahbullock@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','89','');
-INSERT INTO "contacts" VALUES(3,'','Anika','Solomon','anikasolomon@example.com','','','','','','','','','','','','','','anikasolomon@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','90','');
-INSERT INTO "contacts" VALUES(4,'','Christina','Webster','christinawebster@example.com','','','','','','','','','','','','','','christinawebster@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','91','');
-INSERT INTO "contacts" VALUES(5,'','Emilie','Costa','emiliecosta@example.com','','','','','','','','','','','','','','emiliecosta@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','92','');
-INSERT INTO "contacts" VALUES(6,'','Ayana','Humphrey','ayanahumphrey@example.com','','','','','','','','','','','','','','ayanahumphrey@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','93','');
-INSERT INTO "contacts" VALUES(7,'','Lucia','Cain','luciacain@example.com','','','','','','','','','','','','','','luciacain@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','94','');
-INSERT INTO "contacts" VALUES(8,'','Amaya','Dunlap','amayadunlap@example.com','','','','','','','','','','','','','','amayadunlap@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','95','');
-INSERT INTO "contacts" VALUES(9,'','Norma','Burke','normaburke@example.com','555-830-5295','1-333-444-5555','','555-830-5295','','1949-12-21','3160 Green Avenue','Oakland','CA','94612','United States','','','normaburke@example.com','Personal','Home','Home','false','','','','Senior','','Friend','','','','','','they/them/theirs','Client','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','7','');
-INSERT INTO "contacts" VALUES(10,'','Derrick','Blackwell','derrickblackwell@example.com','','','','','','','','','','','','','','derrickblackwell@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','96','');
-INSERT INTO "contacts" VALUES(11,'','Alice','Irwin','aliceirwin@example.com','','','','','','','','','','','','','','aliceirwin@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','97','');
-INSERT INTO "contacts" VALUES(12,'','Fabian','Hughes','fabianhughes@example.com','','','','','','','','','','','','','','fabianhughes@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','98','');
-INSERT INTO "contacts" VALUES(13,'','Raelynn','Wells','raelynnwells@example.com','','','','','','','','','','','','','','raelynnwells@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','99','');
-INSERT INTO "contacts" VALUES(14,'','Simon','Davila','simondavila@example.com','','','','','','','','','','','','','','simondavila@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','100','');
-INSERT INTO "contacts" VALUES(15,'','Jamarcus','Barnett','jamarcusbarnett@example.com','','','','','','','','','','','','','','jamarcusbarnett@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','101','');
-INSERT INTO "contacts" VALUES(16,'','Adrianna','Norman','adriannanorman@example.com','','','','','','','','','','','','','','adriannanorman@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','102','');
-INSERT INTO "contacts" VALUES(17,'','Donna','Snow','donnasnow@example.com','','','','','','','','','','','','','','donnasnow@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','103','');
-INSERT INTO "contacts" VALUES(18,'','Gary','Wood','garywood@example.com','','','','','','','','','','','','','','garywood@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','104','');
-INSERT INTO "contacts" VALUES(19,'','Reagan','Norton','reagannorton@example.com','','','','','','','','','','','','','','reagannorton@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','105','');
-INSERT INTO "contacts" VALUES(20,'','Bobby','Henderson','bobbyhenderson@example.com','555-834-2386','1-333-444-5555','','555-834-2386','','1970-01-04','3547 Water Street','Oakland','CA','94606','United States','','','bobbyhenderson@example.com','Personal','Home','Home','false','','','','Adult','','Friend','06854000000G0PNAA0','','','','','he/him/his','Client','true','2019-12-04','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','8','');
-INSERT INTO "contacts" VALUES(21,'','Jaylin','Morgan','jaylinmorgan@example.com','','','','','','','','','','','','','','jaylinmorgan@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','106','');
-INSERT INTO "contacts" VALUES(22,'','Mira','Decker','miradecker@example.com','','','','','','','','','','','','','','miradecker@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','107','');
-INSERT INTO "contacts" VALUES(23,'','Maya','Lambert','mayalambert@example.com','','','','','','','','','','','','','','mayalambert@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','108','');
-INSERT INTO "contacts" VALUES(24,'','Finley','Barry','finleybarry@example.com','','','','','','','','','','','','','','finleybarry@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','109','');
-INSERT INTO "contacts" VALUES(25,'','Ben','Oneill','benoneill@example.com','','','','','','','','','','','','','','benoneill@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','110','');
-INSERT INTO "contacts" VALUES(26,'','Maia','Cooley','maiacooley@example.com','','','','','','','','','','','','','','maiacooley@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','111','');
-INSERT INTO "contacts" VALUES(27,'','Olive','Leach','oliveleach@example.com','','','','','','','','','','','','','','oliveleach@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','112','');
-INSERT INTO "contacts" VALUES(28,'','Oswaldo','Pacheco','oswaldopacheco@example.com','','','','','','','','','','','','','','oswaldopacheco@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','113','');
-INSERT INTO "contacts" VALUES(29,'','Nico','Rivers','nicorivers@example.com','','','','','','','','','','','','','','nicorivers@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','114','');
-INSERT INTO "contacts" VALUES(30,'','Tiara','Griffith','tiaragriffith@example.com','','','','','','','','','','','','','','tiaragriffith@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','115','');
-INSERT INTO "contacts" VALUES(31,'','Anthony','Hill','anthonyhill@example.com','555-395-9737','1-333-444-5555','','555-395-9737','','1970-01-02','3611 Harrison Street','Oakland','CA','94612','United States','','','anthonyhill@example.com','Personal','Home','Home','false','','','','Adult','','Friend','','','','','','they/them/theirs','Client','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','9','');
-INSERT INTO "contacts" VALUES(32,'','Declan','Glenn','declanglenn@example.com','','','','','','','','','','','','','','declanglenn@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','116','');
-INSERT INTO "contacts" VALUES(33,'','Madalyn','Francis','madalynfrancis@example.com','','','','','','','','','','','','','','madalynfrancis@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','117','');
-INSERT INTO "contacts" VALUES(34,'','Mathew','Rhodes','mathewrhodes@example.com','','','','','','','','','','','','','','mathewrhodes@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','118','');
-INSERT INTO "contacts" VALUES(35,'','Jessica','Woods','jessicawoods@example.com','','','','','','','','','','','','','','jessicawoods@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','119','');
-INSERT INTO "contacts" VALUES(36,'','Eli','White','eliwhite@example.com','','','','','','','','','','','','','','eliwhite@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','120','');
-INSERT INTO "contacts" VALUES(37,'','Tatiana','Lang','tatianalang@example.com','','','','','','','','','','','','','','tatianalang@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','121','');
-INSERT INTO "contacts" VALUES(38,'','Gia','Ramirez','giaramirez@example.com','','','','','','','','','','','','','','giaramirez@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','122','');
-INSERT INTO "contacts" VALUES(39,'','Alejandro','Serrano','alejandroserrano@example.com','','','','','','','','','','','','','','alejandroserrano@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','123','');
-INSERT INTO "contacts" VALUES(40,'','Mya','Galloway','myagalloway@example.com','','','','','','','','','','','','','','myagalloway@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','124','');
-INSERT INTO "contacts" VALUES(41,'','Adam','Clark','adamclark@example.com','','','','','','','','','','','','','','adamclark@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','125','');
-INSERT INTO "contacts" VALUES(42,'Ms.','Virginia','Holmes','virginiaholmes@example.com','555-930-8759','1-333-444-5555','','555-930-8759','','1969-12-26','4318 Lynch Street','Oakland','CA','94607','United States','','','virginiaholmes@example.com','Personal','Home','Home','false','','','','Adult','','Friend','','','','','','she/her/hers','Client;Donor','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','10','');
-INSERT INTO "contacts" VALUES(43,'','Marisol','Gonzales','marisolgonzales@example.com','','','','','','','','','','','','','','marisolgonzales@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','126','');
-INSERT INTO "contacts" VALUES(44,'','Mya','Cobb','myacobb@example.com','','','','','','','','','','','','','','myacobb@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','127','');
-INSERT INTO "contacts" VALUES(45,'','Jay','Shah','jayshah@example.com','','','','','','','','','','','','','','jayshah@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','128','');
-INSERT INTO "contacts" VALUES(46,'','Nancy','Arroyo','nancyarroyo@example.com','','','','','','','','','','','','','','nancyarroyo@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','129','');
-INSERT INTO "contacts" VALUES(47,'','Aubrie','Booker','aubriebooker@example.com','','','','','','','','','','','','','','aubriebooker@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','130','');
-INSERT INTO "contacts" VALUES(48,'','Emelia','Mercer','emeliamercer@example.com','','','','','','','','','','','','','','emeliamercer@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','131','');
-INSERT INTO "contacts" VALUES(49,'','Yadiel','Horton','yadielhorton@example.com','','','','','','','','','','','','','','yadielhorton@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','132','');
-INSERT INTO "contacts" VALUES(50,'','Taniyah','Rios','taniyahrios@example.com','','','','','','','','','','','','','','taniyahrios@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','133','');
-INSERT INTO "contacts" VALUES(51,'','Peyton','Craig','peytoncraig@example.com','','','','','','','','','','','','','','peytoncraig@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','134','');
-INSERT INTO "contacts" VALUES(52,'','Francesca','Oliver','francescaoliver@example.com','','','','','','','','','','','','','','francescaoliver@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','135','');
-INSERT INTO "contacts" VALUES(53,'','Jose','Jenkins','josejenkins@example.com','555-469-9873','1-333-444-5555','','555-469-9873','','1970-01-12','2203 Alexander Avenue','Oakland','CA','94612','United States','','','josejenkins@example.com','Personal','Home','Home','false','','','','Adult','','Friend','','','','','','he/him/his','Donor','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','11','');
-INSERT INTO "contacts" VALUES(54,'','Albert','Montgomery','albertmontgomery@example.com','','','','','','','','','','','','','','albertmontgomery@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','136','');
-INSERT INTO "contacts" VALUES(55,'','Meredith','Cooke','meredithcooke@example.com','','','','','','','','','','','','','','meredithcooke@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','137','');
-INSERT INTO "contacts" VALUES(56,'','Mckayla','Morrison','mckaylamorrison@example.com','','','','','','','','','','','','','','mckaylamorrison@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','138','');
-INSERT INTO "contacts" VALUES(57,'','Hayley','Bright','hayleybright@example.com','','','','','','','','','','','','','','hayleybright@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','139','');
-INSERT INTO "contacts" VALUES(58,'','Dayana','Atkins','dayanaatkins@example.com','','','','','','','','','','','','','','dayanaatkins@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','140','');
-INSERT INTO "contacts" VALUES(59,'','Khloe','Stanley','khloestanley@example.com','','','','','','','','','','','','','','khloestanley@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','141','');
-INSERT INTO "contacts" VALUES(60,'','Ray','Fischer','rayfischer@example.com','','','','','','','','','','','','','','rayfischer@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','142','');
-INSERT INTO "contacts" VALUES(61,'','Casey','Kline','caseykline@example.com','','','','','','','','','','','','','','caseykline@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','143','');
-INSERT INTO "contacts" VALUES(62,'','Aron','Joyce','aronjoyce@example.com','','','','','','','','','','','','','','aronjoyce@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','144','');
-INSERT INTO "contacts" VALUES(63,'','Diego','Case','diegocase@example.com','','','','','','','','','','','','','','diegocase@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','145','');
-INSERT INTO "contacts" VALUES(64,'','Craig','Johnson','craigjohnso@example.com','555-349-3507','','','555-349-3507','','','3041 Park Street','Oakland','CA','94606','','','','craigjohnso@example.com','Personal','Home','Home','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','1.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','12','');
-INSERT INTO "contacts" VALUES(65,'','Maya','Johnson','','555-349-3507','','','555-349-3507','','','3041 Park Street','Oakland','CA','94606','','','','','Personal','Home','Home','false','','','','','','','','','','','','','','false','','false','false','true','true','true','','','false','','','','','','','','','','0.0','','0.0','','','','','2.0','0.0','','0.0','','','','0.0','','','Household__c.Name;Household__c.Formal_Greeting__c;Household__c.Informal_Greeting__c','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','12','');
-INSERT INTO "contacts" VALUES(66,'','Barbara','Johnson','barbarajohnson@example.com','555-349-3507','1-333-444-5555','','555-349-3507','','1970-01-09','3041 Park Street','Oakland','CA','94606','','','','barbarajohnson@example.com','Personal','Home','Home','false','','','','Adult','','Husband','0681g000000kSouAAE','','','','','she/her/hers','Client','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','0.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','12','64');
-INSERT INTO "contacts" VALUES(67,'','Chelsea','Graves','chelseagraves@example.com','','','','','','','','','','','','','','chelseagraves@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','146','');
-INSERT INTO "contacts" VALUES(68,'','Ruth','Wu','ruthwu@example.com','','','','','','','','','','','','','','ruthwu@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','147','');
-INSERT INTO "contacts" VALUES(69,'','Isaac','Grant','isaacgrant@example.com','','','','','','','','','','','','','','isaacgrant@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','148','');
-INSERT INTO "contacts" VALUES(70,'','Audrina','Rojas','audrinarojas@example.com','','','','','','','','','','','','','','audrinarojas@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','149','');
-INSERT INTO "contacts" VALUES(71,'','Koen','Chase','koenchase@example.com','','','','','','','','','','','','','','koenchase@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','150','');
-INSERT INTO "contacts" VALUES(72,'','Hailie','Holder','hailieholder@example.com','','','','','','','','','','','','','','hailieholder@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','151','');
-INSERT INTO "contacts" VALUES(73,'','Caylee','Pollard','cayleepollard@example.com','','','','','','','','','','','','','','cayleepollard@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','152','');
-INSERT INTO "contacts" VALUES(74,'','Guillermo','Quinn','guillermoquinn@example.com','','','','','','','','','','','','','','guillermoquinn@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','153','');
-INSERT INTO "contacts" VALUES(75,'','Dominik','Wilkinson','dominikwilkinson@example.com','','','','','','','','','','','','','','dominikwilkinson@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','154','');
-INSERT INTO "contacts" VALUES(76,'','Simone','Keller','simonekeller@example.com','','','','','','','','','','','','','','simonekeller@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','155','');
-INSERT INTO "contacts" VALUES(77,'','Violet','Ellis','violetellis@example.com','','','','','','','','','','','','','','violetellis@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','156','');
-INSERT INTO "contacts" VALUES(78,'','Samir','Neal','samirneal@example.com','','','','','','','','','','','','','','samirneal@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','157','');
-INSERT INTO "contacts" VALUES(79,'','Mira','Mcconnell','miramcconnell@example.com','','','','','','','','','','','','','','miramcconnell@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','158','');
-INSERT INTO "contacts" VALUES(80,'','Aniya','Arellano','aniyaarellano@example.com','','','','','','','','','','','','','','aniyaarellano@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','159','');
-INSERT INTO "contacts" VALUES(81,'','Jakayla','Glover','jakaylaglover@example.com','','','','','','','','','','','','','','jakaylaglover@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','160','');
-INSERT INTO "contacts" VALUES(82,'','Angelo','Lutz','angelolutz@example.com','','','','','','','','','','','','','','angelolutz@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','161','');
-INSERT INTO "contacts" VALUES(83,'','Audrina','Graves','audrinagraves@example.com','','','','','','','','','','','','','','audrinagraves@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','162','');
-INSERT INTO "contacts" VALUES(84,'','Turner','Carson','turnercarson@example.com','','','','','','','','','','','','','','turnercarson@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','163','');
-INSERT INTO "contacts" VALUES(85,'','Emelia','Fletcher','emeliafletcher@example.com','','','','','','','','','','','','','','emeliafletcher@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','164','');
-INSERT INTO "contacts" VALUES(86,'','Mackenzie','Hernandez','mackenziehernandez@example.com','','','','','','','','','','','','','','mackenziehernandez@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','165','');
-INSERT INTO "contacts" VALUES(87,'','Jose','Burgess','joseburgess@example.com','','','','','','','','','','','','','','joseburgess@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','13','');
-INSERT INTO "contacts" VALUES(88,'','Brenda','Bass','brendabass@example.com','','','','','','','','','','','','','','brendabass@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','14','');
-INSERT INTO "contacts" VALUES(89,'','Nikhil','Bishop','nikhilbishop@example.com','','','','','','','','','','','','','','nikhilbishop@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','15','');
-INSERT INTO "contacts" VALUES(90,'','Juliette','Cisneros','juliettecisneros@example.com','','','','','','','','','','','','','','juliettecisneros@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','16','');
-INSERT INTO "contacts" VALUES(91,'','Alana','Owen','alanaowen@example.com','','','','','','','','','','','','','','alanaowen@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','17','');
-INSERT INTO "contacts" VALUES(92,'','Cruz','Kerr','cruzkerr@example.com','','','','','','','','','','','','','','cruzkerr@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','18','');
-INSERT INTO "contacts" VALUES(93,'','Beau','Eaton','beaueaton@example.com','','','','','','','','','','','','','','beaueaton@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','19','');
-INSERT INTO "contacts" VALUES(94,'','Chance','Rasmussen','chancerasmussen@example.com','','','','','','','','','','','','','','chancerasmussen@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','20','');
-INSERT INTO "contacts" VALUES(95,'','James','Richards','jamesrichards@example.com','','','','','','','','','','','','','','jamesrichards@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','21','');
-INSERT INTO "contacts" VALUES(96,'','Khloe','Campos','khloecampos@example.com','','','','','','','','','','','','','','khloecampos@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','22','');
-INSERT INTO "contacts" VALUES(97,'','Amelie','Bond','ameliebond@example.com','','','','','','','','','','','','','','ameliebond@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','23','');
-INSERT INTO "contacts" VALUES(98,'','Julie','Myers','juliemyers@example.com','','','','','','','','','','','','','','juliemyers@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','24','');
-INSERT INTO "contacts" VALUES(99,'','Jayda','Stanton','jaydastanton@example.com','','','','','','','','','','','','','','jaydastanton@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','25','');
-INSERT INTO "contacts" VALUES(100,'','Yesenia','Ritter','yeseniaritter@example.com','','','','','','','','','','','','','','yeseniaritter@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','26','');
-INSERT INTO "contacts" VALUES(101,'','Abraham','Sims','abrahamsims@example.com','','','','','','','','','','','','','','abrahamsims@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','27','');
-INSERT INTO "contacts" VALUES(102,'','Kyle','Huffman','kylehuffman@example.com','','','','','','','','','','','','','','kylehuffman@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','28','');
-INSERT INTO "contacts" VALUES(103,'','Cora','Hall','corahall@example.com','','','','','','','','','','','','','','corahall@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','29','');
-INSERT INTO "contacts" VALUES(104,'','Isaac','Barker','isaacbarker@example.com','','','','','','','','','','','','','','isaacbarker@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','30','');
-INSERT INTO "contacts" VALUES(105,'','Kailey','Glass','kaileyglass@example.com','','','','','','','','','','','','','','kaileyglass@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','31','');
-INSERT INTO "contacts" VALUES(106,'','Delilah','Ibarra','delilahibarra@example.com','','','','','','','','','','','','','','delilahibarra@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','32','');
-INSERT INTO "contacts" VALUES(107,'','Zackery','Morgan','zackerymorgan@example.com','','','','','','','','','','','','','','zackerymorgan@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','33','');
-INSERT INTO "contacts" VALUES(108,'','Duncan','Bowers','duncanbowers@example.com','','','','','','','','','','','','','','duncanbowers@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','34','');
-INSERT INTO "contacts" VALUES(109,'','Lauryn','Odom','laurynodom@example.com','','','','','','','','','','','','','','laurynodom@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','35','');
-INSERT INTO "contacts" VALUES(110,'','Tom','Higgins','thiggins@example.com','555-248-3956','','','555-248-3956','','2007-04-03','3850 Wolf Pen Road','Oakland','CA','94612','','','','thiggins@example.com','Personal','Home','Home','false','','','','Child','','Mother','0681g000000kSozAAE','','Thomas Higgins','Home Phone','555-248-3956','he/him/his','Client','true','2019-12-04','false','false','true','true','false','','','false','','','','','','','','','','0.0','','0.0','','','','','0.0','0.0','','0.0','','','','0.0','','','Household__c.Formal_Greeting__c;Household__c.Informal_Greeting__c','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','1','111');
-INSERT INTO "contacts" VALUES(111,'','Lisa','Higgins','lhiggins@example.com','555-248-3956','','','555-248-3956','','','3850 Wolf Pen Road','Oakland','CA','94612','','','','lhiggins@example.com','Personal','Home','Home','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','1.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','1','');
-INSERT INTO "contacts" VALUES(112,'','Yusef','Flores','yusefflores@example.com','','','','','','','','','','','','','','yusefflores@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','36','');
-INSERT INTO "contacts" VALUES(113,'','Semaj','Wall','semajwall@example.com','','','','','','','','','','','','','','semajwall@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','37','');
-INSERT INTO "contacts" VALUES(114,'','Frankie','Waller','frankiewaller@example.com','','','','','','','','','','','','','','frankiewaller@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','38','');
-INSERT INTO "contacts" VALUES(115,'','Eliezer','Bray','eliezerbray@example.com','','','','','','','','','','','','','','eliezerbray@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','39','');
-INSERT INTO "contacts" VALUES(116,'','Jaden','Conner','jadenconner@example.com','','','','','','','','','','','','','','jadenconner@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','40','');
-INSERT INTO "contacts" VALUES(117,'','Steven','Harper','stevenharper@example.com','','','','','','','','','','','','','','stevenharper@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','41','');
-INSERT INTO "contacts" VALUES(118,'','Karissa','Aguilar','karissaaguilar@example.com','','','','','','','','','','','','','','karissaaguilar@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','42','');
-INSERT INTO "contacts" VALUES(119,'','Tiara','Cummings','tiaracummings@example.com','','','','','','','','','','','','','','tiaracummings@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','43','');
-INSERT INTO "contacts" VALUES(120,'','Cecilia','Cardenas','ceciliacardenas@example.com','','','','','','','','','','','','','','ceciliacardenas@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','44','');
-INSERT INTO "contacts" VALUES(121,'','Heidi','Woods','heidiwoods@example.com','','','','','','','','','','','','','','heidiwoods@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','45','');
-INSERT INTO "contacts" VALUES(122,'Dr.','Jeremy','Adams','jeremyadams@example.com','555-648-7204','555-510-9375','','555-648-7204','','1970-01-04','1739 Lindale Avenue','Oakland','CA','94612','United States','','','jeremyadams@example.com','Personal','Home','Home','false','','','','Adult','','Friend','','Call','','Phone','555-648-7204','he/him/his','Client','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','2','');
-INSERT INTO "contacts" VALUES(123,'Rev.','Angela','Adams','angelaadams@example.com','555-648-4704','1-333-444-5555','','555-648-4704','','1970-01-04','1739 Lindale Avenue','Oakland','CA','94612','United States','','','angelaadams@example.com','Personal','Home','Home','false','','','','Adult','','Friend','','','','','','she/her/hers','Client;Donor;Volunteer','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','2','');
-INSERT INTO "contacts" VALUES(124,'','Leia','Spence','leiaspence@example.com','','','','','','','','','','','','','','leiaspence@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','46','');
-INSERT INTO "contacts" VALUES(125,'','Leon','Clayton','leonclayton@example.com','','','','','','','','','','','','','','leonclayton@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','47','');
-INSERT INTO "contacts" VALUES(126,'','Marc','Richard','marcrichard@example.com','','','','','','','','','','','','','','marcrichard@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','48','');
-INSERT INTO "contacts" VALUES(127,'','Jordan','Waller','jordanwaller@example.com','','','','','','','','','','','','','','jordanwaller@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','49','');
-INSERT INTO "contacts" VALUES(128,'','Jace','Hampton','jacehampton@example.com','','','','','','','','','','','','','','jacehampton@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','50','');
-INSERT INTO "contacts" VALUES(129,'','Silas','Neal','silasneal@example.com','','','','','','','','','','','','','','silasneal@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','51','');
-INSERT INTO "contacts" VALUES(130,'','Sonia','Gentry','soniagentry@example.com','','','','','','','','','','','','','','soniagentry@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','52','');
-INSERT INTO "contacts" VALUES(131,'','Alison','Barr','alisonbarr@example.com','','','','','','','','','','','','','','alisonbarr@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','53','');
-INSERT INTO "contacts" VALUES(132,'','Vu','Pham','vupham@example.com','','','','','','','','','','','','','','vupham@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','54','');
-INSERT INTO "contacts" VALUES(133,'','Kellen','Cooley','kellencooley@example.com','','','','','','','','','','','','','','kellencooley@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','55','');
-INSERT INTO "contacts" VALUES(134,'','Arthur','Baker','','','','','','','','3810 Green Avenue','Oakland','CA','94612','United States','','','','Personal','Home','Home','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','3','');
-INSERT INTO "contacts" VALUES(135,'','Arlene','Baker','alanbaker@example.com','555-524-0749','1-333-444-5555','','555-524-0749','','1969-12-24','3810 Green Avenue','Oakland','CA','94612','United States','','','alanbaker@example.com','Personal','Home','Home','false','','','','Adult','','Friend','0681g000000kSopAAE','','Alan Baker','','','she/her/hers','Client;Volunteer','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','500.0','2019','500.0','2019-09-02','','0.0','500.0','2019-09-02','500.0','2019-09-02','','','500.0','','','','1.0','1.0','0.0','500.0','0.0','500.0','0.0','1.0','0.0','1.0','500.0','','','','','500.0','500.0','3','123');
-INSERT INTO "contacts" VALUES(136,'','Jay','Zimmerman','jayzimmerman@example.com','','','','','','','','','','','','','','jayzimmerman@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','56','');
-INSERT INTO "contacts" VALUES(137,'','Melanie','Wheeler','melaniewheeler@example.com','','','','','','','','','','','','','','melaniewheeler@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','57','');
-INSERT INTO "contacts" VALUES(138,'','Fernando','Beltran','fernandobeltran@example.com','','','','','','','','','','','','','','fernandobeltran@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','58','');
-INSERT INTO "contacts" VALUES(139,'','Yuliana','Bird','yulianabird@example.com','','','','','','','','','','','','','','yulianabird@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','59','');
-INSERT INTO "contacts" VALUES(140,'','Alyson','Duffy','alysonduffy@example.com','','','','','','','','','','','','','','alysonduffy@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','60','');
-INSERT INTO "contacts" VALUES(141,'','Nyla','Woods','nylawoods@example.com','','','','','','','','','','','','','','nylawoods@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','61','');
-INSERT INTO "contacts" VALUES(142,'','Aaron','Valdez','aaronvaldez@example.com','','','','','','','','','','','','','','aaronvaldez@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','62','');
-INSERT INTO "contacts" VALUES(143,'','John','Mills','johnmills@example.com','','','','','','','','','','','','','','johnmills@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','63','');
-INSERT INTO "contacts" VALUES(144,'','Shannon','Greene','shannongreene@example.com','','','','','','','','','','','','','','shannongreene@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','64','');
-INSERT INTO "contacts" VALUES(145,'','Marco','Escobar','marcoescobar@example.com','','','','','','','','','','','','','','marcoescobar@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','65','');
-INSERT INTO "contacts" VALUES(146,'','Robin','Banks','robinbanks@example.com','555-347-3702','1-333-444-5555','','555-347-3702','','1984-12-29','2546 Harrison Street','Oakland','CA','94612','','','','robinbanks@example.com','Personal','Home','Home','false','','','','Adult','','Partner','0681g000000kSp4AAE','','','','','she/her/hers','Client','true','2019-12-04','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','0.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','4','147');
-INSERT INTO "contacts" VALUES(147,'','Darryl','Graham','darrylgraham@example.com','555-347-3702','','','555-347-3702','','','2546 Harrison Street','Oakland','CA','94612','','','','darrylgraham@example.com','Personal','Home','Home','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','400.0','2019','400.0','2019-08-05','','1.0','400.0','2019-08-05','400.0','2019-08-05','','','400.0','','','','1.0','1.0','0.0','400.0','0.0','400.0','0.0','1.0','0.0','1.0','400.0','','','','','400.0','400.0','4','');
-INSERT INTO "contacts" VALUES(148,'','Lorelai','Gross','lorelaigross@example.com','','','','','','','','','','','','','','lorelaigross@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','66','');
-INSERT INTO "contacts" VALUES(149,'','Elsa','Guerrero','elsaguerrero@example.com','','','','','','','','','','','','','','elsaguerrero@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','67','');
-INSERT INTO "contacts" VALUES(150,'','Dalia','Osborn','daliaosborn@example.com','','','','','','','','','','','','','','daliaosborn@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','68','');
-INSERT INTO "contacts" VALUES(151,'','Tyrone','Pearson','tyronepearson@example.com','','','','','','','','','','','','','','tyronepearson@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','69','');
-INSERT INTO "contacts" VALUES(152,'','Ariella','Branch','ariellabranch@example.com','','','','','','','','','','','','','','ariellabranch@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','70','');
-INSERT INTO "contacts" VALUES(153,'','Jaydon','Bates','jaydonbates@example.com','','','','','','','','','','','','','','jaydonbates@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','71','');
-INSERT INTO "contacts" VALUES(154,'','Javon','Rodgers','javonrodgers@example.com','','','','','','','','','','','','','','javonrodgers@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','72','');
-INSERT INTO "contacts" VALUES(155,'','Josie','Mcclure','josiemcclure@example.com','','','','','','','','','','','','','','josiemcclure@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','73','');
-INSERT INTO "contacts" VALUES(156,'','Marcus','Huynh','marcushuynh@example.com','','','','','','','','','','','','','','marcushuynh@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','74','');
-INSERT INTO "contacts" VALUES(157,'','Ayanna','Gonzalez','ayannagonzalez@example.com','','','','','','','','','','','','','','ayannagonzalez@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','75','');
-INSERT INTO "contacts" VALUES(158,'','Lynn','Barnes','lynnbarnes@example.com','555-893-4763','','','555-893-4763','','','2340 Thompson Drive','Oakland','CA','94621','','','','lynnbarnes@example.com','Personal','Home','Home','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','500.0','2019','500.0','2019-07-01','','2.0','500.0','2019-07-01','500.0','2019-07-01','','','500.0','','','','1.0','1.0','0.0','500.0','0.0','500.0','0.0','1.0','0.0','1.0','500.0','','','','','500.0','500.0','5','');
-INSERT INTO "contacts" VALUES(159,'','David','Barnes','davidbarnes@example.com','555-893-4763','','','555-893-4763','','','2340 Thompson Drive','Oakland','CA','94621','','','','davidbarnes@example.com','Personal','Home','Home','false','','','','','','','','','','','','','','false','','false','false','false','false','false','500.0','2019-07-01','false','500.0','2019-07-01','500.0','2019-07-01','1.0','1.0','0.0','1.0','0.0','500.0','','0.0','','','','','1.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','500.0','500.0','0.0','0.0','0.0','5','');
-INSERT INTO "contacts" VALUES(160,'','Jason','Barnes','jasonbarnes@example.com','555-893-4763','1-333-444-5555','','555-893-4763','','2002-10-29','2340 Thompson Drive','Oakland','CA','94621','','','','jasonbarnes@example.com','Personal','Home','Home','false','','','','Youth','88841515','Mother','0681g000000kSokAAE','','','','','he/him/his','Client','false','','false','false','true','true','false','500.0','2019-07-01','false','500.0','2019-07-01','500.0','2019-07-01','1.0','1.0','0.0','1.0','0.0','500.0','','0.0','','','','','0.0','0.0','','0.0','','','','0.0','','','Household__c.Formal_Greeting__c;Household__c.Informal_Greeting__c','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','500.0','500.0','0.0','0.0','0.0','5','158');
-INSERT INTO "contacts" VALUES(161,'','Taniya','Singleton','taniyasingleton@example.com','','','','','','','','','','','','','','taniyasingleton@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','76','');
-INSERT INTO "contacts" VALUES(162,'','Laura','Woodard','laurawoodard@example.com','','','','','','','','','','','','','','laurawoodard@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','77','');
-INSERT INTO "contacts" VALUES(163,'','Shane','Gibson','shanegibson@example.com','','','','','','','','','','','','','','shanegibson@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','78','');
-INSERT INTO "contacts" VALUES(164,'','Alia','Duarte','aliaduarte@example.com','','','','','','','','','','','','','','aliaduarte@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','79','');
-INSERT INTO "contacts" VALUES(165,'','Neil','Huerta','neilhuerta@example.com','','','','','','','','','','','','','','neilhuerta@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','80','');
-INSERT INTO "contacts" VALUES(166,'','Laura','Hernandez','laurahernandez@example.com','','','','','','','','','','','','','','laurahernandez@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','81','');
-INSERT INTO "contacts" VALUES(167,'','Makhi','Villegas','makhivillegas@example.com','','','','','','','','','','','','','','makhivillegas@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','82','');
-INSERT INTO "contacts" VALUES(168,'','Rafael','Velasquez','rafaelvelasquez@example.com','','','','','','','','','','','','','','rafaelvelasquez@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','83','');
-INSERT INTO "contacts" VALUES(169,'','Ryan','Hardin','ryanhardin@example.com','','','','','','','','','','','','','','ryanhardin@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','84','');
-INSERT INTO "contacts" VALUES(170,'','Mira','Olson','miraolson@example.com','','','','','','','','','','','','','','miraolson@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','85','');
-INSERT INTO "contacts" VALUES(171,'Mrs.','Anne','Boyd','anneboyd@example.com','555-380-8532','555-673-2987','','555-380-8532','','1970-01-01','3528 Rardin Drive','Oakland','CA','94612','United States','','','anneboyd@example.com','Personal','Home','Home','false','','','','Adult','','Friend','','','','','','she/her/hers','Client','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','6','');
-INSERT INTO "contacts" VALUES(172,'','Anna','Orr','annaorr@example.com','','','','','','','','','','','','','','annaorr@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','86','');
-INSERT INTO "contacts" VALUES(173,'','Naima','Crawford','naimacrawford@example.com','','','','','','','','','','','','','','naimacrawford@example.com','Personal','Home','','false','','','','','','','','','','','','','','false','','false','false','false','false','false','','','false','','','','','','','','','','0.0','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','0.0','87','');
+INSERT INTO "contacts" VALUES(
+	1,
+	'',
+	'joesalinas@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	2,
+	''
+	,'maleahbullock@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	3,
+	'',
+	'anikasolomon@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	4,
+	''
+	,'christinawebster@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	5,
+	'',
+	'emiliecosta@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	6,
+	''
+	,'ayanahumphrey@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	7,
+	'',
+	'luciacain@example.com',
+	'Personal'
+	,'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	8,
+	'',
+	'amayadunlap@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	9,
+	'',
+	'normaburke@example.com',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	'',
+	'',
+	'Senior'
+);
+INSERT INTO "contacts" VALUES(
+	10,
+
+	''
+	,'derrickblackwell@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	11,
+
+	'',
+	'aliceirwin@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	12,
+
+	'',
+	'fabianhughes@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	13,
+
+	'',
+	'raelynnwells@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	14,
+
+	'',
+	'simondavila@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	15,
+
+	''
+	,'jamarcusbarnett@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	16,
+
+	''
+	,'adriannanorman@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	17,
+
+	'',
+	'donnasnow@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	18,
+
+	'',
+	'garywood@example.com',
+	'Personal'
+	,'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	19,
+
+	'',
+	'reagannorton@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	20,
+
+	'',
+	'bobbyhenderson@example.com',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	''
+	,'',
+	'Adult'
+);
+INSERT INTO "contacts" VALUES(
+	21,
+
+	'',
+	'jaylinmorgan@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	22,
+
+	'',
+	'miradecker@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	23,
+
+	'',
+	'mayalambert@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	24,
+
+	'',
+	'finleybarry@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	25,
+
+	'',
+	'benoneill@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	26,
+
+	'',
+	'maiacooley@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	27,
+
+	'',
+	'oliveleach@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	28,
+
+	''
+	,'oswaldopacheco@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	29,
+
+	'',
+	'nicorivers@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	30,
+
+	''
+	,'tiaragriffith@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	31,
+
+	'',
+	'anthonyhill@example.com',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	'',
+	'',
+	'Adult'
+);
+INSERT INTO "contacts" VALUES(
+	32,
+
+	'',
+	'declanglenn@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	33,
+
+	''
+	,'madalynfrancis@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	34,
+
+	'',
+	'mathewrhodes@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	35,
+
+	'',
+	'jessicawoods@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	36,
+
+	'',
+	'eliwhite@example.com',
+	'Personal'
+	,'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	37,
+
+	'',
+	'tatianalang@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	38,
+
+	'',
+	'giaramirez@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	39,
+
+	''
+	,'alejandroserrano@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	40,
+
+	'',
+	'myagalloway@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	41,
+
+	'',
+	'adamclark@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	42,
+
+	'',
+	'virginiaholmes@example.com',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	''
+	,'',
+	'Adult'
+);
+INSERT INTO "contacts" VALUES(
+	43,
+
+	''
+	,'marisolgonzales@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	44,
+
+	'',
+	'myacobb@example.com',
+	'Personal'
+	,'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	45,
+
+	'',
+	'jayshah@example.com',
+	'Personal'
+	,'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	46,
+
+	'',
+	'nancyarroyo@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	47,
+
+	'',
+	'aubriebooker@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	48,
+
+	'',
+	'emeliamercer@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	49,
+
+	'',
+	'yadielhorton@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	50,
+
+	'',
+	'taniyahrios@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	51,
+
+	'',
+	'peytoncraig@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	52,
+
+	''
+	,'francescaoliver@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	53,
+
+	'',
+	'josejenkins@example.com',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	'',
+	'',
+	'Adult'
+);
+INSERT INTO "contacts" VALUES(
+	54,
+
+	''
+	,'albertmontgomery@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	55,
+
+	''
+	,'meredithcooke@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	56,
+
+	''
+	,'mckaylamorrison@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	57,
+
+	'',
+	'hayleybright@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	58,
+
+	'',
+	'dayanaatkins@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	59,
+
+	'',
+	'khloestanley@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	60,
+
+	'',
+	'rayfischer@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	61,
+
+	'',
+	'caseykline@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	62,
+
+	'',
+	'aronjoyce@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	63,
+
+	'',
+	'diegocase@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	64,
+
+	'',
+	'craigjohnso@example.com',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	65,
+
+	,'',
+	'',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	66,
+
+	'',
+	'barbarajohnson@example.com',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	'',
+	'',
+	'Adult'4'
+);
+INSERT INTO "contacts" VALUES(
+	67,
+
+	''
+	,'chelseagraves@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	68,
+
+	'',
+	'ruthwu@example.com',
+	'Personal',
+	'Home'
+	,'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	69,
+
+	'',
+	'isaacgrant@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	70,
+
+	'',
+	'audrinarojas@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	71,
+
+	'',
+	'koenchase@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	72,
+
+	'',
+	'hailieholder@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	73,
+
+	''
+	,'cayleepollard@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	74,
+
+	''
+	,'guillermoquinn@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	75,
+
+	''
+	,'dominikwilkinson@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	76,
+
+	'',
+	'simonekeller@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	77,
+
+	'',
+	'violetellis@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	78,
+
+	'',
+	'samirneal@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	79,
+
+	''
+	,'miramcconnell@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	80,
+
+	''
+	,'aniyaarellano@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	81,
+
+	''
+	,'jakaylaglover@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	82,
+
+	'',
+	'angelolutz@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	83,
+
+	''
+	,'audrinagraves@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	84,
+
+	'',
+	'turnercarson@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	85,
+
+	''
+	,'emeliafletcher@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	86,
+
+	''
+	,'mackenziehernandez@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	87,
+
+	'',
+	'joseburgess@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	88,
+
+	'',
+	'brendabass@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	89,
+
+	'',
+	'nikhilbishop@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	90,
+
+	''
+	,'juliettecisneros@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	91,
+
+	'',
+	'alanaowen@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	92,
+
+	'',
+	'cruzkerr@example.com',
+	'Personal'
+	,'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	93,
+
+	'',
+	'beaueaton@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	94,
+
+	''
+	,'chancerasmussen@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	95,
+
+	''
+	,'jamesrichards@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	96,
+
+	'',
+	'khloecampos@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	97,
+
+	'',
+	'ameliebond@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	98,
+
+	'',
+	'juliemyers@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	99,
+
+	'',
+	'jaydastanton@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	100,
+	
+	''
+	,'yeseniaritter@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	101,
+	
+	'',
+	'abrahamsims@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	102,
+	
+	'',
+	'kylehuffman@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	103,
+	
+	'',
+	'corahall@example.com',
+	'Personal'
+	,'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	104,
+	
+	'',
+	'isaacbarker@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	105,
+	
+	'',
+	'kaileyglass@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	106,
+	
+	''
+	,'delilahibarra@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	107,
+	
+	''
+	,'zackerymorgan@example.com',
+	'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	108,
+	
+	'',
+	'duncanbowers@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	109,
+	
+	'',
+	'laurynodom@example.com'
+	,'Personal',
+	'Home',
+	'',
+	'false',
+	'',
+	'',
+	'',
+	''
+);
+INSERT INTO "contacts" VALUES(
+	110,
+	
+	'',
+	'thiggins@example.com',
+	'Personal',
+	'Home',
+	'Home',
+	'false',
+	'',
+	'',
+	'',
+	'Child  'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	112,
+    
+    '',
+    'yusefflores@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	113,
+    
+    '',
+    'semajwall@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	114,
+    
+    '',
+    'frankiewaller@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	115,
+    
+    '',
+    'eliezerbray@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	116,
+    
+    '',
+    'jadenconner@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	117,
+    
+    '',
+    'stevenharper@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	118,
+    
+    '',
+    'karissaaguilar@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	119,
+    
+    '',
+    'tiaracummings@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	120,
+    
+    '',
+    'ceciliacardenas@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	121,
+    
+    '',
+    'heidiwoods@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	122,
+    
+    '',
+    'jeremyadams@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    'Adult  ''
+);
+INSERT INTO "contacts" VALUES(
+	123,
+    
+    '',
+    'angelaadams@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    'Adult  ''
+);
+INSERT INTO "contacts" VALUES(
+	124,
+    
+    '',
+    'leiaspence@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	125,
+    
+    '',
+    'leonclayton@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	126,
+    
+    '',
+    'marcrichard@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	127,
+    
+    '',
+    'jordanwaller@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	128,
+    
+    '',
+    'jacehampton@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	129,
+    
+    '',
+    'silasneal@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	130,
+    
+    '',
+    'soniagentry@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	131,
+    
+    '',
+    'alisonbarr@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	132,
+    
+    '',
+    'vupham@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	133,
+    
+    '',
+    'kellencooley@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	134,
+    
+    '',
+    '',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	135,
+    
+    '',
+    'alanbaker@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    'Adult  '123'
+);
+INSERT INTO "contacts" VALUES(
+	136,
+    
+    '',
+    'jayzimmerman@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	137,
+    
+    '',
+    'melaniewheeler@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	138,
+    
+    '',
+    'fernandobeltran@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	139,
+    
+    '',
+    'yulianabird@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	140,
+    
+    '',
+    'alysonduffy@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	141,
+    
+    '',
+    'nylawoods@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	142,
+    
+    '',
+    'aaronvaldez@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	143,
+    
+    '',
+    'johnmills@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	144,
+    
+    '',
+    'shannongreene@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	145,
+    
+    '',
+    'marcoescobar@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	146,
+    
+    '',
+    'robinbanks@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    'Adult  '147'
+);
+INSERT INTO "contacts" VALUES(
+	147,
+    
+    '',
+    'darrylgraham@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	148,
+    
+    '',
+    'lorelaigross@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	149,
+    
+    '',
+    'elsaguerrero@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	150,
+    
+    '',
+    'daliaosborn@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	151,
+    
+    '',
+    'tyronepearson@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	152,
+    
+    '',
+    'ariellabranch@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	153,
+    
+    '',
+    'jaydonbates@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	154,
+    
+    '',
+    'javonrodgers@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	155,
+    
+    '',
+    'josiemcclure@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	156,
+    
+    '',
+    'marcushuynh@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	157,
+    
+    '',
+    'ayannagonzalez@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	158,
+    
+    '',
+    'lynnbarnes@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	159,
+    
+    '',
+    'davidbarnes@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	160,
+    
+    '',
+    'jasonbarnes@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    'Youth  '158'
+);
+INSERT INTO "contacts" VALUES(
+	161,
+    
+    '',
+    'taniyasingleton@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	162,
+    
+    '',
+    'laurawoodard@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	163,
+    
+    '',
+    'shanegibson@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	164,
+    
+    '',
+    'aliaduarte@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	165,
+    
+    '',
+    'neilhuerta@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	166,
+    
+    '',
+    'laurahernandez@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	167,
+    
+    '',
+    'makhivillegas@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	168,
+    
+    '',
+    'rafaelvelasquez@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	169,
+    
+    '',
+    'ryanhardin@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	170,
+    
+    '',
+    'miraolson@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	171,
+    
+    '',
+    'anneboyd@example.com',
+    'Personal',
+    'Home',
+    'Home',
+    'false',
+    '',
+    '',
+    '',
+    'Adult  ''
+);
+INSERT INTO "contacts" VALUES(
+	172,
+    
+    '',
+    'annaorr@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
+INSERT INTO "contacts" VALUES(
+	173,
+    
+    '',
+    'naimacrawford@example.com',
+    'Personal',
+    'Home',
+    '',
+    'false',
+    '',
+    '',
+    '',
+    '  ''
+);
 CREATE TABLE household_accounts (
 	id INTEGER NOT NULL, 
-	"Name" VARCHAR(255), 
-	"Description" VARCHAR(255), 
-	"Street" VARCHAR(255), 
-	"City" VARCHAR(255), 
-	"State" VARCHAR(255), 
-	"PostalCode" VARCHAR(255), 
-	"Country" VARCHAR(255), 
-	"Phone" VARCHAR(255), 
-	"Fax" VARCHAR(255), 
-	"Website" VARCHAR(255), 
-	"NumberOfEmployees" VARCHAR(255), 
-	"AccountNumber" VARCHAR(255), 
-	"Site" VARCHAR(255), 
-	"Type" VARCHAR(255), 
-	"SYSTEM_AccountType__c" VARCHAR(255), 
-	"SYSTEMIsIndividual__c" VARCHAR(255), 
-	"MaximumClientsServed__c" VARCHAR(255), 
-	"SYSTEM_CUSTOM_NAMING__c" VARCHAR(255), 
-	"FirstCloseDate__c" VARCHAR(255), 
-	"LastCloseDate__c" VARCHAR(255), 
-	"AverageAmount__c" VARCHAR(255), 
-	"LastOppAmount__c" VARCHAR(255), 
-	"LargestAmount__c" VARCHAR(255), 
-	"SmallestAmount__c" VARCHAR(255), 
-	"Best_Gift_Year__c" VARCHAR(255), 
-	"Best_Gift_Year_Total__c" VARCHAR(255), 
-	"TotalOppAmount__c" VARCHAR(255), 
-	"OppAmountLastNDays__c" VARCHAR(255), 
-	"OppAmountThisYear__c" VARCHAR(255), 
-	"OppAmountLastYear__c" VARCHAR(255), 
-	"OppAmount2YearsAgo__c" VARCHAR(255), 
-	"NumberOfClosedOpps__c" VARCHAR(255), 
-	"OppsClosedLastNDays__c" VARCHAR(255), 
-	"OppsClosedThisYear__c" VARCHAR(255), 
-	"OppsClosedLastYear__c" VARCHAR(255), 
-	"OppsClosed2YearsAgo__c" VARCHAR(255), 
-	"TotalMembershipOppAmount__c" VARCHAR(255), 
-	"MembershipEndDate__c" VARCHAR(255), 
-	"LastMembershipLevel__c" VARCHAR(255), 
-	"MembershipJoinDate__c" VARCHAR(255), 
-	"LastMembershipDate__c" VARCHAR(255), 
-	"LastMembershipAmount__c" VARCHAR(255), 
-	"LastMembershipOrigin__c" VARCHAR(255), 
-	"NumberOfMembershipOpps__c" VARCHAR(255), 
-	record_type VARCHAR(255), 
+	"npe01__SYSTEM_AccountType__c" VARCHAR(255), 
+	"npe01__SYSTEMIsIndividual__c" VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "household_accounts" VALUES(1,'Higgins Household','','','','','','','555-248-3956','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(2,'Adams Household','','','','','','','555-648-7204','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(3,'Baker Household','','','','','','','555-524-0749','','','','','','Household','Household Account','true','','','2019-09-02','2019-09-02','500.0','500.0','500.0','500.0','2019','500.0','500.0','500.0','500.0','0.0','0.0','1.0','1.0','1.0','0.0','0.0','500.0','','','','2019-09-02','500.0','','1.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(4,'Banks and Graham Household','','','','','','','555-648-7204','','','','','','Household','Household Account','true','','','2019-08-05','2019-08-05','400.0','400.0','400.0','400.0','2019','400.0','400.0','400.0','400.0','0.0','0.0','1.0','1.0','1.0','0.0','0.0','400.0','','','','2019-08-05','400.0','','1.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(5,'Barnes Household','','','','','','','555-893-4763','','','','','','Household','Household Account','true','','','2019-07-01','2019-07-01','500.0','500.0','500.0','500.0','2019','500.0','500.0','500.0','500.0','0.0','0.0','1.0','1.0','1.0','0.0','0.0','500.0','','','','2019-07-01','500.0','','1.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(6,'Boyd Household','','','','','','','555-380-8532','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(7,'Burke Household','','','','','','','555-830-5295','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(8,'Henderson Household','','','','','','','555-830-5295','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(9,'Hill Household','','','','','','','555-395-9737','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(10,'Holmes Household','','','','','','','555-930-8759','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(11,'Jenkins Household','','','','','','','555-469-9873','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(12,'Johnson Household','','','','','','','555-248-3956','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(13,'Burgess Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(14,'Bass Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(15,'Bishop Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(16,'Cisneros Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(17,'Owen Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(18,'Kerr Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(19,'Eaton Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(20,'Rasmussen Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(21,'Richards Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(22,'Campos Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(23,'Bond Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(24,'Myers Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(25,'Stanton Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(26,'Ritter Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(27,'Sims Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(28,'Huffman Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(29,'Hall Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(30,'Barker Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(31,'Glass Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(32,'Ibarra Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(33,'Morgan Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(34,'Bowers Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(35,'Odom Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(36,'Flores Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(37,'Wall Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(38,'Waller Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(39,'Bray Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(40,'Conner Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(41,'Harper Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(42,'Aguilar Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(43,'Cummings Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(44,'Cardenas Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(45,'Woods Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(46,'Spence Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(47,'Clayton Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(48,'Richard Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(49,'Waller Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(50,'Hampton Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(51,'Neal Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(52,'Gentry Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(53,'Barr Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(54,'Pham Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(55,'Cooley Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(56,'Zimmerman Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(57,'Wheeler Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(58,'Beltran Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(59,'Bird Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(60,'Duffy Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(61,'Woods Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(62,'Valdez Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(63,'Mills Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(64,'Greene Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(65,'Escobar Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(66,'Gross Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(67,'Guerrero Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(68,'Osborn Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(69,'Pearson Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(70,'Branch Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(71,'Bates Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(72,'Rodgers Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(73,'Mcclure Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(74,'Huynh Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(75,'Gonzalez Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(76,'Singleton Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(77,'Woodard Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(78,'Gibson Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(79,'Duarte Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(80,'Huerta Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(81,'Hernandez Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(82,'Villegas Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(83,'Velasquez Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(84,'Hardin Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(85,'Olson Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(86,'Orr Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(87,'Crawford Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(88,'Salinas Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(89,'Bullock Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(90,'Solomon Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(91,'Webster Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(92,'Costa Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(93,'Humphrey Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(94,'Cain Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(95,'Dunlap Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(96,'Blackwell Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(97,'Irwin Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(98,'Hughes Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(99,'Wells Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(100,'Davila Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(101,'Barnett Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(102,'Norman Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(103,'Snow Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(104,'Wood Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(105,'Norton Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(106,'Morgan Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(107,'Decker Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(108,'Lambert Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(109,'Barry Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(110,'Oneill Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(111,'Cooley Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(112,'Leach Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(113,'Pacheco Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(114,'Rivers Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(115,'Griffith Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(116,'Glenn Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(117,'Francis Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(118,'Rhodes Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(119,'Woods Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(120,'White Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(121,'Lang Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(122,'Ramirez Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(123,'Serrano Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(124,'Galloway Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(125,'Clark Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(126,'Gonzales Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(127,'Cobb Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(128,'Shah Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(129,'Arroyo Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(130,'Booker Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(131,'Mercer Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(132,'Horton Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(133,'Rios Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(134,'Craig Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(135,'Oliver Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(136,'Montgomery Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(137,'Cooke Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(138,'Morrison Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(139,'Bright Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(140,'Atkins Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(141,'Stanley Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(142,'Fischer Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(143,'Kline Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(144,'Joyce Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(145,'Case Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(146,'Graves Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(147,'Wu Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(148,'Grant Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(149,'Rojas Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(150,'Chase Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(151,'Holder Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(152,'Pollard Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(153,'Quinn Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(154,'Wilkinson Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(155,'Keller Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(156,'Ellis Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(157,'Neal Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(158,'Mcconnell Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(159,'Arellano Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(160,'Glover Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(161,'Lutz Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(162,'Graves Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(163,'Carson Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(164,'Fletcher Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-INSERT INTO "household_accounts" VALUES(165,'Hernandez Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
-
+INSERT INTO "household_accounts" VALUES(
+	1,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	2,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	3,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	4,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	5,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	6,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	7,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	8,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	9,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	10,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	11,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	12,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	13,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	14,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	15,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	16,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	17,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	18,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	19,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	20,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	21,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	22,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	23,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	24,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	25,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	26,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	27,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	28,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	29,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	30,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	31,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	32,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	33,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	34,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	35,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	36,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	37,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	38,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	39,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	40,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	41,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	42,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	43,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	44,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	45,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	46,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	47,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	48,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	49,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	50,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	51,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	52,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	53,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	54,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	55,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	56,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	57,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	58,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	59,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	60,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	61,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	62,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	63,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	64,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	65,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	66,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	67,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	68,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	69,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	70,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	71,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	72,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	73,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	74,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	75,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	76,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	77,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	78,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	79,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	80,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	81,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	82,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	83,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	84,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	85,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	86,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	87,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	88,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	89,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	90,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	91,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	92,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	93,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	94,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	95,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	96,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	97,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	98,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	99,
+	'Household Account',
+	'true'
+);
+INSERT INTO "household_accounts" VALUES(
+	100,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	101,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	102,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	103,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	104,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	105,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	106,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	107,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	108,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	109,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	110,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	111,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	112,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	113,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	114,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	115,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	116,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	117,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	118,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	119,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	120,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	121,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	122,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	123,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	124,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	125,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	126,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	127,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	128,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	129,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	130,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	131,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	132,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	133,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	134,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	135,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	136,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	137,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	138,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	139,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	140,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	141,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	142,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	143,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	144,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	145,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	146,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	147,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	148,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	149,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	150,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	151,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	152,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	153,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	154,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	155,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	156,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	157,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	158,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	159,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	160,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	161,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	162,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	163,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	164,
+	
+	'Household Account',
+	'true
+);
+INSERT INTO "household_accounts" VALUES(
+	165,
+	
+	'Household Account',
+	'true
+);
 CREATE TABLE npsp__donations (
 	id INTEGER NOT NULL, 
-	"Contact_Id_for_Role__c" VARCHAR(255), 
-	"Membership_Origin__c" VARCHAR(255), 
-	"Member_Level__c" VARCHAR(255), 
-	"Membership_Start_Date__c" VARCHAR(255), 
-	"Membership_End_Date__c" VARCHAR(255), 
-	"Do_Not_Automatically_Create_Payment__c" VARCHAR(255), 
-	"Name" VARCHAR(255), 
-	"NextStep" VARCHAR(255), 
-	"Type" VARCHAR(255), 
-	"StageName" VARCHAR(255), 
-	"LeadSource" VARCHAR(255), 
-	"ForecastCategoryName" VARCHAR(255), 
-	"Probability" VARCHAR(255), 
-	"TotalOpportunityQuantity" VARCHAR(255), 
-	"Description" VARCHAR(255), 
-	"CloseDate" VARCHAR(255), 
-	"Amount" VARCHAR(255), 
-	"IsPrivate" VARCHAR(255), 
-	"Grant_Requirements_Website__c" VARCHAR(255), 
-	"Primary_Contact_Campaign_Member_Status__c" VARCHAR(255), 
-	"Notification_Recipient_Name__c" VARCHAR(255), 
-	"Honoree_Name__c" VARCHAR(255), 
-	"Matching_Gift_Employer__c" VARCHAR(255), 
-	"Grant_Contract_Number__c" VARCHAR(255), 
-	"Notification_Recipient_Information__c" VARCHAR(255), 
-	"Grant_Program_Area_s__c" VARCHAR(255), 
-	"In_Kind_Description__c" VARCHAR(255), 
-	"Tribute_Type__c" VARCHAR(255), 
-	"Notification_Preference__c" VARCHAR(255), 
-	"Matching_Gift_Status__c" VARCHAR(255), 
-	"In_Kind_Type__c" VARCHAR(255), 
-	"Acknowledgment_Status__c" VARCHAR(255), 
-	"Gift_Strategy__c" VARCHAR(255), 
-	"Recurring_Donation_Installment_Number__c" VARCHAR(255), 
-	"Notification_Message__c" VARCHAR(255), 
-	"Closed_Lost_Reason__c" VARCHAR(255), 
-	"Grant_Period_Start_Date__c" VARCHAR(255), 
-	"Grant_Period_End_Date__c" VARCHAR(255), 
-	"Grant_Contract_Date__c" VARCHAR(255), 
-	"Acknowledgment_Date__c" VARCHAR(255), 
-	"Qualified_Date__c" VARCHAR(255), 
-	"Ask_Date__c" VARCHAR(255), 
-	"Fair_Market_Value__c" VARCHAR(255), 
-	"Requested_Amount__c" VARCHAR(255), 
-	"DisableContactRoleAutomation__c" VARCHAR(255), 
-	"In_Kind_Donor_Declared_Value__c" VARCHAR(255), 
-	"Is_Grant_Renewal__c" VARCHAR(255), 
-	"systemHouseholdContactRoleProcessor__c" VARCHAR(255), 
-	account_id VARCHAR(255), 
-	primary_contact__c VARCHAR(255), 
-	honoree_contact__c VARCHAR(255), 
-	notification_recipient_contact__c VARCHAR(255), 
+	"npe01__Membership_Origin__c" VARCHAR(255), 
+	"npe01__Member_Level__c" VARCHAR(255), 
+	"npe01__Membership_Start_Date__c" VARCHAR(255), 
+	"npe01__Membership_End_Date__c" VARCHAR(255), 
+	"npe01__Do_Not_Automatically_Create_Payment__c" VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "npsp__donations" VALUES(1,'0035400000Hsa3XAAR','','','','','false','Arthur Baker Donation in Memoriam','','','Closed Won','','Closed','100.0','','','2019-09-02','500.0','false','','','Arlene Baker','Arthur Baker','','','','','','Memorial','Phone','','','To Be Acknowledged','','','','','','','','2019-09-06','','','','','false','false','false','All Opportunities','3','135','134','135');
-INSERT INTO "npsp__donations" VALUES(2,'0035400000HtExuAAF','','','','','false','Darryl Graham 2019 In-Kind Donation','','','In-Kind Received','','Omitted','100.0','','','2019-08-05','400.0','false','','','','','','','','','<p>PSA Production for fundraising drive</p>','','','','Services','Acknowledged','','','','','','','','2019-08-09','','','800.0','','false','true','false','All Opportunities','4','147','','');
-INSERT INTO "npsp__donations" VALUES(3,'0035400000HtEyZAAV','','','','','false','Lynn Barnes 1019 Donation','','','Closed Won','','Closed','100.0','','','2019-07-01','500.0','false','','','','','','','','','','','','','','Acknowledged','','','','','','','','2019-07-05','','','','','false','false','false','All Opportunities','5','158','','');
-
+INSERT INTO "npsp__donations" VALUES(
+    1,
+    '',
+    '',
+    '',
+    '',
+    'false'
+);
+INSERT INTO "npsp__donations" VALUES(
+    2,
+    '',
+    '',
+    '',
+    '',
+    'false'
+);
+INSERT INTO "npsp__donations" VALUES(
+    3,
+    '',
+    '',
+    '',
+    '',
+    'false'
+);
 CREATE TABLE organization_accounts (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -559,41 +3363,55 @@ CREATE TABLE organization_accounts (
 	"AccountNumber" VARCHAR(255), 
 	"Site" VARCHAR(255), 
 	"Type" VARCHAR(255), 
-	"SYSTEM_AccountType__c" VARCHAR(255), 
-	"SYSTEMIsIndividual__c" VARCHAR(255), 
-	"MaximumClientsServed__c" VARCHAR(255), 
-	"SYSTEM_CUSTOM_NAMING__c" VARCHAR(255), 
-	"FirstCloseDate__c" VARCHAR(255), 
-	"LastCloseDate__c" VARCHAR(255), 
-	"AverageAmount__c" VARCHAR(255), 
-	"LastOppAmount__c" VARCHAR(255), 
-	"LargestAmount__c" VARCHAR(255), 
-	"SmallestAmount__c" VARCHAR(255), 
-	"Best_Gift_Year__c" VARCHAR(255), 
-	"Best_Gift_Year_Total__c" VARCHAR(255), 
-	"TotalOppAmount__c" VARCHAR(255), 
-	"OppAmountLastNDays__c" VARCHAR(255), 
-	"OppAmountThisYear__c" VARCHAR(255), 
-	"OppAmountLastYear__c" VARCHAR(255), 
-	"OppAmount2YearsAgo__c" VARCHAR(255), 
-	"NumberOfClosedOpps__c" VARCHAR(255), 
-	"OppsClosedLastNDays__c" VARCHAR(255), 
-	"OppsClosedThisYear__c" VARCHAR(255), 
-	"OppsClosedLastYear__c" VARCHAR(255), 
-	"OppsClosed2YearsAgo__c" VARCHAR(255), 
-	"TotalMembershipOppAmount__c" VARCHAR(255), 
-	"MembershipEndDate__c" VARCHAR(255), 
-	"LastMembershipLevel__c" VARCHAR(255), 
-	"MembershipJoinDate__c" VARCHAR(255), 
-	"LastMembershipDate__c" VARCHAR(255), 
-	"LastMembershipAmount__c" VARCHAR(255), 
-	"LastMembershipOrigin__c" VARCHAR(255), 
-	"NumberOfMembershipOpps__c" VARCHAR(255), 
+	"npe01__SYSTEM_AccountType__c" VARCHAR(255), 
+	"npe01__SYSTEMIsIndividual__c" VARCHAR(255), 
+	
+    "caseman__MaximumClientsServed__c" VARCHAR(255), 
+	
+    "npo02__SYSTEM_CUSTOM_NAMING__c" VARCHAR(255), 
+	"npo02__FirstCloseDate__c" VARCHAR(255), 
+	"npo02__LastCloseDate__c" VARCHAR(255), 
+	"npo02__AverageAmount__c" VARCHAR(255), 
+	"npo02__LastOppAmount__c" VARCHAR(255), 
+	"npo02__LargestAmount__c" VARCHAR(255), 
+	"npo02__SmallestAmount__c" VARCHAR(255), 
+	"npo02__Best_Gift_Year__c" VARCHAR(255), 
+	"npo02__Best_Gift_Year_Total__c" VARCHAR(255), 
+	"npo02__TotalOppAmount__c" VARCHAR(255), 
+	"npo02__OppAmountLastNDays__c" VARCHAR(255), 
+	"npo02__OppAmountThisYear__c" VARCHAR(255), 
+	"npo02__OppAmountLastYear__c" VARCHAR(255), 
+	"npo02__OppAmount2YearsAgo__c" VARCHAR(255), 
+	"npo02__NumberOfClosedOpps__c" VARCHAR(255), 
+	"npo02__OppsClosedLastNDays__c" VARCHAR(255), 
+	"npo02__OppsClosedThisYear__c" VARCHAR(255), 
+	"npo02__OppsClosedLastYear__c" VARCHAR(255), 
+	"npo02__OppsClosed2YearsAgo__c" VARCHAR(255), 
+	"npo02__TotalMembershipOppAmount__c" VARCHAR(255), 
+	"npo02__MembershipEndDate__c" VARCHAR(255), 
+	"npo02__LastMembershipLevel__c" VARCHAR(255), 
+	"npo02__MembershipJoinDate__c" VARCHAR(255), 
+	"npo02__LastMembershipDate__c" VARCHAR(255), 
+	"npo02__LastMembershipAmount__c" VARCHAR(255), 
+	"npo02__LastMembershipOrigin__c" VARCHAR(255), 
+	"npo02__NumberOfMembershipOpps__c" VARCHAR(255), 
+    
 	record_type VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "organization_accounts" VALUES(1,'Marble Foundation','','','','','','','555-389-74399','','','','','','Foundation','','false','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
-INSERT INTO "organization_accounts" VALUES(2,'Future Potential Fund','','','','','','','555-278-7643','','','','','','Foundation','','false','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
-INSERT INTO "organization_accounts" VALUES(3,'City Department of Human Services','','','','','','','','','','','','','Government','','false','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
-
+INSERT INTO "organization_accounts" VALUES(
+    1,
+    '',
+    'false'
+);
+INSERT INTO "organization_accounts" VALUES(
+    2,
+    '',
+    'false'
+);
+INSERT INTO "organization_accounts" VALUES(
+    3,
+    '',
+    'false'
+);
 COMMIT;

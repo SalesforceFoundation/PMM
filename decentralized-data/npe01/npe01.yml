@@ -1,38 +1,33 @@
 # Accounts
 Household_Accounts:
     fields:
-        # npe01
-        SYSTEM_AccountType__c: SYSTEM_AccountType__c
-        SYSTEMIsIndividual__c: SYSTEMIsIndividual__c
+        SYSTEM_AccountType__c: npe01__SYSTEM_AccountType__c
+        SYSTEMIsIndividual__c: npe01__SYSTEMIsIndividual__c
 
 Organization_Accounts:
     fields:
-        # npe01
-        SYSTEM_AccountType__c: SYSTEM_AccountType__c
-        SYSTEMIsIndividual__c: SYSTEMIsIndividual__c
+        SYSTEM_AccountType__c: npe01__SYSTEM_AccountType__c
+        SYSTEMIsIndividual__c: npe01__SYSTEMIsIndividual__c
 
 # Contacts
 Contacts:
     fields:
-        # npe01
-        SystemAccountProcessor__c: SystemAccountProcessor__c
-        AlternateEmail__c: AlternateEmail__c
-        HomeEmail__c: HomeEmail__c
-        Preferred_Email__c: Preferred_Email__c
-        PreferredPhone__c: PreferredPhone__c
-        Primary_Address_Type__c: Primary_Address_Type__c
-        Private__c: Private__c
-        Secondary_Address_Type__c: Secondary_Address_Type__c
-        WorkEmail__c: WorkEmail__c
-        WorkPhone__c: WorkPhone__c
+        SystemAccountProcessor__c: npe01__SystemAccountProcessor__c
+        AlternateEmail__c: npe01__AlternateEmail__c
+        HomeEmail__c: npe01__HomeEmail__c
+        Preferred_Email__c: npe01__Preferred_Email__c
+        PreferredPhone__c: npe01__PreferredPhone__c
+        Primary_Address_Type__c: npe01__Primary_Address_Type__c
+        Private__c: npe01__Private__c
+        Secondary_Address_Type__c: npe01__Secondary_Address_Type__c
+        WorkEmail__c: npe01__WorkEmail__c
+        WorkPhone__c: npe01__WorkPhone__c
 
 # NPSP Donations
 npsp__Donations:
     fields:
-        # npe01
-        Contact_Id_for_Role__c: Contact_Id_for_Role__c
-        Membership_Origin__c: Membership_Origin__c
-        Member_Level__c: Member_Level__c
-        Membership_Start_Date__c: Membership_Start_Date__c
-        Membership_End_Date__c: Membership_End_Date__c
-        Do_Not_Automatically_Create_Payment__c: Do_Not_Automatically_Create_Payment__c
+        Membership_Origin__c: npe01__Membership_Origin__c
+        Member_Level__c: npe01__Member_Level__c
+        Membership_Start_Date__c: npe01__Membership_Start_Date__c
+        Membership_End_Date__c: npe01__Membership_End_Date__c
+        Do_Not_Automatically_Create_Payment__c: npe01__Do_Not_Automatically_Create_Payment__c

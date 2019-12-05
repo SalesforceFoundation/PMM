@@ -1,4 +1,5 @@
 BEGIN TRANSACTION;
+
 CREATE TABLE contacts (
 	id INTEGER NOT NULL, 
 	salutation VARCHAR(255), 
@@ -316,6 +317,7 @@ CREATE TABLE household_accounts (
 	record_type VARCHAR(255), 
 	PRIMARY KEY (id)
 );
+
 INSERT INTO "household_accounts" VALUES(1,'Higgins Household','','','','','','','555-248-3956','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
 INSERT INTO "household_accounts" VALUES(2,'Adams Household','','','','','','','555-648-7204','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
 INSERT INTO "household_accounts" VALUES(3,'Baker Household','','','','','','','555-524-0749','','','','','','Household','Household Account','true','','','2019-09-02','2019-09-02','500.0','500.0','500.0','500.0','2019','500.0','500.0','500.0','500.0','0.0','0.0','1.0','1.0','1.0','0.0','0.0','500.0','','','','2019-09-02','500.0','','1.0','HH_Account');
@@ -481,6 +483,142 @@ INSERT INTO "household_accounts" VALUES(162,'Graves Household','','','','','',''
 INSERT INTO "household_accounts" VALUES(163,'Carson Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
 INSERT INTO "household_accounts" VALUES(164,'Fletcher Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
 INSERT INTO "household_accounts" VALUES(165,'Hernandez Household','','','','','','','','','','','','','Household','Household Account','true','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','HH_Account');
+
+CREATE TABLE npe4__relationships (
+	id INTEGER NOT NULL, 
+	"Related_Opportunity_Contact_Role__c" VARCHAR(255), 
+	"SYSTEM_SystemCreated__c" VARCHAR(255), 
+	"Description__c" VARCHAR(255), 
+	"Status__c" VARCHAR(255), 
+	"Type__c" VARCHAR(255), 
+	contact__c VARCHAR(255), 
+	related_contact__c VARCHAR(255), 
+	PRIMARY KEY (id)
+);
+INSERT INTO "npe4__relationships" VALUES(1,'','true','','Current','Son','158','160');
+INSERT INTO "npe4__relationships" VALUES(2,'','true','','Current','Son','159','160');
+INSERT INTO "npe4__relationships" VALUES(3,'','false','','Current','Mother','160','158');
+INSERT INTO "npe4__relationships" VALUES(4,'','false','','Current','Father','160','159');
+INSERT INTO "npe4__relationships" VALUES(5,'','true','','Current','Spouse','64','66');
+INSERT INTO "npe4__relationships" VALUES(6,'','true','','Current','Parent','65','66');
+INSERT INTO "npe4__relationships" VALUES(7,'','false','','Current','Husband','66','64');
+INSERT INTO "npe4__relationships" VALUES(8,'','false','','Current','Daughter','66','65');
+INSERT INTO "npe4__relationships" VALUES(9,'','false','','Current','Mother','110','111');
+INSERT INTO "npe4__relationships" VALUES(10,'','true','','Current','Son','111','110');
+INSERT INTO "npe4__relationships" VALUES(11,'','true','Arthur is Arlene''s recently deceased father.','Current','Child','134','135');
+INSERT INTO "npe4__relationships" VALUES(12,'Tribute','false','Arthur is Arlene''s recently deceased father.','Current','Father','135','134');
+CREATE TABLE "npsp__OpportunityContactRole" (
+	id INTEGER NOT NULL, 
+	"Role" VARCHAR(255), 
+	"IsPrimary" VARCHAR(255), 
+	contact_id VARCHAR(255), 
+	opportunity_id VARCHAR(255), 
+	PRIMARY KEY (id)
+);
+
+INSERT INTO "npsp__OpportunityContactRole" VALUES(1,'Household Member','false','146','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(2,'Household Member','false','146','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(3,'Household Member','false','146','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(4,'Household Member','false','146','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(5,'Household Member','false','146','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(6,'Donor','true','147','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(7,'Donor','true','147','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(8,'Donor','true','147','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(9,'Donor','true','147','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(10,'Donor','true','147','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(11,'Donor','true','158','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(12,'Donor','true','158','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(13,'Donor','true','158','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(14,'Donor','true','158','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(15,'Donor','true','158','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(16,'Household Member','false','159','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(17,'Household Member','false','159','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(18,'Household Member','false','159','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(19,'Household Member','false','159','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(20,'Household Member','false','159','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(21,'Household Member','false','160','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(22,'Household Member','false','160','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(23,'Household Member','false','160','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(24,'Household Member','false','160','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(25,'Household Member','false','160','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(26,'Tribute','false','134','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(27,'Tribute','false','134','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(28,'Tribute','false','134','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(29,'Tribute','false','134','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(30,'Tribute','false','134','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(31,'Donor','true','135','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(32,'Donor','true','135','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(33,'Donor','true','135','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(34,'Donor','true','135','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(35,'Donor','true','135','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(36,'Donor','true','135','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(37,'Donor','true','147','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(38,'Donor','true','158','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(39,'Household Member','false','134','1');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(40,'Household Member','false','146','2');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(41,'Household Member','false','159','3');
+INSERT INTO "npsp__OpportunityContactRole" VALUES(42,'Household Member','false','160','3');
+
+CREATE TABLE npsp__donations (
+	id INTEGER NOT NULL, 
+	"Contact_Id_for_Role__c" VARCHAR(255), 
+	"Membership_Origin__c" VARCHAR(255), 
+	"Member_Level__c" VARCHAR(255), 
+	"Membership_Start_Date__c" VARCHAR(255), 
+	"Membership_End_Date__c" VARCHAR(255), 
+	"Do_Not_Automatically_Create_Payment__c" VARCHAR(255), 
+	"Name" VARCHAR(255), 
+	"NextStep" VARCHAR(255), 
+	"Type" VARCHAR(255), 
+	"StageName" VARCHAR(255), 
+	"LeadSource" VARCHAR(255), 
+	"ForecastCategoryName" VARCHAR(255), 
+	"Probability" VARCHAR(255), 
+	"TotalOpportunityQuantity" VARCHAR(255), 
+	"Description" VARCHAR(255), 
+	"CloseDate" VARCHAR(255), 
+	"Amount" VARCHAR(255), 
+	"IsPrivate" VARCHAR(255), 
+	"Grant_Requirements_Website__c" VARCHAR(255), 
+	"Primary_Contact_Campaign_Member_Status__c" VARCHAR(255), 
+	"Notification_Recipient_Name__c" VARCHAR(255), 
+	"Honoree_Name__c" VARCHAR(255), 
+	"Matching_Gift_Employer__c" VARCHAR(255), 
+	"Grant_Contract_Number__c" VARCHAR(255), 
+	"Notification_Recipient_Information__c" VARCHAR(255), 
+	"Grant_Program_Area_s__c" VARCHAR(255), 
+	"In_Kind_Description__c" VARCHAR(255), 
+	"Tribute_Type__c" VARCHAR(255), 
+	"Notification_Preference__c" VARCHAR(255), 
+	"Matching_Gift_Status__c" VARCHAR(255), 
+	"In_Kind_Type__c" VARCHAR(255), 
+	"Acknowledgment_Status__c" VARCHAR(255), 
+	"Gift_Strategy__c" VARCHAR(255), 
+	"Recurring_Donation_Installment_Number__c" VARCHAR(255), 
+	"Notification_Message__c" VARCHAR(255), 
+	"Closed_Lost_Reason__c" VARCHAR(255), 
+	"Grant_Period_Start_Date__c" VARCHAR(255), 
+	"Grant_Period_End_Date__c" VARCHAR(255), 
+	"Grant_Contract_Date__c" VARCHAR(255), 
+	"Acknowledgment_Date__c" VARCHAR(255), 
+	"Qualified_Date__c" VARCHAR(255), 
+	"Ask_Date__c" VARCHAR(255), 
+	"Fair_Market_Value__c" VARCHAR(255), 
+	"Requested_Amount__c" VARCHAR(255), 
+	"DisableContactRoleAutomation__c" VARCHAR(255), 
+	"In_Kind_Donor_Declared_Value__c" VARCHAR(255), 
+	"Is_Grant_Renewal__c" VARCHAR(255), 
+	"systemHouseholdContactRoleProcessor__c" VARCHAR(255), 
+	account_id VARCHAR(255), 
+	primary_contact__c VARCHAR(255), 
+	honoree_contact__c VARCHAR(255), 
+	notification_recipient_contact__c VARCHAR(255), 
+	PRIMARY KEY (id)
+);
+INSERT INTO "npsp__donations" VALUES(1,'0035400000Hsa3XAAR','','','','','false','Arthur Baker Donation in Memoriam','','','Closed Won','','Closed','100.0','','','2019-09-02','500.0','false','','','Arlene Baker','Arthur Baker','','','','','','Memorial','Phone','','','To Be Acknowledged','','','','','','','','2019-09-06','','','','','false','false','false','All Opportunities','3','135','134','135');
+INSERT INTO "npsp__donations" VALUES(2,'0035400000HtExuAAF','','','','','false','Darryl Graham 2019 In-Kind Donation','','','In-Kind Received','','Omitted','100.0','','','2019-08-05','400.0','false','','','','','','','','','<p>PSA Production for fundraising drive</p>','','','','Services','Acknowledged','','','','','','','','2019-08-09','','','800.0','','false','true','false','All Opportunities','4','147','','');
+INSERT INTO "npsp__donations" VALUES(3,'0035400000HtEyZAAV','','','','','false','Lynn Barnes 1019 Donation','','','Closed Won','','Closed','100.0','','','2019-07-01','500.0','false','','','','','','','','','','','','','','Acknowledged','','','','','','','','2019-07-05','','','','','false','false','false','All Opportunities','5','158','','');
+
 CREATE TABLE organization_accounts (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -533,4 +671,5 @@ CREATE TABLE organization_accounts (
 INSERT INTO "organization_accounts" VALUES(1,'Marble Foundation','','','','','','','555-389-74399','','','','','','Foundation','','false','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
 INSERT INTO "organization_accounts" VALUES(2,'Future Potential Fund','','','','','','','555-278-7643','','','','','','Foundation','','false','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
 INSERT INTO "organization_accounts" VALUES(3,'City Department of Human Services','','','','','','','','','','','','','Government','','false','','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
+
 COMMIT;

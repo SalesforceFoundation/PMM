@@ -7,10 +7,10 @@ npe4__Relationships:
         Id: sf_id
 
         # NPSP: npe4
-        SYSTEM_SystemCreated__c: SYSTEM_SystemCreated__c
-        Description__c: Description__c
-        Status__c: Status__c
-        Type__c: Type__c
+        SYSTEM_SystemCreated__c: npe4__SYSTEM_SystemCreated__c
+        Description__c: npe4__Description__c
+        Status__c: npe4__Status__c
+        Type__c: npe4__Type__c
 
     lookups:
         Contact__c:

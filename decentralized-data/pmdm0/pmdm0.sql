@@ -1,4 +1,5 @@
 BEGIN TRANSACTION;
+
 CREATE TABLE "pmdm__ProgramCohort__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -15,6 +16,7 @@ INSERT INTO "pmdm__ProgramCohort__c" VALUES(2,'Genellen','Genellen neighborhood 
 INSERT INTO "pmdm__ProgramCohort__c" VALUES(3,'Riverside','Riverside neighborhood service area','','2019-02-01','Active','Riverside neighborhood service area','1');
 INSERT INTO "pmdm__ProgramCohort__c" VALUES(4,'Fall 2019 STEM','','2019-12-20','2019-09-09','Active','Semester participation in STEM programFall 2019 semester STEM participation','10');
 INSERT INTO "pmdm__ProgramCohort__c" VALUES(5,'Highpoint','Highpoint neighborhood service area','','2019-02-01','Active','Highpoint neighborhood service area','1');
+
 CREATE TABLE "pmdm__ProgramEngagement__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -68,6 +70,7 @@ INSERT INTO "pmdm__ProgramEngagement__c" VALUES(35,'Jason  Barnes - Financial Li
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(36,'Alana  Owen - Mobile Middle School STEM Program','','false','','Client','In Progress','2019-09-09','','91','10','4');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(37,'Lauryn  Odom - Prenatal and Early Childhood Health Program','','false','','Client','In Progress','2019-08-21','','109','1','3');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(38,'Alia  Duarte - Mobile Middle School STEM Program','','false','','Client','In Progress','2019-09-09','79','164','10','4');
+
 CREATE TABLE "pmdm__Program__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -92,6 +95,7 @@ INSERT INTO "pmdm__Program__c" VALUES(9,'After School Program, Ages 11-13','This
 INSERT INTO "pmdm__Program__c" VALUES(10,'Mobile Middle School STEM Program','The program focuses on bringing hands-on mid-level STEM courses into the classroom at least twice a week, and promotes awareness of the STEM fields and occupations. It provides standards-based structured inquiry-based and real-world problem-based learning, connecting all four of the STEM subjects, science, technology, engineering, and math. The goal is to pique students'' interest in them wanting to pursue the courses, not because they have to.','2020-05-15','Education','2019-09-09','Active','The program brings hands-on mid-level STEM courses into the classroom at least twice a week','Middle School students aged 11-14');
 INSERT INTO "pmdm__Program__c" VALUES(11,'Urban Horticulture Food Forest','A green space program to provide healthy and fresh food to our community, teach the connection between the local environment and food production and reclaim sovereignty over food production using environmentally dynamic systems.','','Food and Nutrition','2018-04-03','Active','A green space program to provide healthy and fresh food to our community, teach the connection between the local environment and food production.','Community gardeners, students, and community members including food banks.');
 INSERT INTO "pmdm__Program__c" VALUES(12,'No More Food Deserts Advocacy','Advocacy program calling attention to and seeking remediation for the area''s lack of affordable grocery store options. This is an awareness-building campaign intended to garner support and funding for affordable alternatives from grantmakers and to be supported by the city and county councils.','','Advocacy','2019-08-01','Active','Calling attention to and seeking remediation for the area''s lack of affordable grocery store options.','Area residents, city and county government and grantmakers funding in the region.');
+
 CREATE TABLE "pmdm__ServiceDelivery__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -305,6 +309,7 @@ INSERT INTO "pmdm__ServiceDelivery__c" VALUES(198,'Diego Case - Middle School ST
 INSERT INTO "pmdm__ServiceDelivery__c" VALUES(199,'Alana Owen - Middle School STEM Classroom Hours','false','2019-12-04','2.0','7','','91','');
 INSERT INTO "pmdm__ServiceDelivery__c" VALUES(200,'Alana Owen - Middle School STEM Classroom Hours','false','2019-12-11','2.0','7','','91','');
 INSERT INTO "pmdm__ServiceDelivery__c" VALUES(201,'Alana Owen - Middle School STEM Classroom Hours','false','2019-10-23','2.0','7','','91','');
+
 CREATE TABLE "pmdm__Service__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -333,4 +338,5 @@ INSERT INTO "pmdm__Service__c" VALUES(16,'Financial Advisor Sessions','','Active
 INSERT INTO "pmdm__Service__c" VALUES(17,'Job Readiness Coaching','','Active','Hours','8');
 INSERT INTO "pmdm__Service__c" VALUES(18,'Resume Review','','Active','Hours','8');
 INSERT INTO "pmdm__Service__c" VALUES(19,'Job Placements','','Active','Job Placements','8');
+
 COMMIT;

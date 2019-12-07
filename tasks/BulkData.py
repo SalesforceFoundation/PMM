@@ -303,10 +303,18 @@ class Util:
         return api_name
 
     @staticmethod
-    def add_sf_id(mapping):
-        for step in mapping.items():
+    def force_id_primary_key(mapping):
+        for step_name, step in mapping.items():
             if "fields" in step:
                 step["fields"]["Id"] = "sf_id"
+
+    @staticmethod
+    def force_autonumber_primary_key(mapping):
+        for step_name, step in mapping.items():
+            if "fields" in step:
+                fields = step["fields"]
+                if "Id" in fields:
+                    del fields["Id"]
 
     @staticmethod
     def get_mapping_from_file(mapping_path):
@@ -408,7 +416,7 @@ class Util:
                         mapping[step_name][step_config] = step[step_config]
 
     @staticmethod
-    def get_combined_mapping(mapping_configs):
+    def get_combined_mapping(mapping_configs, forcePrimaryKey="autonumber"):
         combined_mapping = {}
         
         if mapping_configs:
@@ -419,7 +427,9 @@ class Util:
                         mapping_config["path"],
                         mapping_config.get("namespace")
                     )
-
-        Util.add_sf_id(combined_mapping)
+        if forcePrimaryKey == "autonumber":
+            Util.force_autonumber_primary_key(combined_mapping)
+        elif forcePrimaryKey == "id":
+            Util.force_id_primary_key(combined_mapping)
 
         return combined_mapping

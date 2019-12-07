@@ -194,6 +194,14 @@ tasks:
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
 
+    update_client_photo_directories:
+        group: "CaseMan: Test Data"
+        description: "Update client photo directories after capture_test_data"
+        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
+        options:
+            directory_path: "data/bulk/client-photos"
+            sql_path: "data/bulk/data.sql"
+
     upload_client_photos:
         group: "Data: Bulk: CaseMan"
         description: "Upload client photos and link to client records"
@@ -232,12 +240,24 @@ tasks:
             namespace_inject: $project_config.project__package__namespace
 
 flows:
+    capture_bulk_data:
+        steps:
+            100:
+                task: capture_bulk_data
+            200:
+                task: update_client_photo_directories
+
     insert_data:
         steps:
             010:
                 task: cache_namespaces_in_org_config
             100:
                 flow: insert_bulk_data
+            210:
+                task: execute_anon
+                options:
+                    path: "data/scripts/delete_sample_contacts_and_accounts.apex"
+
             999:
                 task: execute_anon
                 options:
@@ -252,19 +272,18 @@ flows:
     npsp_post_insert_bulk_data:
         steps:
             100:
-                task: namespace_execute_anonymous
+                task: execute_anon
                 options:
                     path: "data/scripts/npsp/de-duplicate_npsp_relationships.apex"
-                    namespace: npsp
                 when: "'npsp' in org_config.namespaces"
 
     npsp_pre_insert_bulk_data:
         steps:
             010:
-                task: namespace_execute_anonymous
+                task: execute_anon
                 options:
                     path: "data/scripts/npsp/set_npsp_gender_relationship_setting.apex"
-                    namespace: "'npsp' in org_config.namespaces"
+                when: "'npsp' in org_config.namespaces"
 
     #caseman_pre_insert_bulk_data:
     #    steps:

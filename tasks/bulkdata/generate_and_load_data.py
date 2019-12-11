@@ -1,7 +1,7 @@
 import os
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
-from cumulusci.tasks.bulkdata import LoadData
-from cumulusci.tasks.bulkdata.utils import generate_batches
+from tasks.bulkdata import LoadData
+from tasks.bulkdata.utils import generate_batches
 from cumulusci.utils import temporary_dir
 from cumulusci.core.config import TaskConfig
 from cumulusci.core.utils import import_global

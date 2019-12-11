@@ -11,7 +11,7 @@ import yaml
 
 from cumulusci.core.exceptions import BulkDataException
 from cumulusci.core.exceptions import TaskOptionsError
-from cumulusci.tasks.bulkdata.utils import (
+from tasks.bulkdata.utils import (
     BulkJobTaskMixin,
     get_lookup_key_field,
     download_file,

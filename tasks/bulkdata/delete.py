@@ -4,7 +4,7 @@ import unicodecsv
 import xml.etree.ElementTree as ET
 
 from cumulusci.core.utils import process_bool_arg, process_list_arg
-from cumulusci.tasks.bulkdata.utils import BulkJobTaskMixin
+from tasks.bulkdata.utils import BulkJobTaskMixin
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 from cumulusci.core.exceptions import TaskOptionsError
 

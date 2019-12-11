@@ -27,6 +27,8 @@ Household_Accounts:
 
 # Contacts
 Contacts:
+    sf_object: Contact
+    table: contacts
     lookups:
         AccountId:
             table: household_accounts

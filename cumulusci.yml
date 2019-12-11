@@ -196,7 +196,7 @@ tasks:
     capture_bulk_data_orig:
         group: "Data: Bulk"
         description: "include sql_path and mapping"
-        class_path: tasks.bulkdata.QueryData
+        class_path: tasks.bulkdata.ExtractData
 
     insert_bulk_data:
         group: "Data: Bulk"

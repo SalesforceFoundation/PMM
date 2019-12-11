@@ -40,7 +40,7 @@
         <criteriaItems>
             <column>ServiceDelivery__c.DeliveryDate__c</column>
             <isUnlocked>true</isUnlocked>
-            <operator>greaterThan</operator>
+            <operator>equals</operator>
             <value>LAST_N_MONTHS:6</value>
         </criteriaItems>
         <language>en_US</language>

@@ -37,11 +37,18 @@
     </columns>
     <description>For use on Service record home</description>
     <filter>
+        <booleanFilter>1 OR 2</booleanFilter>
         <criteriaItems>
             <column>ServiceDelivery__c.DeliveryDate__c</column>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
-            <value>LAST_N_MONTHS:6</value>
+            <value>LAST_N_MONTHS:5</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>ServiceDelivery__c.DeliveryDate__c</column>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>THIS_MONTH</value>
         </criteriaItems>
         <language>en_US</language>
     </filter>

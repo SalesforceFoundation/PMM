@@ -1,10 +1,13 @@
+Contacts:
+    sf_object: Contact
+    table: contacts
+
 # Programs
 pmdm__Program__c:
     sf_object: Program__c
     table: pmdm__Program__c
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
 
         # Custom Fields
@@ -21,7 +24,6 @@ pmdm__ProgramCohort__c:
     table: pmdm__ProgramCohort__c
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
 
         # Custom Fields
@@ -41,7 +43,6 @@ pmdm__ProgramEngagement__c:
     table: pmdm__ProgramEngagement__c
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
 
         # Custom Fields
@@ -71,7 +72,6 @@ pmdm__Service__c:
     table: pmdm__Service__c
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
 
         # Custom Fields
@@ -89,7 +89,6 @@ pmdm__ServiceDelivery__c:
     table: pmdm__ServiceDelivery__c
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
 
         # Custom Fields

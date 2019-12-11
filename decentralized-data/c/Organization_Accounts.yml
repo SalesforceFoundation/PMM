@@ -3,7 +3,6 @@ Organization_Accounts:
     table: organization_accounts
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
         Description: Description
         BillingStreet: Street

@@ -1,23 +1,29 @@
 # Accounts
 Household_Accounts:
+    sf_object: Account
+    table: household_accounts
     fields:
         SYSTEM_AccountType__c: npe01__SYSTEM_AccountType__c
         SYSTEMIsIndividual__c: npe01__SYSTEMIsIndividual__c
 
 Organization_Accounts:
+    sf_object: Account
+    table: organization_accounts
     fields:
         SYSTEM_AccountType__c: npe01__SYSTEM_AccountType__c
         SYSTEMIsIndividual__c: npe01__SYSTEMIsIndividual__c
 
 # Contacts
 Contacts:
+    sf_object: Contact
+    table: contacts
     fields:
         SystemAccountProcessor__c: npe01__SystemAccountProcessor__c
         AlternateEmail__c: npe01__AlternateEmail__c
         HomeEmail__c: npe01__HomeEmail__c
         Preferred_Email__c: npe01__Preferred_Email__c
         PreferredPhone__c: npe01__PreferredPhone__c
-        Primary_Address_Type__c: npe01__Primary_Address_Type__c
+        Primary_Address_Type__c: npe01__Pråimary_Address_Type__c
         Private__c: npe01__Private__c
         Secondary_Address_Type__c: npe01__Secondary_Address_Type__c
         WorkEmail__c: npe01__WorkEmail__c
@@ -25,6 +31,8 @@ Contacts:
 
 # NPSP Donations
 npsp__Donations:
+    sf_object: Opportunity
+    table: npsp__donations
     fields:
         Membership_Origin__c: npe01__Membership_Origin__c
         Member_Level__c: npe01__Member_Level__c

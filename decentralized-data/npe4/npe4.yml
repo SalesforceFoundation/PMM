@@ -1,10 +1,13 @@
+Contacts:
+    sf_object: Contact
+    table: contacts
+
 # NPSP Relationships
 npe4__Relationships:
     sf_object: Relationship__c
     table: npe4__relationships
     fields:
         # Standard Fields
-        Id: sf_id
 
         # NPSP: npe4
         SYSTEM_SystemCreated__c: npe4__SYSTEM_SystemCreated__c
@@ -19,6 +22,3 @@ npe4__Relationships:
         RelatedContact__c:
             table: contacts
             key_field: related_contact__c
-#        ReciprocalRelationship__c:
-#            table: npsp_relationships
-#            key_field: reciprocal_relationship__c

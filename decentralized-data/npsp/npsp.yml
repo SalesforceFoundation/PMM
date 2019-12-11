@@ -1,12 +1,18 @@
 # Accounts
 Household_Accounts:
+    sf_object: Account
+    table: household_accounts
     record_type: "HH_Account"
 
 Organization_Accounts:
+    sf_object: Account
+    table: organization_accounts
     record_type: "Organization"
 
 # Contacts
 Contacts:
+    sf_object: Contact
+    table: contacts
     fields:
         # npsp
         Deceased__c: Deceased__c
@@ -30,6 +36,8 @@ Contacts:
 
 # NPSP Relationships
 npe4__Relationships:
+    sf_object: Relationship__c
+    table: npe4__relationships
     fields:
         # npsp
         Related_Opportunity_Contact_Role__c: npsp__Related_Opportunity_Contact_Role__c
@@ -40,7 +48,6 @@ npsp__Donations:
     table: npsp__donations
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
         NextStep: NextStep
         Type: Type
@@ -104,7 +111,6 @@ npsp__OpportunityContactRole:
     table: npsp__OpportunityContactRole
     fields:
         # Standard Fields
-        Id: sf_id
         Role: Role
         IsPrimary: IsPrimary
 

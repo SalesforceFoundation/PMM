@@ -1,10 +1,14 @@
 # Accounts
 Household_Accounts:
+    sf_object: Account
+    table: household_accounts
     record_type: "HH_Account"
     fields:
         MaximumClientsServed__c: caseman__MaximumClientsServed__c
 
 Organization_Accounts:
+    sf_object: Account
+    table: organization_accounts
     record_type: "Organization"
     fields:
         MaximumClientsServed__c: caseman__MaximumClientsServed__c
@@ -15,7 +19,6 @@ caseman__Branches:
     record_type: "Branch"
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
         Description: Description
         BillingStreet: Street
@@ -68,7 +71,6 @@ caseman__Branch_Contacts:
     table: caseman__branch_contacts
     fields:
         # Standard Fields
-        Id: sf_id
         Roles: Roles
         IsActive: IsActive
 
@@ -85,7 +87,6 @@ caseman__Client_Cases:
     record_type: "ClientCase"
     fields:
         # Standard Fields
-        Id: sf_id
         Subject: subject
         Priority: priority
         Status: status
@@ -115,7 +116,6 @@ caseman__Incidents:
     record_type: "Incident"
     fields:
         # Standard Fields
-        Id: sf_id
         Subject: subject
         Priority: priority
         Status: status
@@ -139,96 +139,12 @@ caseman__Incidents:
         ContactId:
             table: contacts
 
-# Programs
-caseman__Programs:
-    sf_object: Program__c
-    table: caseman__programs
-    fields:
-        # Standard Fields
-        Id: sf_id
-        Name: name
-
-        # Custom Fields
-        TargetPopulation__c: targetpopulation__c
-        ProgramDescription__c: programdescription__c
-        Summary__c: summary__c
-        Duration__c: duration__c
-        DurationUnit__c: durationunit__c
-        EndDate__c: enddate__c
-        StartDate__c: startdate__c
-        Status__c: status__c
-        FrequencyDescription__c: frequency_description__c
-
-caseman__Program_Offerings:
-    sf_object: ProgramOffering__c
-    table: caseman__program_offerings
-    fields:
-        # Standard Fields
-        Id: sf_id
-        Name: name
-
-        # Custom Fields
-        Description__c: description__c
-        Summary__c: summary__c
-        Duration__c: duration__c
-        DurationUnit__c: durationunit__c
-        StartDate__c: startdate__c
-        EndDate__c: enddate__c
-        Status__c: status__c
-
-    lookups:
-        Program__c:
-            key_field: program__c
-            table: caseman__programs
-
-caseman__Account_Program_Offerings:
-    sf_object: AccountProgramOffering__c
-    table: caseman__account_program_offerings
-    fields:
-        # Standard Fields
-        Id: sf_id
-
-        # Custom Fields
-        AccountRole__c: accountrole__c
-
-    lookups:
-        Account__c:
-            key_field: account__c
-            table: organization_accounts
-        ProgramOffering__c:
-            key_field: program_offering__c
-            table: caseman__program_offerings
-
-caseman__Program_Engagements:
-    sf_object: ProgramEngagement__c
-    table: caseman__program_engagements
-    fields:
-        # Standard Fields
-        Id: sf_id
-
-        # Custom Fields
-        Status__c: Status__c
-        StartDate__c: StartDate__c
-        EndDate__c: EndDate__c
-
-    lookups:
-        ProgramOffering__c:
-            table: caseman__program_offerings
-            key_field: program_offering__c
-        Contact__c:
-            key_field: contact__c
-            table: contacts
-        Case__c:
-            key_field: case__c
-            table: caseman__client_cases
-
 # Appointments
 caseman__Appointments:
     sf_object: Appointment__c
     table: caseman__appointments
     fields:
         # Standard Fields
-        Id: sf_id
         Name: name
 
         # Custom Fields
@@ -242,8 +158,6 @@ caseman__Appointment_Attendees:
     sf_object: AppointmentAttendee__c
     table: caseman__appointment_attendees
     fields:
-        Id: sf_id
-
         # Custom Fields
         Reason__c: reason__c
         Role__c: role__c
@@ -263,7 +177,6 @@ caseman__Client_Alerts:
     table: caseman__client_alerts
     fields:
         # Standard Fields
-        Id: sf_id
         Name: name
 
         # Custom Fields
@@ -281,7 +194,6 @@ caseman__Client_Notes:
     table: caseman__client_notes
     fields:
         # Standard Fields
-        Id: sf_id
 
         # Custom Fields
         Content__c: content__c
@@ -295,16 +207,12 @@ caseman__Client_Notes:
         Client__c:
             key_field: client__c
             table: contacts
-        ProgramEngagement__c:
-            key_field: program_engagement__c
-            table: caseman__program_engagements
 
 caseman__Client_Note_Relationships:
     sf_object: ClientNoteRelationship__c
     table: caseman__client_note_relationships
     fields:
         # Standard Fields
-        Id: sf_id
 
         # Custom Fields
         RelatedId__c: RelatedId__c
@@ -321,9 +229,6 @@ caseman__Client_Note_Relationships:
         Contact__c:
             key_field: contact__c
             table: contacts
-        ProgramEngagement__c:
-            key_field: program_engagement__c
-            table: caseman__program_engagements
 
 # Case Plans
 caseman__Goal_Templates:
@@ -331,7 +236,6 @@ caseman__Goal_Templates:
     table: caseman__goal_templates
     fields:
         # Standard Fields
-        Id: sf_id
         Name: name
 
 caseman__Action_Item_Templates:
@@ -339,15 +243,11 @@ caseman__Action_Item_Templates:
     table: caseman__action_item_templates
     fields:
         # Standard Fields
-        Id: sf_id
         Name: name
 
 caseman__Goal_Action_Item_Templates:
     sf_object: GoalActionItemTemplate__c
     table: caseman__goal_action_item_templates
-    fields:
-        # Standard Fields
-        Id: sf_id
 
     lookups:
         GoalTemplate__c:
@@ -357,30 +257,11 @@ caseman__Goal_Action_Item_Templates:
             key_field: action_item_template__c
             table: caseman__action_item_templates
 
-caseman__Program_Goal_Templates:
-    sf_object: ProgramGoalTemplate__c
-    table: caseman__program_goal_templates
-    fields:
-        # Standard Fields
-        Id: sf_id
-
-        # Custom Fields
-        IsRequired__c: IsRequired__c
-
-    lookups:
-        GoalTemplate__c:
-            key_field: goal_template__c
-            table: caseman__goal_templates
-        Program__c:
-            key_field: program__c
-            table: caseman__programs
-
 caseman__Case_Plans:
     sf_object: CasePlan__c
     table: caseman__case_plans
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
 
     lookups:
@@ -393,7 +274,6 @@ caseman__Goals:
     table: caseman__goals
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
 
     lookups:
@@ -412,7 +292,6 @@ caseman__Action_Items:
     table: caseman__action_items
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
 
         # Custom Fields

@@ -4,7 +4,6 @@ Household_Accounts:
     table: household_accounts
     fields:
         # Standard Fields
-        Id: sf_id
         Name: Name
         Description: Description
         BillingStreet: Street

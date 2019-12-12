@@ -139,89 +139,6 @@ caseman__Incidents:
         ContactId:
             table: contacts
 
-# Programs
-caseman__Programs:
-    sf_object: Program__c
-    table: caseman__programs
-    fields:
-        # Standard Fields
-        Id: sf_id
-        Name: name
-
-        # Custom Fields
-        TargetPopulation__c: targetpopulation__c
-        ProgramDescription__c: programdescription__c
-        Summary__c: summary__c
-        Duration__c: duration__c
-        DurationUnit__c: durationunit__c
-        EndDate__c: enddate__c
-        StartDate__c: startdate__c
-        Status__c: status__c
-        FrequencyDescription__c: frequency_description__c
-
-caseman__Program_Offerings:
-    sf_object: ProgramOffering__c
-    table: caseman__program_offerings
-    fields:
-        # Standard Fields
-        Id: sf_id
-        Name: name
-
-        # Custom Fields
-        Description__c: description__c
-        Summary__c: summary__c
-        Duration__c: duration__c
-        DurationUnit__c: durationunit__c
-        StartDate__c: startdate__c
-        EndDate__c: enddate__c
-        Status__c: status__c
-
-    lookups:
-        Program__c:
-            key_field: program__c
-            table: caseman__programs
-
-caseman__Account_Program_Offerings:
-    sf_object: AccountProgramOffering__c
-    table: caseman__account_program_offerings
-    fields:
-        # Standard Fields
-        Id: sf_id
-
-        # Custom Fields
-        AccountRole__c: accountrole__c
-
-    lookups:
-        Account__c:
-            key_field: account__c
-            table: organization_accounts
-        ProgramOffering__c:
-            key_field: program_offering__c
-            table: caseman__program_offerings
-
-caseman__Program_Engagements:
-    sf_object: ProgramEngagement__c
-    table: caseman__program_engagements
-    fields:
-        # Standard Fields
-        Id: sf_id
-
-        # Custom Fields
-        Status__c: Status__c
-        StartDate__c: StartDate__c
-        EndDate__c: EndDate__c
-
-    lookups:
-        ProgramOffering__c:
-            table: caseman__program_offerings
-            key_field: program_offering__c
-        Contact__c:
-            key_field: contact__c
-            table: contacts
-        Case__c:
-            key_field: case__c
-            table: caseman__client_cases
-
 # Appointments
 caseman__Appointments:
     sf_object: Appointment__c
@@ -295,9 +212,6 @@ caseman__Client_Notes:
         Client__c:
             key_field: client__c
             table: contacts
-        ProgramEngagement__c:
-            key_field: program_engagement__c
-            table: caseman__program_engagements
 
 caseman__Client_Note_Relationships:
     sf_object: ClientNoteRelationship__c
@@ -321,9 +235,6 @@ caseman__Client_Note_Relationships:
         Contact__c:
             key_field: contact__c
             table: contacts
-        ProgramEngagement__c:
-            key_field: program_engagement__c
-            table: caseman__program_engagements
 
 # Case Plans
 caseman__Goal_Templates:
@@ -356,24 +267,6 @@ caseman__Goal_Action_Item_Templates:
         ActionItemTemplate__c:
             key_field: action_item_template__c
             table: caseman__action_item_templates
-
-caseman__Program_Goal_Templates:
-    sf_object: ProgramGoalTemplate__c
-    table: caseman__program_goal_templates
-    fields:
-        # Standard Fields
-        Id: sf_id
-
-        # Custom Fields
-        IsRequired__c: IsRequired__c
-
-    lookups:
-        GoalTemplate__c:
-            key_field: goal_template__c
-            table: caseman__goal_templates
-        Program__c:
-            key_field: program__c
-            table: caseman__programs
 
 caseman__Case_Plans:
     sf_object: CasePlan__c

@@ -8,19 +8,21 @@ import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfServi
 
 import getFieldSet from '@salesforce/apex/ServiceDeliveryController.getFieldSet';
 
-
 export default class BulkServiceDeliveryUI extends LightningElement {
     @track serviceDeliveries = [{'index' : 0}];
     @track isSaving = false;
     @track saveMessage;
     @track fieldSet = [];
     @track hasQuantity = false;
+    @track rowCount = this.serviceDeliveries.length;
+
     labels = {
         addServiceDelivery,
         saved,
         saving,
         serviceDeliveries
     }
+
     fields = {
         unitServiceField : UNITSERVICE_FIELD,
         quantity : QUANTITY_FIELD
@@ -51,12 +53,14 @@ export default class BulkServiceDeliveryUI extends LightningElement {
     addDelivery() {
         this.serviceDeliveries.push({'index' : this._deliveryIndex});
         this._deliveryIndex++;
+        this.rowCount = this.serviceDeliveries.length;
     }
 
     handleDelete(event) {
         this.serviceDeliveries = this.serviceDeliveries.filter(function( obj ) {
             return obj.index !== event.detail;
         });
+
         if(this.serviceDeliveries.length <= 0) {
             this.addDelivery();
         }

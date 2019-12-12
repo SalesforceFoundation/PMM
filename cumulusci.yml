@@ -380,11 +380,12 @@ tasks:
             path: unpackaged/tests/serviceDeliveryModal
             namespace_inject: $project_config.project__package__namespace
 
-    hard_delete_bulk_data:
+    delete_bulk_data:
         group: "pmdm: data"
         description: "I need a description"
         class_path: tasks.BulkData2.DeleteData
         options:
+            hardDelete: True
             package_mapping_directories:
                 - data/bulk/mapping/caseman
                 - data/bulk/mapping/npsp

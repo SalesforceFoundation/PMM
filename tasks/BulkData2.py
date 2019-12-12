@@ -310,7 +310,7 @@ class DeleteData(BaseDeleteData, MappingGenerator):
         self.options["skip_keeping_existing_record_types"] = True
 
         # Always hard-delete
-        self.options["hardDelete"] = True
+        self.options["hardDelete"] = process_bool_arg(self.options.get("hardDelete"))
         self.options["where"] = self.options.get("where", None)
 
         # Generate objects from mapping
@@ -350,8 +350,6 @@ class DeleteData(BaseDeleteData, MappingGenerator):
                 "child_sf_objects": set(),
             }
             self.tables_by_name[table.get("name")] = table
-            
-                
 
         for name, table in self.tables_by_name.items():
             for parent_name in table.get("parent_names"):

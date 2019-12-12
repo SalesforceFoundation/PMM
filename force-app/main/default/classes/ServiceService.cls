@@ -7,15 +7,43 @@ public with sharing class ServiceService {
 
         for (Schema.FieldSetMember field : Schema.SObjectType.ServiceDelivery__C.FieldSets.Default.getFields()) {
 
-            String label;
-            label = field.getLabel();
-
             fields.add(new Map<String, Object>{
                 'apiName' => field.getFieldPath(),
-                'label' => label
+                'label' => field.getLabel(),
+                'required' => !field.getSObjectField().getDescribe().isNillable()
             });
         }
 
         return fields;
+    }
+
+    public Map<String, List<Object>> getServicesEngagementsByContactId(Id contactId) {
+        ProgramEngagementSelector peSelector = new ProgramEngagementSelector();
+        ServiceSelector serviceSelector = new ServiceSelector();
+        Set<Id> programIds = new Set<Id>();
+
+        Map<String, List<Object>> result = new Map<String, List<Object>>();
+        result.put('engagements', new List<Object>());
+        result.put('services', new List<Object>());
+
+        for(ProgramEngagement__c engagement : peSelector.getProgramEngagementsByContactId(contactId)) {
+            programIds.add(engagement.Program__c);
+            result.get('engagements').add(convertObjectToOption(engagement));
+        }
+
+        for(Service__c service : serviceSelector.getServicesByProgramIds(programIds)) {
+            result.get('services').add(convertObjectToOption(service));
+        }
+
+        return result;
+    }
+
+    //TODO : Need describes here for field names.
+    private Map<String, String> convertObjectToOption(sObject obj) {
+        Map<String, String> result = new Map<String, String>();
+        result.put('label', (String) obj.get('Name'));
+        result.put('value', (String) obj.get('Id'));
+        result.put('program', (String) obj.get('Program__c'));
+        return result;
     }
 }

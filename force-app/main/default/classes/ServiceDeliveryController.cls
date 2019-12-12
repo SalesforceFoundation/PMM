@@ -10,4 +10,13 @@ public with sharing class ServiceDeliveryController {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    @AuraEnabled (cacheable=true)
+    public static Map<String, Object> getServicesAndEngagements(Id contactId) {
+        try {
+            return service.getServicesEngagementsByContactId(contactId);
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }

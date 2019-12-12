@@ -29,11 +29,7 @@ class NamespaceInfo(TableLogger):
             ]
         rows = []
 
-        for package in GetInstalledPackages(
-            self.project_config, 
-            TaskConfig({}), 
-            self.org_config,
-        )().items():
+        for package in self.get_installed_packages().items():
             namespaces[package[0]] = package[0]
             if log_installed_packages:
                 rows.append([
@@ -61,6 +57,25 @@ class NamespaceInfo(TableLogger):
 
         return namespaces
 
+    def get_installed_packages(self):
+        #return GetInstalledPackages(
+            #self.project_config, 
+            #TaskConfig({}), 
+            #self.org_config,
+        #)()
+        return {
+            "pub": "1.5",
+            "sf_chttr_apps": "1.11",
+            "sf_com_apps": "1.7",
+            "caseman": "1.0 (Beta 244)",
+            "npe4": "3.8",
+            "npe5": "3.7",
+            "npsp": "3.165",
+            "npe01": "3.12",
+            "npo02": "3.11",
+            "npe03": "3.15",
+        }
+
     def get_installed_package_versions(self):
         if self.org_config.config.get("namespace_info"):
             return self.org_config.config.get("namespace_info").get("installed_package_versions")
@@ -80,11 +95,7 @@ class NamespaceInfo(TableLogger):
             ]
         rows = []
 
-        for package in GetInstalledPackages(
-            self.project_config, 
-            TaskConfig({}), 
-            self.org_config,
-        )().items():
+        for package in self.get_installed_packages().items():
             installed_package_versions[package[0]] = package[0]
             if log_installed_packages:
                 rows.append([

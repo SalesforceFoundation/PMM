@@ -4,7 +4,8 @@ from tasks.namespaces import NamespaceInfo
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.utils import os_friendly_path
-from tasks.bulkdata import LoadData, ExtractData
+from tasks.bulkdata import LoadData, ExtractData, DeleteData as BaseDeleteData
+from cumulusci.core.exceptions import TaskOptionsError
 
 class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {
@@ -31,6 +32,10 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         },
         "log_mapping": {
             "description": "If a valid value, logs the combined mapping in the console.  Valid values: (1) 'YAML' or 'yml' to log as a YAML file; (2) 'table' to log as a table.  Default: None",
+            "required": False,
+        },
+        "skip_keeping_existing_record_types": {
+            "description": "Skips check to only keep record_types that exist in the org",
             "required": False,
         },
     }
@@ -125,7 +130,7 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         for record in self.sf.query_all(query).get("records"):
             sobject_type = record.get("SobjectType")
             developer_name = record.get("DeveloperName")
-
+            
             developer_names = developer_names_by_object.get(sobject_type) or {}
             developer_names[developer_name] = None
             developer_names_by_object[sobject_type] = developer_names
@@ -222,7 +227,8 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         # Combine mappings
         mapping = Util.get_combined_mapping(all_mapping_configs)
 
-        self.keep_existing_record_types(mapping)
+        if not process_bool_arg(self.options.get("skip_keeping_existing_record_types")):
+            self.keep_existing_record_types(mapping)
 
         self.log_combined_mapping(mapping)
 
@@ -291,7 +297,257 @@ class CaptureData(ExtractData, MappingGenerator):
     def _init_mapping(self):
         self.mappings = self.get_combined_mapping()
 
+class DeleteData(BaseDeleteData, MappingGenerator):
+
+    task_options = {
+        **MappingGenerator.task_options,
+    }
+
+    def _init_options(self, kwargs):
+        super(BaseDeleteData, self)._init_options(kwargs)
+
+        # Getting an error that self.sf doesn't exist???
+        self.options["skip_keeping_existing_record_types"] = True
+
+        # Always hard-delete
+        self.options["hardDelete"] = True
+        self.options["where"] = self.options.get("where", None)
+
+        # Generate objects from mapping
+        self.options["objects"] = self._get_objects_from_combined_mapping()
+        if not len(self.options["objects"]) or not self.options["objects"][0]:
+            raise TaskOptionsError("At least one object must be specified.")
+
+    def log_set(self, title, values):
+        rows = [
+            [
+                title
+            ]
+        ]
+        for value in values:
+            rows.append([
+                value
+            ])
+
+        self.log_table(rows, )
+
+    def _get_objects_from_combined_mapping(self):
+        self.tables_by_name = {}
+        
+        #self.combined_mapping = self.get_combined_mapping()
+        for step_name, step in self.get_combined_mapping().items():
+            parent_names = []
+            if "lookups" in step:
+                for api_name, lookup in step.get("lookups").items():
+                    parent_names.append(lookup.get("table"))
+                    
+            table = {
+                "name": step.get("table"),
+                "sf_object": step.get("sf_object"),
+                "parent_names": parent_names,
+                "parent_sf_objects": set(),
+                "children_names": [],
+                "child_sf_objects": set(),
+            }
+            self.tables_by_name[table.get("name")] = table
+            
+                
+
+        for name, table in self.tables_by_name.items():
+            for parent_name in table.get("parent_names"):
+                if parent_name != name:
+                    self.tables_by_name.get(parent_name).get("children_names").append(name)
+                    self.tables_by_name.get(parent_name).get("child_sf_objects").add(table.get("sf_object"))
+                
+                parent_sf_object = self.tables_by_name.get(parent_name).get("sf_object")
+                # Ignore circuluar references
+                if parent_sf_object != table.get("sf_object"):
+                    table.get("parent_sf_objects").add(parent_sf_object)
+        
+        rows = [
+            [
+                "name",
+                "sf_object",
+                "parent_sf_objects",
+                "child_sf_objects",
+            ]
+        ]
+
+        for name, table in self.tables_by_name.items():
+            if table.get("child_sf_objects"):
+                is_first = True
+                for child_sf_object in table.get("child_sf_objects"):
+                    rows.append([
+                        name if is_first else "",
+                        table.get("sf_object") if is_first else "",
+                        ", ".join(table.get("parent_sf_objects")) if is_first else "",
+                        child_sf_object,
+                    ])
+                    is_first = False
+            else:
+                rows.append([
+                    name,
+                    table.get("sf_object"),
+                    ", ".join(table.get("parent_sf_objects")),
+                    ", ".join(table.get("child_sf_objects")),
+                ])
+
+        self.log_table(rows, groupByBlankColumns=True)
+
+        children_by_parent = self._get_children_by_parent()   
+        parents_by_child = self._get_parents_by_child()
+
+        sobjects_by_name = {}
+        for parent, children in children_by_parent.items():
+            sobjects_by_name[parent] = {
+                "name": parent,
+                "children_names": children,
+                "children": {},
+                "parent_names": parents_by_child[parent],
+                "parents": {},
+                "ancestor_names": set()
+            }
+
+        bottom_names = set()
+        top_names = set()
+        for name, sobject in sobjects_by_name.items():
+            for child_name in sobject.get("children_names"):
+                sobject["children"][child_name] = sobjects_by_name[child_name]
+            for parent_name in sobject.get("parent_names"):
+                sobject["parents"][parent_name] = sobjects_by_name[parent_name]
+            if not sobject.get("children"):
+                bottom_names.add(name)
+            if not sobject.get("parents"):
+                top_names.add(name)
+
+        for name, sobject in sobjects_by_name.items():
+            ancestor_names = set()
+            current_parents = set()
+            current_parents.update(sobject.get("parents"))
+            while current_parents:
+                ancestor_names.update(current_parents)
+                next_parents = set()
+                for parent in current_parents:
+                    next_parents.update(sobjects_by_name[parent].get("parents"))
+                current_parents = next_parents
+            sobject["ancestor_names"] = ancestor_names
+            self.log_set("=== {} ===".format(name), ancestor_names)
+
+        self.log_set("bottom_names", bottom_names)
+        self.log_set("top_names", top_names)
+
+        bottom_up = []
+        current_names = bottom_names
+        while current_names:
+            bottom_up.extend(current_names)
+
+            next_names = set()
+            all_ancestors = set()
+            for name in current_names:
+                sobject = sobjects_by_name[name]
+                # remove current parents from sobject's ancestors
+                sobject["ancestor_names"] = sobject.get("ancestor_names") - sobject.get("parent_names")
+     
+                # Collect all ancestors and all parent's ancestors since higher SObjects have dependencies
+                all_ancestors.update(sobject.get("ancestor_names"))
+                for parent in sobject.get("parent_names"):
+                    all_ancestors.update(sobjects_by_name[parent].get("ancestor_names"))
+
+            for name in current_names:
+                sobject = sobjects_by_name[name]
+                for parent in sobject.get("parent_names"):
+                    if parent not in all_ancestors:
+                        next_names.add(parent)
+
+            current_names = next_names
+
+        self.log_set("==== BOTTOM UP ====", bottom_up)
+
+        return bottom_up
+
+    def _get_children_by_parent(self):
+        # child by parent
+        children_by_parent = {}
+        for name, table in self.tables_by_name.items():
+            parent = table.get("sf_object")
+            children = children_by_parent.get(parent)
+            if not children:
+                children = set()
+            children.update(table.get("child_sf_objects"))
+            children_by_parent[parent] = children
+
+
+        rows = [
+            [
+                "parent",
+                "children",
+            ]
+        ]
+
+        for parent, children in children_by_parent.items():
+            if children:
+                is_first = True
+                for child in children:
+                    rows.append([
+                        parent if is_first else "",
+                        child
+                    ])
+                    is_first = False
+            else:
+                rows.append([
+                    parent,
+                    ""
+                ])
+        self.log_table(rows, groupByBlankColumns=True)
+
+        return children_by_parent
+
+    def _get_parents_by_child(self):
+        parents_by_child = {}
+        for name, table in self.tables_by_name.items():
+            child = table.get("sf_object")
+            parents = parents_by_child.get(child)
+            if not parents:
+                parents = set()
+            parents.update(table.get("parent_sf_objects"))
+            parents_by_child[child] = parents
+
+        rows = [
+            [
+                "child",
+                "parents",
+            ]
+        ]
+
+        for child, parents in parents_by_child.items():
+            if parents:
+                is_first = True
+                for parent in parents:
+                    rows.append([
+                        child if is_first else "",
+                        parent
+                    ])
+                    is_first = False
+            else:
+                rows.append([
+                    child,
+                    ""
+                ])
+        self.log_table(rows, groupByBlankColumns=True)
+
+        return parents_by_child
+
 class Util:
+
+    @staticmethod
+    def get_children_sf_objects(parent, tables_by_name):
+        sf_objects = set()
+        sf_objects.add(parent.get("sf_object"))
+        if parent.get("children_names"): 
+            for child_name in parent.get("children_names"):
+                child = tables_by_name.get(child_name)
+                sf_objects.update(Util.get_children_sf_objects(child, tables_by_name))
+        return sf_objects
 
     @staticmethod
     def get_namespace(mapping_config):

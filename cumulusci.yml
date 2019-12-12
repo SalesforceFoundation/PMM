@@ -149,7 +149,7 @@ tasks:
     log_bulk_data_mapping:
         group: "Data: Bulk"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData.CreateMapping
+        class_path: tasks.BulkData2.LogMapping
         options:
             package_mapping_directories:
                 - data/bulk/mapping/caseman
@@ -164,7 +164,7 @@ tasks:
     create_bulk_data_mapping:
         group: "Data: Bulk"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData.CreateMapping
+        class_path: tasks.BulkData2.CreateMapping
         options:
             package_mapping_directories:
                 - data/bulk/mapping/caseman
@@ -380,6 +380,21 @@ tasks:
             path: unpackaged/tests/serviceDeliveryModal
             namespace_inject: $project_config.project__package__namespace
 
+    hard_delete_bulk_data:
+        group: "pmdm: data"
+        description: "I need a description"
+        class_path: tasks.BulkData2.DeleteData
+        options:
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+
+
 flows:
     capture:
         steps:
@@ -500,11 +515,15 @@ flows:
         steps:
             100:
                 flow: update_admin_profile
-            101:
+            111:
                 task: deploy_dev_config
                 options:
                     unmanaged: True
-            102:
+            112:
+                task: dx
+                options:
+                    command: 'force:user:permset:assign --permsetname HardDeleteData'
+            121:
                 task: activate_flows
             200:
                 flow: insert_data
@@ -513,10 +532,16 @@ flows:
         steps:
             100:
                 flow: update_admin_profile
-            101:
+            111:
                 task: deploy_dev_config
                 options:
                     unmanaged: False
+            112:
+                task: dx
+                options:
+                    command: 'force:user:permset:assign --permsetname HardDeleteData'
+            121:
+                task: activate_flows
             200:
                 flow: insert_data
 

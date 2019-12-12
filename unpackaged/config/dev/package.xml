@@ -4,5 +4,11 @@
         <members>Admin</members>
         <name>Profile</name>
     </types>
+
+    <types>
+        <members>HardDeleteData</members>
+        <name>PermissionSet</name>
+    </types>
+
     <version>47.0</version>
 </Package>

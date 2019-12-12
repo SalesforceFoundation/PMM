@@ -12,6 +12,7 @@ import success from "@salesforce/label/c.Success";
 import recordDeleted from "@salesforce/label/c.Record_Deleted";
 import selectService from "@salesforce/label/c.Select_Service";
 import selectEngagement from "@salesforce/label/c.Select_Program_Engagement";
+import selectedContactWarning from "@salesforce/label/c.Service_Delivery_Contact_Without_Programs";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
@@ -47,6 +48,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         confirmDeleteMessage,
         deleteLabel,
         recordDeleted,
+        selectedContactWarning,
         selectEngagement,
         selectService,
         success,

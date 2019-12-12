@@ -54,16 +54,13 @@
                 </lightning-layout-item>
             </lightning-layout>
             <lightning-layout>
-                <!-- Error Row-->
                 <template if:true={_noContactPrograms}>
                     <lightning-layout-item size="12" padding="around-small">
                         <div class="slds-text-color_error">
-                            To save a service delivery, first enroll this client in a
-                            program with active services.
+                            {labels.selectedContactWarning}
                         </div>
                     </lightning-layout-item>
                 </template>
-                <!-- /Error Row-->
             </lightning-layout>
             <lightning-button
                 class="slds-p-left_medium sd-submit slds-hide"

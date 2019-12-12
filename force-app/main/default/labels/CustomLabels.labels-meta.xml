@@ -96,4 +96,12 @@
         <shortDescription>Select Program Engagement</shortDescription>
         <value>Select Program Engagement</value>
     </labels>
+    <labels>
+        <fullName>Service_Delivery_Contact_Without_Programs</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning message when a selected contact has no programs related.</shortDescription>
+        <value>To save a service delivery, first enroll this client in a program with active services.</value>
+    </labels>    
 </CustomLabels>

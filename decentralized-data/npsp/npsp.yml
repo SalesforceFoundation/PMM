@@ -15,32 +15,24 @@ Contacts:
     table: contacts
     fields:
         # npsp
-        Deceased__c: Deceased__c
-        Do_Not_Contact__c: Do_Not_Contact__c
-        Exclude_from_Household_Formal_Greeting__c: Exclude_from_Household_Formal_Greeting__c
-        Exclude_from_Household_Informal_Greeting__c: Exclude_from_Household_Informal_Greeting__c
-        Exclude_from_Household_Name__c: Exclude_from_Household_Name__c
-        First_Soft_Credit_Amount__c: First_Soft_Credit_Amount__c
-        First_Soft_Credit_Date__c: First_Soft_Credit_Date__c
-        is_Address_Override__c: is_Address_Override__c
-        Largest_Soft_Credit_Amount__c: Largest_Soft_Credit_Amount__c
-        Largest_Soft_Credit_Date__c: Largest_Soft_Credit_Date__c
-        Last_Soft_Credit_Amount__c: Last_Soft_Credit_Amount__c
-        Last_Soft_Credit_Date__c: Last_Soft_Credit_Date__c
-        Number_of_Soft_Credits__c: Number_of_Soft_Credits__c
-        Number_of_Soft_Credits_Last_N_Days__c: Number_of_Soft_Credits_Last_N_Days__c
-        Number_of_Soft_Credits_Last_Year__c: Number_of_Soft_Credits_Last_Year__c
-        Number_of_Soft_Credits_This_Year__c: Number_of_Soft_Credits_This_Year__c
-        Number_of_Soft_Credits_Two_Years_Ago__c: Number_of_Soft_Credits_Two_Years_Ago__c
-        Soft_Credit_Last_N_Days__c: Soft_Credit_Last_N_Days__c
-
-# NPSP Relationships
-npe4__Relationships:
-    sf_object: Relationship__c
-    table: npe4__relationships
-    fields:
-        # npsp
-        Related_Opportunity_Contact_Role__c: npsp__Related_Opportunity_Contact_Role__c
+        Deceased__c: npsp__Deceased__c
+        Do_Not_Contact__c: npsp__Do_Not_Contact__c
+        Exclude_from_Household_Formal_Greeting__c: npsp__Exclude_from_Household_Formal_Greeting__c
+        Exclude_from_Household_Informal_Greeting__c: npsp__Exclude_from_Household_Informal_Greeting__c
+        Exclude_from_Household_Name__c: npsp__Exclude_from_Household_Name__c
+        First_Soft_Credit_Amount__c: npsp__First_Soft_Credit_Amount__c
+        First_Soft_Credit_Date__c: npsp__First_Soft_Credit_Date__c
+        is_Address_Override__c: npsp__is_Address_Override__c
+        Largest_Soft_Credit_Amount__c: npsp__Largest_Soft_Credit_Amount__c
+        Largest_Soft_Credit_Date__c: npsp__Largest_Soft_Credit_Date__c
+        Last_Soft_Credit_Amount__c: npsp__Last_Soft_Credit_Amount__c
+        Last_Soft_Credit_Date__c: npsp__Last_Soft_Credit_Date__c
+        Number_of_Soft_Credits__c: npsp__Number_of_Soft_Credits__c
+        Number_of_Soft_Credits_Last_N_Days__c: npsp__Number_of_Soft_Credits_Last_N_Days__c
+        Number_of_Soft_Credits_Last_Year__c: npsp__Number_of_Soft_Credits_Last_Year__c
+        Number_of_Soft_Credits_This_Year__c: npsp__Number_of_Soft_Credits_This_Year__c
+        Number_of_Soft_Credits_Two_Years_Ago__c: npsp__Number_of_Soft_Credits_Two_Years_Ago__c
+        Soft_Credit_Last_N_Days__c: npsp__Soft_Credit_Last_N_Days__c
 
 # NPSP Donations
 npsp__Donations:

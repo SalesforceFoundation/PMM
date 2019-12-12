@@ -1,5 +1,4 @@
 BEGIN TRANSACTION;
-
 CREATE TABLE organization_accounts (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -18,56 +17,173 @@ CREATE TABLE organization_accounts (
 	"Type" VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "organization_accounts" VALUES(
-    1,
-    'Marble Foundation',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '555-389-74399',
-    '',
-    '',
-    '',
-    '',
-    '',
-    'Foundation'
-);
-INSERT INTO "organization_accounts" VALUES(
-    2,
-    'Future Potential Fund',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '555-278-7643',
-    '',
-    '',
-    '',
-    '',
-    '',
-    'Foundation'
-);
-INSERT INTO "organization_accounts" VALUES(
-    3,
-    'City Department of Human Services',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    'Government'
-);
-
+INSERT INTO "organization_accounts" VALUES(1,'Osborn Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(2,'Pearson Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(3,'Branch Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(4,'Bates Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(5,'Rodgers Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(6,'Mcclure Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(7,'Huynh Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(8,'Gonzalez Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(9,'Singleton Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(10,'Woodard Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(11,'Gibson Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(12,'Duarte Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(13,'Huerta Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(14,'Hernandez Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(15,'Villegas Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(16,'Velasquez Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(17,'Hardin Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(18,'Olson Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(19,'Orr Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(20,'Crawford Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(21,'Salinas Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(22,'Bullock Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(23,'Solomon Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(24,'Higgins Household','','','','','','','555-248-3956','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(25,'Adams Household','','','','','','','555-648-7204','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(26,'Baker Household','','','','','','','555-524-0749','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(27,'Banks and Graham Household','','','','','','','555-648-7204','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(28,'Barnes Household','','','','','','','555-893-4763','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(29,'Boyd Household','','','','','','','555-380-8532','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(30,'Burke Household','','','','','','','555-830-5295','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(31,'Henderson Household','','','','','','','555-830-5295','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(32,'Hill Household','','','','','','','555-395-9737','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(33,'Holmes Household','','','','','','','555-930-8759','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(34,'Jenkins Household','','','','','','','555-469-9873','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(35,'Johnson Household','','','','','','','555-248-3956','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(36,'Burgess Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(37,'Bass Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(38,'Bishop Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(39,'Cisneros Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(40,'Owen Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(41,'Kerr Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(42,'Eaton Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(43,'Rasmussen Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(44,'Richards Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(45,'Campos Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(46,'Bond Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(47,'Myers Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(48,'Stanton Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(49,'Woods Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(50,'Spence Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(51,'Clayton Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(52,'Richard Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(53,'Waller Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(54,'Hampton Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(55,'Neal Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(56,'Gentry Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(57,'Barr Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(58,'Pham Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(59,'Cooley Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(60,'Zimmerman Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(61,'Wheeler Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(62,'Beltran Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(63,'Bird Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(64,'Duffy Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(65,'Woods Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(66,'Valdez Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(67,'Mills Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(68,'Greene Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(69,'Escobar Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(70,'Gross Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(71,'Guerrero Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(72,'Ritter Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(73,'Sims Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(74,'Huffman Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(75,'Hall Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(76,'Barker Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(77,'Glass Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(78,'Ibarra Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(79,'Morgan Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(80,'Bowers Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(81,'Odom Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(82,'Flores Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(83,'Wall Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(84,'Waller Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(85,'Bray Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(86,'Conner Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(87,'Harper Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(88,'Aguilar Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(89,'Cummings Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(90,'Cardenas Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(91,'Webster Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(92,'Costa Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(93,'Humphrey Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(94,'Cain Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(95,'Dunlap Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(96,'Blackwell Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(97,'Irwin Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(98,'Hughes Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(99,'Wells Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(100,'Davila Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(101,'Barnett Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(102,'Norman Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(103,'Snow Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(104,'Wood Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(105,'Norton Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(106,'Morgan Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(107,'Decker Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(108,'Lambert Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(109,'Barry Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(110,'Oneill Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(111,'Cooley Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(112,'Leach Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(113,'Pacheco Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(114,'Rivers Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(115,'Griffith Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(116,'Glenn Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(117,'Francis Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(118,'Rhodes Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(119,'Woods Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(120,'White Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(121,'Lang Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(122,'Ramirez Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(123,'Serrano Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(124,'Galloway Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(125,'Clark Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(126,'Gonzales Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(127,'Cobb Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(128,'Shah Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(129,'Arroyo Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(130,'Booker Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(131,'Mercer Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(132,'Horton Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(133,'Rios Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(134,'Craig Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(135,'Oliver Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(136,'Montgomery Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(137,'Cooke Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(138,'Morrison Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(139,'Bright Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(140,'Atkins Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(141,'Stanley Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(142,'Fischer Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(143,'Kline Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(144,'Joyce Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(145,'Case Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(146,'Graves Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(147,'Wu Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(148,'Grant Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(149,'Rojas Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(150,'Chase Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(151,'Holder Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(152,'Pollard Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(153,'Quinn Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(154,'Wilkinson Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(155,'Keller Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(156,'Ellis Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(157,'Neal Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(158,'Mcconnell Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(159,'Arellano Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(160,'Glover Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(161,'Lutz Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(162,'Graves Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(163,'Carson Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(164,'Fletcher Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(165,'Hernandez Household','','','','','','','','','','','','','Household');
+INSERT INTO "organization_accounts" VALUES(166,'Marble Foundation','','','','','','','555-389-74399','','','','','','Foundation');
+INSERT INTO "organization_accounts" VALUES(167,'Future Potential Fund','','','','','','','555-278-7643','','','','','','Foundation');
+INSERT INTO "organization_accounts" VALUES(168,'City Department of Human Services','','','','','','','','','','','','','Government');
+INSERT INTO "organization_accounts" VALUES(169,'127th Street Community Center','','','','','','','555-398-2090','','','','','','');
 COMMIT;

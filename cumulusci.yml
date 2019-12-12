@@ -239,7 +239,7 @@ tasks:
             log_mapping: table
             sql_path: decentralized-data/caseman/caseman.sql
             package_mapping_directories:
-                - decentralized-data/caseman/caseman.yml
+                - decentralized-data/caseman
 
     capture_bulk_data_caseman_unpackaged:
         group: "Data: Bulk"
@@ -252,6 +252,7 @@ tasks:
             sql_path: decentralized-data/caseman/unpackaged.sql
             pre_mapping_configs:
                 - path: decentralized-data/caseman/unpackaged.yml
+                  inject_project_namespace: true
     
     capture_bulk_data_npe01:
         group: "Data: Bulk"
@@ -263,7 +264,7 @@ tasks:
             log_mapping: table
             sql_path: decentralized-data/npe01/npe01.sql
             package_mapping_directories:
-                - decentralized-data/npe01/npe01.yml
+                - decentralized-data/npe01
     
     capture_bulk_data_npe4:
         group: "Data: Bulk"
@@ -275,7 +276,7 @@ tasks:
             log_mapping: table
             sql_path: decentralized-data/npe4/npe4.sql
             package_mapping_directories:
-                - decentralized-data/npe4/npe4.yml
+                - decentralized-data/npe4
     
     capture_bulk_data_npo02:
         group: "Data: Bulk"
@@ -287,7 +288,7 @@ tasks:
             log_mapping: table
             sql_path: decentralized-data/npo02/npo02.sql
             package_mapping_directories:
-                - decentralized-data/npo02/npo02.yml
+                - decentralized-data/npo02
     
     capture_bulk_data_npsp:
         group: "Data: Bulk"
@@ -299,7 +300,7 @@ tasks:
             log_mapping: table
             sql_path: decentralized-data/npsp/npsp.sql
             package_mapping_directories:
-                - decentralized-data/npsp/npsp.yml
+                - decentralized-data/npsp
     
     capture_bulk_data_pmdm0:
         group: "Data: Bulk"
@@ -311,7 +312,7 @@ tasks:
             log_mapping: table
             sql_path: decentralized-data/pmdm0/pmdm0.sql
             package_mapping_directories:
-                - decentralized-data/pmdm0/pmdm0.yml
+                - decentralized-data/pmdm0
     
     capture_bulk_data_orig:
         group: "Data: Bulk"

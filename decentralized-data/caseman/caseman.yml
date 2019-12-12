@@ -61,6 +61,9 @@ Contacts:
         WatchListDate__c: caseman__WatchListDate__c
 
     lookups:
+        lookups:
+            AccountId:
+                table: household_accounts
         EmergencyContact__c:
             key_field: emergency_contact__c
             table: contacts
@@ -87,21 +90,21 @@ caseman__Client_Cases:
     record_type: "ClientCase"
     fields:
         # Standard Fields
-        Subject: subject
-        Priority: priority
-        Status: status
-        Origin: origin
-        Description: description
+        Subject: Subject
+        Priority: Priority
+        Status: Status
+        Origin: Origin
+        Description: Description
         SuppliedCompany: SuppliedCompany
         SuppliedEmail: SuppliedEmail
         SuppliedName: SuppliedName
         SuppliedPhone: SuppliedPhone
 
         # Custom Fields
-        IncidentDateTime__c: IncidentDateTime__c
-        IncidentType__c: IncidentType__c
-        LocationNotes__c: LocationNotes__c
-        Severity__c: Severity__c
+        IncidentDateTime__c: caseman__IncidentDateTime__c
+        IncidentType__c: caseman__IncidentType__c
+        LocationNotes__c: caseman__LocationNotes__c
+        Severity__c: caseman__Severity__c
 
     lookups:
         Branch__c:
@@ -127,10 +130,10 @@ caseman__Incidents:
         SuppliedPhone: SuppliedPhone
 
         # Custom Fields
-        IncidentDateTime__c: IncidentDateTime__c
-        IncidentType__c: IncidentType__c
-        LocationNotes__c: LocationNotes__c
-        Severity__c: Severity__c
+        IncidentDateTime__c: caseman__IncidentDateTime__c
+        IncidentType__c: caseman__IncidentType__c
+        LocationNotes__c: caseman__LocationNotes__c
+        Severity__c: caseman__Severity__c
 
     lookups:
         Branch__c:
@@ -145,23 +148,23 @@ caseman__Appointments:
     table: caseman__appointments
     fields:
         # Standard Fields
-        Name: name
+        Name: Name
 
         # Custom Fields
-        Type__c: type__c
-        Location__c: location__c
-        StartDateTime__c: startdatetime__c
-        EndDateTime__c: enddatetime__c
-        Description__c: description__c
+        Type__c: caseman__Type__c
+        Location__c: caseman__Location__c
+        StartDateTime__c: caseman__StartDateTime__c
+        EndDateTime__c: caseman__EndDateTime__c
+        Description__c: caseman__Description__c
 
 caseman__Appointment_Attendees:
     sf_object: AppointmentAttendee__c
     table: caseman__appointment_attendees
     fields:
         # Custom Fields
-        Reason__c: reason__c
-        Role__c: role__c
-        Status__c: status__c
+        Reason__c: caseman__Reason__c
+        Role__c: caseman__Role__c
+        Status__c: caseman__Status__c
 
     lookups:
         Appointment__c:
@@ -177,11 +180,11 @@ caseman__Client_Alerts:
     table: caseman__client_alerts
     fields:
         # Standard Fields
-        Name: name
+        Name: Name
 
         # Custom Fields
-        Active__c: active__c
-        Description__c: description__c
+        Active__c: caseman__Active__c
+        Description__c: caseman__Description__c
 
     lookups:
         Contact__c:
@@ -196,12 +199,12 @@ caseman__Client_Notes:
         # Standard Fields
 
         # Custom Fields
-        Content__c: content__c
-        Subject__c: subject__c
-        Status__c: status__c
-        InteractionDate__c: interactiondate__c
-        Draft__c: draft__c
-        MinutesSpentWithClient__c: minutes_spent_with_client__c
+        Content__c: caseman__Content__c
+        Subject__c: caseman__Subject__c
+        Status__c: caseman__Status__c
+        InteractionDate__c: caseman__InteractionDate__c
+        Draft__c: caseman__Draft__c
+        MinutesSpentWithClient__c: caseman__MinutesSpentWithClient__c
 
     lookups:
         Client__c:
@@ -211,13 +214,12 @@ caseman__Client_Notes:
 caseman__Client_Note_Relationships:
     sf_object: ClientNoteRelationship__c
     table: caseman__client_note_relationships
-    fields:
-        # Standard Fields
-
-        # Custom Fields
-        RelatedId__c: RelatedId__c
-        RelatedName__c: RelatedName__c
-        RelatedObject__c: RelatedObject__c
+    #fields:
+    # Standard Fields
+    # Custom Fields
+    #RelatedId__c: caseman__RelatedId__c
+    #RelatedName__c: caseman__RelatedName__c
+    #RelatedObject__c: caseman__RelatedObject__c
 
     lookups:
         Case__c:

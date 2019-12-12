@@ -10,7 +10,7 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {
         "package_mapping_directories": {
             "description": "List of directory paths containing package mapping files.  Package mappings have file names are in the form '[namespace].yml' and are used to automatically include mapping configs for the CumulusCI project and installed managed packages in the org with the namespaced injected if applicable.",
-            "required": True,
+            "required": False,
         },
         "pre_mapping_configs": {
             "description": "List of mapping config objects added to the combined mapping before project, installed packages, and post-mapping configs are added.  Use to initialize combined mapping for Bulk Data Tasks.  Mapping configs are Dicts that (1) contain a required 'path' attribute containing the path to the mapping file, (2) an optional 'namespace' attribute that is injected into the mapping, and (3) an optional 'inject_project_namespace' which injects the project's namespace overriding 'namespace' if True.",
@@ -44,25 +44,26 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         ]
 
         available_mappings = {} 
-        for directory in self.options["package_mapping_directories"]:
-            root = os_friendly_path(directory)
-            items = os.listdir(root)
-            items.sort()
-            is_first = True
-            for item in items:
-                path = os.path.join(root, item)
-                if os.path.isfile(os.path.join(root, item)) and item.endswith(".yml"):
-                    namespace = item[:-4]
-                    mapping = {
-                        "path": path,
-                        "namespace": namespace,
-                    }
-                    available_mappings[namespace] = mapping
-                    rows.append([
-                        root if is_first else "",
-                        namespace
-                    ])
-                    is_first = False
+        if self.options.get("package_mapping_directories"):
+            for directory in self.options["package_mapping_directories"]:
+                root = os_friendly_path(directory)
+                items = os.listdir(root)
+                items.sort()
+                is_first = True
+                for item in items:
+                    path = os.path.join(root, item)
+                    if os.path.isfile(os.path.join(root, item)) and item.endswith(".yml"):
+                        namespace = item[:-4]
+                        mapping = {
+                            "path": path,
+                            "namespace": namespace,
+                        }
+                        available_mappings[namespace] = mapping
+                        rows.append([
+                            root if is_first else "",
+                            namespace
+                        ])
+                        is_first = False
 
         self.log_table(rows, groupByBlankColumns=True)
         

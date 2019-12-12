@@ -1,6 +1,13 @@
+Household_Accounts:
+    sf_object: Account
+    table: household_accounts
+
 Contacts:
     sf_object: Contact
     table: contacts
+    lookups:
+        AccountId:
+            table: household_accounts
 
 # Programs
 pmdm__Program__c:

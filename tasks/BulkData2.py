@@ -7,6 +7,7 @@ from cumulusci.utils import os_friendly_path
 from tasks.bulkdata import LoadData, ExtractData, DeleteData as BaseDeleteData
 from cumulusci.core.exceptions import TaskOptionsError
 
+
 class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {
         "package_mapping_directories": {
@@ -20,11 +21,11 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         "skip_mapping_project": {
             "description": "If True, skips adding the project's mapping config.  Default: False",
             "required": False,
-            "default": True
+            "default": True,
         },
         "skip_mapping_installed_managed_packages": {
             "description": "If True, skips adding mapping configs for the org's installed managed packages.  Default: False",
-            "required": False
+            "required": False,
         },
         "post_mapping_configs": {
             "description": "List of mapping config objects added to the combined mapping after adding pre-, project, installed packages configs.  Use to override any mappings before creating the combined mapping for Bulk Data Tasks.  Mapping configs are Dicts that (1) contain a required 'path' attribute containing the path to the mapping file and (2) an optional 'namespace' attribute that is injected into the mapping.",
@@ -41,14 +42,9 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     }
 
     def get_available_package_mappings(self):
-        rows = [
-            [
-                "PATH",
-                "NAMESPACE"
-            ]
-        ]
+        rows = [["PATH", "NAMESPACE"]]
 
-        available_mappings = {} 
+        available_mappings = {}
         if self.options.get("package_mapping_directories"):
             for directory in self.options["package_mapping_directories"]:
                 root = os_friendly_path(directory)
@@ -57,21 +53,20 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
                 is_first = True
                 for item in items:
                     path = os.path.join(root, item)
-                    if os.path.isfile(os.path.join(root, item)) and item.endswith(".yml"):
+                    if os.path.isfile(os.path.join(root, item)) and item.endswith(
+                        ".yml"
+                    ):
                         namespace = item[:-4]
                         mapping = {
                             "path": path,
                             "namespace": namespace,
                         }
                         available_mappings[namespace] = mapping
-                        rows.append([
-                            root if is_first else "",
-                            namespace
-                        ])
+                        rows.append([root if is_first else "", namespace])
                         is_first = False
 
         self.log_table(rows, groupByBlankColumns=True)
-        
+
         return available_mappings
 
     def get_log_mapping_option(self):
@@ -87,14 +82,12 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
             self.log_title("Combined mapping")
             if log_option == "yml":
                 for row in Util.print_mapping_as_list(
-                    mapping, 
-                    self.options.get("mapping_tab_size"),
+                    mapping, self.options.get("mapping_tab_size"),
                 ):
                     self.logger.info(row)
             elif log_option == "table":
                 self.log_table(
-                    Util.print_mapping_as_table(mapping), 
-                    groupByBlankColumns=True,
+                    Util.print_mapping_as_table(mapping), groupByBlankColumns=True,
                 )
 
     def get_mapping_configs_from_option(self, option):
@@ -109,7 +102,7 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         # Collect sobject_type and developer_name of Record Types used in mapping.
         sobject_types = []
         developer_names = []
-        
+
         for step_name, step in mapping.items():
             record_type = step.get("record_type")
             sf_object = step.get("sf_object")
@@ -130,33 +123,31 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         for record in self.sf.query_all(query).get("records"):
             sobject_type = record.get("SobjectType")
             developer_name = record.get("DeveloperName")
-            
+
             developer_names = developer_names_by_object.get(sobject_type) or {}
             developer_names[developer_name] = None
             developer_names_by_object[sobject_type] = developer_names
 
-        rows = [
-            [
-                "STEP",
-                "OBJECT",
-                "RECORD TYPE",
-                "EXISTS"
-            ]
-        ]
+        rows = [["STEP", "OBJECT", "RECORD TYPE", "EXISTS"]]
 
         # Delete step's "record_type" key if values doesn't exist in developer_names_by_object.
         for step_name, step in mapping.items():
             developer_name = step.get("record_type")
             sobject_type = step.get("sf_object")
             if developer_name:
-                if not (developer_names_by_object.get(sobject_type) and developer_name in developer_names_by_object[sobject_type]):
+                if not (
+                    developer_names_by_object.get(sobject_type)
+                    and developer_name in developer_names_by_object[sobject_type]
+                ):
                     del step["record_type"]
-                rows.append([
-                    step_name,
-                    sobject_type,
-                    developer_name,
-                    "✅" if step.get("record_type") else "❌"
-                ])
+                rows.append(
+                    [
+                        step_name,
+                        sobject_type,
+                        developer_name,
+                        "✅" if step.get("record_type") else "❌",
+                    ]
+                )
 
         self.log_title("Removing Record Types from mapping that don't exist in org")
         self.log_table(rows)
@@ -169,7 +160,9 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         mapping_configs_by_step = {}
 
         # Pre mapping configs
-        mapping_configs_by_step["Pre"] = self.get_mapping_configs_from_option("pre_mapping_configs")
+        mapping_configs_by_step["Pre"] = self.get_mapping_configs_from_option(
+            "pre_mapping_configs"
+        )
 
         # Project mapping config
         mapping_configs_by_step["Project"] = []
@@ -179,53 +172,53 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
             if project_mapping_config:
                 project_mapping_config["namespace"] = self.get_local_project_namespace()
                 mapping_configs_by_step["Project"].append(project_mapping_config)
-        
+
         # Installed managed package mapping configs
         mapping_configs_by_step["Managed packages"] = []
-        if not process_bool_arg(self.options.get("skip_mapping_installed_managed_packages")):
+        if not process_bool_arg(
+            self.options.get("skip_mapping_installed_managed_packages")
+        ):
             for namespace in self.get_installed_package_namespaces():
                 if available_package_mappings.get(namespace):
                     mapping_config = available_package_mappings.get(namespace)
                     mapping_configs_by_step["Managed packages"].append(mapping_config)
 
         # Post mapping configs
-        mapping_configs_by_step["Post"] = self.get_mapping_configs_from_option("post_mapping_configs")
+        mapping_configs_by_step["Post"] = self.get_mapping_configs_from_option(
+            "post_mapping_configs"
+        )
 
         # Log mapping configs
         self.log_title("Mapping configs")
 
         all_mapping_configs = []
 
-        rows = [
-            [
-                "SELF",
-                "PATH",
-                "NAMESPACE",
-            ]
-        ]
+        rows = [["SELF", "PATH", "NAMESPACE",]]
         for step, mapping_configs in mapping_configs_by_step.items():
             if mapping_configs:
                 is_first = True
                 for mapping_config in mapping_configs:
-                    rows.append([
-                        step if is_first else "",
-                        mapping_config.get("path"),
-                        "" if not mapping_config.get("namespace") else mapping_config.get("namespace")
-                    ])
+                    rows.append(
+                        [
+                            step if is_first else "",
+                            mapping_config.get("path"),
+                            ""
+                            if not mapping_config.get("namespace")
+                            else mapping_config.get("namespace"),
+                        ]
+                    )
                     is_first = False
                     all_mapping_configs.append(mapping_config)
             else:
-                rows.append([
-                    step,
-                    "SKIPPED",
-                    ""
-                ])
+                rows.append([step, "SKIPPED", ""])
 
         # self.log_table(rows, groupByFirstColumnIfBlank=True)
         self.log_table(rows, groupByBlankColumns=True)
 
         # Combine mappings
-        mapping = Util.get_ordered_mapping(Util.get_combined_mapping(all_mapping_configs))
+        mapping = Util.get_ordered_mapping(
+            Util.get_combined_mapping(all_mapping_configs)
+        )
 
         if not process_bool_arg(self.options.get("skip_keeping_existing_record_types")):
             self.keep_existing_record_types(mapping)
@@ -234,8 +227,9 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
 
         return mapping
 
+
 class LogMapping(MappingGenerator):
-    
+
     task_options = {
         **MappingGenerator.task_options,
     }
@@ -244,6 +238,7 @@ class LogMapping(MappingGenerator):
         if not self.get_log_mapping_option():
             self.options["log_mapping"] = "yml"
         self.get_combined_mapping()
+
 
 class CreateMapping(MappingGenerator):
     task_options = {
@@ -258,7 +253,14 @@ class CreateMapping(MappingGenerator):
         self.mapping = self.get_combined_mapping()
 
         with open(os_friendly_path(self.options.get("output_path")), "w+") as f:
-            f.write("\n".join(Util.print_mapping_as_list(self.mapping, self.options.get("mapping_tab_size"))))
+            f.write(
+                "\n".join(
+                    Util.print_mapping_as_list(
+                        self.mapping, self.options.get("mapping_tab_size")
+                    )
+                )
+            )
+
 
 class InsertData(LoadData, MappingGenerator):
 
@@ -276,6 +278,7 @@ class InsertData(LoadData, MappingGenerator):
 
     def _init_mapping(self):
         self.mapping = self.get_combined_mapping()
+
 
 class CaptureData(ExtractData, MappingGenerator):
 
@@ -297,6 +300,7 @@ class CaptureData(ExtractData, MappingGenerator):
     def _init_mapping(self):
         self.mappings = self.get_combined_mapping()
 
+
 class DeleteData(BaseDeleteData, MappingGenerator):
 
     task_options = {
@@ -314,16 +318,18 @@ class DeleteData(BaseDeleteData, MappingGenerator):
         self.options["where"] = self.options.get("where", None)
 
         # Generate objects from mapping
-        self.options["objects"] = Util.get_sobjects_orderd_bottom_to_top(self.get_combined_mapping())
-        
+        self.options["objects"] = Util.get_sobjects_orderd_bottom_to_top(
+            self.get_combined_mapping()
+        )
+
         self.log_title("Object to delete")
         self.log_list(self.options.get("objects"))
 
         if not len(self.options["objects"]) or not self.options["objects"][0]:
             raise TaskOptionsError("At least one object must be specified.")
 
-class Util:
 
+class Util:
     @staticmethod
     def get_sobjects_orderd_bottom_to_top(mapping):
         sobject_names_by_table = {}
@@ -348,9 +354,9 @@ class Util:
             sobjects_by_name[step.get("sf_object")] = {
                 "name": sobject,
                 "parents": parents,
-                "children": set()
+                "children": set(),
             }
-        
+
         for name, sobject in sobjects_by_name.items():
             # Set children to detect if sobject is not a dependency
             for parent in sobject.get("parents"):
@@ -358,7 +364,7 @@ class Util:
                 if parent != name:
                     sobjects_by_name.get(parent).get("children").add(name)
 
-            # Set ancestors to detect if a SObject is a dependency even if not a direct parent    
+            # Set ancestors to detect if a SObject is a dependency even if not a direct parent
             ancestors = set()
             current_parents = set(sobject.get("parents"))
             while current_parents:
@@ -381,17 +387,17 @@ class Util:
 
             next_names = set()
             all_ancestors = set()
-            
+
             # Add all parents to next_names if the parent is not a later dependency for any sobject in current_names.
             for name in current_names:
                 sobject = sobjects_by_name[name]
-                
+
                 # Remove parents from ancestors
                 sobject["ancestors"] = sobject.get("ancestors") - sobject.get("parents")
-     
+
                 # Collect all non-parent ancestors
                 all_ancestors.update(sobject.get("ancestors"))
-                
+
                 # Collect all parents' ancestors in case a parent is a dependency of a grandparent
                 for parent in sobject.get("parents"):
                     all_ancestors.update(sobjects_by_name[parent].get("ancestors"))
@@ -432,7 +438,7 @@ class Util:
     def get_children_sf_objects(parent, tables_by_name):
         sf_objects = set()
         sf_objects.add(parent.get("sf_object"))
-        if parent.get("children_names"): 
+        if parent.get("children_names"):
             for child_name in parent.get("children_names"):
                 child = tables_by_name.get(child_name)
                 sf_objects.update(Util.get_children_sf_objects(child, tables_by_name))
@@ -440,7 +446,11 @@ class Util:
 
     @staticmethod
     def get_namespace(mapping_config):
-        return "" if not mapping_config.get("namespace") else mapping_config.get("namespace")
+        return (
+            ""
+            if not mapping_config.get("namespace")
+            else mapping_config.get("namespace")
+        )
 
     @staticmethod
     def get_api_name(namespace, api_name):
@@ -478,11 +488,7 @@ class Util:
             rows.append("{}:".format(step_name))
             for param in ["sf_object", "table", "record_type"]:
                 if param in step:
-                    rows.append("{}{}: {}".format(
-                        tab,     
-                        param, 
-                        step[param]
-                    ))
+                    rows.append("{}{}: {}".format(tab, param, step[param]))
             if "fields" in step:
                 rows.append("{}{}:".format(tab, "fields"))
                 for key, value in step["fields"].items():
@@ -492,52 +498,52 @@ class Util:
                 for api_name, lookup in step["lookups"].items():
                     rows.append("{}{}:".format(tab * 2, api_name))
                     for lookup_param in lookup.keys():
-                        rows.append("{}{}: {}".format(tab * 3, lookup_param, lookup[lookup_param]))
+                        rows.append(
+                            "{}{}: {}".format(
+                                tab * 3, lookup_param, lookup[lookup_param]
+                            )
+                        )
 
         return rows
 
     @staticmethod
     def print_mapping_as_table(mapping):
-        rows = [
-            [
-                "STEP",
-                "PARAMETER",
-                "FIELD",
-            ]
-        ]
+        rows = [["STEP", "PARAMETER", "FIELD",]]
         for step_name, step in mapping.items():
             is_first_step = True
             for param in ["sf_object", "table", "record_type"]:
                 if param in step:
-                    rows.append([
-                        step_name if is_first_step else "",
-                        param,
-                        step[param],
-                    ])
+                    rows.append(
+                        [step_name if is_first_step else "", param, step[param],]
+                    )
                     is_first_step = False
             if "fields" in step:
                 is_first_field = True
                 for key, value in step["fields"].items():
-                    rows.append([
-                        step_name if is_first_step else "",
-                        "fields" if is_first_field else "",
-                        key,
-                        value
-                    ])
+                    rows.append(
+                        [
+                            step_name if is_first_step else "",
+                            "fields" if is_first_field else "",
+                            key,
+                            value,
+                        ]
+                    )
                     is_first_step = False
                     is_first_field = False
             if "lookups" in step:
-                
+
                 for api_name, lookup in step["lookups"].items():
                     is_first_lookup = True
                     for lookup_param in lookup.keys():
-                        rows.append([
-                            step_name if is_first_step else "",
-                            "lookups" if is_first_lookup else "",
-                            api_name if is_first_lookup else "",
-                            lookup_param, 
-                            lookup[lookup_param]
-                        ])
+                        rows.append(
+                            [
+                                step_name if is_first_step else "",
+                                "lookups" if is_first_lookup else "",
+                                api_name if is_first_lookup else "",
+                                lookup_param,
+                                lookup[lookup_param],
+                            ]
+                        )
                         is_first_step = False
                         is_first_lookup = False
         return rows
@@ -555,23 +561,31 @@ class Util:
                         if step_config not in mapping[step_name]:
                             mapping[step_name][step_config] = {}
                         for api_name, value in step[step_config].items():
-                            mapping[step_name][step_config][Util.get_api_name(new_mapping_namespace, api_name)] = value
-                    elif step_config == "sf_object" and step["sf_object"] and step["sf_object"].endswith("__c"):
-                        mapping[step_name]["sf_object"] = Util.get_api_name(new_mapping_namespace, step["sf_object"])
+                            mapping[step_name][step_config][
+                                Util.get_api_name(new_mapping_namespace, api_name)
+                            ] = value
+                    elif (
+                        step_config == "sf_object"
+                        and step["sf_object"]
+                        and step["sf_object"].endswith("__c")
+                    ):
+                        mapping[step_name]["sf_object"] = Util.get_api_name(
+                            new_mapping_namespace, step["sf_object"]
+                        )
                     else:
                         mapping[step_name][step_config] = step[step_config]
 
     @staticmethod
     def get_combined_mapping(mapping_configs, forcePrimaryKey="autonumber"):
         combined_mapping = {}
-        
+
         if mapping_configs:
             for mapping_config in mapping_configs:
                 if "path" in mapping_config:
                     Util.combine_mapping(
                         combined_mapping,
                         mapping_config["path"],
-                        mapping_config.get("namespace")
+                        mapping_config.get("namespace"),
                     )
         if forcePrimaryKey == "autonumber":
             Util.force_autonumber_primary_key(combined_mapping)

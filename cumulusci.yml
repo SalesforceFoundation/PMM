@@ -380,6 +380,29 @@ tasks:
             namespace_inject: $project_config.project__package__namespace
 
 flows:
+    capture:
+        steps:
+            110:
+                task: capture_bulk_data_contacts
+            120:
+                task: capture_bulk_data_household_accounts
+            130:
+                task: capture_bulk_data_organization_accounts
+            140:
+                task: capture_bulk_data_caseman
+            150:
+                task: capture_bulk_data_caseman_unpackaged
+            160:
+                task: capture_bulk_data_npe01
+            170:
+                task: capture_bulk_data_npe4
+            180:
+                task: capture_bulk_data_npo02
+            190:
+                task: capture_bulk_data_npsp
+            195:
+                task: capture_bulk_data_pmdm0
+
     capture_bulk_data:
         steps:
             100:

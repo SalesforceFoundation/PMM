@@ -399,6 +399,10 @@ tasks:
 flows:
     capture:
         steps:
+            #011:
+                #task: delete_bulk_data
+            #020:
+                #flow: insert_data
             110:
                 task: capture_bulk_data_contacts
             120:

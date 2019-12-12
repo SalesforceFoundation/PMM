@@ -225,7 +225,7 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
         self.log_table(rows, groupByBlankColumns=True)
 
         # Combine mappings
-        mapping = Util.get_combined_mapping(all_mapping_configs)
+        mapping = Util.get_ordered_mapping(Util.get_combined_mapping(all_mapping_configs))
 
         if not process_bool_arg(self.options.get("skip_keeping_existing_record_types")):
             self.keep_existing_record_types(mapping)
@@ -314,228 +314,119 @@ class DeleteData(BaseDeleteData, MappingGenerator):
         self.options["where"] = self.options.get("where", None)
 
         # Generate objects from mapping
-        self.options["objects"] = self._get_objects_from_combined_mapping()
+        self.options["objects"] = Util.get_sobjects_orderd_bottom_to_top(self.get_combined_mapping())
+        
+        self.log_title("Object to delete")
+        self.log_list(self.options.get("objects"))
+
         if not len(self.options["objects"]) or not self.options["objects"][0]:
             raise TaskOptionsError("At least one object must be specified.")
 
-    def log_set(self, title, values):
-        rows = [
-            [
-                title
-            ]
-        ]
-        for value in values:
-            rows.append([
-                value
-            ])
+class Util:
 
-        self.log_table(rows, )
+    @staticmethod
+    def get_sobjects_orderd_bottom_to_top(mapping):
+        sobject_names_by_table = {}
+        sobjects_by_name = {}
 
-    def _get_objects_from_combined_mapping(self):
-        self.tables_by_name = {}
-        
-        #self.combined_mapping = self.get_combined_mapping()
-        for step_name, step in self.get_combined_mapping().items():
-            parent_names = []
+        # Set parent_tables
+        for step_name, step in mapping.items():
+            sobject_names_by_table[step.get("table")] = step.get("sf_object")
+
+        # Set sobject with parent_sobject_names
+        for step_name, step in mapping.items():
+            sobject = step.get("sf_object")
+            parents = set()
             if "lookups" in step:
                 for api_name, lookup in step.get("lookups").items():
-                    parent_names.append(lookup.get("table"))
-                    
-            table = {
-                "name": step.get("table"),
-                "sf_object": step.get("sf_object"),
-                "parent_names": parent_names,
-                "parent_sf_objects": set(),
-                "children_names": [],
-                "child_sf_objects": set(),
-            }
-            self.tables_by_name[table.get("name")] = table
+                    parent = sobject_names_by_table.get(lookup.get("table"))
 
-        for name, table in self.tables_by_name.items():
-            for parent_name in table.get("parent_names"):
-                if parent_name != name:
-                    self.tables_by_name.get(parent_name).get("children_names").append(name)
-                    self.tables_by_name.get(parent_name).get("child_sf_objects").add(table.get("sf_object"))
-                
-                parent_sf_object = self.tables_by_name.get(parent_name).get("sf_object")
-                # Ignore circuluar references
-                if parent_sf_object != table.get("sf_object"):
-                    table.get("parent_sf_objects").add(parent_sf_object)
+                    # Ignore circular references
+                    if parent != sobject:
+                        parents.add(parent)
+
+            sobjects_by_name[step.get("sf_object")] = {
+                "name": sobject,
+                "parents": parents,
+                "children": set()
+            }
         
-        rows = [
-            [
-                "name",
-                "sf_object",
-                "parent_sf_objects",
-                "child_sf_objects",
-            ]
-        ]
-
-        for name, table in self.tables_by_name.items():
-            if table.get("child_sf_objects"):
-                is_first = True
-                for child_sf_object in table.get("child_sf_objects"):
-                    rows.append([
-                        name if is_first else "",
-                        table.get("sf_object") if is_first else "",
-                        ", ".join(table.get("parent_sf_objects")) if is_first else "",
-                        child_sf_object,
-                    ])
-                    is_first = False
-            else:
-                rows.append([
-                    name,
-                    table.get("sf_object"),
-                    ", ".join(table.get("parent_sf_objects")),
-                    ", ".join(table.get("child_sf_objects")),
-                ])
-
-        self.log_table(rows, groupByBlankColumns=True)
-
-        children_by_parent = self._get_children_by_parent()   
-        parents_by_child = self._get_parents_by_child()
-
-        sobjects_by_name = {}
-        for parent, children in children_by_parent.items():
-            sobjects_by_name[parent] = {
-                "name": parent,
-                "children_names": children,
-                "children": {},
-                "parent_names": parents_by_child[parent],
-                "parents": {},
-                "ancestor_names": set()
-            }
-
-        bottom_names = set()
-        top_names = set()
         for name, sobject in sobjects_by_name.items():
-            for child_name in sobject.get("children_names"):
-                sobject["children"][child_name] = sobjects_by_name[child_name]
-            for parent_name in sobject.get("parent_names"):
-                sobject["parents"][parent_name] = sobjects_by_name[parent_name]
-            if not sobject.get("children"):
-                bottom_names.add(name)
-            if not sobject.get("parents"):
-                top_names.add(name)
+            # Set children to detect if sobject is not a dependency
+            for parent in sobject.get("parents"):
+                # Ignore circular references
+                if parent != name:
+                    sobjects_by_name.get(parent).get("children").add(name)
 
-        for name, sobject in sobjects_by_name.items():
-            ancestor_names = set()
-            current_parents = set()
-            current_parents.update(sobject.get("parents"))
+            # Set ancestors to detect if a SObject is a dependency even if not a direct parent    
+            ancestors = set()
+            current_parents = set(sobject.get("parents"))
             while current_parents:
-                ancestor_names.update(current_parents)
+                ancestors.update(current_parents)
                 next_parents = set()
                 for parent in current_parents:
                     next_parents.update(sobjects_by_name[parent].get("parents"))
                 current_parents = next_parents
-            sobject["ancestor_names"] = ancestor_names
-            self.log_set("=== {} ===".format(name), ancestor_names)
+            sobject["ancestors"] = ancestors
 
-        self.log_set("bottom_names", bottom_names)
-        self.log_set("top_names", top_names)
+        sobjects_without_children = set()
+        for name, sobject in sobjects_by_name.items():
+            if not sobject.get("children"):
+                sobjects_without_children.add(name)
 
         bottom_up = []
-        current_names = bottom_names
+        current_names = set(sobjects_without_children)
         while current_names:
             bottom_up.extend(current_names)
 
             next_names = set()
             all_ancestors = set()
+            
+            # Add all parents to next_names if the parent is not a later dependency for any sobject in current_names.
             for name in current_names:
                 sobject = sobjects_by_name[name]
-                # remove current parents from sobject's ancestors
-                sobject["ancestor_names"] = sobject.get("ancestor_names") - sobject.get("parent_names")
+                
+                # Remove parents from ancestors
+                sobject["ancestors"] = sobject.get("ancestors") - sobject.get("parents")
      
-                # Collect all ancestors and all parent's ancestors since higher SObjects have dependencies
-                all_ancestors.update(sobject.get("ancestor_names"))
-                for parent in sobject.get("parent_names"):
-                    all_ancestors.update(sobjects_by_name[parent].get("ancestor_names"))
+                # Collect all non-parent ancestors
+                all_ancestors.update(sobject.get("ancestors"))
+                
+                # Collect all parents' ancestors in case a parent is a dependency of a grandparent
+                for parent in sobject.get("parents"):
+                    all_ancestors.update(sobjects_by_name[parent].get("ancestors"))
 
             for name in current_names:
                 sobject = sobjects_by_name[name]
-                for parent in sobject.get("parent_names"):
+                for parent in sobject.get("parents"):
                     if parent not in all_ancestors:
                         next_names.add(parent)
 
             current_names = next_names
 
-        self.log_set("==== BOTTOM UP ====", bottom_up)
-
         return bottom_up
 
-    def _get_children_by_parent(self):
-        # child by parent
-        children_by_parent = {}
-        for name, table in self.tables_by_name.items():
-            parent = table.get("sf_object")
-            children = children_by_parent.get(parent)
-            if not children:
-                children = set()
-            children.update(table.get("child_sf_objects"))
-            children_by_parent[parent] = children
+    @staticmethod
+    def get_sobjects_orderd_top_to_bottom(mapping):
+        return list(reversed(Util.get_sobjects_orderd_bottom_to_top(mapping)))
 
+    @staticmethod
+    def get_ordered_mapping(mapping):
+        step_names_by_sobject = {}
+        for step_name, step in mapping.items():
+            sobject = step.get("sf_object")
+            step_names = step_names_by_sobject.get(sobject)
+            if not step_names:
+                step_names = []
+                step_names_by_sobject[sobject] = step_names
+            step_names.append(step_name)
 
-        rows = [
-            [
-                "parent",
-                "children",
-            ]
-        ]
+        ordered_mapping = {}
+        for sobject in Util.get_sobjects_orderd_top_to_bottom(mapping):
+            for step_name in step_names_by_sobject[sobject]:
+                ordered_mapping[step_name] = mapping[step_name]
 
-        for parent, children in children_by_parent.items():
-            if children:
-                is_first = True
-                for child in children:
-                    rows.append([
-                        parent if is_first else "",
-                        child
-                    ])
-                    is_first = False
-            else:
-                rows.append([
-                    parent,
-                    ""
-                ])
-        self.log_table(rows, groupByBlankColumns=True)
-
-        return children_by_parent
-
-    def _get_parents_by_child(self):
-        parents_by_child = {}
-        for name, table in self.tables_by_name.items():
-            child = table.get("sf_object")
-            parents = parents_by_child.get(child)
-            if not parents:
-                parents = set()
-            parents.update(table.get("parent_sf_objects"))
-            parents_by_child[child] = parents
-
-        rows = [
-            [
-                "child",
-                "parents",
-            ]
-        ]
-
-        for child, parents in parents_by_child.items():
-            if parents:
-                is_first = True
-                for parent in parents:
-                    rows.append([
-                        child if is_first else "",
-                        parent
-                    ])
-                    is_first = False
-            else:
-                rows.append([
-                    child,
-                    ""
-                ])
-        self.log_table(rows, groupByBlankColumns=True)
-
-        return parents_by_child
-
-class Util:
+        return ordered_mapping
 
     @staticmethod
     def get_children_sf_objects(parent, tables_by_name):

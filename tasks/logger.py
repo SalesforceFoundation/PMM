@@ -180,3 +180,15 @@ class TableLogger(TitleLogger):
                     ))
 
             self.logger.info(table_borders.get("footer"))
+
+    def log_list(self, values, **kwargs):
+        rows = []
+        for value in values:
+            rows.append([
+                value
+            ])
+
+        self.log_table(rows, **kwargs)
+
+    def log_set(self, values, **kwargs):
+        self.log_list(values, **kwargs)

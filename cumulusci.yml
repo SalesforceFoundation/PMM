@@ -179,7 +179,7 @@ tasks:
     capture_bulk_data:
         group: "Data: Bulk"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData.CaptureData
+        class_path: tasks.BulkData2.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -193,6 +193,126 @@ tasks:
                 - path: data/bulk/mapping/Contacts.yml
             log_mapping: table
 
+    capture_bulk_data_contacts:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/c/Contacts.sql
+            pre_mapping_configs:
+                - path: decentralized-data/c/Contacts.yml
+
+    capture_bulk_data_household_accounts:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/c/Household_Accounts.sql
+            pre_mapping_configs:
+                - path: decentralized-data/c/Household_Accounts.yml
+
+    capture_bulk_data_organization_accounts:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/c/Organization_Accounts.sql
+            pre_mapping_configs:
+                - path: decentralized-data/c/Organization_Accounts.yml
+
+    capture_bulk_data_caseman:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/caseman/caseman.sql
+            package_mapping_directories:
+                - decentralized-data/caseman/caseman.yml
+
+    capture_bulk_data_caseman_unpackaged:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/caseman/unpackaged.sql
+            pre_mapping_configs:
+                - path: decentralized-data/caseman/unpackaged.yml
+    
+    capture_bulk_data_npe01:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/npe01/npe01.sql
+            package_mapping_directories:
+                - decentralized-data/npe01/npe01.yml
+    
+    capture_bulk_data_npe4:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/npe4/npe4.sql
+            package_mapping_directories:
+                - decentralized-data/npe4/npe4.yml
+    
+    capture_bulk_data_npo02:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/npo02/npo02.sql
+            package_mapping_directories:
+                - decentralized-data/npo02/npo02.yml
+    
+    capture_bulk_data_npsp:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/npsp/npsp.sql
+            package_mapping_directories:
+                - decentralized-data/npsp/npsp.yml
+    
+    capture_bulk_data_pmdm0:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData2.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            log_mapping: table
+            sql_path: decentralized-data/pmdm0/pmdm0.sql
+            package_mapping_directories:
+                - decentralized-data/pmdm0/pmdm0.yml
+    
     capture_bulk_data_orig:
         group: "Data: Bulk"
         description: "include sql_path and mapping"
@@ -201,7 +321,7 @@ tasks:
     insert_bulk_data:
         group: "Data: Bulk"
         description: "Inserts bulk data at sql_path into org with auto-generated mapping"
-        class_path: tasks.BulkData.InsertData
+        class_path: tasks.BulkData2.InsertData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True

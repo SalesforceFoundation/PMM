@@ -4,7 +4,7 @@ from tasks.namespaces import NamespaceInfo
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.utils import os_friendly_path
-from cumulusci.tasks.bulkdata import LoadData, ExtractData
+from tasks.bulkdata import LoadData, ExtractData
 
 class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {

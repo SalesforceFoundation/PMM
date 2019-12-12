@@ -16,6 +16,26 @@ pmdm__Program__c:
         Summary__c: Summary__c
         TargetPopulation__c: TargetPopulation__c
 
+pmdm__ProgramCohort__c:
+    sf_object: ProgramCohort__c
+    table: pmdm__ProgramCohort__c
+    fields:
+        # Standard Fields
+        Id: sf_id
+        Name: Name
+
+        # Custom Fields
+        Description__c: Description__c
+        EndDate__c: EndDate__c
+        StartDate__c: StartDate__c
+        Status__c: Status__c
+        Summary__c: Summary__c
+
+    lookups:
+        Program__c:
+            key_field: program__c
+            table: pmdm__Program__c
+
 pmdm__ProgramEngagement__c:
     sf_object: ProgramEngagement__c
     table: pmdm__ProgramEngagement__c
@@ -26,6 +46,7 @@ pmdm__ProgramEngagement__c:
 
         # Custom Fields
         ApplicationDate__c: ApplicationDate__c
+        AutoName_Override__c: AutoName_Override__c
         EndDate__c: EndDate__c
         Role__c: Role__c
         Stage__c: Stage__c
@@ -41,6 +62,9 @@ pmdm__ProgramEngagement__c:
         Program__c:
             key_field: program__c
             table: pmdm__Program__c
+        ProgramCohort__c:
+            key_field: program_cohort__c
+            table: pmdm__ProgramCohort__c
 
 pmdm__Service__c:
     sf_object: Service__c
@@ -51,6 +75,8 @@ pmdm__Service__c:
         Name: Name
 
         # Custom Fields
+        Description__c: Description__c
+        Status__c: Status__c
         UnitOfService__c: UnitOfService__c
 
     lookups:
@@ -67,6 +93,7 @@ pmdm__ServiceDelivery__c:
         Name: Name
 
         # Custom Fields
+        AutonameOverride__c: AutonameOverride__c
         DeliveryDate__c: DeliveryDate__c
         Quantity__c: Quantity__c
 
@@ -80,3 +107,6 @@ pmdm__ServiceDelivery__c:
         Contact__c:
             key_field: contact__c
             table: contacts
+        ProgramEngagement__c:
+            key_field: program_engagement__c
+            table: pmdm__ProgramEngagement__c

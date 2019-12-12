@@ -79,8 +79,10 @@ caseman__Branch_Contacts:
     lookups:
         AccountId:
             table: caseman__branch_accounts
+            key_field: account_id
         ContactId:
             table: contacts
+            key_field: contact_id
 
 # Cases
 caseman__Client_Cases:

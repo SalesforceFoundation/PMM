@@ -61,9 +61,8 @@ Contacts:
         WatchListDate__c: caseman__WatchListDate__c
 
     lookups:
-        lookups:
-            AccountId:
-                table: household_accounts
+        AccountId:
+            table: household_accounts
         EmergencyContact__c:
             key_field: emergency_contact__c
             table: contacts

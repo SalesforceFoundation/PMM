@@ -14,12 +14,12 @@
                             key={field.apiName}
                             class="slds-p-horizontal_small"
                         >
-                            <template if:false={field.isRequired}>
+                            <template if:false={field.notRequired}>
                                 <strong>{field.label}</strong>
                                 <strong style="color: red;"> * </strong>
                             </template>
 
-                            <template if:true={field.isRequired}>
+                            <template if:true={field.notRequired}>
                                 <strong>{field.label}</strong>
                             </template>
                         </lightning-layout-item>

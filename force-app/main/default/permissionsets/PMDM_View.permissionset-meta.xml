@@ -96,11 +96,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceDelivery__c.ProgramEngagement__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>ServiceDelivery__c.Quantity__c</field>
         <readable>true</readable>
     </fieldPermissions>

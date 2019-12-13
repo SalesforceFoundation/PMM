@@ -335,11 +335,11 @@ class Util:
         sobject_names_by_table = {}
         sobjects_by_name = {}
 
-        # Set parent_tables
+        # Collect tables' sobjects
         for step_name, step in mapping.items():
             sobject_names_by_table[step.get("table")] = step.get("sf_object")
 
-        # Set sobject with parent_sobject_names
+        # Collect each sobject's parents to know which sobjects are dependencies 
         for step_name, step in mapping.items():
             sobject = step.get("sf_object")
             parents = set()
@@ -357,14 +357,16 @@ class Util:
                 "children": set(),
             }
 
+        # Collect each sobject's children and ancestors
         for name, sobject in sobjects_by_name.items():
+
             # Set children to detect if sobject is not a dependency
             for parent in sobject.get("parents"):
                 # Ignore circular references
                 if parent != name:
                     sobjects_by_name.get(parent).get("children").add(name)
 
-            # Set ancestors to detect if a SObject is a dependency even if not a direct parent
+            # Set ancestors to detect if a sobject is a dependency even if not a parent
             ancestors = set()
             current_parents = set(sobject.get("parents"))
             while current_parents:
@@ -375,21 +377,23 @@ class Util:
                 current_parents = next_parents
             sobject["ancestors"] = ancestors
 
+        # Collect sobjects that are not a dependency
         sobjects_without_children = set()
         for name, sobject in sobjects_by_name.items():
             if not sobject.get("children"):
                 sobjects_without_children.add(name)
 
-        bottom_up = []
-        current_names = set(sobjects_without_children)
-        while current_names:
-            bottom_up.extend(current_names)
 
-            next_names = set()
+        sobjects_bottom_up = []
+        current_sobjects = set(sobjects_without_children)
+        while current_sobjects:
+            sobjects_bottom_up.extend(current_sobjects)
+
+            next_sobjects = set()
             all_ancestors = set()
 
-            # Add all parents to next_names if the parent is not a later dependency for any sobject in current_names.
-            for name in current_names:
+            # Add all parents to next_sobjects if the parent is not a later dependency for any sobject in current_sobjects
+            for name in current_sobjects:
                 sobject = sobjects_by_name[name]
 
                 # Remove parents from ancestors
@@ -398,19 +402,20 @@ class Util:
                 # Collect all non-parent ancestors
                 all_ancestors.update(sobject.get("ancestors"))
 
-                # Collect all parents' ancestors in case a parent is a dependency of a grandparent
+                # Collect all parents' ancestors in case a parent is also a dependency of a grandparent
                 for parent in sobject.get("parents"):
                     all_ancestors.update(sobjects_by_name[parent].get("ancestors"))
 
-            for name in current_names:
+            for name in current_sobjects:
                 sobject = sobjects_by_name[name]
                 for parent in sobject.get("parents"):
+                    # Don't include parents that are a later dependency
                     if parent not in all_ancestors:
-                        next_names.add(parent)
+                        next_sobjects.add(parent)
 
-            current_names = next_names
+            current_sobjects = next_sobjects
 
-        return bottom_up
+        return sobjects_bottom_up
 
     @staticmethod
     def get_sobjects_orderd_top_to_bottom(mapping):

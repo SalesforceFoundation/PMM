@@ -9,8 +9,7 @@ public with sharing class ServiceService {
 
             fields.add(new Map<String, Object>{
                 'apiName' => field.getFieldPath(),
-                'label' => field.getLabel(),
-                'required' => !field.getSObjectField().getDescribe().isNillable()
+                'label' => field.getLabel()
             });
         }
 
@@ -21,6 +20,9 @@ public with sharing class ServiceService {
         ProgramEngagementSelector peSelector = new ProgramEngagementSelector();
         ServiceSelector serviceSelector = new ServiceSelector();
         Set<Id> programIds = new Set<Id>();
+        String serviceProgram = Schema.SObjectType.Service__c.Fields.Program__c.getName();
+        String engageProgram = Schema.SObjectType.ProgramEngagement__c.Fields.Program__c.getName();
+
 
         Map<String, List<Object>> result = new Map<String, List<Object>>();
         result.put('engagements', new List<Object>());
@@ -28,22 +30,22 @@ public with sharing class ServiceService {
 
         for(ProgramEngagement__c engagement : peSelector.getProgramEngagementsByContactId(contactId)) {
             programIds.add(engagement.Program__c);
-            result.get('engagements').add(convertObjectToOption(engagement));
+            result.get('engagements').add(convertObjectToOption(engagement, engageProgram));
         }
 
         for(Service__c service : serviceSelector.getServicesByProgramIds(programIds)) {
-            result.get('services').add(convertObjectToOption(service));
+            result.get('services').add(convertObjectToOption(service, serviceProgram));
         }
 
         return result;
     }
 
     //TODO : Need describes here for field names.
-    private Map<String, String> convertObjectToOption(sObject obj) {
+    private Map<String, String> convertObjectToOption(sObject obj, String programField) {
         Map<String, String> result = new Map<String, String>();
         result.put('label', (String) obj.get('Name'));
         result.put('value', (String) obj.get('Id'));
-        result.put('program', (String) obj.get('Program__c'));
+        result.put('program', (String) obj.get(programField));
         return result;
     }
 }

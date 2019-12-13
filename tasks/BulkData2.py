@@ -360,13 +360,13 @@ class Util:
         # Collect each sobject's children and ancestors
         for name, sobject in sobjects_by_name.items():
 
-            # Set children to detect if sobject is not a dependency
+            # Collect all sobjects where this sobject is a direct dependency as "children", i.e. sobjects where this sobject is a parent
             for parent in sobject.get("parents"):
                 # Ignore circular references
                 if parent != name:
                     sobjects_by_name.get(parent).get("children").add(name)
 
-            # Set ancestors to detect if a sobject is a dependency even if not a parent
+            # Collect all dependent sobjects as "ancestors", e.g. parents, grandparents, great-grandparents, etc.
             ancestors = set()
             current_parents = set(sobject.get("parents"))
             while current_parents:
@@ -377,13 +377,13 @@ class Util:
                 current_parents = next_parents
             sobject["ancestors"] = ancestors
 
-        # Collect sobjects that are not a dependency
+        # Collect sobjects that are not a dependency for other sobjects, i.e. have no children
         sobjects_without_children = set()
         for name, sobject in sobjects_by_name.items():
             if not sobject.get("children"):
                 sobjects_without_children.add(name)
 
-
+        # Order all sobjects by dependency starting with sobjects that are no a dependency for other sobjects, i.e. "bottom up"
         sobjects_bottom_up = []
         current_sobjects = set(sobjects_without_children)
         while current_sobjects:
@@ -392,7 +392,7 @@ class Util:
             next_sobjects = set()
             all_ancestors = set()
 
-            # Add all parents to next_sobjects if the parent is not a later dependency for any sobject in current_sobjects
+            # Collect all dependencies/ancestors for current_sobjects' parents
             for name in current_sobjects:
                 sobject = sobjects_by_name[name]
 
@@ -402,10 +402,11 @@ class Util:
                 # Collect all non-parent ancestors
                 all_ancestors.update(sobject.get("ancestors"))
 
-                # Collect all parents' ancestors in case a parent is also a dependency of a grandparent
+                # Collect all parents' ancestors in case a parent is also a dependency/ancestor of a grandparent
                 for parent in sobject.get("parents"):
                     all_ancestors.update(sobjects_by_name[parent].get("ancestors"))
 
+            # Add all parents to next_sobjects if the parent is not a later dependency for any sobject in current_sobjects
             for name in current_sobjects:
                 sobject = sobjects_by_name[name]
                 for parent in sobject.get("parents"):

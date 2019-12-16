@@ -78,7 +78,6 @@ export default class BulkServiceDeliveryUI extends LightningElement {
 
     handleSaveEnd(event) {
         this.saveMessage = this.labels.saved;
-        this.dispatchEvent(new CustomEvent("savesuccess"));
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(
             function() {

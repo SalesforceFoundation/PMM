@@ -6,7 +6,7 @@
     <label>Service Provider</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Service Deliveries (Service Provider)</relationshipLabel>
-    <relationshipName>Service_Deliveries1</relationshipName>
+    <relationshipName>ServiceDeliveries</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

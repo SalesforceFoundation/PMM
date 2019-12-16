@@ -4,6 +4,10 @@
         <application>Program_Management</application>
         <visible>true</visible>
     </applicationVisibilities>
+    <classAccesses>
+        <apexClass>ServiceDeliveryController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>false</editable>
         <field>ProgramCohort__c.Description__c</field>

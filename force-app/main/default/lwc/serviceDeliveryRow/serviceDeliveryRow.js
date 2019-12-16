@@ -13,6 +13,7 @@ import recordDeleted from "@salesforce/label/c.Record_Deleted";
 import selectService from "@salesforce/label/c.Select_Service";
 import selectEngagement from "@salesforce/label/c.Select_Program_Engagement";
 import selectedContactWarning from "@salesforce/label/c.Service_Delivery_Contact_Without_Programs";
+import noServiceWarning from "@salesforce/label/c.No_Services_For_Program_Engagement";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
@@ -39,6 +40,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track hasQuantity = false;
 
     _noContactPrograms = false;
+    _noServicesForPE = false;
     _filteredValues;
     _valuesToSave = [];
     _targetProgram;
@@ -53,6 +55,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         confirmDelete,
         confirmDeleteMessage,
         deleteLabel,
+        noServiceWarning,
         recordDeleted,
         selectedContactWarning,
         selectEngagement,
@@ -107,6 +110,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this._filteredValues = [];
         this._valuesToSave = [];
         this._noContactPrograms = false;
+        this._noServicesForPE = false;
     }
 
     handleComboChange(event) {
@@ -114,6 +118,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         let fieldVal = event.detail.value;
 
         if (fieldName === this.fields.programEngagement.fieldApiName) {
+            this._noServicesForPE = false;
             this._valuesToSave = []; //If the engagement changes, wipe stored values.
             this._filteredValues[ENGAGEMENTS].forEach(element => {
                 if (element.value === fieldVal) {
@@ -232,6 +237,10 @@ export default class ServiceDeliveryRow extends LightningElement {
             if (element.apiName === this.fields.service.fieldApiName) {
                 element.disabled = false;
                 element.options = result;
+                if (!result.length) {
+                    this._noServicesForPE = true;
+                    element.disabled = true;
+                }
             } else if (
                 element.apiName !== this.fields.contact.fieldApiName &&
                 element.apiName !== this.fields.programEngagement.fieldApiName

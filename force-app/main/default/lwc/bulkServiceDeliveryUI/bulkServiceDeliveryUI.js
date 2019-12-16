@@ -1,4 +1,5 @@
 import { LightningElement, track, wire } from "lwc";
+import { handleError, debouncify } from "c/util";
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
 import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
@@ -71,19 +72,20 @@ export default class BulkServiceDeliveryUI extends LightningElement {
         }
     }
 
-    handleSaveStart(event) {
+    handleSaveStart() {
         this.saveMessage = this.labels.saving + "...";
         this.isSaving = true;
     }
 
-    handleSaveEnd(event) {
+    resetIsSaving = debouncify(
+        function() {
+            this.isSaving = false;
+        }.bind(this),
+        2000
+    );
+
+    handleSaveEnd() {
         this.saveMessage = this.labels.saved;
-        // eslint-disable-next-line @lwc/lwc/no-async-operation
-        setTimeout(
-            function() {
-                this.isSaving = false;
-            }.bind(this),
-            2000
-        );
+        this.resetIsSaving();
     }
 }

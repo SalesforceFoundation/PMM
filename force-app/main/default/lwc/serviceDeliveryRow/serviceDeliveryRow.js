@@ -143,7 +143,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-    handleContactChange(event) {
+    handleContactChange() {
         //Make our fieldset mutable the first time it's manipulated.
         this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
 

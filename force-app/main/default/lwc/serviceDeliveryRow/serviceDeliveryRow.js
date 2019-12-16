@@ -26,6 +26,7 @@ const SERVICES = "services";
 export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
     @api index;
+    @api rowCount;
     @api
     get fieldSet() {
         return this.localFieldSet;
@@ -35,6 +36,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     @track localFieldSet;
+    @track hasQuantity = false;
 
     _noContactPrograms = false;
     _filteredValues;
@@ -42,6 +44,10 @@ export default class ServiceDeliveryRow extends LightningElement {
     _targetProgram;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
+
+    get isDeleteDisabled() {
+        return this.rowCount === 1 && this.recordId == null ? true : false;
+    }
     labels = {
         cancel,
         confirmDelete,

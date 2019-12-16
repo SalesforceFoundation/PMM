@@ -17,7 +17,8 @@ public with sharing class ServiceService {
             fields.add(
                 new Map<String, Object>{
                     'apiName' => field.getFieldPath(),
-                    'label' => field.getLabel()
+                    'label' => field.getLabel(),
+                    'isRequired' => !field.getSObjectField().getDescribe().isNillable()
                 }
             );
         }

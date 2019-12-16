@@ -14,7 +14,14 @@
                             key={field.apiName}
                             class="slds-p-horizontal_small"
                         >
-                            <strong>{field.label}</strong>
+                            <template if:true={field.isRequired}>
+                                <strong>{field.label}</strong>
+                                <strong style="color: red;"> * </strong>
+                            </template>
+
+                            <template if:false={field.isRequired}>
+                                <strong>{field.label}</strong>
+                            </template>
                         </lightning-layout-item>
                     </template>
                     <lightning-layout-item
@@ -32,6 +39,7 @@
                             ondelete={handleDelete}
                             onsavestart={handleSaveStart}
                             onsaveend={handleSaveEnd}
+                            row-count={rowCount}
                         ></c-service-delivery-row>
                     </div>
                 </template>

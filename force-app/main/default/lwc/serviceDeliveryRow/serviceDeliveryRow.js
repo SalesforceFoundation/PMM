@@ -17,10 +17,16 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
     @api index;
     @api fieldSet;
-    
+    @api rowCount;
+
     @track hasQuantity = false;
-    
+
     serviceDeliveryObject = SERVICEDEVLIERY_OBJECT;
+
+    get isDeleteDisabled() {
+        return this.rowCount === 1 && this.recordId == null ? true : false;
+    }
+
     labels = {
         cancel,
         confirmDelete,

@@ -1,5 +1,9 @@
 <template>
     <c-modal header={labels.serviceDeliveries}>
-        <c-bulk-service-delivery-u-i></c-bulk-service-delivery-u-i>
+        <c-bulk-service-delivery-u-i
+            onservicedeliveryupsert={handleOnUpsert}
+            ondelete={fowardEventToParent}
+            onsaveend={handleSaveEnd}
+        ></c-bulk-service-delivery-u-i>
     </c-modal>
 </template>

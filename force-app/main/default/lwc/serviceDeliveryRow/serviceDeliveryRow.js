@@ -1,6 +1,8 @@
-import { LightningElement, track, api } from "lwc";
+import { LightningElement, wire, track, api } from "lwc";
 import { showToast, handleError, debouncify } from "c/util";
 import { deleteRecord } from "lightning/uiRecordApi";
+import { fireEvent } from "c/pubsub";
+import { CurrentPageReference } from "lightning/navigation";
 
 import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryController.getServicesAndEngagements";
 
@@ -24,6 +26,8 @@ const ENGAGEMENTS = "engagements";
 const SERVICES = "services";
 
 export default class ServiceDeliveryRow extends LightningElement {
+    @wire(CurrentPageReference) pageRef;
+
     @api recordId;
     @api index;
     @api rowCount;
@@ -154,7 +158,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                     element.disabled = true;
                 }
             } else if (element.apiName !== this.fields.contact.fieldApiName) {
-                element.disabled == true;
+                element.disabled = true;
             }
         });
     }
@@ -168,6 +172,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.recordId = event.detail.id;
         this.dispatchEvent(new CustomEvent("saveend"));
         this.lockContactField();
+        fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
     }
 
     handleSubmit(event) {
@@ -189,9 +194,11 @@ export default class ServiceDeliveryRow extends LightningElement {
         if (this.recordId) {
             deleteRecord(this.recordId)
                 .then(() => {
+                    const deletedRecordId = this.recordId;
                     this.recordId = "";
                     showToast(this.labels.success, this.labels.recordDeleted, "success");
                     this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));
+                    fireEvent(this.pageRef, "serviceDeliveryDelete", deletedRecordId);
                 })
                 .catch(error => {
                     handleError(error);

@@ -62,6 +62,13 @@
                         </div>
                     </lightning-layout-item>
                 </template>
+                <template if:true={_noServicesForPE}>
+                    <lightning-layout-item size="12" padding="around-small">
+                        <div class="slds-text-color_error">
+                            {labels.noServiceWarning}
+                        </div>
+                    </lightning-layout-item>
+                </template>
             </lightning-layout>
             <lightning-button
                 class="slds-p-left_medium sd-submit slds-hide"

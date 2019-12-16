@@ -103,5 +103,15 @@
         <protected>true</protected>
         <shortDescription>Warning message when a selected contact has no programs related.</shortDescription>
         <value>To save a service delivery, first enroll this client in a program with active services.</value>
-    </labels>    
+    </labels>
+    <labels>
+        <fullName>No_Services_For_Program_Engagement</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning message when a selected Program Engagement has no Services related.</shortDescription>
+        <value>No services found, choose another program engagement.</value>
+    </labels>  
+
+
 </CustomLabels>

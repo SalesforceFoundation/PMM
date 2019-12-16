@@ -7,11 +7,7 @@ import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfService__c";
 
-<<<<<<< HEAD
 import getFieldSet from "@salesforce/apex/ServiceDeliveryController.getFieldSet";
-=======
-import getFieldSet from '@salesforce/apex/ServiceDeliveryController.getFieldSet';
->>>>>>> origin/master
 
 export default class BulkServiceDeliveryUI extends LightningElement {
     @track serviceDeliveries = [{ index: 0 }];
@@ -70,12 +66,7 @@ export default class BulkServiceDeliveryUI extends LightningElement {
         this.serviceDeliveries = this.serviceDeliveries.filter(function(obj) {
             return obj.index !== event.detail;
         });
-<<<<<<< HEAD
         if (this.serviceDeliveries.length <= 0) {
-=======
-
-        if(this.serviceDeliveries.length <= 0) {
->>>>>>> origin/master
             this.addDelivery();
         }
     }

@@ -1,5 +1,4 @@
 import { LightningElement, wire, api } from "lwc";
-import { debug } from "c/util";
 import { registerListener, unregisterListener } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
 import serviceDeliveries from "@salesforce/label/c.Service_Deliveries";

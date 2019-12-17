@@ -29,7 +29,7 @@ const debug = (...args) => {
         debugs.push("======  " + title + "  =====");
     }
     for (let name in valuesByName) {
-        if (valuesByName.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(valuesByName, name)) {
             debugs.push(`${name}: ${JSON.stringify(valuesByName[name], null, 2)}`);
         }
     }
@@ -202,7 +202,7 @@ const format = (string, replacements) => {
                 ? Array.prototype.slice.call(replacements)
                 : replacements;
         for (key in args) {
-            if (args.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(args, key)) {
                 formattedString = formattedString.replace(
                     new RegExp("\\{" + key + "\\}", "gi"),
                     args[key]
@@ -217,11 +217,11 @@ const format = (string, replacements) => {
 // This is necessary because of namespacing.
 const getChildObjectByName = (object, property) => {
     if (object) {
-        if (object.hasOwnProperty(property)) {
+        if (Object.prototype.hasOwnProperty.call(object, property)) {
             return object[property];
         }
         let namespacedProperty = "caseman__" + property;
-        if (object.hasOwnProperty(namespacedProperty)) {
+        if (Object.prototype.hasOwnProperty.call(object, namespacedProperty)) {
             return object[namespacedProperty];
         }
     }

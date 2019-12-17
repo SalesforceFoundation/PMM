@@ -34,6 +34,7 @@
                 <template for:each={serviceDeliveries} for:item="delivery">
                     <div key={delivery.index}>
                         <c-service-delivery-row
+                            default-values={defaultValues}
                             field-set={fieldSet}
                             index={delivery.index}
                             ondelete={handleDelete}

@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from "lwc";
+import { LightningElement, api, track, wire } from "lwc";
 import { handleError, debouncify } from "c/util";
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
 import saved from "@salesforce/label/c.Saved";
@@ -11,6 +11,7 @@ import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfServi
 import getFieldSet from "@salesforce/apex/ServiceDeliveryController.getFieldSet";
 
 export default class BulkServiceDeliveryUI extends LightningElement {
+    @api defaultValues;
     @track serviceDeliveries = [{ index: 0 }];
     @track isSaving = false;
     @track saveMessage;

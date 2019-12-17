@@ -9,19 +9,34 @@
             object-api-name={serviceDeliveryObject}
         >
             <lightning-layout class="slds-grid_vertical-align-end">
-                <template for:each={fieldSet} for:item="field">
+                <template for:each={localFieldSet} for:item="field">
                     <lightning-layout-item
                         key={field.apiName}
                         size={field.size}
                         padding="horizontal-small"
                     >
                         <div class="sd-input" data-field={field.apiName}>
-                            <lightning-input-field
-                                data-name={field.apiName}
-                                field-name={field.apiName}
-                                variant="label-hidden"
-                                onchange={handleInputChange}
-                            ></lightning-input-field>
+                            <template if:true={field.showFilteredInput}>
+                                <lightning-combobox
+                                    name={field.apiName}
+                                    label={field.label}
+                                    variant="label-hidden"
+                                    onchange={handleComboChange}
+                                    placeholder={field.placeholder}
+                                    options={field.options}
+                                    disabled={field.disabled}
+                                >
+                                </lightning-combobox>
+                            </template>
+                            <template if:false={field.showFilteredInput}>
+                                <lightning-input-field
+                                    data-name={field.apiName}
+                                    field-name={field.apiName}
+                                    variant="label-hidden"
+                                    onchange={handleInputChange}
+                                    disabled={field.disabled}
+                                ></lightning-input-field>
+                            </template>
                         </div>
                     </lightning-layout-item>
                 </template>
@@ -38,6 +53,22 @@
                     >
                     </lightning-button-icon>
                 </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout>
+                <template if:true={_noContactPrograms}>
+                    <lightning-layout-item size="12" padding="around-small">
+                        <div class="slds-text-color_error">
+                            {labels.selectedContactWarning}
+                        </div>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={_noServicesForPE}>
+                    <lightning-layout-item size="12" padding="around-small">
+                        <div class="slds-text-color_error">
+                            {labels.noServiceWarning}
+                        </div>
+                    </lightning-layout-item>
+                </template>
             </lightning-layout>
             <lightning-button
                 class="slds-p-left_medium sd-submit slds-hide"

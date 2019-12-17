@@ -32,13 +32,13 @@ export default class ServiceDeliveryModal extends LightningElement {
         );
     }
 
-    handleOpenModal(value) {
-        this.defaultValues = value;
+    handleOpenModal() {
         this.showModal();
     }
 
     @api
-    showModal() {
+    showModal(value) {
+        this.defaultValues = value;
         this.template.querySelector("c-modal").show();
     }
 

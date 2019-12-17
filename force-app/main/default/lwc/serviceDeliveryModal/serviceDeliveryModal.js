@@ -1,10 +1,12 @@
-import { LightningElement, wire, api } from "lwc";
+import { LightningElement, wire, api, track } from "lwc";
 import { registerListener, unregisterListener } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
 import serviceDeliveries from "@salesforce/label/c.Service_Deliveries";
 
 export default class ServiceDeliveryModal extends LightningElement {
     @wire(CurrentPageReference) pageRef;
+
+    @track defaultValues;
 
     labels = {
         serviceDeliveries,
@@ -30,7 +32,8 @@ export default class ServiceDeliveryModal extends LightningElement {
         );
     }
 
-    handleOpenModal() {
+    handleOpenModal(value) {
+        this.defaultValues = value;
         this.showModal();
     }
 

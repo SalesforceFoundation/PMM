@@ -32,6 +32,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
     @api index;
     @api rowCount;
+    @api defaultValues;
     @api
     get fieldSet() {
         return this.localFieldSet;
@@ -45,6 +46,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     _noContactPrograms = false;
     _noServicesForPE = false;
+    _defaultsSet = false;
     _filteredValues;
     _valuesToSave = [];
     _targetProgram;
@@ -265,9 +267,41 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
     }
 
+    processDefaults() {
+        if (
+            this.defaultValues &&
+            Object.keys(this.defaultValues).length > 0 &&
+            this.localFieldSet &&
+            this.localFieldSet.length &&
+            !this._defaultsSet
+        ) {
+            this._defaultsSet = true;
+            let hasContact = false;
+
+            this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
+            this.localFieldSet.forEach(element => {
+                for (let [key, value] of Object.entries(this.defaultValues)) {
+                    if (element.apiName.endsWith(key)) {
+                        element.value = this.defaultValues[key];
+                        if (element.apiName === this.fields.contact.fieldApiName) {
+                            hasContact = true;
+                        }
+                    }
+                }
+            });
+
+            if (hasContact) {
+                this.handleGetServicesEngagements(
+                    this.defaultValues[this.fields.contact.fieldApiName]
+                );
+            }
+        }
+    }
+
     //Temporary CSS Overrides.
     //TODO : Update when shadow-dom styling options are available.
     renderedCallback() {
+        this.processDefaults();
         if (this.hasRendered) return;
         this.hasRendered = true;
         const style = document.createElement("style");

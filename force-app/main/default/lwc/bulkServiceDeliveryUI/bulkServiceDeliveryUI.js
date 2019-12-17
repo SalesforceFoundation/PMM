@@ -11,7 +11,6 @@ import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfServi
 import getFieldSet from "@salesforce/apex/ServiceDeliveryController.getFieldSet";
 
 export default class BulkServiceDeliveryUI extends LightningElement {
-    //Test Data, remove before merge.
     @api defaultValues;
     @track serviceDeliveries = [{ index: 0 }];
     @track isSaving = false;

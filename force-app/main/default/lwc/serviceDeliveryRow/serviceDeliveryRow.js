@@ -32,7 +32,14 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
     @api index;
     @api rowCount;
-    @api defaultValues;
+    @api
+    get defaultValues() {
+        return this.localDefaultValues;
+    }
+    set defaultValues(value) {
+        this.localDefaultValues = value;
+        this.processDefaults();
+    }
     @api
     get fieldSet() {
         return this.localFieldSet;
@@ -41,6 +48,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.localFieldSet = value;
     }
 
+    @track localDefaultValues;
     @track localFieldSet;
     @track hasQuantity = false;
 
@@ -273,8 +281,8 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     processDefaults() {
         if (
-            this.defaultValues &&
-            Object.keys(this.defaultValues).length > 0 &&
+            this.localDefaultValues &&
+            Object.keys(this.localDefaultValues).length > 0 &&
             this.localFieldSet &&
             this.localFieldSet.length &&
             !this._defaultsSet
@@ -284,9 +292,9 @@ export default class ServiceDeliveryRow extends LightningElement {
 
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(element => {
-                for (let [key, value] of Object.entries(this.defaultValues)) {
+                for (let [key, value] of Object.entries(this.localDefaultValues)) {
                     if (element.apiName.endsWith(key)) {
-                        element.value = this.defaultValues[key];
+                        element.value = this.localDefaultValues[key];
                         if (element.apiName === this.fields.contact.fieldApiName) {
                             hasContact = true;
                         }
@@ -296,7 +304,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
             if (hasContact) {
                 this.handleGetServicesEngagements(
-                    this.defaultValues[this.fields.contact.fieldApiName]
+                    this.localDefaultValues[this.fields.contact.fieldApiName]
                 );
             }
         }

@@ -92,6 +92,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleGetServicesEngagements(contactId) {
+        this._noContactPrograms = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
                 if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {

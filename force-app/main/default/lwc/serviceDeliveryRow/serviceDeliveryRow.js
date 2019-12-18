@@ -298,7 +298,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
             this._defaultsSet = true;
             let hasContact = false;
-            let contactId;
+            let contactId = "";
 
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(element => {

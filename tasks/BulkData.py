@@ -8,6 +8,10 @@ from cumulusci.tasks.bulkdata import LoadData, ExtractData
 
 class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {
+        "project_namespace": {
+            "description": "Namespace of project.  Defaults to CumulusCI Project's Package's namespace.",
+            "required": False,
+        },
         "package_mapping_directories": {
             "description": "List of directory paths containing package mapping files.  Package mappings have file names are in the form '[namespace].yml' and are used to automatically include mapping configs for the CumulusCI project and installed managed packages in the org with the namespaced injected if applicable.",
             "required": True,
@@ -34,6 +38,9 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
             "required": False,
         },
     }
+
+    def get_project_namespace(self):
+        return self.options.get("project_namespace") if self.options.get("project_namespace") else super().get_project_namespace()
 
     def get_available_package_mappings(self):
         rows = [

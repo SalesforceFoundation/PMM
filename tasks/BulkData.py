@@ -9,7 +9,7 @@ from cumulusci.tasks.bulkdata import LoadData, ExtractData
 class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     task_options = {
         "project_namespace": {
-            "description": "Namespace of project.  Defaults to CumulusCI Project's namespace.",
+            "description": "Namespace of project.  Defaults to CumulusCI Project's Package's namespace.",
             "required": False,
         },
         "package_mapping_directories": {

@@ -170,6 +170,10 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
     }
 
+    handleLoad(event) {
+        this.processDefaults();
+    }
+
     handleError(event) {
         this.dispatchEvent(new CustomEvent("saveend"));
         handleError(event.detail.message);
@@ -301,7 +305,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     //Temporary CSS Overrides.
     //TODO : Update when shadow-dom styling options are available.
     renderedCallback() {
-        this.processDefaults();
         if (this.hasRendered) return;
         this.hasRendered = true;
         const style = document.createElement("style");

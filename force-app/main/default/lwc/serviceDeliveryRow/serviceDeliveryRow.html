@@ -2,6 +2,7 @@
     <div class="style-target"></div>
     <div class="slds-p-vertical_small">
         <lightning-record-edit-form
+            onload={handleLoad}
             onsuccess={handleSuccess}
             onsubmit={handleSubmit}
             onerror={handleError}

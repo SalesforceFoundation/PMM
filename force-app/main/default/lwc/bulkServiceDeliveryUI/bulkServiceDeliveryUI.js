@@ -41,6 +41,13 @@ export default class BulkServiceDeliveryUI extends LightningElement {
         }
     }
 
+    @api
+    resetUI() {
+        this.defaultValues = {};
+        this.serviceDeliveries = [];
+        this.addDelivery();
+    }
+
     configureFieldSize(fieldSet) {
         fieldSet.forEach(field => {
             field.size = 2;

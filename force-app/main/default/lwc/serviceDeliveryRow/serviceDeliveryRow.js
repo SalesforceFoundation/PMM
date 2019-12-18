@@ -93,9 +93,13 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     handleGetServicesEngagements(contactId) {
         this._noContactPrograms = false;
+        console.log("handleGetSericesEngagements", contactId);
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
+                console.log("handleGetServicesEngagements Result");
+                console.log(JSON.parse(JSON.stringify(result)));
                 if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {
+                    console.log("Setting _noContactPrograms true");
                     this._noContactPrograms = true;
                 }
                 this._filteredValues = result;
@@ -288,6 +292,10 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.localFieldSet.length &&
             !this._defaultsSet
         ) {
+            console.log("In processDefaults");
+            console.log("this.localDefaultValues");
+            console.log(JSON.parse(JSON.stringify(this.localDefaultValues)));
+
             this._defaultsSet = true;
             let hasContact = false;
 
@@ -304,6 +312,8 @@ export default class ServiceDeliveryRow extends LightningElement {
             });
 
             if (hasContact) {
+                console.log("Loaded defaults, calling handleGetServicesEngagements");
+                console.log(this.localDefaultValues[this.fields.contact.fieldApiName]);
                 this.handleGetServicesEngagements(
                     this.localDefaultValues[this.fields.contact.fieldApiName]
                 );

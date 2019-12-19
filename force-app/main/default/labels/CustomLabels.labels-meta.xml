@@ -80,4 +80,38 @@
         <shortDescription>Saved</shortDescription>
         <value>Saved</value>
     </labels>
+    <labels>
+        <fullName>Select_Service</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Service</shortDescription>
+        <value>Select Service</value>
+    </labels>
+    <labels>
+        <fullName>Select_Program_Engagement</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Program Engagement</shortDescription>
+        <value>Select Program Engagement</value>
+    </labels>
+    <labels>
+        <fullName>Service_Delivery_Contact_Without_Programs</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning message when a selected contact has no programs related.</shortDescription>
+        <value>To save a service delivery, first enroll this client in a program with active services.</value>
+    </labels>
+    <labels>
+        <fullName>No_Services_For_Program_Engagement</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning message when a selected Program Engagement has no Services related.</shortDescription>
+        <value>No services found, choose another program engagement.</value>
+    </labels>  
+
+
 </CustomLabels>

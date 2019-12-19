@@ -1,0 +1,69 @@
+public with sharing class ProgramTestDataFactory {
+    public static void insertTestData(Boolean addServices) {
+        Account acc = new Account();
+        acc.Name = 'Test Account';
+        insert acc;
+
+        Contact con = new Contact();
+        con.LastName = 'Test Contact';
+        con.AccountId = acc.Id;
+        insert con;
+
+        List<Program__c> programs = new List<Program__c>();
+        Program__c program1 = new Program__c();
+        program1.Name = 'Program 1';
+        program1.Status__c = 'Active';
+        program1.StartDate__c = Date.today();
+        program1.EndDate__c = Date.today().addDays(30);
+        programs.add(program1);
+
+        Program__c program2 = new Program__c();
+        program2.Name = 'Program 2';
+        program2.Status__c = 'Active';
+        program2.StartDate__c = Date.today().addDays(30);
+        program2.EndDate__c = Date.today().addDays(90);
+        programs.add(program2);
+
+        insert programs;
+
+        List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>();
+
+        ProgramEngagement__c engagement1 = new ProgramEngagement__c();
+        engagement1.Name = 'Engagement 1';
+        engagement1.Stage__c = 'Enrolled';
+        engagement1.Contact__c = con.Id;
+        engagement1.Program__c = program1.Id;
+        engagement1.Role__c = 'Client';
+        engagements.add(engagement1);
+
+        ProgramEngagement__c engagement2 = new ProgramEngagement__c();
+        engagement2.Name = 'Engagement 2';
+        engagement2.Stage__c = 'Enrolled';
+        engagement2.Contact__c = con.Id;
+        engagement2.Program__c = program2.Id;
+        engagement2.Role__c = 'Client';
+        engagements.add(engagement2);
+
+        insert engagements;
+
+        if (addServices) {
+            List<Service__c> services = new List<Service__c>();
+
+            Service__c service1 = new Service__c();
+            service1.Name = 'Service 1';
+            service1.Program__c = program1.Id;
+            service1.Status__c = 'Active';
+            service1.UnitOfService__c = 'Hours';
+            services.add(service1);
+
+            Service__c service2 = new Service__c();
+            service2.Name = 'Service 2';
+            service2.Program__c = program2.Id;
+            service2.Status__c = 'Active';
+            service2.UnitOfService__c = 'Days';
+            services.add(service2);
+
+            insert services;
+        }
+    }
+}

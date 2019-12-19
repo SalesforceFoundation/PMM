@@ -1,6 +1,6 @@
 <template>
     <lightning-card>
-        <div class="slds-p-around_medium">
+        <div class="slds-p-left_medium slds-p-right_xx-large">
             <div
                 class="slds-p-horizontal_small slds-text-heading_large slds-m-bottom_x-large"
             >
@@ -34,6 +34,7 @@
                 <template for:each={serviceDeliveries} for:item="delivery">
                     <div key={delivery.index}>
                         <c-service-delivery-row
+                            default-values={defaultValues}
                             field-set={fieldSet}
                             index={delivery.index}
                             ondelete={handleDelete}

@@ -1,0 +1,7 @@
+.spinner-container{
+    bottom:15px;
+}
+
+.color-green .slds-icon-text-default{
+    fill:green;
+}

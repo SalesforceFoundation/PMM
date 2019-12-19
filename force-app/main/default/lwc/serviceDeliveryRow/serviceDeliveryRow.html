@@ -55,6 +55,16 @@
                     >
                     </lightning-button-icon>
                 </lightning-layout-item>
+                <lightning-layout-item>    
+                    <template if:true={isSaving}>  
+                        <div class="slds-is-relative spinner-container" role="alert">
+                            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                        </div>     
+                    </template>
+                    <template if:true={isSaved} role="alert">  
+                        <lightning-icon icon-name="utility:check" class="color-green" alternative-text="Saved" size="small" ></lightning-icon>   
+                    </template>
+                </lightning-layout-item>
             </lightning-layout>
             <lightning-layout>
                 <template if:true={_noContactPrograms}>
@@ -80,6 +90,7 @@
             >
             </lightning-button>
         </lightning-record-edit-form>
+        
     </div>
     <c-modal header={labels.confirmDelete}
         >{labels.confirmDeleteMessage}

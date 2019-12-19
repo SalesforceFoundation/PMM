@@ -72,7 +72,7 @@ export default class BulkServiceDeliveryUI extends LightningElement {
             this.addDelivery();
         }
     }
-
+/*
     handleSaveStart() {
         this.saveMessage = this.labels.saving + "...";
         this.isSaving = true;
@@ -88,5 +88,5 @@ export default class BulkServiceDeliveryUI extends LightningElement {
     handleSaveEnd() {
         this.saveMessage = this.labels.saved;
         this.resetIsSaving();
-    }
+    }*/
 }

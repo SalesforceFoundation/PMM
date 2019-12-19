@@ -32,6 +32,8 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
     @api index;
     @api rowCount;
+    @api isSaving;
+    @track isSaved;
     @api
     get defaultValues() {
         return this.localDefaultValues;
@@ -51,6 +53,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track localDefaultValues;
     @track localFieldSet;
     @track hasQuantity = false;
+    @track saveMessage;
 
     _noContactPrograms = false;
     _noServicesForPE = false;
@@ -184,12 +187,14 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     handleError(event) {
         this.dispatchEvent(new CustomEvent("saveend"));
+        this.handleSaveEnd();
         handleError(event.detail.message);
     }
 
     handleSuccess(event) {
         this.recordId = event.detail.id;
         this.dispatchEvent(new CustomEvent("saveend"));
+        this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
     }
@@ -206,7 +211,11 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         this.template.querySelector("lightning-record-edit-form").submit(fields);
+
         this.dispatchEvent(new CustomEvent("savestart"));
+
+        //start save 
+        this.handleSaveStart();
     }
 
     handleDelete() {
@@ -308,6 +317,26 @@ export default class ServiceDeliveryRow extends LightningElement {
                 );
             }
         }
+    }
+
+
+    handleSaveStart() {
+        this.saveMessage =  "...";
+        this.isSaving = true;
+    }
+
+    resetIsSaving = debouncify(
+        function() {
+            this.isSaving = false;
+            this.isSaved = false;
+        }.bind(this),
+        3000
+    );
+
+    handleSaveEnd() {
+        this.isSaving = false;
+        this.isSaved = true;
+        this.resetIsSaving();
     }
 
     //Temporary CSS Overrides.

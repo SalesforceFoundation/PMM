@@ -3,7 +3,6 @@ public with sharing class ProgramEngagementSelector {
     }
 
     public List<ProgramEngagement__c> getProgramEngagementsByContactId(Id contactId) {
-        System.debug('ContactID : ' + contactId);
         return [
             SELECT Id, Name, Program__c
             FROM ProgramEngagement__c

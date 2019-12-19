@@ -16,7 +16,12 @@
                         >
                             <template if:true={field.isRequired}>
                                 <strong>{field.label}</strong>
-                                <strong style="color: red;"> * </strong>
+                                <strong
+                                    style="color: red;"
+                                    class="slds-p-left_xx-small"
+                                    aria-label="required"
+                                    >*</strong
+                                >
                             </template>
 
                             <template if:false={field.isRequired}>
@@ -26,7 +31,7 @@
                     </template>
                     <lightning-layout-item
                         size="1"
-                        class="slds-p-horizontal_small"
+                        class="slds-p-horizontal_xx-small"
                     ></lightning-layout-item>
                 </lightning-layout>
             </div>

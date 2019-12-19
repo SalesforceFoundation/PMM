@@ -111,7 +111,13 @@
         <protected>true</protected>
         <shortDescription>Warning message when a selected Program Engagement has no Services related.</shortDescription>
         <value>No services found, choose another program engagement.</value>
+    </labels>
+     <labels>
+        <fullName>Required</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Required</shortDescription>
+        <value>Required</value>
     </labels>  
-
-
 </CustomLabels>

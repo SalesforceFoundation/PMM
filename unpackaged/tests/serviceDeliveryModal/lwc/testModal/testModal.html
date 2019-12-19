@@ -1,7 +1,83 @@
 <template>
-    <lightning-button
-        variant="brand"
-        label="Open Bulk Service Deliveries Modal"
-        onclick={handleOpenModal}
-    ></lightning-button>
+
+    <lightning-card>
+        <div class="slds-p-left_medium slds-p-right_xx-large">
+            <div
+                class="slds-p-horizontal_small slds-text-heading_large slds-m-bottom_x-large"
+                style="color: red;"
+            >
+                Test Bulk Service Deliveries Modal
+            </div>
+            <div class="slds-text-title_caps">
+                <h2 class="slds-p-around_small">Default Service Delivery Values</h2>
+                <lightning-layout class="slds-grid_vertical-align-center">
+                    <template for:each={fieldSet} for:item="field">
+                        <lightning-layout-item
+                            size={field.size}
+                            key={field.apiName}
+                            class="slds-p-horizontal_small"
+                        >
+                            <template if:true={field.isRequired}>
+                                <strong>{field.label}</strong>
+                                <strong style="color: red;"> * </strong>
+                            </template>
+
+                            <template if:false={field.isRequired}>
+                                <strong>{field.label}</strong>
+                            </template>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item
+                        size="1"
+                        class="slds-p-horizontal_small"
+                    ></lightning-layout-item>
+                </lightning-layout>
+            </div>
+            <lightning-record-edit-form
+                onload={doNothing}
+                onsuccess={doNothing}
+                onsubmit={doNothing}
+                onerror={doNothing}
+                record-id={recordId}
+                object-api-name={serviceDeliveryObject}
+            >
+                <lightning-layout class="slds-grid_vertical-align-end">
+                    <template for:each={fieldSet} for:item="field">
+                        <lightning-layout-item
+                            key={field.apiName}
+                            size={field.size}
+                            padding="horizontal-small"
+                        >
+                            <div class="sd-input" data-field={field.apiName}>
+                                <lightning-input-field
+                                    data-name={field.apiName}
+                                    field-name={field.apiName}
+                                    variant="label-hidden"
+                                    onchange={doNothing}
+                                    required={isRequired}
+                                ></lightning-input-field>
+                            </div>
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </div>
+        
+        <div class="slds-p-around_large">
+            <lightning-button
+                variant="brand"
+                label="showModal(defaultValues)"
+                onclick={showModal}
+                class="slds-p-around_small"
+            ></lightning-button>
+            <lightning-button
+                variant="brand"
+                label="showNewModal(defaultValues)"
+                onclick={showNewModal}
+                class="slds-p-around_small"
+            ></lightning-button>
+        </div>
+    </lightning-card>
+
+    <c-service-delivery-modal></c-service-delivery-modal>
 </template>

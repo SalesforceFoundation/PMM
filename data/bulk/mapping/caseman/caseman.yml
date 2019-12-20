@@ -344,8 +344,6 @@ caseman__Assessments:
         AssessmentCompletedDate__c: assessmentcompleteddate__c
         Comments__c: comments__c
         TotalScore__c: totalscore__c
-        FinancialStabilityScore__c: financialstabilityscore__c
-        JobReadinessScore__c: jobreadinessscore__c
 
     lookups:
         Client__c:

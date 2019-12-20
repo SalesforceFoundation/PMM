@@ -165,7 +165,7 @@ class NamespaceInfo(TableLogger):
         return namespace in self.get_namespaces()
 
     def is_namespace_used_locally(self, namespace):
-        return namespace in self.get_namespaces() and self.get_namespaces()[namespace]
+        return namespace in self.get_installed_package_namespaces() or (self.get_local_project_namespace() and namespace == self.get_local_project_namespace())
 
 class CacheNamespaces(NamespaceInfo):
     def _run_task(self):

@@ -115,7 +115,7 @@ INSERT INTO "caseman__action_items" VALUES(51,'Deposit 10% of Paycheck: Month 2'
 INSERT INTO "caseman__action_items" VALUES(52,'Deposit 10% of Paycheck: Month 3','Not Started','2019-11-29',15,6,14,29);
 INSERT INTO "caseman__action_items" VALUES(53,'Open a Savings Account','Completed','2019-09-09',15,6,14,39);
 INSERT INTO "caseman__action_items" VALUES(54,'Pass Financial Literacy Course with a grade of 65% or above','In Progress','2019-12-13',15,6,14,2);
-INSERT INTO "caseman__action_items" VALUES(55,'Pass English proficiency exam with a score of 65 or above','In Progress','2020-05-15',25,7,16,28);
+INSERT INTO "caseman__action_items" VALUES(55,'Pass English proficiency exam with a score of 65 or above','In Progress','2020-05-15','0030x00000b3I9RAAU',7,16,28);
 CREATE TABLE caseman__appointment_attendees (
 	sf_id VARCHAR(255) NOT NULL, 
 	reason__c VARCHAR(255), 
@@ -127,7 +127,7 @@ CREATE TABLE caseman__appointment_attendees (
 );
 INSERT INTO "caseman__appointment_attendees" VALUES(1,'Client','Attendee','Attending',2,8);
 INSERT INTO "caseman__appointment_attendees" VALUES(2,'Check in on Jason''s progress with Workplace Readiness.','Attendee','New',3,15);
-INSERT INTO "caseman__appointment_attendees" VALUES(3,'','Attendee','New',4,25);
+INSERT INTO "caseman__appointment_attendees" VALUES(3,'','Attendee','New',4,'0030x00000b3I9RAAU');
 CREATE TABLE caseman__appointments (
 	sf_id VARCHAR(255) NOT NULL, 
 	name VARCHAR(255), 
@@ -161,12 +161,12 @@ INSERT INTO "caseman__assessments" VALUES(5,'Robin Banks-10/19','2019-10-01','',
 INSERT INTO "caseman__assessments" VALUES(6,'Robin Banks-11/19','2019-11-01','Robin is settling into her case plan more easily than I expected.','80.0','75.0','80.0',11);
 INSERT INTO "caseman__assessments" VALUES(7,'Robin Banks 1/20','2020-01-03','Note that some of Robin''s financial stability score reflects her partner''s job','85.0','80.0','85.0',11);
 INSERT INTO "caseman__assessments" VALUES(8,'Arlene Baker-10/19','2019-10-15','Arlene is very diligent with her case plan','76.0','76.0','75.0',10);
-INSERT INTO "caseman__assessments" VALUES(9,'ESL - July 2019','2019-07-01','ESL July 2019 Assessment','63.24','','',25);
-INSERT INTO "caseman__assessments" VALUES(10,'ESL - August 2019','2019-08-01','ESL August Assessment Score','68.5','','',25);
-INSERT INTO "caseman__assessments" VALUES(11,'ESL - September 2019','2019-09-01','ESL September Assessment Score','70.25','','',25);
-INSERT INTO "caseman__assessments" VALUES(12,'ESL - June 2019','2019-06-01','Entry level score in ESL program','51.5','','',25);
-INSERT INTO "caseman__assessments" VALUES(13,'ESL - October 2019','2019-10-01','ESL October Assessment Score','74.55','','',25);
-INSERT INTO "caseman__assessments" VALUES(14,'ESL - November 2019','2019-11-01','ESL November Assessment Score','77.43','','',25);
+INSERT INTO "caseman__assessments" VALUES(9,'ESL - July 2019','2019-07-01','ESL July 2019 Assessment','63.24','','','0030x00000b3I9RAAU');
+INSERT INTO "caseman__assessments" VALUES(10,'ESL - August 2019','2019-08-01','ESL August Assessment Score','68.5','','','0030x00000b3I9RAAU');
+INSERT INTO "caseman__assessments" VALUES(11,'ESL - September 2019','2019-09-01','ESL September Assessment Score','70.25','','','0030x00000b3I9RAAU');
+INSERT INTO "caseman__assessments" VALUES(12,'ESL - June 2019','2019-06-01','Entry level score in ESL program','51.5','','','0030x00000b3I9RAAU');
+INSERT INTO "caseman__assessments" VALUES(13,'ESL - October 2019','2019-10-01','ESL October Assessment Score','74.55','','','0030x00000b3I9RAAU');
+INSERT INTO "caseman__assessments" VALUES(14,'ESL - November 2019','2019-11-01','ESL November Assessment Score','77.43','','','0030x00000b3I9RAAU');
 CREATE TABLE caseman__branch_accounts (
 	sf_id VARCHAR(255) NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -215,7 +215,7 @@ INSERT INTO "caseman__branch_contacts" VALUES(16,'','true',32,21);
 INSERT INTO "caseman__branch_contacts" VALUES(17,'','true',33,22);
 INSERT INTO "caseman__branch_contacts" VALUES(18,'','true',34,23);
 INSERT INTO "caseman__branch_contacts" VALUES(19,'','true',34,24);
-INSERT INTO "caseman__branch_contacts" VALUES(20,'','true',34,25);
+INSERT INTO "caseman__branch_contacts" VALUES(20,'','true',34,'0030x00000b3I9RAAU');
 INSERT INTO "caseman__branch_contacts" VALUES(21,'Other','true',1,8);
 INSERT INTO "caseman__branch_contacts" VALUES(22,'','true',1,7);
 INSERT INTO "caseman__branch_contacts" VALUES(23,'Client','true',1,10);
@@ -227,7 +227,7 @@ INSERT INTO "caseman__branch_contacts" VALUES(28,'Client','true',1,19);
 INSERT INTO "caseman__branch_contacts" VALUES(29,'','true',1,20);
 INSERT INTO "caseman__branch_contacts" VALUES(30,'','true',1,21);
 INSERT INTO "caseman__branch_contacts" VALUES(31,'Client','true',1,22);
-INSERT INTO "caseman__branch_contacts" VALUES(32,'Client','true',1,25);
+INSERT INTO "caseman__branch_contacts" VALUES(32,'Client','true',1,'0030x00000b3I9RAAU');
 CREATE TABLE caseman__case_plans (
 	sf_id VARCHAR(255) NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -244,7 +244,7 @@ INSERT INTO "caseman__case_plans" VALUES(3,'Arlene Baker''s Workforce Re-entry C
 INSERT INTO "caseman__case_plans" VALUES(4,'Robin Banks'' Job Readiness Case Plan','','','','2019-11-05',11);
 INSERT INTO "caseman__case_plans" VALUES(5,'Robin Banks'' Sobriety Case Plan','','','','',11);
 INSERT INTO "caseman__case_plans" VALUES(6,'Financial Literacy Case Plan - Jason Barnes','','','','2019-11-04',15);
-INSERT INTO "caseman__case_plans" VALUES(7,'English proficiency case plan - Barbara Johnson','','','','',25);
+INSERT INTO "caseman__case_plans" VALUES(7,'English proficiency case plan - Barbara Johnson','','','','','0030x00000b3I9RAAU');
 CREATE TABLE caseman__client_alerts (
 	sf_id VARCHAR(255) NOT NULL, 
 	name VARCHAR(255), 
@@ -283,7 +283,7 @@ INSERT INTO "caseman__client_cases" VALUES(4,'Tom Higgins  Clothing Program Summ
 INSERT INTO "caseman__client_cases" VALUES(5,'Arlene Baker Workforce Re-entry, Summer  2019','Medium','Active','Email','Arlene has applied to join the Workforce Re-entry program after a two-year absence from the workforce while caring for her elderly father who was diagnosed with dementia.','','','','','','','','','',10,'ClientCase');
 INSERT INTO "caseman__client_cases" VALUES(6,'Robin Banks Application to Workforce Re-entry Program','Medium','Active','Phone','Robin is working to rejoin the workforce after 3 months in a rehab facility for alcohol addiction','','','','','','','','','',11,'ClientCase');
 INSERT INTO "caseman__client_cases" VALUES(7,'Jason Barnes Workplace Readiness Program Offering','Medium','Active','Phone','','','','','','','','','','',15,'ClientCase');
-INSERT INTO "caseman__client_cases" VALUES(8,'Barbara Johnson ESL I','Medium','Active','Email','Barbara is enrolled in ESL I to learn English to enhance her employment potential.','','','','','','','','','',25,'ClientCase');
+INSERT INTO "caseman__client_cases" VALUES(8,'Barbara Johnson ESL I','Medium','Active','Email','Barbara is enrolled in ESL I to learn English to enhance her employment potential.','','','','','','','','','','0030x00000b3I9RAAU','ClientCase');
 CREATE TABLE caseman__client_note_relationships (
 	sf_id VARCHAR(255) NOT NULL, 
 	"RelatedId__c" VARCHAR(255), 
@@ -312,7 +312,7 @@ INSERT INTO "caseman__client_notes" VALUES(1,'<p><span style="color: rgb(62, 62,
 INSERT INTO "caseman__client_notes" VALUES(2,'<p><span style="color: rgb(62, 62, 60);">Tom Higgins&#39; remedial reading teacher reports that Tom&#39;s reading skills are beginning to improve, albeit slowly.</span></p><p><span style="color: rgb(62, 62, 60);">I met with Tom today and he was agitated. I told him about the report from his teacher and he began to engage more fully with me. He even read a bit from his reader. This seems to be a bright spot we can work with. I&#39;ve asked him to bring his reader to our sessions so we can celebrate his progress more regularly.</span></p>','Tom''s reading skills are improving','Complete','2019-09-05','false','45.0',5);
 INSERT INTO "caseman__client_notes" VALUES(3,'<p><span style="color: rgb(62, 62, 60);">Met with Robin upon her discharge from rehab for alcohol abuse. She appears to have done well in the program but will require further monitoring. We talked about her application to the Workforce Re-entry workshop. She is eager to get back on track, but I want to make sure it does not introduce too much stress too soon.</span></p>','Discharge from Rehab','Complete','2019-08-09','true','60.0',11);
 INSERT INTO "caseman__client_notes" VALUES(4,'<p><span style="color: rgb(62, 62, 60);">Reviewed and corrected birthdate on record. Enrolled him in Workplace Readiness program. remember to set up an appointment to check in with him after program has started to see how he&#39;s doing.</span></p>','Client intake review','Complete','2019-08-08','false','',15);
-INSERT INTO "caseman__client_notes" VALUES(5,'<p><span style="color: rgb(62, 62, 60);">Met with Barbara. She is beginning to overcome her debilitating shyness. I will find an ESL tutor for her, because a lot of her reticence stems from her rudimentary English skills.</span></p>','Find her an ESL tutor','Draft','2019-08-06','false','60.0',25);
+INSERT INTO "caseman__client_notes" VALUES(5,'<p><span style="color: rgb(62, 62, 60);">Met with Barbara. She is beginning to overcome her debilitating shyness. I will find an ESL tutor for her, because a lot of her reticence stems from her rudimentary English skills.</span></p>','Find her an ESL tutor','Draft','2019-08-06','false','60.0','0030x00000b3I9RAAU');
 
 CREATE TABLE contacts (
 	sf_id VARCHAR(255) NOT NULL, 
@@ -432,7 +432,7 @@ INSERT INTO "contacts" VALUES(21,'Ms.','Virginia','Holmes','virginiaholmes@examp
 INSERT INTO "contacts" VALUES(22,'','Jose','Jenkins','josejenkins@example.com','555-469-9873','1-333-444-5555','','555-469-9873','','1970-01-12','2203 Alexander Avenue','Oakland','CA','94612','United States','Adult','','Friend','','','','','','','he/him/his','Donor','false','','','','josejenkins@example.com','Personal','Home','Home','false','','','','0.0','','','','','','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','','0.0','0.0','false','false','false','false','false','','','false','','','','','','','','','','0.0',33,'');
 INSERT INTO "contacts" VALUES(23,'','Craig','Johnson','craigjohnso@example.com','555-349-3507','','','555-349-3507','','','3041 Park Street','Oakland','CA','94606','','','','','','','','','','','','','false','','','','craigjohnso@example.com','Personal','Home','Home','false','','','','0.0','','','','','1.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','','0.0','0.0','false','false','false','false','false','','','false','','','','','','','','','','0.0',34,'');
 INSERT INTO "contacts" VALUES(24,'','Maya','Johnson','','555-349-3507','','','555-349-3507','','','3041 Park Street','Oakland','CA','94606','','','','','','','','','','','','','false','','','','','Personal','Home','Home','false','','','','0.0','','','','','2.0','0.0','','0.0','','','','0.0','','','Household__c.Name;Household__c.Formal_Greeting__c;Household__c.Informal_Greeting__c','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','','0.0','0.0','false','false','true','true','true','','','false','','','','','','','','','','0.0',34,'');
-INSERT INTO "contacts" VALUES(25,'','Barbara','Johnson','barbarajohnson@example.com','555-349-3507','1-333-444-5555','','555-349-3507','','1970-01-09','3041 Park Street','Oakland','CA','94606','','Adult','','Husband','','0680x0000029Ng4AAE','','','','','she/her/hers','Client','false','','','','barbarajohnson@example.com','Personal','Home','Home','false','','','','0.0','','','','','0.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','','0.0','0.0','false','false','false','false','false','','','false','','','','','','','','','','0.0',34,23);
+INSERT INTO "contacts" VALUES('0030x00000b3I9RAAU','','Barbara','Johnson','barbarajohnson@example.com','555-349-3507','1-333-444-5555','','555-349-3507','','1970-01-09','3041 Park Street','Oakland','CA','94606','','Adult','','Husband','','0680x0000029Ng4AAE','','','','','she/her/hers','Client','false','','','','barbarajohnson@example.com','Personal','Home','Home','false','','','','0.0','','','','','0.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','','0.0','0.0','false','false','false','false','false','','','false','','','','','','','','','','0.0',34,23);
 
 
 
@@ -545,7 +545,7 @@ INSERT INTO "caseman__goals" VALUES(12,'Stabilize Employment',11,4,21);
 INSERT INTO "caseman__goals" VALUES(13,'Adopt healthy skills to address dependency issues',11,5,6);
 INSERT INTO "caseman__goals" VALUES(14,'Complete Financial Literacy Course',15,6,12);
 INSERT INTO "caseman__goals" VALUES(15,'Deposit 10% of income in Savings Account for 3 months',15,6,14);
-INSERT INTO "caseman__goals" VALUES(16,'Reach proficiency level in reading, writing, speaking & listening per state std',25,7,8);
+INSERT INTO "caseman__goals" VALUES(16,'Reach proficiency level in reading, writing, speaking & listening per state std','0030x00000b3I9RAAU',7,8);
 INSERT INTO "caseman__goals" VALUES(17,'Build respectful peer relationships',5,1,13);
 INSERT INTO "caseman__goals" VALUES(18,'Build respectful inter-generational relationships',5,1,15);
 INSERT INTO "caseman__goals" VALUES(19,'Reach an age appropriate level of proficiency in reading',5,2,1);

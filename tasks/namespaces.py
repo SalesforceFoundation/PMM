@@ -169,6 +169,9 @@ class NamespaceInfo(TableLogger):
 
 class CacheNamespaces(NamespaceInfo):
     def _run_task(self):
+        # reset namespace info cache
+        if "namespace_info" in self.org_config.config:
+            del self.org_config.config["namespace_info"]
         self.get_namespaces()
 
 class ExecuteAnonymousTask(AnonymousApexTask, NamespaceInfo):

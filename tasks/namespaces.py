@@ -71,46 +71,65 @@ class NamespaceInfo(TableLogger):
             }
         })
 
+
         self.log_title("Namespace Info")
-        self.logger.info("self.org_config.config.get(\"namespace_info\")")
-        self.logger.info("")
+        rows = []
         
-        self.logger.info("    {}".format("installed_package_versions"))
-        if self.org_config.config.get("namespace_info").get("installed_package_versions"):
-            for namespace, version in self.org_config.config.get("namespace_info").get("installed_package_versions").items():
-                self.logger.info("        {}: {}".format(namespace, version))
-        else:
-            self.logger.info("        --None--")
-        self.logger.info("")
-
-        self.logger.info("    {}".format("installed_package_namespaces"))
         if self.org_config.config.get("namespace_info").get("installed_package_namespaces"):
-            for namespace in self.org_config.config.get("namespace_info").get("installed_package_namespaces"):
-                self.logger.info("        {}".format(namespace))
+            row = [
+                "self.org_config.config.get(\"namespace_info\").get(\"installed_package_namespaces\")"
+            ]
+            row.extend(self.org_config.config.get("namespace_info").get("installed_package_namespaces"))
+            rows.append(row)
         else:
-            self.logger.info("        --None--")
-        self.logger.info("")
+            rows.append([
+               "self.org_config.config.get(\"namespace_info\").get(\"installed_package_namespaces\")",
+               "--None--"
+            ])
+
+        if self.org_config.config.get("namespace_info").get("installed_package_versions"):
+            row = [
+                "self.org_config.config.get(\"namespace_info\").get(\"installed_package_versions\")"
+            ]
+            for namespace, version in self.org_config.config.get("namespace_info").get("installed_package_versions").items():
+                row.extend([
+                    "{}".format(version)
+                ])
+            rows.append(row)
+        else:
+            rows.append([
+               "self.org_config.config.get(\"namespace_info\").get(\"installed_package_versions\")",
+               "--None--"
+            ])
+
+        rows.append([
+            "self.org_config.config.get(\"namespace_info\").get(\"project_namespace\")",
+            self.org_config.config.get("namespace_info").get("project_namespace")
+        ])
         
-        self.logger.info("    {}".format("project_namespace"))
-        self.logger.info("        \"{}\"".format(self.org_config.config.get("namespace_info").get("project_namespace")))
-        self.logger.info("")
+        rows.append([
+            "self.org_config.config.get(\"namespace_info\").get(\"is_org_namespaced\")",
+            str(self.org_config.config.get("namespace_info").get("is_org_namespaced"))
+        ])
 
-        self.logger.info("    {}".format("is_org_namespaced"))
-        self.logger.info("        {}".format(self.org_config.config.get("namespace_info").get("is_org_namespaced")))
-        self.logger.info("")
-       
-        self.logger.info("    {}".format("local_project_namespace"))
-        self.logger.info("        \"{}\"".format(self.org_config.config.get("namespace_info").get("local_project_namespace")))
-        self.logger.info("")
+        rows.append([
+            "self.org_config.config.get(\"namespace_info\").get(\"local_project_namespace\")",
+            self.org_config.config.get("namespace_info").get("local_project_namespace")
+        ])
 
-        self.logger.info("    {}".format("namespaces"))
         if self.org_config.config.get("namespace_info").get("namespaces"):
-            for namespace in self.org_config.config.get("namespace_info").get("namespaces"):
-                self.logger.info("        {}".format(namespace))
+            row = [
+                "self.org_config.config.get(\"namespace_info\").get(\"namespaces\")"
+            ]
+            row.extend(self.org_config.config.get("namespace_info").get("namespaces"))
+            rows.append(row)
         else:
-            self.logger.info("        --None--")
+            rows.append([
+               "self.org_config.config.get(\"namespace_info\").get(\"namespaces\")",
+               "--None--"
+            ])
     
-        self.logger.info("")
+        self.log_table(rows)
 
         return installed_package_versions
 

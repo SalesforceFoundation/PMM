@@ -84,9 +84,6 @@ tasks:
                 - record_type: Account.HH_Account
                 - record_type: Account.Organization
                   default: true
-                - record_type: Account.HH_Account
-                - record_type: Account.Organization
-                  default: true
                   person_account_default: true
                 - record_type: Opportunity.Donation
                   default: true

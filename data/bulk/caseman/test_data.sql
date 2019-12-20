@@ -430,7 +430,6 @@ INSERT INTO "contacts" VALUES('0030x00000b3I9OAAU','','Jose','Jenkins','josejenk
 INSERT INTO "contacts" VALUES('0030x00000b3I9PAAU','','Craig','Johnson','craigjohnso@example.com','555-349-3507','','','555-349-3507','','','3041 Park Street','Oakland','CA','94606','','','','','','','','','','','','','false','','','','craigjohnso@example.com','Personal','Home','Home','false','','','','0.0','','','','','1.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','','0.0','0.0','false','false','false','false','false','','','false','','','','','','','','','','0.0','0010x00000mnm5yAAA','');
 INSERT INTO "contacts" VALUES('0030x00000b3I9QAAU','','Maya','Johnson','','555-349-3507','','','555-349-3507','','','3041 Park Street','Oakland','CA','94606','','','','','','','','','','','','','false','','','','','Personal','Home','Home','false','','','','0.0','','','','','2.0','0.0','','0.0','','','','0.0','','','Household__c.Name;Household__c.Formal_Greeting__c;Household__c.Informal_Greeting__c','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','','0.0','0.0','false','false','true','true','true','','','false','','','','','','','','','','0.0','0010x00000mnm5yAAA','');
 INSERT INTO "contacts" VALUES('0030x00000b3I9RAAU','','Barbara','Johnson','barbarajohnson@example.com','555-349-3507','1-333-444-5555','','555-349-3507','','1970-01-09','3041 Park Street','Oakland','CA','94606','','Adult','','Husband','','0680x0000029Ng4AAE','','','','','she/her/hers','Client','false','','','','barbarajohnson@example.com','Personal','Home','Home','false','','','','0.0','','','','','0.0','0.0','','0.0','','','','0.0','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','','0.0','0.0','false','false','false','false','false','','','false','','','','','','','','','','0.0','0010x00000mnm5yAAA','0030x00000b3I9PAAU');
-INSERT INTO "contacts" VALUES('0030x00000ayF4dAAE','','Sample','Contact','sample.contact@email.com','(202) 555-9654','(206) 555-7878','(215) 555-4567','(914) 555-1212','CEO','1985-11-22','One Market Street','San Francisco','CA','94105','USA','','','','','','','','','','','','false','','','sample.contact@otheremail.com','sample.contact@email.com','Personal','Work','Home','false','','sample.contact@workemail.com','(202) 555-9654','0.0','','0.0','','','','0.0','','0.0','','','','','','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','0.0','0.0','false','false','false','false','false','0.0','','false','0.0','','0.0','','0.0','0.0','0.0','0.0','0.0','0.0','0010x00000mrs3tAAA','');
 
 
 
@@ -640,57 +639,4 @@ INSERT INTO "caseman__incident_cases" VALUES(3,'Bullying','Medium','New','','Old
 INSERT INTO "caseman__incident_cases" VALUES(4,'Skipped group field trip','Medium','Closed','','Tom ran off and skipped the group field trip','','','','','2019-06-04T19:00:00.000Z','Other','','Medium','','0030x00000b3I98AAE','Incident');
 INSERT INTO "caseman__incident_cases" VALUES(5,'Left afterschool program without permission','Medium','Closed','','Tom left the program without telling the counselor. He was found an hour later behind the neighborhood convenience store.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium',1,'0030x00000b3I98AAE','Incident');
 
-CREATE TABLE organization_accounts (
-	sf_id VARCHAR(255) NOT NULL, 
-	"Name" VARCHAR(255), 
-	"Description" VARCHAR(255), 
-	"Street" VARCHAR(255), 
-	"City" VARCHAR(255), 
-	"State" VARCHAR(255), 
-	"PostalCode" VARCHAR(255), 
-	"Country" VARCHAR(255), 
-	"Phone" VARCHAR(255), 
-	"Fax" VARCHAR(255), 
-	"Website" VARCHAR(255), 
-	"NumberOfEmployees" VARCHAR(255), 
-	"AccountNumber" VARCHAR(255), 
-	"Site" VARCHAR(255), 
-	"Type" VARCHAR(255), 
-	"MaximumClientsServed__c" VARCHAR(255), 
-	"npe01__SYSTEM_AccountType__c" VARCHAR(255), 
-	"npo02__SYSTEM_CUSTOM_NAMING__c" VARCHAR(255), 
-	"npe01__SYSTEMIsIndividual__c" VARCHAR(255), 
-	"npo02__FirstCloseDate__c" VARCHAR(255), 
-	"npo02__LastCloseDate__c" VARCHAR(255), 
-	"npo02__AverageAmount__c" VARCHAR(255), 
-	"npo02__LastOppAmount__c" VARCHAR(255), 
-	"npo02__LargestAmount__c" VARCHAR(255), 
-	"npo02__SmallestAmount__c" VARCHAR(255), 
-	"npo02__Best_Gift_Year__c" VARCHAR(255), 
-	"npo02__Best_Gift_Year_Total__c" VARCHAR(255), 
-	"npo02__TotalOppAmount__c" VARCHAR(255), 
-	"npo02__OppAmountLastNDays__c" VARCHAR(255), 
-	"npo02__OppAmountThisYear__c" VARCHAR(255), 
-	"npo02__OppAmountLastYear__c" VARCHAR(255), 
-	"npo02__OppAmount2YearsAgo__c" VARCHAR(255), 
-	"npo02__NumberOfClosedOpps__c" VARCHAR(255), 
-	"npo02__OppsClosedLastNDays__c" VARCHAR(255), 
-	"npo02__OppsClosedThisYear__c" VARCHAR(255), 
-	"npo02__OppsClosedLastYear__c" VARCHAR(255), 
-	"npo02__OppsClosed2YearsAgo__c" VARCHAR(255), 
-	"npo02__TotalMembershipOppAmount__c" VARCHAR(255), 
-	"npo02__MembershipEndDate__c" VARCHAR(255), 
-	"npo02__LastMembershipLevel__c" VARCHAR(255), 
-	"npo02__MembershipJoinDate__c" VARCHAR(255), 
-	"npo02__LastMembershipDate__c" VARCHAR(255), 
-	"npo02__LastMembershipAmount__c" VARCHAR(255), 
-	"npo02__LastMembershipOrigin__c" VARCHAR(255), 
-	"npo02__NumberOfMembershipOpps__c" VARCHAR(255), 
-	record_type VARCHAR(255), 
-	PRIMARY KEY (sf_id)
-);
-INSERT INTO "organization_accounts" VALUES('0010x00000mrs3uAAA','Sample Organization','','','','','','','','','','','','','','','','','false','','','0.0','','0.0','0.0','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
-INSERT INTO "organization_accounts" VALUES('0010x00000mnm7XAAQ','Marble Foundation','','','','','','','555-389-74399','','','','','','Foundation','','','','false','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
-INSERT INTO "organization_accounts" VALUES('0010x00000mnm7YAAQ','Future Potential Fund','','','','','','','555-278-7643','','','','','','Foundation','','','','false','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
-INSERT INTO "organization_accounts" VALUES('0010x00000mnm7ZAAQ','City Department of Human Services','','','','','','','','','','','','','Government','','','','false','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Organization');
 COMMIT;

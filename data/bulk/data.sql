@@ -651,12 +651,13 @@ CREATE TABLE organization_accounts (
 	"NumberOfMembershipOpps__c" VARCHAR(255), 
 	"SYSTEM_AccountType__c" VARCHAR(255), 
 	"SYSTEMIsIndividual__c" VARCHAR(255), 
+	"MaximumClientsServed__c" VARCHAR(255), 
 	record_type VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "organization_accounts" VALUES(1,'Marble Foundation','','','','','','','555-389-74399','','','','','','Foundation','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','','false','Organization');
-INSERT INTO "organization_accounts" VALUES(2,'Future Potential Fund','','','','','','','555-278-7643','','','','','','Foundation','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','','false','Organization');
-INSERT INTO "organization_accounts" VALUES(3,'City Department of Human Services','','','','','','','','','','','','','Government','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','','false','Organization');
+INSERT INTO "organization_accounts" VALUES(1,'Marble Foundation','','','','','','','555-389-74399','','','','','','Foundation','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','','false','','Organization');
+INSERT INTO "organization_accounts" VALUES(2,'Future Potential Fund','','','','','','','555-278-7643','','','','','','Foundation','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','','false','','Organization');
+INSERT INTO "organization_accounts" VALUES(3,'City Department of Human Services','','','','','','','','','','','','','Government','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','','false','','Organization');
 CREATE TABLE "pmdm__ProgramCohort__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 

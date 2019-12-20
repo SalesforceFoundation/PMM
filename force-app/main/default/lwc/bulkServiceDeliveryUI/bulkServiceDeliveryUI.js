@@ -3,6 +3,8 @@ import { handleError, debouncify } from "c/util";
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
 import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
+import Label_Required from "@salesforce/label/c.Required";
+
 import serviceDeliveries from "@salesforce/label/c.Service_Deliveries";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
@@ -20,10 +22,11 @@ export default class BulkServiceDeliveryUI extends LightningElement {
     @track rowCount = this.serviceDeliveries.length;
 
     labels = {
-        addServiceDelivery,
-        saved,
-        saving,
-        serviceDeliveries,
+        addServiceDelivery: addServiceDelivery,
+        saved: saved,
+        saving: saving,
+        serviceDeliveries: serviceDeliveries,
+        required: Label_Required,
     };
     fields = {
         contact: CONTACT_FIELD,

@@ -187,7 +187,7 @@ CREATE TABLE caseman__branch_accounts (
 	record_type VARCHAR(255), 
 	PRIMARY KEY (sf_id)
 );
-INSERT INTO "caseman__branch_accounts" VALUES('0010x00000mnm46AAA','127th Street Community Center','','','','','','','555-398-2090','','','','','','','1500.0','Branch');
+INSERT INTO "caseman__branch_accounts" VALUES(1,'127th Street Community Center','','','','','','','555-398-2090','','','','','','','1500.0','Branch');
 CREATE TABLE caseman__branch_contacts (
 	sf_id VARCHAR(255) NOT NULL, 
 	"Roles" VARCHAR(255), 
@@ -196,38 +196,38 @@ CREATE TABLE caseman__branch_contacts (
 	contact_id VARCHAR(255), 
 	PRIMARY KEY (sf_id)
 );
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd0AAA','','true','0010x00000mnm5mAAA','0030x00000b3I98AAE');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd1AAA','','true','0010x00000mnm5mAAA','0030x00000b3I99AAE');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd2AAA','','true','0010x00000mnm5nAAA','0030x00000b3I9AAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd3AAA','','true','0010x00000mnm5nAAA','0030x00000b3I9BAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd4AAA','','true','0010x00000mnm5oAAA','0030x00000b3I9CAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd5AAA','','true','0010x00000mnm5oAAA','0030x00000b3I9DAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd6AAA','','true','0010x00000mnm5pAAA','0030x00000b3I9EAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd7AAA','','true','0010x00000mnm5pAAA','0030x00000b3I9FAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd8AAA','','true','0010x00000mnm5qAAA','0030x00000b3I9GAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpd9AAA','','true','0010x00000mnm5qAAA','0030x00000b3I9HAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdAAAQ','','true','0010x00000mnm5qAAA','0030x00000b3I9IAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdBAAQ','','true','0010x00000mnm5rAAA','0030x00000b3I9JAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdCAAQ','','true','0010x00000mnm5sAAA','0030x00000b3I9KAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdDAAQ','','true','0010x00000mnm5uAAA','0030x00000b3I9LAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdEAAQ','','true','0010x00000mnm5vAAA','0030x00000b3I9MAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdFAAQ','','true','0010x00000mnm5wAAA','0030x00000b3I9NAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdGAAQ','','true','0010x00000mnm5xAAA','0030x00000b3I9OAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdHAAQ','','true','0010x00000mnm5yAAA','0030x00000b3I9PAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdIAAQ','','true','0010x00000mnm5yAAA','0030x00000b3I9QAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdJAAQ','','true','0010x00000mnm5yAAA','0030x00000b3I9RAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdWAAQ','Other','true','0010x00000mnm46AAA','0030x00000b3I9AAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdXAAQ','','true','0010x00000mnm46AAA','0030x00000b3I9BAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdYAAQ','Client','true','0010x00000mnm46AAA','0030x00000b3I9DAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdZAAQ','Client','true','0010x00000mnm46AAA','0030x00000b3I9EAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdaAAA','Client','true','0010x00000mnm46AAA','0030x00000b3I9IAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdbAAA','','true','0010x00000mnm46AAA','0030x00000b3I9JAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdcAAA','','true','0010x00000mnm46AAA','0030x00000b3I9KAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpddAAA','Client','true','0010x00000mnm46AAA','0030x00000b3I9LAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdeAAA','','true','0010x00000mnm46AAA','0030x00000b3I9MAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdfAAA','','true','0010x00000mnm46AAA','0030x00000b3I9NAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdgAAA','Client','true','0010x00000mnm46AAA','0030x00000b3I9OAAU');
-INSERT INTO "caseman__branch_contacts" VALUES('07k0x00000ajpdhAAA','Client','true','0010x00000mnm46AAA','0030x00000b3I9RAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(1,'','true','0010x00000mnm5mAAA','0030x00000b3I98AAE');
+INSERT INTO "caseman__branch_contacts" VALUES(2,'','true','0010x00000mnm5mAAA','0030x00000b3I99AAE');
+INSERT INTO "caseman__branch_contacts" VALUES(3,'','true','0010x00000mnm5nAAA','0030x00000b3I9AAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(4,'','true','0010x00000mnm5nAAA','0030x00000b3I9BAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(5,'','true','0010x00000mnm5oAAA','0030x00000b3I9CAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(6,'','true','0010x00000mnm5oAAA','0030x00000b3I9DAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(7,'','true','0010x00000mnm5pAAA','0030x00000b3I9EAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(8,'','true','0010x00000mnm5pAAA','0030x00000b3I9FAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(9,'','true','0010x00000mnm5qAAA','0030x00000b3I9GAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(10,'','true','0010x00000mnm5qAAA','0030x00000b3I9HAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(11,'','true','0010x00000mnm5qAAA','0030x00000b3I9IAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(12,'','true','0010x00000mnm5rAAA','0030x00000b3I9JAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(13,'','true','0010x00000mnm5sAAA','0030x00000b3I9KAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(14,'','true','0010x00000mnm5uAAA','0030x00000b3I9LAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(15,'','true','0010x00000mnm5vAAA','0030x00000b3I9MAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(16,'','true','0010x00000mnm5wAAA','0030x00000b3I9NAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(17,'','true','0010x00000mnm5xAAA','0030x00000b3I9OAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(18,'','true','0010x00000mnm5yAAA','0030x00000b3I9PAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(19,'','true','0010x00000mnm5yAAA','0030x00000b3I9QAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(20,'','true','0010x00000mnm5yAAA','0030x00000b3I9RAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(21,'Other','true',1,'0030x00000b3I9AAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(22,'','true',1,'0030x00000b3I9BAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(23,'Client','true',1,'0030x00000b3I9DAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(24,'Client','true',1,'0030x00000b3I9EAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(25,'Client','true',1,'0030x00000b3I9IAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(26,'','true',1,'0030x00000b3I9JAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(27,'','true',1,'0030x00000b3I9KAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(28,'Client','true',1,'0030x00000b3I9LAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(29,'','true',1,'0030x00000b3I9MAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(30,'','true',1,'0030x00000b3I9NAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(31,'Client','true',1,'0030x00000b3I9OAAU');
+INSERT INTO "caseman__branch_contacts" VALUES(32,'Client','true',1,'0030x00000b3I9RAAU');
 CREATE TABLE caseman__case_plans (
 	sf_id VARCHAR(255) NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -634,11 +634,11 @@ CREATE TABLE caseman__incident_cases (
 	record_type VARCHAR(255), 
 	PRIMARY KEY (sf_id)
 );
-INSERT INTO "caseman__incident_cases" VALUES(1,'Broke toilet stall door','Medium','Working','','Tom ran away from the group to the boys restroom and kicked in the stall door, breaking it.','','','','','2019-04-12T21:00:00.000Z','Property Damage','','Low','0010x00000mnm46AAA','0030x00000b3I98AAE','Incident');
-INSERT INTO "caseman__incident_cases" VALUES(2,'Breakdown during session','Medium','New','Phone','Tom lost his temper and couldn''t get himself back together','','','','','2019-04-24T20:30:00.000Z','Other','','High','0010x00000mnm46AAA','0030x00000b3I98AAE','Incident');
-INSERT INTO "caseman__incident_cases" VALUES(3,'Bullying','Medium','New','','Older girls teased Tom about his shoes, causing him to lose his temper.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium','0010x00000mnm46AAA','0030x00000b3I98AAE','Incident');
+INSERT INTO "caseman__incident_cases" VALUES(1,'Broke toilet stall door','Medium','Working','','Tom ran away from the group to the boys restroom and kicked in the stall door, breaking it.','','','','','2019-04-12T21:00:00.000Z','Property Damage','','Low',1,'0030x00000b3I98AAE','Incident');
+INSERT INTO "caseman__incident_cases" VALUES(2,'Breakdown during session','Medium','New','Phone','Tom lost his temper and couldn''t get himself back together','','','','','2019-04-24T20:30:00.000Z','Other','','High',1,'0030x00000b3I98AAE','Incident');
+INSERT INTO "caseman__incident_cases" VALUES(3,'Bullying','Medium','New','','Older girls teased Tom about his shoes, causing him to lose his temper.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium',1,'0030x00000b3I98AAE','Incident');
 INSERT INTO "caseman__incident_cases" VALUES(4,'Skipped group field trip','Medium','Closed','','Tom ran off and skipped the group field trip','','','','','2019-06-04T19:00:00.000Z','Other','','Medium','','0030x00000b3I98AAE','Incident');
-INSERT INTO "caseman__incident_cases" VALUES(5,'Left afterschool program without permission','Medium','Closed','','Tom left the program without telling the counselor. He was found an hour later behind the neighborhood convenience store.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium','0010x00000mnm46AAA','0030x00000b3I98AAE','Incident');
+INSERT INTO "caseman__incident_cases" VALUES(5,'Left afterschool program without permission','Medium','Closed','','Tom left the program without telling the counselor. He was found an hour later behind the neighborhood convenience store.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium',1,'0030x00000b3I98AAE','Incident');
 
 CREATE TABLE organization_accounts (
 	sf_id VARCHAR(255) NOT NULL, 

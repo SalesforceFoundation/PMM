@@ -67,19 +67,31 @@ tasks:
     update_admin_profile_caseman:
         class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
         options:
-            package_xml: lib/admin_profile.xml
+            package_xml: lib/caseman.profile.xml
             record_types:
+                - record_type: Account.HH_Account
+                - record_type: Account.Organization
+                  default: true
                 - record_type: Account.caseman__Branch
-                  default: True
                 - record_type: Case.caseman__ClientCase
                   default: True
                 - record_type: Case.caseman__Incident
+                - record_type: Case.None
 
     update_admin_profile_npsp:
         class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
         options:
             package_xml: lib/npsp_admin_profile.xml
             record_types:
+                - record_type: Account.HH_Account
+                - record_type: Account.Organization
+                  default: true
+                - record_type: Account.caseman__Branch
+                  default: True
+                - record_type: Case.caseman__ClientCase
+                  default: True
+                - record_type: Case.caseman__Incident
+                - record_type: Case.None
                 - record_type: Account.HH_Account
                 - record_type: Account.Organization
                   default: true
@@ -92,21 +104,16 @@ tasks:
     update_admin_profile_caseman_npsp:
         class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
         options:
-            package_xml: lib/npsp_admin_profile.xml
+            package_xml: lib/caseman.npsp.profile.xml
             record_types:
                 - record_type: Account.HH_Account
                 - record_type: Account.Organization
                   default: true
                   person_account_default: true
-                - record_type: Account.caseman__Branch
                 - record_type: Opportunity.Donation
                   default: true
                 - record_type: Campaign.Default
                   default: true
-                - record_type: Case.caseman__ClientCase
-                  default: True
-                - record_type: Case.caseman__Incident
-                - record_type: Case.None
 
     run_all_local_tests:
         group: "Tests"
@@ -206,20 +213,6 @@ tasks:
                   when_all_installed:
                       - caseman
 
-    insert_caseman_data:
-        group: "Data: Bulk"
-        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
-        class_path: tasks.BulkData.InsertData
-        options:
-            sql_path: data/bulk/caseman/test_data.sql
-            ignore_row_errors: True
-            package_mapping_directories:
-                - data/bulk/mapping/caseman
-            pre_mapping_configs:
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
-
     update_client_photo_directories:
         group: "CaseMan: Test Data"
         description: "Update client photo directories after capture_test_data"
@@ -293,7 +286,7 @@ flows:
         steps:
             100:
                 task: upload_client_photos
-                when: "'caseman' in org_config.namespaces"
+                when: "'caseman' in org_config.namespace_info.namespaces"
 
     npsp_post_insert_bulk_data:
         steps:
@@ -301,7 +294,7 @@ flows:
                 task: execute_anon
                 options:
                     path: "data/scripts/npsp/de-duplicate_npsp_relationships.apex"
-                when: "'npsp' in org_config.namespaces"
+                when: "'npsp' in org_config.namespace_info.namespaces"
 
     npsp_pre_insert_bulk_data:
         steps:
@@ -309,17 +302,27 @@ flows:
                 task: execute_anon
                 options:
                     path: "data/scripts/npsp/set_npsp_gender_relationship_setting.apex"
-                when: "'npsp' in org_config.namespaces"
+                when: "'npsp' in org_config.namespace_info.namespaces"
 
-    #caseman_pre_insert_bulk_data:
-    #    steps:
+    caseman_pre_insert_bulk_data:
+        steps:
+            10:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname ManageCases"
+                when: "'caseman' in org_config.namespace_info.namespaces"
+            20:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname ManagePrograms"
+                when: "'caseman' in org_config.namespace_info.namespaces"
 
     insert_bulk_data:
         steps:
             010:
                 flow: npsp_pre_insert_bulk_data
-            #020:
-            #    flow: caseman_pre_insert_bulk_data
+            020:
+                flow: caseman_pre_insert_bulk_data
             100:
                 task: insert_bulk_data
             210:
@@ -332,34 +335,24 @@ flows:
             01:
                 task: cache_namespaces_in_org_config
             10:
-                task: update_admin_profile_caseman
-                when: "'npsp' not in org_config.namespaces and 'caseman' in org_config.namespaces"
-            20:
-                task: update_admin_profile_npsp
-                when: "'npsp' in org_config.namespaces and 'caseman' not in org_config.namespaces"
-            30:
-                task: update_admin_profile_caseman_npsp
-                when: "'npsp' in org_config.namespaces and 'caseman' in org_config.namespaces"
-            40:
                 task: update_admin_profile
-                when: "'npsp' not in org_config.namespaces and 'caseman' not in org_config.namespaces"
+                when: "'caseman' not in org_config.namespace_info.namespaces and 'npsp' not in org_config.namespace_info.namespaces"
+            20:
+                task: update_admin_profile_caseman
+                when: "'caseman' in org_config.namespace_info.namespaces and 'npsp' not in org_config.namespace_info.namespaces"
+            30:
+                task: update_admin_profile_npsp
+                when: "'caseman' not in org_config.namespace_info.namespaces and 'npsp' in org_config.namespace_info.namespaces"
+            40:
+                task: update_admin_profile_caseman_npsp
+                when: "'caseman' in org_config.namespace_info.namespaces and 'npsp' in org_config.namespace_info.namespaces"
 
     caseman_org:
         steps:
             100:
                 task: add_caseman_dependency
-            110:
-                task: update_admin_profile_caseman
-            120:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname ManageCases"
-            130:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname ManagePrograms"
             200:
-                task: insert_caseman_data
+                flow: dev_org
 
     caseman_org_namespaced:
         steps:
@@ -370,8 +363,8 @@ flows:
 
     config_unmanaged:
         steps:
-            100:
-                flow: update_admin_profile
+            101:
+                flow: update_admin_profile 
             101:
                 task: deploy_dev_config
                 options:

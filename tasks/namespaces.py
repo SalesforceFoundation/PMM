@@ -10,57 +10,6 @@ class NamespaceInfo(TableLogger):
     """
     installed_package_versions = None
 
-    def get_namespaces(self):
-        if self.org_config.config.get("namespaces"):
-            return self.org_config.config.get("namespaces")
-        
-        log_installed_packages = process_bool_arg(self.options.get("log_installed_packages"))
-
-        self.log_title("Getting installed packages:")
-
-        namespaces = {}
-
-        if log_installed_packages:
-            rows = [
-                [
-                    "NAMESPACE",
-                    "VERSION"
-                ]
-            ]
-        rows = []
-
-        for package in GetInstalledPackages(
-            self.project_config, 
-            TaskConfig({}), 
-            self.org_config,
-        )().items():
-            namespaces[package[0]] = package[0]
-            if log_installed_packages:
-                rows.append([
-                    package[0],
-                    package[1]
-                ])
-            
-        if log_installed_packages:
-            if rows:
-                self.log_table([
-                    ["NAMESPACE", "VERSION",]
-                ] + rows)
-            else:
-                self.log_table([
-                    ["🚫   No packages installed"]
-                ])
-
-        namespaces[self.get_project_namespace()] = self.get_local_project_namespace()
-
-
-
-        self.org_config.config.update({
-            "namespaces": namespaces
-        })
-
-        return namespaces
-
     def get_installed_package_versions(self):
         if self.org_config.config.get("namespace_info"):
             return self.org_config.config.get("namespace_info").get("installed_package_versions")
@@ -85,7 +34,7 @@ class NamespaceInfo(TableLogger):
             TaskConfig({}), 
             self.org_config,
         )().items():
-            installed_package_versions[package[0]] = package[0]
+            installed_package_versions[package[0]] = package[1]
             if log_installed_packages:
                 rows.append([
                     package[0],
@@ -107,6 +56,9 @@ class NamespaceInfo(TableLogger):
                 "installed_package_versions": installed_package_versions,
             }
         })
+
+        namespaces = set(installed_package_versions)
+        namespaces.add(self.get_project_namespace())
             
         self.org_config.config.update({
             "namespace_info": {
@@ -115,13 +67,79 @@ class NamespaceInfo(TableLogger):
                 "project_namespace": self.get_project_namespace(),
                 "is_org_namespaced": self.is_org_namespaced(),
                 "local_project_namespace": self.get_local_project_namespace(),
+                "namespaces": namespaces
             }
         })
 
+
+        self.log_title("Namespace Info")
+        rows = []
+        
+        if self.org_config.config.get("namespace_info").get("installed_package_namespaces"):
+            row = [
+                "config.namespace_info.installed_package_namespaces"
+            ]
+            row.extend(self.org_config.config.get("namespace_info").get("installed_package_namespaces"))
+            rows.append(row)
+        else:
+            rows.append([
+               "config.namespace_info.installed_package_namespaces",
+               "--None--"
+            ])
+
+        if self.org_config.config.get("namespace_info").get("installed_package_versions"):
+            row = [
+                "config.namespace_info.installed_package_versions"
+            ]
+            for namespace, version in self.org_config.config.get("namespace_info").get("installed_package_versions").items():
+                row.extend([
+                    "{}".format(version)
+                ])
+            rows.append(row)
+        else:
+            rows.append([
+               "config.namespace_info.installed_package_versions",
+               "--None--"
+            ])
+
+        rows.append([
+            "config.namespace_info.project_namespace",
+            self.org_config.config.get("namespace_info").get("project_namespace")
+        ])
+        
+        rows.append([
+            "config.namespace_info.is_org_namespaced",
+            str(self.org_config.config.get("namespace_info").get("is_org_namespaced"))
+        ])
+
+        rows.append([
+            "config.namespace_info.local_project_namespace",
+            self.org_config.config.get("namespace_info").get("local_project_namespace")
+        ])
+
+        if self.org_config.config.get("namespace_info").get("namespaces"):
+            row = [
+                "config.namespace_info.namespaces"
+            ]
+            row.extend(self.org_config.config.get("namespace_info").get("namespaces"))
+            rows.append(row)
+        else:
+            rows.append([
+               "config.namespace_info.namespaces",
+               "--None--"
+            ])
+    
+        self.log_table(rows)
+
         return installed_package_versions
 
+    def get_namespaces(self):
+        if not self.org_config.config.get("namespace_info"):
+            self.get_installed_package_versions()
+        return self.org_config.config.get("namespace_info").get("namespaces")
+
     def get_installed_package_namespaces(self):
-        return self.get_installed_package_versions().keys()
+        return set(self.get_installed_package_versions().keys())
 
     def get_project_namespace(self):
         return self.project_config.project__package__namespace
@@ -147,10 +165,13 @@ class NamespaceInfo(TableLogger):
         return namespace in self.get_namespaces()
 
     def is_namespace_used_locally(self, namespace):
-        return namespace in self.get_namespaces() and self.get_namespaces()[namespace]
+        return namespace in self.get_installed_package_namespaces() or (self.get_local_project_namespace() and namespace == self.get_local_project_namespace())
 
 class CacheNamespaces(NamespaceInfo):
     def _run_task(self):
+        # reset namespace info cache
+        if "namespace_info" in self.org_config.config:
+            del self.org_config.config["namespace_info"]
         self.get_namespaces()
 
 class ExecuteAnonymousTask(AnonymousApexTask, NamespaceInfo):

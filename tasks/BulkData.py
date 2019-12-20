@@ -442,8 +442,6 @@ class Util:
                         mapping_config.get("namespace")
                     )
 
-        forcePrimaryKey = "id"
-
         if forcePrimaryKey == "autonumber":
             Util.force_autonumber_primary_key(combined_mapping)
         elif forcePrimaryKey == "id":

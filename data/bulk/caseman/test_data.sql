@@ -125,9 +125,9 @@ CREATE TABLE caseman__appointment_attendees (
 	attendee__c VARCHAR(255), 
 	PRIMARY KEY (sf_id)
 );
-INSERT INTO "caseman__appointment_attendees" VALUES('a0U0x000001dFGVEA2','Client','Attendee','Attending','a0V0x000005NncREAS','0030x00000b3I9AAAU');
-INSERT INTO "caseman__appointment_attendees" VALUES('a0U0x000001dFGWEA2','Check in on Jason''s progress with Workplace Readiness.','Attendee','New','a0V0x000005NncSEAS','0030x00000b3I9IAAU');
-INSERT INTO "caseman__appointment_attendees" VALUES('a0U0x000001dFGXEA2','','Attendee','New','a0V0x000005NncTEAS','0030x00000b3I9RAAU');
+INSERT INTO "caseman__appointment_attendees" VALUES(1,'Client','Attendee','Attending',2,'0030x00000b3I9AAAU');
+INSERT INTO "caseman__appointment_attendees" VALUES(2,'Check in on Jason''s progress with Workplace Readiness.','Attendee','New',3,'0030x00000b3I9IAAU');
+INSERT INTO "caseman__appointment_attendees" VALUES(3,'','Attendee','New',4,'0030x00000b3I9RAAU');
 CREATE TABLE caseman__appointments (
 	sf_id VARCHAR(255) NOT NULL, 
 	name VARCHAR(255), 
@@ -138,10 +138,10 @@ CREATE TABLE caseman__appointments (
 	description__c VARCHAR(255), 
 	PRIMARY KEY (sf_id)
 );
-INSERT INTO "caseman__appointments" VALUES('a0V0x000005NncQEAS','Math Appointment','Scheduled','Corner Office','2022-01-26T16:00:00.000Z','2022-01-26T17:00:00.000Z','We should talk about your grades');
-INSERT INTO "caseman__appointments" VALUES('a0V0x000005NncREAS','Program Evaluation','Scheduled','AC-1223','2022-01-26T16:00:00.000Z','2022-01-26T17:00:00.000Z','Initial program evaluation');
-INSERT INTO "caseman__appointments" VALUES('a0V0x000005NncSEAS','Check-in with Jason Barnes','Scheduled','127th STreet Community Center, Meeting Room 2-B','2021-09-22T20:00:00.000Z','2021-09-22T21:00:00.000Z','Check-in on Jason''s progress with Workplace Readiness');
-INSERT INTO "caseman__appointments" VALUES('a0V0x000005NncTEAS','Barbara Johnson English Tutor','Scheduled','127th Street Community Center Meeting Room A','2021-08-13T01:00:00.000Z','2021-08-13T02:00:00.000Z','Discuss getting Barbara a tutor to improve her conversational confidence');
+INSERT INTO "caseman__appointments" VALUES(1,'Math Appointment','Scheduled','Corner Office','2022-01-26T16:00:00.000Z','2022-01-26T17:00:00.000Z','We should talk about your grades');
+INSERT INTO "caseman__appointments" VALUES(2,'Program Evaluation','Scheduled','AC-1223','2022-01-26T16:00:00.000Z','2022-01-26T17:00:00.000Z','Initial program evaluation');
+INSERT INTO "caseman__appointments" VALUES(3,'Check-in with Jason Barnes','Scheduled','127th STreet Community Center, Meeting Room 2-B','2021-09-22T20:00:00.000Z','2021-09-22T21:00:00.000Z','Check-in on Jason''s progress with Workplace Readiness');
+INSERT INTO "caseman__appointments" VALUES(4,'Barbara Johnson English Tutor','Scheduled','127th Street Community Center Meeting Room A','2021-08-13T01:00:00.000Z','2021-08-13T02:00:00.000Z','Discuss getting Barbara a tutor to improve her conversational confidence');
 CREATE TABLE caseman__assessments (
 	sf_id VARCHAR(255) NOT NULL, 
 	"Name" VARCHAR(255), 

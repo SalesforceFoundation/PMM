@@ -159,6 +159,10 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
+            post_mapping_configs:
+                - path: data/bulk/mapping/unpackaged/caseman.yml
+                  when_all_namespaces:
+                      - caseman
             log_mapping: table
 
     capture_bulk_data:
@@ -176,6 +180,10 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
+            post_mapping_configs:
+                - path: data/bulk/mapping/unpackaged/caseman.yml
+                  when_all_namespaces:
+                      - caseman
             log_mapping: table
 
     insert_bulk_data:
@@ -189,6 +197,24 @@ tasks:
                 - data/bulk/mapping/caseman
                 - data/bulk/mapping/npsp
                 - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            post_mapping_configs:
+                - path: data/bulk/mapping/unpackaged/caseman.yml
+                  when_all_installed:
+                      - caseman
+
+    insert_caseman_data:
+        group: "Data: Bulk"
+        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
+        class_path: tasks.BulkData.InsertData
+        options:
+            sql_path: data/bulk/caseman/test_data.sql
+            ignore_row_errors: True
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
             pre_mapping_configs:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
@@ -322,8 +348,18 @@ flows:
         steps:
             100:
                 task: add_caseman_dependency
+            110:
+                task: update_admin_profile_caseman
+            120:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname ManageCases"
+            130:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname ManagePrograms"
             200:
-                flow: dev_org
+                task: insert_caseman_data
 
     caseman_org_namespaced:
         steps:

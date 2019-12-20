@@ -95,11 +95,22 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
                 )
 
     def get_mapping_configs_from_option(self, option):
-        mapping_configs = self.options.get(option, []).copy()
-        if mapping_configs:
-            for mapping_config in mapping_configs:
-                if process_bool_arg(mapping_config.get("inject_project_namespace")):
-                    mapping_config["namespace"] = self.get_local_project_namespace()
+        mapping_configs = []
+        option_mapping_configs = self.options.get(option, []).copy()
+        if option_mapping_configs:
+            for mapping_config in option_mapping_configs:
+                add_mapping_config = True
+                if mapping_config.get("when_all_namespaces"):
+                    add_mapping_config = True
+                    for namespace in mapping_config.get("when_all_namespaces"):
+                        if namespace not in self.get_namespaces():
+                            add_mapping_config = False
+                            break
+                
+                if add_mapping_config:
+                    if process_bool_arg(mapping_config.get("inject_project_namespace")) or "namespace" not in mapping_config:
+                        mapping_config["namespace"] = self.get_local_project_namespace()
+                    mapping_configs.append(mapping_config)
         return mapping_configs
 
     def keep_existing_record_types(self, mapping):
@@ -430,6 +441,7 @@ class Util:
                         mapping_config["path"],
                         mapping_config.get("namespace")
                     )
+
         if forcePrimaryKey == "autonumber":
             Util.force_autonumber_primary_key(combined_mapping)
         elif forcePrimaryKey == "id":

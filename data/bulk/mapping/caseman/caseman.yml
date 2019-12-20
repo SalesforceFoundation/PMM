@@ -276,6 +276,12 @@ caseman__Case_Plans:
         Id: sf_id
         Name: Name
 
+        # Custom Fields
+        Status__c: status__c
+        AbandonedDate__c: abandoneddate__c
+        CompletedDate__c: completeddate__c
+        InProgressDate__c: inprogressdate__c
+
     lookups:
         Contact__c:
             key_field: contact__c
@@ -325,3 +331,21 @@ caseman__Action_Items:
         ActionItemTemplate__c:
             key_field: action_item_template__c
             table: caseman__action_item_templates
+
+caseman__Assessments:
+    sf_object: Assessment__c
+    table: caseman__assessments
+    fields:
+        # Standard Fields
+        Id: sf_id
+        Name: Name
+
+        # Custom Fields
+        AssessmentCompletedDate__c: assessmentcompleteddate__c
+        Comments__c: comments__c
+        TotalScore__c: totalscore__c
+
+    lookups:
+        Client__c:
+            key_field: client__c
+            table: contacts

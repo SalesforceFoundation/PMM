@@ -210,7 +210,7 @@ tasks:
                 - path: data/bulk/mapping/Contacts.yml
             post_mapping_configs:
                 - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_installed:
+                  when_all_namespaces:
                       - caseman
 
     update_client_photo_directories:

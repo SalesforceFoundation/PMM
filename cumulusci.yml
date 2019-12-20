@@ -69,10 +69,8 @@ tasks:
         options:
             package_xml: lib/caseman.profile.xml
             record_types:
-                - record_type: Account.HH_Account
-                - record_type: Account.Organization
-                  default: true
                 - record_type: Account.caseman__Branch
+                  default: True
                 - record_type: Case.caseman__ClientCase
                   default: True
                 - record_type: Case.caseman__Incident
@@ -86,12 +84,6 @@ tasks:
                 - record_type: Account.HH_Account
                 - record_type: Account.Organization
                   default: true
-                - record_type: Account.caseman__Branch
-                  default: True
-                - record_type: Case.caseman__ClientCase
-                  default: True
-                - record_type: Case.caseman__Incident
-                - record_type: Case.None
                 - record_type: Account.HH_Account
                 - record_type: Account.Organization
                   default: true
@@ -109,11 +101,17 @@ tasks:
                 - record_type: Account.HH_Account
                 - record_type: Account.Organization
                   default: true
+                - record_type: Account.caseman__Branch
                   person_account_default: true
                 - record_type: Opportunity.Donation
                   default: true
                 - record_type: Campaign.Default
                   default: true
+                - record_type: Case.caseman__ClientCase
+                  default: True
+                - record_type: Case.caseman__Incident
+                - record_type: Case.None
+
 
     run_all_local_tests:
         group: "Tests"

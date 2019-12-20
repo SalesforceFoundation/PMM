@@ -77,19 +77,19 @@ class NamespaceInfo(TableLogger):
         
         if self.org_config.config.get("namespace_info").get("installed_package_namespaces"):
             row = [
-                "self.org_config.config.get(\"namespace_info\").get(\"installed_package_namespaces\")"
+                "config.namespace_info.installed_package_namespaces"
             ]
             row.extend(self.org_config.config.get("namespace_info").get("installed_package_namespaces"))
             rows.append(row)
         else:
             rows.append([
-               "self.org_config.config.get(\"namespace_info\").get(\"installed_package_namespaces\")",
+               "config.namespace_info.installed_package_namespaces",
                "--None--"
             ])
 
         if self.org_config.config.get("namespace_info").get("installed_package_versions"):
             row = [
-                "self.org_config.config.get(\"namespace_info\").get(\"installed_package_versions\")"
+                "config.namespace_info.installed_package_versions"
             ]
             for namespace, version in self.org_config.config.get("namespace_info").get("installed_package_versions").items():
                 row.extend([
@@ -98,34 +98,34 @@ class NamespaceInfo(TableLogger):
             rows.append(row)
         else:
             rows.append([
-               "self.org_config.config.get(\"namespace_info\").get(\"installed_package_versions\")",
+               "config.namespace_info.installed_package_versions",
                "--None--"
             ])
 
         rows.append([
-            "self.org_config.config.get(\"namespace_info\").get(\"project_namespace\")",
+            "config.namespace_info.project_namespace",
             self.org_config.config.get("namespace_info").get("project_namespace")
         ])
         
         rows.append([
-            "self.org_config.config.get(\"namespace_info\").get(\"is_org_namespaced\")",
+            "config.namespace_info.is_org_namespaced",
             str(self.org_config.config.get("namespace_info").get("is_org_namespaced"))
         ])
 
         rows.append([
-            "self.org_config.config.get(\"namespace_info\").get(\"local_project_namespace\")",
+            "config.namespace_info.local_project_namespace",
             self.org_config.config.get("namespace_info").get("local_project_namespace")
         ])
 
         if self.org_config.config.get("namespace_info").get("namespaces"):
             row = [
-                "self.org_config.config.get(\"namespace_info\").get(\"namespaces\")"
+                "config.namespace_info.namespaces"
             ]
             row.extend(self.org_config.config.get("namespace_info").get("namespaces"))
             rows.append(row)
         else:
             rows.append([
-               "self.org_config.config.get(\"namespace_info\").get(\"namespaces\")",
+               "config.namespace_info.namespaces",
                "--None--"
             ])
     

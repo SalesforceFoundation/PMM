@@ -86,7 +86,7 @@
     <platformActionList>
         <actionListContext>Record</actionListContext>
         <platformActionListItems>
-            <actionName>Program__c.NewProgramEngagement</actionName>
+            <actionName>Program__c.AddContactToProgram</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>0</sortOrder>
         </platformActionListItems>

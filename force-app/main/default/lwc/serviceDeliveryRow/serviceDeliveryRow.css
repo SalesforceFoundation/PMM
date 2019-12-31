@@ -2,6 +2,6 @@
     bottom:15px;
 }
 
-.color-green .slds-icon-text-default{
-    fill:green;
+.color-green{
+    background-color:#4BCA81;
 }

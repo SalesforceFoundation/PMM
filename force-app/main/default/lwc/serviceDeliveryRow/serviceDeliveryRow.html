@@ -62,7 +62,13 @@
                         </div>     
                     </template>
                     <template if:true={isSaved} role="alert">  
-                        <lightning-icon icon-name="utility:check" class="color-green" alternative-text="Saved" size="small" ></lightning-icon>   
+                        <lightning-icon icon-name="action:check" alternative-text="Saving" size="x-small" ></lightning-icon>   
+                    </template>
+                    <template if:true={isSaved} role="alert">  
+                        <lightning-icon icon-name="action:check" class="color-green" alternative-text="Saved" size="x-small" ></lightning-icon>   
+                    </template>
+                    <template if:true={isError} role="alert">  
+                        <lightning-icon icon-name="utility:warning" variant="error" alternative-text="Error" size="small" ></lightning-icon>   
                     </template>
                 </lightning-layout-item>
             </lightning-layout>

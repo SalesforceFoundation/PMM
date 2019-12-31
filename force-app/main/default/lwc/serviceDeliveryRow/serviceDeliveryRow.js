@@ -218,7 +218,6 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         this.dispatchEvent(new CustomEvent("savestart"));
 
-        //start save 
         this.handleSaveStart();
     }
 
@@ -331,18 +330,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isError = false;
     }
 
-   /* resetIsSaving = debouncify(
-        function() {
-            this.isSaving = false;
-            //this.isSaved = false;
-        }.bind(this),
-        3000
-    );*/
-
     handleSaveEnd() {
         this.isSaving = false;
         this.isSaved = true;
-        //this.resetIsSaving();
     }
 
     //Temporary CSS Overrides.

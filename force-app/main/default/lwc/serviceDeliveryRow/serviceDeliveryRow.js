@@ -96,6 +96,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleGetServicesEngagements(contactId) {
+        this._noContactPrograms = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
                 if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {
@@ -301,6 +302,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         ) {
             this._defaultsSet = true;
             let hasContact = false;
+            let contactId = "";
 
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(element => {
@@ -309,15 +311,14 @@ export default class ServiceDeliveryRow extends LightningElement {
                         element.value = this.localDefaultValues[key];
                         if (element.apiName === this.fields.contact.fieldApiName) {
                             hasContact = true;
+                            contactId = value;
                         }
                     }
                 }
             });
 
             if (hasContact) {
-                this.handleGetServicesEngagements(
-                    this.localDefaultValues[this.fields.contact.fieldApiName]
-                );
+                this.handleGetServicesEngagements(contactId);
             }
         }
     }

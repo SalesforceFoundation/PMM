@@ -29,7 +29,6 @@ pmdm__ProgramCohort__c:
         EndDate__c: EndDate__c
         StartDate__c: StartDate__c
         Status__c: Status__c
-        Summary__c: Summary__c
 
     lookups:
         Program__c:

@@ -824,7 +824,7 @@ CREATE TABLE "pmdm__Program__c" (
 	"ProgramIssueArea__c" VARCHAR(255), 
 	"StartDate__c" VARCHAR(255), 
 	"Status__c" VARCHAR(255), 
-	"Summary__c" VARCHAR(255), 
+	"ShortSummary__c" VARCHAR(255),
 	"TargetPopulation__c" VARCHAR(255), 
 	PRIMARY KEY (id)
 );

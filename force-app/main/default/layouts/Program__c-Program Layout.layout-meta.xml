@@ -16,7 +16,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Summary__c</field>
+                <field>ShortSummary__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

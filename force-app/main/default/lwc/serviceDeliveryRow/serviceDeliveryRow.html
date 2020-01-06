@@ -58,11 +58,8 @@
                 <lightning-layout-item>    
                     <template if:true={isSaving}>  
                         <div class="slds-is-relative spinner-container" role="alert">
-                            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                            <lightning-spinner alternative-text="Saving" size="small"></lightning-spinner>
                         </div>     
-                    </template>
-                    <template if:true={isSaving} role="alert">  
-                        <lightning-icon icon-name="action:check" alternative-text="Saving" size="x-small" ></lightning-icon>   
                     </template>
                     <template if:true={isSaved} role="alert">  
                         <lightning-icon icon-name="action:check" class="color-green" alternative-text="Saved" size="x-small" ></lightning-icon>   

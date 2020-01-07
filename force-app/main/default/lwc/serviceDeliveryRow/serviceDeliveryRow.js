@@ -60,8 +60,8 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track hasQuantity = false;
     @track saveMessage;
 
-    _noContactPrograms = false;
-    _noServicesForPE = false;
+    noContactPrograms = false;
+    noServicesForPE = false;
     _defaultsSet = false;
     _filteredValues;
     _valuesToSave = [];

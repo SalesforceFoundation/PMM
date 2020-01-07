@@ -70,14 +70,14 @@
                 </lightning-layout-item>
             </lightning-layout>
             <lightning-layout>
-                <template if:true={_noContactPrograms}>
+                <template if:true={noContactPrograms}>
                     <lightning-layout-item size="12" padding="around-small">
                         <div class="slds-text-color_error">
                             {labels.selectedContactWarning}
                         </div>
                     </lightning-layout-item>
                 </template>
-                <template if:true={_noServicesForPE}>
+                <template if:true={noServicesForPE}>
                     <lightning-layout-item size="12" padding="around-small">
                         <div class="slds-text-color_error">
                             {labels.noServiceWarning}

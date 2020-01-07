@@ -55,17 +55,30 @@
                     >
                     </lightning-button-icon>
                 </lightning-layout-item>
-                <lightning-layout-item>    
-                    <template if:true={isSaving}>  
+                <lightning-layout-item>
+                    <template if:true={isSaving}>
                         <div class="slds-is-relative spinner-container" role="alert">
-                            <lightning-spinner alternative-text={labels.saving} size="small"></lightning-spinner>
-                        </div>     
+                            <lightning-spinner
+                                alternative-text={labels.saving}
+                                size="small"
+                            ></lightning-spinner>
+                        </div>
                     </template>
-                    <template if:true={isSaved} role="alert">  
-                        <lightning-icon icon-name="action:check" class="color-green" alternative-text={labels.saved} size="xx-small" ></lightning-icon>   
+                    <template if:true={isSaved} role="alert">
+                        <lightning-icon
+                            icon-name="action:check"
+                            class="color-green"
+                            alternative-text={labels.saved}
+                            size="xx-small"
+                        ></lightning-icon>
                     </template>
-                    <template if:true={isError} role="alert">  
-                        <lightning-icon icon-name="utility:warning" variant="error" alternative-text={labels.error} size="small" ></lightning-icon>   
+                    <template if:true={isError} role="alert">
+                        <lightning-icon
+                            icon-name="utility:warning"
+                            variant="error"
+                            alternative-text={labels.error}
+                            size="small"
+                        ></lightning-icon>
                     </template>
                 </lightning-layout-item>
             </lightning-layout>
@@ -93,7 +106,6 @@
             >
             </lightning-button>
         </lightning-record-edit-form>
-        
     </div>
     <c-modal header={labels.confirmDelete}
         >{labels.confirmDeleteMessage}

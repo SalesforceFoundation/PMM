@@ -85,7 +85,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         success,
         saved,
         saving,
-        error
+        error,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -325,9 +325,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-
     handleSaveStart() {
-        this.saveMessage =  "...";
+        this.saveMessage = "...";
         this.isSaving = true;
         this.isSaved = false;
         this.isError = false;

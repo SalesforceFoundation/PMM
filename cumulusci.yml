@@ -390,13 +390,13 @@ flows:
                     command: "force:user:permset:assign --permsetname pmdm0__PMDM_Manage"
             9:
                 task: update_admin_profile_caseman_npsp
-            9:
-                flow: insert_data
             10:
-                task: activate_flows
+                flow: insert_data
             11:
-                task: caseman:set_user_photo
+                task: activate_flows
             12:
+                task: caseman:set_user_photo
+            13:
                 task: set_user_rosa
 
     caseman_org:

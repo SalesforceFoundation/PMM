@@ -8,6 +8,10 @@ import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryControlle
 
 import deleteLabel from "@salesforce/label/c.Delete";
 import cancel from "@salesforce/label/c.Cancel";
+import error from "@salesforce/label/c.Error";
+import saving from "@salesforce/label/c.Saving";
+import saved from "@salesforce/label/c.Saved";
+
 import confirmDelete from "@salesforce/label/c.Confirm_Delete";
 import confirmDeleteMessage from "@salesforce/label/c.Confirm_Delete_Row";
 import success from "@salesforce/label/c.Success";
@@ -79,6 +83,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         selectEngagement,
         selectService,
         success,
+        saved,
+        saving,
+        error
     };
     fields = {
         contact: CONTACT_FIELD,

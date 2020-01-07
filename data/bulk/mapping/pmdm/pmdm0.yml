@@ -1,6 +1,6 @@
 # Programs
 pmdm__Program__c:
-    sf_object: Program__c
+    sf_object: pmdm0__Program__c
     table: pmdm__Program__c
     fields:
         # Standard Fields
@@ -8,16 +8,16 @@ pmdm__Program__c:
         Name: Name
 
         # Custom Fields
-        Description__c: Description__c
-        EndDate__c: EndDate__c
-        ProgramIssueArea__c: ProgramIssueArea__c
-        StartDate__c: StartDate__c
-        Status__c: Status__c
-        Summary__c: Summary__c
-        TargetPopulation__c: TargetPopulation__c
+        pmdm0__Description__c: Description__c
+        pmdm0__EndDate__c: EndDate__c
+        pmdm0__ProgramIssueArea__c: ProgramIssueArea__c
+        pmdm0__StartDate__c: StartDate__c
+        pmdm0__Status__c: Status__c
+        pmdm0__Summary__c: Summary__c
+        pmdm0__TargetPopulation__c: TargetPopulation__c
 
 pmdm__ProgramCohort__c:
-    sf_object: ProgramCohort__c
+    sf_object: pmdm0__ProgramCohort__c
     table: pmdm__ProgramCohort__c
     fields:
         # Standard Fields
@@ -25,19 +25,19 @@ pmdm__ProgramCohort__c:
         Name: Name
 
         # Custom Fields
-        Description__c: Description__c
-        EndDate__c: EndDate__c
-        StartDate__c: StartDate__c
-        Status__c: Status__c
-        Summary__c: Summary__c
+        pmdm0__Description__c: Description__c
+        pmdm0__EndDate__c: EndDate__c
+        pmdm0__StartDate__c: StartDate__c
+        pmdm0__Status__c: Status__c
+        pmdm0__Summary__c: Summary__c
 
     lookups:
-        Program__c:
+        pmdm0__Program__c:
             key_field: program__c
             table: pmdm__Program__c
 
 pmdm__ProgramEngagement__c:
-    sf_object: ProgramEngagement__c
+    sf_object: pmdm0__ProgramEngagement__c
     table: pmdm__ProgramEngagement__c
     fields:
         # Standard Fields
@@ -45,29 +45,29 @@ pmdm__ProgramEngagement__c:
         Name: Name
 
         # Custom Fields
-        ApplicationDate__c: ApplicationDate__c
-        AutoName_Override__c: AutoName_Override__c
-        EndDate__c: EndDate__c
-        Role__c: Role__c
-        Stage__c: Stage__c
-        StartDate__c: StartDate__c
+        pmdm0__ApplicationDate__c: ApplicationDate__c
+        pmdm0__AutoName_Override__c: AutoName_Override__c
+        pmdm0__EndDate__c: EndDate__c
+        pmdm0__Role__c: Role__c
+        pmdm0__Stage__c: Stage__c
+        pmdm0__StartDate__c: StartDate__c
 
     lookups:
-        Account__c:
+        pmdm0__Account__c:
             key_field: account__c
             table: household_accounts
-        Contact__c:
+        pmdm0__Contact__c:
             key_field: contact__c
             table: contacts
-        Program__c:
+        pmdm0__Program__c:
             key_field: program__c
             table: pmdm__Program__c
-        ProgramCohort__c:
+        pmdm0__ProgramCohort__c:
             key_field: program_cohort__c
             table: pmdm__ProgramCohort__c
 
 pmdm__Service__c:
-    sf_object: Service__c
+    sf_object: pmdm0__Service__c
     table: pmdm__Service__c
     fields:
         # Standard Fields
@@ -75,17 +75,17 @@ pmdm__Service__c:
         Name: Name
 
         # Custom Fields
-        Description__c: Description__c
-        Status__c: Status__c
-        UnitOfService__c: UnitOfService__c
+        pmdm0__Description__c: Description__c
+        pmdm0__Status__c: Status__c
+        pmdm0__UnitOfService__c: UnitOfService__c
 
     lookups:
-        Program__c:
+        pmdm0__Program__c:
             key_field: program__c
             table: pmdm__Program__c
 
 pmdm__ServiceDelivery__c:
-    sf_object: ServiceDelivery__c
+    sf_object: pmdm0__ServiceDelivery__c
     table: pmdm__ServiceDelivery__c
     fields:
         # Standard Fields
@@ -93,20 +93,20 @@ pmdm__ServiceDelivery__c:
         Name: Name
 
         # Custom Fields
-        AutonameOverride__c: AutonameOverride__c
-        DeliveryDate__c: DeliveryDate__c
-        Quantity__c: Quantity__c
+        pmdm0__AutonameOverride__c: AutonameOverride__c
+        pmdm0__DeliveryDate__c: DeliveryDate__c
+        pmdm0__Quantity__c: Quantity__c
 
     lookups:
-        Service__c:
+        pmdm0__Service__c:
             key_field: service__c
             table: pmdm__Service__c
-        Account__c:
+        pmdm0__Account__c:
             key_field: account__c
             table: household_accounts
-        Contact__c:
+        pmdm0__Contact__c:
             key_field: contact__c
             table: contacts
-        ProgramEngagement__c:
+        pmdm0__ProgramEngagement__c:
             key_field: program_engagement__c
             table: pmdm__ProgramEngagement__c

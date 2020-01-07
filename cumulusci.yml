@@ -37,6 +37,15 @@ orgs:
             config_file: orgs/npsp.json
             days: 7
             namespaced: True
+        pilot:
+            config_file: orgs/pilot.json
+
+sources:
+    npsp:
+        github: https://github.com/SalesforceFoundation/NPSP
+    caseman: 
+        github: https://github.com/SalesforceFoundation/CaseMan
+
 
 tasks:
     cache_namespaces_in_org_config:
@@ -102,8 +111,8 @@ tasks:
                   person_account_default: true
                 - record_type: Opportunity.Donation
                   default: true
-                - record_type: Campaign.Default
-                  default: true
+#- record_type: Campaign.Default
+#                  default: true
                 - record_type: Case.caseman__ClientCase
                   default: True
                 - record_type: Case.caseman__Incident
@@ -252,6 +261,16 @@ tasks:
         options:
             path: unpackaged/tests/serviceDeliveryModal
             namespace_inject: $project_config.project__package__namespace
+    
+    set_user_rosa:
+        class_path: cumulusci.tasks.apex.anon.AnonymousApexTask
+        options:
+            apex: >
+                update new User(
+                    Id = UserInfo.getUserId(),
+                    FirstName = 'Rosa',
+                    LastName = 'Sanchez'
+                );
 
 flows:
     capture_bulk_data:
@@ -341,6 +360,44 @@ flows:
             40:
                 task: update_admin_profile_caseman_npsp
                 when: "'caseman' in org_config.namespace_info.namespaces and 'npsp' in org_config.namespace_info.namespaces"
+
+    pilot3_org:
+        steps:
+            1: 
+                flow: npsp:install_prod
+            2:
+                flow: install_beta
+            3:
+                flow: caseman:install_beta
+            4:
+                task: caseman:deploy_pmdm_client_note_integration_with_service_deliveries
+                options:
+                    unmanaged: False 
+                    namespace_inject: caseman
+            5:
+                task: caseman:add_permission_set_field_level_security
+            6:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_View"
+            7:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Deliver"
+            8:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Manage"
+            9:
+                task: update_admin_profile_caseman_npsp
+            9:
+                flow: insert_data
+            10:
+                task: activate_flows
+            11:
+                task: caseman:set_user_photo
+            12:
+                task: set_user_rosa
 
     caseman_org:
         steps:

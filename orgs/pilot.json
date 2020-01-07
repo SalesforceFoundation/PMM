@@ -1,0 +1,25 @@
+{
+  "orgName": "Case Management - Beta Test Org",
+  "edition": "Partner Developer",
+  "features": [
+    "ContactsToMultipleAccounts"
+  ],
+  "settings": {
+    "chatterSettings": {
+      "enableChatter": true
+    },
+    "enhancedNotesSettings": {
+      "enableEnhancedNotes": true
+    },
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "accountSettings": {
+      "enableAccountTeams": true,
+      "showViewHierarchyLink": true
+    },
+    "socialProfileSettings": {
+      "enableSocialProfiles": true
+    }
+  }
+}

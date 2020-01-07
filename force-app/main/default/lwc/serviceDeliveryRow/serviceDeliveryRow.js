@@ -36,7 +36,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
     @api index;
     @api rowCount;
-    @api isSaving;
+    @track isSaving;
     @track isError;
     @track isSaved;
     @api
@@ -195,16 +195,14 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleError(event) {
-        this.dispatchEvent(new CustomEvent("saveend"));
         this.isSaving = false;
         this.isSaved = false;
         this.isError = true;
-        handleError(event.detail.message);
+        handleError(event);
     }
 
     handleSuccess(event) {
         this.recordId = event.detail.id;
-        this.dispatchEvent(new CustomEvent("saveend"));
         this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
@@ -222,8 +220,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         this.template.querySelector("lightning-record-edit-form").submit(fields);
-
-        this.dispatchEvent(new CustomEvent("savestart"));
 
         this.handleSaveStart();
     }

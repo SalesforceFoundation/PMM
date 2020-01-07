@@ -279,19 +279,52 @@ class CreateMapping(MappingGenerator):
 class InsertData(LoadData, MappingGenerator):
 
     task_options = {
-        "database_url": {
-            "description": "The database url to a database containing the test data to load",
-            "required": True,
-        },
-        "sql_path": {
-            "description": "If set, an SQL script will be generated at the path provided "
-            + "This is useful for keeping data in the repository and allowing diffs."
-        },
+        **LoadData.task_options,
         **MappingGenerator.task_options,
+        "combine_sql": {
+            "description": "If True, combines SQL files"
+        },
+        "data": {
+            "description": "If True, combines SQL files"
+        },
     }
 
     def _init_mapping(self):
         self.mapping = self.get_combined_mapping()
+
+    def _sqlite_load(self):
+        """ # original
+        conn = self.session.connection()
+        cursor = conn.connection.cursor()
+        with open(self.options["sql_path"], "r") as f:
+            try:
+                cursor.executescript(f.read())
+            finally:
+                cursor.close()
+        # self.session.flush()
+        """
+        """ TODO
+            ------------
+            - get each namespace sql file
+            - modify each namespace 
+
+
+            - how to get data files from other repos?
+                - add cci task that saves the path of a file in org_config from another repo.
+
+        """
+        if process_bool_arg(self.options.get("combine_sql")):
+            conn = self.session.connection()
+            cursor = conn.connection.cursor()
+            with open(self.options["sql_path"], "r") as f:
+                try:
+                    cursor.executescript(f.read())
+                finally:
+                    cursor.close()
+            # self.session.flush()
+        else:
+            super()._sqlite_load()
+        
 
 
 class CaptureData(ExtractData, MappingGenerator):

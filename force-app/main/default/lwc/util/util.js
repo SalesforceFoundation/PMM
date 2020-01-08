@@ -187,7 +187,7 @@ const handleError = (error, fireShowToast = true, showToastMode) => {
             message = errors.map(e => {
                 // TODO: add special nicer handling for "errorCode":"DUPLICATE_VALUE"
                 // TODO: add special nicer handling for duplicateRecordError; this might be the same as above
-                // TODO: consider trigger errors, etc?
+                // TODO: consider trigger errors, etc? general exception AND field-level error sd.Name.addError('msg') https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_sobject.htm#apex_System_SObject_addError
                 return (e.fieldLabel ? e.fieldLabel + ': ' : '') + e.message;
             }).join("; ");
         }

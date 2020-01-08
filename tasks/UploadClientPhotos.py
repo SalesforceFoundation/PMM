@@ -1,10 +1,10 @@
 import base64
 import os
 import re
-from tasks.namespaces import NamespaceInfo
+from tasks.namespaces import NamespaceTask
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 
-class UploadClientPhotos(NamespaceInfo, BaseSalesforceApiTask):
+class UploadClientPhotos(NamespaceTask, BaseSalesforceApiTask):
     task_options = {
         "directory_path": {
             "description": "Path to the root directory of ContentVersions to upload",
@@ -16,15 +16,14 @@ class UploadClientPhotos(NamespaceInfo, BaseSalesforceApiTask):
     }
 
     def _run_task(self):
-        namespace = self.options.get("namespace") or "caseman"
+        namespace_prefix = self.options.get("namespace") or "caseman"
 
         # Skip uploading client photos if namespace is not used
-        if not self.is_namespace_used(namespace):
-            self.logger.info("Skipping uploading client photos.  Only uploads client photos is the project's package's namespace equals '{}' or '{}' is the namespace of an installed package".format(namespace, namespace))
+        if not namespace_prefix in self.get_namespaces():
+            self.logger.info("Skipping uploading client photos.  Only uploads client photos is the project's package's namespace equals '{}' or '{}' is the namespace of an installed package".format(namespace_prefix, namespace_prefix))
             return
 
-        managed = self.is_namespace_used_locally(namespace)
-        namespace_prefix = "{}__".format(namespace)
+        namespace = self.get_namespaces()[namespace_prefix]
 
         # Iterate over our ContentVersion directory
         # It will contain subdirectories whose names are 068 Ids (ContentVersions)
@@ -96,7 +95,7 @@ class UploadClientPhotos(NamespaceInfo, BaseSalesforceApiTask):
             document_ids[content_version["Id"]] = content_version["ContentDocumentId"]
 
         # Now, query Contacts and update their PhotoFileID__c fields.
-        field_name = "{}PhotoFileID__c".format(namespace_prefix if managed else "")
+        field_name = namespace.prefix_field("PhotoFileID__c")
         
         contacts_updated_rows = []
         for old_id in created_versions:

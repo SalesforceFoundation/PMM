@@ -1,6 +1,6 @@
 import os
 import yaml
-from tasks.namespaces import NamespaceInfo
+from tasks.namespaces import NamespaceTask
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.utils import os_friendly_path
@@ -8,7 +8,7 @@ from tasks.bulkdata import LoadData, ExtractData, DeleteData as BaseDeleteData
 from cumulusci.core.exceptions import TaskOptionsError
 
 
-class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
+class MappingGenerator(NamespaceTask, BaseSalesforceApiTask):
     task_options = {
         "package_mapping_directories": {
             "description": "List of directory paths containing package mapping files.  Package mappings have file names are in the form '[namespace].yml' and are used to automatically include mapping configs for the CumulusCI project and installed managed packages in the org with the namespaced injected if applicable.",

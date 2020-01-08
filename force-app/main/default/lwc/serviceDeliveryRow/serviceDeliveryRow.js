@@ -39,6 +39,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track isSaving;
     @track isError;
     @track isSaved;
+    @track rowError;
     @api
     get defaultValues() {
         return this.localDefaultValues;
@@ -198,7 +199,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isSaving = false;
         this.isSaved = false;
         this.isError = true;
-        handleError(event, true, "dismissible");
+        // TODO: show this in a tooltip on the lightning:icon on hover and keyboard focus; probably slds-tooltip
+        this.rowError = handleError(event, true, "dismissible");
     }
 
     handleSuccess(event) {

@@ -291,6 +291,21 @@ flows:
                 options:
                     path: "data/scripts/update_all_records_as_recently_viewed.apex"
 
+    assign_managed_pmdm_permsets:
+        steps:
+            110:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_View"
+            120:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Manage"
+            130:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Deliver"
+
     caseman_post_insert_bulk_data:
         steps:
             100:
@@ -345,6 +360,8 @@ flows:
                 flow: npsp_pre_insert_bulk_data
             020:
                 flow: caseman_pre_insert_bulk_data
+            030:
+                flow: assign_managed_pmdm_permsets
             100:
                 task: insert_bulk_data
                 options:

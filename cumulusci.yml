@@ -389,7 +389,34 @@ tasks:
                   namespace: c
                   when_all_namespaces:
                     - caseman
-                
+    
+    log_mapping:
+        group: "Data: Bulk"
+        class_path: tasks.BulkData2.LogMapping2
+        options:
+            log_mapping: table
+            data:
+                - map: decentralized-data/c/Contacts.yml
+                  sql: decentralized-data/c/Contacts.sql
+                  namespace: c
+                - map: decentralized-data/c/Household_Accounts.yml
+                  sql: decentralized-data/c/Household_Accounts.sql
+                  namespace: c
+                - map: decentralized-data/c/Organization_Accounts.yml
+                  sql: decentralized-data/c/Organization_Accounts.sql
+                  namespace: c
+                - map: decentralized-data/pmdm0/pmdm0.yml
+                  sql: decentralized-data/pmdm0/pmdm0.sql
+                  namespace: pmdm0
+                - map: decentralized-data/caseman/caseman.yml
+                  sql: decentralized-data/caseman/caseman.sql
+                  namespace: pmdm0
+                - map: decentralized-data/caseman/unpackaged.yml
+                  sql: decentralized-data/caseman/unpackaged.sql
+                  namespace: c
+                  when_all_namespaces:
+                    - caseman
+
 
     update_client_photo_directories:
         group: "CaseMan: Test Data"

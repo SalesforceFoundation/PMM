@@ -8,6 +8,272 @@ from tasks.bulkdata import LoadData, ExtractData, DeleteData as BaseDeleteData
 from cumulusci.core.exceptions import TaskOptionsError
 
 
+class MappingGenerator2(NamespaceTask, BaseSalesforceApiTask):
+    task_options = {
+        "data": {
+            "description": "If True, combines SQL files"
+        },
+        "log_mapping": {
+            "description": "If a valid value, logs the combined mapping in the console.  Valid values: (1) 'YAML' or 'yml' to log as a YAML file; (2) 'table' to log as a table.  Default: None",
+            "required": False,
+        },
+        "skip_keeping_existing_record_types": {
+            "description": "Skips check to only keep record_types that exist in the org",
+            "required": False,
+        },
+    }
+
+    """
+    def get_project_namespace(self):
+        return self.org_config.config.get("project_namespace") if self.org_config.config.get("project_namespace") else super().get_project_namespace()
+    """
+
+    def get_available_package_mappings(self):
+        rows = [["PATH", "NAMESPACE"]]
+
+        available_mappings = {}
+        if self.options.get("package_mapping_directories"):
+            for directory in self.options["package_mapping_directories"]:
+                root = os_friendly_path(directory)
+                items = os.listdir(root)
+                items.sort()
+                is_first = True
+                for item in items:
+                    path = os.path.join(root, item)
+                    if os.path.isfile(os.path.join(root, item)) and item.endswith(
+                        ".yml"
+                    ):
+                        namespace = item[:-4]
+                        mapping = {
+                            "path": path,
+                            "namespace": namespace,
+                        }
+                        available_mappings[namespace] = mapping
+                        rows.append([root if is_first else "", namespace])
+                        is_first = False
+
+        self.log_table(rows, groupByBlankColumns=True)
+
+        return available_mappings
+
+    def get_log_mapping_option(self):
+        log_option = str(self.options.get("log_mapping"))
+        if log_option == "yml" or log_option == "yaml":
+            return "yml"
+        elif log_option == "table":
+            return "table"
+
+    def log_combined_mapping(self, mapping):
+        log_option = self.get_log_mapping_option()
+        if log_option:
+            self.log_title("Combined mapping")
+            if log_option == "yml":
+                for row in Util.print_mapping_as_list(
+                    mapping, self.options.get("mapping_tab_size"),
+                ):
+                    self.logger.info(row)
+            elif log_option == "table":
+                self.log_table(
+                    Util.print_mapping_as_table(mapping), groupByBlankColumns=True,
+                )
+
+    def get_mapping_configs_from_option(self, option):
+        mapping_configs = []
+        option_mapping_configs = self.options.get(option, []).copy()
+        if option_mapping_configs:
+            for mapping_config in option_mapping_configs:
+                add_mapping_config = True
+                if mapping_config.get("when_all_namespaces"):
+                    add_mapping_config = all(namespace in self.get_namespaces() for namespace in mapping_config.get("when_all_namespaces"))
+                    """
+                    for namespace in mapping_config.get("when_all_namespaces"):
+                        if namespace not in self.get_namespaces():
+                            add_mapping_config = False
+                            break
+                    """
+                if add_mapping_config:
+                    if process_bool_arg(mapping_config.get("inject_project_namespace")) or "namespace" not in mapping_config:
+                        mapping_config["namespace"] = self.get_local_project_namespace()
+                    mapping_configs.append(mapping_config)
+        return mapping_configs
+
+    def keep_existing_record_types(self, mapping):
+        # Collect sobject_type and developer_name of Record Types used in mapping.
+        sobject_types = []
+        developer_names = []
+
+        for step_name, step in mapping.items():
+            record_type = step.get("record_type")
+            sf_object = step.get("sf_object")
+            if record_type:
+                sobject_types.append(sf_object)
+                developer_names.append(record_type)
+
+        if not sobject_types:
+            return
+
+        # Query org for Record Types that exist.  Sometimes a mapping says to use a Record Type that isn't installed with a dependency.
+        query = "SELECT SobjectType, DeveloperName FROM RecordType WHERE SObjectType IN ({}) and DeveloperName IN ({})".format(
+            "'" + "','".join(sobject_types) + "'",
+            "'" + "','".join(developer_names) + "'",
+        )
+
+        developer_names_by_object = {}
+        for record in self.sf.query_all(query).get("records"):
+            sobject_type = record.get("SobjectType")
+            developer_name = record.get("DeveloperName")
+
+            developer_names = developer_names_by_object.get(sobject_type) or {}
+            developer_names[developer_name] = None
+            developer_names_by_object[sobject_type] = developer_names
+
+        rows = [["STEP", "OBJECT", "RECORD TYPE", "EXISTS"]]
+
+        # Delete step's "record_type" key if values doesn't exist in developer_names_by_object.
+        for step_name, step in mapping.items():
+            developer_name = step.get("record_type")
+            sobject_type = step.get("sf_object")
+            if developer_name:
+                if not (
+                    developer_names_by_object.get(sobject_type)
+                    and developer_name in developer_names_by_object[sobject_type]
+                ):
+                    del step["record_type"]
+                rows.append(
+                    [
+                        step_name,
+                        sobject_type,
+                        developer_name,
+                        "✅" if step.get("record_type") else "❌",
+                    ]
+                )
+
+        self.log_title("Removing Record Types from mapping that don't exist in org")
+        self.log_table(rows)
+
+
+    def get_data_config(self):
+        self.data_configs = []
+
+        rows = [
+            [
+                "NAMESPACE",
+                "WHEN ALL NAMESPACES",
+                "INCLUDED",
+                "MAP",
+                "SQL"
+            ]
+        ]
+
+        for data in self.options.get("data"):
+            namespace_info = self.get_namespaces().get(data.get("namespace"))
+            
+            all_namespaces = set(data.get("namespace"))
+            if "when_all_namespaces" in data:
+                all_namespaces.update(data.get("when_all_namespaces"))
+            
+            is_included = ""
+            if namespace_info and all(namespace in self.get_namespaces() for namespace in all_namespaces):
+                is_included = "✅"
+                self.data_configs.append(data)
+
+            rows.append([
+                data.get("namespace"),
+                "" if not data.get("when_all_namespaces") else ", ".join(data.get("when_all_namespaces")),
+                is_included,
+                data.get("map"),
+                data.get("sql"),
+            ])
+
+        self.log_title("data configs")
+        self.log_table(rows)
+
+    def get_combined_mapping(self):
+        self.options["log_installed_packages"] = True
+
+        available_package_mappings = self.get_available_package_mappings()
+
+        mapping_configs_by_step = {}
+
+        # Pre mapping configs
+        mapping_configs_by_step["Pre"] = self.get_mapping_configs_from_option(
+            "pre_mapping_configs"
+        )
+
+        # Project mapping config
+        mapping_configs_by_step["Project"] = []
+        if not process_bool_arg(self.options.get("skip_mapping_project")):
+            project_namespace = self.get_project_namespace()
+            project_mapping_config = available_package_mappings.get(project_namespace)
+            if project_mapping_config:
+                project_mapping_config["namespace"] = self.get_local_project_namespace()
+                mapping_configs_by_step["Project"].append(project_mapping_config)
+
+        # Installed managed package mapping configs
+        mapping_configs_by_step["Managed packages"] = []
+        if not process_bool_arg(
+            self.options.get("skip_mapping_installed_managed_packages")
+        ):
+            for prefix, namespace in self.get_namspaces().items():
+                if namespace.version and available_package_mappings.get(namespace):
+                    mapping_config = available_package_mappings.get(namespace)
+                    mapping_configs_by_step["Managed packages"].append(mapping_config)
+
+        # Post mapping configs
+        mapping_configs_by_step["Post"] = self.get_mapping_configs_from_option(
+            "post_mapping_configs"
+        )
+
+        # Log mapping configs
+        self.log_title("Mapping configs")
+
+        all_mapping_configs = []
+
+        rows = [["SELF", "PATH", "NAMESPACE",]]
+        for step, mapping_configs in mapping_configs_by_step.items():
+            if mapping_configs:
+                is_first = True
+                for mapping_config in mapping_configs:
+                    rows.append(
+                        [
+                            step if is_first else "",
+                            mapping_config.get("path"),
+                            ""
+                            if not mapping_config.get("namespace")
+                            else mapping_config.get("namespace"),
+                        ]
+                    )
+                    is_first = False
+                    all_mapping_configs.append(mapping_config)
+            else:
+                rows.append([step, "SKIPPED", ""])
+
+        # self.log_table(rows, groupByFirstColumnIfBlank=True)
+        self.log_table(rows, groupByBlankColumns=True)
+
+        # Combine mappings
+        mapping = Util.get_ordered_mapping(
+            Util.get_combined_mapping(all_mapping_configs)
+        )
+
+        if not process_bool_arg(self.options.get("skip_keeping_existing_record_types")):
+            self.keep_existing_record_types(mapping)
+
+        self.log_combined_mapping(mapping)
+
+        return mapping
+
+class LogMapping2(MappingGenerator2):
+
+    task_options = {
+        **MappingGenerator2.task_options,
+    }
+
+    def _run_task(self):
+        if not self.get_log_mapping_option():
+            self.options["log_mapping"] = "yml"
+        self.get_data_config()
+
 class MappingGenerator(NamespaceTask, BaseSalesforceApiTask):
     task_options = {
         "package_mapping_directories": {
@@ -41,8 +307,10 @@ class MappingGenerator(NamespaceTask, BaseSalesforceApiTask):
         },
     }
 
+    """
     def get_project_namespace(self):
         return self.org_config.config.get("project_namespace") if self.org_config.config.get("project_namespace") else super().get_project_namespace()
+    """
 
     def get_available_package_mappings(self):
         rows = [["PATH", "NAMESPACE"]]
@@ -193,8 +461,8 @@ class MappingGenerator(NamespaceTask, BaseSalesforceApiTask):
         if not process_bool_arg(
             self.options.get("skip_mapping_installed_managed_packages")
         ):
-            for namespace in self.get_installed_package_namespaces():
-                if available_package_mappings.get(namespace):
+            for prefix, namespace in self.get_namspaces().items():
+                if namespace.version and available_package_mappings.get(namespace):
                     mapping_config = available_package_mappings.get(namespace)
                     mapping_configs_by_step["Managed packages"].append(mapping_config)
 

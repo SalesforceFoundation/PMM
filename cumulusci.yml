@@ -109,7 +109,6 @@ tasks:
                 - record_type: Case.caseman__Incident
                 - record_type: Case.None
 
-
     run_all_local_tests:
         group: "Tests"
         description: "Runs all local Apex Tests including code coverage"
@@ -509,6 +508,36 @@ flows:
                 options:
                     path: "data/scripts/update_all_records_as_recently_viewed.apex"
 
+    insert_managed_data:
+        steps:
+            010:
+                task: cache_namespaces_in_org_config
+            100:
+                flow: insert_managed_bulk_data
+            210:
+                task: execute_anon
+                options:
+                    path: "data/scripts/delete_sample_contacts_and_accounts.apex"
+            999:
+                task: execute_anon
+                options:
+                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+
+    assign_managed_pmdm_permsets:
+        steps:
+            110:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_View"
+            120:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Manage"
+            130:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Deliver"
+
     caseman_post_insert_bulk_data:
         steps:
             100:
@@ -557,6 +586,23 @@ flows:
             220:
                 flow: caseman_post_insert_bulk_data
 
+    insert_managed_bulk_data:
+        steps:
+            010:
+                flow: npsp_pre_insert_bulk_data
+            020:
+                flow: caseman_pre_insert_bulk_data
+            030:
+                flow: assign_managed_pmdm_permsets
+            100:
+                task: insert_bulk_data
+                options:
+                    skip_mapping_project: True
+            210:
+                flow: npsp_post_insert_bulk_data
+            220:
+                flow: caseman_post_insert_bulk_data
+
     update_admin_profile:
         steps:
             01:
@@ -588,10 +634,17 @@ flows:
             200:
                 flow: dev_org_namespaced
 
+    install_beta_with_caseman:
+        steps:
+            100:
+                task: add_caseman_dependency
+            200:
+                flow: install_beta
+
     config_unmanaged:
         steps:
             101:
-                flow: update_admin_profile 
+                flow: update_admin_profile
             105:
                 task: deploy_dev_config
                 options:
@@ -613,6 +666,15 @@ flows:
                 task: activate_flows
             200:
                 flow: insert_data
+
+    config_managed:
+        steps:
+            100:
+                flow: update_admin_profile
+            102:
+                task: activate_flows
+            200:
+                flow: insert_managed_data
 
     config_qa:
         steps:

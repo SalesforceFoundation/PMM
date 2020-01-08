@@ -100,12 +100,13 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
             for mapping_config in option_mapping_configs:
                 add_mapping_config = True
                 if mapping_config.get("when_all_namespaces"):
-                    add_mapping_config = True
+                    add_mapping_config = all(namespace in self.get_namespaces() for namespace in mapping_config.get("when_all_namespaces"))
+                    """
                     for namespace in mapping_config.get("when_all_namespaces"):
                         if namespace not in self.get_namespaces():
                             add_mapping_config = False
                             break
-                
+                    """
                 if add_mapping_config:
                     if process_bool_arg(mapping_config.get("inject_project_namespace")) or "namespace" not in mapping_config:
                         mapping_config["namespace"] = self.get_local_project_namespace()

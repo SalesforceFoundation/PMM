@@ -157,7 +157,7 @@ class TableLogger(TitleLogger):
     def log_table(
         self,
         raw_rows,
-        groupByBlankColumns=False,
+        groupByBlankColumns=True,
         rowBorders=True,
         columnBorders=True,
         padColumns=True,

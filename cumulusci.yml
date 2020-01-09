@@ -39,6 +39,7 @@ orgs:
             namespaced: True
         pilot:
             config_file: orgs/pilot.json
+            days: 30
 
 sources:
     npsp:

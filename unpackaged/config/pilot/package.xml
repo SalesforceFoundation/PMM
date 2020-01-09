@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Case_Management</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Case Manager%3A Salesforce</members>
+        <members>Case Manager%3A Salesforce Platform</members>
+        <members>Admin</members>
+        <name>Profile</name>
+    </types>
+    <types>
+        <members>AccountContactMultiRoles</members>
+        <name>StandardValueSet</name>
+    </types>
+    <version>46.0</version>
+</Package>

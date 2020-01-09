@@ -376,29 +376,75 @@ flows:
                     unmanaged: False 
                     namespace_inject: caseman
             5:
-                task: caseman:add_permission_set_field_level_security
-            6:
-                task: dx
+                task: caseman:deploy_npsp_relationships_on_contact_layout
                 options:
-                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_View"
+                    unmanaged: False
+                    namespace_inject: caseman
+            6:
+                task: caseman:add_permission_set_field_level_security
             7:
                 task: dx
                 options:
-                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Deliver"
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_View"
             8:
                 task: dx
                 options:
-                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Manage"
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Deliver"
             9:
-                task: update_admin_profile_caseman_npsp
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Manage"
             10:
-                flow: insert_data
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname ManageCases"
             11:
-                task: activate_flows
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname ManagePrograms"            
             12:
+                task: update_admin_profile_caseman_npsp
+            14:
+                flow: insert_data
+            15:
+                flow: caseman_data_tweaks
+            16:
+                task: activate_flows
+            17:
                 task: caseman:set_user_photo
-            13:
+            18:
                 task: set_user_rosa
+            19:
+                task: deploy
+                options:
+                    unmanaged: False
+                    namespace_inject: caseman
+                    path: unpackaged/config/pilot
+
+    caseman_data_tweaks:
+        steps:
+            310:
+                task: caseman:insert_branch_accountteammembers
+            320:
+                task: caseman:update_appointment_dates
+                options:
+                    managed: True
+            321:
+                task: caseman:insert_sample_tasks
+                options:
+                    managed: True
+            322:
+                task: caseman:insert_todays_events
+                options:
+                    managed: True
+            340:
+                task: caseman:create_case_notes
+                options:
+                    managed: True
+            400:
+                task: caseman:update_recently_viewed
+                options:
+                    managed: True
 
     caseman_org:
         steps:

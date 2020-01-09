@@ -439,7 +439,7 @@ tasks:
                     sql: decentralized-data/npsp/npsp.sql
                     namespace: npsp
 
-    capture_bulk_data:
+    capture_specified_bulk_data:
         group: "Data: Bulk"
         class_path: tasks.BulkData2.CaptureBulkDataDataTask
         options:

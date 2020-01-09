@@ -382,7 +382,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
 
         rows = [
             [
-                "NAME",
+                "STEP",
                 "NAMESPACE",
                 "REQUIRES NAMESPACES",
                 "USED",
@@ -391,7 +391,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
             ]
         ]
 
-        for name, data in self.options["bulk_data"].items():
+        for step, data in self.options["bulk_data"].items():
             namespace_info = self.get_namespaces().get(data.get("namespace"))
             
             all_namespaces = set()
@@ -402,7 +402,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
             is_used = ""
             if namespace_info and all(namespace in self.get_namespaces() for namespace in all_namespaces):
                 is_used = "✅"
-                self._bulk_data[name] = BulkData(
+                self._bulk_data[step] = BulkData(
                     namespace_info, 
                     data.get("map"), 
                     data.get("sql"),
@@ -410,7 +410,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
                 )
 
             rows.append([
-                name,
+                step,
                 data.get("namespace"),
                 "'" + "', '".join(all_namespaces) + "'",
                 is_used,
@@ -423,8 +423,8 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
         self.log_table(rows)
 
         if self.log_all_maps:
-            for name, data in self._bulk_data.items():
-                self.log_title(name)
+            for step, data in self._bulk_data.items():
+                self.log_title(step)
                 self.log_table(data.get_map_as_table_rows())
 
         return self._bulk_data
@@ -479,6 +479,43 @@ class DeleteBulkDataTask(BaseDeleteData, BulkDataTask):
             raise TaskOptionsError("At least one object must be specified.")
 
 
+class SpecifiedBulkDataTask(BulkDataTask):
+    task_options = {
+        **BulkDataTask.task_options,
+        "bulk_data_step": {
+            "description": "Data step to capture",
+            "required": True,
+        },
+    }
+
+    @property
+    def specified_bulk_data(self):
+        self._specified_bulk_data = self.bulk_data.get(self.options["bulk_data_step"])
+        if not self._specified_bulk_data:
+            raise TaskOptionsError(
+                "'bulk_data_step' option must be a member of 'bulk_data' option"
+            )
+        return self._specified_bulk_data
+
+class CaptureBulkDataDataTask(ExtractData, SpecifiedBulkDataTask):
+    task_options = {
+        **SpecifiedBulkDataTask.task_options,
+        **ExtractData.task_options,
+    }
+
+    def _init_options(self, kwargs):
+        self.options["sql_path"] = self.specified_bulk_data.sql_path
+        self.options["database_url"] = None
+        self.options["log_mapping"] = None
+        
+        super(ExtractData, self)._init_options(kwargs)
+
+    def _init_mapping(self):
+        # Log specified map
+        self.log_title(self.options["bulk_data_step"])
+        self.log_table(self.specified_bulk_data.get_map_as_table_rows())
+
+        self.mappings = self.specified_bulk_data.map
 
 
 class MappingGenerator(NamespaceTask, BaseSalesforceApiTask):

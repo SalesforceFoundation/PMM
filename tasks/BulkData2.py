@@ -14,11 +14,13 @@ class BulkData(Namespace):
 
     def __init__(
         self,
+        step: str,
         namespace: Namespace,
         map_path = None,
         sql_path = None,
         record_types_by_sobject = None,
     ) -> None:
+        self._step = step
         self._namespace = namespace.namespace
         self._local_namespace = namespace.local_namespace
         self._version = namespace.version
@@ -47,16 +49,19 @@ class BulkData(Namespace):
                         for field in fields_to_delete:
                             del step[key][field]
                         step[key].update(new_fields)
+
+                        # force auto-numbered primary keys
+                        if key == "fields" and "Id" in step["fields"]:
+                            del step["fields"]["Id"]
                 
                 # inject namespace in sf_object
                 sobject = step["sf_object"]
                 step["sf_object"] = self.inject_sobject_namespace(sobject)
                 
-                # delete record_type if doesn't exist in org
-                if step.get("record_type"):
+                # delete record_type if doesn't exist in org if record_types_by_sobject is not None
+                if step.get("record_type") and not record_types_by_sobject is None:
                     if not (
-                        record_types_by_sobject 
-                        and record_types_by_sobject.get(sobject) 
+                        record_types_by_sobject.get(sobject) 
                         and step.get("record_type") in record_types_by_sobject.get(sobject)
                     ):
                         del step["record_type"]
@@ -85,6 +90,18 @@ class BulkData(Namespace):
         if not isinstance(other, Namespace):
             return NotImplemented
         return self.namespace < other.namespace and self.map_path < other.map_path and self.sql_path < other.sql_path
+
+    @property
+    def step(self):
+        return self._step
+
+    @step.setter
+    def step(self, value):
+        pass
+
+    @step.deleter
+    def step(self):
+        pass
 
     @property
     def map_path(self):
@@ -309,6 +326,17 @@ class BulkData(Namespace):
 
         return ordered_mapping
     
+
+#######################
+##
+## TODO:
+##      set bulk_data as project_config attribute
+##      save bulk_data in org_config
+## 
+#######################
+
+
+
 class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
 
     def _get_record_type_query(self):
@@ -317,6 +345,10 @@ class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
     @property
     @functools.lru_cache()
     def record_types_by_sobject(self):
+        # Return None if sf isn't initialized
+        if not hasattr(self, "sf"):
+            return None
+
         # Query org for all Record Types
         self._record_types_by_sobject = {}
 
@@ -403,6 +435,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
             if namespace_info and all(namespace in self.get_namespaces() for namespace in all_namespaces):
                 is_used = "✅"
                 self._bulk_data[step] = BulkData(
+                    step,
                     namespace_info, 
                     data.get("map"), 
                     data.get("sql"),
@@ -432,7 +465,10 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
     @property
     @functools.lru_cache()
     def combined_bulk_data(self):
-        self._combined_bulk_data = BulkData(self.get_namespaces().get("c"))
+        self._combined_bulk_data = BulkData(
+            "Combined", 
+            self.get_namespaces().get("c")
+        )
 
         for data in self.bulk_data.values():
             self._combined_bulk_data.map = data.map
@@ -443,6 +479,26 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
 
         return self._combined_bulk_data
 
+class SpecifiedBulkDataTask(BulkDataTask):
+    task_options = {
+        **BulkDataTask.task_options,
+        "bulk_data_step": {
+            "description": "Data step to capture",
+            "required": True,
+        },
+    }
+
+    @property
+    @functools.lru_cache()
+    def combined_bulk_data(self):
+        # overwrites combined_bulk_data with specified bulk_data_step
+        self._combined_bulk_data = self.bulk_data.get(self.options["bulk_data_step"])
+        if not self._combined_bulk_data:
+            raise TaskOptionsError(
+                "'bulk_data_step' option must be a member of 'bulk_data' option"
+            )
+        return self._combined_bulk_data
+
 class LogBulkDataMapTask(BulkDataTask):
 
     task_options = {
@@ -450,15 +506,21 @@ class LogBulkDataMapTask(BulkDataTask):
     }
 
     def _run_task(self):
-        self.options["log_maps"] = "combined"
+        self.options["log_maps"] = None
         
         # Calling combined_bulk_data logs the map
-        self.combined_bulk_data
+        self.log_title(self.combined_bulk_data.step)
+        self.log_table(self.combined_bulk_data.get_map_as_table_rows())
 
-
-class DeleteBulkDataTask(BaseDeleteData, BulkDataTask):
+class LogSpecifiedBulkDataMapTask(LogBulkDataMapTask, SpecifiedBulkDataTask):
 
     task_options = {
+        **SpecifiedBulkDataTask.task_options,
+    }
+
+class DeleteBulkDataTask(BaseDeleteData, BulkDataTask):
+    task_options = {
+        **BaseDeleteData.task_options,
         **BulkDataTask.task_options,
     }
 
@@ -472,51 +534,34 @@ class DeleteBulkDataTask(BaseDeleteData, BulkDataTask):
         # Generate objects from mapping
         self.options["objects"] = self.combined_bulk_data.sobjects_for_delete
 
-        self.log_title("Object to delete")
+        self.log_title("Deleting SObjects from bulk_data step: {}".format(self.combined_bulk_data.step))
         self.log_list(self.options.get("objects"))
 
         if not len(self.options["objects"]) or not self.options["objects"][0]:
             raise TaskOptionsError("At least one object must be specified.")
 
-
-class SpecifiedBulkDataTask(BulkDataTask):
-    task_options = {
-        **BulkDataTask.task_options,
-        "bulk_data_step": {
-            "description": "Data step to capture",
-            "required": True,
-        },
-    }
-
-    @property
-    def specified_bulk_data(self):
-        self._specified_bulk_data = self.bulk_data.get(self.options["bulk_data_step"])
-        if not self._specified_bulk_data:
-            raise TaskOptionsError(
-                "'bulk_data_step' option must be a member of 'bulk_data' option"
-            )
-        return self._specified_bulk_data
-
-class CaptureBulkDataDataTask(ExtractData, SpecifiedBulkDataTask):
+class CaptureSpecifiedBulkDataDataTask(ExtractData, SpecifiedBulkDataTask):
     task_options = {
         **SpecifiedBulkDataTask.task_options,
-        **ExtractData.task_options,
     }
 
     def _init_options(self, kwargs):
-        self.options["sql_path"] = self.specified_bulk_data.sql_path
-        self.options["database_url"] = None
-        self.options["log_mapping"] = None
-        
-        super(ExtractData, self)._init_options(kwargs)
+        super(ExtractData, self)._init_options(kwargs)    
 
     def _init_mapping(self):
+        self.options["database_url"] = "sqlite://"
+        self.options["sql_path"] = self.combined_bulk_data.sql_path
+
         # Log specified map
-        self.log_title(self.options["bulk_data_step"])
-        self.log_table(self.specified_bulk_data.get_map_as_table_rows())
+        self.log_title(self.combined_bulk_data.step)
+        self.log_table(self.combined_bulk_data.get_map_as_table_rows())
 
-        self.mappings = self.specified_bulk_data.map
+        self.mappings = self.combined_bulk_data.map
 
+class DeleteSpecifiedBulkDataTask(DeleteBulkDataTask, SpecifiedBulkDataTask):
+    task_options = {
+        **SpecifiedBulkDataTask.task_options,
+    }
 
 class MappingGenerator(NamespaceTask, BaseSalesforceApiTask):
     task_options = {
@@ -705,7 +750,7 @@ class MappingGenerator(NamespaceTask, BaseSalesforceApiTask):
         if not process_bool_arg(
             self.options.get("skip_mapping_installed_managed_packages")
         ):
-            for prefix, namespace in self.get_namspaces().items():
+            for _, namespace in self.get_namspaces().items():
                 if namespace.version and available_package_mappings.get(namespace):
                     mapping_config = available_package_mappings.get(namespace)
                     mapping_configs_by_step["Managed packages"].append(mapping_config)

@@ -2,6 +2,7 @@
 Household_Accounts:
     sf_object: Account
     table: household_accounts
+    record_type: HH_Account
     fields:
         # Standard Fields
         Name: Name

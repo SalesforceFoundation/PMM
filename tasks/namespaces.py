@@ -1,14 +1,11 @@
 import operator
-from tasks.logger import TableLogger
+from tasks.logger import LoggingTask
 from cumulusci.core.config import TaskConfig
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.tasks.salesforce import GetInstalledPackages
 from cumulusci.tasks.apex.anon import AnonymousApexTask
 
-class NamespaceInfo():
-    namespace: str
-    local_namespace: str
-    version: str
+class Namespace():
 
     def __init__(
         self,
@@ -16,13 +13,49 @@ class NamespaceInfo():
         localNamespace=None,
         version=None
     ) -> None:
-        self.namespace = namespace
-        self.local_namespace = namespace if localNamespace is None else localNamespace
-        self.version = version
+        self._namespace = namespace
+        self._local_namespace = namespace if localNamespace is None else localNamespace
+        self._version = version
+
+    @property
+    def namespace(self):
+        return self._namespace
+
+    @namespace.setter
+    def namespace(self, value):
+        pass
+
+    @namespace.deleter
+    def namespace(self):
+        pass
+
+    @property
+    def local_namespace(self):
+        return self._local_namespace
+
+    @local_namespace.setter
+    def local_namespace(self, value):
+        pass
+
+    @local_namespace.deleter
+    def local_namespace(self):
+        pass
+
+    @property
+    def version(self):
+        return self._version
+
+    @version.setter
+    def version(self, value):
+        pass
+
+    @version.deleter
+    def version(self):
+        pass
 
     def __repr__(self) -> str:
         return (
-            'NamespaceInfo('
+            'Namespace('
             f'namespace={self.namespace!r}, local_namespace={self.local_namespace!r}, '
             f'version={self.version!r})'
         )
@@ -31,27 +64,30 @@ class NamespaceInfo():
         return hash((self.namespace))
 
     def __eq__(self, other) -> bool:
-        if not isinstance(other, NamespaceInfo):
+        if not isinstance(other, Namespace):
             return NotImplemented
         return (
             (self.namespace, self.local_namespace, self.version) == 
             (other.namespace, other.local_namespace, other.version))
 
     def __lt__(self, other):
-        if not isinstance(other, NamespaceInfo):
+        if not isinstance(other, Namespace):
             return NotImplemented
         return self.namespace < other.namespace
 
-    def prefix(self, value, delimiter):
+    def inject_namespace(self, value, delimiter):
         return "{}{}{}".format(self.local_namespace, delimiter, value) if self.local_namespace else value
 
-    def prefix_field(self, value):
-        return self.prefix(value, "__")
+    def inject_field_namespace(self, field):
+        return self.inject_namespace(field, "__") if field and field.endswith("__c") else field
 
-    def prefix_class(self, value):
-        return self.prefix(value, ".")
+    def inject_sobject_namespace(self, sobject):
+        return self.inject_field_namespace(sobject)
 
-class NamespaceTask(TableLogger):
+    def inject_class_namespace(self, class_name):
+        return self.inject_namespace(class_name, ".")
+
+class NamespaceTask(LoggingTask):
     """
     Caches namespaces in self.org_config.config
     """
@@ -88,11 +124,11 @@ class NamespaceTask(TableLogger):
             self.log_title("Getting installed packages:")
 
             namespace_infos_by_prefix = {
-                "c": NamespaceInfo(
+                "c": Namespace(
                     "c",
                     localNamespace=self.get_local_project_namespace(),
                 ),
-                project_namespace: NamespaceInfo(
+                project_namespace: Namespace(
                     project_namespace,
                     localNamespace=self.get_local_project_namespace(),
                 ),
@@ -104,7 +140,7 @@ class NamespaceTask(TableLogger):
                 TaskConfig({}), 
                 self.org_config,
             )().items():
-                namespace_infos_by_prefix[package[0]] = NamespaceInfo(
+                namespace_infos_by_prefix[package[0]] = Namespace(
                     package[0],
                     version=package[1],
                 )

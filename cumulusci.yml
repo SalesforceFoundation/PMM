@@ -392,30 +392,52 @@ tasks:
     
     log_mapping:
         group: "Data: Bulk"
-        class_path: tasks.BulkData2.LogMapping2
+        class_path: tasks.BulkData2.LogBulkDataMapTask
         options:
             log_mapping: table
-            data:
-                - map: decentralized-data/c/Contacts.yml
-                  sql: decentralized-data/c/Contacts.sql
-                  namespace: c
-                - map: decentralized-data/c/Household_Accounts.yml
-                  sql: decentralized-data/c/Household_Accounts.sql
-                  namespace: c
-                - map: decentralized-data/c/Organization_Accounts.yml
-                  sql: decentralized-data/c/Organization_Accounts.sql
-                  namespace: c
-                - map: decentralized-data/pmdm0/pmdm0.yml
-                  sql: decentralized-data/pmdm0/pmdm0.sql
-                  namespace: pmdm0
-                - map: decentralized-data/caseman/caseman.yml
-                  sql: decentralized-data/caseman/caseman.sql
-                  namespace: pmdm0
-                - map: decentralized-data/caseman/unpackaged.yml
-                  sql: decentralized-data/caseman/unpackaged.sql
-                  namespace: c
-                  when_all_namespaces:
-                    - caseman
+            bulk_data:
+                Contacts:
+                    map: decentralized-data/c/Contacts.yml
+                    sql: decentralized-data/c/Contacts.sql
+                    namespace: c
+                Household_Accounts:
+                    map: decentralized-data/c/Household_Accounts.yml
+                    sql: decentralized-data/c/Household_Accounts.sql
+                    namespace: c
+                Organization_Accounts:
+                    map: decentralized-data/c/Organization_Accounts.yml
+                    sql: decentralized-data/c/Organization_Accounts.sql
+                    namespace: c
+                pmdm0:
+                    map: decentralized-data/pmdm0/pmdm0.yml
+                    sql: decentralized-data/pmdm0/pmdm0.sql
+                    namespace: pmdm0
+                caseman:
+                    map: decentralized-data/caseman/caseman.yml
+                    sql: decentralized-data/caseman/caseman.sql
+                    namespace: caseman
+                caseman_unpackaged:
+                    map: decentralized-data/caseman/unpackaged.yml
+                    sql: decentralized-data/caseman/unpackaged.sql
+                    namespace: c
+                    when_all_namespaces:
+                        - caseman
+                npe01:
+                    map: decentralized-data/npe01/npe01.yml
+                    sql: decentralized-data/npe01/npe01.sql
+                    namespace: npe01
+                npe4:
+                    map: decentralized-data/npe4/npe4.yml
+                    sql: decentralized-data/npe4/npe4.sql
+                    namespace: npe4
+                npo02:
+                    map: decentralized-data/npo02/npo02.yml
+                    sql: decentralized-data/npo02/npo02.sql
+                    namespace: npo02
+                npsp:
+                    map: decentralized-data/npsp/npsp.yml
+                    sql: decentralized-data/npsp/npsp.sql
+                    namespace: npsp
 
 
     update_client_photo_directories:

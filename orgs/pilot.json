@@ -1,5 +1,5 @@
 {
-  "orgName": "Case Management - Beta Test Org",
+  "orgName": "PMDM and Case Management - Pilot Org",
   "edition": "Partner Developer",
   "features": [
     "ContactsToMultipleAccounts"
@@ -20,6 +20,9 @@
     },
     "socialProfileSettings": {
       "enableSocialProfiles": true
+    },
+    "pathAssistantSettings": {
+      "pathAssistantEnabled": true
     }
   }
 }

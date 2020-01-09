@@ -57,39 +57,29 @@
                 </lightning-layout-item>
                 <lightning-layout-item>
                     <template if:true={isSaving}>
-                        <div class="slds-is-relative spinner-container" role="alert">
+                        <div class="slds-is-relative spinner-container" role="alert" >
                             <lightning-spinner
                                 alternative-text={labels.saving}
                                 size="small"
                             ></lightning-spinner>
+
                         </div>
                     </template>
                     <template if:true={isSaved} role="alert">
-                        <lightning-icon
-                            icon-name="action:check"
-                            class="color-green"
-                            alternative-text={labels.saved}
-                            size="xx-small"
-                            tabindex="0"
-                        ></lightning-icon>
+                        <c-service-delivery-row-icon icon-name="action:check" class-name="green" alternative-text={labels.saved} size="xx-small" help-text={labels.saved}> </c-service-delivery-row-icon>
                     </template>
                     <template if:true={isError} role="alert">
-                        <lightning-icon
-                            icon-name="utility:warning"
-                            variant="error"
-                            alternative-text={labels.error}
-                            size="small"
-                            tabindex="0"
-                        ></lightning-icon>
+                        <c-service-delivery-row-icon icon-name="utility:warning" variant="error" alternative-text={labels.error} size="small" help-text={labels.error}> </c-service-delivery-row-icon>
                     </template>
                 </lightning-layout-item>
             </lightning-layout>
             <lightning-layout>
                 <template if:true={noContactPrograms}>
-                    <lightning-layout-item size="12" padding="around-small">
+                    <lightning-layout-item size="12" padding="around-small" >
                         <div class="slds-text-color_error">
                             {labels.selectedContactWarning}
                         </div>
+
                     </lightning-layout-item>
                 </template>
                 <template if:true={noServicesForPE}>

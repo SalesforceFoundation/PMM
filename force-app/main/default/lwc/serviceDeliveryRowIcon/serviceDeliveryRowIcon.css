@@ -1,0 +1,12 @@
+.slds-popover {
+    display:none;
+}
+
+.has-tooltip:hover .slds-popover, .has-tooltip:focus .slds-popover  {
+    display:block;
+
+}
+
+.green{
+    background-color:#4BCA81;
+}

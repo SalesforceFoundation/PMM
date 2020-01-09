@@ -1,0 +1,15 @@
+<template>
+    <span class="has-tooltip" style="position:relative" tabindex="0" role="alert">
+        <lightning-icon
+            icon-name={iconName}
+            class={className}
+            alternative-text={alternativeText}
+            size={size}
+            aria-describedby="help"
+            variant={variant}
+        ></lightning-icon>
+        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left " role="tooltip" id="help" style="position:absolute;bottom: 50px;left: -9px;">
+            <div class="slds-popover__body">{helpText}</div>
+          </div>
+        </span>
+</template>     

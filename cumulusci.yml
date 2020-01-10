@@ -38,15 +38,59 @@ orgs:
             days: 7
             namespaced: True
 
+bulk_data:
+    Contacts:
+        map: decentralized-data/c/Contacts.yml
+        sql: decentralized-data/c/Contacts.sql
+        namespace: c
+    Household_Accounts:
+        map: decentralized-data/c/Household_Accounts.yml
+        sql: decentralized-data/c/Household_Accounts.sql
+        namespace: c
+    Organization_Accounts:
+        map: decentralized-data/c/Organization_Accounts.yml
+        sql: decentralized-data/c/Organization_Accounts.sql
+        namespace: c
+    pmdm0:
+        map: decentralized-data/pmdm0/pmdm0.yml
+        sql: decentralized-data/pmdm0/pmdm0.sql
+        namespace: pmdm0
+    caseman:
+        map: decentralized-data/caseman/caseman.yml
+        sql: decentralized-data/caseman/caseman.sql
+        namespace: caseman
+    caseman_unpackaged:
+        map: decentralized-data/caseman/unpackaged.yml
+        sql: decentralized-data/caseman/unpackaged.sql
+        namespace: c
+        when_all_namespaces:
+            - caseman
+    npe01:
+        map: decentralized-data/npe01/npe01.yml
+        sql: decentralized-data/npe01/npe01.sql
+        namespace: npe01
+    npe4:
+        map: decentralized-data/npe4/npe4.yml
+        sql: decentralized-data/npe4/npe4.sql
+        namespace: npe4
+    npo02:
+        map: decentralized-data/npo02/npo02.yml
+        sql: decentralized-data/npo02/npo02.sql
+        namespace: npo02
+    npsp:
+        map: decentralized-data/npsp/npsp.yml
+        sql: decentralized-data/npsp/npsp.sql
+        namespace: npsp
+
 tasks:
     cache_namespaces_in_org_config:
         description: Caches namespaces information in org_config
-        class_path: tasks.namespaces.CacheNamespaces
+        class_path: tasks.org_info.CacheNamespaces
         group: Namespaces
 
     namespace_execute_anonymous:
         description: Execute anonymous apex via the tooling api if namespace is used.
-        class_path: tasks.namespaces.ExecuteAnonymousTask
+        class_path: tasks.org_info.ExecuteAnonymousTask
         group: Salesforce
 
     robot:
@@ -122,6 +166,7 @@ tasks:
                 - "unable to obtain exclusive access to this record"
                 - "UNABLE_TO_LOCK_ROW"
             retry_always: True
+
     dx:
         group: "Salesforce DX"
         description: "Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option"
@@ -146,11 +191,59 @@ tasks:
             dependencies:
                 - github: "https://github.com/SalesforceFoundation/caseman"
             include_beta: True
+    
+            update_client_photo_directories:
+        group: "CaseMan: Test Data"
+        description: "Update client photo directories after capture_test_data"
+        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
+        options:
+            directory_path: "data/bulk/client-photos"
+            sql_path: "data/bulk/data.sql"
 
+    upload_client_photos:
+        group: "Data: Bulk: CaseMan"
+        description: "Upload client photos and link to client records"
+        class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
+        options:
+            directory_path: "data/bulk/client-photos"
+
+    deploy_dev_config:
+        group: "pmdm: Config"
+        description: Deploys the post-install configuration for an unmanaged DE org
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/dev
+            namespace_inject: $project_config.project__package__namespace
+
+    uninstall_packaged_incremental:
+        description: Deletes any metadata from the package in the target org not in the local workspace
+        class_path: cumulusci.tasks.salesforce.UninstallPackagedIncremental
+        options:
+            ignore:
+                QuickAction:
+                    - NewEvent
+                    - NewCase
+                    - NewLead
+                    - NewContact
+                    - NewOpportunity
+                    - NewTask
+                    - LogACall
+
+    deploy_service_delivery_modal_test:
+        group: "pmdm: tests"
+        description: Deploys a testModal component to test serviceDeliveryModal component
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/tests/serviceDeliveryModal
+            namespace_inject: $project_config.project__package__namespace
+    
+    ################################################
+    ################################################
+    ################################################
     log_bulk_data_mapping:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData2.LogMapping
+        class_path: tasks.BulkData_orig.LogMapping
         options:
             package_mapping_directories:
                 - data/bulk/mapping/caseman
@@ -163,9 +256,9 @@ tasks:
             log_mapping: table
 
     create_bulk_data_mapping:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData2.CreateMapping
+        class_path: tasks.BulkData_orig.CreateMapping
         options:
             package_mapping_directories:
                 - data/bulk/mapping/caseman
@@ -181,10 +274,30 @@ tasks:
                       - caseman
             log_mapping: table
 
+    insert_bulk_data:
+        group: "Data: BulkData_orig"
+        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
+        class_path: tasks.BulkData_orig.InsertData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            post_mapping_configs:
+                - path: data/bulk/mapping/unpackaged/caseman.yml
+                  when_all_namespaces:
+                      - caseman
+
     capture_bulk_data:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -203,9 +316,9 @@ tasks:
             log_mapping: table
 
     capture_bulk_data_contacts:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -215,9 +328,9 @@ tasks:
                 - path: decentralized-data/c/Contacts.yml
 
     capture_bulk_data_household_accounts:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -227,9 +340,9 @@ tasks:
                 - path: decentralized-data/c/Household_Accounts.yml
 
     capture_bulk_data_organization_accounts:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -239,9 +352,9 @@ tasks:
                 - path: decentralized-data/c/Organization_Accounts.yml
 
     capture_bulk_data_caseman:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -251,9 +364,9 @@ tasks:
                 - decentralized-data/caseman
 
     capture_bulk_data_caseman_unpackaged:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -264,9 +377,9 @@ tasks:
                   inject_project_namespace: true
     
     capture_bulk_data_npe01:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -276,9 +389,9 @@ tasks:
                 - decentralized-data/npe01
     
     capture_bulk_data_npe4:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -288,9 +401,9 @@ tasks:
                 - decentralized-data/npe4
     
     capture_bulk_data_npo02:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -300,9 +413,9 @@ tasks:
                 - decentralized-data/npo02
     
     capture_bulk_data_npsp:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -312,9 +425,9 @@ tasks:
                 - decentralized-data/npsp
     
     capture_bulk_data_pmdm0:
-        group: "Data: Bulk"
+        group: "Data: BulkData_orig"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData2.CaptureData
+        class_path: tasks.BulkData_orig.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -322,19 +435,13 @@ tasks:
             sql_path: decentralized-data/pmdm0/pmdm0.sql
             package_mapping_directories:
                 - decentralized-data/pmdm0
-    
-    capture_bulk_data_orig:
-        group: "Data: Bulk"
-        description: "include sql_path and mapping"
-        class_path: tasks.bulkdata.ExtractData
 
-    insert_bulk_data:
-        group: "Data: Bulk"
-        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
-        class_path: tasks.BulkData2.InsertData
+    delete_bulk_data_old:
+        group: "Data: BulkData_orig"
+        description: "I need a description"
+        class_path: tasks.BulkData_orig.DeleteData
         options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
+            hardDelete: True
             package_mapping_directories:
                 - data/bulk/mapping/caseman
                 - data/bulk/mapping/npsp
@@ -343,10 +450,34 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
+
+    ################################################
+    ################################################
+    ################################################
+
+    cache_project_bulk_data:
+        group: "Data: Bulk"
+        class_path: tasks.BulkData2.CacheProjectBulkDataTask
+    
+    log_project_bulk_data_map:
+        group: "Data: Bulk"
+        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
+        class_path: tasks.BulkData2.LoadBulkDataConfigTask
+        options:
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            log_mapping: table
+    
+    capture_bulk_data_orig:
+        group: "Data: Bulk"
+        description: "include sql_path and mapping"
+        class_path: tasks.bulkdata.ExtractData
 
     insert_combined_bulk_data:
         group: "Data: Bulk"
@@ -393,51 +524,8 @@ tasks:
     log_bulk_data_map:
         group: "Data: Bulk"
         class_path: tasks.BulkData2.LogBulkDataMapTask
-        options:
-            log_mapping: table
-            bulk_data:
-                Contacts:
-                    map: decentralized-data/c/Contacts.yml
-                    sql: decentralized-data/c/Contacts.sql
-                    namespace: c
-                Household_Accounts:
-                    map: decentralized-data/c/Household_Accounts.yml
-                    sql: decentralized-data/c/Household_Accounts.sql
-                    namespace: c
-                Organization_Accounts:
-                    map: decentralized-data/c/Organization_Accounts.yml
-                    sql: decentralized-data/c/Organization_Accounts.sql
-                    namespace: c
-                pmdm0:
-                    map: decentralized-data/pmdm0/pmdm0.yml
-                    sql: decentralized-data/pmdm0/pmdm0.sql
-                    namespace: pmdm0
-                caseman:
-                    map: decentralized-data/caseman/caseman.yml
-                    sql: decentralized-data/caseman/caseman.sql
-                    namespace: caseman
-                caseman_unpackaged:
-                    map: decentralized-data/caseman/unpackaged.yml
-                    sql: decentralized-data/caseman/unpackaged.sql
-                    namespace: c
-                    when_all_namespaces:
-                        - caseman
-                npe01:
-                    map: decentralized-data/npe01/npe01.yml
-                    sql: decentralized-data/npe01/npe01.sql
-                    namespace: npe01
-                npe4:
-                    map: decentralized-data/npe4/npe4.yml
-                    sql: decentralized-data/npe4/npe4.sql
-                    namespace: npe4
-                npo02:
-                    map: decentralized-data/npo02/npo02.yml
-                    sql: decentralized-data/npo02/npo02.sql
-                    namespace: npo02
-                npsp:
-                    map: decentralized-data/npsp/npsp.yml
-                    sql: decentralized-data/npsp/npsp.sql
-                    namespace: npsp
+
+    
 
     log_specified_bulk_data_map:
         group: "Data: Bulk"
@@ -632,68 +720,25 @@ tasks:
                     sql: decentralized-data/npsp/npsp.sql
                     namespace: npsp
 
-    update_client_photo_directories:
-        group: "CaseMan: Test Data"
-        description: "Update client photo directories after capture_test_data"
-        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
-        options:
-            directory_path: "data/bulk/client-photos"
-            sql_path: "data/bulk/data.sql"
-
-    upload_client_photos:
-        group: "Data: Bulk: CaseMan"
-        description: "Upload client photos and link to client records"
-        class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
-        options:
-            directory_path: "data/bulk/client-photos"
-
-    deploy_dev_config:
-        group: "pmdm: Config"
-        description: Deploys the post-install configuration for an unmanaged DE org
-        class_path: cumulusci.tasks.salesforce.Deploy
-        options:
-            path: unpackaged/config/dev
-            namespace_inject: $project_config.project__package__namespace
-
-    uninstall_packaged_incremental:
-        description: Deletes any metadata from the package in the target org not in the local workspace
-        class_path: cumulusci.tasks.salesforce.UninstallPackagedIncremental
-        options:
-            ignore:
-                QuickAction:
-                    - NewEvent
-                    - NewCase
-                    - NewLead
-                    - NewContact
-                    - NewOpportunity
-                    - NewTask
-                    - LogACall
-
-    deploy_service_delivery_modal_test:
-        group: "pmdm: tests"
-        description: Deploys a testModal component to test serviceDeliveryModal component
-        class_path: cumulusci.tasks.salesforce.Deploy
-        options:
-            path: unpackaged/tests/serviceDeliveryModal
-            namespace_inject: $project_config.project__package__namespace
-
-    delete_bulk_data_old:
-        group: "pmdm: data"
-        description: "I need a description"
-        class_path: tasks.BulkData2.DeleteData
-        options:
-            hardDelete: True
-            package_mapping_directories:
-                - data/bulk/mapping/caseman
-                - data/bulk/mapping/npsp
-                - data/bulk/mapping/pmdm
-            pre_mapping_configs:
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
 
 
 flows:
+
+    log_bulk_data:
+        steps:
+            1:
+                task: cache_project_bulk_data
+            2:
+                task: cache_project_bulk_data
+                options:
+                    bulk_data_log_level: None
+            3:
+                task: cache_project_bulk_data
+                options:
+                    bulk_data_log_level: None
+            99:
+                task: log_bulk_data_map
+
     capture:
         steps:
             110:

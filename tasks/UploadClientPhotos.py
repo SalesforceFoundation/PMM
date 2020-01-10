@@ -1,7 +1,7 @@
 import base64
 import os
 import re
-from tasks.namespaces import NamespaceTask
+from tasks.org_info import NamespaceTask
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 
 class UploadClientPhotos(NamespaceTask, BaseSalesforceApiTask):

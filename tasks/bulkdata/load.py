@@ -381,6 +381,9 @@ class LoadData(BulkJobTaskMixin, BaseSalesforceApiTask):
         return id_table_name
 
     def _sqlite_load(self):
+
+        # TODO: hack here
+
         conn = self.session.connection()
         cursor = conn.connection.cursor()
         with open(self.options["sql_path"], "r") as f:

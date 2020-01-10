@@ -1,8 +1,9 @@
 import operator
 from tasks.logger import LoggingTask
+
 from cumulusci.core.config import TaskConfig
 from cumulusci.core.utils import process_bool_arg
-from cumulusci.tasks.salesforce import GetInstalledPackages
+from cumulusci.tasks.salesforce import GetInstalledPackages, BaseSalesforceApiTask
 from cumulusci.tasks.apex.anon import AnonymousApexTask
 
 class Namespace():
@@ -75,6 +76,15 @@ class Namespace():
             return NotImplemented
         return self.namespace < other.namespace
 
+    def get_prefix(self, delimter):
+        return "{}{}".format(self.local_namespace, delimter) if self.local_namespace else ""
+
+    def get_field_prefix(self):
+        return self.get_prefix("__")
+
+    def get_class_prefix(self):
+        return self.get_prefix(".")
+
     def inject_namespace(self, value, delimiter):
         return "{}{}{}".format(self.local_namespace, delimiter, value) if self.local_namespace else value
 
@@ -86,6 +96,72 @@ class Namespace():
 
     def inject_class_namespace(self, class_name):
         return self.inject_namespace(class_name, ".")
+
+
+class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
+
+    def _get_record_type_query(self):
+        return "SELECT SobjectType, DeveloperName FROM RecordType ORDER BY SobjectType, DeveloperName"
+
+    @property
+    def record_types_by_sobject(self):
+        # caches queried record_types by SobjectType in org_config
+        record_types_by_sobject = self.org_config.config.get("record_types_by_sobject")
+
+        # record_types_by_sobject is None means sf doesn't exist meaning we can't query
+        if record_types_by_sobject is None and hasattr(self, "sf"):
+            # TODO: is there a way we can "load" sf connection if it doesn't exist?
+            # If we have a Bulk API task, sf attr seems to be deleted
+
+            record_types_by_sobject = {}
+            self.record_types_by_sobject = record_types_by_sobject
+
+            rows = [
+                [
+                    "SOBJECT TYPE",
+                    "DEVELOPER NAME"
+                ]
+            ]
+
+            # Query org for all Record Types
+            last_sobject_type = None
+            for record in self.sf.query_all(self._get_record_type_query()).get("records"):
+                sobject_type = record.get("SobjectType")
+                developer_name = record.get("DeveloperName")
+
+                developer_names = record_types_by_sobject.get(sobject_type) or set()
+                developer_names.add(developer_name)
+
+                record_types_by_sobject[sobject_type] = developer_names
+                rows.append(
+                    [
+                        sobject_type if sobject_type != last_sobject_type else "",
+                        developer_name
+                    ]
+                )
+
+                last_sobject_type = sobject_type
+            
+            if not record_types_by_sobject:
+                rows.append([
+                    "💤  NONE  💤"
+                ])
+            self.log_title("Record Types")
+            self.log_table(rows)
+
+        return record_types_by_sobject
+
+    @record_types_by_sobject.setter
+    def record_types_by_sobject(self, value):
+        # caches queried record_types by SobjectType in org_config
+        self.org_config.config.update({
+            "record_types_by_sobject": value
+        })
+
+    @record_types_by_sobject.deleter
+    def record_types_by_sobject(self):
+        self.record_types_by_sobject = None
+
 
 class NamespaceTask(LoggingTask):
     """
@@ -104,33 +180,61 @@ class NamespaceTask(LoggingTask):
             ]
         ])
 
-    def get_project_namespace(self):
+    @property
+    def project_namespace(self):
         # support caching 
         if not self.org_config.config.get("project_namespace"):
-            self.set_project_namespace(self.project_config.project__package__namespace)
+            self.project_namespace = self.project_config.project__package__namespace
         return self.org_config.config.get("project_namespace")
 
+    @project_namespace.setter
+    def project_namespace(self, project_namespace):
+        self.org_config.config.update({
+            "project_namespace": project_namespace
+        })
+        self.log_title("Setting org config's project namespace")
+        self.log_table([
+            [
+                "project_namespace",
+                self.org_config.config.get("project_namespace")
+            ]
+        ])
+
+    @project_namespace.deleter
+    def project_namespace(self):
+        self.project_namespace = None
+
+    @property
     def is_org_namespaced(self):
         return self.org_config and process_bool_arg(self.org_config.config.get("namespaced"))
+    """
+    @is_org_namespaced.setter
+    def is_org_namespaced(self, value):
+        pass
 
-    def get_local_project_namespace(self):
-        return "" if not self.is_org_namespaced() else self.get_project_namespace()
+    @is_org_namespaced.deleter
+    def is_org_namespaced(self):
+        pass
+    """
+    @property
+    def local_project_namespace(self):
+        return "" if not self.is_org_namespaced else self.project_namespace
 
-    def get_namespaces(self):
+    @property
+    def namespaces(self):
         if not self.org_config.config.get("namespaces"):
-
-            project_namespace = self.get_project_namespace()
+            #project_namespace = self.project_namespace
 
             self.log_title("Getting installed packages:")
 
             namespace_infos_by_prefix = {
                 "c": Namespace(
                     "c",
-                    localNamespace=self.get_local_project_namespace(),
+                    localNamespace=self.local_project_namespace,
                 ),
-                project_namespace: Namespace(
-                    project_namespace,
-                    localNamespace=self.get_local_project_namespace(),
+                self.project_namespace: Namespace(
+                    self.project_namespace,
+                    localNamespace=self.local_project_namespace,
                 ),
             }
 
@@ -153,6 +257,12 @@ class NamespaceTask(LoggingTask):
 
         return self.org_config.config.get("namespaces")
 
+    @namespaces.deleter
+    def namespaces(self):
+        if "namespaces" in self.org_config.config:
+            del self.org_config.config["namespaces"]
+        self.namespaces
+
     def log_namespaces(self):
         rows = [
             [
@@ -162,62 +272,30 @@ class NamespaceTask(LoggingTask):
                 "PROJECT"
             ],
         ]
-        for prefix in sorted(self.get_namespaces().keys()):
+        for prefix in sorted(self.namespaces.keys()):
             rows.append([
-                self.get_namespaces()[prefix].namespace,
-                self.get_namespaces()[prefix].local_namespace,
-                self.get_namespaces()[prefix].version,
-                "✅" if self.get_namespaces()[prefix].namespace == self.get_project_namespace() else ""
+                self.namespaces[prefix].namespace,
+                self.namespaces[prefix].local_namespace,
+                self.namespaces[prefix].version,
+                "✅" if self.namespaces[prefix].namespace == self.project_namespace else ""
             ])
-
-        """
-        prefixes_by_type = {
-            "local": [],
-            "project": [],
-            "installed": [],
-        }
-
-        for prefix, namespace in self.get_namespaces().items():
-            prefixes_by_type[namespace.get("type")].append(prefix)
-
-        rows = [
-            [
-                #"TYPE",
-                "NAMESPACE",
-                "LOCAL NAMESPACE",
-                "VERSION",
-                "IS PROJECT"
-            ],
-        ]
-        
-        for namespace_type in ["local", "project", "installed"]:
-            prefixes = prefixes_by_type[namespace_type]
-            if prefixes:
-                is_first = True
-                for prefix in sorted(prefixes):
-                    rows.append([
-                        namespace_type if is_first else "",
-                        self.get_namespaces()[prefix].get("namespace"),
-                        self.get_namespaces()[prefix].get("local_namespace"),
-                        self.get_namespaces()[prefix].get("version"),
-                        "✅" if self.get_namespaces()[prefix].get("namespace") == self.get_project_namespace() else ""
-                    ])
-                    is_first = False
-        """
         
         self.log_title("Namespaces")
         self.log_table(rows)
 
 class CacheNamespaces(NamespaceTask):
     def _run_task(self):
-        self.get_namespaces()
+        self.namespaces
 
 class RefreshNamespacesCache(NamespaceTask):
     def _run_task(self):
         # reset namespace info cache
+        del self.namespaces
+        """
         if "namespaces" in self.org_config.config:
             del self.org_config.config["namespaces"]
-        self.get_namespaces()
+        self.namespaces
+        """
 
 class ExecuteAnonymousTask(AnonymousApexTask, NamespaceTask):
 
@@ -242,7 +320,7 @@ class ExecuteAnonymousTask(AnonymousApexTask, NamespaceTask):
     }
 
     def _run_task(self):
-        if not self.options.get("namespace") in self.get_namespaces():
+        if not self.options.get("namespace") in self.namespaces:
             self.log_table([
                 [
                     "ACTION",
@@ -261,25 +339,22 @@ class ExecuteAnonymousTask(AnonymousApexTask, NamespaceTask):
 
     def _prepare_apex(self, apex):
         # Process namespace tokens
-        namespace = self.options.get("namespace")
-        namespace_info = self.get_namespaces().get(namespace)
-        if namespace_info:
-            local_namespace = namespace_info.get("local_namespace")
-            namespace_prefix = "" if not local_namespace else "{}__".format(namespace)
-            record_type_prefix = "" if not local_namespace else "{}.".format(namespace)
+        specified_namespace = self.options.get("namespace")
+        namespace = self.namespaces.get(specified_namespace)
 
-            apex = apex.replace("%%%NAMESPACE%%%", namespace_prefix)
-            apex = apex.replace("%%%NAMESPACED_ORG%%%", namespace_prefix)
-            apex = apex.replace("%%%NAMESPACED_RT%%%", record_type_prefix)
+        if namespace:
+            apex = apex.replace("%%%NAMESPACE%%%", namespace.get_prefix("__"))
+            apex = apex.replace("%%%NAMESPACED_ORG%%%", namespace.get_prefix("__"))
+            apex = apex.replace("%%%NAMESPACED_RT%%%", namespace.get_prefix("."))
 
             self.log_table([
                 [
                     "TOKEN",
                     "REPLACEMENT"
                 ],
-                ["%%%NAMESPACE%%%", namespace_prefix],
-                ["%%%NAMESPACED_ORG%%%", namespace_prefix],
-                ["%%%NAMESPACED_RT%%%", record_type_prefix],
+                ["%%%NAMESPACE%%%", namespace.get_prefix("__")],
+                ["%%%NAMESPACED_ORG%%%", namespace.get_prefix("__")],
+                ["%%%NAMESPACED_RT%%%", namespace.get_prefix(".")],
             ])
 
         return apex

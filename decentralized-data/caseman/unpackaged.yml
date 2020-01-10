@@ -2,4 +2,10 @@ Contacts:
     sf_object: Contact
     table: contacts
     fields:
+        # IDs
+        FirstName: FirstName
+        LastName: LastName
+        Email: Email
+
+        # Data
         Gender__c: Gender__c

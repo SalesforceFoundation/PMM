@@ -232,7 +232,12 @@ export default class ServiceDeliveryRow extends LightningElement {
                 .then(() => {
                     const deletedRecordId = this.recordId;
                     this.recordId = "";
-                    showToast(this.labels.success, this.labels.recordDeleted, "success", "dismissible");
+                    showToast(
+                        this.labels.success,
+                        this.labels.recordDeleted,
+                        "success",
+                        "dismissible"
+                    );
                     this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));
                     fireEvent(this.pageRef, "serviceDeliveryDelete", deletedRecordId);
                 })

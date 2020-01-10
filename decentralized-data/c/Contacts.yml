@@ -3,12 +3,13 @@ Contacts:
     sf_object: Contact
     table: contacts
     fields:
-        # Standard Fields
-        Id: sf_id
-        Salutation: salutation
+        # IDs
         FirstName: firstname
         LastName: lastname
         Email: email
+
+        # Data
+        Salutation: salutation
         Phone: phone
         MobilePhone: mobile
         OtherPhone: OtherPhone

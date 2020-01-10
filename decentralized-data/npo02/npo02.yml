@@ -3,7 +3,10 @@ Household_Accounts:
     sf_object: Account
     table: household_accounts
     fields:
-    # NPSP: System Fields
+        # IDs
+        Name: Name
+
+        # Data
         SYSTEM_CUSTOM_NAMING__c: npo02__SYSTEM_CUSTOM_NAMING__c
 
         # NPSP: Donation Information
@@ -42,7 +45,10 @@ Organization_Accounts:
     sf_object: Account
     table: organization_accounts
     fields:
-        # NPSP: System Fields
+        # IDs
+        Name: Name
+
+
         SYSTEM_CUSTOM_NAMING__c: npo02__SYSTEM_CUSTOM_NAMING__c
 
         # NPSP: Donation Information
@@ -82,6 +88,11 @@ Contacts:
     sf_object: Contact
     table: contacts
     fields:
+        # IDs
+        FirstName: FirstName
+        LastName: LastName
+        Email: Email
+
         SystemHouseholdProcessor__c: npo02__SystemHouseholdProcessor__c
         AverageAmount__c: npo02__AverageAmount__c
         Best_Gift_Year__c: npo02__Best_Gift_Year__c
@@ -117,7 +128,6 @@ Contacts:
         SystemHouseholdProcessor__c: npo02__SystemHouseholdProcessor__c
         TotalMembershipOppAmount__c: npo02__TotalMembershipOppAmount__c
         TotalOppAmount__c: npo02__TotalOppAmount__c
-
     lookups:
         AccountId:
             table: household_accounts
@@ -127,8 +137,10 @@ npsp__Donations:
     sf_object: Opportunity
     table: npsp__donations
     fields:
+        # IDs
+        Name: Name
+
         systemHouseholdContactRoleProcessor__c: npo02__systemHouseholdContactRoleProcessor__c
-    
     lookups:
         AccountId:
             table: household_accounts

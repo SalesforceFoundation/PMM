@@ -1,15 +1,18 @@
 Contacts:
     sf_object: Contact
     table: contacts
+    fields:
+        # IDs
+        FirstName: FirstName
+        LastName: LastName
+        Email: Email
 
 # NPSP Relationships
 npe4__Relationships:
     sf_object: Relationship__c
     table: npe4__relationships
     fields:
-        # Standard Fields
-
-        # NPSP: npe4
+        # Data
         SYSTEM_SystemCreated__c: npe4__SYSTEM_SystemCreated__c
         Description__c: npe4__Description__c
         Status__c: npe4__Status__c

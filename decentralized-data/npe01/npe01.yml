@@ -3,6 +3,10 @@ Household_Accounts:
     sf_object: Account
     table: household_accounts
     fields:
+        # IDs
+        Name: Name
+
+        # Data
         SYSTEM_AccountType__c: npe01__SYSTEM_AccountType__c
         SYSTEMIsIndividual__c: npe01__SYSTEMIsIndividual__c
 
@@ -10,6 +14,10 @@ Organization_Accounts:
     sf_object: Account
     table: organization_accounts
     fields:
+        # IDs
+        Name: Name
+
+        # Data
         SYSTEM_AccountType__c: npe01__SYSTEM_AccountType__c
         SYSTEMIsIndividual__c: npe01__SYSTEMIsIndividual__c
 
@@ -18,6 +26,12 @@ Contacts:
     sf_object: Contact
     table: contacts
     fields:
+        # IDs
+        FirstName: FirstName
+        LastName: LastName
+        Email: Email
+
+        # Data
         SystemAccountProcessor__c: npe01__SystemAccountProcessor__c
         AlternateEmail__c: npe01__AlternateEmail__c
         HomeEmail__c: npe01__HomeEmail__c
@@ -34,6 +48,10 @@ npsp__Donations:
     sf_object: Opportunity
     table: npsp__donations
     fields:
+        # IDs
+        Name: Name
+
+        # Data
         Membership_Origin__c: npe01__Membership_Origin__c
         Member_Level__c: npe01__Member_Level__c
         Membership_Start_Date__c: npe01__Membership_Start_Date__c

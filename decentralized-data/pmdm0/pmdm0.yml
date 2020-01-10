@@ -1,10 +1,18 @@
 Household_Accounts:
     sf_object: Account
     table: household_accounts
+    fields:
+        # IDs
+        Name: Name
 
 Contacts:
     sf_object: Contact
     table: contacts
+    fields:
+        # IDs
+        FirstName: FirstName
+        LastName: LastName
+        Email: Email
     lookups:
         AccountId:
             table: household_accounts
@@ -14,10 +22,10 @@ pmdm__Program__c:
     sf_object: Program__c
     table: pmdm__Program__c
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
 
-        # Custom Fields
+        # Data
         Description__c: pmdm0__Description__c
         EndDate__c: pmdm0__EndDate__c
         ProgramIssueArea__c: pmdm0__ProgramIssueArea__c
@@ -30,10 +38,10 @@ pmdm__ProgramCohort__c:
     sf_object: ProgramCohort__c
     table: pmdm__ProgramCohort__c
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
 
-        # Custom Fields
+        # Data
         Description__c: pmdm0__Description__c
         EndDate__c: pmdm0__EndDate__c
         StartDate__c: pmdm0__StartDate__c
@@ -49,10 +57,10 @@ pmdm__ProgramEngagement__c:
     sf_object: ProgramEngagement__c
     table: pmdm__ProgramEngagement__c
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
 
-        # Custom Fields
+        # Data
         ApplicationDate__c: pmdm0__ApplicationDate__c
         AutoName_Override__c: pmdm0__AutoName_Override__c
         EndDate__c: pmdm0__EndDate__c
@@ -78,10 +86,10 @@ pmdm__Service__c:
     sf_object: Service__c
     table: pmdm__Service__c
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
 
-        # Custom Fields
+        # Data
         Description__c: pmdm0__Description__c
         Status__c: pmdm0__Status__c
         UnitOfService__c: pmdm0__UnitOfService__c
@@ -95,10 +103,10 @@ pmdm__ServiceDelivery__c:
     sf_object: ServiceDelivery__c
     table: pmdm__ServiceDelivery__c
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
 
-        # Custom Fields
+        # Data
         AutonameOverride__c: pmdm0__AutonameOverride__c
         DeliveryDate__c: pmdm0__DeliveryDate__c
         Quantity__c: pmdm0__Quantity__c

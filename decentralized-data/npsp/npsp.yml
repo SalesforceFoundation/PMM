@@ -3,18 +3,29 @@ Household_Accounts:
     sf_object: Account
     table: household_accounts
     record_type: "HH_Account"
+    fields:
+        # IDs
+        Name: Name
 
 Organization_Accounts:
     sf_object: Account
     table: organization_accounts
     record_type: "Organization"
+    fields:
+        # IDs
+        Name: Name
 
 # Contacts
 Contacts:
     sf_object: Contact
     table: contacts
     fields:
-        # npsp
+        # IDs
+        FirstName: FirstName
+        LastName: LastName
+        Email: Email
+
+        # Data
         Deceased__c: npsp__Deceased__c
         Do_Not_Contact__c: npsp__Do_Not_Contact__c
         Exclude_from_Household_Formal_Greeting__c: npsp__Exclude_from_Household_Formal_Greeting__c
@@ -39,8 +50,10 @@ npsp__Donations:
     sf_object: Opportunity
     table: npsp__donations
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
+
+        # Data
         NextStep: NextStep
         Type: Type
         StageName: StageName
@@ -53,7 +66,6 @@ npsp__Donations:
         Amount: Amount
         IsPrivate: IsPrivate
 
-        # npsp
         Grant_Requirements_Website__c: npsp__Grant_Requirements_Website__c
         Primary_Contact_Campaign_Member_Status__c: npsp__Primary_Contact_Campaign_Member_Status__c
         Notification_Recipient_Name__c: npsp__Notification_Recipient_Name__c
@@ -102,7 +114,6 @@ npsp__OpportunityContactRole:
     sf_object: OpportunityContactRole
     table: npsp__OpportunityContactRole
     fields:
-        # Standard Fields
         Role: Role
         IsPrimary: IsPrimary
 

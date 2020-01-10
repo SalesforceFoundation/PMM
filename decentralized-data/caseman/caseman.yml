@@ -4,6 +4,10 @@ Household_Accounts:
     table: household_accounts
     record_type: "HH_Account"
     fields:
+        # IDs
+        Name: Name
+
+        # Data
         MaximumClientsServed__c: caseman__MaximumClientsServed__c
 
 Organization_Accounts:
@@ -11,6 +15,10 @@ Organization_Accounts:
     table: organization_accounts
     record_type: "Organization"
     fields:
+        # IDs
+        Name: Name
+
+        # Data
         MaximumClientsServed__c: caseman__MaximumClientsServed__c
 
 caseman__Branches:
@@ -18,8 +26,10 @@ caseman__Branches:
     table: caseman__branch_accounts
     record_type: "Branch"
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
+
+        # Data
         Description: Description
         BillingStreet: Street
         BillingCity: City
@@ -39,7 +49,6 @@ caseman__Branches:
         Site: Site
         Type: Type
 
-        # Custom Fields
         MaximumClientsServed__c: caseman__MaximumClientsServed__c
 
 # Contacts
@@ -47,6 +56,12 @@ Contacts:
     sf_object: Contact
     table: contacts
     fields:
+        # IDs
+        FirstName: FirstName
+        LastName: LastName
+        Email: Email
+
+        # Data
         AgeCategory__c: caseman__AgeCategory__c
         ClientID__c: caseman__ClientID__c
         EmergencyContactRole__c: caseman__EmergencyContactRole__c
@@ -59,7 +74,6 @@ Contacts:
         Roles__c: caseman__Roles__c
         WatchList__c: caseman__WatchList__c
         WatchListDate__c: caseman__WatchListDate__c
-
     lookups:
         AccountId:
             table: household_accounts
@@ -68,30 +82,16 @@ Contacts:
             table: contacts
             after: Contacts
 
-#caseman__Branch_Contacts:
-#sf_object: AccountContactRelation
-#table: caseman__branch_contacts
-#fields:
-## Standard Fields
-#Roles: Roles
-#IsActive: IsActive
-#
-#lookups:
-#AccountId:
-#table: caseman__branch_accounts
-#key_field: account_id
-#ContactId:
-#table: contacts
-#key_field: contact_id
-
 # Cases
 caseman__Client_Cases:
     sf_object: Case
     table: caseman__client_cases
     record_type: "ClientCase"
     fields:
-        # Standard Fields
+        # IDs
         Subject: Subject
+
+        # Data
         Priority: Priority
         Status: Status
         Origin: Origin
@@ -101,12 +101,10 @@ caseman__Client_Cases:
         SuppliedName: SuppliedName
         SuppliedPhone: SuppliedPhone
 
-        # Custom Fields
         IncidentDateTime__c: caseman__IncidentDateTime__c
         IncidentType__c: caseman__IncidentType__c
         LocationNotes__c: caseman__LocationNotes__c
         Severity__c: caseman__Severity__c
-
     lookups:
         Branch__c:
             key_field: branch__c
@@ -119,8 +117,10 @@ caseman__Incidents:
     table: caseman__incident_cases
     record_type: "Incident"
     fields:
-        # Standard Fields
+        # IDs
         Subject: subject
+
+        # Data
         Priority: priority
         Status: status
         Origin: origin
@@ -130,12 +130,10 @@ caseman__Incidents:
         SuppliedName: SuppliedName
         SuppliedPhone: SuppliedPhone
 
-        # Custom Fields
         IncidentDateTime__c: caseman__IncidentDateTime__c
         IncidentType__c: caseman__IncidentType__c
         LocationNotes__c: caseman__LocationNotes__c
         Severity__c: caseman__Severity__c
-
     lookups:
         Branch__c:
             table: caseman__branch_accounts
@@ -148,10 +146,8 @@ caseman__Appointments:
     sf_object: Appointment__c
     table: caseman__appointments
     fields:
-        # Standard Fields
+        # Data
         Name: Name
-
-        # Custom Fields
         Type__c: caseman__Type__c
         Location__c: caseman__Location__c
         StartDateTime__c: caseman__StartDateTime__c
@@ -162,11 +158,10 @@ caseman__Appointment_Attendees:
     sf_object: AppointmentAttendee__c
     table: caseman__appointment_attendees
     fields:
-        # Custom Fields
+        # Data
         Reason__c: caseman__Reason__c
         Role__c: caseman__Role__c
         Status__c: caseman__Status__c
-
     lookups:
         Appointment__c:
             key_field: appointment__c
@@ -180,13 +175,10 @@ caseman__Client_Alerts:
     sf_object: ClientAlert__c
     table: caseman__client_alerts
     fields:
-        # Standard Fields
+        # Data
         Name: Name
-
-        # Custom Fields
         Active__c: caseman__Active__c
         Description__c: caseman__Description__c
-
     lookups:
         Contact__c:
             key_field: contact__c
@@ -197,9 +189,7 @@ caseman__Client_Notes:
     sf_object: ClientNote__c
     table: caseman__client_notes
     fields:
-        # Standard Fields
-
-        # Custom Fields
+        # Data
         Content__c: caseman__Content__c
         Subject__c: caseman__Subject__c
         Status__c: caseman__Status__c
@@ -215,13 +205,6 @@ caseman__Client_Notes:
 caseman__Client_Note_Relationships:
     sf_object: ClientNoteRelationship__c
     table: caseman__client_note_relationships
-    #fields:
-    # Standard Fields
-    # Custom Fields
-    #RelatedId__c: caseman__RelatedId__c
-    #RelatedName__c: caseman__RelatedName__c
-    #RelatedObject__c: caseman__RelatedObject__c
-
     lookups:
         Case__c:
             key_field: case__c
@@ -238,20 +221,19 @@ caseman__Goal_Templates:
     sf_object: GoalTemplate__c
     table: caseman__goal_templates
     fields:
-        # Standard Fields
-        Name: name
+        # IDs
+        Name: Name
 
 caseman__Action_Item_Templates:
     sf_object: ActionItemTemplate__c
     table: caseman__action_item_templates
     fields:
-        # Standard Fields
-        Name: name
+        # IDs
+        Name: Name
 
 caseman__Goal_Action_Item_Templates:
     sf_object: GoalActionItemTemplate__c
     table: caseman__goal_action_item_templates
-
     lookups:
         GoalTemplate__c:
             key_field: goal_template__c
@@ -264,9 +246,8 @@ caseman__Case_Plans:
     sf_object: CasePlan__c
     table: caseman__case_plans
     fields:
-        # Standard Fields
+        # Data
         Name: Name
-
     lookups:
         Contact__c:
             key_field: contact__c
@@ -276,9 +257,8 @@ caseman__Goals:
     sf_object: Goal__c
     table: caseman__goals
     fields:
-        # Standard Fields
+        # Data
         Name: Name
-
     lookups:
         Contact__c:
             key_field: contact__c
@@ -294,13 +274,10 @@ caseman__Action_Items:
     sf_object: ActionItem__c
     table: caseman__action_items
     fields:
-        # Standard Fields
+        # Data
         Name: Name
-
-        # Custom Fields
         Status__c: Status__c
         DueDate__c: DueDate__c
-
     lookups:
         Contact__c:
             key_field: contact__c

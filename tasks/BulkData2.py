@@ -30,6 +30,7 @@ class BulkData(Namespace):
                 "sql": sql_path,
             }
         ]
+        self._sql_path = sql_path
 
         # load map
         map = {}
@@ -76,7 +77,7 @@ class BulkData(Namespace):
         
         # load sql
         if sql_path:
-            with open(sql_path, "r") as f:
+            with open(os_friendly_path(sql_path), "r") as f:
                 self._sql = f.read()
             
             # inject namespace into sql
@@ -105,6 +106,10 @@ class BulkData(Namespace):
     @property
     def paths(self):
         return self._paths
+
+    @property
+    def sql_path(self):
+        return self._sql_path
 
     @property
     def sql(self):
@@ -324,7 +329,6 @@ class BulkData(Namespace):
 
         return ordered_map
 
-
 class BulkDataTask(NamespaceTask, RecordTypeTask):
     task_options = {
         "bulk_data_log_level": {
@@ -358,6 +362,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
     def bulk_data(self):
         if self.org_config.config.get("bulk_data") is None:
             self.bulk_data = {}
+            self.cache_project_bulk_data()
         return self.org_config.config.get("bulk_data")
 
     @bulk_data.setter
@@ -384,37 +389,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
 
         return combined_bulk_data
 
-class BulkDataStepTask(BulkDataTask):
-    task_options = {
-        **BulkDataTask.task_options,
-        "bulk_data_step": {
-            "description": "Data step to capture",
-            "required": True,
-        },
-    }
-
-    @property
-    @functools.lru_cache()
-    def combined_bulk_data(self):
-        # sets combined_bulk_data as the bulk_data for 'bulk_data_step' option
-        if self.options["bulk_data_step"] not in self.bulk_data:
-            raise TaskOptionsError(
-                "'bulk_data_step' option must be a member of 'bulk_data' option"
-            )
-        return self.bulk_data.get(self.options["bulk_data_step"])
-
-class CacheProjectBulkDataTask(BulkDataTask):
-    """
-        Caches project's bulk_data in org_config so accessible in later flow step.
-        Defaults bulk_data_log_level option as 'summary'.
-        Also caches namespaces and record_types_by_sobject in org_config.
-    """
-
-    def _run_task(self):
-
-        if not self.options.get("bulk_data_log_level"):
-            self.options["bulk_data_log_level"] = "summary"
-
+    def cache_project_bulk_data(self):
         if not hasattr(self.project_config, "bulk_data"):
             return
 
@@ -470,6 +445,37 @@ class CacheProjectBulkDataTask(BulkDataTask):
             for step, data in self.bulk_data.items():
                 data.log_map(self)
 
+class BulkDataStepTask(BulkDataTask):
+    task_options = {
+        **BulkDataTask.task_options,
+        "bulk_data_step": {
+            "description": "Data step to capture",
+            "required": True,
+        },
+    }
+
+    @property
+    @functools.lru_cache()
+    def combined_bulk_data(self):
+        # sets combined_bulk_data as the bulk_data for 'bulk_data_step' option
+        if self.options["bulk_data_step"] not in self.bulk_data:
+            raise TaskOptionsError(
+                "'bulk_data_step' option must be a member of 'bulk_data' option"
+            )
+        return self.bulk_data.get(self.options["bulk_data_step"])
+
+class CacheProjectBulkDataTask(BulkDataTask):
+    """
+        Caches project's bulk_data in org_config so accessible in later flow step.
+        Defaults bulk_data_log_level option as 'summary'.
+        Also caches namespaces and record_types_by_sobject in org_config.
+    """
+
+    def _run_task(self):
+        if not self.options.get("bulk_data_log_level"):
+            self.options["bulk_data_log_level"] = "summary"
+        self.cache_project_bulk_data()   
+
 class LogBulkDataMapTask(BulkDataTask):
 
     task_options = {
@@ -497,6 +503,11 @@ class DeleteBulkDataTask(BaseDeleteData, BulkDataTask):
     def _init_options(self, kwargs):
         super(BaseDeleteData, self)._init_options(kwargs)
 
+        if not self.options.get("bulk_data_log_level"):
+            self.options["bulk_data_log_level"] = "combined"
+
+        self.combined_bulk_data.log_map(self)
+
         # Always hard-delete
         self.options["hardDelete"] = process_bool_arg(self.options.get("hardDelete"))
         self.options["where"] = self.options.get("where", None)
@@ -515,42 +526,53 @@ class DeleteBulkDataStepTask(DeleteBulkDataTask, BulkDataStepTask):
         **BulkDataStepTask.task_options,
     }
 
-class CaptureSpecifiedBulkDataDataTask(ExtractData, BulkDataStepTask):
+class CaptureBulkDataStepTask(ExtractData, BulkDataStepTask):
     task_options = {
         **BulkDataStepTask.task_options,
     }
 
     def _init_options(self, kwargs):
-        super(ExtractData, self)._init_options(kwargs)    
+        super(ExtractData, self)._init_options(kwargs)
+        
+        # Set default bulk_data_log_level
+        if not self.options.get("bulk_data_log_level"):
+            self.options["bulk_data_log_level"] = "combined"
 
-    def _init_mapping(self):
         self.options["database_url"] = "sqlite://"
         self.options["sql_path"] = self.combined_bulk_data.sql_path
 
-        # Log specified map
-        self.combined_bulk_data.log_map(self)
-        """
-        self.log_title(self.combined_bulk_data.step)
-        self.log_table(self.combined_bulk_data.get_map_as_table_rows())
-        """
+    def _init_mapping(self):
+        if self.log_combined_bulk_data:
+            self.combined_bulk_data.log_map(self)
+        
         self.mappings = self.combined_bulk_data.map
 
-"""
 class InsertBulkDataStepTask(LoadData, BulkDataStepTask):
 
     task_options = {
-        **LoadData.task_options,
         **BulkDataStepTask.task_options,
-        "combine_sql": {
-            "description": "If True, combines SQL files"
-        },
-        "data": {
-            "description": "If True, combines SQL files"
+        "ignore_row_errors": {
+            "description": "If True, allow the load to continue even if individual rows fail to load."
         },
     }
 
+    def _init_options(self, kwargs):
+        super(LoadData, self)._init_options(kwargs)
+
+        self.options["ignore_row_errors"] = process_bool_arg(
+            self.options.get("ignore_row_errors", False)
+        )
+        self.options["database_url"] = "sqlite://"
+        self.options["sql_path"] = "not None so _sqlite_load() is called"
+
+        # Set default bulk_data_log_level
+        if not self.options.get("bulk_data_log_level"):
+            self.options["bulk_data_log_level"] = "combined"
+
     def _init_mapping(self):
-        self.mapping = self.get_combined_mapping()
+        if self.log_combined_bulk_data:
+            self.combined_bulk_data.log_map(self)
+        self.mapping = self.combined_bulk_data.map
 
     def _sqlite_load(self):
         # original
@@ -570,15 +592,9 @@ class InsertBulkDataStepTask(LoadData, BulkDataStepTask):
         #        - add cci task that saves the path of a file in org_config from another repo.
 
     
-        if process_bool_arg(self.options.get("combine_sql")):
-            conn = self.session.connection()
-            cursor = conn.connection.cursor()
-            with open(self.options["sql_path"], "r") as f:
-                try:
-                    cursor.executescript(f.read())
-                finally:
-                    cursor.close()
-            # self.session.flush()
-        else:
-            super()._sqlite_load()
-"""
+        conn = self.session.connection()
+        cursor = conn.connection.cursor()
+        try:
+            cursor.executescript(self.combined_bulk_data.sql)
+        finally:
+            cursor.close()

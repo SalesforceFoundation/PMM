@@ -1,5 +1,6 @@
 import os
 import yaml
+import re
 import functools
 from tasks.logger import LoggingTask
 from tasks.org_info import Namespace, NamespaceTask, RecordTypeTask
@@ -7,6 +8,9 @@ from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.utils import os_friendly_path
 from tasks.bulkdata import LoadData, ExtractData, DeleteData as BaseDeleteData
+from tasks.bulkdata.utils import (
+    get_lookup_key_field,
+)
 from cumulusci.core.exceptions import TaskOptionsError
 
 
@@ -34,6 +38,8 @@ class BulkData(Namespace):
 
         # load map
         map = {}
+        unique_tables_by_table = {}
+
         if map_path:
             with open(os_friendly_path(map_path), "r") as f:
                 map = yaml.safe_load(f)
@@ -63,7 +69,14 @@ class BulkData(Namespace):
                 # inject namespace in sf_object
                 sobject = step["sf_object"]
                 step["sf_object"] = self.inject_sobject_namespace(sobject)
-                
+
+                # Save uniquify table to this BulkData step as unique_table 
+                if step.get("table"):
+                    table = step["table"]
+                    unique_table = "{}__{}".format(self.step, table)
+                    step["unique_table"] = unique_table
+                    unique_tables_by_table[table] = unique_table
+
                 # delete record_types from map that don't exist
                 # skip this record_type check if record_types_by_sobject is None (meaning the RecordTypeTask wasn't able to query)
                 if step.get("record_type") and not record_types_by_sobject is None:
@@ -76,11 +89,37 @@ class BulkData(Namespace):
         self.map = map   
         
         # load sql
+        self._sql = ""
         if sql_path:
             with open(os_friendly_path(sql_path), "r") as f:
                 self._sql = f.read()
             
-            # inject namespace into sql
+            # Uniquify tables in sql to this BulkData step
+            if self._sql:
+                for table, unique_table in unique_tables_by_table.items():
+                    # CREATE TABLE with and without table wrapped in double-quotes
+                    self._sql = re.sub(
+                        r'(?<=CREATE TABLE )' + re.escape(table) + r'(?= \()', 
+                        unique_table, 
+                        self._sql,
+                    )
+                    self._sql = re.sub(
+                        r'(?<=CREATE TABLE ")' + re.escape(table) + r'(?=" \()', 
+                        unique_table, 
+                        self._sql,
+                    )
+
+                    # INSERT INTO with and without table wrapped in double-quotes
+                    self._sql = re.sub(
+                        r'(?<=INSERT INTO )' + re.escape(table) + r'(?= VALUES\()', 
+                        unique_table, 
+                        self._sql,
+                    )
+                    self._sql = re.sub(
+                        r'(?<=INSERT INTO ")' + re.escape(table) + r'(?=" VALUES\()', 
+                        unique_table, 
+                        self._sql,
+                    )
 
     def __repr__(self) -> str:
         return (
@@ -147,7 +186,7 @@ class BulkData(Namespace):
                     map[step_name][key] = step[key]
         
         # Re-Orders steps in dependency order in setter
-        self.map = BulkData.order_map(map)
+        self.map = map
 
         # Combine sql here??
 
@@ -437,7 +476,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
             ])
         
         # log summary
-        if self.log_summary_bulk_data:
+        if True or self.log_summary_bulk_data:
             self.log_title("{} bulk_data".format(self.project_namespace))
             self.log_table(summary_rows)
 
@@ -487,6 +526,8 @@ class LogBulkDataMapTask(BulkDataTask):
             self.options["log_maps"] = "combined"
         
         self.combined_bulk_data.log_map(self)
+
+        self.logger.info(self.combined_bulk_data.sql)
 
 class LogBulkDataStepMapTask(LogBulkDataMapTask, BulkDataStepTask):
 
@@ -596,5 +637,94 @@ class InsertBulkDataStepTask(LoadData, BulkDataStepTask):
         cursor = conn.connection.cursor()
         try:
             cursor.executescript(self.combined_bulk_data.sql)
+        finally:
+            cursor.close()
+
+class InsertBulkDataTask(LoadData, BulkDataTask):
+
+    task_options = {
+        **BulkDataTask.task_options,
+        "ignore_row_errors": {
+            "description": "If True, allow the load to continue even if individual rows fail to load."
+        },
+    }
+
+    def _init_options(self, kwargs):
+        super(LoadData, self)._init_options(kwargs)
+
+        self.options["ignore_row_errors"] = process_bool_arg(
+            self.options.get("ignore_row_errors", False)
+        )
+        self.options["database_url"] = "sqlite://"
+        self.options["sql_path"] = "not None so _sqlite_load() is called"
+
+        # Set default bulk_data_log_level
+        if not self.options.get("bulk_data_log_level"):
+            self.options["bulk_data_log_level"] = "combined"
+
+    def _init_mapping(self):
+        if self.log_combined_bulk_data:
+            self.combined_bulk_data.log_map(self)
+        self.mapping = self.combined_bulk_data.map
+
+        sql = self._get_combined_bulk_data_sql()
+        self.logger.info(sql)
+        if True:
+            raise TaskOptionsError("......")
+
+    def _get_combined_bulk_data_sql(self):
+        sql_lines = [
+            "",
+            "BEGIN TRANSACTION;",
+        ]
+        
+        # CREATE TABLES
+        for step in self.combined_bulk_data.map.values():
+            sql_lines.extend([
+                'CREATE TABLE "{}" ('.format(step["table"]),
+                # id
+                sql_lines.append("    id INTEGER NOT NULL,"),
+            ])
+            """
+            # fields
+            if step.get("fields"):
+                for field in step["fields"].values():
+                    sql_lines.append('    "{}" VARCHAR(255),'.format(field))
+
+            # lookups
+            if step.get("lookups"):
+                for field, lookup in step["lookups"].items():
+                    sql_lines.append('    "{}" VARCHAR(255),'.format(get_lookup_key_field(lookup, field)))
+            
+            # record_type
+            if step.get("record_type"):
+                sql_lines.append("    record_type VARCHAR(255),")
+            """
+            sql_lines.extend([
+                "    PRIMARY KEY(id)",
+                ");",
+                "",
+            ])
+          
+        # UPDATE tables from bulk_data steps
+
+
+        sql_lines.append("COMMIT;")
+        return "\n".join(sql_lines)
+
+    def _sqlite_load(self):
+        conn = self.session.connection()
+        cursor = conn.connection.cursor()
+        try:
+            # Load each bulk_data step's sql
+            for step in self.bulk_data.values():
+                cursor.executescript(step.sql)
+
+            sql = self._get_combined_bulk_data_sql()
+            self.logger.info(sql)
+            if True:
+                raise TaskOptionsError("......")
+
+
         finally:
             cursor.close()

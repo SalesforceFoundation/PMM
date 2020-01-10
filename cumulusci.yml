@@ -483,11 +483,12 @@ tasks:
         group: "Data: Bulk"
         description: "Inserts bulk data at for bulk_data_step"
         class_path: tasks.BulkData2.InsertBulkDataStepTask
-    
-    
 
+    insert_bulk_data2:
+        group: "Data: Bulk"
+        description: "Inserts combined bulk data"
+        class_path: tasks.BulkData2.InsertBulkDataTask
     
-
 flows:
 
     log_bulk_data:

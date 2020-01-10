@@ -2,8 +2,10 @@ Organization_Accounts:
     sf_object: Account
     table: organization_accounts
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
+
+        # Data
         Description: Description
         BillingStreet: Street
         BillingCity: City

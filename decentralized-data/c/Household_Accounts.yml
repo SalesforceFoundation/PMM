@@ -4,8 +4,10 @@ Household_Accounts:
     table: household_accounts
     record_type: HH_Account
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
+
+        # Data
         Description: Description
         BillingStreet: Street
         BillingCity: City
@@ -29,6 +31,11 @@ Household_Accounts:
 Contacts:
     sf_object: Contact
     table: contacts
+    fields:
+        # IDs
+        FirstName: FirstName
+        LastName: LastName
+        Email: Email
     lookups:
         AccountId:
             table: household_accounts

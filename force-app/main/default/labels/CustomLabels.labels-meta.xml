@@ -25,6 +25,14 @@
         <value>Error</value>
     </labels>
     <labels>
+        <fullName>Warning</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning</shortDescription>
+        <value>Warning</value>
+    </labels>
+    <labels>
         <fullName>Delete</fullName>
         <categories></categories>
         <language>en_US</language>

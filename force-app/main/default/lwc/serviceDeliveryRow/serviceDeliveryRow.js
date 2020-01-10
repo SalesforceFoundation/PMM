@@ -9,6 +9,7 @@ import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryControlle
 import deleteLabel from "@salesforce/label/c.Delete";
 import cancel from "@salesforce/label/c.Cancel";
 import error from "@salesforce/label/c.Error";
+import warning from "@salesforce/label/c.Warning";
 import saving from "@salesforce/label/c.Saving";
 import saved from "@salesforce/label/c.Saved";
 
@@ -62,11 +63,13 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track saveMessage;
 
     noContactPrograms = false;
-    noServicesForPE = false;
     _defaultsSet = false;
     _filteredValues;
     _valuesToSave = [];
     _targetProgram;
+
+    ERROR = error;
+    WARNING = warning;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -109,6 +112,12 @@ export default class ServiceDeliveryRow extends LightningElement {
             .then(result => {
                 if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {
                     this.noContactPrograms = true;
+                    showToast(
+                        this.WARNING,
+                        this.labels.selectedContactWarning,
+                        "warning",
+                        "dismissible"
+                    );
                 }
                 this._filteredValues = result;
                 this.handleContactChange();
@@ -137,7 +146,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         this._filteredValues = [];
         this._valuesToSave = [];
         this.noContactPrograms = false;
-        this.noServicesForPE = false;
     }
 
     handleComboChange(event) {
@@ -145,7 +153,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         let fieldVal = event.detail.value;
 
         if (fieldName === this.fields.programEngagement.fieldApiName) {
-            this.noServicesForPE = false;
             this._valuesToSave = []; //If the engagement changes, wipe stored values.
             this._filteredValues[ENGAGEMENTS].forEach(element => {
                 if (element.value === fieldVal) {
@@ -232,7 +239,12 @@ export default class ServiceDeliveryRow extends LightningElement {
                 .then(() => {
                     const deletedRecordId = this.recordId;
                     this.recordId = "";
-                    showToast(this.labels.success, this.labels.recordDeleted, "success", "dismissible");
+                    showToast(
+                        this.labels.success,
+                        this.labels.recordDeleted,
+                        "success",
+                        "dismissible"
+                    );
                     this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));
                     fireEvent(this.pageRef, "serviceDeliveryDelete", deletedRecordId);
                 })
@@ -276,7 +288,12 @@ export default class ServiceDeliveryRow extends LightningElement {
                 element.disabled = false;
                 element.options = result;
                 if (!result.length) {
-                    this.noServicesForPE = true;
+                    showToast(
+                        this.WARNING,
+                        this.labels.noServiceWarning,
+                        "warning",
+                        "dismissible"
+                    );
                     element.disabled = true;
                 }
             } else if (

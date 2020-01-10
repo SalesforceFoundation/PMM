@@ -7,7 +7,7 @@ Household_Accounts:
 
 Contacts:
     sf_object: Contact
-    table: contacts
+    table: Contact
     fields:
         # IDs
         FirstName: FirstName
@@ -18,9 +18,9 @@ Contacts:
             table: household_accounts
 
 # Programs
-pmdm__Program__c:
+pmdm0__Program__c:
     sf_object: Program__c
-    table: pmdm__Program__c
+    table: pmdm0__Program__c
     fields:
         # IDs
         Name: Name
@@ -34,9 +34,9 @@ pmdm__Program__c:
         Summary__c: pmdm0__Summary__c
         TargetPopulation__c: pmdm0__TargetPopulation__c
 
-pmdm__ProgramCohort__c:
+pmdm0__ProgramCohort__c:
     sf_object: ProgramCohort__c
-    table: pmdm__ProgramCohort__c
+    table: pmdm0__ProgramCohort__c
     fields:
         # IDs
         Name: Name
@@ -51,11 +51,11 @@ pmdm__ProgramCohort__c:
     lookups:
         Program__c:
             key_field: program__c
-            table: pmdm__Program__c
+            table: pmdm0__Program__c
 
-pmdm__ProgramEngagement__c:
+pmdm0__ProgramEngagement__c:
     sf_object: ProgramEngagement__c
-    table: pmdm__ProgramEngagement__c
+    table: pmdm0__ProgramEngagement__c
     fields:
         # IDs
         Name: Name
@@ -74,17 +74,17 @@ pmdm__ProgramEngagement__c:
             table: household_accounts
         Contact__c:
             key_field: contact__c
-            table: contacts
+            table: Contact
         Program__c:
             key_field: program__c
-            table: pmdm__Program__c
+            table: pmdm0__Program__c
         ProgramCohort__c:
             key_field: program_cohort__c
-            table: pmdm__ProgramCohort__c
+            table: pmdm0__ProgramCohort__c
 
-pmdm__Service__c:
+pmdm0__Service__c:
     sf_object: Service__c
-    table: pmdm__Service__c
+    table: pmdm0__Service__c
     fields:
         # IDs
         Name: Name
@@ -97,11 +97,11 @@ pmdm__Service__c:
     lookups:
         Program__c:
             key_field: program__c
-            table: pmdm__Program__c
+            table: pmdm0__Program__c
 
-pmdm__ServiceDelivery__c:
+pmdm0__ServiceDelivery__c:
     sf_object: ServiceDelivery__c
-    table: pmdm__ServiceDelivery__c
+    table: pmdm0__ServiceDelivery__c
     fields:
         # IDs
         Name: Name
@@ -114,13 +114,13 @@ pmdm__ServiceDelivery__c:
     lookups:
         Service__c:
             key_field: service__c
-            table: pmdm__Service__c
+            table: pmdm0__Service__c
         Account__c:
             key_field: account__c
             table: household_accounts
         Contact__c:
             key_field: contact__c
-            table: contacts
+            table: Contact
         ProgramEngagement__c:
             key_field: program_engagement__c
-            table: pmdm__ProgramEngagement__c
+            table: pmdm0__ProgramEngagement__c

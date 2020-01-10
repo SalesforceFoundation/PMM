@@ -1,6 +1,6 @@
 Contacts:
     sf_object: Contact
-    table: contacts
+    table: Contact
     fields:
         # IDs
         FirstName: FirstName

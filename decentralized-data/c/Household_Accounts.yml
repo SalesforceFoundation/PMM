@@ -1,7 +1,7 @@
 # Accounts
 Household_Accounts:
     sf_object: Account
-    table: household_accounts
+    table: Account__HH_Account
     record_type: HH_Account
     fields:
         # IDs
@@ -30,7 +30,7 @@ Household_Accounts:
 # Contacts
 Contacts:
     sf_object: Contact
-    table: contacts
+    table: Contact
     fields:
         # IDs
         FirstName: FirstName
@@ -38,4 +38,4 @@ Contacts:
         Email: Email
     lookups:
         AccountId:
-            table: household_accounts
+            table: Account__HH_Account

@@ -1,6 +1,6 @@
 Organization_Accounts:
     sf_object: Account
-    table: organization_accounts
+    table: Account__Organization
     fields:
         # IDs
         Name: Name

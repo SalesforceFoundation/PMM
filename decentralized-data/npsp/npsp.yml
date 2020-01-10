@@ -1,7 +1,7 @@
 # Accounts
 Household_Accounts:
     sf_object: Account
-    table: household_accounts
+    table: Account__HH_Account
     record_type: "HH_Account"
     fields:
         # IDs
@@ -9,7 +9,7 @@ Household_Accounts:
 
 Organization_Accounts:
     sf_object: Account
-    table: organization_accounts
+    table: Account__Organization
     record_type: "Organization"
     fields:
         # IDs
@@ -18,7 +18,7 @@ Organization_Accounts:
 # Contacts
 Contacts:
     sf_object: Contact
-    table: contacts
+    table: Contact
     fields:
         # IDs
         FirstName: FirstName
@@ -48,7 +48,7 @@ Contacts:
 # NPSP Donations
 npsp__Donations:
     sf_object: Opportunity
-    table: npsp__donations
+    table: Opportunity
     fields:
         # IDs
         Name: Name
@@ -98,29 +98,29 @@ npsp__Donations:
 
     lookups:
         AccountId:
-            table: household_accounts
+            table: Account__HH_Account
             key_field: account_id
         Primary_Contact__c:
-            table: contacts
+            table: Contact
             key_field: primary_contact__c
         Honoree_Contact__c:
-            table: contacts
+            table: Contact
             key_field: honoree_contact__c
         Notification_Recipient_Contact__c:
-            table: contacts
+            table: Contact
             key_field: notification_recipient_contact__c
 
 npsp__OpportunityContactRole:
     sf_object: OpportunityContactRole
-    table: npsp__OpportunityContactRole
+    table: OpportunityContactRole
     fields:
         Role: Role
         IsPrimary: IsPrimary
 
     lookups:
         ContactId:
-            table: contacts
+            table: Contact
             key_field: contact_id
         OpportunityId:
-            table: npsp__donations
+            table: Opportunity
             key_field: opportunity_id

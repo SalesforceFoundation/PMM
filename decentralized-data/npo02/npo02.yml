@@ -1,7 +1,7 @@
 # Accounts
 Household_Accounts:
     sf_object: Account
-    table: household_accounts
+    table: Account__HH_Account
     fields:
         # IDs
         Name: Name
@@ -43,12 +43,12 @@ Household_Accounts:
 
 Organization_Accounts:
     sf_object: Account
-    table: organization_accounts
+    table: Account__Organization
     fields:
         # IDs
         Name: Name
 
-
+        # Data
         SYSTEM_CUSTOM_NAMING__c: npo02__SYSTEM_CUSTOM_NAMING__c
 
         # NPSP: Donation Information
@@ -86,7 +86,7 @@ Organization_Accounts:
 # Contacts
 Contacts:
     sf_object: Contact
-    table: contacts
+    table: Contact
     fields:
         # IDs
         FirstName: FirstName
@@ -130,18 +130,19 @@ Contacts:
         TotalOppAmount__c: npo02__TotalOppAmount__c
     lookups:
         AccountId:
-            table: household_accounts
+            table: Account__HH_Account
 
 # NPSP Donations
 npsp__Donations:
     sf_object: Opportunity
-    table: npsp__donations
+    table: Opportunity
     fields:
         # IDs
         Name: Name
 
+        # Data
         systemHouseholdContactRoleProcessor__c: npo02__systemHouseholdContactRoleProcessor__c
     lookups:
         AccountId:
-            table: household_accounts
+            table: Account__HH_Account
             key_field: account_id

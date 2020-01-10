@@ -1,6 +1,6 @@
 Contacts:
     sf_object: Contact
-    table: contacts
+    table: Contact
     fields:
         # IDs
         FirstName: FirstName
@@ -10,7 +10,7 @@ Contacts:
 # NPSP Relationships
 npe4__Relationships:
     sf_object: Relationship__c
-    table: npe4__relationships
+    table: npe4__Relationship__c
     fields:
         # Data
         SYSTEM_SystemCreated__c: npe4__SYSTEM_SystemCreated__c
@@ -20,8 +20,8 @@ npe4__Relationships:
 
     lookups:
         Contact__c:
-            table: contacts
+            table: Contact
             key_field: contact__c
         RelatedContact__c:
-            table: contacts
+            table: Contact
             key_field: related_contact__c

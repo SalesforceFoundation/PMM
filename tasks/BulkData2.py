@@ -28,12 +28,6 @@ class BulkData(Namespace):
         self._namespace = namespace.namespace
         self._local_namespace = namespace.local_namespace
         self._version = namespace.version
-        self._paths = [
-            {
-                "map": map_path,
-                "sql": sql_path,
-            }
-        ]
         self._sql_path = sql_path
 
         # load map
@@ -45,7 +39,7 @@ class BulkData(Namespace):
                 map = yaml.safe_load(f)
             
             # inject namepsace into fields and lookups
-            for _, step in map.items():
+            for map_step, step in map.items():
                 for key in [
                     "fields", 
                     "lookups",
@@ -67,15 +61,27 @@ class BulkData(Namespace):
                             del step["fields"]["Id"]
                 
                 # inject namespace in sf_object
+                if not step.get("table"):
+                    raise TaskOptionsError("Each bulk data map step must have a 'sf_object'.\n\nBulk Data Step: {}\nMap: {}\nMap Step: {}".format(
+                        step,
+                        map_path,
+                        map_step,
+                    ))
                 sobject = step["sf_object"]
                 step["sf_object"] = self.inject_sobject_namespace(sobject)
 
                 # Save uniquify table to this BulkData step as unique_table 
-                if step.get("table"):
-                    table = step["table"]
-                    unique_table = "{}__{}".format(self.step, table)
-                    step["unique_table"] = unique_table
-                    unique_tables_by_table[table] = unique_table
+                if not step.get("table"):
+                    raise TaskOptionsError("Each bulk data map step must have a 'table'.\n\nBulk Data Step: {}\nMap: {}\nMap Step: {}".format(
+                        step,
+                        map_path,
+                        map_step,
+                    ))
+                    
+                table = step["table"]
+                unique_table = "{}__{}".format(self.step, table)
+                step["unique_table"] = unique_table
+                unique_tables_by_table[table] = unique_table
 
                 # delete record_types from map that don't exist
                 # skip this record_type check if record_types_by_sobject is None (meaning the RecordTypeTask wasn't able to query)
@@ -125,26 +131,26 @@ class BulkData(Namespace):
         return (
             'BulkData('
             f'namespace={self.namespace!r}, local_namespace={self.local_namespace!r}, '
-            f'version={self.version!r}), paths={self.paths!r}'
+            f'version={self.version!r}), map_path={self.map_path!r}, sql_path={self.sql_path!r}'
         )
 
     def __hash__(self) -> int:
-        return hash((self.namespace, self.paths))
+        return hash((self.namespace, self.map_path, self.sql_path))
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Namespace):
             return NotImplemented
         return (
-            (self.namespace, self.local_namespace, self.version, self.paths) == 
-            (other.namespace, other.local_namespace, other.version, other.paths))
+            (self.namespace, self.local_namespace, self.version, self.map_path, self.sql_path) == 
+            (other.namespace, other.local_namespace, other.version, other.map_path, other.sql_path))
 
     @property
     def step(self):
         return self._step
 
     @property
-    def paths(self):
-        return self._paths
+    def map_path(self):
+        return self._map_path
 
     @property
     def sql_path(self):
@@ -165,9 +171,6 @@ class BulkData(Namespace):
     def __iadd__(self, other):
         if other is None:
             return
-
-        # extend paths
-        self._paths.extend(other._paths)
 
         # combines maps
         map = self.map
@@ -268,16 +271,26 @@ class BulkData(Namespace):
             sobject_names_by_table[step.get("table")] = step.get("sf_object")
 
         # Collect each sobject's parents to know which sobjects are dependencies 
-        for _, step in map.items():
+        for step_name, step in map.items():
             sobject = step.get("sf_object")
             parents = set()
             if "lookups" in step:
                 for _, lookup in step.get("lookups").items():
                     parent = sobject_names_by_table.get(lookup.get("table"))
 
+                    print("\n".join([
+                        "",
+                        "step: {}"
+                    ]))
+
                     # Ignore circular references
                     if parent != sobject:
                         parents.add(parent)
+
+            if not step.get("sf_object"):
+                raise TaskOptionsError("Each bulk data map step must have a 'sf_object'.\n\nMap Step: {}".format(
+                    step_name,
+                ))
 
             sobjects_by_name[step.get("sf_object")] = {
                 "name": sobject,
@@ -285,12 +298,22 @@ class BulkData(Namespace):
                 "children": set(),
             }
 
+        print("")
+        print("Collect each sobject's children and ancestors")
+        print("---------------------------------------------")
         # Collect each sobject's children and ancestors
         for name, sobject in sobjects_by_name.items():
 
             # Collect all sobjects where this sobject is a direct dependency as "children", i.e. sobjects where this sobject is a parent
             for parent in sobject.get("parents"):
                 # Ignore circular references
+                print("\n".join([
+                    "",
+                    "sobject.name: {}".format(name),
+                    "sobject.parents: {}".format(sobject.get("parents")),
+                    "sobject.children: {}".format(sobject.get("children")),
+                ]))
+
                 if parent != name:
                     sobjects_by_name.get(parent).get("children").add(name)
 
@@ -462,7 +485,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
                     self.record_types_by_sobject
                 )
                 if step in self.bulk_data:
-                    self.bulk_data[step] += bulk_data
+                    raise TaskOptionsError("Each bulk_data step must be uniquely defined among all projects.\n\nDuplicate bulk_data step: {}".format(step))
                 else:
                     self.bulk_data[step] = bulk_data 
 

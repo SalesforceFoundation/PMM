@@ -220,6 +220,31 @@ class NamespaceTask(LoggingTask):
     def local_project_namespace(self):
         return "" if not self.is_org_namespaced else self.project_namespace
 
+    def get_installed_package_version_by_namespace(self):
+        """
+        installed_package_version_by_namespace = {}
+        for package in GetInstalledPackages(
+            self.project_config, 
+            TaskConfig({}), 
+            self.org_config,
+        ).items():
+            installed_package_version_by_namespace[package[0]] = package[1]
+        return installed_package_version_by_namespace
+        """
+        return {
+            "caseman": "1.0 (Beta 256)",
+            "npe01": "3.13",
+            "npe03": "3.16",
+            "npe4": "3.9",
+            "npe5": "3.8",
+            "npo02": "3.12",
+            "npsp": "3.168",
+            "pmdm0": "1.0 (Beta 29)",
+            "pub": "1.5",
+            "sf_chttr_apps": "1.11",
+            "sf_com_apps": "1.7",
+        }
+
     @property
     def namespaces(self):
         if not self.org_config.config.get("namespaces"):
@@ -239,14 +264,10 @@ class NamespaceTask(LoggingTask):
             }
 
             # Overwrites project namespace if project is installed, e.g. install_beta flow
-            for package in GetInstalledPackages(
-                self.project_config, 
-                TaskConfig({}), 
-                self.org_config,
-            )().items():
-                namespace_infos_by_prefix[package[0]] = Namespace(
-                    package[0],
-                    version=package[1],
+            for namespace, version in self.get_installed_package_version_by_namespace().items():
+                namespace_infos_by_prefix[namespace] = Namespace(
+                    namespace,
+                    version=version,
                 )
 
             self.org_config.config.update({

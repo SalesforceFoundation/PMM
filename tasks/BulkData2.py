@@ -62,21 +62,28 @@ class BulkData(Namespace):
                 
                 # inject namespace in sf_object
                 if not step.get("table"):
-                    raise TaskOptionsError("Each bulk data map step must have a 'sf_object'.\n\nBulk Data Step: {}\nMap: {}\nMap Step: {}".format(
-                        step,
-                        map_path,
-                        map_step,
-                    ))
+                    raise TaskOptionsError("\n".join([
+                        "Each bulk data map step must have a 'sf_object':",
+                        "",
+                        "    bulk_data step: {}".format(self.step),
+                        "        map_path: {}".format(map_path),
+                        "",
+                        "    map step: {}".format(map_step),
+                    ]))
                 sobject = step["sf_object"]
                 step["sf_object"] = self.inject_sobject_namespace(sobject)
 
                 # Save uniquify table to this BulkData step as unique_table 
                 if not step.get("table"):
-                    raise TaskOptionsError("Each bulk data map step must have a 'table'.\n\nBulk Data Step: {}\nMap: {}\nMap Step: {}".format(
-                        step,
-                        map_path,
-                        map_step,
-                    ))
+                    raise TaskOptionsError("\n".join([
+                        "Each bulk data map step must have a 'table':",
+                        "",
+                        "    bulk_data step: {}".format(self.step),
+                        "        map_path: {}".format(map_path),
+                        "",
+                        "    map step: {}".format(map_step),
+                        "        sf_object: {}".format(sobject),
+                    ]))
                     
                 table = step["table"]
                 unique_table = "{}__{}".format(self.step, table)
@@ -258,8 +265,95 @@ class BulkData(Namespace):
         logging_task.log_table(rows)
 
     @property
+    def insert_combined_data_sql(self):
+        combined_sql_queries = [
+            "BEGIN TRANSACTION;",
+        ]
+        table = step["table"]
+        unique_table = step["unique_table"]
+
+        # inserts rows from unqiue_table into table whose id does not exist in table
+        return "\n".join([
+            "BEGIN TRANSACTION;",
+            f"INSERT INTO {table}",
+            "SELECT *",
+            f"FROM {unique_table}",
+            f"WHERE id NOT IN (SELECT id FROM {table})",
+            "ORDER BY id;",
+            "COMMIT;",
+        ])
+        
+    @property
+    def insert_update_combied_data_sql_queries(self):
+        queries_by_step = {}
+
+        for step_name, step in self.map.items():
+            queries = {}
+            queries_by_step[step_name] = queries
+
+            table = step["table"]
+            unique_table = step["unique_table"]
+
+            # collect all table columns
+            columns = BulkData.get_map_step_columns(step)
+            
+            columns_with_id = set()
+            columns_with_id.add("id")
+            columns_with_id.update(columns)
+
+            # inserts rows from unqiue_table into table whose id does not exist in table
+            columns_with_id_by_comma = ", ".join(columns_with_id)
+            queries["insert"] = "\n".join([
+                "",
+                "BEGIN TRANSACTION;",
+                f"INSERT INTO {table} ({columns_with_id_by_comma})",
+                f"SELECT {columns_with_id_by_comma}",
+                f"FROM {unique_table}",
+                f"WHERE id NOT IN (SELECT id FROM {table})",
+                "ORDER BY id;",
+                "COMMIT;",
+            ])
+
+            # updates all unique_table columns into table whose id exists in table
+            set_columns = ", ".join(columns)
+            select_column_prefix = "{}.".format(unique_table)
+            select_columns = select_column_prefix + (", {}".format(select_column_prefix)).join(columns) 
+
+            queries["update"] = "\n".join([
+                "",
+                "BEGIN TRANSACTION;",
+                f"UPDATE {table}",
+                "SET",
+                f"    ({set_columns}) = (",
+                f"        SELECT {select_columns}",
+                f"        FROM {unique_table}",
+                f"        WHERE {unique_table}.id = {table}.id",
+                "    )",
+                "WHERE",
+                "    EXISTS (",
+                "        SELECT *",
+                f"        FROM {unique_table}",
+                f"        WHERE {unique_table}.id = {table}.id",
+                "    );",
+                "COMMIT;",
+            ])
+        return queries_by_step
+
+    @property
     def sobjects_for_delete(self):
         return BulkData.get_sobjects_ordered_by_reverse_dependency(self.map)
+
+    @staticmethod
+    def get_map_step_columns(step):
+        columns = set()
+        if step.get("fields"):
+            columns.update(step["fields"].values())
+        if step.get("lookups"):
+            for field, lookup in step["lookups"].items():
+                columns.add(get_lookup_key_field(lookup, field))
+        if step.get("record_type"):
+            columns.add("record_type")
+        return columns
 
     @staticmethod
     def get_sobjects_ordered_by_reverse_dependency(map):
@@ -267,30 +361,39 @@ class BulkData(Namespace):
         sobjects_by_name = {}
 
         # Collect tables' sobjects
-        for _, step in map.items():
+        for step_name, step in map.items():
             sobject_names_by_table[step.get("table")] = step.get("sf_object")
 
-        # Collect each sobject's parents to know which sobjects are dependencies 
+        # Collect each sobject's parents to know which sobjects are dependencies
         for step_name, step in map.items():
             sobject = step.get("sf_object")
             parents = set()
             if "lookups" in step:
-                for _, lookup in step.get("lookups").items():
-                    parent = sobject_names_by_table.get(lookup.get("table"))
+                for api_name, lookup in step.get("lookups").items():
+                    table = lookup.get("table")
+                    parent = sobject_names_by_table.get(table)
 
-                    print("\n".join([
-                        "",
-                        "step: {}"
-                    ]))
+                    if parent is None:
+                        error_messages = [
+                            "No table found for map step's lookup:",
+                            "",
+                            "    map step: {}".format(step_name),
+                            "        sf_object: {}".format(sobject),
+                            "",
+                            "    lookup:",
+                            "        Field API Name: {}".format(api_name),
+                            "        table: {}".format(table),
+                            "        key_field: {}".format(lookup.get("key_field")),
+                            "",
+                            "    available sobject_names_by_table:",
+                        ]
+                        for table, sobject in sobject_names_by_table.items():
+                            error_messages.append("        {}: {}".format(table, sobject))
+                        raise TaskOptionsError("\n".join(error_messages))
 
                     # Ignore circular references
                     if parent != sobject:
                         parents.add(parent)
-
-            if not step.get("sf_object"):
-                raise TaskOptionsError("Each bulk data map step must have a 'sf_object'.\n\nMap Step: {}".format(
-                    step_name,
-                ))
 
             sobjects_by_name[step.get("sf_object")] = {
                 "name": sobject,
@@ -298,22 +401,12 @@ class BulkData(Namespace):
                 "children": set(),
             }
 
-        print("")
-        print("Collect each sobject's children and ancestors")
-        print("---------------------------------------------")
         # Collect each sobject's children and ancestors
         for name, sobject in sobjects_by_name.items():
 
             # Collect all sobjects where this sobject is a direct dependency as "children", i.e. sobjects where this sobject is a parent
             for parent in sobject.get("parents"):
                 # Ignore circular references
-                print("\n".join([
-                    "",
-                    "sobject.name: {}".format(name),
-                    "sobject.parents: {}".format(sobject.get("parents")),
-                    "sobject.children: {}".format(sobject.get("children")),
-                ]))
-
                 if parent != name:
                     sobjects_by_name.get(parent).get("children").add(name)
 
@@ -485,7 +578,16 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
                     self.record_types_by_sobject
                 )
                 if step in self.bulk_data:
-                    raise TaskOptionsError("Each bulk_data step must be uniquely defined among all projects.\n\nDuplicate bulk_data step: {}".format(step))
+                    error_messages = [
+                        "Each bulk_data step must be uniquely defined among all projects:",
+                        "",
+                        "    Duplicate bulk_data step: {}".format(step),
+                        "",
+                        "    Existing bulk_data steps:"
+                    ]
+                    for step_name in self.bulk_data.keys():
+                        error_messages.append("        {}".format(step_name))
+                    raise TaskOptionsError("\n".join(error_messages))
                 else:
                     self.bulk_data[step] = bulk_data 
 
@@ -521,9 +623,16 @@ class BulkDataStepTask(BulkDataTask):
     def combined_bulk_data(self):
         # sets combined_bulk_data as the bulk_data for 'bulk_data_step' option
         if self.options["bulk_data_step"] not in self.bulk_data:
-            raise TaskOptionsError(
-                "'bulk_data_step' option must be a member of 'bulk_data' option"
-            )
+            error_messages = [
+                "'bulk_data_step' option must be a member of 'bulk_data' option:",
+                "",
+                "    Invalid bulk_data_step: {}".format(self.options["bulk_data_step"]),
+                "",
+                "    Existing bulk_data steps:"
+            ]
+            for step_name in self.bulk_data.keys():
+                error_messages.append("        {}".format(step_name))
+            raise TaskOptionsError("\n".join(error_messages))
         return self.bulk_data.get(self.options["bulk_data_step"])
 
 class CacheProjectBulkDataTask(BulkDataTask):
@@ -689,11 +798,46 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         if self.log_combined_bulk_data:
             self.combined_bulk_data.log_map(self)
         self.mapping = self.combined_bulk_data.map
+    
+    def _get_combined_bulk_data_create_tables_script(self):
+        sql_lines = [
+            "",
+            "BEGIN TRANSACTION;",
+        ]
+        
+        # CREATE TABLES
+        for step in self.combined_bulk_data.map.values():
 
-        sql = self._get_combined_bulk_data_sql()
-        self.logger.info(sql)
-        if True:
-            raise TaskOptionsError("......")
+            sql_lines.extend([
+                'CREATE TABLE "{}" ('.format(step["table"]),
+                "    id INTEGER NOT NULL,",
+            ])
+
+            for column in BulkData.get_map_step_columns(step):
+                sql_lines.append('    "{}" VARCHAR(255),'.format(column))
+            """
+            # fields
+            if step.get("fields"):
+                for field in step["fields"].values():
+                    sql_lines.append('    "{}" VARCHAR(255),'.format(field))
+            
+            # lookups
+            if step.get("lookups"):
+                for field, lookup in step["lookups"].items():
+                    sql_lines.append('    {} VARCHAR(255),'.format(get_lookup_key_field(lookup, field)))
+            
+            # record_type
+            if step.get("record_type"):
+                sql_lines.append("    record_type VARCHAR(255),")
+            """
+
+            sql_lines.extend([
+                "    PRIMARY KEY(id)",
+                ");",
+                "",
+            ])
+        sql_lines.append("COMMIT;")
+        return "\n".join(sql_lines)
 
     def _get_combined_bulk_data_sql(self):
         sql_lines = [
@@ -703,21 +847,25 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         
         # CREATE TABLES
         for step in self.combined_bulk_data.map.values():
+
             sql_lines.extend([
                 'CREATE TABLE "{}" ('.format(step["table"]),
-                # id
-                sql_lines.append("    id INTEGER NOT NULL,"),
+                "    id INTEGER NOT NULL,",
             ])
+
+
+            for column in BulkData.get_map_step_columns(step):
+                sql_lines.append('    "{}" VARCHAR(255),'.format(column))
             """
             # fields
             if step.get("fields"):
                 for field in step["fields"].values():
                     sql_lines.append('    "{}" VARCHAR(255),'.format(field))
-
+            
             # lookups
             if step.get("lookups"):
                 for field, lookup in step["lookups"].items():
-                    sql_lines.append('    "{}" VARCHAR(255),'.format(get_lookup_key_field(lookup, field)))
+                    sql_lines.append('    {} VARCHAR(255),'.format(get_lookup_key_field(lookup, field)))
             
             # record_type
             if step.get("record_type"):
@@ -728,23 +876,74 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
                 ");",
                 "",
             ])
-          
-        # UPDATE tables from bulk_data steps
 
+        """
+        # group bulk_data steps by table
+        bulk_data_map_steps_by_table = {}
+        for data_name, data in self.bulk_data.items():
+            for step in data.map.values():
+                table = step["table"]
+                map_steps_by_bulk_data_step = bulk_data_map_steps_by_table.get(table)
+                if not map_steps_by_bulk_data_step:
+                    map_steps_by_bulk_data_step = {}
+                    bulk_data_map_steps_by_table[table] = map_steps_by_bulk_data_step
+                map_steps_by_bulk_data_step[data_name] = step
+
+
+        rows = [
+            [
+                "TABLE",
+                "bulk_data STEP",
+                "UNIQUE TABLE",
+            ]
+        ]
+
+        for table, bulk_data_map_steps in bulk_data_map_steps_by_table.items():
+            is_first = True
+            for data_step_name, map_step in bulk_data_map_steps.items():
+                rows.append([
+                    table if is_first else "",
+                    data_step_name,
+                    map_step.get("unique_table"),
+                ])
+                is_first = False
+
+        self.log_title("bulk_data_map_steps_by_table")
+        self.log_table(rows)
+        """
+
+        # UPDATE tables from bulk_data steps
+        for data in self.bulk_data.values():
+            sql_lines.extend(data.combied_sql_queries)
 
         sql_lines.append("COMMIT;")
+
         return "\n".join(sql_lines)
 
     def _sqlite_load(self):
         conn = self.session.connection()
         cursor = conn.connection.cursor()
         try:
-            # Load each bulk_data step's sql
-            for step in self.bulk_data.values():
-                cursor.executescript(step.sql)
+            # Create combined_bulk_data tables
+            self.log_title("Creating combined_bulk_data tables")
+            cursor.executescript(self._get_combined_bulk_data_create_tables_script())
 
-            sql = self._get_combined_bulk_data_sql()
-            self.logger.info(sql)
+            # Load each bulk_data step's unique_table sql
+            self.log_title("Loading sql data for bulk_data steps")
+            for step, data in self.bulk_data.items():
+                self.logger.info("")
+                self.logger.info(step)
+                self.logger.info("    Creating unique tables and inserting data")
+                cursor.executescript(data.sql)
+
+                self.logger.info("    Inserting/Updating data from unique tables into combined tables")
+                queries_by_step = data.insert_update_combied_data_sql_queries
+                for map_step, queries in queries_by_step.items():
+                    self.logger.info("        {}".format(map_step))
+                    for query_type, query in queries.items():
+                        self.logger.info("            {}: {}".format(query_type, query))
+                        cursor.executescript(query)
+
             if True:
                 raise TaskOptionsError("......")
 

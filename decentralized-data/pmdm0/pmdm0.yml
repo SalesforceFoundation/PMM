@@ -1,6 +1,6 @@
 Household_Accounts:
     sf_object: Account
-    table: household_accounts
+    table: Account__HH_Account
     fields:
         # IDs
         Name: Name
@@ -15,7 +15,7 @@ Contacts:
         Email: Email
     lookups:
         AccountId:
-            table: household_accounts
+            table: Account__HH_Account
 
 # Programs
 pmdm0__Program__c:
@@ -71,7 +71,7 @@ pmdm0__ProgramEngagement__c:
     lookups:
         Account__c:
             key_field: account__c
-            table: household_accounts
+            table: Account__HH_Account
         Contact__c:
             key_field: contact__c
             table: Contact
@@ -117,7 +117,7 @@ pmdm0__ServiceDelivery__c:
             table: pmdm0__Service__c
         Account__c:
             key_field: account__c
-            table: household_accounts
+            table: Account__HH_Account
         Contact__c:
             key_field: contact__c
             table: Contact

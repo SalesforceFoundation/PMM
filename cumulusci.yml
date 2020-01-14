@@ -44,8 +44,10 @@ orgs:
 sources:
     npsp:
         github: https://github.com/SalesforceFoundation/NPSP
+        tag: rel/3.168
     caseman: 
         github: https://github.com/SalesforceFoundation/CaseMan
+        commit: cc6dc45cbcdadb1d4285b73c046de23992b3ddad
 
 
 tasks:

@@ -70,7 +70,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Program__c.Summary__c</field>
+        <field>Program__c.ShortSummary__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

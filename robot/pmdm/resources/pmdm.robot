@@ -17,7 +17,7 @@ API Create Program
     ...               Name=${program_name}
     ...               ProgramIssueArea__c=Employment
     ...               Description__c=PMDM Robot Program
-    ...               Summary__c=created via API
+    ...               ShortSummary__c=created via API
     ...               TargetPopulation__c=Youth Target Population
     ...               Status__c=Active
     &{program} =     Salesforce Get  Program__c  ${program_id}

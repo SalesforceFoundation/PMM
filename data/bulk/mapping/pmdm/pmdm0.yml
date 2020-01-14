@@ -13,7 +13,7 @@ pmdm__Program__c:
         ProgramIssueArea__c: ProgramIssueArea__c
         StartDate__c: StartDate__c
         Status__c: Status__c
-        Summary__c: Summary__c
+        ShortSummary__c: ShortSummary__c
         TargetPopulation__c: TargetPopulation__c
 
 pmdm__ProgramCohort__c:
@@ -29,7 +29,6 @@ pmdm__ProgramCohort__c:
         EndDate__c: EndDate__c
         StartDate__c: StartDate__c
         Status__c: Status__c
-        Summary__c: Summary__c
 
     lookups:
         Program__c:

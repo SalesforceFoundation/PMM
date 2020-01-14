@@ -22,37 +22,13 @@ class Namespace():
     def namespace(self):
         return self._namespace
 
-    @namespace.setter
-    def namespace(self, value):
-        pass
-
-    @namespace.deleter
-    def namespace(self):
-        pass
-
     @property
     def local_namespace(self):
         return self._local_namespace
 
-    @local_namespace.setter
-    def local_namespace(self, value):
-        pass
-
-    @local_namespace.deleter
-    def local_namespace(self):
-        pass
-
     @property
     def version(self):
         return self._version
-
-    @version.setter
-    def version(self, value):
-        pass
-
-    @version.deleter
-    def version(self):
-        pass
 
     def __repr__(self) -> str:
         return (
@@ -207,43 +183,20 @@ class NamespaceTask(LoggingTask):
     @property
     def is_org_namespaced(self):
         return self.org_config and process_bool_arg(self.org_config.config.get("namespaced"))
-    """
-    @is_org_namespaced.setter
-    def is_org_namespaced(self, value):
-        pass
 
-    @is_org_namespaced.deleter
-    def is_org_namespaced(self):
-        pass
-    """
     @property
     def local_project_namespace(self):
         return "" if not self.is_org_namespaced else self.project_namespace
 
     def get_installed_package_version_by_namespace(self):
-        """
         installed_package_version_by_namespace = {}
         for package in GetInstalledPackages(
             self.project_config, 
             TaskConfig({}), 
             self.org_config,
-        ).items():
+        )().items():
             installed_package_version_by_namespace[package[0]] = package[1]
         return installed_package_version_by_namespace
-        """
-        return {
-            "caseman": "1.0 (Beta 256)",
-            "npe01": "3.13",
-            "npe03": "3.16",
-            "npe4": "3.9",
-            "npe5": "3.8",
-            "npo02": "3.12",
-            "npsp": "3.168",
-            "pmdm0": "1.0 (Beta 29)",
-            "pub": "1.5",
-            "sf_chttr_apps": "1.11",
-            "sf_com_apps": "1.7",
-        }
 
     @property
     def namespaces(self):
@@ -312,11 +265,6 @@ class RefreshNamespacesCache(NamespaceTask):
     def _run_task(self):
         # reset namespace info cache
         del self.namespaces
-        """
-        if "namespaces" in self.org_config.config:
-            del self.org_config.config["namespaces"]
-        self.namespaces
-        """
 
 class ExecuteAnonymousTask(AnonymousApexTask, NamespaceTask):
 

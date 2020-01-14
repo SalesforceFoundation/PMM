@@ -192,7 +192,7 @@ tasks:
                 - github: "https://github.com/SalesforceFoundation/caseman"
             include_beta: True
     
-            update_client_photo_directories:
+    update_client_photo_directories:
         group: "CaseMan: Test Data"
         description: "Update client photo directories after capture_test_data"
         class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
@@ -241,9 +241,9 @@ tasks:
     ################################################
     ################################################
     log_bulk_data_mapping:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData_orig.LogMapping
+        class_path: tasks.BulkDataOriginal.LogMapping
         options:
             package_mapping_directories:
                 - data/bulk/mapping/caseman
@@ -256,9 +256,9 @@ tasks:
             log_mapping: table
 
     create_bulk_data_mapping:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData_orig.CreateMapping
+        class_path: tasks.BulkDataOriginal.CreateMapping
         options:
             package_mapping_directories:
                 - data/bulk/mapping/caseman
@@ -275,9 +275,9 @@ tasks:
             log_mapping: table
 
     insert_bulk_data:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Inserts bulk data at sql_path into org with auto-generated mapping"
-        class_path: tasks.BulkData_orig.InsertData
+        class_path: tasks.BulkDataOriginal.InsertData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -295,9 +295,9 @@ tasks:
                       - caseman
 
     capture_bulk_data:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -316,9 +316,9 @@ tasks:
             log_mapping: table
 
     capture_bulk_data_contacts:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -328,9 +328,9 @@ tasks:
                 - path: decentralized-data/c/Contacts.yml
 
     capture_bulk_data_household_accounts:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -340,9 +340,9 @@ tasks:
                 - path: decentralized-data/c/Household_Accounts.yml
 
     capture_bulk_data_organization_accounts:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -352,9 +352,9 @@ tasks:
                 - path: decentralized-data/c/Organization_Accounts.yml
 
     capture_bulk_data_caseman:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -364,9 +364,9 @@ tasks:
                 - decentralized-data/caseman
 
     capture_bulk_data_caseman_unpackaged:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -377,9 +377,9 @@ tasks:
                   inject_project_namespace: true
     
     capture_bulk_data_npe01:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -389,9 +389,9 @@ tasks:
                 - decentralized-data/npe01
     
     capture_bulk_data_npe4:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -401,9 +401,9 @@ tasks:
                 - decentralized-data/npe4
     
     capture_bulk_data_npo02:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -413,9 +413,9 @@ tasks:
                 - decentralized-data/npo02
     
     capture_bulk_data_npsp:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -425,9 +425,9 @@ tasks:
                 - decentralized-data/npsp
     
     capture_bulk_data_pmdm0:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData_orig.CaptureData
+        class_path: tasks.BulkDataOriginal.CaptureData
         options:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
@@ -437,9 +437,9 @@ tasks:
                 - decentralized-data/pmdm0
 
     delete_bulk_data_old:
-        group: "Data: BulkData_orig"
+        group: "Data: BulkDataOriginal"
         description: "I need a description"
-        class_path: tasks.BulkData_orig.DeleteData
+        class_path: tasks.BulkDataOriginal.DeleteData
         options:
             hardDelete: True
             package_mapping_directories:
@@ -745,8 +745,10 @@ flows:
                     unmanaged: True
             110:
                 task: activate_flows
+            #200:
+                #flow: insert_data
             200:
-                flow: insert_data
+                task: insert_bulk_data2
 
     config_unmanaged_namespaced:
         steps:
@@ -758,8 +760,10 @@ flows:
                     unmanaged: False
             102:
                 task: activate_flows
+            #200:
+                #flow: insert_data
             200:
-                flow: insert_data
+                task: insert_bulk_data2
 
     config_managed:
         steps:

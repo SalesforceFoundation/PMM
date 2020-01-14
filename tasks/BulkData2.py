@@ -263,25 +263,6 @@ class BulkData(Namespace):
         
         logging_task.log_title(self.step)
         logging_task.log_table(rows)
-
-    @property
-    def insert_combined_data_sql(self):
-        combined_sql_queries = [
-            "BEGIN TRANSACTION;",
-        ]
-        table = step["table"]
-        unique_table = step["unique_table"]
-
-        # inserts rows from unqiue_table into table whose id does not exist in table
-        return "\n".join([
-            "BEGIN TRANSACTION;",
-            f"INSERT INTO {table}",
-            "SELECT *",
-            f"FROM {unique_table}",
-            f"WHERE id NOT IN (SELECT id FROM {table})",
-            "ORDER BY id;",
-            "COMMIT;",
-        ])
         
     @property
     def insert_update_combied_data_sql_queries(self):
@@ -781,6 +762,24 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         },
     }
 
+    # hard code get_installed_package_version_by_namespace response for quick testing
+    """
+    def get_installed_package_version_by_namespace(self):
+        return {
+            "caseman": "1.0 (Beta 256)",
+            "npe01": "3.13",
+            "npe03": "3.16",
+            "npe4": "3.9",
+            "npe5": "3.8",
+            "npo02": "3.12",
+            "npsp": "3.168",
+            "pmdm0": "1.0 (Beta 29)",
+            "pub": "1.5",
+            "sf_chttr_apps": "1.11",
+            "sf_com_apps": "1.7",
+        }
+    """
+
     def _init_options(self, kwargs):
         super(LoadData, self)._init_options(kwargs)
 
@@ -839,87 +838,6 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         sql_lines.append("COMMIT;")
         return "\n".join(sql_lines)
 
-    def _get_combined_bulk_data_sql(self):
-        sql_lines = [
-            "",
-            "BEGIN TRANSACTION;",
-        ]
-        
-        # CREATE TABLES
-        for step in self.combined_bulk_data.map.values():
-
-            sql_lines.extend([
-                'CREATE TABLE "{}" ('.format(step["table"]),
-                "    id INTEGER NOT NULL,",
-            ])
-
-
-            for column in BulkData.get_map_step_columns(step):
-                sql_lines.append('    "{}" VARCHAR(255),'.format(column))
-            """
-            # fields
-            if step.get("fields"):
-                for field in step["fields"].values():
-                    sql_lines.append('    "{}" VARCHAR(255),'.format(field))
-            
-            # lookups
-            if step.get("lookups"):
-                for field, lookup in step["lookups"].items():
-                    sql_lines.append('    {} VARCHAR(255),'.format(get_lookup_key_field(lookup, field)))
-            
-            # record_type
-            if step.get("record_type"):
-                sql_lines.append("    record_type VARCHAR(255),")
-            """
-            sql_lines.extend([
-                "    PRIMARY KEY(id)",
-                ");",
-                "",
-            ])
-
-        """
-        # group bulk_data steps by table
-        bulk_data_map_steps_by_table = {}
-        for data_name, data in self.bulk_data.items():
-            for step in data.map.values():
-                table = step["table"]
-                map_steps_by_bulk_data_step = bulk_data_map_steps_by_table.get(table)
-                if not map_steps_by_bulk_data_step:
-                    map_steps_by_bulk_data_step = {}
-                    bulk_data_map_steps_by_table[table] = map_steps_by_bulk_data_step
-                map_steps_by_bulk_data_step[data_name] = step
-
-
-        rows = [
-            [
-                "TABLE",
-                "bulk_data STEP",
-                "UNIQUE TABLE",
-            ]
-        ]
-
-        for table, bulk_data_map_steps in bulk_data_map_steps_by_table.items():
-            is_first = True
-            for data_step_name, map_step in bulk_data_map_steps.items():
-                rows.append([
-                    table if is_first else "",
-                    data_step_name,
-                    map_step.get("unique_table"),
-                ])
-                is_first = False
-
-        self.log_title("bulk_data_map_steps_by_table")
-        self.log_table(rows)
-        """
-
-        # UPDATE tables from bulk_data steps
-        for data in self.bulk_data.values():
-            sql_lines.extend(data.combied_sql_queries)
-
-        sql_lines.append("COMMIT;")
-
-        return "\n".join(sql_lines)
-
     def _sqlite_load(self):
         conn = self.session.connection()
         cursor = conn.connection.cursor()
@@ -941,12 +859,12 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
                 for map_step, queries in queries_by_step.items():
                     self.logger.info("        {}".format(map_step))
                     for query_type, query in queries.items():
-                        self.logger.info("            {}: {}".format(query_type, query))
+                        self.logger.info("            {}: {}".format(query_type, "query"))
                         cursor.executescript(query)
-
+            """
             if True:
                 raise TaskOptionsError("......")
-
+            """
 
         finally:
             cursor.close()

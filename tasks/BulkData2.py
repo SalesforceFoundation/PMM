@@ -468,19 +468,29 @@ class BulkData(Namespace):
 class BulkDataTask(NamespaceTask, RecordTypeTask):
     task_options = {
         "bulk_data_log_level": {
-            "description": "Level to log BulkData maps.  Options are 'None', 'Summary', 'Combined', or 'All'. Default: None",
+            "description": "Level to log BulkData maps.  Options are 'None', 'Summary', 'Combined', or 'All'. Default: 'Summary'",
             "required": False,
         },
     }
 
+    _is_bulk_data_cached = False
+
+    # TODO: temporarily hard-coding installed package versions for quick testing
+    def get_installed_package_version_by_namespace(self):
+        return {
+            "caseman": "1.0 (Beta 256)",
+        }
+
     @property
     @functools.lru_cache()
     def bulk_data_log_level(self):
-        return {
+        # Default to 'summary' bulk_data_log_level
+        bulk_data_log_level = {
             "all": 3,
             "combined": 2,
             "summary": 1,
-        }.get((self.options.get("bulk_data_log_level") or "").lower()) or 0
+        }.get((self.options.get("bulk_data_log_level") or "summary").lower()) or 0
+        return bulk_data_log_level
 
     @property
     def log_all_bulk_data(self):
@@ -497,7 +507,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
     @property
     def bulk_data(self):
         if self.org_config.config.get("bulk_data") is None:
-            self.bulk_data = {}
+            #self.bulk_data = {}
             self.cache_project_bulk_data()
         return self.org_config.config.get("bulk_data")
 
@@ -526,8 +536,21 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
         return combined_bulk_data
 
     def cache_project_bulk_data(self):
-        if not hasattr(self.project_config, "bulk_data"):
+        if self._is_bulk_data_cached:
             return
+
+        # check if self.project_config.bulk_data is defined
+        if not self.project_config.bulk_data:
+            self.log_title("cumulusci.yml does not have bulk_data defined")
+            self.log_table([
+                [
+                    " 💤  Skipping caching project bulk_data  💤 "
+                ]
+            ])
+            self._is_bulk_data_cached = True
+            return
+
+        cached_bulk_data = self.org_config.config.get("bulk_data") or {}
 
         summary_rows = [
             [
@@ -558,7 +581,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
                     data.get("sql"),
                     self.record_types_by_sobject
                 )
-                if step in self.bulk_data:
+                if step in cached_bulk_data:
                     error_messages = [
                         "Each bulk_data step must be uniquely defined among all projects:",
                         "",
@@ -566,11 +589,11 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
                         "",
                         "    Existing bulk_data steps:"
                     ]
-                    for step_name in self.bulk_data.keys():
+                    for step_name in cached_bulk_data.keys():
                         error_messages.append("        {}".format(step_name))
                     raise TaskOptionsError("\n".join(error_messages))
                 else:
-                    self.bulk_data[step] = bulk_data 
+                    cached_bulk_data[step] = bulk_data 
 
             summary_rows.append([
                 step,
@@ -580,9 +603,12 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
                 data.get("map"),
                 data.get("sql"),
             ])
+
+        self.bulk_data = cached_bulk_data
+        self._is_bulk_data_cached = True
         
         # log summary
-        if True or self.log_summary_bulk_data:
+        if self.log_summary_bulk_data:
             self.log_title("{} bulk_data".format(self.project_namespace))
             self.log_table(summary_rows)
 
@@ -624,9 +650,10 @@ class CacheProjectBulkDataTask(BulkDataTask):
     """
 
     def _run_task(self):
-        if not self.options.get("bulk_data_log_level"):
-            self.options["bulk_data_log_level"] = "summary"
-        self.cache_project_bulk_data()   
+        self.cache_project_bulk_data()
+        self.cache_project_bulk_data()
+        self.cache_project_bulk_data()
+        self.cache_project_bulk_data()
 
 class LogBulkDataMapTask(BulkDataTask):
 
@@ -639,8 +666,6 @@ class LogBulkDataMapTask(BulkDataTask):
             self.options["log_maps"] = "combined"
         
         self.combined_bulk_data.log_map(self)
-
-        self.logger.info(self.combined_bulk_data.sql)
 
 class LogBulkDataStepMapTask(LogBulkDataMapTask, BulkDataStepTask):
 
@@ -657,10 +682,9 @@ class DeleteBulkDataTask(BaseDeleteData, BulkDataTask):
     def _init_options(self, kwargs):
         super(BaseDeleteData, self)._init_options(kwargs)
 
-        if not self.options.get("bulk_data_log_level"):
-            self.options["bulk_data_log_level"] = "combined"
-
-        self.combined_bulk_data.log_map(self)
+        # Optinally log combined_bulk_data for debugging
+        if self.log_combined_bulk_data:
+            self.combined_bulk_data.log_map(self)
 
         # Always hard-delete
         self.options["hardDelete"] = process_bool_arg(self.options.get("hardDelete"))
@@ -729,23 +753,6 @@ class InsertBulkDataStepTask(LoadData, BulkDataStepTask):
         self.mapping = self.combined_bulk_data.map
 
     def _sqlite_load(self):
-        # original
-        #        conn = self.session.connection()
-        #        cursor = conn.connection.cursor()
-        #        with open(self.options["sql_path"], "r") as f:
-        #            try:
-        #                cursor.executescript(f.read())
-        #            finally:
-        #                cursor.close()
-        #        #self.session.flush()
-        #    TODO
-        #    ------------
-        #    - get each namespace sql file
-        #    - modify each namespace 
-        #    - how to get data files from other repos?
-        #        - add cci task that saves the path of a file in org_config from another repo.
-
-    
         conn = self.session.connection()
         cursor = conn.connection.cursor()
         try:
@@ -762,24 +769,6 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         },
     }
 
-    # hard code get_installed_package_version_by_namespace response for quick testing
-    """
-    def get_installed_package_version_by_namespace(self):
-        return {
-            "caseman": "1.0 (Beta 256)",
-            "npe01": "3.13",
-            "npe03": "3.16",
-            "npe4": "3.9",
-            "npe5": "3.8",
-            "npo02": "3.12",
-            "npsp": "3.168",
-            "pmdm0": "1.0 (Beta 29)",
-            "pub": "1.5",
-            "sf_chttr_apps": "1.11",
-            "sf_com_apps": "1.7",
-        }
-    """
-
     def _init_options(self, kwargs):
         super(LoadData, self)._init_options(kwargs)
 
@@ -788,10 +777,6 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         )
         self.options["database_url"] = "sqlite://"
         self.options["sql_path"] = "not None so _sqlite_load() is called"
-
-        # Set default bulk_data_log_level
-        if not self.options.get("bulk_data_log_level"):
-            self.options["bulk_data_log_level"] = "combined"
 
     def _init_mapping(self):
         if self.log_combined_bulk_data:
@@ -814,21 +799,6 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
 
             for column in BulkData.get_map_step_columns(step):
                 sql_lines.append('    "{}" VARCHAR(255),'.format(column))
-            """
-            # fields
-            if step.get("fields"):
-                for field in step["fields"].values():
-                    sql_lines.append('    "{}" VARCHAR(255),'.format(field))
-            
-            # lookups
-            if step.get("lookups"):
-                for field, lookup in step["lookups"].items():
-                    sql_lines.append('    {} VARCHAR(255),'.format(get_lookup_key_field(lookup, field)))
-            
-            # record_type
-            if step.get("record_type"):
-                sql_lines.append("    record_type VARCHAR(255),")
-            """
 
             sql_lines.extend([
                 "    PRIMARY KEY(id)",
@@ -847,6 +817,7 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
             cursor.executescript(self._get_combined_bulk_data_create_tables_script())
 
             # Load each bulk_data step's unique_table sql
+            # TODO: add better logging.  Use log_table(...)?
             self.log_title("Loading sql data for bulk_data steps")
             for step, data in self.bulk_data.items():
                 self.logger.info("")
@@ -861,10 +832,5 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
                     for query_type, query in queries.items():
                         self.logger.info("            {}: {}".format(query_type, "query"))
                         cursor.executescript(query)
-            """
-            if True:
-                raise TaskOptionsError("......")
-            """
-
         finally:
             cursor.close()

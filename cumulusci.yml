@@ -191,7 +191,7 @@ tasks:
             dependencies:
                 - github: "https://github.com/SalesforceFoundation/caseman"
             include_beta: True
-    
+
     update_client_photo_directories:
         group: "CaseMan: Test Data"
         description: "Update client photo directories after capture_test_data"
@@ -236,11 +236,11 @@ tasks:
         options:
             path: unpackaged/tests/serviceDeliveryModal
             namespace_inject: $project_config.project__package__namespace
-    
+
     ################################################
     ################################################
     ################################################
-    log_bulk_data_mapping:
+    log_bulk_data_mapping_original:
         group: "Data: BulkDataOriginal"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
         class_path: tasks.BulkDataOriginal.LogMapping
@@ -255,7 +255,7 @@ tasks:
                 - path: data/bulk/mapping/Contacts.yml
             log_mapping: table
 
-    create_bulk_data_mapping:
+    create_bulk_data_mapping_original:
         group: "Data: BulkDataOriginal"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
         class_path: tasks.BulkDataOriginal.CreateMapping
@@ -274,7 +274,7 @@ tasks:
                       - caseman
             log_mapping: table
 
-    insert_bulk_data:
+    insert_bulk_data_original:
         group: "Data: BulkDataOriginal"
         description: "Inserts bulk data at sql_path into org with auto-generated mapping"
         class_path: tasks.BulkDataOriginal.InsertData
@@ -294,7 +294,7 @@ tasks:
                   when_all_namespaces:
                       - caseman
 
-    capture_bulk_data:
+    capture_bulk_data_original:
         group: "Data: BulkDataOriginal"
         description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
         class_path: tasks.BulkDataOriginal.CaptureData
@@ -315,128 +315,7 @@ tasks:
                       - caseman
             log_mapping: table
 
-    capture_bulk_data_contacts:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/c/Contacts.sql
-            pre_mapping_configs:
-                - path: decentralized-data/c/Contacts.yml
-
-    capture_bulk_data_household_accounts:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/c/Household_Accounts.sql
-            pre_mapping_configs:
-                - path: decentralized-data/c/Household_Accounts.yml
-
-    capture_bulk_data_organization_accounts:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/c/Organization_Accounts.sql
-            pre_mapping_configs:
-                - path: decentralized-data/c/Organization_Accounts.yml
-
-    capture_bulk_data_caseman:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/caseman/caseman.sql
-            package_mapping_directories:
-                - decentralized-data/caseman
-
-    capture_bulk_data_caseman_unpackaged:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/caseman/unpackaged.sql
-            pre_mapping_configs:
-                - path: decentralized-data/caseman/unpackaged.yml
-                  inject_project_namespace: true
-    
-    capture_bulk_data_npe01:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/npe01/npe01.sql
-            package_mapping_directories:
-                - decentralized-data/npe01
-    
-    capture_bulk_data_npe4:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/npe4/npe4.sql
-            package_mapping_directories:
-                - decentralized-data/npe4
-    
-    capture_bulk_data_npo02:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/npo02/npo02.sql
-            package_mapping_directories:
-                - decentralized-data/npo02
-    
-    capture_bulk_data_npsp:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/npsp/npsp.sql
-            package_mapping_directories:
-                - decentralized-data/npsp
-    
-    capture_bulk_data_pmdm0:
-        group: "Data: BulkDataOriginal"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkDataOriginal.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            log_mapping: table
-            sql_path: decentralized-data/pmdm0/pmdm0.sql
-            package_mapping_directories:
-                - decentralized-data/pmdm0
-
-    delete_bulk_data_old:
+    delete_bulk_data_original:
         group: "Data: BulkDataOriginal"
         description: "I need a description"
         class_path: tasks.BulkDataOriginal.DeleteData
@@ -458,7 +337,7 @@ tasks:
     cache_project_bulk_data:
         group: "Data: Bulk"
         class_path: tasks.BulkData2.CacheProjectBulkDataTask
-    
+
     log_bulk_data_map:
         group: "Data: Bulk"
         class_path: tasks.BulkData2.LogBulkDataMapTask
@@ -484,119 +363,22 @@ tasks:
         description: "Inserts bulk data at for bulk_data_step"
         class_path: tasks.BulkData2.InsertBulkDataStepTask
 
-    insert_bulk_data2:
+    insert_bulk_data:
         group: "Data: Bulk"
         description: "Inserts combined bulk data"
         class_path: tasks.BulkData2.InsertBulkDataTask
-    
+
 flows:
-
-    log_bulk_data:
-        steps:
-            1:
-                task: cache_project_bulk_data
-            99:
-                task: log_bulk_data_map
-
-    insert_bulk_data2:
-        steps:
-            10:
-                flow: log_bulk_data
-            20:
-                task: insert_bulk_data_step
-                options:
-                    bulk_data_step: Contacts          
-
-    capture:
-        steps:
-            110:
-                task: capture_bulk_data_contacts
-            120:
-                task: capture_bulk_data_household_accounts
-            130:
-                task: capture_bulk_data_organization_accounts
-            140:
-                task: capture_bulk_data_caseman
-            150:
-                task: capture_bulk_data_caseman_unpackaged
-            160:
-                task: capture_bulk_data_npe01
-            170:
-                task: capture_bulk_data_npe4
-            180:
-                task: capture_bulk_data_npo02
-            190:
-                task: capture_bulk_data_npsp
-            195:
-                task: capture_bulk_data_pmdm0
-
-    delete_insert_capture:
-        steps:
-            100:
-                task: delete_bulk_data
-            200:
-                flow: insert_data
-            300:
-                flow: capture
-
-    capture_bulk_data:
-        steps:
-            #100:
-                #task: capture_bulk_data
-            100:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: Contacts
-            101:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: Household_Accounts
-            102:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: Organization_Accounts
-            103:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: pmdm0
-            104:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: caseman
-            105:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: caseman_unpackaged
-            106:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: npe01
-            107:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: npe4
-            108:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: npo02
-            109:
-                task: capture_bulk_data_step
-                options:
-                    bulk_data_step: npsp
-            #200:
-                #task: update_client_photo_directories
-
     insert_data:
         steps:
             010:
-                task: cache_namespaces_in_org_config
+                task: cache_project_bulk_data
             100:
                 flow: insert_bulk_data
             210:
                 task: execute_anon
                 options:
                     path: "data/scripts/delete_sample_contacts_and_accounts.apex"
-
             999:
                 task: execute_anon
                 options:
@@ -605,7 +387,7 @@ flows:
     insert_managed_data:
         steps:
             010:
-                task: cache_namespaces_in_org_config
+                task: cache_project_bulk_data
             100:
                 flow: insert_managed_bulk_data
             210:
@@ -700,7 +482,7 @@ flows:
     update_admin_profile:
         steps:
             01:
-                task: cache_namespaces_in_org_config
+                task: cache_project_bulk_data
             10:
                 task: update_admin_profile
                 when: "'caseman' not in org_config.namespace_info.namespaces and 'npsp' not in org_config.namespace_info.namespaces"
@@ -745,10 +527,8 @@ flows:
                     unmanaged: True
             110:
                 task: activate_flows
-            #200:
-                #flow: insert_data
             200:
-                task: insert_bulk_data2
+            flow: insert_data
 
     config_unmanaged_namespaced:
         steps:
@@ -760,10 +540,8 @@ flows:
                     unmanaged: False
             102:
                 task: activate_flows
-            #200:
-                #flow: insert_data
             200:
-                task: insert_bulk_data2
+                flow: insert_data
 
     config_managed:
         steps:

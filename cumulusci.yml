@@ -6,6 +6,9 @@ project:
         namespace: pmdm0
         api_version: "46.0"
     source_format: sfdx
+    dependencies:
+        # sfdo-base
+        - github: https://github.com/SalesforceFoundation/sfdo-base
 
 orgs:
     scratch:

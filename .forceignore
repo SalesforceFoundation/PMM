@@ -6,9 +6,6 @@
 *.profile
 
 # FlexiPages with %%%NAMESPACED_ORG%%% tokens
-<<<<<<< HEAD
-=======
 # uncomment the flexipages below during active development to avoid pulling changes
 # force-app/main/default/flexipages/CaseManagementHome.flexipage
 # force-app/main/default/flexipages/Program_Engagement_Record_Page.flexipage
->>>>>>> origin/master

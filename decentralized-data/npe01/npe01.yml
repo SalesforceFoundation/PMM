@@ -2,8 +2,10 @@
 Household_Accounts:
     sf_object: Account
     table: Account__HH_Account
+    table_primary_key: Site
     fields:
         # IDs
+        Site: Site
         Name: Name
 
         # Data
@@ -13,8 +15,10 @@ Household_Accounts:
 Organization_Accounts:
     sf_object: Account
     table: Account__Organization
+    table_primary_key: Site
     fields:
         # IDs
+        Site: Site
         Name: Name
 
         # Data
@@ -27,9 +31,9 @@ Contacts:
     table: Contact
     fields:
         # IDs
+        Email: Email
         FirstName: FirstName
         LastName: LastName
-        Email: Email
 
         # Data
         SystemAccountProcessor__c: npe01__SystemAccountProcessor__c
@@ -47,6 +51,7 @@ Contacts:
 npsp__Donations:
     sf_object: Opportunity
     table: Opportunity
+    table_primary_key: Name
     fields:
         # IDs
         Name: Name

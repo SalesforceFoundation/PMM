@@ -1,8 +1,10 @@
 Organization_Accounts:
     sf_object: Account
     table: Account__Organization
+    table_primary_key: Site
     fields:
         # IDs
+        Site: Site
         Name: Name
 
         # Data
@@ -22,5 +24,4 @@ Organization_Accounts:
         Website: Website
         NumberOfEmployees: NumberOfEmployees
         AccountNumber: AccountNumber
-        Site: Site
         Type: Type

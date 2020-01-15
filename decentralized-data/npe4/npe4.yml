@@ -1,11 +1,12 @@
 Contacts:
     sf_object: Contact
     table: Contact
+    table_primary_key: Email
     fields:
         # IDs
+        Email: Email
         FirstName: FirstName
         LastName: LastName
-        Email: Email
 
 # NPSP Relationships
 npe4__Relationships:
@@ -17,7 +18,6 @@ npe4__Relationships:
         Description__c: npe4__Description__c
         Status__c: npe4__Status__c
         Type__c: npe4__Type__c
-
     lookups:
         Contact__c:
             table: Contact

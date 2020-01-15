@@ -3,8 +3,10 @@ Household_Accounts:
     sf_object: Account
     table: Account__HH_Account
     record_type: "HH_Account"
+    table_primary_key: Site
     fields:
         # IDs
+        Site: Site
         Name: Name
 
         # Data
@@ -14,8 +16,10 @@ Organization_Accounts:
     sf_object: Account
     table: Account__Organization
     record_type: "Organization"
+    table_primary_key: Site
     fields:
         # IDs
+        Site: Site
         Name: Name
 
         # Data
@@ -25,8 +29,10 @@ caseman__Branches:
     sf_object: Account
     table: Account__Branch
     record_type: "Branch"
+    table_primary_key: Site
     fields:
         # IDs
+        Site: Site
         Name: Name
 
         # Data
@@ -55,11 +61,12 @@ caseman__Branches:
 Contacts:
     sf_object: Contact
     table: Contact
+    table_primary_key: Email
     fields:
         # IDs
+        Email: Email
         FirstName: FirstName
         LastName: LastName
-        Email: Email
 
         # Data
         AgeCategory__c: caseman__AgeCategory__c
@@ -139,35 +146,6 @@ caseman__Incidents:
             table: Account__Branch
             key_field: branch__c
         ContactId:
-            table: Contact
-
-# Appointments
-caseman__Appointments:
-    sf_object: Appointment__c
-    table: caseman__Appointment__c
-    fields:
-        # Data
-        Name: Name
-        Type__c: caseman__Type__c
-        Location__c: caseman__Location__c
-        StartDateTime__c: caseman__StartDateTime__c
-        EndDateTime__c: caseman__EndDateTime__c
-        Description__c: caseman__Description__c
-
-caseman__Appointment_Attendees:
-    sf_object: AppointmentAttendee__c
-    table: caseman__AppointmentAttendee__c
-    fields:
-        # Data
-        Reason__c: caseman__Reason__c
-        Role__c: caseman__Role__c
-        Status__c: caseman__Status__c
-    lookups:
-        Appointment__c:
-            key_field: appointment__c
-            table: caseman__Appointment__c
-        Attendee__c:
-            key_field: attendee__c
             table: Contact
 
 # Client Alerts

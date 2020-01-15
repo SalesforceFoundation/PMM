@@ -1,11 +1,12 @@
 Contacts:
     sf_object: Contact
     table: Contact
+    table_primary_key: Email
     fields:
         # IDs
+        Email: Email
         FirstName: FirstName
         LastName: LastName
-        Email: Email
 
         # Data
         Gender__c: Gender__c

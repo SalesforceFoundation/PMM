@@ -2,22 +2,23 @@
 Contacts:
     sf_object: Contact
     table: Contact
+    table_primary_key: Email
     fields:
         # IDs
-        FirstName: firstname
-        LastName: lastname
-        Email: email
+        Email: Email
+        FirstName: FirstName
+        LastName: LastName
 
         # Data
-        Salutation: salutation
-        Phone: phone
-        MobilePhone: mobile
+        Salutation: Salutation
+        Phone: Phone
+        MobilePhone: MobilePhone
         OtherPhone: OtherPhone
         HomePhone: HomePhone
-        Title: title
-        Birthdate: birthdate
-        MailingStreet: mailingstreet
-        MailingCity: mailingcity
-        MailingState: mailingstate
-        MailingPostalCode: mailingpostalcode
-        MailingCountry: mailingcountry
+        Title: Title
+        Birthdate: Birthdate
+        MailingStreet: MailingStreet
+        MailingCity: MailingCity
+        MailingState: MailingState
+        MailingPostalCode: MailingPostalCode
+        MailingCountry: MailingCountry

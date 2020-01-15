@@ -3,8 +3,10 @@ Household_Accounts:
     sf_object: Account
     table: Account__HH_Account
     record_type: HH_Account
+    table_primary_key: Site
     fields:
         # IDs
+        Site: Site
         Name: Name
 
         # Data
@@ -24,18 +26,18 @@ Household_Accounts:
         Website: Website
         NumberOfEmployees: NumberOfEmployees
         AccountNumber: AccountNumber
-        Site: Site
         Type: Type
 
 # Contacts
 Contacts:
     sf_object: Contact
     table: Contact
+    table_primary_key: Email
     fields:
         # IDs
+        Email: Email
         FirstName: FirstName
         LastName: LastName
-        Email: Email
     lookups:
         AccountId:
             table: Account__HH_Account

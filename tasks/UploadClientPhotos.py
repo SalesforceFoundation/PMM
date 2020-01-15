@@ -19,11 +19,11 @@ class UploadClientPhotos(NamespaceTask, BaseSalesforceApiTask):
         namespace_prefix = self.options.get("namespace") or "caseman"
 
         # Skip uploading client photos if namespace is not used
-        if not namespace_prefix in self.get_namespaces():
+        if not namespace_prefix in self.namespaces:
             self.logger.info("Skipping uploading client photos.  Only uploads client photos is the project's package's namespace equals '{}' or '{}' is the namespace of an installed package".format(namespace_prefix, namespace_prefix))
             return
 
-        namespace = self.get_namespaces()[namespace_prefix]
+        namespace = self.namespaces[namespace_prefix]
 
         # Iterate over our ContentVersion directory
         # It will contain subdirectories whose names are 068 Ids (ContentVersions)

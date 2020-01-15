@@ -31,7 +31,7 @@ pmdm0__Program__c:
         ProgramIssueArea__c: pmdm0__ProgramIssueArea__c
         StartDate__c: pmdm0__StartDate__c
         Status__c: pmdm0__Status__c
-        Summary__c: pmdm0__Summary__c
+        ShortSummary__c: pmdm0__ShortSummary__c
         TargetPopulation__c: pmdm0__TargetPopulation__c
 
 pmdm0__ProgramCohort__c:
@@ -46,8 +46,6 @@ pmdm0__ProgramCohort__c:
         EndDate__c: pmdm0__EndDate__c
         StartDate__c: pmdm0__StartDate__c
         Status__c: pmdm0__Status__c
-        Summary__c: pmdm0__Summary__c
-
     lookups:
         Program__c:
             key_field: program__c
@@ -67,7 +65,6 @@ pmdm0__ProgramEngagement__c:
         Role__c: pmdm0__Role__c
         Stage__c: pmdm0__Stage__c
         StartDate__c: pmdm0__StartDate__c
-
     lookups:
         Account__c:
             key_field: account__c
@@ -93,7 +90,6 @@ pmdm0__Service__c:
         Description__c: pmdm0__Description__c
         Status__c: pmdm0__Status__c
         UnitOfService__c: pmdm0__UnitOfService__c
-
     lookups:
         Program__c:
             key_field: program__c
@@ -110,7 +106,6 @@ pmdm0__ServiceDelivery__c:
         AutonameOverride__c: pmdm0__AutonameOverride__c
         DeliveryDate__c: pmdm0__DeliveryDate__c
         Quantity__c: pmdm0__Quantity__c
-
     lookups:
         Service__c:
             key_field: service__c

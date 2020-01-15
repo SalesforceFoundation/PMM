@@ -361,16 +361,15 @@ CREATE TABLE "pmdm0__ProgramCohort__c" (
 	"pmdm0__EndDate__c" VARCHAR(255), 
 	"pmdm0__StartDate__c" VARCHAR(255), 
 	"pmdm0__Status__c" VARCHAR(255), 
-	"pmdm0__Summary__c" VARCHAR(255), 
 	program__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "pmdm0__ProgramCohort__c" VALUES(1,'Job Readiness 2019-2021','This program is designed to assist adults who have experienced a prolonged absence from the workforce for a variety of reasons such as caring for a family member, protracted joblessness following a layoff or return from a short period of incarceration for a minor crime. It''s also intended to provide support for adults in the workforce who are looking to stabilize their housing or working situation.','2021-04-15','2019-04-15','Active','Assisting adults who have experienced a prolonged absence from the workforce or are seeking to progressively stabilize their experience in the workforce.','2');
-INSERT INTO "pmdm0__ProgramCohort__c" VALUES(2,'Fall 2019 STEM','','2019-12-20','2019-09-09','Active','Semester participation in STEM programFall 2019 semester STEM participation','4');
-INSERT INTO "pmdm0__ProgramCohort__c" VALUES(3,'Eastgate','Eastgate neighborhood service area','','2019-02-01','Active','Eastgate neighborhood service area','6');
-INSERT INTO "pmdm0__ProgramCohort__c" VALUES(4,'Genellen','Genellen neighborhood service area','','2019-02-01','Active','Genellen neighborhood service area','6');
-INSERT INTO "pmdm0__ProgramCohort__c" VALUES(5,'Riverside','Riverside neighborhood service area','','2019-02-01','Active','Riverside neighborhood service area','6');
-INSERT INTO "pmdm0__ProgramCohort__c" VALUES(6,'Highpoint','Highpoint neighborhood service area','','2019-02-01','Active','Highpoint neighborhood service area','6');
+INSERT INTO "pmdm0__ProgramCohort__c" VALUES(1,'Job Readiness 2019-2021','This program is designed to assist adults who have experienced a prolonged absence from the workforce for a variety of reasons such as caring for a family member, protracted joblessness following a layoff or return from a short period of incarceration for a minor crime. It''s also intended to provide support for adults in the workforce who are looking to stabilize their housing or working situation.','2021-04-15','2019-04-15','Active','2');
+INSERT INTO "pmdm0__ProgramCohort__c" VALUES(2,'Fall 2019 STEM','','2019-12-20','2019-09-09','Active','4');
+INSERT INTO "pmdm0__ProgramCohort__c" VALUES(3,'Eastgate','Eastgate neighborhood service area','','2019-02-01','Active','6');
+INSERT INTO "pmdm0__ProgramCohort__c" VALUES(4,'Genellen','Genellen neighborhood service area','','2019-02-01','Active','6');
+INSERT INTO "pmdm0__ProgramCohort__c" VALUES(5,'Riverside','Riverside neighborhood service area','','2019-02-01','Active','6');
+INSERT INTO "pmdm0__ProgramCohort__c" VALUES(6,'Highpoint','Highpoint neighborhood service area','','2019-02-01','Active','6');
 CREATE TABLE "pmdm0__ProgramEngagement__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -495,7 +494,7 @@ CREATE TABLE "pmdm0__Program__c" (
 	"pmdm0__ProgramIssueArea__c" VARCHAR(255), 
 	"pmdm0__StartDate__c" VARCHAR(255), 
 	"pmdm0__Status__c" VARCHAR(255), 
-	"pmdm0__Summary__c" VARCHAR(255), 
+	"pmdm0__ShortSummary__c" VARCHAR(255), 
 	"pmdm0__TargetPopulation__c" VARCHAR(255), 
 	PRIMARY KEY (id)
 );

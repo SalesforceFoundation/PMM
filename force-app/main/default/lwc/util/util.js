@@ -154,7 +154,7 @@ const reduceErrors = errors => {
     );
 };
 
-const handleError = (error, fireShowToast = true, showToastMode) => {
+const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) => {
     let message = "Unknown error";
 
     // error.body is the error from apex calls
@@ -183,13 +183,14 @@ const handleError = (error, fireShowToast = true, showToastMode) => {
                     errors = errors.concat(fieldErrors);
                 });
             }
-            debug({errors: errors});
+            debug({ errors: errors });
             message = errors.map(e => {
                 // TODO: add special nicer handling for "errorCode":"DUPLICATE_VALUE"
                 // TODO: add special nicer handling for duplicateRecordError; this might be the same as above
                 // TODO: consider trigger errors, etc? general exception AND field-level error sd.Name.addError('msg') https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_sobject.htm#apex_System_SObject_addError
-                return (e.fieldLabel ? e.fieldLabel + ': ' : '') + e.message;
-            }).join("; ");
+                return (e.fieldLabel ? e.fieldLabel + ": " : "") + e.message;
+            });
+            returnAsArray ? message : message.join("; ");
         }
     }
     debug(

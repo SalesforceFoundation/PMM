@@ -207,7 +207,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isSaved = false;
         this.isError = true;
         // TODO: show this in a tooltip on the lightning:icon on hover and keyboard focus; probably slds-tooltip
-        this.rowError = handleError(event, true, "dismissible");
+        this.rowError = handleError(event, false, "dismissible", true);
     }
 
     handleSuccess(event) {

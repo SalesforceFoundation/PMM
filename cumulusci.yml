@@ -60,6 +60,11 @@ tasks:
             path: robot/pmdm/tests
             output: robot/pmdm/doc/pmdm_tests.html
 
+    robot_libdoc:
+        options:
+            path: robot/pmdm/resources/pmdm.py,robot/pmdm/resources/pmdm.robot,robot/pmdm/resources/*PageObject.py
+            output: robot/pmdm/doc/Keywords.html
+
     update_admin_profile:
         options:
             package_xml: lib/admin_profile.xml

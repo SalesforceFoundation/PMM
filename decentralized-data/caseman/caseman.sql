@@ -618,14 +618,15 @@ INSERT INTO "caseman__ClientAlert__c" VALUES(2,'Tom has anger issues','true','',
 INSERT INTO "caseman__ClientAlert__c" VALUES(3,'Tom''s sister passed away recently (very emotional)','true','','82');
 CREATE TABLE "caseman__ClientNoteRelationship__c" (
 	id INTEGER NOT NULL, 
+	"caseman__RelatedName__c" VARCHAR(255),
 	case__c VARCHAR(255), 
 	client_note__c VARCHAR(255), 
 	contact__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(1,'2','1','');
-INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(2,'3','2','');
-INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(3,'4','3','');
+INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(1,'','2','1','');
+INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(2,'','3','2','');
+INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(3,'','4','3','');
 CREATE TABLE "caseman__ClientNote__c" (
 	id INTEGER NOT NULL, 
 	"caseman__Content__c" VARCHAR(255), 
@@ -644,46 +645,47 @@ INSERT INTO "caseman__ClientNote__c" VALUES(4,'<p><span style="color: rgb(62, 62
 INSERT INTO "caseman__ClientNote__c" VALUES(5,'<p><span style="color: rgb(62, 62, 60);">Tom Higgins&#39; remedial reading teacher reports that Tom&#39;s reading skills are beginning to improve, albeit slowly.</span></p><p><span style="color: rgb(62, 62, 60);">I met with Tom today and he was agitated. I told him about the report from his teacher and he began to engage more fully with me. He even read a bit from his reader. This seems to be a bright spot we can work with. I&#39;ve asked him to bring his reader to our sessions so we can celebrate his progress more regularly.</span></p>','Tom''s reading skills are improving','Complete','2019-09-05','false','45.0','82');
 CREATE TABLE "caseman__GoalActionItemTemplate__c" (
 	id INTEGER NOT NULL, 
+	"caseman__IsRequired__c" VARCHAR(255),
 	goal_template__c VARCHAR(255), 
 	action_item_template__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(1,'1','1');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(2,'12','45');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(3,'12','46');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(4,'14','39');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(5,'14','40');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(6,'14','43');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(7,'14','44');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(8,'2','28');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(9,'28','28');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(10,'3','16');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(11,'3','17');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(12,'3','19');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(13,'3','2');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(14,'3','21');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(15,'3','24');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(16,'3','30');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(17,'3','31');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(18,'3','32');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(19,'3','33');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(20,'3','34');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(21,'3','35');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(22,'3','36');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(23,'3','37');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(24,'3','38');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(25,'4','22');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(26,'4','23');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(27,'4','4');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(28,'4','5');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(29,'4','6');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(30,'6','25');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(31,'9','10');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(32,'9','11');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(33,'9','3');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(34,'9','7');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(35,'9','8');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(36,'9','9');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(1,'false','1','1');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(2,'false','12','45');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(3,'false','12','46');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(4,'false','14','39');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(5,'false','14','40');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(6,'false','14','43');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(7,'false','14','44');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(8,'false','2','28');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(9,'false','28','28');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(10,'false','3','16');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(11,'false','3','17');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(12,'false','3','19');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(13,'false','3','2');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(14,'false','3','21');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(15,'false','3','24');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(16,'false','3','30');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(17,'false','3','31');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(18,'false','3','32');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(19,'false','3','33');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(20,'false','3','34');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(21,'false','3','35');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(22,'false','3','36');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(23,'false','3','37');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(24,'false','3','38');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(25,'false','4','22');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(26,'false','4','23');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(27,'false','4','4');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(28,'false','4','5');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(29,'false','4','6');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(30,'false','6','25');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(31,'false','9','10');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(32,'false','9','11');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(33,'false','9','3');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(34,'false','9','7');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(35,'false','9','8');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(36,'false','9','9');
 CREATE TABLE "caseman__GoalTemplate__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 

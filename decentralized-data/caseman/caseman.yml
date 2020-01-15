@@ -205,6 +205,8 @@ caseman__Client_Notes:
 caseman__Client_Note_Relationships:
     sf_object: ClientNoteRelationship__c
     table: caseman__ClientNoteRelationship__c
+    fields:
+        RelatedName__c: caseman__RelatedName__c
     lookups:
         Case__c:
             key_field: case__c
@@ -234,6 +236,8 @@ caseman__Action_Item_Templates:
 caseman__Goal_Action_Item_Templates:
     sf_object: GoalActionItemTemplate__c
     table: caseman__GoalActionItemTemplate__c
+    fields:
+        IsRequired__c: caseman__IsRequired__c
     lookups:
         GoalTemplate__c:
             key_field: goal_template__c

@@ -9,21 +9,15 @@ from pmdm_locators import pmdm_lex_locators
 class ProgramListingPage(ListingPage):
     object_name = "None"
 
-    def _go_to_page(self, **kwargs):
+    def _go_to_page(self):
         """To go to Home page"""
         url = self.cumulusci.org.lightning_base_url
         url = "{}/lightning/o/Program__c/list".format(url)
         self.selenium.go_to(url)
         self.salesforce.wait_until_loading_is_complete()
 
-    def _is_current_page(self):
-        """
-        Waits for the current page to be a Program List page
-        """
-        self.selenium.wait_until_location_contains("/list",timeout=60, message="Programs list page did not load for 1 minute")
 
-
-@pageobject("NewProgram", "Program")
+@pageobject("NewProgram", "Program__c")
 class NewProgramPage(BasePage):
 
     @property
@@ -31,16 +25,16 @@ class NewProgramPage(BasePage):
         return self.builtin.get_library_instance('PMDM')
 
     def _is_current_page(self):
-        """ Verify we are on the New Program page
-            by verifying that the header title is 'New Program'
+        """ Verify we are on the New Program modal page
+            by verifying that the section title is 'New Program'
         """
-        locator_title = pmdm_lex_locators["new_record"]["title"]
-        self.selenium.page_should_contain_element(locator_title,
-                                                  message="Title is not 'New Program' as expected")
+        locator = pmdm_lex_locators["new_record"]["title"]
+        self.selenium.wait_until_page_contains_element(locator,
+                                                       error="Section title is not 'New Program' as expected")
 
     def click_save_button(self):
         """ Click on the save button """
-        locator_save = pmdm_lex_locators["new_record"]["button"]
+        locator_save = pmdm_lex_locators["new_record"]["button"].format("Save")
         self.selenium.wait_until_element_is_enabled(locator_save, error="Save button is not enabled")
         self.selenium.click_element(locator_save)
 
@@ -48,18 +42,51 @@ class NewProgramPage(BasePage):
         """ Populates new program form with the field-value pairs """
         for key, value in kwargs.items():
             if key == 'Program Name':
-                locator = pmdm_lex_locators["new_record"]["text_field"]
+                locator = pmdm_lex_locators["new_record"]["text_field"].format("Program Name")
+                self.selenium.set_focus_to_element(locator)
                 self.selenium.get_webelement(locator).send_keys(value)
             elif key == 'Short Summary':
-                locator = pmdm_lex_locators["new_record"]["text_field"]
+                locator = pmdm_lex_locators["new_record"]["text_field"].format("Short Summary")
+                self.selenium.set_focus_to_element(locator)
                 self.selenium.get_webelement(locator).send_keys(value)
             elif key == 'Description':
-                locator = pmdm_lex_locators["new_record"]["text_field"]
+                locator = pmdm_lex_locators["new_record"]["text_field"].format("Description")
+                self.selenium.set_focus_to_element(locator)
                 self.selenium.get_webelement(locator).send_keys(value)
             elif key == 'Target Population':
-                locator = pmdm_lex_locators["new_record"]["text_field"]
+                locator = pmdm_lex_locators["new_record"]["text_field"].format("Target Population")
+                self.selenium.set_focus_to_element(locator)
                 self.selenium.get_webelement(locator).send_keys(value)
             elif key == 'Status':
-                self.pmdm.select_value_from_listbox(key, value)
+                locator = pmdm_lex_locators["new_record"]["dropdown_field"].format("Status")
+                self.selenium.click_element(locator)
+                loc = pmdm_lex_locators["new_record"]["dropdown_value"].format(value)
+                self.selenium.click_element(loc)
+            elif key == 'Start Date':
+                locator = pmdm_lex_locators["new_record"]["text_field"].format("Start Date")
+                self.selenium.set_focus_to_element(locator)
+                self.selenium.get_webelement(locator).send_keys(value)
+            elif key == 'End Date':
+                locator = pmdm_lex_locators["new_record"]["text_field"].format("End Date")
+                self.selenium.set_focus_to_element(locator)
+                self.selenium.get_webelement(locator).send_keys(value)
+            elif key == 'Program Issue Area':
+                locator = pmdm_lex_locators["new_record"]["dropdown_field"].format("Program Issue Area")
+                self.selenium.click_element(locator)
+                loc = pmdm_lex_locators["new_record"]["dropdown_value"].format(value)
+                self.selenium.click_element(loc)
             else:
                 assert False, "Key provided by name '{}' does not exist".format(key)
+
+
+@pageobject("Details", "Program__c")
+class ProgramDetailPage(DetailPage):
+
+
+    def _is_current_page(self):
+        """ Verify we are on the Program detail page
+            by verifying that the url contains '/view'
+        """
+        self.selenium.wait_until_location_contains("/view", timeout=60, message="Detail view did not open in 1 min")
+        self.selenium.location_should_contain("/lightning/r/Program__c/",message="Current page is not a Program record detail view")
+

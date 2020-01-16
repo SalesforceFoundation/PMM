@@ -50,7 +50,3 @@ class pmdm(object):
             PREFIX=prefix,
             RANDOM=self.new_random_string(len=5)
         )
-
-    def page_should_contain_text(self, text):
-        locator = pmdm_lex_locators["text"].format(text)
-        self.selenium.page_should_contain_element(locator)

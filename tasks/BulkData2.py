@@ -16,6 +16,11 @@ from cumulusci.core.exceptions import TaskOptionsError
 
 class BulkData(Namespace):
 
+    _reserved_sql_columns = [
+        "id", 
+        "table_primary_key",
+    ]
+
     def __init__(
         self,
         step: str,
@@ -52,6 +57,10 @@ class BulkData(Namespace):
                             if field != namespaced_field:
                                 new_fields[namespaced_field] = step[key][field]
                                 fields_to_delete.add(field)
+
+                            # Always set lookups' key_field
+                            if key == "lookups":
+                                step[key][field]["key_field"] = get_lookup_key_field(step[key][field], field)
                         for field in fields_to_delete:
                             del step[key][field]
                         step[key].update(new_fields)
@@ -80,7 +89,7 @@ class BulkData(Namespace):
                         record_types_by_sobject.get(sobject) 
                         and step.get("record_type") in record_types_by_sobject.get(sobject)
                     ):
-                        del step["record_type"]
+                        del step["record_type"]                
 
         self.map = map   
         
@@ -92,27 +101,28 @@ class BulkData(Namespace):
             
             # Uniquify tables in sql to this BulkData step
             if self._sql:
-                for table, unique_table in unique_tables_by_table.items():
+                for table_name, table in self.tables_by_name.items():
+                    unique_table = table["unique_table"]
                     # CREATE TABLE with and without table wrapped in double-quotes
                     self._sql = re.sub(
-                        r'(?<=CREATE TABLE )' + re.escape(table) + r'(?= \()', 
+                        r'(?<=CREATE TABLE )' + re.escape(table_name) + r'(?= \()', 
                         unique_table, 
                         self._sql,
                     )
                     self._sql = re.sub(
-                        r'(?<=CREATE TABLE ")' + re.escape(table) + r'(?=" \()', 
+                        r'(?<=CREATE TABLE ")' + re.escape(table_name) + r'(?=" \()', 
                         unique_table, 
                         self._sql,
                     )
 
                     # INSERT INTO with and without table wrapped in double-quotes
                     self._sql = re.sub(
-                        r'(?<=INSERT INTO )' + re.escape(table) + r'(?= VALUES\()', 
+                        r'(?<=INSERT INTO )' + re.escape(table_name) + r'(?= VALUES\()', 
                         unique_table, 
                         self._sql,
                     )
                     self._sql = re.sub(
-                        r'(?<=INSERT INTO ")' + re.escape(table) + r'(?=" VALUES\()', 
+                        r'(?<=INSERT INTO ")' + re.escape(table_name) + r'(?=" VALUES\()', 
                         unique_table, 
                         self._sql,
                     )
@@ -158,21 +168,21 @@ class BulkData(Namespace):
     def map(self, map):
         self._map = BulkData.order_map(map) if map else {}
         unique_tables_by_table = {}
-        self._primary_keys_by_table = {}
-        
+        self._tables_by_name = {}
+
         for map_step, step in self._map.items():
             sobject = step["sf_object"]
 
             # Save uniquify table to this BulkData step as unique_table 
             if not step.get("table"):
                 raise TaskOptionsError("\n".join([
-                    "Each bulk data map step must have a 'table':",
-                    "",
-                    "    bulk_data step: {}".format(self.step),
-                    "        map_path: {}".format(self.map_path),
-                    "",
-                    "    map step: {}".format(map_step),
-                    "        sf_object: {}".format(sobject),
+                    f"Each bulk data map step must have a 'table':",
+                    f"",
+                    f"    bulk_data step: {self.step}",
+                    f"        map_path: {self.map_path}",
+                    f"",
+                    f"    map step: {map_step}",
+                    f"        sf_object: {sobject}",
                 ]))
                 
             table = step["table"]
@@ -198,7 +208,34 @@ class BulkData(Namespace):
                         error_messages.append(f"        {column}")
                     raise TaskOptionsError("\n".join(error_messages))
             step["table_primary_key"] = table_primary_key
-            self._primary_keys_by_table[table] = table_primary_key
+
+            # Verify reserved sql columns are not used
+            for reserved_column in ["id", "table_primary_key"]:
+                if step.get("fields") and reserved_column in step["fields"].values():
+                    raise TaskOptionsError(
+                        f"'{reserved_column}' is a reserved SQL Column name and cannot be used in a map's fields.\n"
+                        f"\n"
+                        f"bulk_data step: {self.step}\n"
+                        f"map step: {map_step}\n"
+                    )
+                if step.get("lookups") and reserved_column in step["fields"].values():
+                    raise TaskOptionsError(
+                        f"'{reserved_column}' is a reserved SQL Column name and cannot be used in a map's fields.\n"
+                        f"\n"
+                        f"bulk_data step: {self.step}\n"
+                        f"map step: {map_step}\n"
+                    )
+
+            # Update tables_by_name
+            self._tables_by_name[table] = {
+                "table": table,
+                "unique_table": unique_table,
+                "primary_key": table_primary_key,
+            }
+
+    @property
+    def tables_by_name(self):
+        return self._tables_by_name
 
     def __iadd__(self, other):
         if other is None:
@@ -291,62 +328,68 @@ class BulkData(Namespace):
         logging_task.log_title(self.step)
         logging_task.log_table(rows)
         
+    @staticmethod
+    def get_map_create_tables_sql(combined_bulk_data):
+        sql_lines = [
+            f"BEGIN TRANSACTION;",
+            f"",
+        ]
+        for step in combined_bulk_data.map.values():
+            table = step["table"]
+
+            fields = [
+                "table_primary_key"
+            ]
+            fields.extend(BulkData.get_map_step_columns(step))
+
+            
+
+            sql_lines.extend([
+                f'CREATE TABLE "{table}" (',
+                f"    id INTEGER PRIMARY KEY AUTOINCREMENT,",
+                f'    "' + '" VARCHAR(255),\n    "'.join(fields) + '" VARCHAR(255)',
+                f");",
+                f"",
+            ])
+            
+        sql_lines.append("COMMIT;")
+        return "\n".join(sql_lines)
+
     @property
-    def insert_update_combied_data_sql_queries(self):
+    def sql_queries_to_combine(self):
         queries_by_step = {}
 
         for step_name, step in self.map.items():
-
-            ########################################################################
-            #
-            # TODO: update lookups based on table_primary_key
-            #       update sql files since we added table_primary_key to all maps
-            #
-            ########################################################################
-
 
             queries = {}
             queries_by_step[step_name] = queries
 
             table = step["table"]
             unique_table = step["unique_table"]
-
-            # collect all table columns
-            columns = BulkData.get_map_step_columns(step)
-            columns_by_comma = ", ".join(columns)
             table_primary_key = step["table_primary_key"]
 
-            """
-            columns_with_id = set()
-            columns_with_id.add("id")
-            columns_with_id.update(columns)
-            """
-            # inserts rows from unqiue_table into table whose id does not exist in table
-            """
-            columns_with_id_by_comma = ", ".join(columns_with_id)
-            """
-            queries["insert"] = "\n".join([
-                f"",
-                f"BEGIN TRANSACTION;",
-                f"INSERT INTO {table} ({columns_by_comma})",
-                f"SELECT {columns_by_comma}",
-                f"FROM {unique_table}",
-                f"WHERE {table_primary_key} NOT IN (SELECT {table_primary_key} FROM {table})",
-                f"ORDER BY id;",
-                f"COMMIT;",
-            ])
+            # collect all table columns
+            field_columns = BulkData.get_map_step_field_columns(step)
+            lookup_columns = BulkData.get_map_step_lookup_columns(step)
+            record_type_columns = BulkData.get_map_step_record_type_columns(step)
 
-            # updates all unique_table columns into table whose id exists in table
-            set_columns = ", ".join(columns)
+            columns = set()
+            columns.update(field_columns)
+            columns.update(lookup_columns)
+            columns.update(record_type_columns)
+
+            columns_by_comma = ", ".join(columns)
+
+            # Update all unique_table columns into table whose primary key exists in table
             select_column_prefix = "{}.".format(unique_table)
-            select_columns = select_column_prefix + (", {}".format(select_column_prefix)).join(columns) 
+            select_columns = select_column_prefix + (f", {select_column_prefix}").join(columns) 
 
-            queries["update"] = "\n".join([
-                f"",
+            queries["update_records"] = "\n".join([
                 f"BEGIN TRANSACTION;",
+                f"",
                 f"UPDATE {table}",
                 f"SET",
-                f"    ({set_columns}) = (",
+                f"    ({columns_by_comma}) = (",
                 f"        SELECT {select_columns}",
                 f"        FROM {unique_table}",
                 f"        WHERE {unique_table}.{table_primary_key} = {table}.{table_primary_key}",
@@ -357,8 +400,61 @@ class BulkData(Namespace):
                 f"        FROM {unique_table}",
                 f"        WHERE {unique_table}.{table_primary_key} = {table}.{table_primary_key}",
                 f"    );",
+                f"",
                 f"COMMIT;",
             ])
+
+            # Insert rows from unique_table into table whose primary key does not exist in table
+            queries["insert_records"] = "\n".join([
+                f"BEGIN TRANSACTION;",
+                f"",
+                f"INSERT INTO {table} (table_primary_key, {columns_by_comma})",
+                f"SELECT {table_primary_key} AS table_primay_key, {columns_by_comma}",
+                f"FROM {unique_table}",
+                f"WHERE {table_primary_key} NOT IN (SELECT {table_primary_key} FROM {table})",
+                f"ORDER BY ROWID;",
+                f"",
+                f"COMMIT;",
+            ])
+            
+            # Update lookups
+            if step.get("lookups"):
+                queries["update_lookups"] = {}
+                for field, lookup in step["lookups"].items():
+                    lookup_table = self.tables_by_name[lookup["table"]]
+                    lookup_combined_table = lookup_table["table"]
+                    lookup_unique_table = lookup_table["unique_table"]
+                    lookup_table_primary_key = lookup_table["primary_key"]
+                    key_field = lookup["key_field"]
+
+                    queries["update_lookups"][field] = "\n".join([
+                        f"BEGIN TRANSACTION;",
+                        f"",
+                        f"UPDATE {table}",
+                        f"SET ({key_field}) = (",
+                        f"    SELECT {lookup_combined_table}.id",
+                        f"    FROM ",
+                        f"        {unique_table}",
+                        f"        JOIN {lookup_unique_table}",
+                        f"            ON {unique_table}.{key_field} = {lookup_unique_table}.id",
+                        f"        JOIN {lookup_combined_table}",
+                        f"            ON {lookup_unique_table}.{lookup_table_primary_key} = {lookup_combined_table}.table_primary_key",
+                        f"    WHERE",
+                        f"        EXISTS (",
+                        f"            SELECT *",
+                        f"            FROM {unique_table}",
+                        f"            WHERE {key_field} IS NOT NULL",
+                        f"        )",
+                        f"    )",
+                        f"WHERE table_primary_key IN (",
+                        f"    SELECT {table_primary_key}",
+                        f"    FROM {unique_table}",
+                        f"    WHERE {key_field} IS NOT NULL",
+                        f");",
+                        f"",
+                        f"COMMIT;",
+                    ])
+            
         return queries_by_step
 
     @property
@@ -366,15 +462,33 @@ class BulkData(Namespace):
         return BulkData.get_sobjects_ordered_by_reverse_dependency(self.map)
 
     @staticmethod
-    def get_map_step_columns(step):
+    def get_map_step_field_columns(step):
         columns = set()
         if step.get("fields"):
             columns.update(step["fields"].values())
+        return columns
+
+    @staticmethod
+    def get_map_step_lookup_columns(step):
+        columns = set()
         if step.get("lookups"):
             for field, lookup in step["lookups"].items():
                 columns.add(get_lookup_key_field(lookup, field))
+        return columns
+
+    @staticmethod
+    def get_map_step_record_type_columns(step):
+        columns = set()
         if step.get("record_type"):
             columns.add("record_type")
+        return columns
+
+    @staticmethod
+    def get_map_step_columns(step):
+        columns = set()
+        columns.update(BulkData.get_map_step_field_columns(step))
+        columns.update(BulkData.get_map_step_lookup_columns(step))
+        columns.update(BulkData.get_map_step_record_type_columns(step))
         return columns
 
     @staticmethod
@@ -515,7 +629,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
     }
 
     _is_bulk_data_cached = False
-
+    """
     # TODO: remove tempoary override
     def get_installed_package_version_by_namespace(self):
         return {
@@ -531,6 +645,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
             "sf_chttr_apps": "1.11",
             "sf_com_apps": "1.7",
         }
+    """
 
     @property
     @functools.lru_cache()
@@ -843,29 +958,7 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         self.mapping = self.combined_bulk_data.map
     
     def _get_combined_bulk_data_create_tables_script(self):
-        sql_lines = [
-            "",
-            "BEGIN TRANSACTION;",
-        ]
-        
-        # CREATE TABLES
-        for step in self.combined_bulk_data.map.values():
-
-            sql_lines.extend([
-                'CREATE TABLE "{}" ('.format(step["table"]),
-               "    id INTEGER PRIMARY KEY AUTOINCREMENT,",
-            ])
-
-            for column in BulkData.get_map_step_columns(step):
-                sql_lines.append('    "{}" VARCHAR(255),'.format(column))
-
-            sql_lines.extend([
-                #"    PRIMARY KEY(id)",
-                ");",
-                "",
-            ])
-        sql_lines.append("COMMIT;")
-        return "\n".join(sql_lines)
+        return BulkData.get_map_create_tables_sql(self.combined_bulk_data)
 
     def _sqlite_load(self):
         conn = self.session.connection()
@@ -873,6 +966,8 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         try:
             # Create combined_bulk_data tables
             self.log_title("Creating combined_bulk_data tables")
+            combined_bulk_data_create_tables_script = self._get_combined_bulk_data_create_tables_script()
+            self.logger.info(combined_bulk_data_create_tables_script)
             cursor.executescript(self._get_combined_bulk_data_create_tables_script())
 
             # Load each bulk_data step's unique_table sql
@@ -884,13 +979,28 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
                 self.logger.info("    Creating unique tables and inserting data")
                 cursor.executescript(data.sql)
 
-                self.logger.info("    Inserting/Updating data from unique tables into combined tables")
-                queries_by_step = data.insert_update_combied_data_sql_queries
-                for map_step, queries in queries_by_step.items():
-                    self.logger.info("        {}".format(map_step))
-                    for query_type, query in queries.items():
-                        self.logger.info("            {}: {}".format(query_type, "query"))
-                        cursor.executescript(query)
+                self.logger.info("    'Joining' bulk_data sql into combined sql for each map step")
+                sql_queries_to_combine = data.sql_queries_to_combine
+                for map_step, queries in sql_queries_to_combine.items():
+                    self.logger.info(f"        {map_step}")
+                    
+                    # update records
+                    update_records = queries["update_records"]
+                    self.logger.info(f"            update_records: \n{update_records}\n")
+                    cursor.executescript(queries["update_records"])
+
+                    # insert records
+                    insert_records = queries["insert_records"]
+                    self.logger.info(f"            insert_records: \n{insert_records}\n")
+                    cursor.executescript(queries["insert_records"])
+
+                    # update lookups
+                    lookup_queries = queries.get("lookup_queries")
+                    if lookup_queries:
+                        self.logger.info(f"            update_lookups")
+                        for field, lookup_query in lookup_queries.items():
+                            self.logger.info(f"                {field}: \n{lookup_query}\n")
+                            cursor.executescript(lookup_query)
             self.logger.info("")
         finally:
             cursor.close()

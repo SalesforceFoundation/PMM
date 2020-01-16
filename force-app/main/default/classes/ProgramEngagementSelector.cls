@@ -2,7 +2,7 @@ public with sharing class ProgramEngagementSelector {
     public ProgramEngagementSelector() {
     }
 
-    public static List<ProgramEngagement__c> getProgramEngagementsByContactId(Id contactId) {
+    public List<ProgramEngagement__c> getProgramEngagementsByContactId(Id contactId) {
         return [
             SELECT Id, Name, Program__c, Program__r.Name
             FROM ProgramEngagement__c

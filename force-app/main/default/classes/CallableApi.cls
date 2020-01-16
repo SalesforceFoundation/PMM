@@ -1,15 +1,9 @@
 public class CallableApi implements Callable {
-    Map<Id, String> getProgramsForContact(Id contactId) {
-        Map<Id, String> programsForContact = new Map<Id, String>();
 
-        for (
-            ProgramEngagement__c pe : ProgramEngagementSelector.getProgramEngagementsByContactId(
-                contactId
-            )
-        ) {
-            programsForContact.put(pe.Program__c, pe.Program__r.Name);
-        }
-        return programsForContact;
+    ProgramService programService = new ProgramService();
+
+    Map<Id, String> getProgramsForContact(Id contactId) {
+        return programService.getProgramNamesByIdForContact(contactId);
     }
 
     public Object call(String action, Map<String, Object> args) {

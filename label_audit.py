@@ -83,7 +83,7 @@ def get_all_paths(path):
 
 def find_dictionary_file():
     """Return the filepath of the .ignorable_strings.json dictionary file."""
-    file_name = ".ignorable_strings.json"
+    file_name = ".ignoreable_strings.json"
     parent_directories = [pathlib.Path().resolve()] + list(
         pathlib.Path().resolve().parents
     )

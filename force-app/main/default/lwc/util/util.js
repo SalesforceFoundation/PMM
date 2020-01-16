@@ -1,4 +1,6 @@
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import unknownLabelError from "@salesforce/label/c.Util_Unknown_Error";
+import errorLabel from "@salesforce/label/c.Util_Error";
 
 /**
  * Returns if value is a string literal or String instance
@@ -156,7 +158,7 @@ const reduceErrors = errors => {
 };
 
 const handleError = error => {
-    let message = "Unknown error";
+    let message = unknownLabelError;
 
     // error.body is the error from apex calls
     // error.detail.output.errors is the error from record-edit-forms
@@ -182,7 +184,7 @@ const handleError = error => {
         },
         "handleError"
     );
-    showToast("Error", message, "error");
+    showToast(errorLabel, message, "error");
 };
 
 /**

@@ -2,11 +2,16 @@ public with sharing class ProgramSelector {
     public ProgramSelector() {
     }
 
-    public List<Program__c> getProgramsFromProgramEngagements(
-        List<ProgramEngagement__c> programEngagements
-    ) {
+    @TestVisible
+    private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
+
+    public List<Program__c> getProgramsForContactId(Id contactId) {
         List<Id> programIds = new List<Id>();
-        for (ProgramEngagement__c pe : programEngagements) {
+        for (
+            ProgramEngagement__c pe : programEngagementSelector.getProgramEngagementsByContactId(
+                contactId
+            )
+        ) {
             programIds.add(pe.Program__c);
         }
 

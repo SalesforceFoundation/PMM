@@ -10,9 +10,22 @@ public with sharing class ProgramSelector_TEST {
             LIMIT 1
         ][0];
 
-        Set<Id> expectedProgramIds = new Set<Id>();
+        Set<Id> expectedProgramIds = (new Map<Id, SObject>(
+                [
+                    SELECT ID
+                    FROM Program__c
+                    WHERE
+                        Id IN (
+                            SELECT Program__c
+                            FROM ProgramEngagement__c
+                            WHERE Contact__c = :con.Id
+                        )
+                ]
+            ))
+            .keySet();
 
-        List<ProgramEngagement__c> programEngagements = [SELECT Id, Program__c
+        /*       List<ProgramEngagement__c> programEngagements = [
+            SELECT Id, Program__c
             FROM ProgramEngagement__c
             WHERE Contact__c = :con.Id
         ];
@@ -20,9 +33,10 @@ public with sharing class ProgramSelector_TEST {
             expectedProgramIds.add(pe.Program__c);
         }
 
+*/
         Test.startTest();
-        ProgramSelector foo = new ProgramSelector();
-        List<Program__c> actual = foo.getProgramsFromProgramEngagements(programEngagements);
+        ProgramSelector programSelector = new ProgramSelector();
+        List<Program__c> actual = programSelector.getProgramsForContactId(con.Id);
         Test.stopTest();
 
         System.assert(!actual.isEmpty());

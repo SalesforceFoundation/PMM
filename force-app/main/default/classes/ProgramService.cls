@@ -1,13 +1,10 @@
 public with sharing class ProgramService {
-    @TestVisible
-    private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
 
     @TestVisible
     private ProgramSelector programSelector = new ProgramSelector();
 
     public Map<Id, String> getProgramNamesByIdForContact(Id contactId) {
-        List<ProgramEngagement__c> programEngagements = programEngagementSelector.getProgramEngagementsByContactId(contactId);
-        List<Program__c> programs = programSelector.getProgramsFromProgramEngagements(programEngagements);
+        List<Program__c> programs = programSelector.getProgramsForContactId(contactId);
         return mapProgramNamesById(programs);
     }
 

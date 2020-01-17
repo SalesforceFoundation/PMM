@@ -7,7 +7,9 @@ public class CallableApi implements Callable {
     }
 
     public Object call(String action, Map<String, Object> args) {
-        this.programService = (ProgramService) args.get('programService');
+        if (args.get('programService') != null) {
+            this.programService = (ProgramService) args.get('programService');
+        }
 
         switch on action {
             when 'getProgramsForContact' {

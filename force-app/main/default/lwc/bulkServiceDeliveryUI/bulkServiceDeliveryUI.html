@@ -43,8 +43,6 @@
                             field-set={fieldSet}
                             index={delivery.index}
                             ondelete={handleDelete}
-                            onsavestart={handleSaveStart}
-                            onsaveend={handleSaveEnd}
                             row-count={rowCount}
                         ></c-service-delivery-row>
                     </div>
@@ -63,13 +61,7 @@
                             onclick={addDelivery}
                         ></lightning-button>
                     </lightning-layout-item>
-                    <lightning-layout-item flexibility="auto, no-grow">
-                        <template if:true={isSaving}>
-                            <div class="slds-p-left_large">
-                                {saveMessage}
-                            </div>
-                        </template>
-                    </lightning-layout-item>
+
                 </lightning-layout>
             </div>
         </div>

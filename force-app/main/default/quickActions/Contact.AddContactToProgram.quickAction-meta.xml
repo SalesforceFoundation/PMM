@@ -4,7 +4,7 @@
         <field>Name</field>
         <formula>&#39;New Program Engagement&#39;</formula>
     </fieldOverrides>
-    <label>New Program Engagement</label>
+    <label>Add Contact to Program</label>
     <optionsCreateFeedItem>true</optionsCreateFeedItem>
     <quickActionLayout>
         <layoutSectionStyle>TwoColumnsLeftToRight</layoutSectionStyle>
@@ -49,6 +49,6 @@
         </quickActionLayoutColumns>
     </quickActionLayout>
     <targetObject>ProgramEngagement__c</targetObject>
-    <targetParentField>Program__c</targetParentField>
+    <targetParentField>Contact__c</targetParentField>
     <type>Create</type>
 </QuickAction>

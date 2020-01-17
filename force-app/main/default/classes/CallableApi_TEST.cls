@@ -1,56 +1,66 @@
 @IsTest
 private class CallableApi_TEST {
-
     @IsTest
     static void testGetProgramsForContact() {
-
         // Given
-        String extensionClass = 'CallableApi';
-        Decimal decimalTestValue = 10;
+        Id contactId = Stub.generateFakeId(Schema.SObjectType.Contact);
 
         // When
-        Callable extension =
-            (Callable) Type.forName(extensionClass).newInstance();
-        Decimal result = (Decimal)
-            extension.call('multiplyNumbers', new Map<String, Object> {
-                'decimalValue' => decimalTestValue
-            });
 
-        // Then
-        System.assertEquals(100, result);
-
-
-
-/*
-        ******************************
-*/
         final Map<Id, String> expected = new Map<Id, String>();
 
-/*
-        ServiceService_TEST.GetBulkFieldsMethod getBulkFieldsMethod = new ServiceService_Test.GetBulkFieldsMethod();
-        getBulkFieldsMethod.returnValue = expected;
+        ProgramService_TEST.GetProgramNamesByIdForContactMethod getProgramNamesByIdForContactMethod = new ProgramService_TEST.GetProgramNamesByIdForContactMethod();
+        getProgramNamesByIdForContactMethod.contactId = contactId;
+        getProgramNamesByIdForContactMethod.returnValue = expected;
 
         final List<Stub.Method> expectedMethodsCalled = new List<Stub.Method>{
-            getBulkFieldsMethod
+            getProgramNamesByIdForContactMethod
         };
 
         Test.startTest();
 
         final Stub stub = new Stub(expectedMethodsCalled);
 
-        ServiceDeliveryController.service = (ServiceService) Test.createStub(
-            ServiceService.class,
+        ProgramService programService = (ProgramService) Test.createStub(
+            ProgramService.class,
             stub
         );
 
-        final List<Object> actual = ServiceDeliveryController.getFieldSet();
+        System.Callable callableClass = (System.Callable) Type.forName('CallableApi')
+            .newInstance();
+
+        final Map<Id, String> actual = (Map<Id, String>) callableClass.call(
+            'getProgramsForContact',
+            new Map<String, Object>{
+                'contactId' => contactId,
+                'programService' => programService
+            }
+        );
 
         Test.stopTest();
 
+        // Then
         System.assertEquals(true, expected == actual);
-
         stub.assertMethodsCalled();
+    }
 
-*/
+    @isTest
+    private static void testCallableApiUnsupportedMethodException() {
+        System.Callable callableClass = (System.Callable) Type.forName('CallableApi')
+            .newInstance();
+
+        try {
+            callableClass.call(
+                'garbageMethod',
+                new Map<String, Object>{ 'garbageParameter' => 'garbage' }
+            );
+        } catch (Exception actualException) {
+            System.debug(actualException.getMessage());
+            System.assertEquals(
+                true,
+                actualException instanceof CallableApi.ExtensionMalformedCallException
+            );
+            System.assertEquals('Method not implemented', actualException.getMessage());
+        }
     }
 }

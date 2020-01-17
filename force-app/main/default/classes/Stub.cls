@@ -410,7 +410,7 @@ public class Stub implements System.StubProvider {
                 this.parameterTypes.equals(parameterTypes);
         }
 
-        private void assertArugmentsAreValid(
+        private void assertArgumentsAreValid(
             List<Object> arguments,
             String parameterName
         ) {
@@ -436,8 +436,8 @@ public class Stub implements System.StubProvider {
             final List<Object> actualArguments
         ) {
             final List<Object> expectedArguments = this.getExpectedArguments();
-            this.assertArugmentsAreValid(expectedArguments, 'getExpectedArguments()');
-            this.assertArugmentsAreValid(actualArguments, 'actualArguments');
+            this.assertArgumentsAreValid(expectedArguments, 'getExpectedArguments()');
+            this.assertArgumentsAreValid(actualArguments, 'actualArguments');
 
             final String methodSignature = this.getSignature();
 

@@ -112,18 +112,13 @@ export default class ServiceDeliveryRow extends LightningElement {
             .then(result => {
                 if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {
                     this.noContactPrograms = true;
-                    showToast(
-                        this.WARNING,
-                        this.labels.selectedContactWarning,
-                        "warning",
-                        "dismissible"
-                    );
+                    this.rowError = this.labels.selectedContactWarning;
                 }
                 this._filteredValues = result;
                 this.handleContactChange();
             })
             .catch(error => {
-                handleError(error);
+                this.rowError = handleError(error,false);
             });
     }
 

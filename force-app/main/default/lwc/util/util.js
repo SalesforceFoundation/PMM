@@ -193,7 +193,7 @@ const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) 
                 return (e.fieldLabel ? e.fieldLabel + ": " : "") + e.message;
             });
 
-            if (returnAsArray) {
+            if (!returnAsArray) {
                 message.join("; ");
             }
         }

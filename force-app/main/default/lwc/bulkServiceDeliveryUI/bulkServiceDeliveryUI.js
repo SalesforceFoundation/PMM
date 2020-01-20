@@ -83,20 +83,4 @@ export default class BulkServiceDeliveryUI extends LightningElement {
         }
     }
 
-    handleSaveStart() {
-        this.saveMessage = this.labels.saving + "...";
-        this.isSaving = true;
-    }
-
-    resetIsSaving = debouncify(
-        function() {
-            this.isSaving = false;
-        }.bind(this),
-        2000
-    );
-
-    handleSaveEnd() {
-        this.saveMessage = this.labels.saved;
-        this.resetIsSaving();
-    }
 }

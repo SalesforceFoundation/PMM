@@ -356,7 +356,7 @@
                 <stringValue>TODAY() </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_11_myRule_10_A1_3239052747</name>
+        <name>formula_11_myRule_10_A1_1255474780</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -364,12 +364,12 @@
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>[ProgramEngagement__c].Contact__c.FirstName + &#39;  &#39; + [ProgramEngagement__c].Contact__c.LastName  + &#39; - &#39; + [ProgramEngagement__c].Program__c.Name </stringValue>
+                <stringValue>[ProgramEngagement__c].Program__c.Name + &#39; - &#39; + [ProgramEngagement__c].Contact__c.FirstName + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_2_myRule_1_A1_6658729321</name>
+        <name>formula_2_myRule_1_A1_4540842853</name>
         <dataType>String</dataType>
-        <expression>{!myVariable_current.Contact__r.FirstName} + &#39;  &#39; + {!myVariable_current.Contact__r.LastName}  + &#39; - &#39; + {!myVariable_current.Program__r.Name}</expression>
+        <expression>{!myVariable_current.Program__r.Name} + &#39; - &#39; + {!myVariable_current.Contact__r.FirstName} + &#39; &#39; + {!myVariable_current.Contact__r.LastName}</expression>
     </formulas>
     <formulas>
         <processMetadataValues>
@@ -378,7 +378,7 @@
                 <stringValue>TODAY()</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_5_myRule_4_A1_1822348719</name>
+        <name>formula_5_myRule_4_A1_9897687670</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -389,7 +389,7 @@
                 <stringValue>TODAY() </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_8_myRule_7_A1_3630542287</name>
+        <name>formula_8_myRule_7_A1_2583473506</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -404,7 +404,7 @@
         <dataType>Boolean</dataType>
         <expression> NOT({!myVariable_current.AutoName_Override__c})</expression>
     </formulas>
-    <interviewLabel>Auto_Populate_Date_And_Name_On_Program_Engagement-1_InterviewLabel</interviewLabel>
+    <interviewLabel>Auto_Populate_Date_And_Name_On_Program_Engagement-4_InterviewLabel</interviewLabel>
     <isTemplate>true</isTemplate>
     <label>Auto Populate Date And Name On Program Engagement</label>
     <processMetadataValues>
@@ -507,7 +507,7 @@
             </processMetadataValues>
             <field>EndDate__c</field>
             <value>
-                <elementReference>formula_11_myRule_10_A1_3239052747</elementReference>
+                <elementReference>formula_11_myRule_10_A1_1255474780</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -590,7 +590,7 @@
             </processMetadataValues>
             <field>Name</field>
             <value>
-                <elementReference>formula_2_myRule_1_A1_6658729321</elementReference>
+                <elementReference>formula_2_myRule_1_A1_4540842853</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -670,7 +670,7 @@
             </processMetadataValues>
             <field>ApplicationDate__c</field>
             <value>
-                <elementReference>formula_5_myRule_4_A1_1822348719</elementReference>
+                <elementReference>formula_5_myRule_4_A1_9897687670</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -750,13 +750,13 @@
             </processMetadataValues>
             <field>StartDate__c</field>
             <value>
-                <elementReference>formula_8_myRule_7_A1_3630542287</elementReference>
+                <elementReference>formula_8_myRule_7_A1_2583473506</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
     </recordUpdates>
     <startElementReference>myDecision</startElementReference>
-    <status>Obsolete</status>
+    <status>Active</status>
     <variables>
         <name>myVariable_current</name>
         <dataType>SObject</dataType>

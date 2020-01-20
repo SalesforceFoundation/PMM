@@ -154,7 +154,7 @@
             <sortOrder>0</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Contact.NewProgramEngagement</actionName>
+            <actionName>Contact.AddContactToProgram</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>1</sortOrder>
         </platformActionListItems>

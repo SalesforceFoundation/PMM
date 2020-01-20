@@ -1,11 +1,14 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track } from "lwc";
+import closeLabel from "@salesforce/label/c.Close";
 
-const CSS_CLASS = 'modal-hidden';
+const CSS_CLASS = "modal-hidden";
 
 export default class Modal extends LightningElement {
+    close = closeLabel;
+
     @api
     set header(value) {
-        this.hasHeaderString = value !== '';
+        this.hasHeaderString = value !== "";
         this._headerPrivate = value;
     }
     get header() {
@@ -16,28 +19,27 @@ export default class Modal extends LightningElement {
     _headerPrivate;
 
     @api show() {
-        const outerDivEl = this.template.querySelector('div');
+        const outerDivEl = this.template.querySelector("div");
         outerDivEl.classList.remove(CSS_CLASS);
     }
 
     @api hide() {
-        const outerDivEl = this.template.querySelector('div');
+        const outerDivEl = this.template.querySelector("div");
         outerDivEl.classList.add(CSS_CLASS);
     }
 
     handleDialogClose() {
         this.hide();
-        this.dispatchEvent(new CustomEvent('dialogclose'));
-
+        this.dispatchEvent(new CustomEvent("dialogclose"));
     }
 
     handleSlotTaglineChange() {
-        const taglineEl = this.template.querySelector('p');
+        const taglineEl = this.template.querySelector("p");
         taglineEl.classList.remove(CSS_CLASS);
     }
 
     handleSlotFooterChange() {
-        const footerEl = this.template.querySelector('footer');
+        const footerEl = this.template.querySelector("footer");
         footerEl.classList.remove(CSS_CLASS);
     }
 }

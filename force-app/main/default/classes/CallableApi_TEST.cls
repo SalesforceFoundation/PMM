@@ -2,10 +2,7 @@
 private class CallableApi_TEST {
     @IsTest
     static void testGetProgramsForContact() {
-        // Given
         Id contactId = Stub.generateFakeId(Schema.SObjectType.Contact);
-
-        // When
 
         final Map<Id, String> expected = new Map<Id, String>();
 
@@ -39,8 +36,7 @@ private class CallableApi_TEST {
 
         Test.stopTest();
 
-        // Then
-        System.assertEquals(true, expected == actual);
+        System.assertEquals(true, expected === actual);
         stub.assertMethodsCalled();
     }
 
@@ -51,8 +47,8 @@ private class CallableApi_TEST {
 
         try {
             callableClass.call(
-                'garbageMethod',
-                new Map<String, Object>{ 'garbageParameter' => 'garbage' }
+                'testMethod',
+                new Map<String, Object>{ 'testParameter' => 'test' }
             );
         } catch (Exception actualException) {
             System.debug(actualException.getMessage());

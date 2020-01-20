@@ -108,22 +108,18 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     handleGetServicesEngagements(contactId) {
         this.noContactPrograms = false;
+        this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
                 if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {
-                    this.noContactPrograms = true;
-                    showToast(
-                        this.WARNING,
-                        this.labels.selectedContactWarning,
-                        "warning",
-                        "dismissible"
-                    );
+                    this.isError = true;
+                    this.rowError = [this.labels.selectedContactWarning];
                 }
                 this._filteredValues = result;
                 this.handleContactChange();
             })
             .catch(error => {
-                handleError(error);
+                this.rowError = handleError(error,false);
             });
     }
 
@@ -276,7 +272,6 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     enableServiceInputWithOptions() {
         let result = [];
-
         this._filteredValues[SERVICES].forEach(element => {
             if (element.program === this._targetProgram) {
                 result.push(element);
@@ -285,15 +280,12 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         this.localFieldSet.forEach(element => {
             if (element.apiName === this.fields.service.fieldApiName) {
+                this.isError = false;
                 element.disabled = false;
                 element.options = result;
                 if (!result.length) {
-                    showToast(
-                        this.WARNING,
-                        this.labels.noServiceWarning,
-                        "warning",
-                        "dismissible"
-                    );
+                    this.isError = true;
+                    this.rowError = [this.labels.noServiceWarning];
                     element.disabled = true;
                 }
             } else if (

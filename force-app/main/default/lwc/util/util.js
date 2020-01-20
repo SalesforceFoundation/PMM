@@ -40,8 +40,7 @@ const debug = (...args) => {
     console.log(debugs.join("\n"));
 };
 
-const showToast = (title, message, variant) => {
-    let mode = variant === "error" ? "sticky" : "pester";
+const showToast = (title, message, variant, mode = "pester") => {
     const toast = new ShowToastEvent({
         title: title,
         message: message,
@@ -157,8 +156,8 @@ const reduceErrors = errors => {
     );
 };
 
-const handleError = error => {
-    let message = unknownLabelError;
+const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) => {
+    let message = "Unknown error";
 
     // error.body is the error from apex calls
     // error.detail.output.errors is the error from record-edit-forms
@@ -172,10 +171,28 @@ const handleError = error => {
         } else if (
             error.detail &&
             error.detail.output &&
-            Array.isArray(error.detail.output.errors)
+            (Array.isArray(error.detail.output.errors) || error.detail.output.fieldErrors)
         ) {
-            //TODO: could make this *slightly* nicer by having a custom error message if "errorCode":"DUPLICATE_VALUE"
-            message = error.detail.output.errors.map(e => e.message).join(", ");
+            let errors = [];
+            // first catch any top-of-page errors
+            if (Array.isArray(error.detail.output.errors)) {
+                errors = errors.concat(error.detail.output.errors);
+            }
+            // then also catch any field-level errors
+            if (error.detail.output.fieldErrors) {
+                // TODO: loop the fields, then loop each field's errors
+                Object.values(error.detail.output.fieldErrors).forEach(fieldErrors => {
+                    errors = errors.concat(fieldErrors);
+                });
+            }
+            debug({ errors: errors });
+            message = errors.map(e => {
+                // TODO: add special nicer handling for "errorCode":"DUPLICATE_VALUE"
+                // TODO: add special nicer handling for duplicateRecordError; this might be the same as above
+                // TODO: consider trigger errors, etc? general exception AND field-level error sd.Name.addError('msg') https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_sobject.htm#apex_System_SObject_addError
+                return (e.fieldLabel ? e.fieldLabel + ": " : "") + e.message;
+            });
+            returnAsArray ? message : message.join("; ");
         }
     }
     debug(
@@ -184,7 +201,11 @@ const handleError = error => {
         },
         "handleError"
     );
-    showToast(errorLabel, message, "error");
+    if (fireShowToast) {
+        showToast("Error", message, "error", showToastMode);
+    }
+
+    return message;
 };
 
 /**

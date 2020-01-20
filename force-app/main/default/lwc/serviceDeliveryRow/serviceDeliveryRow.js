@@ -8,6 +8,11 @@ import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryControlle
 
 import deleteLabel from "@salesforce/label/c.Delete";
 import cancel from "@salesforce/label/c.Cancel";
+import error from "@salesforce/label/c.Error";
+import warning from "@salesforce/label/c.Warning";
+import saving from "@salesforce/label/c.Saving";
+import saved from "@salesforce/label/c.Saved";
+
 import confirmDelete from "@salesforce/label/c.Confirm_Delete";
 import confirmDeleteMessage from "@salesforce/label/c.Confirm_Delete_Row";
 import success from "@salesforce/label/c.Success";
@@ -32,6 +37,10 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api recordId;
     @api index;
     @api rowCount;
+    @track isSaving;
+    @track isError;
+    @track isSaved;
+    @track rowError;
     @api
     get defaultValues() {
         return this.localDefaultValues;
@@ -51,13 +60,16 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track localDefaultValues;
     @track localFieldSet;
     @track hasQuantity = false;
+    @track saveMessage;
 
-    _noContactPrograms = false;
-    _noServicesForPE = false;
+    noContactPrograms = false;
     _defaultsSet = false;
     _filteredValues;
     _valuesToSave = [];
     _targetProgram;
+
+    ERROR = error;
+    WARNING = warning;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -75,6 +87,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         selectEngagement,
         selectService,
         success,
+        saved,
+        saving,
+        error,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -92,17 +107,19 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleGetServicesEngagements(contactId) {
-        this._noContactPrograms = false;
+        this.noContactPrograms = false;
+        this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
                 if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {
-                    this._noContactPrograms = true;
+                    this.isError = true;
+                    this.rowError = [this.labels.selectedContactWarning];
                 }
                 this._filteredValues = result;
                 this.handleContactChange();
             })
             .catch(error => {
-                handleError(error);
+                this.rowError = handleError(error,false);
             });
     }
 
@@ -124,8 +141,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
         this._filteredValues = [];
         this._valuesToSave = [];
-        this._noContactPrograms = false;
-        this._noServicesForPE = false;
+        this.noContactPrograms = false;
     }
 
     handleComboChange(event) {
@@ -133,7 +149,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         let fieldVal = event.detail.value;
 
         if (fieldName === this.fields.programEngagement.fieldApiName) {
-            this._noServicesForPE = false;
             this._valuesToSave = []; //If the engagement changes, wipe stored values.
             this._filteredValues[ENGAGEMENTS].forEach(element => {
                 if (element.value === fieldVal) {
@@ -170,7 +185,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 element.options = this._filteredValues[ENGAGEMENTS];
                 element.placeholder = this.labels.selectEngagement;
                 element.disabled = false;
-                if (this._noContactPrograms) {
+                if (this.noContactPrograms) {
                     element.disabled = true;
                 }
             } else if (element.apiName !== this.fields.contact.fieldApiName) {
@@ -184,13 +199,16 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleError(event) {
-        this.dispatchEvent(new CustomEvent("saveend"));
-        handleError(event.detail.message);
+        this.isSaving = false;
+        this.isSaved = false;
+        this.isError = true;
+        // TODO: show this in a tooltip on the lightning:icon on hover and keyboard focus; probably slds-tooltip
+        this.rowError = handleError(event, false, "dismissible", true);
     }
 
     handleSuccess(event) {
         this.recordId = event.detail.id;
-        this.dispatchEvent(new CustomEvent("saveend"));
+        this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
     }
@@ -207,7 +225,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         this.template.querySelector("lightning-record-edit-form").submit(fields);
-        this.dispatchEvent(new CustomEvent("savestart"));
+
+        this.handleSaveStart();
     }
 
     handleDelete() {
@@ -216,7 +235,12 @@ export default class ServiceDeliveryRow extends LightningElement {
                 .then(() => {
                     const deletedRecordId = this.recordId;
                     this.recordId = "";
-                    showToast(this.labels.success, this.labels.recordDeleted, "success");
+                    showToast(
+                        this.labels.success,
+                        this.labels.recordDeleted,
+                        "success",
+                        "dismissible"
+                    );
                     this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));
                     fireEvent(this.pageRef, "serviceDeliveryDelete", deletedRecordId);
                 })
@@ -248,7 +272,6 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     enableServiceInputWithOptions() {
         let result = [];
-
         this._filteredValues[SERVICES].forEach(element => {
             if (element.program === this._targetProgram) {
                 result.push(element);
@@ -257,10 +280,12 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         this.localFieldSet.forEach(element => {
             if (element.apiName === this.fields.service.fieldApiName) {
+                this.isError = false;
                 element.disabled = false;
                 element.options = result;
                 if (!result.length) {
-                    this._noServicesForPE = true;
+                    this.isError = true;
+                    this.rowError = [this.labels.noServiceWarning];
                     element.disabled = true;
                 }
             } else if (
@@ -309,6 +334,18 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this.handleGetServicesEngagements(contactId);
             }
         }
+    }
+
+    handleSaveStart() {
+        this.saveMessage = "...";
+        this.isSaving = true;
+        this.isSaved = false;
+        this.isError = false;
+    }
+
+    handleSaveEnd() {
+        this.isSaving = false;
+        this.isSaved = true;
     }
 
     //Temporary CSS Overrides.

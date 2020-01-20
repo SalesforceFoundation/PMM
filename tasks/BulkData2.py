@@ -16,6 +16,11 @@ from cumulusci.core.exceptions import TaskOptionsError
 
 class BulkData(Namespace):
 
+    _private_combined_sql_columns = [
+        "_last_table",
+        "_last_table_id",
+    ]
+
     _reserved_sql_columns = [
         "id", 
         "table_primary_key",
@@ -61,6 +66,10 @@ class BulkData(Namespace):
                             # Always set lookups' key_field
                             if key == "lookups":
                                 step[key][field]["key_field"] = get_lookup_key_field(step[key][field], field)
+
+                                # Add column_name to make later code easier to understand
+                                step[key][field]["column_name"] = step[key][field]["key_field"]
+
                         for field in fields_to_delete:
                             del step[key][field]
                         step[key].update(new_fields)
@@ -231,6 +240,11 @@ class BulkData(Namespace):
                 "table": table,
                 "unique_table": unique_table,
                 "primary_key": table_primary_key,
+
+                # new keys
+                "namespaced_name": unique_table,
+                "combined_name": table,
+                "natural_key": table_primary_key, # do we use another name, e.g. "combine_on_column"
             }
 
     @property
@@ -337,19 +351,16 @@ class BulkData(Namespace):
         for step in combined_bulk_data.map.values():
             table = step["table"]
 
-            fields = [
-                "table_primary_key"
-            ]
+            fields = []
+            fields.extend(BulkData._private_combined_sql_columns)
             fields.extend(BulkData.get_map_step_columns(step))
-
-            
 
             sql_lines.extend([
                 f'CREATE TABLE "{table}" (',
-                f"    id INTEGER PRIMARY KEY AUTOINCREMENT,",
+                f'    id INTEGER PRIMARY KEY AUTOINCREMENT,',
                 f'    "' + '" VARCHAR(255),\n    "'.join(fields) + '" VARCHAR(255)',
-                f");",
-                f"",
+                f');',
+                f'',
             ])
             
         sql_lines.append("COMMIT;")
@@ -368,6 +379,8 @@ class BulkData(Namespace):
             unique_table = step["unique_table"]
             table_primary_key = step["table_primary_key"]
 
+            step_table = self.tables_by_name[step["table"]]
+
             # collect all table columns
             field_columns = BulkData.get_map_step_field_columns(step)
             lookup_columns = BulkData.get_map_step_lookup_columns(step)
@@ -384,76 +397,107 @@ class BulkData(Namespace):
             select_column_prefix = "{}.".format(unique_table)
             select_columns = select_column_prefix + (f", {select_column_prefix}").join(columns) 
 
+            # TODO: Do we want to only combine records if there is a natural_key/combine_on_column???
             queries["update_records"] = "\n".join([
-                f"BEGIN TRANSACTION;",
-                f"",
-                f"UPDATE {table}",
-                f"SET",
-                f"    ({columns_by_comma}) = (",
-                f"        SELECT {select_columns}",
-                f"        FROM {unique_table}",
-                f"        WHERE {unique_table}.{table_primary_key} = {table}.{table_primary_key}",
-                f"    )",
-                f"WHERE",
-                f"    EXISTS (",
-                f"        SELECT *",
-                f"        FROM {unique_table}",
-                f"        WHERE {unique_table}.{table_primary_key} = {table}.{table_primary_key}",
-                f"    );",
-                f"",
-                f"COMMIT;",
+                f'BEGIN TRANSACTION;',
+                f'',
+                f'UPDATE {step_table["combined_name"]}',
+                f'SET',
+                f'    (_last_table, _last_table_id, {columns_by_comma}) = (',
+                f'        SELECT "{step_table["namespaced_name"]}" AS _last_table, id AS _last_table_id, {select_columns}',
+                f'        FROM {step_table["namespaced_name"]}',
+                f'        WHERE {step_table["namespaced_name"]}.{step_table["natural_key"]} = {step_table["combined_name"]}.{step_table["natural_key"]}',
+                f'    )',
+                f'WHERE EXISTS (',
+                f'    SELECT *',
+                f'    FROM {step_table["namespaced_name"]}',
+                f'    WHERE {step_table["namespaced_name"]}.{step_table["natural_key"]} = {step_table["combined_name"]}.{step_table["natural_key"]}',
+                f'    AND {step_table["namespaced_name"]}.{step_table["natural_key"]} IS NOT NULL',
+                f');',
+                f'',
+                f'COMMIT;',
             ])
 
             # Insert rows from unique_table into table whose primary key does not exist in table
             queries["insert_records"] = "\n".join([
-                f"BEGIN TRANSACTION;",
-                f"",
-                f"INSERT INTO {table} (table_primary_key, {columns_by_comma})",
-                f"SELECT {table_primary_key} AS table_primay_key, {columns_by_comma}",
-                f"FROM {unique_table}",
-                f"WHERE {table_primary_key} NOT IN (SELECT {table_primary_key} FROM {table})",
-                f"ORDER BY ROWID;",
-                f"",
-                f"COMMIT;",
+                f'BEGIN TRANSACTION;',
+                f'',
+                f'INSERT INTO {step_table["combined_name"]} (_last_table, _last_table_id, {columns_by_comma})',
+                f'SELECT "{step_table["namespaced_name"]}" AS _last_table, id AS _last_table_id, {columns_by_comma}',
+                f'FROM {step_table["namespaced_name"]}',
+                f'WHERE id NOT IN (',
+                f'    SELECT _last_table_id',
+                f'    FROM {step_table["combined_name"]}',
+                f'    WHERE _last_table = "{step_table["namespaced_name"]}"',
+                f')',
+                f'ORDER BY ROWID;',
+                f'',
+                f'COMMIT;',
             ])
             
             # Update lookups
-            if step.get("lookups"):
-                queries["update_lookups"] = {}
-                for field, lookup in step["lookups"].items():
-                    lookup_table = self.tables_by_name[lookup["table"]]
-                    lookup_combined_table = lookup_table["table"]
-                    lookup_unique_table = lookup_table["unique_table"]
-                    lookup_table_primary_key = lookup_table["primary_key"]
-                    key_field = lookup["key_field"]
-
-                    queries["update_lookups"][field] = "\n".join([
-                        f"BEGIN TRANSACTION;",
-                        f"",
-                        f"UPDATE {table}",
-                        f"SET ({key_field}) = (",
-                        f"    SELECT {lookup_combined_table}.id",
-                        f"    FROM ",
-                        f"        {unique_table}",
-                        f"        JOIN {lookup_unique_table}",
-                        f"            ON {unique_table}.{key_field} = {lookup_unique_table}.id",
-                        f"        JOIN {lookup_combined_table}",
-                        f"            ON {lookup_unique_table}.{lookup_table_primary_key} = {lookup_combined_table}.table_primary_key",
-                        f"    WHERE",
-                        f"        EXISTS (",
-                        f"            SELECT *",
-                        f"            FROM {unique_table}",
-                        f"            WHERE {key_field} IS NOT NULL",
-                        f"        )",
-                        f"    )",
-                        f"WHERE table_primary_key IN (",
-                        f"    SELECT {table_primary_key}",
-                        f"    FROM {unique_table}",
-                        f"    WHERE {key_field} IS NOT NULL",
-                        f");",
-                        f"",
-                        f"COMMIT;",
-                    ])
+            queries["update_lookups"] = {}
+            for field, lookup in (step.get("lookups") or {}).items():
+                """
+                lookup_table = self.tables_by_name[lookup["table"]]
+                lookup_combined_table = lookup_table["table"]
+                lookup_unique_table = lookup_table["unique_table"]
+                lookup_table_primary_key = lookup_table["primary_key"]
+                key_field = lookup["key_field"]
+                
+                queries["update_lookups"][field] = "\n".join([
+                    f"BEGIN TRANSACTION;",
+                    f"",
+                    f"UPDATE {table}",
+                    f"SET ({key_field}) = (",
+                    f"    SELECT {lookup_combined_table}.id",
+                    f"    FROM ",
+                    f"        {unique_table}",
+                    f"        JOIN {lookup_unique_table}",
+                    f"            ON {unique_table}.{key_field} = {lookup_unique_table}.id",
+                    f"        JOIN {lookup_combined_table}",
+                    f"            ON {lookup_unique_table}.{lookup_table_primary_key} = {lookup_combined_table}.table_primary_key",
+                    f"    WHERE",
+                    f"        EXISTS (",
+                    f"            SELECT *",
+                    f"            FROM {unique_table}",
+                    f"            WHERE {key_field} IS NOT NULL",
+                    f"        )",
+                    f"    )",
+                    f"WHERE table_primary_key IN (",
+                    f"    SELECT {table_primary_key}",
+                    f"    FROM {unique_table}",
+                    f"    WHERE {key_field} IS NOT NULL",
+                    f");",
+                    f"",
+                    f"COMMIT;",
+                ])
+                """
+                lookup_table = self.tables_by_name[lookup["table"]]
+                queries["update_lookups"][field] = "\n".join([
+                    f'UPDATE {step_table["combined_name"]}',
+                    f'SET ({lookup["column_name"]}) = (',
+                    f'    SELECT {lookup_table["combined_name"]}.id',
+                    f'    FROM ',
+                    f'        {step_table["namespaced_name"]}', # JOIN 1
+                    f'        JOIN {lookup_table["namespaced_name"]}', # JOIN 2
+                    f'            ON {step_table["namespaced_name"]}.{lookup["column_name"]} = {lookup_table["namespaced_name"]}.id',
+                    f'        JOIN {lookup_table["combined_name"]}', # JOIN 3
+                    f'            ON {lookup_table["combined_name"]}._last_table = "{lookup_table["namespaced_name"]}"',
+                    f'            AND {lookup_table["combined_name"]}._last_table_id = {lookup_table["namespaced_name"]}.id',
+                    f'    WHERE EXISTS (',
+                    f'        SELECT *',
+                    f'        FROM {step_table["namespaced_name"]}',
+                    f'        WHERE {lookup["column_name"]} IS NOT NULL',
+                    f'    )',
+                    f')',
+                    f'WHERE _last_table = "{step_table["namespaced_name"]}"',
+                    f'AND _last_table_id IN (',
+                    f'    SELECT id',
+                    f'    FROM {step_table["namespaced_name"]}',
+                    f')',
+                    f'AND {lookup["column_name"]} IS NOT NULL',
+                ])
             
         return queries_by_step
 
@@ -995,7 +1039,7 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
                     cursor.executescript(queries["insert_records"])
 
                     # update lookups
-                    lookup_queries = queries.get("lookup_queries")
+                    lookup_queries = queries.get("update_lookups")
                     if lookup_queries:
                         self.logger.info(f"            update_lookups")
                         for field, lookup_query in lookup_queries.items():

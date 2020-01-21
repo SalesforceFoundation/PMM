@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Status__c</name>
+    <label>[Status]o&#39;]</label>
+    <picklistValues>
+        <masterLabel>Planned</masterLabel>
+        <translation>[Planned]o&#39;]</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Active</masterLabel>
+        <translation>[Active]o&#39;]</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation>[Completed]o&#39;介]</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Cancelled</masterLabel>
+        <translation>[Cancelled]o&#39;介]</translation>
+    </picklistValues>
+</CustomFieldTranslation>

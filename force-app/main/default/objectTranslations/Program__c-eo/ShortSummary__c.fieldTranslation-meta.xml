@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ShortSummary__c</name>
+    <help>[Program summary displayed in Program list views]o&#39;介引户הаí先ร简аน取]</help>
+    <label>[Short Summary]o&#39;介]</label>
+</CustomFieldTranslation>

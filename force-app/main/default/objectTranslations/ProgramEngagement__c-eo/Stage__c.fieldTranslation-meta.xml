@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Stage__c</name>
+    <label>[Stage]o&#39;介引户]</label>
+    <picklistValues>
+        <masterLabel>Applied</masterLabel>
+        <translation>[Applied]o&#39;]</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Application Denied</masterLabel>
+        <translation>[Application Denied]o&#39;介引户]</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Enrolled</masterLabel>
+        <translation>[Enrolled]o&#39;介]</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>In Progress</masterLabel>
+        <translation>[In Progress]o&#39;介引]</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation>[Completed]o&#39;介]</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Withdrawn</masterLabel>
+        <translation>[Withdrawn]o&#39;介]</translation>
+    </picklistValues>
+</CustomFieldTranslation>

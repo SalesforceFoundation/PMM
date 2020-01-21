@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customLabels>
+        <name>Add_Service_Delivery</name>
+        <label>[Add Service Delivery]l&#39;介引户ה]</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel</name>
+        <label>[Cancel]l&#39;]</label>
+    </customLabels>
+    <customLabels>
+        <name>Close</name>
+        <label>[Close]l&#39;介引户]</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete</name>
+        <label>[Confirm Delete]l&#39;介引]</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete_Row</name>
+        <label>[Are you sure you want to delete this row?]l&#39;介引户הаí先ร简а]</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete</name>
+        <label>[Delete]l&#39;]</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Services_For_Program_Engagement</name>
+        <label>[No services found, choose another program engagement.]l&#39;介引户הаí先ร简аน取정]</label>
+    </customLabels>
+    <customLabels>
+        <name>Record_Deleted</name>
+        <label>[Your record has been deleted]l&#39;介引户הаí]</label>
+    </customLabels>
+    <customLabels>
+        <name>Required</name>
+        <label>[Required]l&#39;介]</label>
+    </customLabels>
+    <customLabels>
+        <name>Saved</name>
+        <label>[Saved]l&#39;介引户]</label>
+    </customLabels>
+    <customLabels>
+        <name>Saving</name>
+        <label>[Saving]l&#39;]</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Program_Engagement</name>
+        <label>[Select Program Engagement]l&#39;介引户הа]</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service</name>
+        <label>[Select Service]l&#39;介引]</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Deliveries</name>
+        <label>[Service Deliveries]l&#39;介引户]</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Delivery_Contact_Without_Programs</name>
+        <label>[To save a service delivery, first enroll this client in a program with active services.]l&#39;介引户הаí先ร简аน取정úσιмÜП介мのαş]</label>
+    </customLabels>
+    <customLabels>
+        <name>Success</name>
+        <label>[Success]l&#39;]</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Error</name>
+        <label>[Error]l&#39;介引户]</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Unknown_Error</name>
+        <label>[Unknown Error]l&#39;介]</label>
+    </customLabels>
+    <customTabs>
+        <name>Bulk_Service_Deliveries</name>
+        <label>[Bulk Service Deliveries]l&#39;介引户ה]</label>
+    </customTabs>
+    <customApplications>
+        <name>Program_Management</name>
+        <label>[Program Management]l&#39;介引户]</label>
+    </customApplications>
+    <quickActions>
+        <name>Program__c.NewProgramEngagement</name>
+        <label>[New Program Engagement]l&#39;介引户ה]</label>
+    </quickActions>
+    <quickActions>
+        <name>Contact.NewProgramEngagement</name>
+        <label>[New Program Engagement]l&#39;介引户ה]</label>
+    </quickActions>
+</Translations>

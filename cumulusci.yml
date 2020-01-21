@@ -3,7 +3,7 @@ project:
     name: pmdm
     package:
         name: Program Management Data Model
-        namespace: pmdm0
+        namespace: pmdm
         api_version: "46.0"
     source_format: sfdx
 
@@ -113,7 +113,6 @@ tasks:
                   default: True
                 - record_type: Case.caseman__Incident
                 - record_type: Case.None
-
 
     run_all_local_tests:
         group: "Tests"
@@ -364,7 +363,7 @@ flows:
     config_unmanaged:
         steps:
             101:
-                flow: update_admin_profile 
+                flow: update_admin_profile
             105:
                 task: deploy_dev_config
                 options:

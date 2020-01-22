@@ -108,7 +108,7 @@
     </platformActionList>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>UnitOfService__c</fields>
+        <fields>UnitOfMeasurement__c</fields>
         <fields>CREATEDBY_USER</fields>
         <fields>LAST_UPDATE</fields>
         <relatedList>Service__c.Program__c</relatedList>

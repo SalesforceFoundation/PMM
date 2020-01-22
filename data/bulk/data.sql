@@ -1502,7 +1502,7 @@ CREATE TABLE "pmdm__Service__c" (
 	"Name" VARCHAR(255), 
 	"Description__c" VARCHAR(255), 
 	"Status__c" VARCHAR(255), 
-	"UnitOfService__c" VARCHAR(255), 
+	"UnitOfMeasurement__c" VARCHAR(255),
 	program__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );

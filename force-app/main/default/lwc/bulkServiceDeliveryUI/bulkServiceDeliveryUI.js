@@ -8,7 +8,7 @@ import Label_Required from "@salesforce/label/c.Required";
 import serviceDeliveries from "@salesforce/label/c.Service_Deliveries";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
-import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfService__c";
+import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 
 import getFieldSet from "@salesforce/apex/ServiceDeliveryController.getFieldSet";
 
@@ -30,7 +30,7 @@ export default class BulkServiceDeliveryUI extends LightningElement {
     };
     fields = {
         contact: CONTACT_FIELD,
-        unitService: UNITSERVICE_FIELD,
+        unitMeasurement: UNITMEASUREMENT_FIELD,
         quantity: QUANTITY_FIELD,
     };
     _deliveryIndex = 1;
@@ -57,7 +57,7 @@ export default class BulkServiceDeliveryUI extends LightningElement {
             field.disabled = true;
             if (
                 field.apiName === this.fields.quantity.fieldApiName ||
-                field.apiName === this.fields.unitService.fieldApiName
+                field.apiName === this.fields.unitMeasurement.fieldApiName
             ) {
                 field.size = 1;
             }

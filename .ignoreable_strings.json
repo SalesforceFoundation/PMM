@@ -1,5 +1,15 @@
 {
-    "ignorable_js_values": ["M 1 0 A 1 1 0", "L 0 0", "Id"],
+    "ignorable_js_values": [
+        "M 1 0 A 1 1 0",
+        "L 0 0",
+        "Id",
+        "OpenPmdmBulkServiceDelivery",
+        "PMDM: pubsub.registerListener",
+        "PMDM: pubsub.fireEvent",
+        "PMDM: Pubsub.dispatchGlobalEvent",
+        "PMDM Pubsub.fireGlobalEvent",
+        "*"
+    ],
     "ignorable_js_last_values": [
         "layoutTypes",
         "modes",

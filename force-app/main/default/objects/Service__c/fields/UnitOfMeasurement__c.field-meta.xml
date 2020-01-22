@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>UnitOfService__c</fullName>
+    <fullName>UnitOfMeasurement__c</fullName>
     <externalId>false</externalId>
-    <label>Unit of Service</label>
+    <inlineHelpText>The unit used to track this service. For example: hours, meals, sessions, deliveries, kits, etc.</inlineHelpText>
+    <label>Unit of Measurement</label>
     <length>255</length>
     <required>false</required>
     <trackTrending>false</trackTrending>

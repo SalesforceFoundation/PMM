@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>UnitOfService__c</fullName>
+    <fullName>UnitOfMeasurement__c</fullName>
     <externalId>false</externalId>
-    <formula>Service__r.UnitOfService__c</formula>
-    <label>Unit of Service</label>
+    <formula>Service__r.UnitOfMeasurement__c</formula>
+    <label>Unit of Measurement</label>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Text</type>

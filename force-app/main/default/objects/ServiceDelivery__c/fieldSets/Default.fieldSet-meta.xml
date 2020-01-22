@@ -28,7 +28,7 @@
         <isRequired>false</isRequired>
     </displayedFields>
     <displayedFields>
-        <field>UnitOfService__c</field>
+        <field>UnitOfMeasurement__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </displayedFields>

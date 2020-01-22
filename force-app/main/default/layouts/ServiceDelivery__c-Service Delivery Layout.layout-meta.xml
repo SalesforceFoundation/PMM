@@ -45,7 +45,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>UnitOfService__c</field>
+                <field>UnitOfMeasurement__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

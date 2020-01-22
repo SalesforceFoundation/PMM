@@ -1,5 +1,5 @@
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import unknownLabelError from "@salesforce/label/c.Util_Unknown_Error";
+import unknownErrorLabel from "@salesforce/label/c.Util_Unknown_Error";
 import errorLabel from "@salesforce/label/c.Util_Error";
 
 /**
@@ -157,7 +157,7 @@ const reduceErrors = errors => {
 };
 
 const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) => {
-    let message = "Unknown error";
+    let message = unknownErrorLabel;
 
     // error.body is the error from apex calls
     // error.detail.output.errors is the error from record-edit-forms
@@ -192,7 +192,10 @@ const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) 
                 // TODO: consider trigger errors, etc? general exception AND field-level error sd.Name.addError('msg') https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_sobject.htm#apex_System_SObject_addError
                 return (e.fieldLabel ? e.fieldLabel + ": " : "") + e.message;
             });
-            returnAsArray ? message : message.join("; ");
+
+            if (!returnAsArray) {
+                message.join("; ");
+            }
         }
     }
     debug(
@@ -202,7 +205,7 @@ const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) 
         "handleError"
     );
     if (fireShowToast) {
-        showToast("Error", message, "error", showToastMode);
+        showToast(errorLabel, message, "error", showToastMode);
     }
 
     return message;

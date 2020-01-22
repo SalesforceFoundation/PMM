@@ -33,7 +33,7 @@
         <field>ServiceDelivery__c.Quantity__c</field>
     </columns>
     <columns>
-        <field>ServiceDelivery__c.UnitOfService__c</field>
+        <field>ServiceDelivery__c.UnitOfMeasurement__c</field>
     </columns>
     <description>For use on Service record home</description>
     <filter>

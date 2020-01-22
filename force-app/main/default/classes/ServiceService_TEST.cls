@@ -70,7 +70,7 @@ public with sharing class ServiceService_TEST {
         service1.Name = 'Service 1';
         service1.Program__c = program1.Id;
         service1.Status__c = 'Active';
-        service1.UnitOfService__c = 'Hours';
+        service1.UnitOfMeasurement__c = 'Hours';
 
         ProgramEngagementSelector_TEST.GetProgramEngagementsByContactIdMethod getProgramEngagementsByContactIdMethod = new ProgramEngagementSelector_TEST.GetProgramEngagementsByContactIdMethod();
         getProgramEngagementsByContactIdMethod.contactId = contactId;

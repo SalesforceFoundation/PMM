@@ -8,7 +8,7 @@ import getFieldSet from "@salesforce/apex/ServiceDeliveryController.getFieldSet"
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
-import UNITSERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfService__c";
+import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 
 export default class TestModal extends LightningElement {
 
@@ -21,7 +21,7 @@ export default class TestModal extends LightningElement {
 
     fields = {
         contact: CONTACT_FIELD,
-        unitService: UNITSERVICE_FIELD,
+        unitMeasurement: UNITMEASUREMENT_FIELD,
         quantity: QUANTITY_FIELD,
     };
 
@@ -38,7 +38,7 @@ export default class TestModal extends LightningElement {
             field.disabled = true;
             if (
                 field.apiName === this.fields.quantity.fieldApiName ||
-                field.apiName === this.fields.unitService.fieldApiName
+                field.apiName === this.fields.unitMeasurement.fieldApiName
             ) {
                 field.size = 1;
             }

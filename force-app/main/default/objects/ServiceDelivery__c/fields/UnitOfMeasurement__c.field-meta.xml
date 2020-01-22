@@ -3,7 +3,7 @@
     <fullName>UnitOfMeasurement__c</fullName>
     <externalId>false</externalId>
     <formula>Service__r.UnitOfMeasurement__c</formula>
-    <label>Unit of Service</label>
+    <label>Unit of Measurement</label>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Text</type>

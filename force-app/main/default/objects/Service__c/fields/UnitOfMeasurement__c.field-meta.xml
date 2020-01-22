@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>UnitOfMeasurement__c</fullName>
     <externalId>false</externalId>
-    <label>Unit of Service</label>
+    <label>Unit of Measurement</label>
     <length>255</length>
     <required>false</required>
     <trackTrending>false</trackTrending>

@@ -76,7 +76,7 @@ pmdm__Service__c:
         # Custom Fields
         Description__c: Description__c
         Status__c: Status__c
-        UnitOfService__c: UnitOfService__c
+        UnitOfMeasurement__c: UnitOfMeasurement__c
 
     lookups:
         Program__c:

@@ -53,14 +53,14 @@ public with sharing class ProgramTestDataFactory {
             service1.Name = 'Service 1';
             service1.Program__c = program1.Id;
             service1.Status__c = 'Active';
-            service1.UnitOfService__c = 'Hours';
+            service1.UnitOfMeasurement__c = 'Hours';
             services.add(service1);
 
             Service__c service2 = new Service__c();
             service2.Name = 'Service 2';
             service2.Program__c = program2.Id;
             service2.Status__c = 'Active';
-            service2.UnitOfService__c = 'Days';
+            service2.UnitOfMeasurement__c = 'Days';
             services.add(service2);
 
             insert services;

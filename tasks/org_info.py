@@ -143,7 +143,7 @@ class NamespaceTask(LoggingTask):
     """
     Caches namespaces in self.org_config.config
     """
-
+    """
     def set_project_namespace(self, project_namespace):
         self.org_config.config.update({
             "project_namespace": project_namespace
@@ -155,15 +155,18 @@ class NamespaceTask(LoggingTask):
                 self.org_config.config.get("project_namespace")
             ]
         ])
-
+    """
     # TODO: Can we get rid of project_namespace???
     @property
     def project_namespace(self):
+        """
         # support caching 
         if not self.org_config.config.get("project_namespace"):
             self.project_namespace = self.project_config.project__package__namespace
         return self.org_config.config.get("project_namespace")
-
+        """
+        return self.project_config.project__package__namespace
+    """
     @project_namespace.setter
     def project_namespace(self, project_namespace):
         self.org_config.config.update({
@@ -176,11 +179,11 @@ class NamespaceTask(LoggingTask):
                 self.org_config.config.get("project_namespace")
             ]
         ])
-
+    
     @project_namespace.deleter
     def project_namespace(self):
         self.project_namespace = None
-
+    """
     @property
     def is_org_namespaced(self):
         return self.org_config and process_bool_arg(self.org_config.config.get("namespaced"))

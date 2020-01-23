@@ -92,7 +92,7 @@ pmdm__Service__c:
         # Data
         Description__c: pmdm__Description__c
         Status__c: pmdm__Status__c
-        UnitOfService__c: pmdm__UnitOfService__c
+        UnitOfMeasurement__c: pmdm__UnitOfMeasurement__c
     lookups:
         Program__c:
             key_field: program__c

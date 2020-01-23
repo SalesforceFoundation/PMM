@@ -41,6 +41,15 @@ orgs:
             config_file: orgs/npsp.json
             days: 7
             namespaced: True
+        beta_caseman:
+            config_file: orgs/beta.json
+            days: 7
+        beta_caseman_npsp:
+            config_file: orgs/beta.npsp.json
+            days: 7
+        beta_npsp:
+            config_file: orgs/beta.npsp.json
+            days: 7
 
 bulk_data:
     #Contacts:
@@ -58,7 +67,7 @@ bulk_data:
     pmdm:
         map: decentralized-data/pmdm/pmdm.yml
         sql: decentralized-data/pmdm/pmdm.sql
-        namespace: pmdm0
+        namespace: pmdm
     caseman:
         map: decentralized-data/caseman/caseman.yml
         sql: decentralized-data/caseman/caseman.sql
@@ -69,13 +78,6 @@ bulk_data:
         namespace: c
         when_all_namespaces:
             - caseman
-    caseman_client_notes_and_pdmm_service_delivery:
-        map: decentralized-data/caseman/unpackaged.yml
-        sql: decentralized-data/caseman/unpackaged.sql
-        namespace: c
-        when_all_namespaces:
-            - caseman
-            - pmdm
     npe01:
         map: decentralized-data/npe01/npe01.yml
         sql: decentralized-data/npe01/npe01.sql
@@ -94,7 +96,7 @@ bulk_data:
         namespace: npsp
 
 tasks:
-    cache_namespaces_in_org_config:
+    cache_namespces:
         description: Caches namespaces information in org_config
         class_path: tasks.org_info.CacheNamespaces
         group: Namespaces
@@ -253,126 +255,29 @@ tasks:
             path: unpackaged/tests/serviceDeliveryModal
             namespace_inject: $project_config.project__package__namespace
 
-    ################################################
-    ################################################
-    ################################################
-    #    log_bulk_data_mapping_original:
-    #        group: "Data: BulkDataOriginal"
-    #        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-    #        class_path: tasks.BulkDataOriginal.LogMapping
-    #        options:
-    #            package_mapping_directories:
-    #                - data/bulk/mapping/caseman
-    #                - data/bulk/mapping/npsp
-    #                - data/bulk/mapping/pmdm
-    #            pre_mapping_configs:
-    #                - path: data/bulk/mapping/Household_Accounts.yml
-    #                - path: data/bulk/mapping/Organization_Accounts.yml
-    #                - path: data/bulk/mapping/Contacts.yml
-    #            log_mapping: table
-    #
-    #    create_bulk_data_mapping_original:
-    #        group: "Data: BulkDataOriginal"
-    #        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-    #        class_path: tasks.BulkDataOriginal.CreateMapping
-    #        options:
-    #            package_mapping_directories:
-    #                - data/bulk/mapping/caseman
-    #                - data/bulk/mapping/npsp
-    #                - data/bulk/mapping/pmdm
-    #            pre_mapping_configs:
-    #                - path: data/bulk/mapping/Household_Accounts.yml
-    #                - path: data/bulk/mapping/Organization_Accounts.yml
-    #                - path: data/bulk/mapping/Contacts.yml
-    #            post_mapping_configs:
-    #                - path: data/bulk/mapping/unpackaged/caseman.yml
-    #                  when_all_namespaces:
-    #                      - caseman
-    #            log_mapping: table
-    #
-    #    insert_bulk_data_original:
-    #        group: "Data: BulkDataOriginal"
-    #        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
-    #        class_path: tasks.BulkDataOriginal.InsertData
-    #        options:
-    #            sql_path: data/bulk/data.sql
-    #            ignore_row_errors: True
-    #            package_mapping_directories:
-    #                - data/bulk/mapping/caseman
-    #                - data/bulk/mapping/npsp
-    #                - data/bulk/mapping/pmdm
-    #            pre_mapping_configs:
-    #                - path: data/bulk/mapping/Household_Accounts.yml
-    #                - path: data/bulk/mapping/Organization_Accounts.yml
-    #                - path: data/bulk/mapping/Contacts.yml
-    #            post_mapping_configs:
-    #                - path: data/bulk/mapping/unpackaged/caseman.yml
-    #                  when_all_namespaces:
-    #                      - caseman
-    #
-    #    capture_bulk_data_original:
-    #        group: "Data: BulkDataOriginal"
-    #        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-    #        class_path: tasks.BulkDataOriginal.CaptureData
-    #        options:
-    #            sql_path: data/bulk/data.sql
-    #            ignore_row_errors: True
-    #            package_mapping_directories:
-    #                - data/bulk/mapping/caseman
-    #                - data/bulk/mapping/npsp
-    #                - data/bulk/mapping/pmdm
-    #            pre_mapping_configs:
-    #                - path: data/bulk/mapping/Household_Accounts.yml
-    #                - path: data/bulk/mapping/Organization_Accounts.yml
-    #                - path: data/bulk/mapping/Contacts.yml
-    #            post_mapping_configs:
-    #                - path: data/bulk/mapping/unpackaged/caseman.yml
-    #                  when_all_namespaces:
-    #                      - caseman
-    #            log_mapping: table
-    #
-    #    delete_bulk_data_original:
-    #        group: "Data: BulkDataOriginal"
-    #        description: "I need a description"
-    #        class_path: tasks.BulkDataOriginal.DeleteData
-    #        options:
-    #            hardDelete: True
-    #            package_mapping_directories:
-    #                - data/bulk/mapping/caseman
-    #                - data/bulk/mapping/npsp
-    #                - data/bulk/mapping/pmdm
-    #            pre_mapping_configs:
-    #                - path: data/bulk/mapping/Household_Accounts.yml
-    #                - path: data/bulk/mapping/Organization_Accounts.yml
-    #                - path: data/bulk/mapping/Contacts.yml
-
-    ################################################
-    ################################################
-    ################################################
-
     cache_project_bulk_data:
         group: "Data: Bulk"
-        class_path: tasks.BulkData2.CacheProjectBulkDataTask
+        class_path: tasks.SharedBulkData.CacheProjectBulkDataTask
 
-    log_bulk_data_map:
+    log_bulk_data_combined_map:
         group: "Data: Bulk"
-        class_path: tasks.BulkData2.LogBulkDataMapTask
+        class_path: tasks.SharedBulkData.LogBulkDataCombinedMapTask
 
     log_bulk_data_step_map:
         group: "Data: Bulk"
-        class_path: tasks.BulkData2.LogBulkDataStepMapTask
+        class_path: tasks.SharedBulkData.LogBulkDataStepMapTask
 
     delete_bulk_data_step:
         group: "Data: Bulk"
-        class_path: tasks.BulkData2.DeleteBulkDataStepTask
+        class_path: tasks.SharedBulkData.DeleteBulkDataStepTask
 
-    delete_bulk_data:
+    delete_bulk_data_combined:
         group: "Data: Bulk"
-        class_path: tasks.BulkData2.DeleteBulkDataTask
+        class_path: tasks.SharedBulkData.DeleteBulkDataCombinedTask
 
     capture_bulk_data_step:
         group: "Data: Bulk"
-        class_path: tasks.BulkData2.CaptureBulkDataStepTask
+        class_path: tasks.SharedBulkData.CaptureBulkDataStepTask
         # Each repo will specify bulk_data_step option
         options:
             bulk_data_step: pmdm
@@ -380,12 +285,12 @@ tasks:
     insert_bulk_data_step:
         group: "Data: Bulk"
         description: "Inserts bulk data at for bulk_data_step"
-        class_path: tasks.BulkData2.InsertBulkDataStepTask
+        class_path: tasks.SharedBulkData.InsertBulkDataStepTask
 
-    insert_bulk_data:
+    insert_bulk_data_combined:
         group: "Data: Bulk"
         description: "Inserts combined bulk data"
-        class_path: tasks.BulkData2.InsertBulkDataTask
+        class_path: tasks.SharedBulkData.InsertBulkDataCombinedTask
 
 flows:
     cache_project_bulk_data:
@@ -417,15 +322,15 @@ flows:
             110:
                 task: dx
                 options:
-                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_View"
+                    command: "force:user:permset:assign --permsetname pmdm__PMDM_View"
             120:
                 task: dx
                 options:
-                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Manage"
+                    command: "force:user:permset:assign --permsetname pmdm__PMDM_Manage"
             130:
                 task: dx
                 options:
-                    command: "force:user:permset:assign --permsetname pmdm0__PMDM_Deliver"
+                    command: "force:user:permset:assign --permsetname pmdm__PMDM_Deliver"
 
     #caseman_post_insert_bulk_data:
     #steps:
@@ -471,7 +376,7 @@ flows:
             120:
                 flow: caseman_pre_insert_bulk_data
             200:
-                task: insert_bulk_data
+                task: insert_bulk_data_combined
             310:
                 flow: npsp_post_insert_bulk_data
             #320:
@@ -525,8 +430,8 @@ flows:
                     unmanaged: True
             110:
                 task: activate_flows
-            #200:
-            #flow: insert_data
+            200:
+                flow: insert_data
 
     config_unmanaged_namespaced:
         steps:
@@ -547,8 +452,8 @@ flows:
                 flow: update_admin_profile
             102:
                 task: activate_flows
-            200:
-                flow: insert_data
+            #200:
+            #flow: insert_data
 
     config_qa:
         steps:

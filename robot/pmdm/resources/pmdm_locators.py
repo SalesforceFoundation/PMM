@@ -23,7 +23,8 @@ pmdm_lex_locators = {
     "new_record": {
         "title": "//h2[contains(@class, 'inlineTitle') and text()='New Program']",
         "text_field": "//div[contains(@class, 'uiInput')][.//label[contains(@class, 'uiLabel')][.//span[text()='{}']]]//*[self::input or self::textarea]",
-        "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']][//div[contains(@class,'uiMenu')]//a[@class='select']]",
+        "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
+        "dropdown_popup": "//div[@class='select-options' and @role='menu']",
         "dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
         "button": "//button[contains(@class, 'slds-button') and @type='button' and @title = '{}']",
     }

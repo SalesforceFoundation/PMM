@@ -9,13 +9,6 @@ from pmdm_locators import pmdm_lex_locators
 class ProgramListingPage(ListingPage):
     object_name = "None"
 
-    def _go_to_page(self):
-        """To go to Home page"""
-        url = self.cumulusci.org.lightning_base_url
-        url = "{}/lightning/o/Program__c/list".format(url)
-        self.selenium.go_to(url)
-        self.salesforce.wait_until_loading_is_complete()
-
 
 @pageobject("NewProgram", "Program__c")
 class NewProgramPage(BasePage):
@@ -59,9 +52,11 @@ class NewProgramPage(BasePage):
                 self.selenium.get_webelement(locator).send_keys(value)
             elif key == 'Status':
                 locator = pmdm_lex_locators["new_record"]["dropdown_field"].format("Status")
-                self.selenium.click_element(locator)
-                loc = pmdm_lex_locators["new_record"]["dropdown_value"].format(value)
-                self.selenium.click_element(loc)
+                self.selenium.get_webelement(locator).click()
+                popup_loc = pmdm_lex_locators['new_record']['dropdown_popup']
+                self.selenium.wait_until_page_contains_element(popup_loc, error="Status field dropdown did not open")
+                value_loc=pmdm_lex_locators["new_record"]["dropdown_value"].format(value)
+                self.selenium.click_link(value_loc)
             elif key == 'Start Date':
                 locator = pmdm_lex_locators["new_record"]["text_field"].format("Start Date")
                 self.selenium.set_focus_to_element(locator)
@@ -72,9 +67,12 @@ class NewProgramPage(BasePage):
                 self.selenium.get_webelement(locator).send_keys(value)
             elif key == 'Program Issue Area':
                 locator = pmdm_lex_locators["new_record"]["dropdown_field"].format("Program Issue Area")
-                self.selenium.click_element(locator)
-                loc = pmdm_lex_locators["new_record"]["dropdown_value"].format(value)
-                self.selenium.click_element(loc)
+                self.selenium.set_focus_to_element(locator)
+                self.selenium.get_webelement(locator).click()
+                popup_loc = pmdm_lex_locators['new_record']['dropdown_popup']
+                self.selenium.wait_until_page_contains_element(popup_loc, error="Program Issue Area field dropdown did not open")
+                value_loc=pmdm_lex_locators["new_record"]["dropdown_value"].format(value)
+                self.selenium.click_link(value_loc)
             else:
                 assert False, "Key provided by name '{}' does not exist".format(key)
 
@@ -82,11 +80,10 @@ class NewProgramPage(BasePage):
 @pageobject("Details", "Program__c")
 class ProgramDetailPage(DetailPage):
 
-
     def _is_current_page(self):
         """ Verify we are on the Program detail page
             by verifying that the url contains '/view'
         """
         self.selenium.wait_until_location_contains("/view", timeout=60, message="Detail view did not open in 1 min")
-        self.selenium.location_should_contain("/lightning/r/Program__c/",message="Current page is not a Program record detail view")
-
+        self.selenium.location_should_contain("/lightning/r/Program__c/",
+                                              message="Current page is not a Program record detail view")

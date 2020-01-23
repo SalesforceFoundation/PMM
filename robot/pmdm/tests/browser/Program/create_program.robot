@@ -26,23 +26,21 @@ Setup Test Data
 
 
 *** Test Cases ***
-#Create a Program via API
-#     &{program} =  API Create Program
-#     Go To Record Home    &{program}[Id]
-#     page should contain text    Active
+Create a Program via API
+     &{program} =  API Create Program
+     Go To Record Home    &{program}[Id]
+     page should contain text    Active
 
 Create a Program via UI
 
     [Documentation]                        This test creates Program and verifies that the Program record
     ...                                    has all the values from the form
-
-    #Create a Program
     Go To Page                             Listing                               Program__c
     Click Object Button                    New
     Current Page Should Be                 NewProgram                           Program__c
     Populate New Program Form              Program Name=${program_name}
-    ...                                    Status=Active
     ...                                    Short Summary=${short_summary}
+    ...                                    Status=Active
     ...                                    Target Population=${target_population}
     ...                                    Description=${description}
     ...                                    Start Date=${start_date}

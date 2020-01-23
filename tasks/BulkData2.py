@@ -14,7 +14,7 @@ from tasks.bulkdata.utils import (
 from cumulusci.core.exceptions import TaskOptionsError
 
 
-class BulkData(Namespace):
+class BulkDataStep(Namespace):
 
     _private_combined_sql_columns = [
         "_last_table",
@@ -48,7 +48,7 @@ class BulkData(Namespace):
             with open(os_friendly_path(map_path), "r") as f:
                 map = yaml.safe_load(f)
             
-            # inject namepsace into fields and lookups
+            # inject namespace into sf_object, fields, and lookups
             for map_step, step in map.items():
                 for key in [
                     "fields", 
@@ -98,7 +98,7 @@ class BulkData(Namespace):
                         record_types_by_sobject.get(sobject) 
                         and step.get("record_type") in record_types_by_sobject.get(sobject)
                     ):
-                        del step["record_type"]                
+                        del step["record_type"]
 
         self.map = map   
         
@@ -108,7 +108,7 @@ class BulkData(Namespace):
             with open(os_friendly_path(sql_path), "r") as f:
                 self._sql = f.read()
             
-            # Uniquify tables in sql to this BulkData step
+            # Uniquify tables in sql to this BulkDataStep step
             if self._sql:
                 for table_name, table in self.tables_by_name.items():
                     unique_table = table["unique_table"]
@@ -138,7 +138,7 @@ class BulkData(Namespace):
 
     def __repr__(self) -> str:
         return (
-            'BulkData('
+            'BulkDataStep('
             f'namespace={self.namespace!r}, local_namespace={self.local_namespace!r}, '
             f'version={self.version!r}), map_path={self.map_path!r}, sql_path={self.sql_path!r}'
         )
@@ -175,14 +175,14 @@ class BulkData(Namespace):
 
     @map.setter
     def map(self, map):
-        self._map = BulkData.order_map(map) if map else {}
+        self._map = BulkDataStep.order_map(map) if map else {}
         unique_tables_by_table = {}
         self._tables_by_name = {}
 
         for map_step, step in self._map.items():
             sobject = step["sf_object"]
 
-            # Save uniquify table to this BulkData step as unique_table 
+            # Save uniquify table to this BulkDataStep step as unique_table 
             if not step.get("table"):
                 raise TaskOptionsError("\n".join([
                     f"Each bulk data map step must have a 'table':",
@@ -202,7 +202,7 @@ class BulkData(Namespace):
             # verify table_primary_key is a column, i.e. field or lookup, unless "id"
             table_primary_key = step.get("table_primary_key") or "id"
             if table_primary_key and table_primary_key != "id":
-                columns = BulkData.get_map_step_columns(step)    
+                columns = BulkDataStep.get_map_step_columns(step)    
                 if table_primary_key not in columns:
                     error_messages = [
                         f"table_primary_key must be a SQL Column (field or lookup) for this map step",
@@ -352,8 +352,8 @@ class BulkData(Namespace):
             table = step["table"]
 
             fields = []
-            fields.extend(BulkData._private_combined_sql_columns)
-            fields.extend(BulkData.get_map_step_columns(step))
+            fields.extend(BulkDataStep._private_combined_sql_columns)
+            fields.extend(BulkDataStep.get_map_step_columns(step))
 
             sql_lines.extend([
                 f'CREATE TABLE "{table}" (',
@@ -382,9 +382,9 @@ class BulkData(Namespace):
             step_table = self.tables_by_name[step["table"]]
 
             # collect all table columns
-            field_columns = BulkData.get_map_step_field_columns(step)
-            lookup_columns = BulkData.get_map_step_lookup_columns(step)
-            record_type_columns = BulkData.get_map_step_record_type_columns(step)
+            field_columns = BulkDataStep.get_map_step_field_columns(step)
+            lookup_columns = BulkDataStep.get_map_step_lookup_columns(step)
+            record_type_columns = BulkDataStep.get_map_step_record_type_columns(step)
 
             columns = set()
             columns.update(field_columns)
@@ -503,7 +503,7 @@ class BulkData(Namespace):
 
     @property
     def sobjects_for_delete(self):
-        return BulkData.get_sobjects_ordered_by_reverse_dependency(self.map)
+        return BulkDataStep.get_sobjects_ordered_by_reverse_dependency(self.map)
 
     @staticmethod
     def get_map_step_field_columns(step):
@@ -530,9 +530,9 @@ class BulkData(Namespace):
     @staticmethod
     def get_map_step_columns(step):
         columns = set()
-        columns.update(BulkData.get_map_step_field_columns(step))
-        columns.update(BulkData.get_map_step_lookup_columns(step))
-        columns.update(BulkData.get_map_step_record_type_columns(step))
+        columns.update(BulkDataStep.get_map_step_field_columns(step))
+        columns.update(BulkDataStep.get_map_step_lookup_columns(step))
+        columns.update(BulkDataStep.get_map_step_record_type_columns(step))
         return columns
 
     @staticmethod
@@ -644,7 +644,7 @@ class BulkData(Namespace):
 
     @staticmethod
     def get_sobjects_ordered_by_dependency(map):
-        return list(reversed(BulkData.get_sobjects_ordered_by_reverse_dependency(map)))
+        return list(reversed(BulkDataStep.get_sobjects_ordered_by_reverse_dependency(map)))
 
     @staticmethod
     def order_map(map):
@@ -658,16 +658,16 @@ class BulkData(Namespace):
             step_names.append(step_name)
 
         ordered_map = {}
-        for sobject in BulkData.get_sobjects_ordered_by_dependency(map):
+        for sobject in BulkDataStep.get_sobjects_ordered_by_dependency(map):
             for step_name in step_names_by_sobject[sobject]:
                 ordered_map[step_name] = map[step_name]
 
         return ordered_map
 
-class BulkDataTask(NamespaceTask, RecordTypeTask):
+class BulkDataCombinedTask(NamespaceTask, RecordTypeTask):
     task_options = {
         "bulk_data_log_level": {
-            "description": "Level to log BulkData maps.  Options are 'None', 'Summary', 'Combined', or 'All'. Default: 'Summary'",
+            "description": "Level to log BulkDataStep maps.  Options are 'None', 'Summary', 'Combined', or 'All'. Default: 'Summary'",
             "required": False,
         },
     }
@@ -735,7 +735,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
     @property
     @functools.lru_cache()
     def combined_bulk_data(self):
-        combined_bulk_data = BulkData(
+        combined_bulk_data = BulkDataStep(
             "Combined", 
             self.namespaces.get("c")
         )
@@ -788,7 +788,7 @@ class BulkDataTask(NamespaceTask, RecordTypeTask):
             is_used = ""
             if namespace and all(prefix in self.namespaces for prefix in all_namespaces):
                 is_used = "✅"
-                bulk_data = BulkData(
+                bulk_data = BulkDataStep(
                     step,
                     namespace, 
                     data.get("map"), 
@@ -873,7 +873,7 @@ class CacheProjectBulkDataTask(BulkDataTask):
         self.namespaces
         self.cache_project_bulk_data()
 
-class LogBulkDataMapTask(BulkDataTask):
+class LogBulkDataCombinedMapTask(BulkDataTask):
 
     task_options = {
         **BulkDataTask.task_options,
@@ -891,7 +891,7 @@ class LogBulkDataStepMapTask(LogBulkDataMapTask, BulkDataStepTask):
         **BulkDataStepTask.task_options,
     }
 
-class DeleteBulkDataTask(BaseDeleteData, BulkDataTask):
+class DeleteBulkDataCombinedTask(BaseDeleteData, BulkDataTask):
     task_options = {
         **BaseDeleteData.task_options,
         **BulkDataTask.task_options,
@@ -978,7 +978,7 @@ class InsertBulkDataStepTask(LoadData, BulkDataStepTask):
         finally:
             cursor.close()
 
-class InsertBulkDataTask(LoadData, BulkDataTask):
+class InsertBulkDataCombinedTask(LoadData, BulkDataTask):
 
     task_options = {
         **BulkDataTask.task_options,
@@ -1002,7 +1002,7 @@ class InsertBulkDataTask(LoadData, BulkDataTask):
         self.mapping = self.combined_bulk_data.map
     
     def _get_combined_bulk_data_create_tables_script(self):
-        return BulkData.get_map_create_tables_sql(self.combined_bulk_data)
+        return BulkDataStep.get_map_create_tables_sql(self.combined_bulk_data)
 
     def _sqlite_load(self):
         conn = self.session.connection()

@@ -39,21 +39,21 @@ orgs:
             namespaced: True
 
 bulk_data:
-    Contacts:
-        map: decentralized-data/c/Contacts.yml
-        sql: decentralized-data/c/Contacts.sql
-        namespace: c
-    Household_Accounts:
-        map: decentralized-data/c/Household_Accounts.yml
-        sql: decentralized-data/c/Household_Accounts.sql
-        namespace: c
-    Organization_Accounts:
-        map: decentralized-data/c/Organization_Accounts.yml
-        sql: decentralized-data/c/Organization_Accounts.sql
-        namespace: c
-    pmdm0:
-        map: decentralized-data/pmdm0/pmdm0.yml
-        sql: decentralized-data/pmdm0/pmdm0.sql
+    #Contacts:
+    #map: decentralized-data/c/Contacts.yml
+    #sql: decentralized-data/c/Contacts.sql
+    #namespace: c
+    #Household_Accounts:
+    #map: decentralized-data/c/Household_Accounts.yml
+    #sql: decentralized-data/c/Household_Accounts.sql
+    #namespace: c
+    #Organization_Accounts:
+    #map: decentralized-data/c/Organization_Accounts.yml
+    #sql: decentralized-data/c/Organization_Accounts.sql
+    #namespace: c
+    pmdm:
+        map: decentralized-data/pmdm/pmdm.yml
+        sql: decentralized-data/pmdm/pmdm.sql
         namespace: pmdm0
     caseman:
         map: decentralized-data/caseman/caseman.yml
@@ -65,6 +65,13 @@ bulk_data:
         namespace: c
         when_all_namespaces:
             - caseman
+    caseman_client_notes_and_pdmm_service_delivery:
+        map: decentralized-data/caseman/unpackaged.yml
+        sql: decentralized-data/caseman/unpackaged.sql
+        namespace: c
+        when_all_namespaces:
+            - caseman
+            - pmdm
     npe01:
         map: decentralized-data/npe01/npe01.yml
         sql: decentralized-data/npe01/npe01.sql
@@ -362,6 +369,9 @@ tasks:
     capture_bulk_data_step:
         group: "Data: Bulk"
         class_path: tasks.BulkData2.CaptureBulkDataStepTask
+        # Each repo will specify bulk_data_step option
+        options:
+            bulk_data_step: pmdm
 
     insert_bulk_data_step:
         group: "Data: Bulk"
@@ -374,6 +384,15 @@ tasks:
         class_path: tasks.BulkData2.InsertBulkDataTask
 
 flows:
+    cache_project_bulk_data:
+        steps:
+            10:
+                task: caseman:cache_project_bulk_data
+            20:
+                task: npsp:cache_project_bulk_data
+            30:
+                task: cache_project_bulk_data
+
     insert_data:
         steps:
             010:
@@ -524,8 +543,8 @@ flows:
                 flow: update_admin_profile
             102:
                 task: activate_flows
-            #200:
-            #flow: insert_data
+            200:
+                flow: insert_data
 
     config_qa:
         steps:

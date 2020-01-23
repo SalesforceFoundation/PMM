@@ -2,7 +2,7 @@
 Contacts:
     sf_object: Contact
     table: Contact
-    table_primary_key: Email
+    primary_key: Email
     fields:
         # IDs
         Email: Email

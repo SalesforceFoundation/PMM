@@ -61,7 +61,12 @@ caseman__Branches:
 Contacts:
     sf_object: Contact
     table: Contact
-    table_primary_key: Email
+
+    # TODO: if field, we need to namespace the field.
+    #       then raise an Error if the field is in fields (cannot be in lookups)
+    combine_records_on_field: Email
+   
+
     fields:
         # IDs
         Email: Email

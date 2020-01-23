@@ -156,6 +156,7 @@ class NamespaceTask(LoggingTask):
             ]
         ])
 
+    # TODO: Can we get rid of project_namespace???
     @property
     def project_namespace(self):
         # support caching 

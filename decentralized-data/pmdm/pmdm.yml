@@ -3,6 +3,7 @@ Household_Accounts:
     table: Account__HH_Account
     fields:
         # IDs
+        AccountNumber: AccountNumber
         Name: Name
 
 Contacts:
@@ -10,9 +11,9 @@ Contacts:
     table: Contact
     fields:
         # IDs
+        Email: Email
         FirstName: FirstName
         LastName: LastName
-        Email: Email
     lookups:
         AccountId:
             table: Account__HH_Account

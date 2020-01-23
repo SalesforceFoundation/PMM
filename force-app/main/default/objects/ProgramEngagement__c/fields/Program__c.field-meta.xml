@@ -9,7 +9,7 @@
         <filterItems>
             <field>Program__c.Status__c</field>
             <operation>equals</operation>
-            <value>Active</value>
+            <value>Planned, Active</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>

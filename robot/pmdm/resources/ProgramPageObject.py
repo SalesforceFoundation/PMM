@@ -3,19 +3,16 @@ from cumulusci.robotframework.pageobjects import ListingPage
 from cumulusci.robotframework.pageobjects import DetailPage
 from cumulusci.robotframework.pageobjects import pageobject
 from pmdm_locators import pmdm_lex_locators
+from BaseObjects import BasePMDMPage
 
 
 @pageobject("Listing", "Program")
-class ProgramListingPage(ListingPage):
+class ProgramListingPage(BasePMDMPage, ListingPage):
     object_name = "None"
 
 
 @pageobject("NewProgram", "Program__c")
-class NewProgramPage(BasePage):
-
-    @property
-    def pmdm(self):
-        return self.builtin.get_library_instance('PMDM')
+class NewProgramPage(BasePMDMPage, BasePage):
 
     def _is_current_page(self):
         """ Verify we are on the New Program modal page
@@ -78,7 +75,7 @@ class NewProgramPage(BasePage):
 
 
 @pageobject("Details", "Program__c")
-class ProgramDetailPage(DetailPage):
+class ProgramDetailPage(BasePMDMPage, DetailPage):
 
     def _is_current_page(self):
         """ Verify we are on the Program detail page

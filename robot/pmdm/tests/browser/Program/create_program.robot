@@ -26,10 +26,6 @@ Setup Test Data
 
 
 *** Test Cases ***
-Create a Program via API
-     &{program} =  API Create Program
-     Go To Record Home    &{program}[Id]
-     page should contain text    Active
 
 Create a Program via UI
 

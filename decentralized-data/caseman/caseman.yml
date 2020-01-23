@@ -3,36 +3,10 @@ Household_Accounts:
     sf_object: Account
     table: Account__HH_Account
     record_type: "HH_Account"
-    combine_records_on_column: Site
+    combine_records_on_column: AccountNumber
     fields:
         # IDs
-        Site: Site
-        Name: Name
-
-        # Data
-        MaximumClientsServed__c: caseman__MaximumClientsServed__c
-
-Organization_Accounts:
-    sf_object: Account
-    table: Account__Organization
-    record_type: "Organization"
-    combine_records_on_column: Site
-    fields:
-        # IDs
-        Site: Site
-        Name: Name
-
-        # Data
-        MaximumClientsServed__c: caseman__MaximumClientsServed__c
-
-caseman__Branches:
-    sf_object: Account
-    table: Account__Branch
-    record_type: "Branch"
-    combine_records_on_column: Site
-    fields:
-        # IDs
-        Site: Site
+        AccountNumber: AccountNumber
         Name: Name
 
         # Data
@@ -51,7 +25,67 @@ caseman__Branches:
         Fax: Fax
         Website: Website
         NumberOfEmployees: NumberOfEmployees
+        Site: Site
+        Type: Type
+
+        MaximumClientsServed__c: caseman__MaximumClientsServed__c
+
+Organization_Accounts:
+    sf_object: Account
+    table: Account__Organization
+    record_type: "Organization"
+    combine_records_on_column: AccountNumber
+    fields:
+        # IDs
         AccountNumber: AccountNumber
+        Name: Name
+
+        # Data
+        Description: Description
+        BillingStreet: Street
+        BillingCity: City
+        BillingState: State
+        BillingPostalCode: PostalCode
+        BillingCountry: Country
+        ShippingStreet: Street
+        ShippingCity: City
+        ShippingState: State
+        ShippingPostalCode: PostalCode
+        ShippingCountry: Country
+        Phone: Phone
+        Fax: Fax
+        Website: Website
+        NumberOfEmployees: NumberOfEmployees
+        Site: Site
+        Type: Type
+
+        MaximumClientsServed__c: caseman__MaximumClientsServed__c
+
+caseman__Branches:
+    sf_object: Account
+    table: Account__Branch
+    record_type: "Branch"
+    fields:
+        # IDs
+        AccountNumber: AccountNumber
+        Name: Name
+
+        # Data
+        Description: Description
+        BillingStreet: Street
+        BillingCity: City
+        BillingState: State
+        BillingPostalCode: PostalCode
+        BillingCountry: Country
+        ShippingStreet: Street
+        ShippingCity: City
+        ShippingState: State
+        ShippingPostalCode: PostalCode
+        ShippingCountry: Country
+        Phone: Phone
+        Fax: Fax
+        Website: Website
+        NumberOfEmployees: NumberOfEmployees
         Site: Site
         Type: Type
 
@@ -61,9 +95,6 @@ caseman__Branches:
 Contacts:
     sf_object: Contact
     table: Contact
-
-    # TODO: if field, we need to namespace the field.
-    #       then raise an Error if the field is in fields (cannot be in lookups)
     combine_records_on_column: Email
 
     fields:
@@ -73,6 +104,19 @@ Contacts:
         LastName: LastName
 
         # Data
+        Salutation: Salutation
+        Phone: Phone
+        MobilePhone: MobilePhone
+        OtherPhone: OtherPhone
+        HomePhone: HomePhone
+        Title: Title
+        Birthdate: Birthdate
+        MailingStreet: MailingStreet
+        MailingCity: MailingCity
+        MailingState: MailingState
+        MailingPostalCode: MailingPostalCode
+        MailingCountry: MailingCountry
+
         AgeCategory__c: caseman__AgeCategory__c
         ClientID__c: caseman__ClientID__c
         EmergencyContactRole__c: caseman__EmergencyContactRole__c
@@ -234,6 +278,10 @@ caseman__Case_Plans:
     fields:
         # Data
         Name: Name
+        Status__c: caseman__Status__c
+        AbandonedDate__c: caseman__AbandonedDate__c
+        CompletedDate__c: caseman__CompletedDate__c
+        InProgressDate__c: caseman__InProgressDate__c
     lookups:
         Contact__c:
             key_field: contact__c
@@ -262,8 +310,8 @@ caseman__Action_Items:
     fields:
         # Data
         Name: Name
-        Status__c: Status__c
-        DueDate__c: DueDate__c
+        Status__c: caseman__Status__c
+        DueDate__c: caseman__DueDate__c
     lookups:
         Contact__c:
             key_field: contact__c
@@ -277,3 +325,22 @@ caseman__Action_Items:
         ActionItemTemplate__c:
             key_field: action_item_template__c
             table: caseman__ActionItemTemplate__c
+
+caseman__Assessments:
+    sf_object: Assessment__c
+    table: caseman__Assessment__c
+    fields:
+        # Standard Fields
+        Name: Name
+
+        # Custom Fields
+        AssessmentCompletedDate__c: caseman__AssessmentCompletedDate__c
+        Comments__c: caseman__Comments__c
+        TotalScore__c: caseman__TotalScore__c
+        FinancialStabilityScore__c: caseman__FinancialStabilityScore__c
+        JobReadinessScore__c: caseman__JobReadinessScore__c
+
+    lookups:
+        Client__c:
+            key_field: client__c
+            table: Contact

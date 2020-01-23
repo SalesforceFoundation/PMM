@@ -1,7 +1,7 @@
 Contacts:
     sf_object: Contact
     table: Contact
-    table_primary_key: Email
+    combine_records_on_column: Email
     fields:
         # IDs
         Email: Email

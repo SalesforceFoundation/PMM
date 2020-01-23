@@ -1,6 +1,7 @@
 Household_Accounts:
     sf_object: Account
     table: Account__HH_Account
+    combine_records_on_column: AccountNumber
     fields:
         # IDs
         AccountNumber: AccountNumber
@@ -9,6 +10,7 @@ Household_Accounts:
 Contacts:
     sf_object: Contact
     table: Contact
+    combine_records_on_column: Email
     fields:
         # IDs
         Email: Email
@@ -19,53 +21,53 @@ Contacts:
             table: Account__HH_Account
 
 # Programs
-pmdm0__Program__c:
+pmdm__Program__c:
     sf_object: Program__c
-    table: pmdm0__Program__c
+    table: pmdm__Program__c
     fields:
         # IDs
         Name: Name
 
         # Data
-        Description__c: pmdm0__Description__c
-        EndDate__c: pmdm0__EndDate__c
-        ProgramIssueArea__c: pmdm0__ProgramIssueArea__c
-        StartDate__c: pmdm0__StartDate__c
-        Status__c: pmdm0__Status__c
-        ShortSummary__c: pmdm0__ShortSummary__c
-        TargetPopulation__c: pmdm0__TargetPopulation__c
+        Description__c: pmdm__Description__c
+        EndDate__c: pmdm__EndDate__c
+        ProgramIssueArea__c: pmdm__ProgramIssueArea__c
+        StartDate__c: pmdm__StartDate__c
+        Status__c: pmdm__Status__c
+        ShortSummary__c: pmdm__ShortSummary__c
+        TargetPopulation__c: pmdm__TargetPopulation__c
 
-pmdm0__ProgramCohort__c:
+pmdm__ProgramCohort__c:
     sf_object: ProgramCohort__c
-    table: pmdm0__ProgramCohort__c
+    table: pmdm__ProgramCohort__c
     fields:
         # IDs
         Name: Name
 
         # Data
-        Description__c: pmdm0__Description__c
-        EndDate__c: pmdm0__EndDate__c
-        StartDate__c: pmdm0__StartDate__c
-        Status__c: pmdm0__Status__c
+        Description__c: pmdm__Description__c
+        EndDate__c: pmdm__EndDate__c
+        StartDate__c: pmdm__StartDate__c
+        Status__c: pmdm__Status__c
     lookups:
         Program__c:
             key_field: program__c
-            table: pmdm0__Program__c
+            table: pmdm__Program__c
 
-pmdm0__ProgramEngagement__c:
+pmdm__ProgramEngagement__c:
     sf_object: ProgramEngagement__c
-    table: pmdm0__ProgramEngagement__c
+    table: pmdm__ProgramEngagement__c
     fields:
         # IDs
         Name: Name
 
         # Data
-        ApplicationDate__c: pmdm0__ApplicationDate__c
-        AutoName_Override__c: pmdm0__AutoName_Override__c
-        EndDate__c: pmdm0__EndDate__c
-        Role__c: pmdm0__Role__c
-        Stage__c: pmdm0__Stage__c
-        StartDate__c: pmdm0__StartDate__c
+        ApplicationDate__c: pmdm__ApplicationDate__c
+        AutoName_Override__c: pmdm__AutoName_Override__c
+        EndDate__c: pmdm__EndDate__c
+        Role__c: pmdm__Role__c
+        Stage__c: pmdm__Stage__c
+        StartDate__c: pmdm__StartDate__c
     lookups:
         Account__c:
             key_field: account__c
@@ -75,42 +77,42 @@ pmdm0__ProgramEngagement__c:
             table: Contact
         Program__c:
             key_field: program__c
-            table: pmdm0__Program__c
+            table: pmdm__Program__c
         ProgramCohort__c:
             key_field: program_cohort__c
-            table: pmdm0__ProgramCohort__c
+            table: pmdm__ProgramCohort__c
 
-pmdm0__Service__c:
+pmdm__Service__c:
     sf_object: Service__c
-    table: pmdm0__Service__c
+    table: pmdm__Service__c
     fields:
         # IDs
         Name: Name
 
         # Data
-        Description__c: pmdm0__Description__c
-        Status__c: pmdm0__Status__c
-        UnitOfService__c: pmdm0__UnitOfService__c
+        Description__c: pmdm__Description__c
+        Status__c: pmdm__Status__c
+        UnitOfService__c: pmdm__UnitOfService__c
     lookups:
         Program__c:
             key_field: program__c
-            table: pmdm0__Program__c
+            table: pmdm__Program__c
 
-pmdm0__ServiceDelivery__c:
+pmdm__ServiceDelivery__c:
     sf_object: ServiceDelivery__c
-    table: pmdm0__ServiceDelivery__c
+    table: pmdm__ServiceDelivery__c
     fields:
         # IDs
         Name: Name
 
         # Data
-        AutonameOverride__c: pmdm0__AutonameOverride__c
-        DeliveryDate__c: pmdm0__DeliveryDate__c
-        Quantity__c: pmdm0__Quantity__c
+        AutonameOverride__c: pmdm__AutonameOverride__c
+        DeliveryDate__c: pmdm__DeliveryDate__c
+        Quantity__c: pmdm__Quantity__c
     lookups:
         Service__c:
             key_field: service__c
-            table: pmdm0__Service__c
+            table: pmdm__Service__c
         Account__c:
             key_field: account__c
             table: Account__HH_Account
@@ -119,4 +121,4 @@ pmdm0__ServiceDelivery__c:
             table: Contact
         ProgramEngagement__c:
             key_field: program_engagement__c
-            table: pmdm0__ProgramEngagement__c
+            table: pmdm__ProgramEngagement__c

@@ -3,7 +3,7 @@ Household_Accounts:
     sf_object: Account
     table: Account__HH_Account
     record_type: "HH_Account"
-    table_primary_key: Site
+    combine_records_on_column: Site
     fields:
         # IDs
         Site: Site
@@ -16,7 +16,7 @@ Organization_Accounts:
     sf_object: Account
     table: Account__Organization
     record_type: "Organization"
-    table_primary_key: Site
+    combine_records_on_column: Site
     fields:
         # IDs
         Site: Site
@@ -29,7 +29,7 @@ caseman__Branches:
     sf_object: Account
     table: Account__Branch
     record_type: "Branch"
-    table_primary_key: Site
+    combine_records_on_column: Site
     fields:
         # IDs
         Site: Site
@@ -64,8 +64,7 @@ Contacts:
 
     # TODO: if field, we need to namespace the field.
     #       then raise an Error if the field is in fields (cannot be in lookups)
-    combine_records_on_field: Email
-   
+    combine_records_on_column: Email
 
     fields:
         # IDs

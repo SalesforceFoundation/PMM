@@ -13,17 +13,20 @@ pmdm_lex_locators = {
     "input": {
         "input1": "//label[text()='{}']/following::input",
         "input2": "//input[@type='text' and @data-name='{}']"
-    }
-}
-
-program_locators = {
-    "header_title": "//div[contains(@class, 'slds-page-header')]/descendant::span[text()='Programs']",
-    "new_program": {
+    },
+    "page_header": "//div[contains(@class, 'slds-page-header')]/descendant::span[text()='{}}']",
+    'confirm': {
+        'check_value':'//div[contains(@class, "forcePageBlockItem")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span',
+        'check_status':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-text',
+        'check_numbers':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-number',
+    },
+    "new_record": {
         "title": "//h2[contains(@class, 'inlineTitle') and text()='New Program']",
         "text_field": "//div[contains(@class, 'uiInput')][.//label[contains(@class, 'uiLabel')][.//span[text()='{}']]]//*[self::input or self::textarea]",
-        "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']][//div[contains(@class,'uiMenu')]//a[@class='select']]",
+        "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
+        "dropdown_popup": "//div[@class='select-options' and @role='menu']",
         "dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
-        "save": "//button[contains(@class, 'slds-button') and @type='button' and @title = 'Save']",
+        "button": "//button[contains(@class, 'slds-button') and @type='button' and @title = '{}']",
     }
 }
 

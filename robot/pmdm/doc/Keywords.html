@@ -1,10 +1,462 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html>
+  <head>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+      crossorigin="anonymous">
+    </script>
+    <script>
+      function filter() {
+          var filter_string = $("#filter").val().toLowerCase();
+          $(".kwtable .kwname").each(function() {
+              if ($(this).text().toLowerCase().indexOf(filter_string) !== -1) {
+                  $(this).parent().show();
+              } else {
+                  $(this).parent().hide();
+              }
+          })
+      }
+      $(document).ready(function() {
+          $("#filter").on("input", function() {
+              filter()
+          })
+          $("#filter").keyup(function() {
+              filter()
+          })
+      });
+    </script>
+    <style>
+      body {
+    font-family: 'Open Sans', sans-serif;
+}
+.container {
+    margin: 2em;
+}
+#search {
+    width: 20em;
+}
+.header {
+    display: flex;
+    align-items: bottom;
+}
+.header h1 {
+    margin-top: 0px;
+}
+.header search {
+    align-self: flex-end;
+    margin-bottom: 0px;
+}
+.file-header: {
+    margin-bottom: 10em;
+}
+.file-header h2 {
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #127a9a
+}
+.right {
+    margin-left: auto;
+}
+.search {
+    align-self: center;
+}
+.search {
+    border: 0px;
+}
+.search input {
+    border: 1px solid gray;
+    padding: 4px;
+}
+.footer {
+    margin: 30px;
+    /* background: black; */
+    font-size: 80%;
+    /* color: gray; */
+    padding: 4px;
+}
+.section {
+    margin-bottom: 2em;
+    margin-left: 2em;
+}
 
-</body>
+pre {
+    max-width: 60em;
+    border: 1px solid lightgrey;
+    padding: 10px 0px 10px 10px;
+}
+
+.pageobject-file-description {
+    margin-left: 2em;
+}
+
+.description {
+    margin-top: 0em;
+    margin-bottom: .5em;
+    padding-left: 0em;
+    padding-top: 0em;
+    padding-bottom: 0em;
+    max-width: 60em;
+}
+
+.kwtable {
+    box-shadow: 3px 3px 5px #d4d4d4;
+    border-collapse: collapse;
+    border: 1px solid gray;
+    text-align: left;
+    width: 100%;
+}
+.kwtable th {
+    font-weight: normal;
+    background: #109AD7;
+    color: #f0f0f0;
+    padding: 4px;
+    border: 1px solid gray;
+}
+.kwrow td {
+    padding: 4px;
+    border: 1px solid gray;
+    vertical-align: top;
+}
+.kwtable tr:hover {
+    background-color: #f9f9f9;
+}
+.kwtable .kwargs {
+    width: 20%;
+}
+.kwtable .kwname {
+    font-weight: bold;
+    width: 25%;
+    /* min-width: 15em; */
+    /* max-width: 20%; */
+}
+.library-documentation {
+    margin-bottom: 2em;
+    margin-left: 2em;
+}
+
+.pageobject-header {
+    margin-top: 2em;
+    margin-left: 0px;
+    padding: 0px;
+    border-spacing: 0px;
+}
+
+.pageobject-header td {
+    border: 0px;
+    padding-right: 1.5em;
+}
+.pageobject-header .data {
+    padding-right: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.pageobject-header .labels {
+    font-size: .75em;
+    font-weight: normal;
+    color: gray;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- this is the header for the documentation as a whole -->
+      <div class="header">
+        <h1 class="title">Program Management Data Model</h1>
+        <div class="filter right">filter: <input id="filter" type="filter"></input></div>
+      </div>
+
+      
+      <div class="file" id="file-robot/pmdm/resources/pmdm.py">
+        <div class='file-header'>
+          <h2 title='robot/pmdm/resources/pmdm.py'>pmdm.py</h2>
+          <div class='file-path'>robot/pmdm/resources/pmdm.py</div>
+        </div>
+
+        
+
+        
+        <div class="section" pageobject="">
+
+          
+
+          <div class='description' title='Description'><p>Documentation for library <code>pmdm</code>.</p></div>
+          <table class="kwtable" title='Table of keywords'>
+            <tbody>
+              <tr><th>Keyword</th><th>Arguments</th><th>Documentation</th></tr>
+              
+              <tr class="kwrow" id="pmdm.py.Check If Element Exists">
+                <td class="kwname">
+                  Check If Element Exists
+                </td>
+                <td class="kwargs">
+                  
+                  <i>xpath</i>
+                  
+                </td>
+                <td class="kwdoc"></td>
+              </tr>
+              
+              <tr class="kwrow" id="pmdm.py.Generate New String">
+                <td class="kwname">
+                  Generate New String
+                </td>
+                <td class="kwargs">
+                  
+                  <i>prefix=PMDM Robot</i>
+                  
+                </td>
+                <td class="kwdoc"></td>
+              </tr>
+              
+              <tr class="kwrow" id="pmdm.py.New Random String">
+                <td class="kwname">
+                  New Random String
+                </td>
+                <td class="kwargs">
+                  
+                  <i>len=5</i>
+                  
+                </td>
+                <td class="kwdoc"></td>
+              </tr>
+              
+              <tr class="kwrow" id="pmdm.py.Selenium Execute With Retry">
+                <td class="kwname">
+                  Selenium Execute With Retry
+                </td>
+                <td class="kwargs">
+                  
+                  <i>execute</i>, 
+                  
+                  <i>command</i>, 
+                  
+                  <i>params</i>
+                  
+                </td>
+                <td class="kwdoc"><p>Run a single selenium command and retry once.</p>
+<p>The retry happens for certain errors that are likely to be resolved by retrying.</p></td>
+              </tr>
+              
+              <tr class="kwrow" id="pmdm.py.Wait For Aura">
+                <td class="kwname">
+                  Wait For Aura
+                </td>
+                <td class="kwargs">
+                  
+                </td>
+                <td class="kwdoc"><p>Run the WAIT_FOR_AURA_SCRIPT.</p>
+<p>This script polls Aura via $A in Javascript to determine when all in-flight XHTTP requests have completed before continuing.</p></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div> 
+        
+      </div>
+      
+      <div class="file" id="file-robot/pmdm/resources/pmdm.robot">
+        <div class='file-header'>
+          <h2 title='robot/pmdm/resources/pmdm.robot'>pmdm.robot</h2>
+          <div class='file-path'>robot/pmdm/resources/pmdm.robot</div>
+        </div>
+
+        
+
+        
+        <div class="section" pageobject="">
+
+          
+
+          <div class='description' title='Description'><p>Documentation for resource file <code>pmdm</code>.</p></div>
+          <table class="kwtable" title='Table of keywords'>
+            <tbody>
+              <tr><th>Keyword</th><th>Arguments</th><th>Documentation</th></tr>
+              
+              <tr class="kwrow" id="pmdm.robot.API Create Program">
+                <td class="kwname">
+                  API Create Program
+                </td>
+                <td class="kwargs">
+                  
+                  <i>**fields</i>
+                  
+                </td>
+                <td class="kwdoc"></td>
+              </tr>
+              
+              <tr class="kwrow" id="pmdm.robot.Go To PMDM App">
+                <td class="kwname">
+                  Go To PMDM App
+                </td>
+                <td class="kwargs">
+                  
+                </td>
+                <td class="kwdoc"></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div> 
+        
+      </div>
+      
+      <div class="file" id="file-robot/pmdm/resources/ProgramPageObject.py">
+        <div class='file-header'>
+          <h2 title='robot/pmdm/resources/ProgramPageObject.py'>ProgramPageObject.py</h2>
+          <div class='file-path'>robot/pmdm/resources/ProgramPageObject.py</div>
+        </div>
+
+        
+
+        
+        <div class="section" pageobject="Details-Program__c">
+
+          
+          <div class='pageobject-header'>
+
+            <table class='pageobject-header'>
+              <tbody>
+	        <tr class='data'>
+	          <td title='Page Type'>Details</td>
+	          <td title='Object Name'>Program__c</td>
+	        </tr>
+	        <tr class='labels'>
+	          <td>Page Type</td>
+	          <td>Object Name</td>
+	        </tr>
+              </tbody>
+            </table>
+          </div>
+          
+
+          <div class='description' title='Description'><p>Documentation for library <code>ProgramPageObject.ProgramDetailPage</code>.</p></div>
+          <table class="kwtable" title='Table of keywords'>
+            <tbody>
+              <tr><th>Keyword</th><th>Arguments</th><th>Documentation</th></tr>
+              
+              <tr class="kwrow" id="ProgramPageObject.py.Log Current Page Object">
+                <td class="kwname">
+                  Log Current Page Object
+                </td>
+                <td class="kwargs">
+                  
+                </td>
+                <td class="kwdoc"><p>Logs the name of the current page object</p>
+<p>The current page object is also returned as an object</p></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div> 
+        
+        <div class="section" pageobject="Listing-Program">
+
+          
+          <div class='pageobject-header'>
+
+            <table class='pageobject-header'>
+              <tbody>
+	        <tr class='data'>
+	          <td title='Page Type'>Listing</td>
+	          <td title='Object Name'>Program</td>
+	        </tr>
+	        <tr class='labels'>
+	          <td>Page Type</td>
+	          <td>Object Name</td>
+	        </tr>
+              </tbody>
+            </table>
+          </div>
+          
+
+          <div class='description' title='Description'><p>Documentation for library <code>ProgramPageObject.ProgramListingPage</code>.</p></div>
+          <table class="kwtable" title='Table of keywords'>
+            <tbody>
+              <tr><th>Keyword</th><th>Arguments</th><th>Documentation</th></tr>
+              
+              <tr class="kwrow" id="ProgramPageObject.py.Log Current Page Object">
+                <td class="kwname">
+                  Log Current Page Object
+                </td>
+                <td class="kwargs">
+                  
+                </td>
+                <td class="kwdoc"><p>Logs the name of the current page object</p>
+<p>The current page object is also returned as an object</p></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div> 
+        
+        <div class="section" pageobject="NewProgram-Program__c">
+
+          
+          <div class='pageobject-header'>
+
+            <table class='pageobject-header'>
+              <tbody>
+	        <tr class='data'>
+	          <td title='Page Type'>NewProgram</td>
+	          <td title='Object Name'>Program__c</td>
+	        </tr>
+	        <tr class='labels'>
+	          <td>Page Type</td>
+	          <td>Object Name</td>
+	        </tr>
+              </tbody>
+            </table>
+          </div>
+          
+
+          <div class='description' title='Description'><p>Documentation for library <code>ProgramPageObject.NewProgramPage</code>.</p></div>
+          <table class="kwtable" title='Table of keywords'>
+            <tbody>
+              <tr><th>Keyword</th><th>Arguments</th><th>Documentation</th></tr>
+              
+              <tr class="kwrow" id="ProgramPageObject.py.Click Save Button">
+                <td class="kwname">
+                  Click Save Button
+                </td>
+                <td class="kwargs">
+                  
+                </td>
+                <td class="kwdoc"><p>Click on the save button</p></td>
+              </tr>
+              
+              <tr class="kwrow" id="ProgramPageObject.py.Log Current Page Object">
+                <td class="kwname">
+                  Log Current Page Object
+                </td>
+                <td class="kwargs">
+                  
+                </td>
+                <td class="kwdoc"><p>Logs the name of the current page object</p>
+<p>The current page object is also returned as an object</p></td>
+              </tr>
+              
+              <tr class="kwrow" id="ProgramPageObject.py.Populate New Program Form">
+                <td class="kwname">
+                  Populate New Program Form
+                </td>
+                <td class="kwargs">
+                  
+                  <i>**kwargs</i>
+                  
+                </td>
+                <td class="kwdoc"><p>Populates new program form with the field-value pairs</p></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div> 
+        
+      </div>
+      
+    </div>
+    <div class="footer">
+      Generated on Thursday January 16, 01:06 PM - cumulusci v3.4.0
+    </div>
+  </body>
 </html>

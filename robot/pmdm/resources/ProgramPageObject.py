@@ -6,7 +6,7 @@ from pmdm_locators import pmdm_lex_locators
 from BaseObjects import BasePMDMPage
 
 
-@pageobject("Listing", "Program")
+@pageobject("Listing", "Program__c")
 class ProgramListingPage(BasePMDMPage, ListingPage):
     object_name = "None"
 
@@ -21,12 +21,6 @@ class NewProgramPage(BasePMDMPage, BasePage):
         locator = pmdm_lex_locators["new_record"]["title"]
         self.selenium.wait_until_page_contains_element(locator,
                                                        error="Section title is not 'New Program' as expected")
-
-    def click_save_button(self):
-        """ Click on the save button """
-        locator_save = pmdm_lex_locators["new_record"]["button"].format("Save")
-        self.selenium.wait_until_element_is_enabled(locator_save, error="Save button is not enabled")
-        self.selenium.click_element(locator_save)
 
     def populate_new_program_form(self, **kwargs):
         """ Populates new program form with the field-value pairs """

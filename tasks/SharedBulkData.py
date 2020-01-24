@@ -1,9 +1,10 @@
+import sys  # TODO: remove sys
 import os
 import yaml
 import re
-import functools
 from tasks.logger import LoggingTask
-from tasks.org_info import Namespace, NamespaceTask, RecordTypeTask
+from tasks.org_info import Namespace, NamespaceTask, utils
+
 
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 from cumulusci.core.utils import process_bool_arg
@@ -14,6 +15,18 @@ from cumulusci.tasks.bulkdata.utils import get_lookup_key_field
 from cumulusci.core.exceptions import TaskOptionsError
 
 
+class MapError(Exception):
+    pass
+
+
+class MapColumnError(Exception):
+    pass
+
+
+class MapLookupError(Exception):
+    pass
+
+
 class BulkDataStep(Namespace):
 
     _reserved_sql_columns = [
@@ -22,12 +35,7 @@ class BulkDataStep(Namespace):
     ]
 
     def __init__(
-        self,
-        step: str,
-        namespace: Namespace,
-        map_path=None,
-        sql_path=None,
-        record_types_by_sobject=None,
+        self, step: str, namespace: Namespace, map_path=None, sql_path=None,
     ) -> None:
         self._step = step
         self._namespace = namespace.namespace
@@ -35,11 +43,16 @@ class BulkDataStep(Namespace):
         self._version = namespace.version
         self._sql_path = sql_path
         self._map_path = map_path
+        self._map = None
 
-        self._load_map(record_types_by_sobject)
+        self._load_map()
         self._load_sql()
 
-    def _load_map(self, record_types_by_sobject):
+    def load(self):
+        self._load_map()
+        self._load_sql()
+
+    def _load_map(self):
         # Set map after:
         #   load map from map_path,
         #   inject namespace,
@@ -47,7 +60,7 @@ class BulkDataStep(Namespace):
         #   delete record_types that don't exist
         map = {}
         if self._map_path:
-            with open(os_friendly_path(self._map_path), "r") as f:
+            with open(self._map_path, "r") as f:
                 map = yaml.safe_load(f)
 
             # inject namespace into sf_object, fields, and lookups
@@ -80,30 +93,29 @@ class BulkDataStep(Namespace):
                             del step["fields"]["Id"]
 
                 # inject namespace in sf_object
-                if not step.get("table"):
-                    raise TaskOptionsError(
-                        "\n".join(
-                            [
-                                f'Each bulk data map step must have an "sf_object":',
-                                f"",
-                                f"    bulk_data step: {self.step}",
-                                f"    map_path: {self._map_path}",
-                                f"    map step: {map_step}",
-                            ]
-                        )
-                    )
+                if not step.get("sf_object"):
+                    raise MapError(f'Map step "{map_step}" must have an "sf_object"')
                 sobject = step["sf_object"]
                 step["sf_object"] = self.inject_sobject_namespace(sobject)
+                """
+                # TODO: This method originally took in a argument "record_types_by_sobject" 
+                #       which resolved to be the value of self.record_types_by_sobject from tasks.org_info.RecordTypeTask.
+                #       
+                #       We are deprecating removing record_type from map steps if that record_type doesn't exist in the org.
+                #       
+                #       To re-implment, have BulkDataCombinedTask extend tasks.org_info.RecordTypeTask 
+                #       and pass in self.record_types_by_sobject into __init__, etc to this method.
 
                 # delete record_types from map that don't exist
                 # skip this record_type check if record_types_by_sobject is None (meaning the RecordTypeTask wasn't able to query)
-                if step.get("record_type") and not record_types_by_sobject is None:
+                if step.get("record_type") and not record_types_by_sobject is None: # Hard coding the conditaional to False so it's never called
                     if not (
                         record_types_by_sobject.get(sobject)
                         and step.get("record_type")
                         in record_types_by_sobject.get(sobject)
                     ):
                         del step["record_type"]
+                """
         self.map = map
 
     def _load_sql(self):
@@ -114,7 +126,7 @@ class BulkDataStep(Namespace):
         #       INSERT INTO
         self._sql = ""
         if self._sql_path:
-            with open(os_friendly_path(self._sql_path), "r") as f:
+            with open(self._sql_path, "r") as f:
                 self._sql = f.read()
 
             # Namespace tables in _sql
@@ -131,24 +143,26 @@ class BulkDataStep(Namespace):
                         self._sql,
                     )
                     self._sql = re.sub(
-                        r'(?<=CREATE TABLE )' + re.escape(combined_table) + r'(?= \()',
-                        f'"{namespaced_table}"', # wrap namespaced_table in double quotes
+                        r"(?<=CREATE TABLE )" + re.escape(combined_table) + r"(?= \()",
+                        f'"{namespaced_table}"',  # wrap namespaced_table in double quotes
                         self._sql,
                     )
-                    
 
                     # INSERT INTO with and without table wrapped in double-quotes
                     self._sql = re.sub(
-                        r'(?<=INSERT INTO ")' + re.escape(combined_table) + r'(?=" VALUES\()',
+                        r'(?<=INSERT INTO ")'
+                        + re.escape(combined_table)
+                        + r'(?=" VALUES\()',
                         namespaced_table,
                         self._sql,
                     )
                     self._sql = re.sub(
-                        r'(?<=INSERT INTO )' + re.escape(combined_table) + r'(?= VALUES\()',
-                        f'"{namespaced_table}"', # wrap namespaced_table in double quotes
+                        r"(?<=INSERT INTO )"
+                        + re.escape(combined_table)
+                        + r"(?= VALUES\()",
+                        f'"{namespaced_table}"',  # wrap namespaced_table in double quotes
                         self._sql,
                     )
-                    
 
     def __repr__(self) -> str:
         return (
@@ -199,90 +213,62 @@ class BulkDataStep(Namespace):
 
     def _validate_table_is_not_none(self, map_step, step):
         if not step.get("table"):
-            raise TaskOptionsError(
-                "\n".join(
-                    [
-                        f'Each bulk data map step must have a "table":',
-                        f"",
-                        f"    bulk_data step: {self.step}",
-                        f"    map step: {map_step}",
-                        f'        sf_object: {step["sf_object"]}',
-                    ]
-                )
-            )
-
-    def _validate_lookup_tables_exist(self, map_step, step):
-        for field, lookup in (step.get("lookups") or {}).items():
-            if not self._table_infos_by_table.get(lookup["table"]):
-                raise TaskOptionsError(
-                    "\n".join(
-                        [
-                            f'Each lookup for each bulk data map step must look up to a valid "table":',
-                            f"",
-                            f"    bulk_data step: {self.step}",
-                            f"    map step: {map_step}",
-                            f'        sf_object: {step["sf_object"]}',
-                            f"        lookup: {field}",
-                            f'            invalid table: {lookup["table"]}',
-                        ]
-                    )
-                )
+            raise MapError(f'Map step "{map_step}" must have a "table"')
 
     def _validate_reserved_sql_columns_are_not_used(self, map_step, step):
         # Validates _reserved_sql_columns are not used as SQL columns for fields and lookups
-        reserved_columns_messages = []
-
+        is_valid = True
+        field = None
+        fields_or_lookups = "field"
         for field, column in (step.get("fields") or {}).items():
             if column in BulkDataStep._reserved_sql_columns:
-                reserved_columns_messages.extend(
-                    [f"    field: {field}", f"        column: {column}",]
-                )
-        for field, lookup in (step.get("lookups") or {}).items():
-            key_field = lookup.get("key_field")
-            if key_field in BulkDataStep._reserved_sql_columns:
-                reserved_columns_messages.extend(
-                    [f"    lookup: {field}", f"        key_field: {key_field}",]
-                )
+                is_valid = False
+                field = field
+                break
 
-        if reserved_columns_messages:
-            messages = [
-                f'The following SQL column names are reserved and cannot be used: {", ".join(BulkDataStep._reserved_sql_columns)}',
-                f"",
-                f"The following map uses reserved SQL colunms:",
-                f"    bulk_data step: {self.step}",
-                f"    map step: {map_step}",
-            ]
-            messages.extend(reserved_columns_messages)
-            messages.append("")
+        if is_valid:
+            fields_or_lookups = "lookup"
+            for field, lookup in (step.get("lookups") or {}).items():
+                key_field = lookup.get("key_field")
+                if key_field in BulkDataStep._reserved_sql_columns:
+                    is_valid = False
+                    field = field
+                    break
 
-            raise TaskOptionsError("\n".join(messages))
+        if not is_valid:
+            reserved_sql_columns_message = (
+                '"' + '", "'.join(BulkDataStep._reserved_sql_columns) + '"'
+            )
+            raise MapError(
+                f'{fields_or_lookups} "{field}" for map step "{map_step}" uses a reserved a SQL column ({reserved_sql_columns_message})'
+            )
 
     def _validate_combine_on_column_is_a_fields_column(self, map_step, step):
         # Verify combine_records_on_column is valid, i.e. a column in fields
         combine_records_on_column = step.get("combine_records_on_column")
         if combine_records_on_column:
-            fields_columns = BulkDataStep.get_map_step_fields_columns(step)
-            if combine_records_on_column not in fields_columns:
-                error_messages = [
-                    f"combine_records_on_column must be a SQL Column defined in fields",
-                    f"",
-                    f"    bulk_data step: {self.step}",
-                    f"    map step: {map_step}",
-                    f"    combine_records_on_column: {combine_records_on_column}",
-                    f"",
-                    f"    available columns in fields:",
-                ]
-                for column in fields_columns:
-                    error_messages.append(f"        {column}")
-                raise TaskOptionsError("\n".join(error_messages))
+            if (
+                combine_records_on_column
+                not in BulkDataStep.get_map_step_fields_columns(step)
+            ):
+                raise MapColumnError(
+                    f'combine_records_on_column "{combine_records_on_column}" for map step "{map_step}" must exist in fields'
+                )
+
+    def _validate_lookup_tables_exist(self, map_step, step):
+        for field, lookup in (step.get("lookups") or {}).items():
+            if not self._table_infos_by_table.get(lookup["table"]):
+                raise MapLookupError(
+                    f'Cannot find table "{lookup["table"]}" used in lookup "{field}" of map step "{map_step}"'
+                )
 
     @map.setter
     def map(self, map):
-        self._map = BulkDataStep.order_map(map) if map else {}
         self._table_infos_by_table = {}
 
+        _map = map or {}
         # Validate map steps are valid and store table info used to combine SQL
-        for map_step, step in self._map.items():
+        for map_step, step in _map.items():
 
             # Set table's namespaced_table after validation
             self._validate_table_is_not_none(map_step, step)
@@ -305,9 +291,11 @@ class BulkDataStep(Namespace):
                 "record_type": step.get("record_type"),
             }
 
-        for map_step, step in self._map.items():
+        for map_step, step in _map.items():
             # Validate lookups are consistent, i.e. lookups' tables are actual tables
             self._validate_lookup_tables_exist(map_step, step)
+
+        self._map = BulkDataStep.order_map(_map) if map else {}
 
     @property
     def table_infos_by_table(self):
@@ -488,7 +476,9 @@ class BulkDataStep(Namespace):
                 ]
             )
 
-    def _get_step_insert_sql_for_records_not_combined(self, step, columns_by_comma, namespaced_columns_by_comma):
+    def _get_step_insert_sql_for_records_not_combined(
+        self, step, columns_by_comma, namespaced_columns_by_comma
+    ):
         table_info = self.table_infos_by_table[step["table"]]
 
         namespaced_table = table_info["namespaced_name"]
@@ -525,7 +515,7 @@ class BulkDataStep(Namespace):
         # Returns UPDATE script to convert lookups to the ids in the lookup's combined_table.
         return "\n".join(
             [
-                f'BEGIN TRANSACTION;'
+                f"BEGIN TRANSACTION;",
                 f"UPDATE {combined_table}",
                 f"SET ({lookup_column}) = (",
                 f"    SELECT {lookup_combined_table}.id",
@@ -548,7 +538,7 @@ class BulkDataStep(Namespace):
                 f"    FROM {namespaced_table}",
                 f")",
                 f"AND {lookup_column} IS NOT NULL;",
-                f'COMMIT;',
+                f"COMMIT;",
             ]
         )
 
@@ -565,7 +555,9 @@ class BulkDataStep(Namespace):
             columns.update(BulkDataStep.get_map_step_record_type_columns(step))
 
             columns_by_comma = ", ".join(columns)
-            namespaced_columns_by_comma = f'{table_info["namespaced_name"]}.' + (f', {table_info["namespaced_name"]}.'.join(columns))
+            namespaced_columns_by_comma = f'{table_info["namespaced_name"]}.' + (
+                f', {table_info["namespaced_name"]}.'.join(columns)
+            )
 
             queries = {}
             queries_by_step[step_name] = queries
@@ -656,22 +648,9 @@ class BulkDataStep(Namespace):
                     parent = sobject_names_by_table.get(table)
 
                     if parent is None:
-                        error_messages = [
-                            f"No table found for map step's lookup:",
-                            f"",
-                            f"    map step: {step_name}",
-                            f"        sf_object: {sobject}",
-                            f"",
-                            f"    lookup:",
-                            f"        Field API Name: {api_name}",
-                            f"        table: {table}",
-                            f'        key_field: {lookup.get("key_field")}',
-                            f"",
-                            f"    available sobject_names_by_table:",
-                        ]
-                        for table, sobject in sobject_names_by_table.items():
-                            error_messages.append(f"        {table}: {sobject}")
-                        raise TaskOptionsError("\n".join(error_messages))
+                        raise TaskOptionsError(
+                            f'No table "{table}" found for lookup "{api_name}" in map step "{step_name}"'
+                        )
 
                     # Ignore circular references
                     if parent != sobject:
@@ -769,26 +748,25 @@ class BulkDataStep(Namespace):
         return ordered_map
 
 
-class BulkDataCombinedTask(NamespaceTask, RecordTypeTask):
+class BulkDataCombinedTask(NamespaceTask):
     task_options = {
         "bulk_data_log_level": {
             "description": "Level to log BulkDataStep maps.  Options are 'None', 'Summary', 'Combined', or 'All'. Default: 'Summary'",
             "required": False,
         },
     }
+    _bulk_data = None
+    _combined_bulk_data = None
+    _bulk_data_log_level = None
 
-    # TODO: delete!!
-    def get_installed_package_version_by_namespace(self):
-        return {}
-    
     @property
-    @functools.lru_cache()
     def bulk_data_log_level(self):
-        # Default to 'summary' bulk_data_log_level
-        bulk_data_log_level = {"all": 3, "combined": 2, "summary": 1,}.get(
-            (self.options.get("bulk_data_log_level") or "summary").lower()
-        ) or 0
-        return bulk_data_log_level
+        if self._bulk_data_log_level is None:
+            # defaults to none
+            self._bulk_data_log_level = {"all": 3, "combined": 2, "summary": 1,}.get(
+                (self.options.get("bulk_data_log_level") or "").lower()
+            ) or 0
+        return self._bulk_data_log_level
 
     @property
     def log_all_bulk_data(self):
@@ -804,114 +782,163 @@ class BulkDataCombinedTask(NamespaceTask, RecordTypeTask):
 
     @property
     def bulk_data(self):
-        if self.org_config.config.get("bulk_data") is None:
-            # self.bulk_data = {}
-            self.cache_project_bulk_data()
-        return self.org_config.config.get("bulk_data")
+        if self._bulk_data is None:
+            # Always cache this project's bulk_data_config to:
+            #   (1) initialize bulk_data_config if not already cached in a previous flow step (e.g. calling a cci BulkDataCombinedTask directly)
+            #   (2) Always overwrite bulk_data_config steps to use this project's bulk_data_config if there are duplicate bulk_data_config steps used
+            cached_bulk_data_config = self.cache_project_bulk_data()
 
-    @bulk_data.setter
-    def bulk_data(self, value):
-        # save bulk_data in org_config to be shared with flow's next steps
-        self.org_config.config.update({"bulk_data": value or {}})
+            namespaces_used = set()
+            namespaces_used.update(self.namespaces.keys())
 
-    @bulk_data.deleter
-    def bulk_data(self):
-        self.bulk_data = {}
+            summary_header = [
+                "STEP",
+                "NAMESPACE",
+                "REQUIRED NAMESPACES",
+                "USED",
+                "FROM PROJECT",
+                "ERROR",
+            ]
+            if self.log_all_bulk_data:
+                summary_header.append("MAP")
+
+            summary_rows = [summary_header]
+
+            self._bulk_data = {}
+
+            for step, bulk_data_config in cached_bulk_data_config.items():
+                # bulk_data_config is sanitized because it came through cache_project_bulk_data()
+                required_namespaces = bulk_data_config["required_namespaces"]
+
+                namespace = bulk_data_config.get("namespace")
+                namespace_info = self.namespaces.get(namespace)
+
+                missing_namespaces = required_namespaces - namespaces_used
+
+                is_used = ""
+                error = ""
+                if namespace_info and not missing_namespaces:
+                    # Create the BulkDataStep for the bulk_data_config to catch any map, sql errors.
+                    try:
+                        bulk_data_step = BulkDataStep(
+                            step,
+                            namespace_info,
+                            bulk_data_config.get("map"),
+                            bulk_data_config.get("sql"),
+                        )
+                        is_used = "✅"
+                        self._bulk_data[step] = bulk_data_step
+
+                        if self.log_all_bulk_data:
+                            bulk_data_step.log_map(self)
+                    except Exception as e:
+                        # TODO: only display str(e)
+                        exc_type, _, _ = sys.exc_info()
+                        error = f"{exc_type.__name__}: {str(e)}"
+                else:
+                    error = (
+                        f'Required namespaces not used: {", ".join(missing_namespaces)}'
+                        if namespace_info
+                        else f"Namespace not used: {namespace}"
+                    )
+
+                summary_row = [
+                    step,
+                    bulk_data_config["namespace"],
+                    ", ".join(required_namespaces),
+                    is_used,
+                    bulk_data_config["project"],
+                    error,
+                ]
+
+                if self.log_all_bulk_data:
+                    summary_row.append(bulk_data_config.get("map"))
+
+                summary_rows.append(summary_row)
+
+            # log summary
+            if self.log_summary_bulk_data:
+                self.log_title("{} bulk_data".format(self.project_namespace))
+                self.log_table(summary_rows)
+
+        return self._bulk_data
 
     @property
-    @functools.lru_cache()
     def combined_bulk_data(self):
-        combined_bulk_data = BulkDataStep("Combined", self.namespaces.get("c"))
+        if self._combined_bulk_data is None:
+            self._combined_bulk_data = BulkDataStep(
+                "Combined", self.namespaces.get("c")
+            )
 
-        for data in self.bulk_data.values():
-            combined_bulk_data += data
+            for bulk_data_step in self.bulk_data.values():
+                self._combined_bulk_data += bulk_data_step
 
-        return combined_bulk_data
+        return self._combined_bulk_data
 
-    def is_project_bulk_data_cached(self):
-        return self.org_config.config.get(
-            "bulk_data_projects_cached"
-        ) and self.project_namespace in self.org_config.config.get(
-            "bulk_data_projects_cached"
-        )
+    def _sanitize_bulk_data_config(self, bulk_data_config):
+        # sanitized_bulk_data_config is a dict only containing values of type string or list of strings.
+        # sanitized_bulk_data_config will be cached in org_config.config and needs to be unpickleable, i.e. "deserializable".
+        required_namespaces = set()
+
+        if utils.is_set(bulk_data_config.get("required_namespaces")):
+            for required_namespace in bulk_data_config["required_namespaces"]:
+                if utils.is_string(required_namespace):
+                    required_namespaces.add(required_namespace)
+
+        sanitized_bulk_data_config = {
+            "project": bulk_data_config.get("project")
+            or self.project_namespace,  # store which project namespace this bulk_data_config came from to help debug.
+            "required_namespaces": required_namespaces,
+        }
+
+        if utils.is_dict(bulk_data_config):
+            # Copy string values of and_require_namespaces
+            namespace = bulk_data_config.get("namespace")
+            if utils.is_string(namespace):
+                sanitized_bulk_data_config["namespace"] = namespace
+                required_namespaces.add(namespace)
+
+            # Copy absolute paths of map and sql
+            for key in ["map", "sql"]:
+                path = bulk_data_config.get(key)
+                if utils.is_string(path):
+                    sanitized_bulk_data_config[key] = utils.absolute_path(path)
+
+            # Copy string values of and_require_namespaces
+            if utils.is_string(sanitized_bulk_data_config.get("namespace")):
+                required_namespaces.add(sanitized_bulk_data_config.get("namespace"))
+
+            if utils.is_list(bulk_data_config.get("and_require_namespaces")):
+                for namespace in bulk_data_config.get("and_require_namespaces"):
+                    if utils.is_string(namespace):
+                        required_namespaces.add(namespace)
+
+        return sanitized_bulk_data_config
 
     def cache_project_bulk_data(self):
-        if self.is_project_bulk_data_cached():
-            self.logger.info(f"{self.project_namespace} bulk_data is already cached")
-            return
-
-        # check if self.project_config.bulk_data is defined
-        if not self.project_config.bulk_data:
+        # Log warning if project_config.bulk_data isn't defined
+        if not utils.is_dict(self.project_config.bulk_data):
             self.log_title("cumulusci.yml does not have bulk_data defined")
             self.log_table([[" 💤  Skipping caching project bulk_data  💤 "]])
             return
 
-        cached_bulk_data = self.org_config.config.get("bulk_data") or {}
-
-        summary_rows = [["STEP", "NAMESPACE", "REQUIRES NAMESPACES", "USED",]]
-
-        for step, data in self.project_config.bulk_data.items():
-            namespace = self.namespaces.get(data.get("namespace"))
-
-            all_namespaces = set()
-            all_namespaces.add(data.get("namespace"))
-            if data.get("when_all_namespaces"):
-                all_namespaces.update(data.get("when_all_namespaces"))
-
-            is_used = ""
-            if namespace and all(
-                prefix in self.namespaces for prefix in all_namespaces
-            ):
-                is_used = "✅"
-                bulk_data = BulkDataStep(
-                    step,
-                    namespace,
-                    data.get("map"),
-                    data.get("sql"),
-                    self.record_types_by_sobject,
+        cached_bulk_data_config = {}
+        if utils.is_dict(self.org_config.config.get("bulk_data_config")):
+            for step, bulk_data_config in self.org_config.config.get(
+                "bulk_data_config"
+            ).items():
+                cached_bulk_data_config[step] = self._sanitize_bulk_data_config(
+                    bulk_data_config
                 )
-                if step in cached_bulk_data:
-                    error_messages = [
-                        "Each bulk_data step must be uniquely defined among all projects:",
-                        "",
-                        "    Duplicate bulk_data step: {}".format(step),
-                        "",
-                        "    Existing bulk_data steps:",
-                    ]
-                    for step_name in cached_bulk_data.keys():
-                        error_messages.append("        {}".format(step_name))
-                    raise TaskOptionsError("\n".join(error_messages))
-                else:
-                    cached_bulk_data[step] = bulk_data
 
-            summary_rows.append(
-                [
-                    step,
-                    data.get("namespace"),
-                    '"' + ('", "'.join(all_namespaces)) + '"',
-                    is_used,
-                ]
+        for step, bulk_data_config in self.project_config.bulk_data.items():
+            cached_bulk_data_config[step] = self._sanitize_bulk_data_config(
+                bulk_data_config
             )
 
-        self.bulk_data = cached_bulk_data
+        self.org_config.config.update({"bulk_data_config": cached_bulk_data_config})
 
-        # Update org_config saying this project's bulk_data is cached
-        bulk_data_projects_cached = (
-            self.org_config.config.get("bulk_data_projects_cached") or set()
-        )
-        bulk_data_projects_cached.add(self.project_namespace)
-        self.org_config.config.update(
-            {"bulk_data_projects_cached": bulk_data_projects_cached}
-        )
-
-        # log summary
-        if self.log_summary_bulk_data:
-            self.log_title("{} bulk_data".format(self.project_namespace))
-            self.log_table(summary_rows)
-
-        if self.log_all_bulk_data:
-            for step, data in self.bulk_data.items():
-                data.log_map(self)
+        return cached_bulk_data_config
 
 
 class BulkDataStepTask(BulkDataCombinedTask):
@@ -921,32 +948,35 @@ class BulkDataStepTask(BulkDataCombinedTask):
     }
 
     @property
-    @functools.lru_cache()
     def combined_bulk_data(self):
-        # sets combined_bulk_data as the bulk_data for 'bulk_data_step' option
-        if self.options["bulk_data_step"] not in self.bulk_data:
-            error_messages = [
-                f'"bulk_data_step" option must be a member of "bulk_data" option:',
-                f"",
-                f'    Invalid bulk_data_step: {self.options["bulk_data_step"]}',
-                f"",
-                f"    bulk_data steps used in this org:",
-            ]
-            for step_name in self.bulk_data.keys():
-                error_messages.append(f"        {step_name}")
-            raise TaskOptionsError("\n".join(error_messages))
-        return self.bulk_data.get(self.options["bulk_data_step"])
+        if self._combined_bulk_data is None:
+            # sets combined_bulk_data as the bulk_data for 'bulk_data_step' option
+            if self.options["bulk_data_step"] not in self.bulk_data:
+                error_messages = [
+                    f'"bulk_data_step" option must be a member of "bulk_data" option:',
+                    f"",
+                    f'    Invalid bulk_data_step: {self.options["bulk_data_step"]}',
+                    f"",
+                    f"    bulk_data steps used in this org:",
+                ]
+                for step_name in self.bulk_data.keys():
+                    error_messages.append(f"        {step_name}")
+                raise TaskOptionsError("\n".join(error_messages))
+            self._combined_bulk_data = self.bulk_data.get(
+                self.options["bulk_data_step"]
+            )
+        return self._combined_bulk_data
 
 
 class CacheProjectBulkDataTask(BulkDataCombinedTask):
-
     #    Caches project's bulk_data in org_config so accessible in later flow step.
     #    Defaults bulk_data_log_level option as 'summary'.
     #    Also caches namespaces and record_types_by_sobject in org_config.
-
     def _run_task(self):
-        self.namespaces
         self.cache_project_bulk_data()
+
+        if self.log_summary_bulk_data:
+            self.bulk_data
 
 
 class LogBulkDataCombinedMapTask(BulkDataCombinedTask):
@@ -962,14 +992,14 @@ class LogBulkDataCombinedMapTask(BulkDataCombinedTask):
         self.combined_bulk_data.log_map(self)
 
 
-class LogBulkDataStepMapTask(LogBulkDataCombinedMapTask, BulkDataStepTask):
+class LogBulkDataStepMapTask(BulkDataStepTask, LogBulkDataCombinedMapTask):
 
     task_options = {
         **BulkDataStepTask.task_options,
     }
 
 
-class DeleteBulkDataCombinedTask(DeleteData, BulkDataCombinedTask):
+class DeleteBulkDataCombinedTask(BulkDataCombinedTask, DeleteData):
     task_options = {
         **DeleteData.task_options,
         **BulkDataCombinedTask.task_options,
@@ -1000,13 +1030,13 @@ class DeleteBulkDataCombinedTask(DeleteData, BulkDataCombinedTask):
             raise TaskOptionsError("At least one object must be specified.")
 
 
-class DeleteBulkDataStepTask(DeleteBulkDataCombinedTask, BulkDataStepTask):
+class DeleteBulkDataStepTask(BulkDataStepTask, DeleteBulkDataCombinedTask):
     task_options = {
         **BulkDataStepTask.task_options,
     }
 
 
-class CaptureBulkDataStepTask(ExtractData, BulkDataStepTask):
+class CaptureBulkDataStepTask(BulkDataStepTask, ExtractData):
     task_options = {
         **BulkDataStepTask.task_options,
     }
@@ -1028,7 +1058,7 @@ class CaptureBulkDataStepTask(ExtractData, BulkDataStepTask):
         self.mappings = self.combined_bulk_data.map
 
 
-class BaseInsertBulkDataTask(LoadData, BulkDataCombinedTask):
+class BaseInsertBulkDataTask(BulkDataCombinedTask, LoadData):
 
     task_options = {
         **BulkDataCombinedTask.task_options,
@@ -1051,7 +1081,12 @@ class BaseInsertBulkDataTask(LoadData, BulkDataCombinedTask):
             self.options["bulk_data_log_level"] = "combined"
 
         self.reset_oids = self.options.get("reset_oids", True)
-        self.bulk_mode = "Parallel" if self.options.get("bulk_mode") and self.options.get("bulk_mode").title() == "Parallel" else "Serial"
+        self.bulk_mode = (
+            "Parallel"
+            if self.options.get("bulk_mode")
+            and self.options.get("bulk_mode").title() == "Parallel"
+            else "Serial"
+        )
 
     def _init_mapping(self):
         if self.log_combined_bulk_data:
@@ -1059,10 +1094,12 @@ class BaseInsertBulkDataTask(LoadData, BulkDataCombinedTask):
         self.mapping = self.combined_bulk_data.map
 
     def _sqlite_load(self):
-        raise TaskOptionsError("BaseInsertBulkDataTask _sqlite_load() must be overridden")
-    
+        raise TaskOptionsError(
+            "BaseInsertBulkDataTask _sqlite_load() must be overridden"
+        )
 
-class InsertBulkDataStepTask(BaseInsertBulkDataTask, BulkDataStepTask):
+
+class InsertBulkDataStepTask(BulkDataStepTask, BaseInsertBulkDataTask):
 
     task_options = {
         **BulkDataStepTask.task_options,
@@ -1098,50 +1135,51 @@ class InsertBulkDataCombinedTask(BaseInsertBulkDataTask):
             for line in lines:
                 self.logger.info(line)
 
-    def _log_last_script(self, last_script):
+    def _log_last_script(self, last_script, caught_exception=None,):
         if last_script:
-            self.log_table([
-                [
-                    "DESCRIPTION",
-                    last_script.get("title"),
-                ],
-                [
-                    "BULK DATA STEP",
-                    last_script.get("bulk_data_step"),
-                ],
-                [
-                    "MAP STEP",
-                    last_script.get("map_step"),
-                ],
-            ])
+            rows = [
+                ["DESCRIPTION", last_script.get("title"),],
+                ["BULK DATA STEP", last_script.get("bulk_data_step"),],
+                ["MAP STEP", last_script.get("map_step"),],
+            ]
+            if caught_exception:
+                rows.append([
+                    "ERROR", str(caught_exception),
+                ])
+            self.log_table(rows)
             self.log_title("SQL script")
             self._log_script(last_script.get("script"))
 
     def _sqlite_load(self):
         conn = self.session.connection()
         cursor = conn.connection.cursor()
-        
-        last_script = {}
 
+        last_script = None
+
+        caught_exception = None
         try:
             # Create combined_bulk_data tables
-            last_script["title"] = "Creating combined tables for all bulk_data steps"
-            last_script["script"] = self._get_combined_bulk_data_create_tables_script()
+            last_script = {
+                "title": "Creating combined tables for all bulk_data steps",
+                "script": self._get_combined_bulk_data_create_tables_script(),
+            }
             cursor.executescript(last_script["script"])
-            if self.log_all_bulk_data():
+            if self.log_all_bulk_data:
                 self._log_last_script(last_script)
 
             # Combine records for each bulk_data step
             for step, data in self.bulk_data.items():
-                last_script["bulk_data_step"] = step
-                last_script["bulk_data"] = data
-                last_script["map_step"] = None
-
                 # Create combined tables
-                last_script["title"] = "Loading namespaced tables and records for bulk_data step"
-                last_script["script"] = data.sql
+                last_script = {
+                    "bulk_data_step": step,
+                    "bulk_data": data,
+                    "map_step": None,
+                    "title": "Loading namespaced tables and records for bulk_data step",
+                    "script": data.sql,
+                }
+
                 cursor.executescript(last_script["script"])
-                if self.log_all_bulk_data():
+                if self.log_all_bulk_data:
                     self._log_last_script(last_script)
 
                 # Combine records for each of data's map steps
@@ -1152,13 +1190,20 @@ class InsertBulkDataCombinedTask(BaseInsertBulkDataTask):
                         last_script["title"] = title
                         last_script["script"] = script
                         cursor.executescript(last_script["script"])
-                        if self.log_all_bulk_data():
+                        if self.log_all_bulk_data:
                             self._log_last_script(last_script)
+
+                # Reset last_scripts if all SQL scripts were successful
+                last_script = {}
+        except Exception as e:
+            caught_exception = e
         finally:
             cursor.close()
 
-            # Log which SQL script raised an error
-            self.log_title('Error combining data.  Set "bulk_data_log_level" option to "All" to log all SQL scripts used to combine data')
-            self._log_last_script(last_script)
-
-
+            # last_script is not empty implying an Exception was raised
+            if caught_exception:
+                # Log which SQL script raised an error
+                self.log_title('Error combining SQL data')
+                self.logger.info('Set "bulk_data_log_level" option to "All" to log all SQL scripts used to combine data')
+                self._log_last_script(last_script, caught_exception)
+                raise caught_exception

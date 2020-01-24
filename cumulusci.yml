@@ -11,6 +11,11 @@ project:
         prefix_beta: uat/
         prefix_release: release/
 
+sources:
+    caseman:
+        github: https://github.com/SalesforceFoundation/caseman
+        branch: test/sharedbulkdata
+
 orgs:
     scratch:
         dev_namespaced:
@@ -52,32 +57,20 @@ orgs:
             days: 7
 
 bulk_data:
-    #Contacts:
-    #map: decentralized-data/c/Contacts.yml
-    #sql: decentralized-data/c/Contacts.sql
-    #namespace: c
-    #Household_Accounts:
-    #map: decentralized-data/c/Household_Accounts.yml
-    #sql: decentralized-data/c/Household_Accounts.sql
-    #namespace: c
-    #Organization_Accounts:
-    #map: decentralized-data/c/Organization_Accounts.yml
-    #sql: decentralized-data/c/Organization_Accounts.sql
-    #namespace: c
     pmdm:
         map: decentralized-data/pmdm/pmdm.yml
         sql: decentralized-data/pmdm/pmdm.sql
         namespace: pmdm
-    caseman:
-        map: decentralized-data/caseman/caseman.yml
-        sql: decentralized-data/caseman/caseman.sql
-        namespace: caseman
-    caseman_unpackaged:
-        map: decentralized-data/caseman/unpackaged.yml
-        sql: decentralized-data/caseman/unpackaged.sql
-        namespace: c
-        when_all_namespaces:
-            - caseman
+    #caseman:
+    #map: decentralized-data/caseman/caseman.yml
+    #sql: decentralized-data/caseman/caseman.sql
+    #namespace: caseman
+    #caseman_unpackaged2:
+    #map: decentralized-data/caseman/unpackaged.yml
+    #sql: decentralized-data/caseman/unpackaged.sql
+    #namespace: c
+    #and_require_namespaces:
+    #- caseman
     npe01:
         map: decentralized-data/npe01/npe01.yml
         sql: decentralized-data/npe01/npe01.sql
@@ -96,10 +89,10 @@ bulk_data:
         namespace: npsp
 
 tasks:
-    cache_namespces:
+    cache_namespaces:
+        group: "Org info"
         description: Caches namespaces information in org_config
         class_path: tasks.org_info.CacheNamespaces
-        group: Namespaces
 
     namespace_execute_anonymous:
         description: Execute anonymous apex via the tooling api if namespace is used.
@@ -255,29 +248,33 @@ tasks:
             path: unpackaged/tests/serviceDeliveryModal
             namespace_inject: $project_config.project__package__namespace
 
+    refresh_cache_project_bulk_data:
+        group: "Data: Bulk"
+        class_path: tasks.sharedbulkdata.RefreshCacheProjectBulkDataTask
+
     cache_project_bulk_data:
         group: "Data: Bulk"
-        class_path: tasks.SharedBulkData.CacheProjectBulkDataTask
+        class_path: tasks.sharedbulkdata.CacheProjectBulkDataTask
 
     log_bulk_data_combined_map:
         group: "Data: Bulk"
-        class_path: tasks.SharedBulkData.LogBulkDataCombinedMapTask
+        class_path: tasks.sharedbulkdata.LogBulkDataCombinedMapTask
 
     log_bulk_data_step_map:
         group: "Data: Bulk"
-        class_path: tasks.SharedBulkData.LogBulkDataStepMapTask
+        class_path: tasks.sharedbulkdata.LogBulkDataStepMapTask
 
     delete_bulk_data_step:
         group: "Data: Bulk"
-        class_path: tasks.SharedBulkData.DeleteBulkDataStepTask
+        class_path: tasks.sharedbulkdata.DeleteBulkDataStepTask
 
     delete_bulk_data_combined:
         group: "Data: Bulk"
-        class_path: tasks.SharedBulkData.DeleteBulkDataCombinedTask
+        class_path: tasks.sharedbulkdata.DeleteBulkDataCombinedTask
 
     capture_bulk_data_step:
         group: "Data: Bulk"
-        class_path: tasks.SharedBulkData.CaptureBulkDataStepTask
+        class_path: tasks.sharedbulkdata.CaptureBulkDataStepTask
         # Each repo will specify bulk_data_step option
         options:
             bulk_data_step: pmdm
@@ -285,27 +282,31 @@ tasks:
     insert_bulk_data_step:
         group: "Data: Bulk"
         description: "Inserts bulk data at for bulk_data_step"
-        class_path: tasks.SharedBulkData.InsertBulkDataStepTask
+        class_path: tasks.sharedbulkdata.InsertBulkDataStepTask
 
     insert_bulk_data_combined:
         group: "Data: Bulk"
         description: "Inserts combined bulk data"
-        class_path: tasks.SharedBulkData.InsertBulkDataCombinedTask
+        class_path: tasks.sharedbulkdata.InsertBulkDataCombinedTask
 
 flows:
     cache_project_bulk_data:
         steps:
+            01:
+                task: cache_namespaces
             10:
                 task: caseman:cache_project_bulk_data
-            20:
-                task: npsp:cache_project_bulk_data
+                options:
+                    bulk_data_log_level: summary
             30:
                 task: cache_project_bulk_data
+                options:
+                    bulk_data_log_level: summary
 
     insert_data:
         steps:
             010:
-                task: cache_project_bulk_data
+                flow: cache_project_bulk_data
             100:
                 flow: insert_bulk_data
             210:
@@ -377,6 +378,8 @@ flows:
                 flow: caseman_pre_insert_bulk_data
             200:
                 task: insert_bulk_data_combined
+                options:
+                    bulk_data_log_level: all
             310:
                 flow: npsp_post_insert_bulk_data
             #320:
@@ -385,10 +388,10 @@ flows:
     update_admin_profile:
         steps:
             01:
-                task: cache_project_bulk_data
+                task: cache_namespaces
             10:
                 task: update_admin_profile
-                when: "'caseman' not in org_config.namespaces and 'npsp' not in org_config.namespaces"
+                when: '"caseman" not in org_config.namespaces and "npsp" not in org_config.namespaces'
             20:
                 task: update_admin_profile_caseman
                 when: "'caseman' in org_config.namespaces and 'npsp' not in org_config.namespaces"
@@ -443,8 +446,8 @@ flows:
                     unmanaged: False
             102:
                 task: activate_flows
-            #200:
-            #flow: insert_data
+            200:
+                flow: insert_data
 
     config_managed:
         steps:

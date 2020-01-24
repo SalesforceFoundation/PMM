@@ -1,21 +1,42 @@
 import operator
-from tasks.logger import LoggingTask
+import os
 
+from tasks.logger import LoggingTask
+from cumulusci.utils import os_friendly_path
 from cumulusci.core.config import TaskConfig
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.tasks.salesforce import GetInstalledPackages, BaseSalesforceApiTask
 from cumulusci.tasks.apex.anon import AnonymousApexTask
 
-class Namespace():
 
+class utils(object):
+    @staticmethod
+    def absolute_path(path):
+        return os.path.abspath(os_friendly_path(path))
+
+    @staticmethod
+    def is_dict(value):
+        return isinstance(value, dict)
+
+    @staticmethod
+    def is_string(value):
+        return isinstance(value, str)
+
+    @staticmethod
+    def is_list(value):
+        return isinstance(value, list)
+
+    @staticmethod
+    def is_set(value):
+        return isinstance(value, set)
+
+
+class Namespace:
     def __init__(
-        self,
-        namespace: str,
-        localNamespace=None,
-        version=None
+        self, namespace: str, local_namespace: str = None, version: str = None,
     ) -> None:
         self._namespace = namespace
-        self._local_namespace = namespace if localNamespace is None else localNamespace
+        self._local_namespace = local_namespace if local_namespace else namespace
         self._version = version
 
     @property
@@ -32,9 +53,9 @@ class Namespace():
 
     def __repr__(self) -> str:
         return (
-            'Namespace('
-            f'namespace={self.namespace!r}, local_namespace={self.local_namespace!r}, '
-            f'version={self.version!r})'
+            "Namespace("
+            f"namespace={self.namespace!r}, local_namespace={self.local_namespace!r}, "
+            f"version={self.version!r})"
         )
 
     def __hash__(self) -> int:
@@ -43,9 +64,11 @@ class Namespace():
     def __eq__(self, other) -> bool:
         if not isinstance(other, Namespace):
             return NotImplemented
-        return (
-            (self.namespace, self.local_namespace, self.version) == 
-            (other.namespace, other.local_namespace, other.version))
+        return (self.namespace, self.local_namespace, self.version) == (
+            other.namespace,
+            other.local_namespace,
+            other.version,
+        )
 
     def __lt__(self, other):
         if not isinstance(other, Namespace):
@@ -53,7 +76,11 @@ class Namespace():
         return self.namespace < other.namespace
 
     def get_prefix(self, delimter):
-        return "{}{}".format(self.local_namespace, delimter) if self.local_namespace else ""
+        return (
+            "{}{}".format(self.local_namespace, delimter)
+            if self.local_namespace
+            else ""
+        )
 
     def get_field_prefix(self):
         return self.get_prefix("__")
@@ -62,10 +89,18 @@ class Namespace():
         return self.get_prefix(".")
 
     def inject_namespace(self, value, delimiter):
-        return "{}{}{}".format(self.local_namespace, delimiter, value) if self.local_namespace else value
+        return (
+            "{}{}{}".format(self.local_namespace, delimiter, value)
+            if self.local_namespace
+            else value
+        )
 
     def inject_field_namespace(self, field):
-        return self.inject_namespace(field, "__") if field and field.endswith("__c") else field
+        return (
+            self.inject_namespace(field, "__")
+            if field and field.endswith("__c")
+            else field
+        )
 
     def inject_sobject_namespace(self, sobject):
         return self.inject_field_namespace(sobject)
@@ -74,6 +109,7 @@ class Namespace():
         return self.inject_namespace(class_name, ".")
 
 
+"""
 class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
 
     def _get_record_type_query(self):
@@ -137,56 +173,22 @@ class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
     @record_types_by_sobject.deleter
     def record_types_by_sobject(self):
         self.record_types_by_sobject = None
+"""
 
 
 class NamespaceTask(LoggingTask):
-    """
-    Caches namespaces in self.org_config.config
-    """
-    """
-    def set_project_namespace(self, project_namespace):
-        self.org_config.config.update({
-            "project_namespace": project_namespace
-        })
-        self.log_title("Setting org config's project namespace")
-        self.log_table([
-            [
-                "project_namespace",
-                self.org_config.config.get("project_namespace")
-            ]
-        ])
-    """
-    # TODO: Can we get rid of project_namespace???
+
+    _namespaces = None
+
     @property
     def project_namespace(self):
-        """
-        # support caching 
-        if not self.org_config.config.get("project_namespace"):
-            self.project_namespace = self.project_config.project__package__namespace
-        return self.org_config.config.get("project_namespace")
-        """
         return self.project_config.project__package__namespace
-    """
-    @project_namespace.setter
-    def project_namespace(self, project_namespace):
-        self.org_config.config.update({
-            "project_namespace": project_namespace
-        })
-        self.log_title("Setting org config's project namespace")
-        self.log_table([
-            [
-                "project_namespace",
-                self.org_config.config.get("project_namespace")
-            ]
-        ])
-    
-    @project_namespace.deleter
-    def project_namespace(self):
-        self.project_namespace = None
-    """
+
     @property
     def is_org_namespaced(self):
-        return self.org_config and process_bool_arg(self.org_config.config.get("namespaced"))
+        return self.org_config and process_bool_arg(
+            self.org_config.config.get("namespaced")
+        )
 
     @property
     def local_project_namespace(self):
@@ -195,88 +197,103 @@ class NamespaceTask(LoggingTask):
     def get_installed_package_version_by_namespace(self):
         installed_package_version_by_namespace = {}
         for package in GetInstalledPackages(
-            self.project_config, 
-            TaskConfig({}), 
-            self.org_config,
+            self.project_config, TaskConfig({}), self.org_config,
         )().items():
             installed_package_version_by_namespace[package[0]] = package[1]
         return installed_package_version_by_namespace
 
-    @property
-    def namespaces(self):
-        if not self.org_config.config.get("namespaces"):
-            #project_namespace = self.project_namespace
-
-            self.log_title("Getting installed packages:")
-
-            namespace_infos_by_prefix = {
-                "c": Namespace(
-                    "c",
-                    localNamespace=self.local_project_namespace,
-                ),
-                self.project_namespace: Namespace(
-                    self.project_namespace,
-                    localNamespace=self.local_project_namespace,
-                ),
-            }
-
-            # Overwrites project namespace if project is installed, e.g. install_beta flow
-            for namespace, version in self.get_installed_package_version_by_namespace().items():
-                namespace_infos_by_prefix[namespace] = Namespace(
-                    namespace,
-                    version=version,
-                )
-
-            self.org_config.config.update({
-                "namespaces": namespace_infos_by_prefix
-            })
-
-            self.log_namespaces()
-
-        return self.org_config.config.get("namespaces")
-
-    @namespaces.deleter
-    def namespaces(self):
-        if "namespaces" in self.org_config.config:
-            del self.org_config.config["namespaces"]
-        self.namespaces
-
     def log_namespaces(self):
         rows = [
-            [
-                "NAMESPACE",
-                "LOCAL NAMESPACE",
-                "VERSION",
-                "PROJECT"
-            ],
+            ["NAMESPACE", "LOCAL NAMESPACE", "PACKAGE VERSION", "PROJECT"],
         ]
         for prefix in sorted(self.namespaces.keys()):
-            rows.append([
-                self.namespaces[prefix].namespace,
-                self.namespaces[prefix].local_namespace,
-                self.namespaces[prefix].version,
-                "✅" if self.namespaces[prefix].namespace == self.project_namespace else ""
-            ])
-        
+            rows.append(
+                [
+                    self.namespaces[prefix].namespace,
+                    self.namespaces[prefix].local_namespace,
+                    self.namespaces[prefix].version,
+                    "✅"
+                    if self.namespaces[prefix].namespace == self.project_namespace
+                    else "",
+                ]
+            )
+
         self.log_title("Namespaces")
         self.log_table(rows)
 
+    # cache namespace_infos as dicts and load NamespaceInfos
+    def cache_namespaces(self):
+        self.log_title("Getting installed packages:")
+
+        namespaces = {
+            "c": {
+                "namespace": "c",
+                "local_namespace": str(self.local_project_namespace),
+            },
+            self.project_namespace: {
+                "namespace": str(self.project_namespace),
+                "local_namespace": str(self.local_project_namespace),
+            },
+        }
+
+        # Overwrites project namespace if project is installed, e.g. install_beta flow
+        for (
+            namespace,
+            version,
+        ) in self.get_installed_package_version_by_namespace().items():
+            if utils.is_string(namespace):
+                namespaces[namespace] = {
+                    "namespace": namespace,
+                    "local_namespace": namespace,
+                    "version": str(version),
+                }
+
+        # Cache namespaces in org_config.config as dict of strings which can always safely be unpickled
+        self.org_config.config.update({"namespaces": namespaces})
+
+        self.log_namespaces()
+
+    @property
+    def namespaces(self):
+        if self._namespaces is None:
+            if not self.org_config.config.get("namespaces"):
+                self.cache_namespaces()
+
+            self._namespaces = {}
+
+            # Load instances of Namespace from org_config.config.get("namespaces")
+            cached_namespaces = self.org_config.config.get("namespaces")
+            for namespace in (
+                cached_namespaces if utils.is_dict(cached_namespaces) else {}
+            ).values():
+                # Only create safe Namespace instances from cache, e.g. namespace, local_namespace, version are strings
+                if utils.is_string(namespace.get("namespace")):
+                    self._namespaces[namespace["namespace"]] = Namespace(
+                        namespace["namespace"],
+                        namespace.get("local_namespace")
+                        if utils.is_string(namespace.get("local_namespace"))
+                        else None,
+                        namespace.get("version")
+                        if utils.is_string(namespace.get("version"))
+                        else None,
+                    )
+
+        return self._namespaces
+
+
 class CacheNamespaces(NamespaceTask):
     def _run_task(self):
-        self.namespaces
+        self.cache_namespaces()
 
-class RefreshNamespacesCache(NamespaceTask):
-    def _run_task(self):
-        # reset namespace info cache
-        del self.namespaces
 
+"""
 class ExecuteAnonymousTask(AnonymousApexTask, NamespaceTask):
 
-    task_docs = """
+    task_docs = ""
     Use the `apex` option to run a string of anonymous Apex.
     Use the `path` option to run anonymous Apex from a file.
     Or use both to concatenate the string to the file contents.
-    """
+    ""
 
     task_options = {
         "path": {"description": "The path to an Apex file to run.", "required": False},
@@ -331,4 +348,4 @@ class ExecuteAnonymousTask(AnonymousApexTask, NamespaceTask):
             ])
 
         return apex
-
+"""

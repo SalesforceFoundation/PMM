@@ -54,3 +54,29 @@ class pmdm(object):
     def page_should_contain_text(self, text):
         locator = pmdm_lex_locators["text"].format(text)
         self.selenium.page_should_contain_element(locator)
+
+    def click_wrapper_related_list_button(self,heading,button_title):
+        """Clicks a button in the heading of a related list when the related list is enclosed in wrapper.
+           Waits for a modal to open after clicking the button.
+        """
+        locator = pmdm_lex_locators["related"]["button"].format(heading, button_title)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script('arguments[0].click()', element)
+
+    def populate_lookup(self,title, value):
+        """associate a client to a note"""
+        locator = pmdm_lex_locators["new_record"]["lookup_field"].format(title)
+        self.selenium.click_element(locator)
+        self.selenium.clear_element_text(locator)
+        self.selenium.get_webelement(locator).send_keys(value)
+
+        locator_val = pmdm_lex_locators["new_record"]["lookup_value"].format(value)
+        self.selenium.wait_until_page_contains_element(locator_val,
+                                                       error="value is not available")
+        self.selenium.click_element(locator_val)
+
+    def click_save_button(self):
+        """ Click on the save button """
+        locator_save = pmdm_lex_locators["new_record"]["button"].format("Save")
+        self.selenium.wait_until_element_is_enabled(locator_save, error="Save button is not enabled")
+        self.selenium.click_element(locator_save)

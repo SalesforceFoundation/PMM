@@ -59,4 +59,24 @@ private class CallableApi_TEST {
             System.assertEquals('Method not implemented', actualException.getMessage());
         }
     }
+
+    @isTest
+    private static void testCallableApiInvalidArgumentException() {
+        System.Callable callableClass = (System.Callable) Type.forName('CallableApi')
+            .newInstance();
+
+        try {
+            callableClass.call(
+                'getProgramsForContact',
+                new Map<String, Object>{ 'contactId' => 'test' }
+            );
+        } catch (Exception actualException) {
+            System.debug(actualException.getMessage());
+            System.assertEquals(
+                true,
+                actualException instanceof CallableApi.InvalidArgumentTypeException
+            );
+            System.assertEquals('Invalid argument', actualException.getMessage());
+        }
+    }
 }

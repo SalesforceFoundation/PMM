@@ -23,3 +23,16 @@ API Create Program
     &{program} =     Salesforce Get  Program__c  ${program_id}
     Store Session Record    Program__c  ${program_id}
     [Return]         &{program}
+
+API Create Contact
+    [Arguments]      &{fields}
+    ${first_name} =  Generate Random String
+    ${last_name} =   Generate Random String
+    ${legal_name} =  Generate Random String
+    ${contact_id} =  Salesforce Insert  Contact
+    ...                  FirstName=${first_name}
+    ...                  LastName=${last_name}
+    ...                  &{fields}
+    &{contact} =     Salesforce Get  Contact  ${contact_id}
+    Store Session Record      Contact  ${contact_id}
+    [Return]         &{contact}

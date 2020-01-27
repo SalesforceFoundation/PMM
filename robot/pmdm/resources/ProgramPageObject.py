@@ -18,9 +18,9 @@ class NewProgramPage(BasePMDMPage, BasePage):
         """ Verify we are on the New Program modal page
             by verifying that the section title is 'New Program'
         """
-        locator = pmdm_lex_locators["new_record"]["title"]
-        self.selenium.wait_until_page_contains_element(locator,
-                                                       error="Section title is not 'New Program' as expected")
+        self.selenium.wait_until_location_contains("/new", timeout=60, message="Record view did not open in 1 min")
+        self.selenium.location_should_contain("/lightning/o/Program__c/",message="Section title is not 'New Program' as expected")
+
 
     def click_save_button(self):
         """ Click on the save button """

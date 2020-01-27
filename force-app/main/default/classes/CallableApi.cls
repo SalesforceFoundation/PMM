@@ -2,10 +2,6 @@ global class CallableApi implements Callable {
     @TestVisible
     private ProgramService programService = new ProgramService();
 
-    Map<Id, String> getProgramsForContact(Id contactId) {
-        return programService.getProgramNamesByIdForContact(contactId);
-    }
-
     global Object call(String action, Map<String, Object> args) {
         if (args.get('programService') != null) {
             this.programService = (ProgramService) args.get('programService');
@@ -13,7 +9,13 @@ global class CallableApi implements Callable {
 
         switch on action {
             when 'getProgramsForContact' {
-                return this.getProgramsForContact((Id) args.get('contactId'));
+                if (args.get('contactId') instanceof Id) {
+                    return this.programService.getProgramNamesByIdForContact(
+                        (Id) args.get('contactId')
+                    );
+                } else {
+                    throw new InvalidArgumentTypeException('Invalid argument');
+                }
             }
             when else {
                 throw new ExtensionMalformedCallException('Method not implemented');
@@ -22,5 +24,7 @@ global class CallableApi implements Callable {
     }
 
     public class ExtensionMalformedCallException extends Exception {
+    }
+    public class InvalidArgumentTypeException extends Exception {
     }
 }

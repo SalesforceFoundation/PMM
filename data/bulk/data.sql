@@ -712,7 +712,6 @@ CREATE TABLE "pmdm__ProgramEngagement__c" (
 	account__c VARCHAR(255), 
 	contact__c VARCHAR(255), 
 	program__c VARCHAR(255), 
-	program_cohort__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(1,'Tatiana  Lang - Mobile Middle School STEM Program','','false','','Client','Enrolled','2020-01-06','','121','4');
@@ -789,8 +788,8 @@ INSERT INTO "pmdm__ProgramEngagement__c" VALUES(71,'Jace  Hampton - After School
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(72,'Emelia  Mercer - Housing Assistance Program','','false','','Client','In Progress','2019-10-02','','132','8');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(73,'Josie  Mcclure - Financial Literacy Program','','false','','Client','Enrolled','2019-09-09','','52','10');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(74,'Isaac  Barker - Financial Literacy Program','','false','','Client','In Progress','2019-09-09','','70','10');
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(75,'Fabian  Hughes - Remedial Reading Program','2019-12-02','false','','Client','Enrolled','2019-12-19','','94','1';
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(76,'Laura  Woodard - Prenatal and Early Childhood Health Program','','false','','Client','Enrolled','2020-01-10','','97','6',);
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(75,'Fabian  Hughes - Remedial Reading Program','2019-12-02','false','','Client','Enrolled','2019-12-19','','94','1');
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(76,'Laura  Woodard - Prenatal and Early Childhood Health Program','','false','','Client','Enrolled','2020-01-10','','97','6');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(77,'Leon  Clayton - No More Food Deserts Advocacy','','false','','Volunteer','In Progress','2019-09-10','','43','5');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(78,'Taniya  Singleton - No More Food Deserts Advocacy','','false','','Volunteer','Enrolled','2019-12-02','','85','5');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(79,'Anthony  Hill - Job Readiness Program','','false','','Client','Enrolled','2019-12-19','','20','2');

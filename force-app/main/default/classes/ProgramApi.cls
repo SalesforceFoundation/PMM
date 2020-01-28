@@ -1,8 +1,8 @@
-global class CallableApi implements Callable {
+public class ProgramApi implements Callable {
     @TestVisible
     private ProgramService programService = new ProgramService();
 
-    global Object call(String action, Map<String, Object> args) {
+    public Object call(String action, Map<String, Object> args) {
         if (args.get('programService') != null) {
             this.programService = (ProgramService) args.get('programService');
         }

@@ -1,5 +1,5 @@
 @IsTest
-private class CallableApi_TEST {
+private class ProgramApi_TEST {
     @IsTest
     static void testGetProgramsForContact() {
         Id contactId = Stub.generateFakeId(Schema.SObjectType.Contact);
@@ -23,7 +23,7 @@ private class CallableApi_TEST {
             stub
         );
 
-        System.Callable callableClass = (System.Callable) Type.forName('CallableApi')
+        System.Callable callableClass = (System.Callable) Type.forName('ProgramApi')
             .newInstance();
 
         final Map<Id, String> actual = (Map<Id, String>) callableClass.call(
@@ -42,7 +42,7 @@ private class CallableApi_TEST {
 
     @isTest
     private static void testCallableApiUnsupportedMethodException() {
-        System.Callable callableClass = (System.Callable) Type.forName('CallableApi')
+        System.Callable callableClass = (System.Callable) Type.forName('ProgramApi')
             .newInstance();
 
         try {
@@ -54,7 +54,7 @@ private class CallableApi_TEST {
             System.debug(actualException.getMessage());
             System.assertEquals(
                 true,
-                actualException instanceof CallableApi.ExtensionMalformedCallException
+                actualException instanceof ProgramApi.ExtensionMalformedCallException
             );
             System.assertEquals('Method not implemented', actualException.getMessage());
         }
@@ -62,7 +62,7 @@ private class CallableApi_TEST {
 
     @isTest
     private static void testCallableApiInvalidArgumentException() {
-        System.Callable callableClass = (System.Callable) Type.forName('CallableApi')
+        System.Callable callableClass = (System.Callable) Type.forName('ProgramApi')
             .newInstance();
 
         try {
@@ -74,7 +74,7 @@ private class CallableApi_TEST {
             System.debug(actualException.getMessage());
             System.assertEquals(
                 true,
-                actualException instanceof CallableApi.InvalidArgumentTypeException
+                actualException instanceof ProgramApi.InvalidArgumentTypeException
             );
             System.assertEquals('Invalid argument', actualException.getMessage());
         }

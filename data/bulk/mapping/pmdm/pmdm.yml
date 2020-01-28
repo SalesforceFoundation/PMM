@@ -61,9 +61,6 @@ pmdm__ProgramEngagement__c:
         Program__c:
             key_field: program__c
             table: pmdm__Program__c
-        ProgramCohort__c:
-            key_field: program_cohort__c
-            table: pmdm__ProgramCohort__c
 
 pmdm__Service__c:
     sf_object: Service__c

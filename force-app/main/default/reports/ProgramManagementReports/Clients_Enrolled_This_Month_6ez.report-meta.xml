@@ -11,7 +11,7 @@
         <chartType>HorizontalBar</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>ProgramEngagement__c.ProgramCohort__c</groupingColumn>
+        <groupingColumn>ProgramEngagement__c.StartDate__c</groupingColumn>
         <location>CHART_BOTTOM</location>
         <showAxisLabels>false</showAxisLabels>
         <showPercentage>false</showPercentage>
@@ -41,11 +41,7 @@
     </filter>
     <format>Summary</format>
     <groupingsDown>
-        <dateGranularity>Day</dateGranularity>
-        <field>ProgramEngagement__c.ProgramCohort__c</field>
-        <sortOrder>Asc</sortOrder>
-    </groupingsDown>
-    <groupingsDown>
+        <dateGranularity>Week</dateGranularity>
         <field>ProgramEngagement__c.StartDate__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>

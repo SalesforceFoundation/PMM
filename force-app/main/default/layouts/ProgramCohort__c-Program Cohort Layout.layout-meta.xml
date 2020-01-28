@@ -97,13 +97,6 @@
         </platformActionListItems>
     </platformActionList>
     <relatedLists>
-        <fields>NAME</fields>
-        <fields>Contact__c</fields>
-        <fields>Stage__c</fields>
-        <fields>StartDate__c</fields>
-        <relatedList>ProgramEngagement__c.ProgramCohort__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <relatedList>RelatedFileList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

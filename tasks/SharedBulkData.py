@@ -3,7 +3,7 @@ import os
 import yaml
 import re
 from tasks.logger import LoggingTask
-from tasks.org_info import Namespace, NamespaceTask, utils
+from tasks.org_info import Namespace, NamespaceTask, utils, RecordTypeTask
 
 
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
@@ -35,7 +35,7 @@ class BulkDataStep(Namespace):
     ]
 
     def __init__(
-        self, step: str, namespace: Namespace, map_path=None, sql_path=None,
+        self, step: str, namespace: Namespace, map_path=None, sql_path=None, record_types_by_sobject=None,
     ) -> None:
         self._step = step
         self._namespace = namespace.namespace
@@ -45,14 +45,10 @@ class BulkDataStep(Namespace):
         self._map_path = map_path
         self._map = None
 
-        self._load_map()
+        self._load_map(record_types_by_sobject)
         self._load_sql()
 
-    def load(self):
-        self._load_map()
-        self._load_sql()
-
-    def _load_map(self):
+    def _load_map(self, record_types_by_sobject=None):
         # Set map after:
         #   load map from map_path,
         #   inject namespace,
@@ -97,7 +93,7 @@ class BulkDataStep(Namespace):
                     raise MapError(f'Map step "{map_step}" must have an "sf_object"')
                 sobject = step["sf_object"]
                 step["sf_object"] = self.inject_sobject_namespace(sobject)
-                """
+            
                 # TODO: This method originally took in a argument "record_types_by_sobject" 
                 #       which resolved to be the value of self.record_types_by_sobject from tasks.org_info.RecordTypeTask.
                 #       
@@ -105,7 +101,6 @@ class BulkDataStep(Namespace):
                 #       
                 #       To re-implment, have BulkDataCombinedTask extend tasks.org_info.RecordTypeTask 
                 #       and pass in self.record_types_by_sobject into __init__, etc to this method.
-
                 # delete record_types from map that don't exist
                 # skip this record_type check if record_types_by_sobject is None (meaning the RecordTypeTask wasn't able to query)
                 if step.get("record_type") and not record_types_by_sobject is None: # Hard coding the conditaional to False so it's never called
@@ -115,7 +110,6 @@ class BulkDataStep(Namespace):
                         in record_types_by_sobject.get(sobject)
                     ):
                         del step["record_type"]
-                """
         self.map = map
 
     def _load_sql(self):
@@ -274,7 +268,7 @@ class BulkDataStep(Namespace):
             self._validate_table_is_not_none(map_step, step)
 
             table = step["table"]
-            namespaced_table = "{}__{}".format(self.step, table)
+            namespaced_table = "{}___{}".format(self.step, table)
             step["namespaced_table"] = namespaced_table
 
             # Verify _reserved_sql_columns are not used
@@ -347,13 +341,14 @@ class BulkDataStep(Namespace):
         ]
         for step_name, step in self.map.items():
             is_first_step = True
+            table_info = self.table_infos_by_table.get(step.get("table"))
             if "sf_object" in step:
                 rows.append(
                     [
                         step_name if is_first_step else "",
                         "sf_object",
                         step["sf_object"],
-                        step.get("table"),
+                        table_info.get("namespaced_name") if table_info and table_info.get("namespaced_name") and self.step != "Combined" else step.get("table"),
                         step.get("combine_records_on_column"),
                     ]
                 )
@@ -401,7 +396,7 @@ class BulkDataStep(Namespace):
         logging_task.log_table(rows)
 
     @staticmethod
-    def get_map_create_tables_sql(combined_bulk_data):
+    def get_create_tables_sql(combined_bulk_data):
         sql_lines = [
             f"BEGIN TRANSACTION;",
             f"",
@@ -428,20 +423,20 @@ class BulkDataStep(Namespace):
         sql_lines.append("COMMIT;")
         return "\n".join(sql_lines)
 
-    def _get_step_update_record_type_sql_on_namespaced_table(self, step):
+    def _get_update_record_type_sql_on_combined_table(self, step):
         table_info = self.table_infos_by_table[step["table"]]
         record_type = table_info.get("record_type")
 
         # If record_type exists, UPDATE all rows record_type value.
         if record_type:
-            namespaced_table = table_info["namespaced_name"]
+            combined_table = table_info["combined_name"]
 
             return "\n".join(
                 [
-                    f"BEGIN TRANSACTION;",
-                    f"UPDATE {namespaced_table}",
+                    f'BEGIN TRANSACTION;',
+                    f'UPDATE {combined_table}',
                     f'    SET record_type = "{record_type}";',
-                    f"COMMIT;",
+                    f'COMMIT;',
                 ]
             )
 
@@ -502,6 +497,10 @@ class BulkDataStep(Namespace):
         )
 
     def _get_step_update_lookup_sql(self, step, lookup):
+        # Ingore circuluar lookups
+        if lookup["table"] == step["table"]:
+            return
+
         lookup_column = lookup["key_field"]
 
         table_info = self.table_infos_by_table[step["table"]]
@@ -541,12 +540,41 @@ class BulkDataStep(Namespace):
                 f"COMMIT;",
             ]
         )
+    
+    @property
+    def sql_scripts_to_apply_record_type_on_combined_tables(self):
+        sql_scripts = []
+        for map_step, step in self.map.items():
+            # Update namespaced_table's record_type
+            sql_script = self._get_update_record_type_sql_on_combined_table(
+                step
+            )
+            if sql_script:
+                combined_table = step["table"]
+                record_type = step["record_type"]
+                sql_scripts.append(
+                    {
+                        "bulk_data_step": self.step,
+                        "map_step": map_step,
+                        "title": f'Updating all records in "{combined_table}" SQL table to have record_type "{record_type}"',
+                        "script": sql_script,
+                    }
+                )
+        return sql_scripts
+                
 
     @property
     def sql_scripts_to_combine_records(self):
-        queries_by_step = {}
+        sql_scripts = [
+            {
+                "bulk_data_step": self.step,
+                "map_step": None,
+                "title": "Loading namespaced tables and records for bulk_data step",
+                "script": self.sql,
+            }
+        ]
 
-        for step_name, step in self.map.items():
+        for map_step, step in self.map.items():
             table_info = self.table_infos_by_table[step["table"]]
 
             columns = set()
@@ -559,41 +587,46 @@ class BulkDataStep(Namespace):
                 f', {table_info["namespaced_name"]}.'.join(columns)
             )
 
-            queries = {}
-            queries_by_step[step_name] = queries
-
-            # Update namespaced_table's record_type
-            update_record_type_sql = self._get_step_update_record_type_sql_on_namespaced_table(
-                step
-            )
-            if update_record_type_sql:
-                queries[
-                    f'Updating all records to have record_type: {step.get("record_type")}'
-                ] = update_record_type_sql
-
             # Update records
             update_sql = self._get_step_update_sql_if_combined_records_on_column(
                 step, columns_by_comma, namespaced_columns_by_comma
             )
             if update_sql:
-                queries[
-                    f'Update records on {step.get("combine_records_on_column")}'
-                ] = update_sql
+                sql_scripts.append(
+                    {
+                        "bulk_data_step": self.step,
+                        "map_step": map_step,
+                        "title": f'Update records on {step.get("combine_records_on_column")}',
+                        "script": update_sql,
+                    }
+                )
 
             # Inserting records
-            queries[
-                "Insert records not already combined/updated"
-            ] = self._get_step_insert_sql_for_records_not_combined(
-                step, columns_by_comma, namespaced_columns_by_comma
+            sql_scripts.append(
+                {
+                    "bulk_data_step": self.step,
+                    "map_step": map_step,
+                    "title": "Insert records not already combined/updated",
+                    "script": self._get_step_insert_sql_for_records_not_combined(
+                        step, columns_by_comma, namespaced_columns_by_comma
+                    ),
+                }
             )
 
             # Update lookups
             for field, lookup in (step.get("lookups") or {}).items():
-                queries[
-                    f'Update {field}/{lookup["key_field"]} lookups from combined table'
-                ] = self._get_step_update_lookup_sql(step, lookup)
+                lookup_script = self._get_step_update_lookup_sql(step, lookup)
+                if lookup_script:
+                    sql_scripts.append(
+                        {
+                            "bulk_data_step": self.step,
+                            "map_step": map_step,
+                            "title": f'Update {field}/{lookup["key_field"]} lookups from combined table',
+                            "script": lookup_script,
+                        }
+                    )
 
-        return queries_by_step
+        return sql_scripts
 
     @property
     def sobjects_for_delete(self):
@@ -748,7 +781,7 @@ class BulkDataStep(Namespace):
         return ordered_map
 
 
-class BulkDataCombinedTask(NamespaceTask):
+class BulkDataCombinedTask(NamespaceTask, RecordTypeTask):
     task_options = {
         "bulk_data_log_level": {
             "description": "Level to log BulkDataStep maps.  Options are 'None', 'Summary', 'Combined', or 'All'. Default: 'Summary'",
@@ -758,6 +791,7 @@ class BulkDataCombinedTask(NamespaceTask):
     _bulk_data = None
     _combined_bulk_data = None
     _bulk_data_log_level = None
+    _sql_scripts = None
 
     @property
     def bulk_data_log_level(self):
@@ -825,6 +859,7 @@ class BulkDataCombinedTask(NamespaceTask):
                             namespace_info,
                             bulk_data_config.get("map"),
                             bulk_data_config.get("sql"),
+                            self.record_types_by_sobject
                         )
                         is_used = "✅"
                         self._bulk_data[step] = bulk_data_step
@@ -940,6 +975,56 @@ class BulkDataCombinedTask(NamespaceTask):
 
         return cached_bulk_data_config
 
+    @property
+    def sql_scripts(self):
+        if not self._sql_scripts:
+            self._sql_scripts = [
+                # Create combined_bulk_data tables
+                {
+                    "title": "Creating combined tables for all bulk_data steps",
+                    "script": BulkDataStep.get_create_tables_sql(
+                        self.combined_bulk_data
+                    ),
+                }
+            ]
+
+            # Combine records for each bulk_data step
+            for bulk_data_step in self.bulk_data.values():
+                self._sql_scripts.extend(bulk_data_step.sql_scripts_to_combine_records)
+
+            # Apply combined tables' record_type to all rows in combined table
+            self._sql_scripts.extend(self.combined_bulk_data.sql_scripts_to_apply_record_type_on_combined_tables)
+
+        return self._sql_scripts
+
+    def log_sql_scripts(self):
+        for sql_script in self.sql_scripts:
+            self.log_sql_script(sql_script)
+
+    def log_sql_script(
+        self, sql_script, caught_exception=None,
+    ):
+        if not sql_script:
+            return
+        rows = [
+            ["DESCRIPTION", sql_script.get("title"),],
+            ["BULK DATA STEP", sql_script.get("bulk_data_step"),],
+            ["MAP STEP", sql_script.get("map_step"),],
+        ]
+        if caught_exception:
+            rows.append(
+                ["ERROR", str(caught_exception),]
+            )
+        self.log_table(rows)
+        self.log_title("SQL script")
+        self.logger.info("")
+        if sql_script.get("script"):
+            for line in sql_script.get("script").split("\n"):
+                self.logger.info(line)
+        else:
+            self.logger.info("--None--")
+        self.logger.info("")
+
 
 class BulkDataStepTask(BulkDataCombinedTask):
     task_options = {
@@ -967,6 +1052,25 @@ class BulkDataStepTask(BulkDataCombinedTask):
             )
         return self._combined_bulk_data
 
+    @property
+    def sql_scripts(self):
+        if not self._sql_scripts:
+            self._sql_scripts = [
+                # Create combined_bulk_data tables
+                {
+                    "title": "Creating combined tables for all bulk_data steps",
+                    "script": BulkDataStep.get_create_tables_sql(
+                        self.combined_bulk_data
+                    ),
+                }
+            ]
+
+            # Combine records for this bulk_data step
+            self._sql_scripts.extend(
+                self.combined_bulk_data.sql_scripts_to_combine_records
+            )
+        return self._sql_scripts
+
 
 class CacheProjectBulkDataTask(BulkDataCombinedTask):
     #    Caches project's bulk_data in org_config so accessible in later flow step.
@@ -986,13 +1090,35 @@ class LogBulkDataCombinedMapTask(BulkDataCombinedTask):
     }
 
     def _run_task(self):
-        if (self.options.get("log_maps") or "").lower() != "all":
-            self.options["log_maps"] = "combined"
+        if (self.options.get("bulk_data_log_level") or "").lower() != "all":
+            self.options["bulk_data_log_level"] = "combined"
 
         self.combined_bulk_data.log_map(self)
 
 
 class LogBulkDataStepMapTask(BulkDataStepTask, LogBulkDataCombinedMapTask):
+
+    task_options = {
+        **BulkDataStepTask.task_options,
+    }
+
+
+class LogBulkDataCombinedSqlScriptsTask(BulkDataCombinedTask):
+
+    task_options = {
+        **BulkDataCombinedTask.task_options,
+    }
+
+    def _run_task(self):
+        if (self.options.get("bulk_data_log_level") or "").lower() != "all":
+            self.options["bulk_data_log_level"] = "combined"
+
+        self.log_sql_scripts()
+
+
+class LogBulkDataStepSqlScriptsTask(
+    LogBulkDataCombinedSqlScriptsTask, BulkDataStepTask
+):
 
     task_options = {
         **BulkDataStepTask.task_options,
@@ -1058,7 +1184,7 @@ class CaptureBulkDataStepTask(BulkDataStepTask, ExtractData):
         self.mappings = self.combined_bulk_data.map
 
 
-class BaseInsertBulkDataTask(BulkDataCombinedTask, LoadData):
+class InsertBulkDataCombinedTask(BulkDataCombinedTask, LoadData):
 
     task_options = {
         **BulkDataCombinedTask.task_options,
@@ -1094,107 +1220,17 @@ class BaseInsertBulkDataTask(BulkDataCombinedTask, LoadData):
         self.mapping = self.combined_bulk_data.map
 
     def _sqlite_load(self):
-        raise TaskOptionsError(
-            "BaseInsertBulkDataTask _sqlite_load() must be overridden"
-        )
-
-
-class InsertBulkDataStepTask(BulkDataStepTask, BaseInsertBulkDataTask):
-
-    task_options = {
-        **BulkDataStepTask.task_options,
-        "ignore_row_errors": {
-            "description": "If True, allow the load to continue even if individual rows fail to load."
-        },
-    }
-
-    def _sqlite_load(self):
-        conn = self.session.connection()
-        cursor = conn.connection.cursor()
-        try:
-            cursor.executescript(self.combined_bulk_data.sql)
-        finally:
-            cursor.close()
-
-
-class InsertBulkDataCombinedTask(BaseInsertBulkDataTask):
-
-    task_options = {
-        **BaseInsertBulkDataTask.task_options,
-    }
-
-    def _get_combined_bulk_data_create_tables_script(self):
-        return BulkDataStep.get_map_create_tables_sql(self.combined_bulk_data)
-
-    def _log_script(self, script):
-        if script:
-            lines = [""]
-            lines.extend(script.split("\n"))
-            lines.append("")
-
-            for line in lines:
-                self.logger.info(line)
-
-    def _log_last_script(self, last_script, caught_exception=None,):
-        if last_script:
-            rows = [
-                ["DESCRIPTION", last_script.get("title"),],
-                ["BULK DATA STEP", last_script.get("bulk_data_step"),],
-                ["MAP STEP", last_script.get("map_step"),],
-            ]
-            if caught_exception:
-                rows.append([
-                    "ERROR", str(caught_exception),
-                ])
-            self.log_table(rows)
-            self.log_title("SQL script")
-            self._log_script(last_script.get("script"))
-
-    def _sqlite_load(self):
         conn = self.session.connection()
         cursor = conn.connection.cursor()
 
-        last_script = None
-
+        last_sql_script = None
         caught_exception = None
         try:
-            # Create combined_bulk_data tables
-            last_script = {
-                "title": "Creating combined tables for all bulk_data steps",
-                "script": self._get_combined_bulk_data_create_tables_script(),
-            }
-            cursor.executescript(last_script["script"])
-            if self.log_all_bulk_data:
-                self._log_last_script(last_script)
-
-            # Combine records for each bulk_data step
-            for step, data in self.bulk_data.items():
-                # Create combined tables
-                last_script = {
-                    "bulk_data_step": step,
-                    "bulk_data": data,
-                    "map_step": None,
-                    "title": "Loading namespaced tables and records for bulk_data step",
-                    "script": data.sql,
-                }
-
-                cursor.executescript(last_script["script"])
+            for sql_script in self.sql_scripts:
+                last_sql_script = sql_script
+                cursor.executescript(sql_script.get("script"))
                 if self.log_all_bulk_data:
-                    self._log_last_script(last_script)
-
-                # Combine records for each of data's map steps
-                for map_step, queries in data.sql_scripts_to_combine_records.items():
-                    last_script["map_step"] = map_step
-
-                    for title, script in queries.items():
-                        last_script["title"] = title
-                        last_script["script"] = script
-                        cursor.executescript(last_script["script"])
-                        if self.log_all_bulk_data:
-                            self._log_last_script(last_script)
-
-                # Reset last_scripts if all SQL scripts were successful
-                last_script = {}
+                    self.log_sql_script(sql_script)
         except Exception as e:
             caught_exception = e
         finally:
@@ -1203,7 +1239,16 @@ class InsertBulkDataCombinedTask(BaseInsertBulkDataTask):
             # last_script is not empty implying an Exception was raised
             if caught_exception:
                 # Log which SQL script raised an error
-                self.log_title('Error combining SQL data')
-                self.logger.info('Set "bulk_data_log_level" option to "All" to log all SQL scripts used to combine data')
-                self._log_last_script(last_script, caught_exception)
+                self.log_title("Error combining SQL data")
+                self.logger.info(
+                    'Set "bulk_data_log_level" option to "All" to log all SQL scripts used to combine data'
+                )
+                self.log_sql_script(last_sql_script, caught_exception)
                 raise caught_exception
+
+
+class InsertBulkDataStepTask(InsertBulkDataCombinedTask, BulkDataStepTask):
+
+    task_options = {
+        **InsertBulkDataCombinedTask.task_options,
+    }

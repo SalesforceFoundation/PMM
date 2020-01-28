@@ -54,6 +54,10 @@ class NewProgramEngagementPage(BasePMDMPage, BasePage):
             else:
                 assert False, "Key provided by name '{}' does not exist".format(key)
 
+    def select_auto_name_override_checkbox(self):
+        locator = pmdm_lex_locators["checkbox"].format('Auto-Name Override')
+        self.selenium.get_webelement(locator).click()
+
 
 @pageobject("Details", "ProgramEngagement__c")
 class ProgramDetailPage(BasePMDMPage, DetailPage):

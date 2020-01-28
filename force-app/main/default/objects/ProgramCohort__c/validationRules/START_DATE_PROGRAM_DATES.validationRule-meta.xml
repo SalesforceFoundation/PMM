@@ -3,9 +3,19 @@
     <fullName>START_DATE_PROGRAM_DATES</fullName>
     <active>true</active>
     <description>Ensures the Start Date is within the start and end dates of the related program.</description>
-    <errorConditionFormula>OR(
- StartDate__c &lt; Program__r.StartDate__c ,
- StartDate__c &gt; Program__r.EndDate__c
+    <errorConditionFormula>AND(
+  NOT(ISBLANK(StartDate__c)),
+  OR(
+    AND(
+      NOT(ISBLANK(Program__r.StartDate__c)),
+      StartDate__c &lt; Program__r.StartDate__c
+    ),
+    AND(
+      NOT(ISBLANK(Program__r.EndDate__c)),
+      Program__r.EndDate__c &lt; StartDate__c
+    )
+  )
 )</errorConditionFormula>
+    <errorDisplayField>StartDate__c</errorDisplayField>
     <errorMessage>Start Date must be within the range of the related Program Start and End Dates.</errorMessage>
 </ValidationRule>

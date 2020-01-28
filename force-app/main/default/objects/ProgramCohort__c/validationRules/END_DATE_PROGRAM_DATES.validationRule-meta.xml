@@ -3,9 +3,19 @@
     <fullName>END_DATE_PROGRAM_DATES</fullName>
     <active>true</active>
     <description>Ensures End Date is within the Program Start and End Dates</description>
-    <errorConditionFormula>OR(
-EndDate__c &lt; Program__r.StartDate__c,
-EndDate__c &gt; Program__r.EndDate__c
+    <errorConditionFormula>AND(
+  NOT(ISBLANK(EndDate__c)),
+  OR(
+    AND(
+      NOT(ISBLANK(Program__r.StartDate__c)),
+      EndDate__c &lt; Program__r.StartDate__c
+    ),
+    AND(
+      NOT(ISBLANK(Program__r.EndDate__c)),
+      Program__r.EndDate__c &lt; EndDate__c
+    )
+  )
 )</errorConditionFormula>
+    <errorDisplayField>EndDate__c</errorDisplayField>
     <errorMessage>End Date must be within the Program Start and End Dates</errorMessage>
 </ValidationRule>

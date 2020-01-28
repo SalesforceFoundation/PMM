@@ -3,6 +3,10 @@
     <fullName>START_DATE_BEFORE_END_DATE</fullName>
     <active>true</active>
     <description>Ensures the start date is before the end date.</description>
-    <errorConditionFormula>StartDate__c &gt;  EndDate__c</errorConditionFormula>
+    <errorConditionFormula>AND(
+  NOT(ISBLANK(StartDate__c)),
+  NOT(ISBLANK(EndDate__c)),
+  EndDate__c &lt; StartDate__c
+)</errorConditionFormula>
     <errorMessage>Start Date must be before End Date</errorMessage>
 </ValidationRule>

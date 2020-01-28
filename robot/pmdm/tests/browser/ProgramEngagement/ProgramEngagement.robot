@@ -42,4 +42,6 @@ Create Program Engagemnet from Program Object
      Click Save Button
      Wait Until Modal Is Closed
      current page should be                 Details                                 Program__c
+     click new related record link          &{program}[Name]
+     ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
      Page Should Contain                   ${program_engagement_name}

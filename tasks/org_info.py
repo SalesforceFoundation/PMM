@@ -1,5 +1,6 @@
 import operator
 import os
+import subprocess
 
 from tasks.logger import LoggingTask
 from cumulusci.utils import os_friendly_path
@@ -36,7 +37,7 @@ class Namespace:
         self, namespace: str, local_namespace: str = None, version: str = None,
     ) -> None:
         self._namespace = namespace
-        self._local_namespace = local_namespace if local_namespace else namespace
+        self._local_namespace = local_namespace
         self._version = version
 
     @property
@@ -109,74 +110,72 @@ class Namespace:
         return self.inject_namespace(class_name, ".")
 
 
-"""
+
 class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
+
+    _record_types_by_sobject = None
 
     def _get_record_type_query(self):
         return "SELECT SobjectType, DeveloperName FROM RecordType ORDER BY SobjectType, DeveloperName"
 
+    def cache_record_types_by_sobject(self):
+        # TODO: Is there a way we can "load" sf connection if it doesn't exist?
+        #       If we have a Bulk API task, sf attr seems to be deleted
+        if not hasattr(self, "sf"):
+            return
+    
+        self._record_types_by_sobject = {}
+
+        rows = [
+            [
+                "SOBJECT TYPE",
+                "DEVELOPER NAME"
+            ]
+        ]
+
+        # Query org for all Record Types
+        last_sobject_type = None
+        for record in self.sf.query_all(self._get_record_type_query()).get("records"):
+            sobject_type = record.get("SobjectType")
+            developer_name = record.get("DeveloperName")
+
+            developer_names = self._record_types_by_sobject.get(sobject_type) or set()
+            developer_names.add(developer_name)
+
+            self._record_types_by_sobject[sobject_type] = developer_names
+            rows.append(
+                [
+                    sobject_type if sobject_type != last_sobject_type else "",
+                    developer_name
+                ]
+            )
+
+            last_sobject_type = sobject_type
+        
+        if not self._record_types_by_sobject:
+            rows.append([
+                "💤  NONE  💤"
+            ])
+        self.log_title("Record Types")
+        self.log_table(rows)
+
+        return self._record_types_by_sobject
+
     @property
     def record_types_by_sobject(self):
-        # caches queried record_types by SobjectType in org_config
-        record_types_by_sobject = self.org_config.config.get("record_types_by_sobject")
-
-        # record_types_by_sobject is None means sf doesn't exist meaning we can't query
-        if record_types_by_sobject is None and hasattr(self, "sf"):
-            # TODO: is there a way we can "load" sf connection if it doesn't exist?
-            # If we have a Bulk API task, sf attr seems to be deleted
-
-            record_types_by_sobject = {}
-            self.record_types_by_sobject = record_types_by_sobject
-
-            rows = [
-                [
-                    "SOBJECT TYPE",
-                    "DEVELOPER NAME"
-                ]
-            ]
-
-            # Query org for all Record Types
-            last_sobject_type = None
-            for record in self.sf.query_all(self._get_record_type_query()).get("records"):
-                sobject_type = record.get("SobjectType")
-                developer_name = record.get("DeveloperName")
-
-                developer_names = record_types_by_sobject.get(sobject_type) or set()
-                developer_names.add(developer_name)
-
-                record_types_by_sobject[sobject_type] = developer_names
-                rows.append(
-                    [
-                        sobject_type if sobject_type != last_sobject_type else "",
-                        developer_name
-                    ]
-                )
-
-                last_sobject_type = sobject_type
-            
-            if not record_types_by_sobject:
-                rows.append([
-                    "💤  NONE  💤"
-                ])
-            self.log_title("Record Types")
-            self.log_table(rows)
-
-        return record_types_by_sobject
-
-    @record_types_by_sobject.setter
-    def record_types_by_sobject(self, value):
-        # caches queried record_types by SobjectType in org_config
-        self.org_config.config.update({
-            "record_types_by_sobject": value
-        })
-
-    @record_types_by_sobject.deleter
-    def record_types_by_sobject(self):
-        self.record_types_by_sobject = None
-"""
+        if self._record_types_by_sobject is None:
+            self.cache_record_types_by_sobject()
+        return self._record_types_by_sobject
 
 
 class NamespaceTask(LoggingTask):
+
+    task_options = {
+        "installed_packages_api": {
+            "description": "API to get list of installed packages.  Options are 'sfdx' or 'metadata'.  Default: 'metadata",
+            "required": False,
+        },
+    }
 
     _namespaces = None
 
@@ -194,13 +193,29 @@ class NamespaceTask(LoggingTask):
     def local_project_namespace(self):
         return "" if not self.is_org_namespaced else self.project_namespace
 
-    def get_installed_package_version_by_namespace(self):
+    def _get_installed_package_versions_by_namespace_from_metadata(self):
+        self.log_title("Getting installed packages from Metadata API")
         installed_package_version_by_namespace = {}
         for package in GetInstalledPackages(
             self.project_config, TaskConfig({}), self.org_config,
         )().items():
             installed_package_version_by_namespace[package[0]] = package[1]
         return installed_package_version_by_namespace
+
+    def _get_installed_package_versions_by_namespace_from_sfdx(self):
+        self.logger.info(
+            "Getting installed packages from sfdx is currently not supported"
+        )
+        # TODO: use subprocess to call f'sfdx force:packages:installed:list --json -u {self.org_config.username}', parse the response as JSON
+        return self._get_installed_package_versions_by_namespace_from_metadata()
+
+    def get_installed_package_version_by_namespace(self):
+        if (
+            self.options.get("installed_packages_api")
+            and self.options.get("installed_packages_api").lower() == "sfdx"
+        ):
+            return self._get_installed_package_versions_by_namespace_from_sfdx()
+        return self._get_installed_package_versions_by_namespace_from_metadata()
 
     def log_namespaces(self):
         rows = [
@@ -223,8 +238,6 @@ class NamespaceTask(LoggingTask):
 
     # cache namespace_infos as dicts and load NamespaceInfos
     def cache_namespaces(self):
-        self.log_title("Getting installed packages:")
-
         namespaces = {
             "c": {
                 "namespace": "c",

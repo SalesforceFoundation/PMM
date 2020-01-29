@@ -221,7 +221,6 @@ caseman__Client_Notes:
         Status__c: caseman__Status__c
         InteractionDate__c: caseman__InteractionDate__c
         Draft__c: caseman__Draft__c
-        MinutesSpentWithClient__c: caseman__MinutesSpentWithClient__c
 
     lookups:
         Client__c:
@@ -329,17 +328,15 @@ caseman__Action_Items:
 caseman__Assessments:
     sf_object: Assessment__c
     table: caseman__Assessment__c
+    combine_record_on_column: Name
     fields:
-        # Standard Fields
+        # IDs
         Name: Name
 
-        # Custom Fields
+        # Data
         AssessmentCompletedDate__c: caseman__AssessmentCompletedDate__c
         Comments__c: caseman__Comments__c
         TotalScore__c: caseman__TotalScore__c
-        FinancialStabilityScore__c: caseman__FinancialStabilityScore__c
-        JobReadinessScore__c: caseman__JobReadinessScore__c
-
     lookups:
         Client__c:
             key_field: client__c

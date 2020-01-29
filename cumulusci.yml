@@ -58,34 +58,24 @@ orgs:
 
 bulk_data:
     pmdm:
-        map: decentralized-data/pmdm/pmdm.yml
-        sql: decentralized-data/pmdm/pmdm.sql
+        map: sharedbulkdata/pmdm/pmdm.yml
+        sql: sharedbulkdata/pmdm/pmdm.sql
         namespace: pmdm
-    #caseman:
-    #map: decentralized-data/caseman/caseman.yml
-    #sql: decentralized-data/caseman/caseman.sql
-    #namespace: caseman
-    #caseman_unpackaged2:
-    #map: decentralized-data/caseman/unpackaged.yml
-    #sql: decentralized-data/caseman/unpackaged.sql
-    #namespace: c
-    #and_require_namespaces:
-    #- caseman
     npe01:
-        map: decentralized-data/npe01/npe01.yml
-        sql: decentralized-data/npe01/npe01.sql
+        map: sharedbulkdata/npe01/npe01.yml
+        sql: sharedbulkdata/npe01/npe01.sql
         namespace: npe01
     npe4:
-        map: decentralized-data/npe4/npe4.yml
-        sql: decentralized-data/npe4/npe4.sql
+        map: sharedbulkdata/npe4/npe4.yml
+        sql: sharedbulkdata/npe4/npe4.sql
         namespace: npe4
     npo02:
-        map: decentralized-data/npo02/npo02.yml
-        sql: decentralized-data/npo02/npo02.sql
+        map: sharedbulkdata/npo02/npo02.yml
+        sql: sharedbulkdata/npo02/npo02.sql
         namespace: npo02
     npsp:
-        map: decentralized-data/npsp/npsp.yml
-        sql: decentralized-data/npsp/npsp.sql
+        map: sharedbulkdata/npsp/npsp.yml
+        sql: sharedbulkdata/npsp/npsp.sql
         namespace: npsp
 
 tasks:

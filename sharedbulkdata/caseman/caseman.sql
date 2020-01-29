@@ -95,14 +95,14 @@ CREATE TABLE "Case__ClientCase" (
 	record_type VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "Case__ClientCase" VALUES(1,'Tom Higgins School Lunch program Summer 2019','Medium','Active','Phone','','','','','','','','','','','1','ClientCase');
-INSERT INTO "Case__ClientCase" VALUES(2,'Tom Higgins Remedial Reading Summer 2019','Medium','Active','Email','','','','','','','','','','','1','ClientCase');
-INSERT INTO "Case__ClientCase" VALUES(3,'Tom Higgins After School Program (rolling enrollment)','Medium','Active','Phone','Tom is enrolled in the afterschool program to increase his socialization and provide care while his parents are working','','','','','','','','','','1','ClientCase');
-INSERT INTO "Case__ClientCase" VALUES(4,'Tom Higgins  Clothing Program Summer 2019','Medium','Active','Email','Tome is receiving clothing assistance while his family is in the Housing Assistance Program.','','','','','','','','','','1','ClientCase');
-INSERT INTO "Case__ClientCase" VALUES(5,'Arlene Baker Workforce Re-entry, Summer  2019','Medium','Active','Email','Arlene has applied to join the Workforce Re-entry program after a two-year absence from the workforce while caring for her elderly father who was diagnosed with dementia.','','','','','','','','','','6','ClientCase');
-INSERT INTO "Case__ClientCase" VALUES(6,'Robin Banks Application to Workforce Re-entry Program','Medium','Active','Phone','Robin is working to rejoin the workforce after 3 months in a rehab facility for alcohol addiction','','','','','','','','','','7','ClientCase');
-INSERT INTO "Case__ClientCase" VALUES(7,'Jason Barnes Workplace Readiness Program Offering','Medium','Active','Phone','','','','','','','','','','','11','ClientCase');
-INSERT INTO "Case__ClientCase" VALUES(8,'Barbara Johnson ESL I','Medium','Active','Email','Barbara is enrolled in ESL I to learn English to enhance her employment potential.','','','','','','','','','','20','ClientCase');
+INSERT INTO "Case__ClientCase" VALUES(1,'Arlene Baker Workforce Re-entry, Summer  2019','Medium','Active','Email','Arlene has applied to join the Workforce Re-entry program after a two-year absence from the workforce while caring for her elderly father who was diagnosed with dementia.','','','','','','','','','','6','ClientCase');
+INSERT INTO "Case__ClientCase" VALUES(2,'Robin Banks Application to Workforce Re-entry Program','Medium','Active','Phone','Robin is working to rejoin the workforce after 3 months in a rehab facility for alcohol addiction','','','','','','','','','','7','ClientCase');
+INSERT INTO "Case__ClientCase" VALUES(3,'Jason Barnes Workplace Readiness Program Offering','Medium','Active','Phone','','','','','','','','','','','11','ClientCase');
+INSERT INTO "Case__ClientCase" VALUES(4,'Barbara Johnson ESL I','Medium','Active','Email','Barbara is enrolled in ESL I to learn English to enhance her employment potential.','','','','','','','','','','20','ClientCase');
+INSERT INTO "Case__ClientCase" VALUES(5,'Tom Higgins School Lunch program Summer 2019','Medium','Active','Phone','','','','','','','','','','','1','ClientCase');
+INSERT INTO "Case__ClientCase" VALUES(6,'Tom Higgins Remedial Reading Summer 2019','Medium','Active','Email','','','','','','','','','','','1','ClientCase');
+INSERT INTO "Case__ClientCase" VALUES(7,'Tom Higgins After School Program (rolling enrollment)','Medium','Active','Phone','Tom is enrolled in the afterschool program to increase his socialization and provide care while his parents are working','','','','','','','','','','1','ClientCase');
+INSERT INTO "Case__ClientCase" VALUES(8,'Tom Higgins  Clothing Program Summer 2019','Medium','Active','Email','Tome is receiving clothing assistance while his family is in the Housing Assistance Program.','','','','','','','','','','1','ClientCase');
 CREATE TABLE "Case__Incident" (
 	id INTEGER NOT NULL, 
 	subject VARCHAR(255), 
@@ -126,8 +126,8 @@ CREATE TABLE "Case__Incident" (
 INSERT INTO "Case__Incident" VALUES(1,'Broke toilet stall door','Medium','Working','','Tom ran away from the group to the boys restroom and kicked in the stall door, breaking it.','','','','','2019-04-12T21:00:00.000Z','Property Damage','','Low','1','1','Incident');
 INSERT INTO "Case__Incident" VALUES(2,'Breakdown during session','Medium','New','Phone','Tom lost his temper and couldn''t get himself back together','','','','','2019-04-24T20:30:00.000Z','Other','','High','1','1','Incident');
 INSERT INTO "Case__Incident" VALUES(3,'Bullying','Medium','New','','Older girls teased Tom about his shoes, causing him to lose his temper.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium','1','1','Incident');
-INSERT INTO "Case__Incident" VALUES(4,'Skipped group field trip','Medium','Closed','','Tom ran off and skipped the group field trip','','','','','2019-06-04T19:00:00.000Z','Other','','Medium','','1','Incident');
-INSERT INTO "Case__Incident" VALUES(5,'Left afterschool program without permission','Medium','Closed','','Tom left the program without telling the counselor. He was found an hour later behind the neighborhood convenience store.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium','1','1','Incident');
+INSERT INTO "Case__Incident" VALUES(4,'Left afterschool program without permission','Medium','Closed','','Tom left the program without telling the counselor. He was found an hour later behind the neighborhood convenience store.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium','1','1','Incident');
+INSERT INTO "Case__Incident" VALUES(5,'Skipped group field trip','Medium','Closed','','Tom ran off and skipped the group field trip','','','','','2019-06-04T19:00:00.000Z','Other','','Medium','','1','Incident');
 CREATE TABLE "Contact" (
 	id INTEGER NOT NULL, 
 	"Email" VARCHAR(255), 
@@ -161,26 +161,26 @@ CREATE TABLE "Contact" (
 	emergency_contact__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "Contact" VALUES(1,'thiggins@example.com','Tom','Higgins','','555-248-3956','','','555-248-3956','','2007-04-03','3850 Wolf Pen Road','Oakland','CA','94612','','Child','','Mother','06817000000VpmvAAC','','Thomas Higgins','Home Phone','555-248-3956','he/him/his','Client','true','2020-01-23','1','2');
+INSERT INTO "Contact" VALUES(1,'thiggins@example.com','Tom','Higgins','','555-248-3956','','','555-248-3956','','2007-04-03','3850 Wolf Pen Road','Oakland','CA','94612','','Child','','Mother','06854000000feuCAAQ','','Thomas Higgins','Home Phone','555-248-3956','he/him/his','Client','true','2020-01-29','1','2');
 INSERT INTO "Contact" VALUES(2,'lhiggins@example.com','Lisa','Higgins','','555-248-3956','','','555-248-3956','','','3850 Wolf Pen Road','Oakland','CA','94612','','','','','','','','','','','','false','','1','');
 INSERT INTO "Contact" VALUES(3,'angelaadams@example.com','Angela','Adams','Rev.','555-648-4704','1-333-444-5555','','555-648-4704','','1970-01-04','1739 Lindale Avenue','Oakland','CA','94612','United States','Adult','','Friend','','','','','','she/her/hers','Client;Donor;Volunteer','false','','2','');
 INSERT INTO "Contact" VALUES(4,'jeremyadams@example.com','Jeremy','Adams','Dr.','555-648-7204','555-510-9375','','555-648-7204','','1970-01-04','1739 Lindale Avenue','Oakland','CA','94612','United States','Adult','','Friend','','Call','','Phone','555-648-7204','he/him/his','Client','false','','2','');
 INSERT INTO "Contact" VALUES(5,'','Arthur','Baker','','','','','','','','3810 Green Avenue','Oakland','CA','94612','United States','','','','','','','','','','','false','','3','');
-INSERT INTO "Contact" VALUES(6,'alanbaker@example.com','Arlene','Baker','','555-524-0749','1-333-444-5555','','555-524-0749','','1969-12-24','3810 Green Avenue','Oakland','CA','94612','United States','Adult','','Friend','06817000000Vpn0AAC','','Alan Baker','','','she/her/hers','Client;Volunteer','false','','3','3');
-INSERT INTO "Contact" VALUES(7,'robinbanks@example.com','Robin','Banks','','555-347-3702','1-333-444-5555','','555-347-3702','','1984-12-29','2546 Harrison Street','Oakland','CA','94612','','Adult','','Partner','06817000000VpnFAAS','','','','','she/her/hers','Client','true','2020-01-23','4','8');
+INSERT INTO "Contact" VALUES(6,'alanbaker@example.com','Arlene','Baker','','555-524-0749','1-333-444-5555','','555-524-0749','','1969-12-24','3810 Green Avenue','Oakland','CA','94612','United States','Adult','','Friend','06854000000feuHAAQ','','Alan Baker','','','she/her/hers','Client;Volunteer','false','','3','3');
+INSERT INTO "Contact" VALUES(7,'robinbanks@example.com','Robin','Banks','','555-347-3702','1-333-444-5555','','555-347-3702','','1984-12-29','2546 Harrison Street','Oakland','CA','94612','','Adult','','Partner','06854000000feuWAAQ','','','','','she/her/hers','Client','true','2020-01-29','4','8');
 INSERT INTO "Contact" VALUES(8,'darrylgraham@example.com','Darryl','Graham','','555-347-3702','','','555-347-3702','','','2546 Harrison Street','Oakland','CA','94612','','','','','','','','','','','','false','','4','');
 INSERT INTO "Contact" VALUES(9,'lynnbarnes@example.com','Lynn','Barnes','','555-893-4763','','','555-893-4763','','','2340 Thompson Drive','Oakland','CA','94621','','','','','','','','','','','','false','','5','');
 INSERT INTO "Contact" VALUES(10,'davidbarnes@example.com','David','Barnes','','555-893-4763','','','555-893-4763','','','2340 Thompson Drive','Oakland','CA','94621','','','','','','','','','','','','false','','5','');
-INSERT INTO "Contact" VALUES(11,'jasonbarnes@example.com','Jason','Barnes','','555-893-4763','1-333-444-5555','','555-893-4763','','2002-10-29','2340 Thompson Drive','Oakland','CA','94621','','Youth','88841515','Mother','06817000000Vpn5AAC','','','','','he/him/his','Client','false','','5','9');
+INSERT INTO "Contact" VALUES(11,'jasonbarnes@example.com','Jason','Barnes','','555-893-4763','1-333-444-5555','','555-893-4763','','2002-10-29','2340 Thompson Drive','Oakland','CA','94621','','Youth','88841515','Mother','06854000000feuMAAQ','','','','','he/him/his','Client','false','','5','9');
 INSERT INTO "Contact" VALUES(12,'anneboyd@example.com','Anne','Boyd','Mrs.','555-380-8532','555-673-2987','','555-380-8532','','1970-01-01','3528 Rardin Drive','Oakland','CA','94612','United States','Adult','','Friend','','','','','','she/her/hers','Client','false','','6','');
 INSERT INTO "Contact" VALUES(13,'normaburke@example.com','Norma','Burke','','555-830-5295','1-333-444-5555','','555-830-5295','','1949-12-21','3160 Green Avenue','Oakland','CA','94612','United States','Senior','','Friend','','','','','','they/them/theirs','Client','false','','7','');
-INSERT INTO "Contact" VALUES(14,'bobbyhenderson@example.com','Bobby','Henderson','','555-834-2386','1-333-444-5555','','555-834-2386','','1970-01-04','3547 Water Street','Oakland','CA','94606','United States','Adult','','Friend','06854000000G0PNAA0','','','','','he/him/his','Client','true','2020-01-23','8','');
+INSERT INTO "Contact" VALUES(14,'bobbyhenderson@example.com','Bobby','Henderson','','555-834-2386','1-333-444-5555','','555-834-2386','','1970-01-04','3547 Water Street','Oakland','CA','94606','United States','Adult','','Friend','06854000000G0PNAA0','','','','','he/him/his','Client','true','2020-01-29','8','');
 INSERT INTO "Contact" VALUES(15,'anthonyhill@example.com','Anthony','Hill','','555-395-9737','1-333-444-5555','','555-395-9737','','1970-01-02','3611 Harrison Street','Oakland','CA','94612','United States','Adult','','Friend','','','','','','they/them/theirs','Client','false','','9','');
 INSERT INTO "Contact" VALUES(16,'virginiaholmes@example.com','Virginia','Holmes','Ms.','555-930-8759','1-333-444-5555','','555-930-8759','','1969-12-26','4318 Lynch Street','Oakland','CA','94607','United States','Adult','','Friend','','','','','','she/her/hers','Client;Donor','false','','10','');
 INSERT INTO "Contact" VALUES(17,'josejenkins@example.com','Jose','Jenkins','','555-469-9873','1-333-444-5555','','555-469-9873','','1970-01-12','2203 Alexander Avenue','Oakland','CA','94612','United States','Adult','','Friend','','','','','','he/him/his','Donor','false','','11','');
 INSERT INTO "Contact" VALUES(18,'craigjohnso@example.com','Craig','Johnson','','555-349-3507','','','555-349-3507','','','3041 Park Street','Oakland','CA','94606','','','','','','','','','','','','false','','12','');
 INSERT INTO "Contact" VALUES(19,'','Maya','Johnson','','555-349-3507','','','555-349-3507','','','3041 Park Street','Oakland','CA','94606','','','','','','','','','','','','false','','12','');
-INSERT INTO "Contact" VALUES(20,'barbarajohnson@example.com','Barbara','Johnson','','555-349-3507','1-333-444-5555','','555-349-3507','','1970-01-09','3041 Park Street','Oakland','CA','94606','','Adult','','Husband','06817000000VpnAAAS','','','','','she/her/hers','Client','false','','12','18');
+INSERT INTO "Contact" VALUES(20,'barbarajohnson@example.com','Barbara','Johnson','','555-349-3507','1-333-444-5555','','555-349-3507','','1970-01-09','3041 Park Street','Oakland','CA','94606','','Adult','','Husband','06854000000feuRAAQ','','','','','she/her/hers','Client','false','','12','18');
 CREATE TABLE "caseman__ActionItemTemplate__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -304,25 +304,23 @@ CREATE TABLE "caseman__Assessment__c" (
 	"caseman__AssessmentCompletedDate__c" VARCHAR(255), 
 	"caseman__Comments__c" VARCHAR(255), 
 	"caseman__TotalScore__c" VARCHAR(255), 
-	"caseman__FinancialStabilityScore__c" VARCHAR(255), 
-	"caseman__JobReadinessScore__c" VARCHAR(255), 
 	client__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "caseman__Assessment__c" VALUES(1,'Arlene Baker-9/19','2019-09-16','Arlene has been out of the active workforce for more than one year','75.0','75.0','70.0','6');
-INSERT INTO "caseman__Assessment__c" VALUES(2,'Arlene Baker-11/19','2019-11-15','Arlene''s financial stability score declined due to a rent increase. She is revising her budget.','80.0','73.0','85.0','6');
-INSERT INTO "caseman__Assessment__c" VALUES(3,'Arlene Baker-1/20','2020-01-15','Arlene has shown resilience and ability to adapt to adverse circumstances.','90.0','80.0','88.0','6');
-INSERT INTO "caseman__Assessment__c" VALUES(4,'Arlene Baker-10/19','2019-10-15','Arlene is very diligent with her case plan','76.0','76.0','75.0','6');
-INSERT INTO "caseman__Assessment__c" VALUES(5,'Robin Banks 12/19','2019-12-01','Robin has shown diligence in the resume and interview workshops.','85.0','80.0','83.0','7');
-INSERT INTO "caseman__Assessment__c" VALUES(6,'Robin Banks-10/19','2019-10-01','','75.0','70.0','75.0','7');
-INSERT INTO "caseman__Assessment__c" VALUES(7,'Robin Banks-11/19','2019-11-01','Robin is settling into her case plan more easily than I expected.','80.0','75.0','80.0','7');
-INSERT INTO "caseman__Assessment__c" VALUES(8,'Robin Banks 1/20','2020-01-03','Note that some of Robin''s financial stability score reflects her partner''s job','85.0','80.0','85.0','7');
-INSERT INTO "caseman__Assessment__c" VALUES(9,'ESL - July 2019','2019-07-01','ESL July 2019 Assessment','63.24','','','20');
-INSERT INTO "caseman__Assessment__c" VALUES(10,'ESL - August 2019','2019-08-01','ESL August Assessment Score','68.5','','','20');
-INSERT INTO "caseman__Assessment__c" VALUES(11,'ESL - September 2019','2019-09-01','ESL September Assessment Score','70.25','','','20');
-INSERT INTO "caseman__Assessment__c" VALUES(12,'ESL - June 2019','2019-06-01','Entry level score in ESL program','51.5','','','20');
-INSERT INTO "caseman__Assessment__c" VALUES(13,'ESL - October 2019','2019-10-01','ESL October Assessment Score','74.55','','','20');
-INSERT INTO "caseman__Assessment__c" VALUES(14,'ESL - November 2019','2019-11-01','ESL November Assessment Score','77.43','','','20');
+INSERT INTO "caseman__Assessment__c" VALUES(1,'Arlene Baker-9/19','2019-09-16','Arlene has been out of the active workforce for more than one year','75.0','6');
+INSERT INTO "caseman__Assessment__c" VALUES(2,'Arlene Baker-11/19','2019-11-15','Arlene''s financial stability score declined due to a rent increase. She is revising her budget.','80.0','6');
+INSERT INTO "caseman__Assessment__c" VALUES(3,'Arlene Baker-1/20','2020-01-15','Arlene has shown resilience and ability to adapt to adverse circumstances.','90.0','6');
+INSERT INTO "caseman__Assessment__c" VALUES(4,'Arlene Baker-10/19','2019-10-15','Arlene is very diligent with her case plan','76.0','6');
+INSERT INTO "caseman__Assessment__c" VALUES(5,'Robin Banks 12/19','2019-12-01','Robin has shown diligence in the resume and interview workshops.','85.0','7');
+INSERT INTO "caseman__Assessment__c" VALUES(6,'Robin Banks-10/19','2019-10-01','','75.0','7');
+INSERT INTO "caseman__Assessment__c" VALUES(7,'Robin Banks-11/19','2019-11-01','Robin is settling into her case plan more easily than I expected.','80.0','7');
+INSERT INTO "caseman__Assessment__c" VALUES(8,'Robin Banks 1/20','2020-01-03','Note that some of Robin''s financial stability score reflects her partner''s job','85.0','7');
+INSERT INTO "caseman__Assessment__c" VALUES(9,'ESL - July 2019','2019-07-01','ESL July 2019 Assessment','63.24','20');
+INSERT INTO "caseman__Assessment__c" VALUES(10,'ESL - August 2019','2019-08-01','ESL August Assessment Score','68.5','20');
+INSERT INTO "caseman__Assessment__c" VALUES(11,'ESL - September 2019','2019-09-01','ESL September Assessment Score','70.25','20');
+INSERT INTO "caseman__Assessment__c" VALUES(12,'ESL - June 2019','2019-06-01','Entry level score in ESL program','51.5','20');
+INSERT INTO "caseman__Assessment__c" VALUES(13,'ESL - October 2019','2019-10-01','ESL October Assessment Score','74.55','20');
+INSERT INTO "caseman__Assessment__c" VALUES(14,'ESL - November 2019','2019-11-01','ESL November Assessment Score','77.43','20');
 CREATE TABLE "caseman__CasePlan__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -359,9 +357,9 @@ CREATE TABLE "caseman__ClientNoteRelationship__c" (
 	contact__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(1,'00001008','6','3','');
-INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(2,'00001009','7','4','');
-INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(3,'00001010','8','5','');
+INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(1,'00001008','2','3','');
+INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(2,'00001009','3','4','');
+INSERT INTO "caseman__ClientNoteRelationship__c" VALUES(3,'00001010','4','5','');
 CREATE TABLE "caseman__ClientNote__c" (
 	id INTEGER NOT NULL, 
 	"caseman__Content__c" VARCHAR(255), 
@@ -385,75 +383,75 @@ CREATE TABLE "caseman__GoalActionItemTemplate__c" (
 	action_item_template__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(1,'false','1','1');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(2,'false','2','28');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(3,'false','3','16');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(4,'false','3','17');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(5,'false','3','19');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(6,'false','3','21');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(7,'false','3','24');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(8,'false','3','30');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(9,'false','3','31');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(10,'false','3','32');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(11,'false','3','33');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(12,'false','3','34');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(13,'false','3','35');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(14,'false','3','36');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(15,'false','3','37');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(16,'false','3','38');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(17,'false','3','2');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(18,'false','4','22');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(19,'false','4','23');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(20,'false','4','4');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(21,'false','4','5');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(22,'false','4','6');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(23,'false','6','25');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(24,'false','9','3');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(25,'false','9','7');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(26,'false','9','8');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(27,'false','9','9');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(28,'false','9','10');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(29,'false','9','11');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(30,'false','12','45');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(31,'false','12','46');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(32,'false','14','39');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(33,'false','14','40');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(34,'false','14','43');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(35,'false','14','44');
-INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(36,'false','28','28');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(1,'false','19','1');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(2,'false','20','28');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(3,'false','21','16');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(4,'false','21','17');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(5,'false','21','19');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(6,'false','21','21');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(7,'false','21','24');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(8,'false','21','30');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(9,'false','21','31');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(10,'false','21','32');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(11,'false','21','33');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(12,'false','21','34');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(13,'false','21','35');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(14,'false','21','36');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(15,'false','21','37');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(16,'false','21','38');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(17,'false','21','2');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(18,'false','22','22');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(19,'false','22','23');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(20,'false','22','4');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(21,'false','22','5');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(22,'false','22','6');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(23,'false','24','25');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(24,'false','27','3');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(25,'false','27','7');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(26,'false','27','8');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(27,'false','27','9');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(28,'false','27','10');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(29,'false','27','11');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(30,'false','2','45');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(31,'false','2','46');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(32,'false','4','39');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(33,'false','4','40');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(34,'false','4','43');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(35,'false','4','44');
+INSERT INTO "caseman__GoalActionItemTemplate__c" VALUES(36,'false','18','28');
 CREATE TABLE "caseman__GoalTemplate__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "caseman__GoalTemplate__c" VALUES(1,'Reach an age appropriate level of proficiency in reading');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(2,'Reach proficiency in reading, writing, speaking, and listening');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(3,'Develop basic financial literacy skills');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(4,'Get and keep job for 6 - 12 months');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(5,'Stabilize career path');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(6,'Acquire and adopt healthy skills to address problems');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(7,'Participate in a Twelve Step or other mutual-help group');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(8,'Reach proficiency level in reading, writing, speaking & listening per state std');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(9,'Develop soft skills');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(10,'Stabilize housing');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(11,'Complete Advancement program');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(12,'Complete Financial Literacy Course');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(13,'Build respectful peer relationships');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(14,'Deposit 10% of income in Savings Account for 3 months');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(15,'Build respectful intergenerational relationships');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(16,'Identify industry/career path');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(17,'Complete Advancement program');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(18,'Meet job requirement standards');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(19,'Complete Succeed program');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(20,'Meet with a Financial Advisor');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(21,'Stabilize employment');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(22,'Get a Job Readiness Coach');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(23,'Meet with Legal Assistance Advisor');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(24,'Visioning career path');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(25,'Complete Stability Assessment');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(26,'Complete Jump Start program');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(27,'Get any required certifications');
-INSERT INTO "caseman__GoalTemplate__c" VALUES(28,'Get a passing grade in ESL I Class');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(1,'Complete Advancement program');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(2,'Complete Financial Literacy Course');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(3,'Build respectful peer relationships');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(4,'Deposit 10% of income in Savings Account for 3 months');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(5,'Build respectful intergenerational relationships');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(6,'Identify industry/career path');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(7,'Complete Advancement program');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(8,'Meet job requirement standards');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(9,'Complete Succeed program');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(10,'Meet with a Financial Advisor');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(11,'Stabilize employment');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(12,'Get a Job Readiness Coach');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(13,'Meet with Legal Assistance Advisor');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(14,'Visioning career path');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(15,'Complete Stability Assessment');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(16,'Complete Jump Start program');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(17,'Get any required certifications');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(18,'Get a passing grade in ESL I Class');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(19,'Reach an age appropriate level of proficiency in reading');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(20,'Reach proficiency in reading, writing, speaking, and listening');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(21,'Develop basic financial literacy skills');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(22,'Get and keep job for 6 - 12 months');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(23,'Stabilize career path');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(24,'Acquire and adopt healthy skills to address problems');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(25,'Participate in a Twelve Step or other mutual-help group');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(26,'Reach proficiency level in reading, writing, speaking & listening per state std');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(27,'Develop soft skills');
+INSERT INTO "caseman__GoalTemplate__c" VALUES(28,'Stabilize housing');
 CREATE TABLE "caseman__Goal__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 
@@ -462,25 +460,25 @@ CREATE TABLE "caseman__Goal__c" (
 	goal_template__c VARCHAR(255), 
 	PRIMARY KEY (id)
 );
-INSERT INTO "caseman__Goal__c" VALUES(1,'Build respectful peer relationships','1','1','13');
-INSERT INTO "caseman__Goal__c" VALUES(2,'Build respectful inter-generational relationships','1','1','15');
-INSERT INTO "caseman__Goal__c" VALUES(3,'Reach an age appropriate level of proficiency in reading','1','2','1');
-INSERT INTO "caseman__Goal__c" VALUES(4,'Develop basic financial literacy skills','6','3','3');
-INSERT INTO "caseman__Goal__c" VALUES(5,'Get and keep job for 6 - 12 months','6','3','4');
-INSERT INTO "caseman__Goal__c" VALUES(6,'Develop Soft Skills','6','3','9');
-INSERT INTO "caseman__Goal__c" VALUES(7,'Stabilize housing','6','3','10');
-INSERT INTO "caseman__Goal__c" VALUES(8,'Identify industry/career path','6','3','16');
-INSERT INTO "caseman__Goal__c" VALUES(9,'Meet job requirement standards','6','3','18');
-INSERT INTO "caseman__Goal__c" VALUES(10,'Complete Succeed Program','6','3','19');
-INSERT INTO "caseman__Goal__c" VALUES(11,'Stabilize Employment','6','3','21');
-INSERT INTO "caseman__Goal__c" VALUES(12,'Develop basic financial literacy skills','7','4','3');
-INSERT INTO "caseman__Goal__c" VALUES(13,'Get and keep job for 6 - 12 months','7','4','4');
-INSERT INTO "caseman__Goal__c" VALUES(14,'Develop Soft Skills','7','4','9');
-INSERT INTO "caseman__Goal__c" VALUES(15,'Meet job requirement standards','7','4','18');
-INSERT INTO "caseman__Goal__c" VALUES(16,'Complete Succeed Program','7','4','19');
-INSERT INTO "caseman__Goal__c" VALUES(17,'Stabilize Employment','7','4','21');
-INSERT INTO "caseman__Goal__c" VALUES(18,'Adopt healthy skills to address dependency issues','7','5','6');
-INSERT INTO "caseman__Goal__c" VALUES(19,'Complete Financial Literacy Course','11','6','12');
-INSERT INTO "caseman__Goal__c" VALUES(20,'Deposit 10% of income in Savings Account for 3 months','11','6','14');
-INSERT INTO "caseman__Goal__c" VALUES(21,'Reach proficiency level in reading, writing, speaking & listening per state std','20','7','8');
+INSERT INTO "caseman__Goal__c" VALUES(1,'Build respectful peer relationships','1','1','3');
+INSERT INTO "caseman__Goal__c" VALUES(2,'Build respectful inter-generational relationships','1','1','5');
+INSERT INTO "caseman__Goal__c" VALUES(3,'Reach an age appropriate level of proficiency in reading','1','2','19');
+INSERT INTO "caseman__Goal__c" VALUES(4,'Develop basic financial literacy skills','6','3','21');
+INSERT INTO "caseman__Goal__c" VALUES(5,'Get and keep job for 6 - 12 months','6','3','22');
+INSERT INTO "caseman__Goal__c" VALUES(6,'Develop Soft Skills','6','3','27');
+INSERT INTO "caseman__Goal__c" VALUES(7,'Stabilize housing','6','3','28');
+INSERT INTO "caseman__Goal__c" VALUES(8,'Identify industry/career path','6','3','6');
+INSERT INTO "caseman__Goal__c" VALUES(9,'Meet job requirement standards','6','3','8');
+INSERT INTO "caseman__Goal__c" VALUES(10,'Complete Succeed Program','6','3','9');
+INSERT INTO "caseman__Goal__c" VALUES(11,'Stabilize Employment','6','3','11');
+INSERT INTO "caseman__Goal__c" VALUES(12,'Develop basic financial literacy skills','7','4','21');
+INSERT INTO "caseman__Goal__c" VALUES(13,'Get and keep job for 6 - 12 months','7','4','22');
+INSERT INTO "caseman__Goal__c" VALUES(14,'Develop Soft Skills','7','4','27');
+INSERT INTO "caseman__Goal__c" VALUES(15,'Meet job requirement standards','7','4','8');
+INSERT INTO "caseman__Goal__c" VALUES(16,'Complete Succeed Program','7','4','9');
+INSERT INTO "caseman__Goal__c" VALUES(17,'Stabilize Employment','7','4','11');
+INSERT INTO "caseman__Goal__c" VALUES(18,'Adopt healthy skills to address dependency issues','7','5','24');
+INSERT INTO "caseman__Goal__c" VALUES(19,'Complete Financial Literacy Course','11','6','2');
+INSERT INTO "caseman__Goal__c" VALUES(20,'Deposit 10% of income in Savings Account for 3 months','11','6','4');
+INSERT INTO "caseman__Goal__c" VALUES(21,'Reach proficiency level in reading, writing, speaking & listening per state std','20','7','26');
 COMMIT;

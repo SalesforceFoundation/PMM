@@ -27,6 +27,26 @@ class MapLookupError(Exception):
     pass
 
 
+class TestInjectNamespaceTask(NamespaceTask):
+    task_options = {
+        "test_strings": {
+            "description": "Array of Field or SObject API Names to test",
+            "required": True,
+        },
+    }
+
+
+    def _run_task(self):
+        step = BulkDataStep(
+            "my_step",
+            self.namespaces["pmdm"],
+            self.namespaces
+        )
+        map_step = "my_map_step"
+        for test in self.options.get("test_strings"):
+            self.logger.info(f'injecting namespace into "{test}": "{step._inject_local_namespace(test, map_step)}"')
+
+
 class BulkDataStep(Namespace):
 
     _reserved_sql_columns = [
@@ -34,8 +54,10 @@ class BulkDataStep(Namespace):
         "_last_table_id",
     ]
 
+    _custom_namespace_injection_regex = r'{(\w+)}(\w+)'
+
     def __init__(
-        self, step: str, namespace: Namespace, map_path=None, sql_path=None, record_types_by_sobject=None,
+        self, step: str, namespace: Namespace, namespaces, map_path=None, sql_path=None, record_types_by_sobject=None,
     ) -> None:
         self._step = step
         self._namespace = namespace.namespace
@@ -45,8 +67,30 @@ class BulkDataStep(Namespace):
         self._map_path = map_path
         self._map = None
 
+        self._namespaces = namespaces
+
         self._load_map(record_types_by_sobject)
         self._load_sql()
+
+    def _inject_local_namespace(self, field_or_sobject_api_name:str, map_step):
+        # Returns f"{local_namespace}__{field_or_sobject_api_name}" if field_or_sobject_api_name ends with "__c" and local_namespace is not blank.
+        # If field is of the form "{another_namespace}ApiName__c", injects another_namespace's local_namespace if not blank and another_namespace found in namespaces.
+        if not field_or_sobject_api_name or not field_or_sobject_api_name.lower().endswith('__c'):
+            return field_or_sobject_api_name
+        
+        namespace = self._namespaces[self.namespace]
+        custom_namespace_matches = re.match(BulkDataStep._custom_namespace_injection_regex, field_or_sobject_api_name)
+        non_namespaced_field_or_sobject_api_name = field_or_sobject_api_name
+        if custom_namespace_matches:
+            custom_namespace_prefix = custom_namespace_matches.group(1)
+            print(f'custom_namespace_prefix: {custom_namespace_prefix}')
+            custom_namespace = self._namespaces.get(custom_namespace_prefix)
+            if custom_namespace:
+                namespace = custom_namespace
+                non_namespaced_field_or_sobject_api_name = custom_namespace_matches.group(2)
+            else:
+                raise TaskOptionsError(f'"{custom_namespace_prefix}" not found in namespaces trying to inject namespace into "{field_or_sobject_api_name}" on bulk_data step "{self.step}" and map step "{map_step}"')
+        return f'{namespace.local_namespace}__{non_namespaced_field_or_sobject_api_name}' if namespace.local_namespace else non_namespaced_field_or_sobject_api_name
 
     def _load_map(self, record_types_by_sobject=None):
         # Set map after:
@@ -69,7 +113,7 @@ class BulkDataStep(Namespace):
                         fields_to_delete = set()
                         new_fields = {}
                         for field in step[key].keys():
-                            namespaced_field = self.inject_field_namespace(field)
+                            namespaced_field = self._inject_local_namespace(field, map_step)
                             if field != namespaced_field:
                                 new_fields[namespaced_field] = step[key][field]
                                 fields_to_delete.add(field)
@@ -92,7 +136,7 @@ class BulkDataStep(Namespace):
                 if not step.get("sf_object"):
                     raise MapError(f'Map step "{map_step}" must have an "sf_object"')
                 sobject = step["sf_object"]
-                step["sf_object"] = self.inject_sobject_namespace(sobject)
+                step["sf_object"] = self._inject_local_namespace(sobject, map_step)
             
                 # TODO: This method originally took in a argument "record_types_by_sobject" 
                 #       which resolved to be the value of self.record_types_by_sobject from tasks.org_info.RecordTypeTask.

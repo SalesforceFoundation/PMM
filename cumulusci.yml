@@ -61,6 +61,16 @@ bulk_data:
         map: sharedbulkdata/pmdm/pmdm.yml
         sql: sharedbulkdata/pmdm/pmdm.sql
         namespace: pmdm
+    #caseman:
+    #map: sharedbulkdata/caseman/caseman.yml
+    #sql: sharedbulkdata/caseman/caseman.sql
+    #namespace: caseman
+    #caseman_unpackaged:
+    #map: sharedbulkdata/caseman/unpackaged.yml
+    #sql: sharedbulkdata/caseman/unpackaged.sql
+    #namespace: c
+    #and_require_namespaced:
+    #- caseman
     npe01:
         map: sharedbulkdata/npe01/npe01.yml
         sql: sharedbulkdata/npe01/npe01.sql
@@ -79,6 +89,17 @@ bulk_data:
         namespace: npsp
 
 tasks:
+    test_inject_namespace:
+        class_path: tasks.sharedbulkdata.TestInjectNamespaceTask
+        options:
+            test_strings:
+                - "Name"
+                - "Field__c"
+                - "Field__C"
+                - "{caseman}Assessment__c"
+                - "{pmdm}ServiceDelivery__c"
+                - "{npsp}Whoops"
+                - "{npsp}Whoops__c"
     cache_namespaces:
         group: "Org info"
         description: Caches namespaces information in org_config

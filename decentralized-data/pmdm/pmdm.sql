@@ -366,10 +366,10 @@ CREATE TABLE "pmdm__ProgramCohort__c" (
 );
 INSERT INTO "pmdm__ProgramCohort__c" VALUES(1,'Job Readiness 2019-2021','This program is designed to assist adults who have experienced a prolonged absence from the workforce for a variety of reasons such as caring for a family member, protracted joblessness following a layoff or return from a short period of incarceration for a minor crime. It''s also intended to provide support for adults in the workforce who are looking to stabilize their housing or working situation.','2021-04-15','2019-04-15','Active','2');
 INSERT INTO "pmdm__ProgramCohort__c" VALUES(2,'Fall 2019 STEM','','2019-12-20','2019-09-09','Active','4');
-INSERT INTO "pmdm__ProgramCohort__c" VALUES(3,'Eastgate','Eastgate neighborhood service area','','2019-02-01','Active','6');
-INSERT INTO "pmdm__ProgramCohort__c" VALUES(4,'Genellen','Genellen neighborhood service area','','2019-02-01','Active','6');
-INSERT INTO "pmdm__ProgramCohort__c" VALUES(5,'Riverside','Riverside neighborhood service area','','2019-02-01','Active','6');
-INSERT INTO "pmdm__ProgramCohort__c" VALUES(6,'Highpoint','Highpoint neighborhood service area','','2019-02-01','Active','6');
+INSERT INTO "pmdm__ProgramCohort__c" VALUES(3,'Eastgate','Eastgate neighborhood service area','','2019-05-01','Active','6');
+INSERT INTO "pmdm__ProgramCohort__c" VALUES(4,'Genellen','Genellen neighborhood service area','','2019-05-01','Active','6');
+INSERT INTO "pmdm__ProgramCohort__c" VALUES(5,'Riverside','Riverside neighborhood service area','','2019-05-01','Active','6');
+INSERT INTO "pmdm__ProgramCohort__c" VALUES(6,'Highpoint','Highpoint neighborhood service area','','2019-05-01','Active','6');
 CREATE TABLE "pmdm__ProgramEngagement__c" (
 	id INTEGER NOT NULL, 
 	"Name" VARCHAR(255), 

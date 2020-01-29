@@ -256,6 +256,10 @@ tasks:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.CacheProjectBulkDataTask
 
+    view_cached_project_bulk_data:
+        group: "Data: Bulk"
+        class_path: tasks.sharedbulkdata.ViewCachedProjectBulkDataTask
+
     log_bulk_data_combined_map:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.LogBulkDataCombinedMapTask
@@ -263,6 +267,14 @@ tasks:
     log_bulk_data_step_map:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.LogBulkDataStepMapTask
+
+    log_bulk_data_combined_sql_scripts:
+        group: "Data: Bulk"
+        class_path: tasks.sharedbulkdata.LogBulkDataCombinedSqlScriptsTask
+
+    log_bulk_data_step_sql_scripts:
+        group: "Data: Bulk"
+        class_path: tasks.sharedbulkdata.LogBulkDataStepSqlScriptsTask
 
     delete_bulk_data_step:
         group: "Data: Bulk"
@@ -289,6 +301,13 @@ tasks:
         description: "Inserts combined bulk data"
         class_path: tasks.sharedbulkdata.InsertBulkDataCombinedTask
 
+    update_all_records_as_recently_viewed:
+        group: "Data: Script"
+        description: Updates Accounts, Contacts, Cases, Opportunities, and all records for Custom Objects having a Tab as recently viewed.
+        class_path: cumulusci.tasks.apex.anon.AnonymousApexTask
+        options:
+            path: "data/scripts/update_all_records_as_recently_viewed.apex"
+
 flows:
     cache_project_bulk_data:
         steps:
@@ -303,20 +322,95 @@ flows:
                 options:
                     bulk_data_log_level: summary
 
+    view_cached_project_bulk_data:
+        steps:
+            10:
+                flow: cache_project_bulk_data
+            99:
+                task: view_cached_project_bulk_data
+
+    log_bulk_data_combined_map:
+        steps:
+            01:
+                flow: cache_project_bulk_data
+            10:
+                task: log_bulk_data_combined_map
+                options:
+                    bulk_data_log_level: all
+
+    log_bulk_data_combined_sql_scripts:
+        steps:
+            01:
+                flow: cache_project_bulk_data
+            10:
+                task: log_bulk_data_combined_sql_scripts
+                options:
+                    bulk_data_log_level: all
+
+    delete_bulk_data_combined:
+        steps:
+            01:
+                flow: cache_project_bulk_data
+            10:
+                task: delete_bulk_data_combined
+
     insert_data:
         steps:
             010:
                 flow: cache_project_bulk_data
-            100:
-                flow: insert_bulk_data
+            020:
+                task: execute_anon
+                options:
+                    path: "data/scripts/delete_sample_contacts_and_accounts.apex"
+            110:
+                task: execute_anon
+                options:
+                    path: "data/scripts/npsp/set_npsp_gender_relationship_setting.apex"
+                when: "'npsp' in org_config.namespaces"
+            120:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname ManageCases"
+                when: "'caseman' in org_config.namespaces"
+            121:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname ManagePrograms"
+                when: "'caseman' in org_config.namespaces"
+            130:
+                task: insert_bulk_data_combined
+                options:
+                    bulk_data_log_level: all
+            140:
+                task: execute_anon
+                options:
+                    path: "data/scripts/npsp/de-duplicate_npsp_relationships.apex"
+                when: "'npsp' in org_config.namespaces"
             210:
                 task: execute_anon
                 options:
                     path: "data/scripts/delete_sample_contacts_and_accounts.apex"
             999:
-                task: execute_anon
+                task: update_all_records_as_recently_viewed
+            1000:
+                task: view_cached_project_bulk_data
+
+    insert_bulk_data:
+        steps:
+            010:
+                flow: cache_project_bulk_data
+            110:
+                flow: npsp_pre_insert_bulk_data
+            120:
+                flow: caseman_pre_insert_bulk_data
+            200:
+                task: insert_bulk_data_combined
                 options:
-                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+                    bulk_data_log_level: all
+            310:
+                flow: npsp_post_insert_bulk_data
+            #320:
+            #flow: caseman_post_insert_bulk_data
 
     assign_managed_pmdm_permsets:
         steps:
@@ -368,23 +462,6 @@ flows:
                     command: "force:user:permset:assign --permsetname ManagePrograms"
                 when: "'caseman' in org_config.namespaces"
 
-    insert_bulk_data:
-        steps:
-            010:
-                task: cache_project_bulk_data
-            110:
-                flow: npsp_pre_insert_bulk_data
-            120:
-                flow: caseman_pre_insert_bulk_data
-            200:
-                task: insert_bulk_data_combined
-                options:
-                    bulk_data_log_level: all
-            310:
-                flow: npsp_post_insert_bulk_data
-            #320:
-            #flow: caseman_post_insert_bulk_data
-
     update_admin_profile:
         steps:
             01:
@@ -433,8 +510,8 @@ flows:
                     unmanaged: True
             110:
                 task: activate_flows
-            200:
-                flow: insert_data
+            #200:
+            #flow: insert_data
 
     config_unmanaged_namespaced:
         steps:
@@ -446,8 +523,8 @@ flows:
                     unmanaged: False
             102:
                 task: activate_flows
-            200:
-                flow: insert_data
+            #200:
+            #flow: insert_data
 
     config_managed:
         steps:

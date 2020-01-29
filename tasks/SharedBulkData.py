@@ -515,9 +515,10 @@ class BulkDataStep(Namespace):
         return "\n".join(
             [
                 f"BEGIN TRANSACTION;",
-                f"UPDATE {combined_table}",
-                f"SET ({lookup_column}) = (",
-                f"    SELECT {lookup_combined_table}.id",
+                f'WITH ___combined_lookup AS (',
+                f"    SELECT ",
+                f'        {lookup_combined_table}.id AS {lookup_column},',
+                f'        {namespaced_table}.id AS _last_table_id',
                 f"    FROM ",
                 f"        {namespaced_table}",  # JOIN 1
                 f"        JOIN {lookup_namespaced_table}",  # JOIN 2
@@ -525,18 +526,16 @@ class BulkDataStep(Namespace):
                 f"        JOIN {lookup_combined_table}",  # JOIN 3
                 f'            ON {lookup_combined_table}._last_table = "{lookup_namespaced_table}"',
                 f"            AND {lookup_combined_table}._last_table_id = {lookup_namespaced_table}.id",
-                f"    WHERE EXISTS (",
-                f"        SELECT *",
-                f"        FROM {namespaced_table}",
-                f"        WHERE {lookup_column} IS NOT NULL",
-                f"    )",
-                f")",
-                f'WHERE _last_table = "{namespaced_table}"',
-                f"AND _last_table_id IN (",
-                f"    SELECT id",
-                f"    FROM {namespaced_table}",
-                f")",
-                f"AND {lookup_column} IS NOT NULL;",
+                f"    WHERE {namespaced_table}.{lookup_column} IS NOT NULL",
+                f')',
+                f"UPDATE {combined_table}",
+                f"SET ({lookup_column}) = (",
+                f'    SELECT {lookup_column}',
+                f'    FROM ___combined_lookup',
+                f'    WHERE ___combined_lookup._last_table_id = {combined_table}._last_table_id',
+                f'    AND {combined_table}._last_table = "{namespaced_table}"',
+                f'    AND {combined_table}.{lookup_column} IS NOT NULL',
+                f');',
                 f"COMMIT;",
             ]
         )
@@ -1081,6 +1080,13 @@ class CacheProjectBulkDataTask(BulkDataCombinedTask):
 
         if self.log_summary_bulk_data:
             self.bulk_data
+
+class ViewCachedProjectBulkDataTask(BulkDataCombinedTask):
+    #    Caches project's bulk_data in org_config so accessible in later flow step.
+    #    Defaults bulk_data_log_level option as 'summary'.
+    #    Also caches namespaces and record_types_by_sobject in org_config.
+    def _run_task(self):
+        self.logger.info(f'bulk_data_config: {self.org_config.config.get("bulk_data_config")}')
 
 
 class LogBulkDataCombinedMapTask(BulkDataCombinedTask):

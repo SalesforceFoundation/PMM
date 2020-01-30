@@ -900,9 +900,10 @@ class BulkDataCombinedTask(NamespaceTask, RecordTypeTask):
                         bulk_data_step = BulkDataStep(
                             step,
                             namespace_info,
+                            self.namespaces,
                             bulk_data_config.get("map"),
                             bulk_data_config.get("sql"),
-                            self.record_types_by_sobject
+                            self.record_types_by_sobject,
                         )
                         is_used = "✅"
                         self._bulk_data[step] = bulk_data_step

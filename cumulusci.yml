@@ -143,10 +143,6 @@ tasks:
         options:
             command: "force:source:status"
 
-    activate_flows:
-        description: This task activates all the process builder processes in the org
-        class_path: tasks.ActivateProcessBuilders.ActivateProcessBuilderProcesses
-
     add_caseman_dependency:
         group: Impact Engineering
         description: Installs CaseMan with dependencies
@@ -373,7 +369,11 @@ flows:
                 options:
                     unmanaged: True
             110:
-                task: activate_flows
+                task: activate_flow
+                options:
+                    developer_names:
+                        - ServiceDelivery
+                        - Auto_Populate_Date_And_Name_On_Program_Engagement
             200:
                 flow: insert_data
 
@@ -386,14 +386,16 @@ flows:
                 options:
                     unmanaged: False
             102:
-                task: activate_flows
+                task: activate_flow
+                options:
+                    developer_names:
+                        - ServiceDelivery
+                        - Auto_Populate_Date_And_Name_On_Program_Engagement
             200:
                 flow: insert_data
 
     config_qa:
         steps:
-            100:
-                task: activate_flows
             200:
                 flow: config_unmanaged
 

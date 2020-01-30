@@ -10,6 +10,8 @@ project:
         repo_url: https://github.com/SalesforceFoundation/PMDM
         prefix_beta: uat/
         prefix_release: release/
+    dependencies:
+        - github: https://github.com/SalesforceFoundation/sfdo-base
 
 orgs:
     scratch:

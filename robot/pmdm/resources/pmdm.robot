@@ -47,6 +47,7 @@ API Create Service
     ...                  Description__c=PMDM Robot service
     ...                  UnitOfMeasurement__c=Hours
     ...                  Status__c=Active
+    ...                  &{fields}
     &{service} =     Salesforce Get  Service__c  ${service_id}
     Store Session Record      Service__c  ${service_id}
     [Return]         &{service}
@@ -65,14 +66,3 @@ API Create Program Engagement
     &{program_engagement} =     Salesforce Get  ProgramEngagement__c  ${program_engagement_id}
     Store Session Record      ProgramEngagement__c  ${program_engagement_id}
     [Return]         &{program_engagement}
-
-API Create Account
-    [Arguments]      &{fields}
-    ${account_name} =        Generate Random String
-    ${rt_id} =       Get Record Type Id  Account  Organization
-    ${account_id} =  Salesforce Insert  Account
-    ...                  Name=${account_name}
-    ...                  RecordTypeId=${rt_id}
-    ...                  &{fields}
-    &{account} =     Salesforce Get  Account  ${account_id}
-    [return]         &{account}

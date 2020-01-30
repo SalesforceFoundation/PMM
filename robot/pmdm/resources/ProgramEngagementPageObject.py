@@ -60,7 +60,7 @@ class NewProgramEngagementPage(BasePMDMPage, BasePage):
 
 
 @pageobject("Details", "ProgramEngagement__c")
-class ProgramDetailPage(BasePMDMPage, DetailPage):
+class ProgramEngagementDetailPage(BasePMDMPage, DetailPage):
 
     def _is_current_page(self):
         """ Verify we are on the Program detail page

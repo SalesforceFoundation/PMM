@@ -1,7 +1,6 @@
 {
     "orgName": "Program Management Data Model - Beta Test Org",
     "edition": "Developer",
-    "features": ["ContactsToMultipleAccounts"],
     "settings": {
         "lightningExperienceSettings": {
             "enableS1DesktopEnabled": true

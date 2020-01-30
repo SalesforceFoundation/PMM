@@ -15,6 +15,7 @@ pmdm_lex_locators = {
         "input2": "//input[@type='text' and @data-name='{}']"
     },
     "page_header": "//div[contains(@class, 'slds-page-header')]/descendant::span[text()='{}}']",
+    "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
     'confirm': {
         'check_value':'//div[contains(@class, "forcePageBlockItem")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span',
         'check_status':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-text',

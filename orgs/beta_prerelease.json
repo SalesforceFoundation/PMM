@@ -2,7 +2,6 @@
     "orgName": "Program Management Data Model - Prerelease Beta Test Org",
     "edition": "Developer",
     "instance": "cs46",
-    "features": ["ContactsToMultipleAccounts"],
     "settings": {
         "lightningExperienceSettings": {
             "enableS1DesktopEnabled": true

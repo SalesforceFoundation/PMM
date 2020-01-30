@@ -38,7 +38,6 @@ API Create Contact
     [Return]         &{contact}
 
 API Create Service
-   # [Arguments]      &{fields}
     ${service_name} =  Generate Random String
     [Arguments]       ${program_id}  &{fields}
     ${service_id} =  Salesforce Insert  Service__c
@@ -53,7 +52,6 @@ API Create Service
     [Return]         &{service}
 
 API Create Program Engagement
-    #[Arguments]      &{fields}
     ${program_engagement_name} =  Generate Random String
     [Arguments]       ${program_id}     ${contact_id}   &{fields}
     ${program_engagement_id} =  Salesforce Insert  ProgramEngagement__c

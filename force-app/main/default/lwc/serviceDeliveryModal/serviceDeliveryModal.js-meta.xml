@@ -3,9 +3,4 @@
     <apiVersion>47.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>Bulk Service Deliveries Modal</masterLabel>
-    <targets>
-        <target>lightning__RecordPage</target>
-        <target>lightning__HomePage</target>
-        <target>lightning__AppPage</target>
-    </targets>
 </LightningComponentBundle>

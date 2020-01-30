@@ -946,7 +946,7 @@ class BulkDataCombinedTask(NamespaceTask, RecordTypeTask):
     def combined_bulk_data(self):
         if self._combined_bulk_data is None:
             self._combined_bulk_data = BulkDataStep(
-                "Combined", self.namespaces.get("c")
+                "Combined", self.namespaces.get("c"), self.namespaces
             )
 
             for bulk_data_step in self.bulk_data.values():

@@ -1,8 +1,0 @@
-Contacts:
-    fields:
-        Gender__c: Gender__c
-
-caseman__Assessments:
-    fields:
-        FinancialStabilityScore__c: financialstabilityscore__c
-        JobReadinessScore__c: jobreadinessscore__c

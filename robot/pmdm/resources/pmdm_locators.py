@@ -29,7 +29,11 @@ pmdm_lex_locators = {
         "dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
         "button": "//button[contains(@class, 'slds-button') and @type='button' and @title = '{}']",
         "lookup_field": "//div[contains(@class, 'autocompleteWrapper')]//input[@title='{}']",
-        "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']"
+        "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']",
+        #"open_date_picker": "//div[contains(@class,'forcePageBlockSectionRow')]/div[contains(@class,'forcePageBlockItem')]/div[contains(@class,'slds-hint-parent')]/div[@class='slds-form-element__control']/div[.//span[text()='{}']][//div[contains(@class,'uiInput')]//a[contains(@class,'datePicker-openIcon display')]]",
+        "open_date_picker": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]//div//a[contains(@class,'datePicker-openIcon display')]",
+        "datepicker_popup": "//table[@class='calGrid' and @role='grid']",
+        "select_date": "//div[contains(@class,'uiDatePickerGrid')]/table[@class='calGrid']//span[text()='{}']",
     },
     'related': {
         'button': "//article[contains(@class, 'forceRelatedListCardDesktop')][.//img][.//span[@title='{}']]//a[@title='{}']",

@@ -38,3 +38,4 @@ Create Service from Program Object
      Wait Until Modal Is Closed
      current page should be                 Details                                 Program__c
      Page Should Contain                   ${service_name}
+     ${service_id} =            Save Current Record ID For Deletion     Service__c

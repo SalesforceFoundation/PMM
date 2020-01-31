@@ -1,0 +1,23 @@
+{
+    "orgName": "Program Management Data Model - Beta Test Org with caseman and NPSP",
+    "edition": "Developer",
+    "features": ["ContactsToMultipleAccounts"],
+    "settings": {
+        "lightningExperienceSettings": {
+            "enableS1DesktopEnabled": true
+        },
+        "chatterSettings": {
+            "enableChatter": true
+        },
+        "enhancedNotesSettings": {
+            "enableEnhancedNotes": true
+        },
+        "pathAssistantSettings": {
+            "pathAssistantEnabled": true
+        },
+        "accountSettings": {
+            "enableAccountTeams": true,
+            "showViewHierarchyLink": true
+        }
+    }
+}

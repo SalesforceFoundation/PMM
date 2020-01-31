@@ -60,8 +60,8 @@ orgs:
 
 bulk_data:
     pmdm:
-        map: sharedbulkdata/pmdm/pmdm.yml
-        sql: sharedbulkdata/pmdm/pmdm.sql
+        map: storytelling_data/pmdm/pmdm.yml
+        sql: storytelling_data/pmdm/pmdm.sql
         namespace: pmdm
 
 tasks:

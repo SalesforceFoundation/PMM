@@ -35,24 +35,24 @@ orgs:
             days: 7
             namespaced: True
         caseman:
-            config_file: orgs/dev.json
+            config_file: orgs/caseman.json
             days: 7
         caseman_namespaced:
-            config_file: orgs/dev.json
+            config_file: orgs/caseman.json
             days: 7
             namespaced: True
         caseman_npsp:
-            config_file: orgs/npsp.json
+            config_file: orgs/caseman_npsp.json
             days: 7
         caseman_npsp_namespaced:
-            config_file: orgs/npsp.json
+            config_file: orgs/caseman_npsp.json
             days: 7
             namespaced: True
         beta_caseman:
-            config_file: orgs/beta.json
+            config_file: orgs/beta_caseman.json
             days: 7
         beta_caseman_npsp:
-            config_file: orgs/beta.npsp.json
+            config_file: orgs/beta_caseman_npsp.json
             days: 7
         beta_npsp:
             config_file: orgs/beta.npsp.json
@@ -65,32 +65,6 @@ bulk_data:
         namespace: pmdm
 
 tasks:
-    test_inject_namespace:
-        class_path: tasks.sharedbulkdata.TestInjectNamespaceTask
-        options:
-            test_strings:
-                - "Name"
-                - "Field__c"
-                - "Field__C"
-                - "{caseman}Assessment__c"
-                - "{pmdm}ServiceDelivery__c"
-                - "{npsp}Whoops"
-                - "{npsp}Whoops__c"
-    cache_namespaces:
-        group: "Org info"
-        description: Caches namespaces in org_config if first call to CacheNamespacesTask.
-        class_path: tasks.org_info.CacheNamespacesTask
-
-    refresh_namespaces_cache:
-        group: "Org info"
-        description: Forces refresh of cached namespaces in org_config with API callout.
-        class_path: tasks.org_info.RefreshNamespacesCacheTask
-
-    namespace_execute_anonymous:
-        description: Execute anonymous apex via the tooling api if namespace is used.
-        class_path: tasks.org_info.ExecuteAnonymousTask
-        group: Salesforce
-
     robot:
         options:
             suites: robot/pmdm/tests
@@ -195,21 +169,6 @@ tasks:
                 - github: "https://github.com/SalesforceFoundation/caseman"
             include_beta: True
 
-    update_client_photo_directories:
-        group: "CaseMan: Test Data"
-        description: "Update client photo directories after capture_test_data"
-        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
-        options:
-            directory_path: "data/bulk/client-photos"
-            sql_path: "data/bulk/data.sql"
-
-    upload_client_photos:
-        group: "Data: Bulk: CaseMan"
-        description: "Upload client photos and link to client records"
-        class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
-        options:
-            directory_path: "data/bulk/client-photos"
-
     deploy_dev_config:
         group: "pmdm: Config"
         description: Deploys the post-install configuration for an unmanaged DE org
@@ -240,17 +199,27 @@ tasks:
             path: unpackaged/tests/serviceDeliveryModal
             namespace_inject: $project_config.project__package__namespace
 
-    refresh_cache_bulk_data_config:
-        group: "Data: Bulk"
-        class_path: tasks.sharedbulkdata.RefreshCacheProjectBulkDataTask
+    cache_namespaces:
+        group: "Org info"
+        description: Caches namespaces in org_config if first call to CacheNamespacesTask.
+        class_path: tasks.org_info.CacheNamespacesTask
+
+    refresh_namespaces_cache:
+        group: "Org info"
+        description: Forces refresh of cached namespaces in org_config with API callout.
+        class_path: tasks.org_info.RefreshNamespacesCacheTask
 
     cache_bulk_data_config:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.CacheBulkDataConfigTask
+        options:
+            bulk_data_log_level: summary
 
     view_cached_bulk_data_config:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.ViewCachedBulkDataConfigTask
+        options:
+            bulk_data_log_level: summary
 
     log_bulk_data_combined_map:
         group: "Data: Bulk"
@@ -259,6 +228,8 @@ tasks:
     log_bulk_data_step_map:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.LogBulkDataStepMapTask
+        options:
+            bulk_data_step: pmdm
 
     log_bulk_data_combined_sql_scripts:
         group: "Data: Bulk"
@@ -267,10 +238,14 @@ tasks:
     log_bulk_data_step_sql_scripts:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.LogBulkDataStepSqlScriptsTask
+        options:
+            bulk_data_step: pmdm
 
     delete_bulk_data_step:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.DeleteBulkDataStepTask
+        options:
+            bulk_data_step: pmdm
 
     delete_bulk_data_combined:
         group: "Data: Bulk"
@@ -279,7 +254,6 @@ tasks:
     capture_bulk_data_step:
         group: "Data: Bulk"
         class_path: tasks.sharedbulkdata.CaptureBulkDataStepTask
-        # Each repo will specify bulk_data_step option
         options:
             bulk_data_step: pmdm
 
@@ -287,6 +261,8 @@ tasks:
         group: "Data: Bulk"
         description: "Inserts bulk data at for bulk_data_step"
         class_path: tasks.sharedbulkdata.InsertBulkDataStepTask
+        options:
+            bulk_data_step: pmdm
 
     insert_bulk_data_combined:
         group: "Data: Bulk"
@@ -344,45 +320,6 @@ flows:
             10:
                 task: delete_bulk_data_combined
 
-    insert_storytelling_data:
-        steps:
-            1:
-                task: cache_namespaces
-            10:
-                flow: caseman:before_insert_storytelling_data
-            11:
-                flow: before_insert_storytelling_data
-            20:
-                flow: cache_bulk_data_config
-            21:
-                task: insert_bulk_data_combined
-            31:
-                flow: caseman:after_insert_storytelling_data
-            999:
-                task: update_all_records_as_recently_viewed
-
-    insert_bulk_data:
-        steps:
-            010:
-                flow: cache_bulk_data_config
-            110:
-                flow: npsp_pre_insert_bulk_data
-            120:
-                flow: caseman_pre_insert_bulk_data
-            200:
-                task: insert_bulk_data_combined
-                options:
-                    bulk_data_log_level: all
-            310:
-                flow: npsp_post_insert_bulk_data
-            #320:
-            #flow: caseman_post_insert_bulk_data
-
-    before_insert_storytelling_data:
-        steps:
-            10:
-                flow: assign_permission_sets_to_admin
-
     assign_permission_sets_to_admin:
         steps:
             1:
@@ -418,58 +355,6 @@ flows:
                     command: "force:user:permset:assign --permsetname PMDM_Deliver"
                 when: '"pmdm" in org_config.namespaces_without_injection'
 
-    assign_managed_pmdm_permsets:
-        steps:
-            1:
-                task: cache_namespaces
-            110:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname pmdm__PMDM_View"
-            120:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname pmdm__PMDM_Manage"
-            130:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname pmdm__PMDM_Deliver"
-
-    #caseman_post_insert_bulk_data:
-    #steps:
-    #100:
-    #task: upload_client_photos
-    #when: "'caseman' in org_config.namespaces"
-
-    npsp_post_insert_bulk_data:
-        steps:
-            100:
-                task: execute_anon
-                options:
-                    path: "data/scripts/npsp/de-duplicate_npsp_relationships.apex"
-                when: "'npsp' in org_config.namespaces"
-
-    npsp_pre_insert_bulk_data:
-        steps:
-            010:
-                task: execute_anon
-                options:
-                    path: "data/scripts/npsp/set_npsp_gender_relationship_setting.apex"
-                when: "'npsp' in org_config.namespaces"
-
-    caseman_pre_insert_bulk_data:
-        steps:
-            10:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname ManageCases"
-                when: "'caseman' in org_config.namespaces"
-            20:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname ManagePrograms"
-                when: "'caseman' in org_config.namespaces"
-
     update_admin_profile:
         steps:
             01:
@@ -486,6 +371,28 @@ flows:
             40:
                 task: update_admin_profile_caseman_npsp
                 when: "'caseman' in org_config.namespaces and 'npsp' in org_config.namespaces"
+
+    before_insert_storytelling_data:
+        steps:
+            10:
+                flow: assign_permission_sets_to_admin
+
+    insert_storytelling_data:
+        steps:
+            1:
+                task: cache_namespaces
+            10:
+                flow: caseman:before_insert_storytelling_data
+            11:
+                flow: before_insert_storytelling_data
+            20:
+                flow: cache_bulk_data_config
+            21:
+                task: insert_bulk_data_combined
+            31:
+                flow: caseman:after_insert_storytelling_data
+            999:
+                task: update_all_records_as_recently_viewed
 
     caseman_org:
         steps:

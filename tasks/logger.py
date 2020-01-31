@@ -212,5 +212,6 @@ class TableLogger(TitleLogger):
     def log_set(self, values, **kwargs):
         self.log_list(values, **kwargs)
 
+
 class LoggingTask(TableLogger):
     pass

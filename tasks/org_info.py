@@ -110,7 +110,6 @@ class Namespace:
         return self.inject_namespace(class_name, ".")
 
 
-
 class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
 
     _record_types_by_sobject = None
@@ -123,15 +122,10 @@ class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
         #       If we have a Bulk API task, sf attr seems to be deleted
         if not hasattr(self, "sf"):
             return
-    
+
         self._record_types_by_sobject = {}
 
-        rows = [
-            [
-                "SOBJECT TYPE",
-                "DEVELOPER NAME"
-            ]
-        ]
+        rows = [["SOBJECT TYPE", "DEVELOPER NAME"]]
 
         # Query org for all Record Types
         last_sobject_type = None
@@ -146,16 +140,14 @@ class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
             rows.append(
                 [
                     sobject_type if sobject_type != last_sobject_type else "",
-                    developer_name
+                    developer_name,
                 ]
             )
 
             last_sobject_type = sobject_type
-        
+
         if not self._record_types_by_sobject:
-            rows.append([
-                "💤  NONE  💤"
-            ])
+            rows.append(["💤  NONE  💤"])
         self.log_title("Record Types")
         self.log_table(rows)
 
@@ -193,8 +185,8 @@ class NamespaceTask(LoggingTask):
     def local_project_namespace(self):
         return "" if not self.is_org_namespaced else self.project_namespace
 
-    def _get_installed_package_versions_by_namespace_from_metadata(self):
-        self.log_title("Getting installed packages from Metadata API")
+    def _get_installed_package_versions_by_namespace_from_soap_api(self):
+        self.log_title("Getting installed packages from SOAP API")
         installed_package_version_by_namespace = {}
         for package in GetInstalledPackages(
             self.project_config, TaskConfig({}), self.org_config,
@@ -207,7 +199,7 @@ class NamespaceTask(LoggingTask):
             "Getting installed packages from sfdx is currently not supported"
         )
         # TODO: use subprocess to call f'sfdx force:packages:installed:list --json -u {self.org_config.username}', parse the response as JSON
-        return self._get_installed_package_versions_by_namespace_from_metadata()
+        return self._get_installed_package_versions_by_namespace_from_soap_api()
 
     def get_installed_package_version_by_namespace(self):
         if (
@@ -215,11 +207,11 @@ class NamespaceTask(LoggingTask):
             and self.options.get("installed_packages_api").lower() == "sfdx"
         ):
             return self._get_installed_package_versions_by_namespace_from_sfdx()
-        return self._get_installed_package_versions_by_namespace_from_metadata()
+        return self._get_installed_package_versions_by_namespace_from_soap_api()
 
     def log_namespaces(self):
         rows = [
-            ["NAMESPACE", "LOCAL NAMESPACE", "PACKAGE VERSION", "PROJECT"],
+            ["NAMESPACE", "LOCAL NAMESPACE", "PACKAGE VERSION", "PROJECT","NEEDING INJECTION", "WITHOUT INJECTION",],
         ]
         for prefix in sorted(self.namespaces.keys()):
             rows.append(
@@ -230,6 +222,12 @@ class NamespaceTask(LoggingTask):
                     "✅"
                     if self.namespaces[prefix].namespace == self.project_namespace
                     else "",
+                    "✅"
+                    if self.namespaces[prefix].local_namespace
+                    else "",
+                    ""
+                    if self.namespaces[prefix].local_namespace
+                    else "✅",
                 ]
             )
 
@@ -261,8 +259,25 @@ class NamespaceTask(LoggingTask):
                     "version": str(version),
                 }
 
-        # Cache namespaces in org_config.config as dict of strings which can always safely be unpickled
-        self.org_config.config.update({"namespaces": namespaces})
+        namespaces_needing_injection = {}
+        namespaces_without_injection = {}
+        for prefix, namespace in namespaces.items():
+            if namespace.get("local_namespace"):
+                namespaces_needing_injection[prefix] = namespace
+            else:
+                namespaces_without_injection[prefix] = namespace
+
+        
+        
+        # Cache in org_config:
+        #   - namespaces as dict of strings which can always safely be unpickled
+        #   - namespaces_needing_injection as namespaces needing namespace injection
+        #   - namespaces_without_injection as namespaces without needing namespace injection
+        self.org_config.config.update({
+            "namespaces": namespaces,
+            "namespaces_needing_injection": namespaces_needing_injection,
+            "namespaces_without_injection": namespaces_without_injection,
+        })
 
         self.log_namespaces()
 
@@ -294,7 +309,12 @@ class NamespaceTask(LoggingTask):
         return self._namespaces
 
 
-class CacheNamespaces(NamespaceTask):
+class CacheNamespacesTask(NamespaceTask):
+    def _run_task(self):
+        # Calling namespaces will cache_namespaces() if first call
+        self.namespaces
+
+class RefreshNamespacesCacheTask(NamespaceTask):
     def _run_task(self):
         self.cache_namespaces()
 

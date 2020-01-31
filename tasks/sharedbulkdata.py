@@ -35,16 +35,13 @@ class TestInjectNamespaceTask(NamespaceTask):
         },
     }
 
-
     def _run_task(self):
-        step = BulkDataStep(
-            "my_step",
-            self.namespaces["pmdm"],
-            self.namespaces
-        )
+        step = BulkDataStep("my_step", self.namespaces["pmdm"], self.namespaces)
         map_step = "my_map_step"
         for test in self.options.get("test_strings"):
-            self.logger.info(f'injecting namespace into "{test}": "{step._inject_local_namespace(test, map_step)}"')
+            self.logger.info(
+                f'injecting namespace into "{test}": "{step._inject_local_namespace(test, map_step)}"'
+            )
 
 
 class BulkDataStep(Namespace):
@@ -54,10 +51,16 @@ class BulkDataStep(Namespace):
         "_last_table_id",
     ]
 
-    _custom_namespace_injection_regex = r'{(\w+)}(\w+)'
+    _custom_namespace_injection_regex = r"{(\w+)}(\w+)"
 
     def __init__(
-        self, step: str, namespace: Namespace, namespaces, map_path=None, sql_path=None, record_types_by_sobject=None,
+        self,
+        step: str,
+        namespace: Namespace,
+        namespaces,
+        map_path=None,
+        sql_path=None,
+        record_types_by_sobject=None,
     ) -> None:
         self._step = step
         self._namespace = namespace.namespace
@@ -72,25 +75,40 @@ class BulkDataStep(Namespace):
         self._load_map(record_types_by_sobject)
         self._load_sql()
 
-    def _inject_local_namespace(self, field_or_sobject_api_name:str, map_step):
-        # Returns f"{local_namespace}__{field_or_sobject_api_name}" if field_or_sobject_api_name ends with "__c" and local_namespace is not blank.
-        # If field is of the form "{another_namespace}ApiName__c", injects another_namespace's local_namespace if not blank and another_namespace found in namespaces.
-        if not field_or_sobject_api_name or not field_or_sobject_api_name.lower().endswith('__c'):
+    def _inject_local_namespace(self, field_or_sobject_api_name: str, map_step):
+        # Returns f"{local_namespace}__{field_or_sobject_api_name}" if:
+        #   field_or_sobject_api_name ends with "__c" and local_namespace is not blank.
+        #
+        # If field is of the form "{another_namespace}ApiName__c",
+        #   injects another_namespace's local_namespace if not blank
+        #   and another_namespace found in namespaces.
+        if not field_or_sobject_api_name or not field_or_sobject_api_name.lower().endswith(
+            "__c"
+        ):
             return field_or_sobject_api_name
-        
+
         namespace = self._namespaces[self.namespace]
-        custom_namespace_matches = re.match(BulkDataStep._custom_namespace_injection_regex, field_or_sobject_api_name)
+        custom_namespace_matches = re.match(
+            BulkDataStep._custom_namespace_injection_regex, field_or_sobject_api_name
+        )
         non_namespaced_field_or_sobject_api_name = field_or_sobject_api_name
         if custom_namespace_matches:
             custom_namespace_prefix = custom_namespace_matches.group(1)
-            print(f'custom_namespace_prefix: {custom_namespace_prefix}')
             custom_namespace = self._namespaces.get(custom_namespace_prefix)
             if custom_namespace:
                 namespace = custom_namespace
-                non_namespaced_field_or_sobject_api_name = custom_namespace_matches.group(2)
+                non_namespaced_field_or_sobject_api_name = custom_namespace_matches.group(
+                    2
+                )
             else:
-                raise TaskOptionsError(f'"{custom_namespace_prefix}" not found in namespaces trying to inject namespace into "{field_or_sobject_api_name}" on bulk_data step "{self.step}" and map step "{map_step}"')
-        return f'{namespace.local_namespace}__{non_namespaced_field_or_sobject_api_name}' if namespace.local_namespace else non_namespaced_field_or_sobject_api_name
+                raise TaskOptionsError(
+                    f'"{custom_namespace_prefix}" not found in namespaces trying to inject namespace into "{field_or_sobject_api_name}" on bulk_data step "{self.step}" and map step "{map_step}"'
+                )
+        return (
+            f"{namespace.local_namespace}__{non_namespaced_field_or_sobject_api_name}"
+            if namespace.local_namespace
+            else non_namespaced_field_or_sobject_api_name
+        )
 
     def _load_map(self, record_types_by_sobject=None):
         # Set map after:
@@ -113,7 +131,9 @@ class BulkDataStep(Namespace):
                         fields_to_delete = set()
                         new_fields = {}
                         for field in step[key].keys():
-                            namespaced_field = self._inject_local_namespace(field, map_step)
+                            namespaced_field = self._inject_local_namespace(
+                                field, map_step
+                            )
                             if field != namespaced_field:
                                 new_fields[namespaced_field] = step[key][field]
                                 fields_to_delete.add(field)
@@ -137,17 +157,19 @@ class BulkDataStep(Namespace):
                     raise MapError(f'Map step "{map_step}" must have an "sf_object"')
                 sobject = step["sf_object"]
                 step["sf_object"] = self._inject_local_namespace(sobject, map_step)
-            
-                # TODO: This method originally took in a argument "record_types_by_sobject" 
+
+                # TODO: This method originally took in a argument "record_types_by_sobject"
                 #       which resolved to be the value of self.record_types_by_sobject from tasks.org_info.RecordTypeTask.
-                #       
+                #
                 #       We are deprecating removing record_type from map steps if that record_type doesn't exist in the org.
-                #       
-                #       To re-implment, have BulkDataCombinedTask extend tasks.org_info.RecordTypeTask 
+                #
+                #       To re-implment, have BulkDataCombinedTask extend tasks.org_info.RecordTypeTask
                 #       and pass in self.record_types_by_sobject into __init__, etc to this method.
                 # delete record_types from map that don't exist
                 # skip this record_type check if record_types_by_sobject is None (meaning the RecordTypeTask wasn't able to query)
-                if step.get("record_type") and not record_types_by_sobject is None: # Hard coding the conditaional to False so it's never called
+                if (
+                    step.get("record_type") and not record_types_by_sobject is None
+                ):  # Hard coding the conditaional to False so it's never called
                     if not (
                         record_types_by_sobject.get(sobject)
                         and step.get("record_type")
@@ -392,7 +414,11 @@ class BulkDataStep(Namespace):
                         step_name if is_first_step else "",
                         "sf_object",
                         step["sf_object"],
-                        table_info.get("namespaced_name") if table_info and table_info.get("namespaced_name") and self.step != "Combined" else step.get("table"),
+                        table_info.get("namespaced_name")
+                        if table_info
+                        and table_info.get("namespaced_name")
+                        and self.step != "Combined"
+                        else step.get("table"),
                         step.get("combine_records_on_column"),
                     ]
                 )
@@ -477,10 +503,10 @@ class BulkDataStep(Namespace):
 
             return "\n".join(
                 [
-                    f'BEGIN TRANSACTION;',
-                    f'UPDATE {combined_table}',
+                    f"BEGIN TRANSACTION;",
+                    f"UPDATE {combined_table}",
                     f'    SET record_type = "{record_type}";',
-                    f'COMMIT;',
+                    f"COMMIT;",
                 ]
             )
 
@@ -559,10 +585,10 @@ class BulkDataStep(Namespace):
         return "\n".join(
             [
                 f"BEGIN TRANSACTION;",
-                f'WITH ___combined_lookup AS (',
+                f"WITH ___combined_lookup AS (",
                 f"    SELECT ",
-                f'        {lookup_combined_table}.id AS {lookup_column},',
-                f'        {namespaced_table}.id AS _last_table_id',
+                f"        {lookup_combined_table}.id AS {lookup_column},",
+                f"        {namespaced_table}.id AS _last_table_id",
                 f"    FROM ",
                 f"        {namespaced_table}",  # JOIN 1
                 f"        JOIN {lookup_namespaced_table}",  # JOIN 2
@@ -571,27 +597,25 @@ class BulkDataStep(Namespace):
                 f'            ON {lookup_combined_table}._last_table = "{lookup_namespaced_table}"',
                 f"            AND {lookup_combined_table}._last_table_id = {lookup_namespaced_table}.id",
                 f"    WHERE {namespaced_table}.{lookup_column} IS NOT NULL",
-                f')',
+                f")",
                 f"UPDATE {combined_table}",
                 f"SET ({lookup_column}) = (",
-                f'    SELECT {lookup_column}',
-                f'    FROM ___combined_lookup',
-                f'    WHERE ___combined_lookup._last_table_id = {combined_table}._last_table_id',
+                f"    SELECT {lookup_column}",
+                f"    FROM ___combined_lookup",
+                f"    WHERE ___combined_lookup._last_table_id = {combined_table}._last_table_id",
                 f'    AND {combined_table}._last_table = "{namespaced_table}"',
-                f'    AND {combined_table}.{lookup_column} IS NOT NULL',
-                f');',
+                f"    AND {combined_table}.{lookup_column} IS NOT NULL",
+                f");",
                 f"COMMIT;",
             ]
         )
-    
+
     @property
     def sql_scripts_to_apply_record_type_on_combined_tables(self):
         sql_scripts = []
         for map_step, step in self.map.items():
             # Update namespaced_table's record_type
-            sql_script = self._get_update_record_type_sql_on_combined_table(
-                step
-            )
+            sql_script = self._get_update_record_type_sql_on_combined_table(step)
             if sql_script:
                 combined_table = step["table"]
                 record_type = step["record_type"]
@@ -604,7 +628,6 @@ class BulkDataStep(Namespace):
                     }
                 )
         return sql_scripts
-                
 
     @property
     def sql_scripts_to_combine_records(self):
@@ -1037,7 +1060,9 @@ class BulkDataCombinedTask(NamespaceTask, RecordTypeTask):
                 self._sql_scripts.extend(bulk_data_step.sql_scripts_to_combine_records)
 
             # Apply combined tables' record_type to all rows in combined table
-            self._sql_scripts.extend(self.combined_bulk_data.sql_scripts_to_apply_record_type_on_combined_tables)
+            self._sql_scripts.extend(
+                self.combined_bulk_data.sql_scripts_to_apply_record_type_on_combined_tables
+            )
 
         return self._sql_scripts
 
@@ -1116,7 +1141,7 @@ class BulkDataStepTask(BulkDataCombinedTask):
         return self._sql_scripts
 
 
-class CacheProjectBulkDataTask(BulkDataCombinedTask):
+class CacheBulkDataConfigTask(BulkDataCombinedTask):
     #    Caches project's bulk_data in org_config so accessible in later flow step.
     #    Defaults bulk_data_log_level option as 'summary'.
     #    Also caches namespaces and record_types_by_sobject in org_config.
@@ -1126,12 +1151,18 @@ class CacheProjectBulkDataTask(BulkDataCombinedTask):
         if self.log_summary_bulk_data:
             self.bulk_data
 
-class ViewCachedProjectBulkDataTask(BulkDataCombinedTask):
+
+class ViewCachedBulkDataConfigTask(BulkDataCombinedTask):
     #    Caches project's bulk_data in org_config so accessible in later flow step.
     #    Defaults bulk_data_log_level option as 'summary'.
     #    Also caches namespaces and record_types_by_sobject in org_config.
     def _run_task(self):
-        self.logger.info(f'bulk_data_config: {self.org_config.config.get("bulk_data_config")}')
+        # Set minimum bulk_data_log_level as "summary"
+        if not self.log_summary_bulk_data:
+            self._bulk_data_log_level = 1
+
+        # Call bulk_data which will log what's cached
+        self.bulk_data
 
 
 class LogBulkDataCombinedMapTask(BulkDataCombinedTask):
@@ -1161,8 +1192,9 @@ class LogBulkDataCombinedSqlScriptsTask(BulkDataCombinedTask):
     }
 
     def _run_task(self):
-        if (self.options.get("bulk_data_log_level") or "").lower() != "all":
-            self.options["bulk_data_log_level"] = "combined"
+        # Set minimum bulk_data_log_level as "combined"
+        if not self.log_combined_bulk_data:
+            self._bulk_data_log_level = 2
 
         self.log_sql_scripts()
 
@@ -1247,15 +1279,18 @@ class InsertBulkDataCombinedTask(BulkDataCombinedTask, LoadData):
     def _init_options(self, kwargs):
         super(LoadData, self)._init_options(kwargs)
 
+        # Set minimum bulk_data_log_level as "summary"
+        if not self.log_summary_bulk_data:
+            self._bulk_data_log_level = 1
+
+        # Processing ignore_row_errors same as LoadData
         self.options["ignore_row_errors"] = process_bool_arg(
             self.options.get("ignore_row_errors", False)
         )
+
+        # Setting database_url and sql_path so we can combine SQL
         self.options["database_url"] = "sqlite://"
         self.options["sql_path"] = "not None so _sqlite_load() is called"
-
-        # Set default bulk_data_log_level
-        if not self.options.get("bulk_data_log_level"):
-            self.options["bulk_data_log_level"] = "combined"
 
         self.reset_oids = self.options.get("reset_oids", True)
         self.bulk_mode = (

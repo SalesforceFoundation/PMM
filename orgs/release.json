@@ -1,7 +1,6 @@
 {
     "orgName": "Program Management Data Model - Release Test Org",
     "edition": "Enterprise",
-    "features": ["ContactsToMultipleAccounts"],
     "settings": {
         "lightningExperienceSettings": {
             "enableS1DesktopEnabled": true

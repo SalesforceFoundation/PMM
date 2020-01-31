@@ -53,7 +53,6 @@ Contacts:
         PreferredPhoneField__c: PreferredPhoneField__c
         PreferredPhoneNumber__c: PreferredPhoneNumber__c
         Pronouns__c: Pronouns__c
-        Roles__c: Roles__c
         WatchList__c: WatchList__c
         WatchListDate__c: WatchListDate__c
 
@@ -139,41 +138,6 @@ caseman__Incidents:
         ContactId:
             table: contacts
 
-# Appointments
-caseman__Appointments:
-    sf_object: Appointment__c
-    table: caseman__appointments
-    fields:
-        # Standard Fields
-        Id: sf_id
-        Name: name
-
-        # Custom Fields
-        Type__c: type__c
-        Location__c: location__c
-        StartDateTime__c: startdatetime__c
-        EndDateTime__c: enddatetime__c
-        Description__c: description__c
-
-caseman__Appointment_Attendees:
-    sf_object: AppointmentAttendee__c
-    table: caseman__appointment_attendees
-    fields:
-        Id: sf_id
-
-        # Custom Fields
-        Reason__c: reason__c
-        Role__c: role__c
-        Status__c: status__c
-
-    lookups:
-        Appointment__c:
-            key_field: appointment__c
-            table: caseman__appointments
-        Attendee__c:
-            key_field: attendee__c
-            table: contacts
-
 # Client Alerts
 caseman__Client_Alerts:
     sf_object: ClientAlert__c
@@ -206,7 +170,6 @@ caseman__Client_Notes:
         Status__c: status__c
         InteractionDate__c: interactiondate__c
         Draft__c: draft__c
-        MinutesSpentWithClient__c: minutes_spent_with_client__c
 
     lookups:
         Client__c:

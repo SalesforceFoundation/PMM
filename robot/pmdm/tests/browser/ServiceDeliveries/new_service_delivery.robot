@@ -30,7 +30,7 @@ Setup Test Data
 *** Test Cases ***
 
 Create a Service Delivery via UI
-    [Documentation]                        This test creates Service Delivery recotf and verifies that the Service Delivery record
+    [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
     ...                                    has all the values from the form
     Go To Page                             Listing                               ServiceDelivery__c
     Click Object Button                    New

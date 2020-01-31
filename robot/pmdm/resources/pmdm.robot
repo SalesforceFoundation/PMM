@@ -36,3 +36,31 @@ API Create Contact
     &{contact} =     Salesforce Get  Contact  ${contact_id}
     Store Session Record      Contact  ${contact_id}
     [Return]         &{contact}
+
+API Create Service
+    ${service_name} =  Generate Random String
+    [Arguments]       ${program_id}  &{fields}
+    ${service_id} =  Salesforce Insert  Service__c
+    ...                  Name=${service_name}
+    ...                  Program__c=${program_id}
+    ...                  Description__c=PMDM Robot service
+    ...                  UnitOfMeasurement__c=Hours
+    ...                  Status__c=Active
+    ...                  &{fields}
+    &{service} =     Salesforce Get  Service__c  ${service_id}
+    Store Session Record      Service__c  ${service_id}
+    [Return]         &{service}
+
+API Create Program Engagement
+    ${program_engagement_name} =  Generate Random String
+    [Arguments]       ${program_id}     ${contact_id}   &{fields}
+    ${program_engagement_id} =  Salesforce Insert  ProgramEngagement__c
+    ...                  Name=${program_engagement_name}
+    ...                  Program__c=${program_id}
+    ...                  Contact__c=${contact_id}
+    ...                  Stage__c=Enrolled
+    ...                  Role__c=Client
+    ...                  &{fields}
+    &{program_engagement} =     Salesforce Get  ProgramEngagement__c  ${program_engagement_id}
+    Store Session Record      ProgramEngagement__c  ${program_engagement_id}
+    [Return]         &{program_engagement}

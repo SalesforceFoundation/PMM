@@ -233,14 +233,6 @@ tasks:
         options:
             directory_path: "data/bulk/client-photos"
 
-    deploy_dev_config:
-        group: "pmdm: Config"
-        description: Deploys the post-install configuration for an unmanaged DE org
-        class_path: cumulusci.tasks.salesforce.Deploy
-        options:
-            path: unpackaged/config/dev
-            namespace_inject: $project_config.project__package__namespace
-
     uninstall_packaged_incremental:
         description: Deletes any metadata from the package in the target org not in the local workspace
         class_path: cumulusci.tasks.salesforce.UninstallPackagedIncremental
@@ -370,10 +362,6 @@ flows:
         steps:
             101:
                 flow: update_admin_profile
-            105:
-                task: deploy_dev_config
-                options:
-                    unmanaged: True
             110:
                 task: activate_flows
             200:
@@ -383,10 +371,6 @@ flows:
         steps:
             100:
                 flow: update_admin_profile
-            101:
-                task: deploy_dev_config
-                options:
-                    unmanaged: False
             102:
                 task: activate_flows
             200:

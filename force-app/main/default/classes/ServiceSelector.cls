@@ -3,9 +3,8 @@ public with sharing class ServiceSelector {
     }
 
     public List<Service__c> getServicesByProgramIds(Set<Id> programIds) {
-        List<Service__c> services = new List<Service__c>();
         if (!Schema.SObjectType.Service__c.isAccessible()) {
-            return services;
+            return new List<Service__c>();
         }
         List<Service__c> queriedServices = [
             SELECT Id, Name, Program__c

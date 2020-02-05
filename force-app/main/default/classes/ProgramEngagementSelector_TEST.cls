@@ -35,16 +35,17 @@ public with sharing class ProgramEngagementSelector_TEST {
     @isTest
     private static void testGetProgramEngagementsByContactIdNoAccess() {
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+        Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
         User u = new User(
             Alias = 'stand',
-            Email = 'standarduser@example.com',
+            Email = 'standarduser2@' + random + '.example.com',
             EmailEncodingKey = 'UTF-8',
             LastName = 'StandardUser',
             LanguageLocaleKey = 'en_US',
             LocaleSidKey = 'en_US',
             ProfileId = p.Id,
             TimeZoneSidKey = 'America/Los_Angeles',
-            UserName = 'standarduser@example.com'
+            UserName = 'standarduser2@' + random + '.example.com'
         );
 
         ProgramTestDataFactory.insertTestData(true);

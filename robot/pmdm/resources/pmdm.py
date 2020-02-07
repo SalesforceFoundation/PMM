@@ -94,3 +94,7 @@ class pmdm(object):
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script('arguments[0].click()', element)
 
+    def select_auto_name_override_checkbox(self,label):
+        locator = pmdm_lex_locators["checkbox"].format(label)
+        self.selenium.get_webelement(locator).click()
+

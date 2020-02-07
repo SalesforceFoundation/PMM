@@ -67,7 +67,7 @@ Create Program Engagement with Auto Name Override
      ...                                    Start Date=${start_date}
      ...                                    End Date=${end_date}
      populate lookup                        Search Contacts         &{contact}[FirstName] &{contact}[LastName]
-     Select Auto Name Override Checkbox
+     Select Auto Name Override Checkbox     Auto-Name Override
      Click Save Button
      Wait Until Modal Is Closed
      current page should be                 Details                                 Program__c

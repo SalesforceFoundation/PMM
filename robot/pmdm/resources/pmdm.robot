@@ -38,7 +38,7 @@ API Create Contact
     [Return]         &{contact}
 
 API Create Service
-    ${service_name} =  Generate Random String
+    ${service_name} =  Generate New String
     [Arguments]       ${program_id}  &{fields}
     ${service_id} =  Salesforce Insert  Service__c
     ...                  Name=${service_name}

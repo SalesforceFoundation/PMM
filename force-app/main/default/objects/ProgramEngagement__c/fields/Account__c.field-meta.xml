@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Account__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <description>o be populated if the benefits delivered through Program Engagement accrue to the members of the Contact's Household Account, for example, a Program Engagement with a Food Bank.</description>
+    <description>To be populated if the benefits delivered through Program Engagement accrue to the members of the Contact's Household Account, for example, a Program Engagement with a Food Bank.</description>
     <externalId>false</externalId>
     <inlineHelpText>To be populated if the benefits delivered through Program Engagement accrue to the members of the Contact's Household Account, for example, a Program Engagement with a Food Bank.</inlineHelpText>
     <label>Household Account</label>

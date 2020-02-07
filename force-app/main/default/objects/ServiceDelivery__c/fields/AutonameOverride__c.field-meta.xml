@@ -2,7 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>AutonameOverride__c</fullName>
     <defaultValue>false</defaultValue>
+    <description>When this is checked, the Service Name can be edited after it has been created by the Process Builder process titled Template: Service Delivery Name.</description>
     <externalId>false</externalId>
+    <inlineHelpText>When this is checked, the Service Name can be edited after it has been created by the Process Builder process titled Template: Service Delivery Name.</inlineHelpText>
     <label>Auto-name Override</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

@@ -2,7 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Account__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
+    <description>Add the Contact's Household Account if the Service Delivery has the potential to benefit the entire household. For example, meals from a food bank. If the Service Delivery only benefits the individual Contact, leave this field blank.</description>
     <externalId>false</externalId>
+    <inlineHelpText>Add the Contact's Household Account if the Service Delivery has the potential to benefit the entire household. For example, meals from a food bank. If the Service Delivery only benefits the individual Contact, leave this field blank.</inlineHelpText>
     <label>Household Account</label>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Service Deliveries</relationshipLabel>

@@ -2,7 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>DeliveryDate__c</fullName>
     <defaultValue>NOW()</defaultValue>
+    <description>The date of the Service Delivery.</description>
     <externalId>false</externalId>
+    <inlineHelpText>The date of the Service Delivery.</inlineHelpText>
     <label>Delivery Date</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

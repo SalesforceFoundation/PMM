@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>UnitOfMeasurement__c</fullName>
+    <description>The unit used to track this service. For example: hours, meals, sessions, deliveries, kits, etc. Defining a Unit of Measurement standardizes how you measure the delivery of this service.</description>
     <externalId>false</externalId>
-    <inlineHelpText>The unit used to track this service. For example: hours, meals, sessions, deliveries, kits, etc.</inlineHelpText>
+    <inlineHelpText>The unit used to track this service. For example: hours, meals, sessions, deliveries, kits, etc. Defining a Unit of Measurement standardizes how you measure the delivery of this service.</inlineHelpText>
     <label>Unit of Measurement</label>
     <length>255</length>
     <required>false</required>

@@ -2,7 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ProgramCohort__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
+    <description>A lookup to the name of the Program Cohort, if any, the Contact has been placed in.</description>
     <externalId>false</externalId>
+    <inlineHelpText>A lookup to the name of the Program Cohort, if any, the Contact has been placed in.</inlineHelpText>
     <label>Program Cohort</label>
     <referenceTo>ProgramCohort__c</referenceTo>
     <relationshipLabel>Program Engagements</relationshipLabel>

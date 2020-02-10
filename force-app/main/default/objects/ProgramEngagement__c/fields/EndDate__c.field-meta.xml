@@ -3,7 +3,7 @@
     <fullName>EndDate__c</fullName>
     <description>The date a Contact completes or leaves the Program. If the Program Engagement stage is Completed or Withdrawn, the End Date is set to TODAY() by the Process Builder process titled Template: Program Engagement Name. Clone the process template to edit it.</description>
     <externalId>false</externalId>
-    <inlineHelpText>TThe date a Contact completes or leaves the Program. If the Program Engagement stage is Completed or Withdrawn, the End Date is set to TODAY() by the Process Builder process titled Template: Program Engagement Name. Clone the process template to edit it.</inlineHelpText>
+    <inlineHelpText>The date a Contact completes or leaves the Program. If the Program Engagement stage is Completed or Withdrawn, the End Date is set to TODAY() by the Process Builder process titled Template: Program Engagement Name. Clone the process template to edit it.</inlineHelpText>
     <label>End Date</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

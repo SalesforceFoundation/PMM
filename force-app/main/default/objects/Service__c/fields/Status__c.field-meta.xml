@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Status__c</fullName>
+    <description>These picklist values describe the status of the Service.The picklist's default values are, planned, active, completed, and canceled. You can edit the picklist values displayed for this field.</description>
     <externalId>false</externalId>
+    <inlineHelpText>These picklist values describe the status of the Service.The picklist's default values are, planned, active, completed, and canceled. You can edit the picklist values displayed for this field.</inlineHelpText>
     <label>Status</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

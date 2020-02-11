@@ -2,7 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Program__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
+    <description>A lookup to the Program being segmented by the Program Cohort.</description>
     <externalId>false</externalId>
+    <inlineHelpText>A lookup to the Program being segmented by the Program Cohort.</inlineHelpText>
     <label>Program</label>
     <referenceTo>Program__c</referenceTo>
     <relationshipLabel>Program Cohorts</relationshipLabel>

@@ -177,6 +177,81 @@ tasks:
             path: unpackaged/config/dev
             namespace_inject: $project_config.project__package__namespace
 
+    log_bulk_data_mapping:
+        group: "Data: Bulk"
+        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
+        class_path: tasks.BulkData.LogMapping
+        options:
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            post_mapping_configs:
+                - path: data/bulk/mapping/unpackaged/caseman.yml
+                  when_all_namespaces:
+                      - caseman
+            log_mapping: table
+
+    capture_bulk_data:
+        group: "Data: Bulk"
+        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
+        class_path: tasks.BulkData.CaptureData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            post_mapping_configs:
+                - path: data/bulk/mapping/unpackaged/caseman.yml
+                  when_all_namespaces:
+                      - caseman
+            log_mapping: table
+
+    insert_bulk_data:
+        group: "Data: Bulk"
+        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
+        class_path: tasks.BulkData.InsertData
+        options:
+            sql_path: data/bulk/data.sql
+            ignore_row_errors: True
+            package_mapping_directories:
+                - data/bulk/mapping/caseman
+                - data/bulk/mapping/npsp
+                - data/bulk/mapping/pmdm
+            pre_mapping_configs:
+                - path: data/bulk/mapping/Household_Accounts.yml
+                - path: data/bulk/mapping/Organization_Accounts.yml
+                - path: data/bulk/mapping/Contacts.yml
+            post_mapping_configs:
+                - path: data/bulk/mapping/unpackaged/caseman.yml
+                  when_all_namespaces:
+                      - caseman
+
+    update_client_photo_directories:
+        group: "CaseMan: Test Data"
+        description: "Update client photo directories after capture_test_data"
+        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
+        options:
+            directory_path: "data/bulk/client-photos"
+            sql_path: "data/bulk/data.sql"
+
+    upload_client_photos:
+        group: "Data: Bulk: CaseMan"
+        description: "Upload client photos and link to client records"
+        class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
+        options:
+            directory_path: "data/bulk/client-photos"
+
     uninstall_packaged_incremental:
         description: Deletes any metadata from the package in the target org not in the local workspace
         class_path: cumulusci.tasks.salesforce.UninstallPackagedIncremental
@@ -419,10 +494,6 @@ flows:
         steps:
             101:
                 flow: update_admin_profile
-            105:
-                task: deploy_dev_config
-                options:
-                    unmanaged: True
             110:
                 task: activate_flows
             200:
@@ -432,10 +503,6 @@ flows:
         steps:
             100:
                 flow: update_admin_profile
-            111:
-                task: deploy_dev_config
-                options:
-                    unmanaged: False
             102:
                 task: activate_flows
             200:

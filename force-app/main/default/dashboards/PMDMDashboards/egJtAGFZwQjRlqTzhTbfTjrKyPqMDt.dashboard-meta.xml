@@ -68,13 +68,13 @@
                 <decimalPrecision>-1</decimalPrecision>
                 <displayUnits>Auto</displayUnits>
                 <groupingSortProperties/>
-                <header>Contact Records Missing Email</header>
+                <header>Client Records with Missing Phone Number</header>
                 <indicatorBreakpoint1>33.0</indicatorBreakpoint1>
                 <indicatorBreakpoint2>67.0</indicatorBreakpoint2>
                 <indicatorHighColor>#00716B</indicatorHighColor>
                 <indicatorLowColor>#C23934</indicatorLowColor>
                 <indicatorMiddleColor>#FFB75D</indicatorMiddleColor>
-                <report>ProgramManagementReports/Contact_Records_Missing_Email_RsH</report>
+                <report>ProgramManagementReports/Client_Records_with_Missing_Phone_Number</report>
                 <showRange>false</showRange>
             </dashboardComponent>
             <rowIndex>0</rowIndex>
@@ -85,7 +85,7 @@
     </dashboardGridLayout>
     <dashboardType>SpecifiedUser</dashboardType>
     <isGridLayout>true</isGridLayout>
-    <runningUser>test-woxg9qpz8eff@example.com</runningUser>
+    <runningUser>test-ngv1gbc16lib@example.com</runningUser>
     <textColor>#000000</textColor>
     <title>Sample PMDM Dashboard</title>
     <titleColor>#000000</titleColor>

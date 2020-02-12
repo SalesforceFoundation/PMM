@@ -12,7 +12,6 @@ project:
         prefix_release: release/
     dependencies:
         - github: https://github.com/SalesforceFoundation/sfdo-base
-
 orgs:
     scratch:
         dev_namespaced:
@@ -144,10 +143,6 @@ tasks:
         class_path: cumulusci.tasks.sfdx.SFDXOrgTask
         options:
             command: "force:source:status"
-
-    activate_flows:
-        description: This task activates all the process builder processes in the org
-        class_path: tasks.ActivateProcessBuilders.ActivateProcessBuilderProcesses
 
     add_caseman_dependency:
         group: Impact Engineering
@@ -362,8 +357,6 @@ flows:
         steps:
             101:
                 flow: update_admin_profile
-            110:
-                task: activate_flows
             200:
                 flow: insert_data
 
@@ -371,15 +364,11 @@ flows:
         steps:
             100:
                 flow: update_admin_profile
-            102:
-                task: activate_flows
             200:
                 flow: insert_data
 
     config_qa:
         steps:
-            100:
-                task: activate_flows
             200:
                 flow: config_unmanaged
 

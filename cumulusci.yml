@@ -358,19 +358,10 @@ flows:
         steps:
             101:
                 flow: update_admin_profile
-<<<<<<< HEAD
             105:
                 task: deploy_dev_config
                 options:
                     unmanaged: True
-=======
-            110:
-                task: activate_flow
-                options:
-                    developer_names:
-                        - ServiceDelivery
-                        - Auto_Populate_Date_And_Name_On_Program_Engagement
->>>>>>> 64b2e2d915f90d304e66491e03dcf33063197a8a
             200:
                 flow: insert_data
 
@@ -378,19 +369,10 @@ flows:
         steps:
             100:
                 flow: update_admin_profile
-<<<<<<< HEAD
             101:
                 task: deploy_dev_config
                 options:
                     unmanaged: False
-=======
-            102:
-                task: activate_flow
-                options:
-                    developer_names:
-                        - ServiceDelivery
-                        - Auto_Populate_Date_And_Name_On_Program_Engagement
->>>>>>> 64b2e2d915f90d304e66491e03dcf33063197a8a
             200:
                 flow: insert_data
 

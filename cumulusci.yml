@@ -3,10 +3,15 @@ project:
     name: pmdm
     package:
         name: Program Management Data Model
-        namespace: pmdm0
+        namespace: pmdm
         api_version: "46.0"
     source_format: sfdx
-
+    git:
+        repo_url: https://github.com/SalesforceFoundation/PMDM
+        prefix_beta: uat/
+        prefix_release: release/
+    dependencies:
+        - github: https://github.com/SalesforceFoundation/sfdo-base
 orgs:
     scratch:
         dev_namespaced:
@@ -114,7 +119,6 @@ tasks:
                 - record_type: Case.caseman__Incident
                 - record_type: Case.None
 
-
     run_all_local_tests:
         group: "Tests"
         description: "Runs all local Apex Tests including code coverage"
@@ -139,10 +143,6 @@ tasks:
         class_path: cumulusci.tasks.sfdx.SFDXOrgTask
         options:
             command: "force:source:status"
-
-    activate_flows:
-        description: This task activates all the process builder processes in the org
-        class_path: tasks.ActivateProcessBuilders.ActivateProcessBuilderProcesses
 
     add_caseman_dependency:
         group: Impact Engineering
@@ -227,14 +227,6 @@ tasks:
         class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
         options:
             directory_path: "data/bulk/client-photos"
-
-    deploy_dev_config:
-        group: "pmdm: Config"
-        description: Deploys the post-install configuration for an unmanaged DE org
-        class_path: cumulusci.tasks.salesforce.Deploy
-        options:
-            path: unpackaged/config/dev
-            namespace_inject: $project_config.project__package__namespace
 
     uninstall_packaged_incremental:
         description: Deletes any metadata from the package in the target org not in the local workspace
@@ -364,13 +356,7 @@ flows:
     config_unmanaged:
         steps:
             101:
-                flow: update_admin_profile 
-            105:
-                task: deploy_dev_config
-                options:
-                    unmanaged: True
-            110:
-                task: activate_flows
+                flow: update_admin_profile
             200:
                 flow: insert_data
 
@@ -378,19 +364,11 @@ flows:
         steps:
             100:
                 flow: update_admin_profile
-            101:
-                task: deploy_dev_config
-                options:
-                    unmanaged: False
-            102:
-                task: activate_flows
             200:
                 flow: insert_data
 
     config_qa:
         steps:
-            100:
-                task: activate_flows
             200:
                 flow: config_unmanaged
 

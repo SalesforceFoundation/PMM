@@ -1,7 +1,6 @@
 {
     "orgName": "Program Management Data Model - Dev Org with NPSP Trial",
     "template": "0TT1I000006q3Yj",
-    "features": ["ContactsToMultipleAccounts"],
     "settings": {
         "lightningExperienceSettings": {
             "enableS1DesktopEnabled": true

@@ -21,7 +21,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>UnitOfService__c</field>
+                <field>UnitOfMeasurement__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -113,7 +113,7 @@
         <fields>NAME</fields>
         <fields>DeliveryDate__c</fields>
         <fields>Quantity__c</fields>
-        <fields>UnitOfService__c</fields>
+        <fields>UnitOfMeasurement__c</fields>
         <fields>HouseholdBenefit__c</fields>
         <relatedList>ServiceDelivery__c.Service__c</relatedList>
     </relatedLists>

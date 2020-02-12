@@ -368,12 +368,6 @@ flows:
                 task: deploy_dev_config
                 options:
                     unmanaged: True
-            110:
-                task: activate_flow
-                options:
-                    developer_names:
-                        - ServiceDelivery
-                        - Auto_Populate_Date_And_Name_On_Program_Engagement
             200:
                 flow: insert_data
 
@@ -385,12 +379,6 @@ flows:
                 task: deploy_dev_config
                 options:
                     unmanaged: False
-            102:
-                task: activate_flow
-                options:
-                    developer_names:
-                        - ServiceDelivery
-                        - Auto_Populate_Date_And_Name_On_Program_Engagement
             200:
                 flow: insert_data
 

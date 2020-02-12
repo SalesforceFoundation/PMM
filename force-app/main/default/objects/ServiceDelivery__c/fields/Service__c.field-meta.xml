@@ -2,7 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Service__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
+    <description>A lookup to the Service that is delivered.</description>
     <externalId>false</externalId>
+    <inlineHelpText>A lookup to the Service that is delivered.</inlineHelpText>
     <label>Service</label>
     <referenceTo>Service__c</referenceTo>
     <relationshipLabel>Service Deliveries</relationshipLabel>

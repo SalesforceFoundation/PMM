@@ -32,6 +32,41 @@ public with sharing class ProgramEngagementSelector_TEST {
         }
     }
 
+    @isTest
+    private static void testGetProgramEngagementsByContactIdNoAccess() {
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+        Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
+        User u = new User(
+            Alias = 'stand',
+            Email = 'standarduser2@' + random + '.example.com',
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'StandardUser',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            ProfileId = p.Id,
+            TimeZoneSidKey = 'America/Los_Angeles',
+            UserName = 'standarduser2@' + random + '.example.com'
+        );
+
+        ProgramTestDataFactory.insertTestData(true);
+        Contact con = [
+            SELECT Id, Name
+            FROM Contact
+            WHERE LastName = 'Test Contact'
+            LIMIT 1
+        ][0];
+
+        Test.startTest();
+        System.runAs(u) {
+            ProgramEngagementSelector selector = new ProgramEngagementSelector();
+            List<ProgramEngagement__c> actual = selector.getProgramEngagementsByContactId(
+                con.Id
+            );
+            System.assertEquals(new List<ProgramEngagement__c>(), actual);
+        }
+        Test.stopTest();
+    }
+
     public class GetProgramEngagementsByContactIdMethod extends Stub.method {
         public Id contactId;
         public List<ProgramEngagement__c> returnValue;

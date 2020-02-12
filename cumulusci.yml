@@ -10,7 +10,8 @@ project:
         repo_url: https://github.com/SalesforceFoundation/PMDM
         prefix_beta: uat/
         prefix_release: release/
-
+    dependencies:
+        - github: https://github.com/SalesforceFoundation/sfdo-base
 orgs:
     scratch:
         dev_namespaced:
@@ -226,14 +227,6 @@ tasks:
         class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
         options:
             directory_path: "data/bulk/client-photos"
-
-    deploy_dev_config:
-        group: "pmdm: Config"
-        description: Deploys the post-install configuration for an unmanaged DE org
-        class_path: cumulusci.tasks.salesforce.Deploy
-        options:
-            path: unpackaged/config/dev
-            namespace_inject: $project_config.project__package__namespace
 
     uninstall_packaged_incremental:
         description: Deletes any metadata from the package in the target org not in the local workspace

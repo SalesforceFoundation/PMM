@@ -98,3 +98,5 @@ class pmdm(object):
         locator = pmdm_lex_locators["checkbox"].format(label)
         self.selenium.get_webelement(locator).click()
 
+
+

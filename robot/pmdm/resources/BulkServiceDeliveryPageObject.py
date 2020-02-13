@@ -24,18 +24,18 @@ class BulkServiceDeliveryBasePage(BasePMDMPage, BasePage):
 
     def populate_contact_lookup(self,title, value):
         """populate the lookup field on bulk service delivery"""
-        locator = bulk_service_delivery_locators["lookup_field"].format(title)
+        locator = bulk_service_delivery_locators["lookup_contact"].format(title)
         self.selenium.click_element(locator)
         self.selenium.clear_element_text(locator)
         self.selenium.get_webelement(locator).send_keys(value)
 
-        locator_val = bulk_service_delivery_locators["lookup_contact"].format(value)
+        locator_val = bulk_service_delivery_locators["select_contact"].format(value)
         self.selenium.wait_until_page_contains_element(locator_val,
                                                        error="value is not available")
         self.selenium.click_element(locator_val)
 
-    def populate_fields(self,title, value):
-        locator = bulk_service_delivery_locators["lookup_field"].format(title)
+    def populate_row1_fields(self,title, value):
+        locator = bulk_service_delivery_locators["lookup_field_row1"].format(title)
         self.selenium.get_webelement(locator).click()
         popup_loc = bulk_service_delivery_locators["select_popup"]
         self.selenium.wait_until_page_contains_element(popup_loc, error="The dropdown did not open")
@@ -43,9 +43,34 @@ class BulkServiceDeliveryBasePage(BasePMDMPage, BasePage):
         element_click = self.selenium.driver.find_element_by_xpath(value_loc)
         self.selenium.driver.execute_script('arguments[0].click()', element_click)
 
-    def input_data(self,label,value):
-        locator = bulk_service_delivery_locators["text_field"].format(label)
+    def populate_row2_fields(self,title, value):
+        locator = bulk_service_delivery_locators["lookup_field_row2"].format(title)
+        self.selenium.get_webelement(locator).click()
+        popup_loc = bulk_service_delivery_locators["select_popup"]
+        self.selenium.wait_until_page_contains_element(popup_loc, error="The dropdown did not open")
+        value_loc=bulk_service_delivery_locators["select_value"].format(value)
+        element_click = self.selenium.driver.find_element_by_xpath(value_loc)
+        self.selenium.driver.execute_script('arguments[0].click()', element_click)
+
+    def input_row1_data(self,label,value):
+        locator = bulk_service_delivery_locators["text_field_row1"].format(label)
         self.selenium.get_webelement(locator).click()
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).send_keys(value)
+
+    def input_row2_data(self,label,value):
+        locator = bulk_service_delivery_locators["text_field_row2"].format(label)
+        self.selenium.get_webelement(locator).click()
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).send_keys(value)
+
+    def click_button(self,label):
+        """ Click on the save button """
+        locator_save = bulk_service_delivery_locators["button"].format(label)
+        self.selenium.wait_until_element_is_enabled(locator_save, error="Save button is not enabled")
+        self.selenium.click_element(locator_save)
+
+    def verify_error_message(self, message):
+        locator = bulk_service_delivery_locators["contact_error"].format(message)
+        self.selenium.wait_until_page_contains_element(locator, error=" Incorrect title found")
 

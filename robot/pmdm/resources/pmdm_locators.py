@@ -58,11 +58,17 @@ service_delivery_locators = {
 
 bulk_service_delivery_locators = {
     "page_header": "//div[@class='slds-p-horizontal_small slds-text-heading_large slds-m-bottom_x-large' and text()='{}']",
-    "lookup_field": "//input[contains(@class,'slds-input slds-combobox__input') and contains(@placeholder,'{}')]",
-    "lookup_contact": "//span[contains(@class,'slds-listbox__option-text')]/lightning-base-combobox-formatted-text[@class='slds-truncate' and @title='{}']",
+    "lookup_contact": "//input[contains(@class,'slds-input slds-combobox__input') and contains(@placeholder,'{}')]",
+    "select_contact": "//span[contains(@class,'slds-listbox__option-text')]/lightning-base-combobox-formatted-text[@class='slds-truncate' and @title='{}']",
     "select_value":"//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(@title,'{}')]",
     "select_popup":"//div[contains(@class,'slds-listbox')]",
-    "text_field":"//input[@class='slds-input' and contains(@name,'{}')]",
+    "lookup_field_row1": "//div[3]//input[@placeholder='{}']",
+    "lookup_field_row2": "//div[4]//input[@placeholder='{}']",
+    "text_field_row1":"//div[3]//input[@class='slds-input' and contains(@name,'{}')]",
+    "text_field_row2":"//div[4]//input[@class='slds-input' and contains(@name,'{}')]",
+    "button":"//button[@class='slds-button slds-button_brand' and @type='button' and text()='{}']",
+    "contact_error":"//div[@class='slds-text-color_error' and text()='{}']",
+
 }
 
 account_locators = {

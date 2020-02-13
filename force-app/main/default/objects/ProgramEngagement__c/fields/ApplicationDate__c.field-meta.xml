@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ApplicationDate__c</fullName>
+    <description>The date the Contact applied to the program. If the Program Engagement stage is set to Applied, the Application Date is set to TODAY() by the Process Builder process titled Template: Program Engagement Name. To edit the Process Builder process, clone the template and edit it.</description>
     <externalId>false</externalId>
+    <inlineHelpText>The date the Contact applied to the program. If the Program Engagement stage is Applied, the Application Date is set to TODAY() by the Process Builder process titled Template: Program Engagement Name. To edit the process, clone the template and edit it.</inlineHelpText>
     <label>Application Date</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

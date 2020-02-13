@@ -6,8 +6,6 @@
         <members>Contact</members>
         <members>AccountContactRelation</members>
         <members>Case</members>
-        <members>caseman__Appointment__c</members>
-        <members>caseman__AppointmentAttendee__c</members>
         <members>caseman__ClientAlert__c</members>
         <members>caseman__ClientNote__c</members>
         <members>caseman__ClientNoteRelationship__c</members>

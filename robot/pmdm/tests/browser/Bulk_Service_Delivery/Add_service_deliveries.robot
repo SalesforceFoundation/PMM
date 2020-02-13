@@ -52,8 +52,7 @@ Setup Test Data
 
 Add service delivery on bulk service delivery
 
-    [Documentation]                        This test adds service deliveries on bulk service delivery and
-    ...                                    verifies that the record exists on service delivery listpage
+    [Documentation]                        This test adds service deliveries on bulk service delivery
     Go To Page                             BasePage                               ServiceDelivery__c
     verify current page                    Service Deliveries
     populate contact lookup           Search Contacts         &{contact1}[FirstName] &{contact1}[LastName]
@@ -71,11 +70,15 @@ Add service delivery on bulk service delivery
     verify persist save icon    Saved
 
 Verify Service delivery on service delivery listview page
+    [Documentation]                        This test verifies that the added service deliveries on bulk service delivery
+    ...                                    exists on service delivery list page.
     Go To Page                             Listing                               ServiceDelivery__c
     Page Should Contain                    &{contact1}[FirstName] &{contact1}[LastName]
     Page Should Contain                    &{contact2}[FirstName] &{contact2}[LastName]
 
 Verify error message when there are no services associated with the program
+    [Documentation]                        This test verifies that an error message is displayed when there are no
+    ...                                    services associated with the program.
     Go To Page                             BasePage                               ServiceDelivery__c
     verify current page                    Service Deliveries
     populate contact lookup           Search Contacts         &{contact3}[FirstName] &{contact3}[LastName]
@@ -84,6 +87,8 @@ Verify error message when there are no services associated with the program
     verify persist warning icon    No services found, choose another program engagement.
 
 Verify error message when contact is not enrolled on a program
+    [Documentation]                        This test verifies that an error message is displayed when the contact is
+    ...                                    not associated with any program
     Go To Page                             BasePage                               ServiceDelivery__c
     verify current page                    Service Deliveries
     populate contact lookup           Search Contacts         &{contact4}[FirstName] &{contact4}[LastName]

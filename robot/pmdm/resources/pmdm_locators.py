@@ -67,7 +67,9 @@ bulk_service_delivery_locators = {
     "text_field_row1":"//div[3]//input[@class='slds-input' and contains(@name,'{}')]",
     "text_field_row2":"//div[4]//input[@class='slds-input' and contains(@name,'{}')]",
     "button":"//button[@class='slds-button slds-button_brand' and @type='button' and text()='{}']",
-    "contact_error":"//div[@class='slds-text-color_error' and text()='{}']",
+    "error_message":"//div[@class='slds-text-color_error' and text()='{}']",
+    "persist_save":"//lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
+    "persist_warning":"//lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
 
 }
 

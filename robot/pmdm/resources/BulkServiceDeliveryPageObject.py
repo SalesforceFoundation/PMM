@@ -71,6 +71,13 @@ class BulkServiceDeliveryBasePage(BasePMDMPage, BasePage):
         self.selenium.click_element(locator_save)
 
     def verify_error_message(self, message):
-        locator = bulk_service_delivery_locators["contact_error"].format(message)
-        self.selenium.wait_until_page_contains_element(locator, error=" Incorrect title found")
+        locator = bulk_service_delivery_locators["error_message"].format(message)
+        self.selenium.wait_until_page_contains_element(locator, error=" Incorrect message displayed")
 
+    def verify_persist_save_icon(self, message):
+        locator = bulk_service_delivery_locators["persist_save"].format(message)
+        self.selenium.wait_until_page_contains_element(locator, error=" Incorrect icon displayed ")
+
+    def verify_persist_warning_icon(self, message):
+        locator = bulk_service_delivery_locators["persist_warning"].format(message)
+        self.selenium.wait_until_page_contains_element(locator, error=" Incorrect icon displayed ")

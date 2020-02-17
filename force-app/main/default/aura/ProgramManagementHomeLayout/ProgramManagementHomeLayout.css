@@ -1,0 +1,15 @@
+.THIS .header {
+    background: #fff;
+}
+
+.THIS .content {
+    background: #f9f9f9;
+}
+
+.THIS .topleft {
+    border-right: 1px solid #eee;
+}
+
+.THIS .sidebar .flexipageComponent {
+    margin-bottom: 40px;
+}

@@ -1,0 +1,10 @@
+.photo {
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+    border: 5px solid rgb(243, 242, 242);
+}
+
+.messages {
+    height: 100%;
+}

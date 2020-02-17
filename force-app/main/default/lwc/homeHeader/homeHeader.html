@@ -1,0 +1,44 @@
+<template>
+    <template if:false={error}>
+        <template if:true={welcomeMessage}>
+            <lightning-layout vertical-align="stretch" pull-to-boundary="small">
+                <lightning-layout-item size="3">
+                    <lightning-avatar
+                        src={user.photoUrl}
+                        size="large"
+                        variant="circle"
+                        class="photo slds-align_absolute-center"
+                    ></lightning-avatar>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="9">
+                    <lightning-layout
+                        multiple-rows="true"
+                        vertical-align="center"
+                        class="messages"
+                    >
+                        <lightning-layout-item
+                            size="12"
+                            class="slds-p-around_xx-small slds-text-heading_large"
+                        >
+                            <lightning-formatted-date-time
+                                value={today}
+                                year="numeric"
+                                month="long"
+                                day="2-digit"
+                            ></lightning-formatted-date-time>
+                        </lightning-layout-item>
+                        <lightning-layout-item
+                            size="12"
+                            class="slds-p-around_xx-small slds-text-heading_medium"
+                        >
+                            {welcomeMessage}
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+    </template>
+    <template if:true={error}>
+        <c-error-panel errors={error}></c-error-panel>
+    </template>
+</template>

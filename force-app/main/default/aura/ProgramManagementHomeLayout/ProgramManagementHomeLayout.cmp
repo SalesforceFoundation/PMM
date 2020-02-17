@@ -1,0 +1,39 @@
+<aura:component
+    implements="lightning:homeTemplate"
+    description="Program Management Home"
+    access="global"
+>
+    <aura:attribute access="global" name="topLeft" type="Aura.Component[]" />
+    <aura:attribute access="global" name="topRight" type="Aura.Component[]" />
+    <aura:attribute access="global" name="sidebar" type="Aura.Component[]" />
+    <aura:attribute access="global" name="main" type="Aura.Component[]" />
+
+    <div>
+        <div class="header slds-p-horizontal_medium slds-p-vertical_large">
+            <lightning:layout>
+                <lightning:layoutItem
+                    flexibility="auto"
+                    class="topleft slds-p-right_medium"
+                >
+                    {!v.topLeft}
+                </lightning:layoutItem>
+                <lightning:layoutItem
+                    flexibility="auto, no-grow"
+                    class="slds-m-left_medium slds-text-align_left"
+                >
+                    {!v.topRight}
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+        <div class="content slds-p-around_medium slds-p-top_large">
+            <lightning:layout>
+                <lightning:layoutItem size="9" class="sidebar slds-m-right_medium">
+                    {!v.main}
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="grow" class="slds-p-left_medium">
+                    {!v.sidebar}
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+    </div>
+</aura:component>

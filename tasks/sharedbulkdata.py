@@ -1,9 +1,9 @@
-import sys  # TODO: remove sys
+import sys
 import os
 import yaml
 import re
 from tasks.logger import LoggingTask
-from tasks.org_info import Namespace, NamespaceTask, utils, RecordTypeTask
+from tasks.org_info import Namespace, BaseNamespaceTask, utils, RecordTypeTask
 
 
 from cumulusci.tasks.salesforce import BaseSalesforceApiTask
@@ -27,7 +27,7 @@ class MapLookupError(Exception):
     pass
 
 
-class TestInjectNamespaceTask(NamespaceTask):
+class TestInjectNamespaceTask(BaseNamespaceTask):
     task_options = {
         "test_strings": {
             "description": "Array of Field or SObject API Names to test",
@@ -51,8 +51,6 @@ class BulkDataStep(Namespace):
         "_last_table_id",
     ]
 
-    _custom_namespace_injection_regex = r"{(\w+)}(\w+)"
-
     def __init__(
         self,
         step: str,
@@ -75,6 +73,8 @@ class BulkDataStep(Namespace):
         self._load_map(record_types_by_sobject)
         self._load_sql()
 
+    _custom_namespace_injection_regex = r"{(\w+)}(\w+)"
+
     def _inject_local_namespace(self, field_or_sobject_api_name: str, map_step):
         # Returns f"{local_namespace}__{field_or_sobject_api_name}" if:
         #   field_or_sobject_api_name ends with "__c" and local_namespace is not blank.
@@ -87,28 +87,47 @@ class BulkDataStep(Namespace):
         ):
             return field_or_sobject_api_name
 
+        # Use the task's default namespace
         namespace = self._namespaces[self.namespace]
+
+        # Set the non-namespaced API Name we're trying to namespace inject if needed
+        non_namespaced_field_or_sobject_api_name = field_or_sobject_api_name
+
+        # See if field_or_sobject_api_name matches the regex pattern
         custom_namespace_matches = re.match(
             BulkDataStep._custom_namespace_injection_regex, field_or_sobject_api_name
         )
-        non_namespaced_field_or_sobject_api_name = field_or_sobject_api_name
+    
         if custom_namespace_matches:
+            # The regex matched saying we want to inject a custom namespace
+    
+            # Set custom_namespace_prefix as regex catpure group 1
             custom_namespace_prefix = custom_namespace_matches.group(1)
+            
+            # Try to get Namespce instance associated with custom_namespace_prefix
             custom_namespace = self._namespaces.get(custom_namespace_prefix)
+
             if custom_namespace:
+                # custom_namespace is found!
+                # Use custom_namespace instead of the default
                 namespace = custom_namespace
+
+                # Set the non-namespaced API Name as regex capture 2
                 non_namespaced_field_or_sobject_api_name = custom_namespace_matches.group(
                     2
                 )
             else:
+                # No Namespace instance was found associated with custom_namespace_prefix
                 raise TaskOptionsError(
                     f'"{custom_namespace_prefix}" not found in namespaces trying to inject namespace into "{field_or_sobject_api_name}" on bulk_data step "{self.step}" and map step "{map_step}"'
                 )
-        return (
-            f"{namespace.local_namespace}__{non_namespaced_field_or_sobject_api_name}"
-            if namespace.local_namespace
-            else non_namespaced_field_or_sobject_api_name
-        )
+        
+        if namespace.local_namespace:
+            # Namespace injection needed
+            return f"{namespace.local_namespace}__{non_namespaced_field_or_sobject_api_name}"
+        else:
+            # No namespace injection needed
+            return non_namespaced_field_or_sobject_api_name
 
     def _load_map(self, record_types_by_sobject=None):
         # Set map after:
@@ -847,7 +866,7 @@ class BulkDataStep(Namespace):
         return ordered_map
 
 
-class BulkDataCombinedTask(NamespaceTask, RecordTypeTask):
+class BulkDataCombinedTask(BaseNamespaceTask, RecordTypeTask):
     task_options = {
         "bulk_data_log_level": {
             "description": "Level to log BulkDataStep maps.  Options are 'None', 'Summary', 'Combined', or 'All'. Default: 'Summary'",

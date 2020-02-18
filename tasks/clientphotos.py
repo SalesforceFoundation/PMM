@@ -15,7 +15,7 @@ class utils:
             return f"'{ids_for_query}'"
 
 
-class InsertTask(BaseSalesforceApiTask, NamespaceTask):
+class InsertTask(NamespaceTask, BaseSalesforceApiTask):
     task_options = {
         "photos": {
             "description": 'Map of photo steps by step name.   Photo step names are arbitrary.  Each photo step requires an "email" as Contact record\'s Email to insert the client photo on and "photo" as the path the client photo file to insert.',
@@ -58,17 +58,11 @@ class InsertTask(BaseSalesforceApiTask, NamespaceTask):
 
         return content_document_ids_by_content_version_id
 
-    def _run_task(self):
-        caseman_namespace = self.namespaces.get("caseman")
-        if True or not caseman_namespace:
-            self.log_table(
-                [
-                    [f'"caseman" namespace is not used in this org.',],
-                    ["Skipping inserting client photos. 💤 "],
-                ]
-            )
-            return
+    def _init_options(self, kwargs):
+        super(BaseSalesforceApiTask, self)._init_options(kwargs)
+        self.options["namespace"] = "caseman"
 
+    def _run_task_when_namespace_used(self):
         # Insert ContentVersions
         content_version_ids = set()
         for step, photo in (self.options.get("photos") or {}).items():
@@ -104,7 +98,7 @@ class InsertTask(BaseSalesforceApiTask, NamespaceTask):
         # Update Contacts' PhotoFileID__c fields.
         self.log_title("Inserting Client Photos")
 
-        photo_file_id_field = caseman_namespace.inject_field_namespace("PhotoFileID__c")
+        photo_file_id_field = self.namespace.inject_field_namespace("PhotoFileID__c")
         for step, photo in self.photos.items():
             email = photo.get("email")
             contact_id = self.contact_ids_by_email.get(email)

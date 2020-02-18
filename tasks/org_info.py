@@ -2,12 +2,15 @@ import operator
 import os
 import subprocess
 
-from tasks.logger import LoggingTask
 from cumulusci.utils import os_friendly_path
 from cumulusci.core.config import TaskConfig
+from cumulusci.core.exceptions import TaskOptionsError
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.tasks.salesforce import GetInstalledPackages, BaseSalesforceApiTask
 from cumulusci.tasks.apex.anon import AnonymousApexTask
+from cumulusci.tasks.sfdx import SFDXBaseTask
+
+from tasks.logger import LoggingTask
 
 
 class utils(object):
@@ -160,7 +163,7 @@ class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
         return self._record_types_by_sobject
 
 
-class NamespaceTask(LoggingTask):
+class BaseNamespaceTask(LoggingTask):
 
     task_options = {
         "installed_packages_api": {
@@ -198,6 +201,7 @@ class NamespaceTask(LoggingTask):
         self.logger.info(
             "Getting installed packages from sfdx is currently not supported"
         )
+
         # TODO: use subprocess to call f'sfdx force:packages:installed:list --json -u {self.org_config.username}', parse the response as JSON
         return self._get_installed_package_versions_by_namespace_from_soap_api()
 
@@ -211,7 +215,14 @@ class NamespaceTask(LoggingTask):
 
     def log_namespaces(self):
         rows = [
-            ["NAMESPACE", "LOCAL NAMESPACE", "PACKAGE VERSION", "PROJECT","NEEDING INJECTION", "WITHOUT INJECTION",],
+            [
+                "NAMESPACE",
+                "LOCAL NAMESPACE",
+                "PACKAGE VERSION",
+                "PROJECT",
+                "NEEDING INJECTION",
+                "WITHOUT INJECTION",
+            ],
         ]
         for prefix in sorted(self.namespaces.keys()):
             rows.append(
@@ -222,12 +233,8 @@ class NamespaceTask(LoggingTask):
                     "✅"
                     if self.namespaces[prefix].namespace == self.project_namespace
                     else "",
-                    "✅"
-                    if self.namespaces[prefix].local_namespace
-                    else "",
-                    ""
-                    if self.namespaces[prefix].local_namespace
-                    else "✅",
+                    "✅" if self.namespaces[prefix].local_namespace else "",
+                    "" if self.namespaces[prefix].local_namespace else "✅",
                 ]
             )
 
@@ -267,17 +274,17 @@ class NamespaceTask(LoggingTask):
             else:
                 namespaces_without_injection[prefix] = namespace
 
-        
-        
         # Cache in org_config:
         #   - namespaces as dict of strings which can always safely be unpickled
         #   - namespaces_needing_injection as namespaces needing namespace injection
         #   - namespaces_without_injection as namespaces without needing namespace injection
-        self.org_config.config.update({
-            "namespaces": namespaces,
-            "namespaces_needing_injection": namespaces_needing_injection,
-            "namespaces_without_injection": namespaces_without_injection,
-        })
+        self.org_config.config.update(
+            {
+                "namespaces": namespaces,
+                "namespaces_needing_injection": namespaces_needing_injection,
+                "namespaces_without_injection": namespaces_without_injection,
+            }
+        )
 
         self.log_namespaces()
 
@@ -309,76 +316,192 @@ class NamespaceTask(LoggingTask):
         return self._namespaces
 
 
-class CacheNamespacesTask(NamespaceTask):
+class NamespaceTask(BaseNamespaceTask):
+
+    task_options = {
+        "namespace": {
+            "description": 'Namespace to inject if locally used.  Task runs only if namespace is used.  Use the "c" namespace for unpackaged/local references.',
+            "required": True,
+        },
+        "and_require_namespaces": {
+            "description": 'Array of namespaces that also must be used in addition to "namespace" option to run this task.  Ignores non-string-array option values.',
+            "required": False,
+        },
+        "and_require_namespaces_installed": {
+            "description": 'Array of namespaces that must be locally used/installed to run this task in addition to the "namespace" and "and_require_namespaces" options.  If the "namespace" option should be installed, include "namespace" in this option.  Ignores non-string-array option values.',
+            "required": False,
+        },
+    }
+
+    _required_namespaces = None
+    _required_namespaces_installed = None
+    _is_namespace_used = None
+    _namespace = None
+
+    @property
+    def required_namespaces_installed(self):
+        if self._required_namespaces_installed is None:
+            self._required_namespaces_installed = set()
+            # and_require_namespaces_installed
+            if utils.is_list(self.options.get("and_require_namespaces_installed")):
+                for namespace in self.options.get("and_require_namespaces_installed"):
+                    if utils.is_string(namespace):
+                        self._required_namespaces_installed.add(namespace)
+
+        return self._required_namespaces_installed
+
+    @property
+    def required_namespaces(self):
+        if self._required_namespaces is None:
+            self._required_namespaces = []
+            # namespace
+            if utils.is_string(self.options.get("namespace")):
+                self._required_namespaces.append(self.options.get("namespace"))
+
+            # and_require_namespaces
+            if utils.is_list(self.options.get("and_require_namespaces")):
+                for namespace in self.options.get("and_require_namespaces"):
+                    if utils.is_string(namespace):
+                        self._required_namespaces.append(namespace)
+
+            # and_require_namespaces_installed
+            self._required_namespaces.extend(
+                self.required_namespaces_installed.difference(self._required_namespaces)
+            )
+
+        return self._required_namespaces
+
+    @property
+    def is_namespace_used(self):
+        if self._is_namespace_used is None:
+            rows = [["REQUIRED NAMESPACE", "USED", "INSTALLED", "INSTALL REQUIRED",]]
+
+            is_namespace_used = True
+            for namespace_prefix in self.required_namespaces:
+                namespace = self.namespaces.get(namespace_prefix)
+                is_installed_required = (
+                    namespace_prefix in self.required_namespaces_installed
+                )
+                is_namespace_used = is_namespace_used and namespace
+
+                installed = "✅" if namespace and namespace.local_namespace else ""
+                if is_installed_required:
+                    installed = installed if installed else "❌"
+
+                rows.append(
+                    [
+                        namespace_prefix,
+                        "✅" if namespace else "❌",
+                        installed,
+                        "❕" if is_installed_required else "",
+                    ]
+                )
+
+            self._is_namespace_used = is_namespace_used
+
+            # log result
+            self.log_table(rows)
+            if self._is_namespace_used:
+                self.log_title("✅  Running task!  All required namespaces are used.")
+            else:
+                self.log_title(
+                    "😴  Skipping task.  All required namespaces must be used and/or installed to run task."
+                )
+        return self._is_namespace_used
+
+    @property
+    def namespace(self):
+        if self.is_namespace_used:
+            return self.namespaces.get(self.options.get("namespace"))
+
+    def _run_task_when_namespace_used(self):
+        """ Subclasses should override to provide their implementation """
+        raise NotImplementedError("Subclasses should provide their own implementation")
+
+    def _run_task(self):
+        if self.is_namespace_used:
+            self._run_task_when_namespace_used()
+
+
+class CacheNamespacesTask(BaseNamespaceTask):
     def _run_task(self):
         # Calling namespaces will cache_namespaces() if first call
         self.namespaces
 
-class RefreshNamespacesCacheTask(NamespaceTask):
+
+class RefreshNamespacesCacheTask(BaseNamespaceTask):
     def _run_task(self):
         self.cache_namespaces()
 
 
-"""
-class ExecuteAnonymousTask(AnonymousApexTask, NamespaceTask):
-
-    task_docs = ""
-    Use the `apex` option to run a string of anonymous Apex.
-    Use the `path` option to run anonymous Apex from a file.
-    Or use both to concatenate the string to the file contents.
-    ""
+class AssignPermissionSetNamespaceTask(NamespaceTask, SFDXBaseTask):
 
     task_options = {
-        "path": {"description": "The path to an Apex file to run.", "required": False},
-        "apex": {
-            "description": "A string of Apex to run (after the file, if specified).",
-            "required": False,
-        },
-        "namespace": {
-            "description": (
-                "If the namespace is used in the org (as the project's package's namespace or as an installed package, the tokens %%%NAMESPACED_RT%%% and %%%namespaced%%% will get replaced with the namespace prefix for Record Types.   Automatically detects if the namespace is the project's package's namespace and whether or not the org is namespaced."
-            ),
+        **NamespaceTask.task_options,
+        "permsetname": {
+            "description": "Un-namespaced Permission Set API Name to assign.",
             "required": True,
+        },
+        "extra": {
+            "description": "Append additional options to the command.  e.g. --onbehalfof",
+            "required": False,
         },
     }
 
-    def _run_task(self):
-        if not self.options.get("namespace") in self.namespaces:
-            self.log_table([
-                [
-                    "ACTION",
-                    "MESSAGE",
-                    "NAMESPACE",
-                ],
-                [
-                    "💤  Skipping",
-                    "Namespace is not used.",
-                    self.options.get("namespace")
-                ]
-            ])
-            return
+    salesforce_task = True
 
-        AnonymousApexTask._run_task(self)
+    @property
+    def permsetname(self):
+        permsetname = self.options.get("permsetname")
+        if self.is_namespace_used:
+            return self.namespace.inject_namespace(permsetname, "__")
+        else:
+            return permsetname
+
+    def _get_command(self):
+        return f'sfdx force:user:permset:assign --targetusername="{self.sfdx_username}" --permsetname="{self.permsetname}"'
+
+    def _run_task_when_namespace_used(self):
+        """ Calls SFDXBaseTask's _run_task() """
+        return super(SFDXBaseTask, self)._run_task()
+
+
+class ExecuteAnonymousNamespaceTask(NamespaceTask, AnonymousApexTask):
+    """ Runs AnonymousApexTask if is_namespace_used.   Injects namespace into apex. """
+
+    task_options = {
+        **NamespaceTask.task_options,
+        **AnonymousApexTask.task_options,
+    }
 
     def _prepare_apex(self, apex):
         # Process namespace tokens
-        specified_namespace = self.options.get("namespace")
-        namespace = self.namespaces.get(specified_namespace)
 
-        if namespace:
-            apex = apex.replace("%%%NAMESPACE%%%", namespace.get_prefix("__"))
-            apex = apex.replace("%%%NAMESPACED_ORG%%%", namespace.get_prefix("__"))
-            apex = apex.replace("%%%NAMESPACED_RT%%%", namespace.get_prefix("."))
+        if self.is_namespace_used:
+            NAMESPACE = self.namespace.get_prefix("__")
+            NAMESPACED_ORG = self.namespace.get_prefix("__")
+            NAMESPACED_RT = self.namespace.get_prefix(".")
+            param1 = self.options.get("param1") or ""
+            param2 = self.options.get("param2") or ""
 
-            self.log_table([
+            apex = apex.replace("%%%NAMESPACE%%%", NAMESPACE)
+            apex = apex.replace("%%%NAMESPACED_ORG%%%", NAMESPACED_ORG)
+            apex = apex.replace("%%%NAMESPACED_RT%%%", NAMESPACED_RT)
+            apex = apex.replace("%%%PARAM_1%%%", param1)
+            apex = apex.replace("%%%PARAM_2%%%", param2)
+
+            self.log_table(
                 [
-                    "TOKEN",
-                    "REPLACEMENT"
-                ],
-                ["%%%NAMESPACE%%%", namespace.get_prefix("__")],
-                ["%%%NAMESPACED_ORG%%%", namespace.get_prefix("__")],
-                ["%%%NAMESPACED_RT%%%", namespace.get_prefix(".")],
-            ])
+                    ["TOKEN", "REPLACEMENT"],
+                    ["%%%NAMESPACE%%%", NAMESPACE,],
+                    ["%%%NAMESPACED_ORG%%%", NAMESPACED_ORG,],
+                    ["%%%NAMESPACED_RT%%%", NAMESPACED_RT,],
+                    ["%%%PARAM_1%%%", param1,],
+                    ["%%%PARAM_2%%%", param2,],
+                ]
+            )
 
         return apex
-"""
+
+    def _run_task_when_namespace_used(self):
+        return AnonymousApexTask._run_task(self)

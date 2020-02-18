@@ -451,6 +451,14 @@ class AssignPermissionSetNamespaceTask(NamespaceTask, SFDXBaseTask):
     salesforce_task = True
 
     @property
+    def sfdx_username(self):
+        return (
+            self.org_config.sfdx_alias
+            if self.org_config.sfdx_alias
+            else self.org_config.username
+        )
+
+    @property
     def permsetname(self):
         permsetname = self.options.get("permsetname")
         if self.is_namespace_used:

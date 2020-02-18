@@ -18,7 +18,7 @@
     <description>To be used in a dashboard metric component for data hygiene</description>
     <filter>
         <criteriaItems>
-            <column>EMAIL</column>
+            <column>PHONE1</column>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value/>
@@ -31,7 +31,7 @@
         <field>ADDRESS2_COUNTRY</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Contact Records Missing Email</name>
+    <name>Client Records with Missing Phone Number</name>
     <params>
         <name>co</name>
         <value>1</value>

@@ -97,13 +97,13 @@ class BulkDataStep(Namespace):
         custom_namespace_matches = re.match(
             BulkDataStep._custom_namespace_injection_regex, field_or_sobject_api_name
         )
-    
+
         if custom_namespace_matches:
             # The regex matched saying we want to inject a custom namespace
-    
+
             # Set custom_namespace_prefix as regex catpure group 1
             custom_namespace_prefix = custom_namespace_matches.group(1)
-            
+
             # Try to get Namespce instance associated with custom_namespace_prefix
             custom_namespace = self._namespaces.get(custom_namespace_prefix)
 
@@ -121,7 +121,7 @@ class BulkDataStep(Namespace):
                 raise TaskOptionsError(
                     f'"{custom_namespace_prefix}" not found in namespaces trying to inject namespace into "{field_or_sobject_api_name}" on bulk_data step "{self.step}" and map step "{map_step}"'
                 )
-        
+
         if namespace.local_namespace:
             # Namespace injection needed
             return f"{namespace.local_namespace}__{non_namespaced_field_or_sobject_api_name}"

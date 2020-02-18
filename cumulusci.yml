@@ -12,6 +12,15 @@ project:
         prefix_release: release/
     dependencies:
         - github: https://github.com/SalesforceFoundation/sfdo-base
+
+sources:
+    sfdobase:
+        github: https://github.com/SalesforceFoundation/sfdo-base
+        release: latest_beta
+    caseman:
+        github: https://github.com/SalesforceFoundation/CaseMan
+        branch: feature/sharedbulkdata
+
 orgs:
     scratch:
         dev_namespaced:
@@ -167,81 +176,6 @@ tasks:
             path: unpackaged/config/dev
             namespace_inject: $project_config.project__package__namespace
 
-    log_bulk_data_mapping:
-        group: "Data: Bulk"
-        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData.LogMapping
-        options:
-            package_mapping_directories:
-                - data/bulk/mapping/caseman
-                - data/bulk/mapping/npsp
-                - data/bulk/mapping/pmdm
-            pre_mapping_configs:
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
-            log_mapping: table
-
-    capture_bulk_data:
-        group: "Data: Bulk"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            package_mapping_directories:
-                - data/bulk/mapping/caseman
-                - data/bulk/mapping/npsp
-                - data/bulk/mapping/pmdm
-            pre_mapping_configs:
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
-            log_mapping: table
-
-    insert_bulk_data:
-        group: "Data: Bulk"
-        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
-        class_path: tasks.BulkData.InsertData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            package_mapping_directories:
-                - data/bulk/mapping/caseman
-                - data/bulk/mapping/npsp
-                - data/bulk/mapping/pmdm
-            pre_mapping_configs:
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
-
-    update_client_photo_directories:
-        group: "CaseMan: Test Data"
-        description: "Update client photo directories after capture_test_data"
-        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
-        options:
-            directory_path: "data/bulk/client-photos"
-            sql_path: "data/bulk/data.sql"
-
-    upload_client_photos:
-        group: "Data: Bulk: CaseMan"
-        description: "Upload client photos and link to client records"
-        class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
-        options:
-            directory_path: "data/bulk/client-photos"
-
     uninstall_packaged_incremental:
         description: Deletes any metadata from the package in the target org not in the local workspace
         class_path: cumulusci.tasks.salesforce.UninstallPackagedIncremental
@@ -336,12 +270,26 @@ tasks:
         options:
             bulk_data_log_level: summary
 
-    update_all_records_as_recently_viewed:
-        group: "Data: Script"
-        description: Updates Accounts, Contacts, Cases, Opportunities, and all records for Custom Objects having a Tab as recently viewed.
-        class_path: cumulusci.tasks.apex.anon.AnonymousApexTask
+    assign_pmdm_view_permset:
+        group: "PMDM: Permissions"
+        class_path: tasks.org_info.AssignPermissionSetNamespaceTask
         options:
-            path: "data/scripts/update_all_records_as_recently_viewed.apex"
+            namespace: pmdm
+            permsetname: PMDM_View
+
+    assign_pmdm_manage_permset:
+        group: "PMDM: Permissions"
+        class_path: tasks.org_info.AssignPermissionSetNamespaceTask
+        options:
+            namespace: pmdm
+            permsetname: PMDM_Manage
+
+    assign_pmdm_deliver_permset:
+        group: "PMDM: Permissions"
+        class_path: tasks.org_info.AssignPermissionSetNamespaceTask
+        options:
+            namespace: pmdm
+            permsetname: PMDM_Deliver
 
 flows:
     cache_bulk_data_config:
@@ -385,40 +333,25 @@ flows:
             10:
                 task: delete_bulk_data_combined
 
+    capture_storytelling_data:
+        steps:
+            10:
+                task: sfdobase:verify_account_storytelling_data
+            11:
+                task: sfdobase:verify_contact_storytelling_data
+            99:
+                task: capture_bulk_data_step
+                options:
+                    bulk_data_step: pmdm
+
     assign_permission_sets_to_admin:
         steps:
             1:
-                task: cache_namespaces
-            10:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname pmdm__PMDM_View"
-                when: '"pmdm" in org_config.namespaces_needing_injection'
-            11:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname pmdm__PMDM_Manage"
-                when: '"pmdm" in org_config.namespaces_needing_injection'
-            12:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname pmdm__PMDM_Deliver"
-                when: '"pmdm" in org_config.namespaces_needing_injection'
-            20:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname PMDM_View"
-                when: '"pmdm" in org_config.namespaces_without_injection'
-            21:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname PMDM_Manage"
-                when: '"pmdm" in org_config.namespaces_without_injection'
-            22:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname PMDM_Deliver"
-                when: '"pmdm" in org_config.namespaces_without_injection'
+                task: assign_pmdm_view_permset
+            2:
+                task: assign_pmdm_manage_permset
+            3:
+                task: assign_pmdm_deliver_permset
 
     update_admin_profile:
         steps:
@@ -457,7 +390,7 @@ flows:
             31:
                 flow: caseman:after_insert_storytelling_data
             999:
-                task: update_all_records_as_recently_viewed
+                task: sfdobase:update_all_records_as_recently_viewed
 
     caseman_org:
         steps:

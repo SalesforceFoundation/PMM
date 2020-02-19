@@ -76,12 +76,14 @@ class BulkDataStep(Namespace):
     _custom_namespace_injection_regex = r"{(\w+)}(\w+)"
 
     def _inject_local_namespace(self, field_or_sobject_api_name: str, map_step):
-        # Returns f"{local_namespace}__{field_or_sobject_api_name}" if:
-        #   field_or_sobject_api_name ends with "__c" and local_namespace is not blank.
-        #
-        # If field is of the form "{another_namespace}ApiName__c",
-        #   injects another_namespace's local_namespace if not blank
-        #   and another_namespace found in namespaces.
+        """
+        Returns f"{local_namespace}__{field_or_sobject_api_name}" if:
+            field_or_sobject_api_name ends with "__c" and local_namespace is not blank.
+        
+        If field is of the form "{another_namespace}ApiName__c",
+            injects another_namespace's local_namespace if not blank
+            and another_namespace found in namespaces.
+        """
         if not field_or_sobject_api_name or not field_or_sobject_api_name.lower().endswith(
             "__c"
         ):
@@ -130,11 +132,13 @@ class BulkDataStep(Namespace):
             return non_namespaced_field_or_sobject_api_name
 
     def _load_map(self, record_types_by_sobject=None):
-        # Set map after:
-        #   load map from map_path,
-        #   inject namespace,
-        #   force autoincremented primary key "id",
-        #   delete record_types that don't exist
+        """
+        Set map after:
+            load map from map_path,
+            inject namespace,
+            force autoincremented primary key "id",
+            delete record_types that don't exist
+        """
         map = {}
         if self._map_path:
             with open(self._map_path, "r") as f:
@@ -177,15 +181,6 @@ class BulkDataStep(Namespace):
                 sobject = step["sf_object"]
                 step["sf_object"] = self._inject_local_namespace(sobject, map_step)
 
-                # TODO: This method originally took in a argument "record_types_by_sobject"
-                #       which resolved to be the value of self.record_types_by_sobject from tasks.org_info.RecordTypeTask.
-                #
-                #       We are deprecating removing record_type from map steps if that record_type doesn't exist in the org.
-                #
-                #       To re-implment, have BulkDataCombinedTask extend tasks.org_info.RecordTypeTask
-                #       and pass in self.record_types_by_sobject into __init__, etc to this method.
-                # delete record_types from map that don't exist
-                # skip this record_type check if record_types_by_sobject is None (meaning the RecordTypeTask wasn't able to query)
                 if (
                     step.get("record_type") and not record_types_by_sobject is None
                 ):  # Hard coding the conditaional to False so it's never called
@@ -198,11 +193,13 @@ class BulkDataStep(Namespace):
         self.map = map
 
     def _load_sql(self):
-        # Set _sql after:
-        #   load sql from sql_path,
-        #   namespacify tables in _sql by regex updating tables in statements:
-        #       CREATE TABLE
-        #       INSERT INTO
+        """
+        Set _sql after:
+            load sql from sql_path,
+            namespacify tables in _sql by regex updating tables in statements:
+                CREATE TABLE
+                INSERT INTO
+        """
         self._sql = ""
         if self._sql_path:
             with open(self._sql_path, "r") as f:
@@ -902,10 +899,12 @@ class BulkDataCombinedTask(BaseNamespaceTask, RecordTypeTask):
     @property
     def bulk_data(self):
         if self._bulk_data is None:
-            # Always cache this project's bulk_data_config to:
-            #   (1) initialize bulk_data_config if not already cached in a previous flow step (e.g. calling a cci BulkDataCombinedTask directly)
-            #   (2) Always overwrite bulk_data_config steps to use this project's bulk_data_config if there are duplicate bulk_data_config steps used
-            cached_bulk_data_config = self.cache_project_bulk_data()
+            """
+            Always cache this project's bulk_data_config to:
+                (1) initialize bulk_data_config if not already cached in a previous flow step (e.g. calling a cci BulkDataCombinedTask directly)
+                (2) Always overwrite bulk_data_config steps to use this project's bulk_data_config if there are duplicate bulk_data_config steps used
+            """
+            cached_bulk_data_config = self.cache_project_bulk_data() or {}
 
             namespaces_used = set()
             namespaces_used.update(self.namespaces.keys())
@@ -996,43 +995,61 @@ class BulkDataCombinedTask(BaseNamespaceTask, RecordTypeTask):
 
         return self._combined_bulk_data
 
-    def _sanitize_bulk_data_config(self, bulk_data_config):
-        # sanitized_bulk_data_config is a dict only containing values of type string or list of strings.
-        # sanitized_bulk_data_config will be cached in org_config.config and needs to be unpickleable, i.e. "deserializable".
+    def _sanitize_bulk_data_config(self, bulk_data_config={}):
+        """
+        sanitized_bulk_data_config is a dict only containing values of type string or list of strings.
+        sanitized_bulk_data_config will be cached in org_config.config and needs to be unpickleable, i.e. "deserializable".
+        """
         required_namespaces = set()
 
-        if utils.is_set(bulk_data_config.get("required_namespaces")):
-            for required_namespace in bulk_data_config["required_namespaces"]:
-                if utils.is_string(required_namespace):
-                    required_namespaces.add(required_namespace)
+        for required_namespace in utils.assert_is_set(
+            "bulk_data_config.required_namespaces",
+            bulk_data_config.get("required_namespaces") or set(),
+        ):
+            required_namespaces.add(
+                utils.assert_is_string(
+                    "bulk_data_config.required_namespaces value", required_namespace
+                )
+            )
 
         sanitized_bulk_data_config = {
             "project": bulk_data_config.get("project")
             or self.project_namespace,  # store which project namespace this bulk_data_config came from to help debug.
-            "required_namespaces": required_namespaces,
+            "required_namespaces": required_namespaces,  # store config's required_namespaces
         }
 
-        if utils.is_dict(bulk_data_config):
-            # Copy string values of and_require_namespaces
-            namespace = bulk_data_config.get("namespace")
-            if utils.is_string(namespace):
-                sanitized_bulk_data_config["namespace"] = namespace
-                required_namespaces.add(namespace)
+        # Copy string values of and_require_namespaces
+        utils.assert_is_dict("bulk_data config", bulk_data_config)
 
-            # Copy absolute paths of map and sql
-            for key in ["map", "sql"]:
-                path = bulk_data_config.get(key)
-                if utils.is_string(path):
-                    sanitized_bulk_data_config[key] = utils.absolute_path(path)
+        namespace = utils.assert_is_string(
+            f"bulk_data namespace", bulk_data_config.get("namespace")
+        )
+        sanitized_bulk_data_config["namespace"] = namespace
+        required_namespaces.add(namespace)
 
-            # Copy string values of and_require_namespaces
-            if utils.is_string(sanitized_bulk_data_config.get("namespace")):
-                required_namespaces.add(sanitized_bulk_data_config.get("namespace"))
+        # Copy absolute paths of map and sql
+        for key in ["map", "sql"]:
+            path = bulk_data_config.get(key)
 
-            if utils.is_list(bulk_data_config.get("and_require_namespaces")):
-                for namespace in bulk_data_config.get("and_require_namespaces"):
-                    if utils.is_string(namespace):
-                        required_namespaces.add(namespace)
+            utils.assert_is_string(f"bulk_data {key}", path)
+            sanitized_bulk_data_config[key] = utils.absolute_path(path)
+
+        # Copy string values of and_require_namespaces
+        required_namespaces.add(
+            utils.assert_is_string(
+                f"bulk_data namespace", sanitized_bulk_data_config.get("namespace")
+            )
+        )
+
+        for namespace in utils.assert_is_list(
+            f"bulk_data and_require_namespaces",
+            bulk_data_config.get("and_require_namespaces") or [],
+        ):
+            required_namespaces.add(
+                utils.assert_is_string(
+                    f"bulk_data and_require_namespaces value", namespace
+                )
+            )
 
         return sanitized_bulk_data_config
 
@@ -1044,17 +1061,20 @@ class BulkDataCombinedTask(BaseNamespaceTask, RecordTypeTask):
             return
 
         cached_bulk_data_config = {}
-        if utils.is_dict(self.org_config.config.get("bulk_data_config")):
-            for step, bulk_data_config in self.org_config.config.get(
-                "bulk_data_config"
-            ).items():
-                cached_bulk_data_config[step] = self._sanitize_bulk_data_config(
-                    bulk_data_config
-                )
 
-        for step, bulk_data_config in self.project_config.bulk_data.items():
+        for step, bulk_data_config in utils.assert_is_dict(
+            f"org_config.bulk_data_config",
+            self.org_config.config.get("bulk_data_config") or {},
+        ).items():
             cached_bulk_data_config[step] = self._sanitize_bulk_data_config(
-                bulk_data_config
+                bulk_data_config=bulk_data_config
+            )
+
+        for step, bulk_data_config in utils.assert_is_dict(
+            f"project_config.bulk_data)", self.project_config.bulk_data
+        ).items():
+            cached_bulk_data_config[step] = self._sanitize_bulk_data_config(
+                bulk_data_config=bulk_data_config
             )
 
         self.org_config.config.update({"bulk_data_config": cached_bulk_data_config})
@@ -1132,8 +1152,13 @@ class BulkDataStepTask(BulkDataCombinedTask):
                     f"",
                     f"    bulk_data steps used in this org:",
                 ]
-                for step_name in self.bulk_data.keys():
-                    error_messages.append(f"        {step_name}")
+                if self.bulk_data:
+                    for step_name in self.bulk_data.keys():
+                        error_messages.append(f"        {step_name}")
+                else:
+                    error_messages.append(
+                        f"        NONE 🥵  Add your bulk_data configs in cumulusci.yml"
+                    )
                 raise TaskOptionsError("\n".join(error_messages))
             self._combined_bulk_data = self.bulk_data.get(
                 self.options["bulk_data_step"]
@@ -1161,9 +1186,12 @@ class BulkDataStepTask(BulkDataCombinedTask):
 
 
 class CacheBulkDataConfigTask(BulkDataCombinedTask):
-    #    Caches project's bulk_data in org_config so accessible in later flow step.
-    #    Defaults bulk_data_log_level option as 'summary'.
-    #    Also caches namespaces and record_types_by_sobject in org_config.
+    """
+    Caches project's bulk_data in org_config so accessible in later flow step.
+    Defaults bulk_data_log_level option as 'summary'.
+    Also caches namespaces and record_types_by_sobject in org_config.
+    """
+
     def _run_task(self):
         self.cache_project_bulk_data()
 
@@ -1172,9 +1200,12 @@ class CacheBulkDataConfigTask(BulkDataCombinedTask):
 
 
 class ViewCachedBulkDataConfigTask(BulkDataCombinedTask):
-    #    Caches project's bulk_data in org_config so accessible in later flow step.
-    #    Defaults bulk_data_log_level option as 'summary'.
-    #    Also caches namespaces and record_types_by_sobject in org_config.
+    """
+    Caches project's bulk_data in org_config so accessible in later flow step.
+    Defaults bulk_data_log_level option as 'summary'.
+    Also caches namespaces and record_types_by_sobject in org_config.
+    """
+
     def _run_task(self):
         # Set minimum bulk_data_log_level as "summary"
         if not self.log_summary_bulk_data:

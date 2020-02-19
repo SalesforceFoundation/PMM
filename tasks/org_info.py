@@ -34,6 +34,30 @@ class utils(object):
     def is_set(value):
         return isinstance(value, set)
 
+    @staticmethod
+    def assert_is_dict(label, value):
+        if not utils.is_dict(value):
+            raise TaskOptionsError(f'{label} must be a "dict"')
+        return value
+
+    @staticmethod
+    def assert_is_string(label, value):
+        if not utils.is_string(value):
+            raise TaskOptionsError(f'{label} must be a "string"')
+        return value
+
+    @staticmethod
+    def assert_is_list(label, value):
+        if not utils.is_list(value):
+            raise TaskOptionsError(f'{label} must be a "list"')
+        return value
+
+    @staticmethod
+    def assert_is_set(label, value):
+        if not utils.is_set(value):
+            raise TaskOptionsError(f'{label} must be a "set"')
+        return value
+
 
 class Namespace:
     def __init__(
@@ -121,8 +145,10 @@ class RecordTypeTask(LoggingTask, BaseSalesforceApiTask):
         return "SELECT SobjectType, DeveloperName FROM RecordType ORDER BY SobjectType, DeveloperName"
 
     def cache_record_types_by_sobject(self):
-        # TODO: Is there a way we can "load" sf connection if it doesn't exist?
-        #       If we have a Bulk API task, sf attr seems to be deleted
+        """
+        TODO: Is there a way we can "load" sf connection if it doesn't exist?
+              If we have a Bulk API task, sf attr seems to be deleted
+        """
         if not hasattr(self, "sf"):
             return
 
@@ -202,7 +228,9 @@ class BaseNamespaceTask(LoggingTask):
             "Getting installed packages from sfdx is currently not supported"
         )
 
-        # TODO: use subprocess to call f'sfdx force:packages:installed:list --json -u {self.org_config.username}', parse the response as JSON
+        """
+        TODO: use subprocess to call f'sfdx force:packages:installed:list --json -u {self.org_config.username}', parse the response as JSON
+        """
         return self._get_installed_package_versions_by_namespace_from_soap_api()
 
     def get_installed_package_version_by_namespace(self):
@@ -259,12 +287,16 @@ class BaseNamespaceTask(LoggingTask):
             namespace,
             version,
         ) in self.get_installed_package_version_by_namespace().items():
-            if utils.is_string(namespace):
-                namespaces[namespace] = {
-                    "namespace": namespace,
-                    "local_namespace": namespace,
-                    "version": str(version),
-                }
+            # Assert values have correct type
+            utils.assert_is_string(
+                "get_installed_package_version_by_namespace namespace", namespace
+            )
+
+            namespaces[namespace] = {
+                "namespace": namespace,
+                "local_namespace": namespace,
+                "version": str(version),
+            }
 
         namespaces_needing_injection = {}
         namespaces_without_injection = {}
@@ -274,10 +306,12 @@ class BaseNamespaceTask(LoggingTask):
             else:
                 namespaces_without_injection[prefix] = namespace
 
-        # Cache in org_config:
-        #   - namespaces as dict of strings which can always safely be unpickled
-        #   - namespaces_needing_injection as namespaces needing namespace injection
-        #   - namespaces_without_injection as namespaces without needing namespace injection
+        """
+        Cache in org_config:
+            - namespaces as dict of strings which can always safely be unpickled
+            - namespaces_needing_injection as namespaces needing namespace injection
+            - namespaces_without_injection as namespaces without needing namespace injection
+        """
         self.org_config.config.update(
             {
                 "namespaces": namespaces,
@@ -297,21 +331,21 @@ class BaseNamespaceTask(LoggingTask):
             self._namespaces = {}
 
             # Load instances of Namespace from org_config.config.get("namespaces")
-            cached_namespaces = self.org_config.config.get("namespaces")
-            for namespace in (
-                cached_namespaces if utils.is_dict(cached_namespaces) else {}
-            ).values():
+            cached_namespaces = utils.assert_is_dict(
+                "org_config.namespaces", self.org_config.config.get("namespaces") or {}
+            )
+
+            for namespace in cached_namespaces.values():
                 # Only create safe Namespace instances from cache, e.g. namespace, local_namespace, version are strings
-                if utils.is_string(namespace.get("namespace")):
-                    self._namespaces[namespace["namespace"]] = Namespace(
-                        namespace["namespace"],
-                        namespace.get("local_namespace")
-                        if utils.is_string(namespace.get("local_namespace"))
-                        else None,
-                        namespace.get("version")
-                        if utils.is_string(namespace.get("version"))
-                        else None,
-                    )
+                utils.assert_is_string(
+                    "org_config.namespaces namespace", namespace.get("namespace")
+                )
+
+                self._namespaces[namespace["namespace"]] = Namespace(
+                    namespace["namespace"],
+                    namespace.get("local_namespace"),
+                    namespace.get("version"),
+                )
 
         return self._namespaces
 
@@ -337,16 +371,48 @@ class NamespaceTask(BaseNamespaceTask):
     _required_namespaces_installed = None
     _is_namespace_used = None
     _namespace = None
+    _namespace_option = None
+    _and_require_namespaces_option = None
+    _and_require_namespaces_installed_option = None
+
+    @property
+    def namespace_option(self):
+        if self._namespace_option is None:
+            self._namespace_option = utils.assert_is_string(
+                "namespace", self.options.get("namespace")
+            )
+        return self._namespace_option
+
+    @property
+    def and_require_namespaces_option(self):
+        if self._and_require_namespaces_option is None:
+            self._and_require_namespaces_option = utils.assert_is_list(
+                "and_require_namespaces",
+                self.options.get("and_require_namespaces") or [],
+            )
+        return self._and_require_namespaces_option
+
+    @property
+    def and_require_namespaces_installed_option(self):
+        if self._and_require_namespaces_option is None:
+            self._and_require_namespaces_option = utils.assert_is_list(
+                "and_require_namespaces_installed",
+                self.options.get("and_require_namespaces_installed") or [],
+            )
+        return self._and_require_namespaces_option
 
     @property
     def required_namespaces_installed(self):
         if self._required_namespaces_installed is None:
             self._required_namespaces_installed = set()
+
             # and_require_namespaces_installed
-            if utils.is_list(self.options.get("and_require_namespaces_installed")):
-                for namespace in self.options.get("and_require_namespaces_installed"):
-                    if utils.is_string(namespace):
-                        self._required_namespaces_installed.add(namespace)
+            for namespace in self.and_require_namespaces_installed_option:
+                self._required_namespaces_installed.add(
+                    utils.assert_is_string(
+                        "and_require_namespaces_installed value", namespace
+                    )
+                )
 
         return self._required_namespaces_installed
 
@@ -354,15 +420,17 @@ class NamespaceTask(BaseNamespaceTask):
     def required_namespaces(self):
         if self._required_namespaces is None:
             self._required_namespaces = []
+
             # namespace
-            if utils.is_string(self.options.get("namespace")):
-                self._required_namespaces.append(self.options.get("namespace"))
+            self._required_namespaces.append(self.namespace_option)
 
             # and_require_namespaces
-            if utils.is_list(self.options.get("and_require_namespaces")):
-                for namespace in self.options.get("and_require_namespaces"):
-                    if utils.is_string(namespace):
-                        self._required_namespaces.append(namespace)
+            for namespace in self.and_require_namespaces_option:
+                self._required_namespaces.append(
+                    utils.assert_is_string(
+                        "and_require_namespaces_option value", namespace
+                    )
+                )
 
             # and_require_namespaces_installed
             self._required_namespaces.extend(
@@ -425,7 +493,7 @@ class NamespaceTask(BaseNamespaceTask):
 
 class CacheNamespacesTask(BaseNamespaceTask):
     def _run_task(self):
-        # Calling namespaces will cache_namespaces() if first call
+        """ Calling namespaces will cache_namespaces() if first call """
         self.namespaces
 
 
@@ -483,8 +551,6 @@ class ExecuteAnonymousNamespaceTask(NamespaceTask, AnonymousApexTask):
     }
 
     def _prepare_apex(self, apex):
-        # Process namespace tokens
-
         if self.is_namespace_used:
             NAMESPACE = self.namespace.get_prefix("__")
             NAMESPACED_ORG = self.namespace.get_prefix("__")

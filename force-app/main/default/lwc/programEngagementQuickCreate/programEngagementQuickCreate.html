@@ -1,0 +1,12 @@
+<template>
+    <template if:true={fields}>
+        <lightning-record-form
+            object-api-name={objectApiName}
+            fields={fields}
+            columns="2"
+            oncancel={handleCancel}
+            onsubmit={handleSubmit}
+        >
+        </lightning-record-form>
+    </template>
+</template>

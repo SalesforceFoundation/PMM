@@ -1,7 +1,7 @@
 <template>
     <lightning-layout multiple-rows="true">
         <lightning-layout-item size="12" class="slds-p-around_xx-small">
-            <a onclick={navigateToNewProgramEngagement}>
+            <a onclick={addContactToProgram}>
                 <div
                     class="slds-icon_container slds-icon_container_circle slds-icon-custom-15"
                 >
@@ -42,4 +42,9 @@
             </a>
         </lightning-layout-item>
     </lightning-layout>
+    <c-modal header={label.newProgramEngagement} oncancel={closeModal}>
+        <c-program-engagement-quick-create
+            oncancel={closeModal}
+        ></c-program-engagement-quick-create>
+    </c-modal>
 </template>

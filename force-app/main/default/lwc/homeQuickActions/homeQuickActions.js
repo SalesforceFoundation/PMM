@@ -3,7 +3,6 @@ import { format } from "c/util";
 import { NavigationMixin } from "lightning/navigation";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
-import PROGRAM_ENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 
 // Labels
 import ADD_CONTACT_TO_PROGRAM from "@salesforce/label/c.Add_Contact_To_Program";
@@ -15,14 +14,14 @@ export default class HomeQuickActions extends NavigationMixin(LightningElement) 
         bulkServiceDelivery: BULK_SERVICE_DELIVERIES,
         newProgramEngagement: ADD_CONTACT_TO_PROGRAM,
     };
-    @track error;
+    @track error; // TODO: Handle errors
 
     @wire(getObjectInfo, { objectApiName: CONTACT_OBJECT })
-    contactObjectInfo({ data, error }) {
+    contactObjectInfo({ data, errors }) {
         if (data) {
             this.label.newContactLabel = data.label;
-        } else if (error) {
-            this.error = error;
+        } else if (errors) {
+            this.error = errors;
         }
     }
 
@@ -51,13 +50,11 @@ export default class HomeQuickActions extends NavigationMixin(LightningElement) 
         });
     }
 
-    navigateToNewProgramEngagement() {
-        this[NavigationMixin.Navigate]({
-            type: "standard__objectPage",
-            attributes: {
-                objectApiName: PROGRAM_ENGAGEMENT_OBJECT.objectApiName,
-                actionName: "new",
-            },
-        });
+    addContactToProgram() {
+        this.template.querySelector("c-modal").show();
+    }
+
+    closeModal() {
+        this.template.querySelector("c-modal").hide();
     }
 }

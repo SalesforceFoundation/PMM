@@ -3,12 +3,13 @@ import { showToast, handleError, debouncify } from "c/util";
 import { deleteRecord } from "lightning/uiRecordApi";
 import { fireEvent } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
+import { loadStyle } from "lightning/platformResourceLoader";
 
 import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryController.getServicesAndEngagements";
 
 import deleteLabel from "@salesforce/label/c.Delete";
 import cancel from "@salesforce/label/c.Cancel";
-import error from "@salesforce/label/c.Error";
+import errorLabel from "@salesforce/label/c.Error";
 import warning from "@salesforce/label/c.Warning";
 import saving from "@salesforce/label/c.Saving";
 import saved from "@salesforce/label/c.Saved";
@@ -26,6 +27,8 @@ import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+
+import hideHelpIcons from "@salesforce/resourceUrl/hideHelpIcons";
 
 const DELAY = 1000;
 const ENGAGEMENTS = "engagements";
@@ -68,7 +71,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     _valuesToSave = [];
     _targetProgram;
 
-    ERROR = error;
+    ERROR = errorLabel;
     WARNING = warning;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
@@ -89,7 +92,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         success,
         saved,
         saving,
-        error,
+        errorLabel,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -98,6 +101,10 @@ export default class ServiceDeliveryRow extends LightningElement {
     };
 
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
+
+    connectedCallback() {
+        loadStyle(this, hideHelpIcons);
+    }
 
     autoSave() {
         let deliverySubmit = this.template.querySelector(".sd-submit");
@@ -119,7 +126,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this.handleContactChange();
             })
             .catch(error => {
-                this.rowError = handleError(error,false);
+                this.rowError = handleError(error, false);
             });
     }
 
@@ -194,7 +201,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
     }
 
-    handleLoad(event) {
+    handleLoad() {
         this.processDefaults();
     }
 

@@ -1,5 +1,5 @@
 import { LightningElement, api, track, wire } from "lwc";
-import { handleError, debouncify } from "c/util";
+import { handleError } from "c/util";
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
 import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
@@ -55,12 +55,15 @@ export default class BulkServiceDeliveryUI extends LightningElement {
         fieldSet.forEach(field => {
             field.size = 2;
             field.disabled = true;
-            if (
-                field.apiName === this.fields.quantity.fieldApiName ||
-                field.apiName === this.fields.unitMeasurement.fieldApiName
-            ) {
+
+            if (field.apiName === this.fields.quantity.fieldApiName) {
                 field.size = 1;
             }
+
+            if (field.apiName === this.fields.unitMeasurement.fieldApiName) {
+                field.size = 1.5;
+            }
+
             if (field.apiName === this.fields.contact.fieldApiName) {
                 field.disabled = false;
             }
@@ -82,5 +85,4 @@ export default class BulkServiceDeliveryUI extends LightningElement {
             this.addDelivery();
         }
     }
-
 }

@@ -13,13 +13,11 @@ export default class ServiceDeliveryModal extends LightningElement {
     };
 
     connectedCallback() {
-        registerListener("OpenPmdmBulkServiceDelivery", this.handleOpenModal, this);
         registerListener("serviceDeliveryUpsert", this.handleServiceDeliveryUpsert, this);
         registerListener("serviceDeliveryDelete", this.handleServiceDeliveryDelete, this);
     }
 
     disconnectedCallback() {
-        unregisterListener("OpenPmdmBulkServiceDelivery", this.handleOpenModal, this);
         unregisterListener(
             "serviceDeliveryUpsert",
             this.handleServiceDeliveryUpsert,

@@ -9,7 +9,7 @@ import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryControlle
 
 import deleteLabel from "@salesforce/label/c.Delete";
 import cancel from "@salesforce/label/c.Cancel";
-import errorLabel from "@salesforce/label/c.Error";
+import error from "@salesforce/label/c.Error";
 import warning from "@salesforce/label/c.Warning";
 import saving from "@salesforce/label/c.Saving";
 import saved from "@salesforce/label/c.Saved";
@@ -71,7 +71,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     _valuesToSave = [];
     _targetProgram;
 
-    ERROR = errorLabel;
+    ERROR = error;
     WARNING = warning;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
@@ -92,7 +92,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         success,
         saved,
         saving,
-        errorLabel,
+        error,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -125,8 +125,8 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this._filteredValues = result;
                 this.handleContactChange();
             })
-            .catch(error => {
-                this.rowError = handleError(error, false);
+            .catch(err => {
+                this.rowError = handleError(err, false);
             });
     }
 
@@ -251,8 +251,8 @@ export default class ServiceDeliveryRow extends LightningElement {
                     this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));
                     fireEvent(this.pageRef, "serviceDeliveryDelete", deletedRecordId);
                 })
-                .catch(error => {
-                    handleError(error);
+                .catch(err => {
+                    handleError(err);
                 });
         } else {
             this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));

@@ -118,8 +118,8 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this._filteredValues = result;
                 this.handleContactChange();
             })
-            .catch(errors => {
-                this.rowError = handleError(errors, false);
+            .catch(err => {
+                this.rowError = handleError(err, false);
             });
     }
 
@@ -244,8 +244,8 @@ export default class ServiceDeliveryRow extends LightningElement {
                     this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));
                     fireEvent(this.pageRef, "serviceDeliveryDelete", deletedRecordId);
                 })
-                .catch(errors => {
-                    handleError(errors);
+                .catch(err => {
+                    handleError(err);
                 });
         } else {
             this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));

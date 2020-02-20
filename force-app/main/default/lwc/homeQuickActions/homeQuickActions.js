@@ -19,7 +19,9 @@ export default class HomeQuickActions extends NavigationMixin(LightningElement) 
     @wire(getObjectInfo, { objectApiName: CONTACT_OBJECT })
     contactObjectInfo({ data, errors }) {
         if (data) {
-            this.label.newContactLabel = data.label;
+            this.label.newContactLabel = format(NEW_RECORD_FORMAT, {
+                0: data.label,
+            });
         } else if (errors) {
             this.error = errors;
         }
@@ -46,6 +48,23 @@ export default class HomeQuickActions extends NavigationMixin(LightningElement) 
             type: "standard__navItemPage",
             attributes: {
                 apiName: "Bulk_Service_Deliveries",
+            },
+        });
+    }
+
+    navigateToRecord(event) {
+        this.closeModal(event);
+        const recordId = event.detail.id;
+        if (!recordId) {
+            return;
+        }
+        console.log("Id: ", recordId);
+
+        this[NavigationMixin.Navigate]({
+            type: "standard__objectPage",
+            attributes: {
+                recordId: recordId,
+                actionName: "view",
             },
         });
     }

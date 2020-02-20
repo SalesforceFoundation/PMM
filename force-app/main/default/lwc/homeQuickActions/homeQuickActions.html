@@ -42,9 +42,10 @@
             </a>
         </lightning-layout-item>
     </lightning-layout>
-    <c-modal header={label.newProgramEngagement} oncancel={closeModal}>
+    <c-modal header={label.newProgramEngagement}>
         <c-program-engagement-quick-create
             oncancel={closeModal}
+            onsuccess={navigateToRecord}
         ></c-program-engagement-quick-create>
     </c-modal>
 </template>

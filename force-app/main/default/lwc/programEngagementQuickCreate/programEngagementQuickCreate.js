@@ -1,4 +1,5 @@
 import { LightningElement, track, wire } from "lwc";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { handleError } from "c/util";
 import PROGRAM_ENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import NAME_FIELD from "@salesforce/schema/ProgramEngagement__c.Name";
@@ -31,10 +32,23 @@ export default class ProgramEngagementQuickCreate extends LightningElement {
 
     handleSubmit(event) {
         event.preventDefault();
-        const formFields = event.detail.formFields;
+        const formFields = event.detail.fields;
         formFields[NAME_FIELD] = "Program Engagement Name";
         this.template.querySelector("lightning-record-form").submit(formFields);
-        //TODO: Handle navigation to newly created record
+    }
+
+    handleSuccess(event) {
+        const toastEvent = new ShowToastEvent({
+            title: "Record created",
+            message: "Record: " + event.detail.id,
+            variant: "success",
+        });
+        this.dispatchEvent(toastEvent);
+        this.dispatchEvent(
+            new CustomEvent("success", {
+                detail: event.detail,
+            })
+        );
     }
 
     handleCancel(event) {

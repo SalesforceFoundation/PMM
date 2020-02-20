@@ -64,7 +64,7 @@ class pmdm(object):
         self.selenium.driver.execute_script('arguments[0].click()', element)
 
     def populate_lookup(self,title, value):
-        """associate a client to a note"""
+        """populate the lookup field"""
         locator = pmdm_lex_locators["new_record"]["lookup_field"].format(title)
         self.selenium.click_element(locator)
         self.selenium.clear_element_text(locator)
@@ -97,4 +97,6 @@ class pmdm(object):
     def select_auto_name_override_checkbox(self,label):
         locator = pmdm_lex_locators["checkbox"].format(label)
         self.selenium.get_webelement(locator).click()
+
+
 

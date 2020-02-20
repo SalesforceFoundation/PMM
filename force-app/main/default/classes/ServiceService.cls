@@ -19,11 +19,6 @@ public with sharing class ServiceService {
                     'apiName' => field.getFieldPath(),
                     'label' => field.getLabel(),
                     'isRequired' => !field.getSObjectField().getDescribe().isNillable(),
-                    'helpTextExists' => field.getSObjectField()
-                            .getDescribe()
-                            .getInlineHelpText() != null
-                        ? true
-                        : false,
                     'helpText' => field.getSObjectField()
                         .getDescribe()
                         .getInlineHelpText()

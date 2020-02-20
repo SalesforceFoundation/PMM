@@ -58,9 +58,7 @@ export default class BulkServiceDeliveryUI extends LightningElement {
 
             if (field.apiName === this.fields.quantity.fieldApiName) {
                 field.size = 1;
-            }
-
-            if (field.apiName === this.fields.unitMeasurement.fieldApiName) {
+            } else if (field.apiName === this.fields.unitMeasurement.fieldApiName) {
                 field.size = 1.5;
             }
 

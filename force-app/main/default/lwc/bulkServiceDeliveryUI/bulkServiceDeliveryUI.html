@@ -16,7 +16,7 @@
                         >
                             <template if:true={field.isRequired}>
                                 <strong>{field.label}</strong>
-                                <template if:true={field.helpTextExists}>
+                                <template if:true={field.helpText}>
                                     <lightning-helptext
                                         content={field.helpText}
                                         icon-name="utility:info"
@@ -33,7 +33,7 @@
 
                             <template if:false={field.isRequired}>
                                 <strong>{field.label}</strong>
-                                <template if:true={field.helpTextExists}>
+                                <template if:true={field.helpText}>
                                     <lightning-helptext
                                         content={field.helpText}
                                         icon-name="utility:info"

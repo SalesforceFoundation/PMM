@@ -1,5 +1,5 @@
 import { LightningElement, wire, track } from "lwc";
-import { format } from "c/util";
+import { format, handleError } from "c/util";
 import { NavigationMixin } from "lightning/navigation";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
@@ -14,16 +14,15 @@ export default class HomeQuickActions extends NavigationMixin(LightningElement) 
         bulkServiceDelivery: BULK_SERVICE_DELIVERIES,
         newProgramEngagement: ADD_CONTACT_TO_PROGRAM,
     };
-    @track error; // TODO: Handle errors
 
     @wire(getObjectInfo, { objectApiName: CONTACT_OBJECT })
-    contactObjectInfo({ data, errors }) {
+    contactObjectInfo({ data, err }) {
         if (data) {
             this.label.newContactLabel = format(NEW_RECORD_FORMAT, {
                 0: data.label,
             });
-        } else if (errors) {
-            this.error = errors;
+        } else if (err) {
+            handleError(err);
         }
     }
 
@@ -58,8 +57,7 @@ export default class HomeQuickActions extends NavigationMixin(LightningElement) 
         if (!recordId) {
             return;
         }
-        console.log("Id: ", recordId);
-
+        // TODO: Figure out why navigation to new page fails
         this[NavigationMixin.Navigate]({
             type: "standard__objectPage",
             attributes: {

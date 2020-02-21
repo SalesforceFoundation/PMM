@@ -124,6 +124,13 @@
         <value>No services found, choose another program engagement.</value>
     </labels>
     <labels>
+        <fullName>Record_Created</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Notification that the [Object] record was created successfully.</shortDescription>
+        <value>{object} {name} was created.</value>
+    </labels>
+    <labels>
         <fullName>Record_Deleted</fullName>
         <language>en_US</language>
         <protected>true</protected>

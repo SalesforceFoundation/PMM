@@ -4,3 +4,7 @@
 # CumulusCI
 /cumulusci.yml        @SalesforceFoundation/release-engineering-reviewers
 /tasks/               @SalesforceFoundation/release-engineering-reviewers
+
+# Packaged Metadata
+/force-app/main/default/labels  @microveldt @katherinemitchell @AndersonTarren
+/force-app/main/default/objects  @microveldt @katherinemitchell @AndersonTarren

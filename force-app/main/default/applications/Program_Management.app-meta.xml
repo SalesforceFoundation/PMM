@@ -65,14 +65,16 @@
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <label>Program Management</label>
     <navType>Standard</navType>
-    <tabs>standard-Account</tabs>
+    <tabs>ProgramEngagement__c</tabs>
+    <tabs>Bulk_Service_Deliveries</tabs>
     <tabs>standard-Contact</tabs>
     <tabs>Program__c</tabs>
-    <tabs>ProgramEngagement__c</tabs>
     <tabs>ProgramCohort__c</tabs>
-    <tabs>standard-report</tabs>
     <tabs>Service__c</tabs>
-    <tabs>Bulk_Service_Deliveries</tabs>
+    <tabs>standard-report</tabs>
+    <tabs>standard-Task</tabs>
+    <tabs>standard-Dashboard</tabs>
     <tabs>ServiceDelivery__c</tabs>
+    <tabs>standard-Account</tabs>
     <uiType>Lightning</uiType>
 </CustomApplication>

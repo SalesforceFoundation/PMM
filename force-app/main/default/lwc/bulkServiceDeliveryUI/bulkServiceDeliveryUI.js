@@ -53,13 +53,14 @@ export default class BulkServiceDeliveryUI extends LightningElement {
 
     configureFieldSize(fieldSet) {
         fieldSet.forEach(field => {
-            field.size = 2;
             field.disabled = true;
 
             if (field.apiName === this.fields.quantity.fieldApiName) {
                 field.size = 1;
             } else if (field.apiName === this.fields.unitMeasurement.fieldApiName) {
                 field.size = 1.5;
+            } else {
+                field.size = 2;
             }
 
             if (field.apiName === this.fields.contact.fieldApiName) {

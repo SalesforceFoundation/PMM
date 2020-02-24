@@ -104,9 +104,9 @@
                         <sortOrder>a</sortOrder>
                     </groupingSorts>
                 </groupingSortProperties>
-                <header>Active Program Engagements</header>
+                <header>All Active Program Engagements</header>
                 <legendPosition>Bottom</legendPosition>
-                <report>ProgramManagementReports/Active_Program_Engagements_pgA</report>
+                <report>ProgramManagementReports/All_Active_Program_Engagements_HWv</report>
                 <showPercentage>false</showPercentage>
                 <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>

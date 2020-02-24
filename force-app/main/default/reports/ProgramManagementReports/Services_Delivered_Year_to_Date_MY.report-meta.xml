@@ -26,7 +26,7 @@
         <value>0</value>
     </params>
     <reportType>CustomEntity$ServiceDelivery__c@ServiceDelivery__c.Service__c</reportType>
-    <scope>user</scope>
+    <scope>organization</scope>
     <showDetails>false</showDetails>
     <showGrandTotal>false</showGrandTotal>
     <showSubTotals>false</showSubTotals>

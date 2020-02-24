@@ -24,7 +24,7 @@
         <value>1</value>
     </params>
     <reportType>CustomEntity$ProgramEngagement__c</reportType>
-    <scope>user</scope>
+    <scope>organization</scope>
     <showDetails>false</showDetails>
     <showGrandTotal>false</showGrandTotal>
     <showSubTotals>false</showSubTotals>

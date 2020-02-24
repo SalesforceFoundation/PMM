@@ -352,7 +352,7 @@ INSERT INTO "household_accounts" VALUES(22,'Solomon Household','','','','','',''
 INSERT INTO "household_accounts" VALUES(23,'Higgins Household','','','','','','','555-248-3956','','','','','','Household','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Household Account','true','','HH_Account');
 INSERT INTO "household_accounts" VALUES(24,'Adams Household','','','','','','','555-648-7204','','','','','','Household','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Household Account','true','','HH_Account');
 INSERT INTO "household_accounts" VALUES(25,'Baker Household','','','','','','','555-524-0749','','','','','','Household','','2019-09-02','2019-09-02','500.0','500.0','500.0','500.0','2019','500.0','500.0','500.0','500.0','0.0','0.0','1.0','1.0','1.0','0.0','0.0','500.0','','','','2019-09-02','500.0','','1.0','Household Account','true','','HH_Account');
-INSERT INTO "household_accounts" VALUES(26,'Banks and Graham Household','','','','','','','555-648-7204','','','','','','Household','','2019-08-05','2019-08-05','400.0','400.0','400.0','400.0','2019','400.0','400.0','400.0','400.0','0.0','0.0','1.0','1.0','1.0','0.0','0.0','400.0','','','','2019-08-05','400.0','','1.0','Household Account','true','','HH_Account');
+INSERT INTO "household_accounts" VALUES(26,'Brooks and Graham Household','','','','','','','555-648-7204','','','','','','Household','','2019-08-05','2019-08-05','400.0','400.0','400.0','400.0','2019','400.0','400.0','400.0','400.0','0.0','0.0','1.0','1.0','1.0','0.0','0.0','400.0','','','','2019-08-05','400.0','','1.0','Household Account','true','','HH_Account');
 INSERT INTO "household_accounts" VALUES(27,'Barnes Household','','','','','','','555-893-4763','','','','','','Household','','2019-07-01','2019-07-01','500.0','500.0','500.0','500.0','2019','500.0','500.0','500.0','500.0','0.0','0.0','1.0','1.0','1.0','0.0','0.0','500.0','','','','2019-07-01','500.0','','1.0','Household Account','true','','HH_Account');
 INSERT INTO "household_accounts" VALUES(28,'Boyd Household','','','','','','','555-380-8532','','','','','','Household','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Household Account','true','','HH_Account');
 INSERT INTO "household_accounts" VALUES(29,'Burke Household','','','','','','','555-830-5295','','','','','','Household','','','','0.0','0.0','0.0','0.0','','','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','0.0','','','','','0.0','','0.0','Household Account','true','','HH_Account');
@@ -1679,9 +1679,8 @@ CREATE TABLE caseman__client_alerts (
 	contact__c VARCHAR(255), 
 	PRIMARY KEY (sf_id)
 );
-INSERT INTO "caseman__client_alerts" VALUES(1,'Tom has anger issues','true','',5);
-INSERT INTO "caseman__client_alerts" VALUES(2,'Tom''s sister passed away recently (very emotional)','true','',5);
-INSERT INTO "caseman__client_alerts" VALUES(3,'Robin was recently released from rehab','true','',11);
+INSERT INTO "caseman__client_alerts" VALUES(2,'Tom is really motivated by positive reinforcement','true','',5);
+INSERT INTO "caseman__client_alerts" VALUES(3,'Robin will always be 15 minutes late to workshop, she comes straight from work','true','',11);
 CREATE TABLE caseman__client_cases (
 	sf_id VARCHAR(255) NOT NULL, 
 	subject VARCHAR(255), 
@@ -1865,9 +1864,7 @@ CREATE TABLE caseman__incident_cases (
 	record_type VARCHAR(255), 
 	PRIMARY KEY (sf_id)
 );
-INSERT INTO "caseman__incident_cases" VALUES(1,'Broke toilet stall door','Medium','Working','','Tom ran away from the group to the boys restroom and kicked in the stall door, breaking it.','','','','','2019-04-12T21:00:00.000Z','Property Damage','','Low',1,5,'Incident');
-INSERT INTO "caseman__incident_cases" VALUES(2,'Breakdown during session','Medium','New','Phone','Tom lost his temper and couldn''t get himself back together','','','','','2019-04-24T20:30:00.000Z','Other','','High',1,5,'Incident');
-INSERT INTO "caseman__incident_cases" VALUES(3,'Bullying','Medium','New','','Older girls teased Tom about his shoes, causing him to lose his temper.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium',1,5,'Incident');
+INSERT INTO "caseman__incident_cases" VALUES(3,'Tom lost his cell phone','Medium','New','','Tom lost his cell phone at school today.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium',1,5,'Incident');
 INSERT INTO "caseman__incident_cases" VALUES(4,'Skipped group field trip','Medium','Closed','','Tom ran off and skipped the group field trip','','','','','2019-06-04T19:00:00.000Z','Other','','Medium','',5,'Incident');
 INSERT INTO "caseman__incident_cases" VALUES(5,'Left afterschool program without permission','Medium','Closed','','Tom left the program without telling the counselor. He was found an hour later behind the neighborhood convenience store.','','','','','2019-06-03T19:00:00.000Z','Other','','Medium',1,5,'Incident');
 

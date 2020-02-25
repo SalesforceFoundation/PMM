@@ -177,12 +177,12 @@ export default class ServiceDeliveryRow extends LightningElement {
             if (element.apiName === this.fields.service.fieldApiName) {
                 element.showFilteredInput = true;
                 element.isService = true;
-                element.options = this._filteredValues[SERVICES];
+                element.options = this._filteredValues[SERVICES].slice(0);
                 element.placeholder = this.labels.selectService;
             } else if (element.apiName === this.fields.programEngagement.fieldApiName) {
                 element.showFilteredInput = true;
                 element.isEngagement = true;
-                element.options = this._filteredValues[ENGAGEMENTS];
+                element.options = this._filteredValues[ENGAGEMENTS].slice(0);
                 element.placeholder = this.labels.selectEngagement;
                 element.disabled = false;
                 if (this.noContactPrograms) {

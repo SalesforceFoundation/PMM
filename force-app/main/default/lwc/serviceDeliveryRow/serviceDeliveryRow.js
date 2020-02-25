@@ -28,7 +28,7 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
-import hideHelpIcons from "@salesforce/resourceUrl/hideHelpIcons";
+import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const DELAY = 1000;
 const ENGAGEMENTS = "engagements";
@@ -103,7 +103,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
 
     connectedCallback() {
-        loadStyle(this, hideHelpIcons);
+        loadStyle(this, pmmFolder + "/hideHelpIcons.css");
     }
 
     autoSave() {

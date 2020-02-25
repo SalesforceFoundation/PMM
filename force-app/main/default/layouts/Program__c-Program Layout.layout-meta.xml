@@ -114,6 +114,7 @@
         <relatedList>Service__c.Program__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Contact__c</fields>
         <fields>Stage__c</fields>

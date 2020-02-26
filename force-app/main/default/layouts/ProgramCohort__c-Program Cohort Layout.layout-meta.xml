@@ -97,6 +97,7 @@
         </platformActionListItems>
     </platformActionList>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Contact__c</fields>
         <fields>Stage__c</fields>

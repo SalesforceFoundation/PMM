@@ -6,6 +6,16 @@
     <externalId>false</externalId>
     <inlineHelpText>A lookup to the Program Engagement for the Service Delivery.</inlineHelpText>
     <label>Program Engagement</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>Contact must match the Contact in the Program Engagement.</errorMessage>
+        <filterItems>
+            <field>ProgramEngagement__c.Contact__c</field>
+            <operation>equals</operation>
+            <valueField>$Source.Contact__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
     <referenceTo>ProgramEngagement__c</referenceTo>
     <relationshipLabel>Service Deliveries</relationshipLabel>
     <relationshipName>ServiceDeliveries</relationshipName>

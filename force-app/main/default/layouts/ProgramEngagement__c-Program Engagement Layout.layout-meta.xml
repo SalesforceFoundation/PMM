@@ -139,6 +139,7 @@
         </quickActionListItems>
     </quickActionList>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>DeliveryDate__c</fields>
         <fields>Quantity__c</fields>

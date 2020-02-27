@@ -1,0 +1,10 @@
+.hideHelpText .slds-form-element__icon {
+    display: none;
+}
+.displayHelpText button {
+    display: inline;
+}
+.slds-form-element__icon {
+    display: inline;
+    padding-left: 4px;
+}

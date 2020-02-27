@@ -3,6 +3,7 @@ import { showToast, handleError, debouncify } from "c/util";
 import { deleteRecord } from "lightning/uiRecordApi";
 import { fireEvent } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
+import { loadStyle } from "lightning/platformResourceLoader";
 
 import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryController.getServicesAndEngagements";
 
@@ -26,6 +27,8 @@ import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+
+import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const DELAY = 1000;
 const ENGAGEMENTS = "engagements";
@@ -98,6 +101,10 @@ export default class ServiceDeliveryRow extends LightningElement {
     };
 
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
+
+    connectedCallback() {
+        loadStyle(this, pmmFolder + "/hideHelpIcons.css");
+    }
 
     autoSave() {
         let deliverySubmit = this.template.querySelector(".sd-submit");

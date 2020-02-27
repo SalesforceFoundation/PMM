@@ -45,7 +45,12 @@ Create a Program via UI
     Click Save Button
     Wait Until Modal Is Closed
     current page should be                 Details                                 Program__c
-    Page Should Contain                   ${program_name}
+    verify details  Program Name    contains    ${program_name}
+    verify page contains related list  Services
+    verify page contains related list  Program Engagements
+    verify page contains related list  Program Cohorts
+    verify page contains related list  Files
+
 
 
 

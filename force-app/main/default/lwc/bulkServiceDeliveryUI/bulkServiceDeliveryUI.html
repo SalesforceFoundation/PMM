@@ -16,6 +16,13 @@
                         >
                             <template if:true={field.isRequired}>
                                 <strong>{field.label}</strong>
+                                <template if:true={field.helpText}>
+                                    <lightning-helptext
+                                        content={field.helpText}
+                                        icon-name="utility:info"
+                                        class="displayHelpText"
+                                    ></lightning-helptext>
+                                </template>
                                 <strong
                                     style="color: red;"
                                     class="slds-p-left_xx-small"
@@ -26,6 +33,13 @@
 
                             <template if:false={field.isRequired}>
                                 <strong>{field.label}</strong>
+                                <template if:true={field.helpText}>
+                                    <lightning-helptext
+                                        content={field.helpText}
+                                        icon-name="utility:info"
+                                        class="displayHelpText"
+                                    ></lightning-helptext>
+                                </template>
                             </template>
                         </lightning-layout-item>
                     </template>
@@ -61,7 +75,6 @@
                             onclick={addDelivery}
                         ></lightning-button>
                     </lightning-layout-item>
-
                 </lightning-layout>
             </div>
         </div>

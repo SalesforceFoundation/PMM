@@ -4,7 +4,6 @@
         <members>*</members>
         <members>Account</members>
         <members>Contact</members>
-        <members>AccountContactRelation</members>
         <members>Case</members>
         <members>caseman__ClientAlert__c</members>
         <members>caseman__ClientNote__c</members>

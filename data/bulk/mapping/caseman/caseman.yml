@@ -62,52 +62,7 @@ Contacts:
             table: contacts
             after: Contacts
 
-caseman__Branch_Contacts:
-    sf_object: AccountContactRelation
-    table: caseman__branch_contacts
-    fields:
-        # Standard Fields
-        Id: sf_id
-        Roles: Roles
-        IsActive: IsActive
-
-    lookups:
-        AccountId:
-            table: caseman__branch_accounts
-        ContactId:
-            table: contacts
-
 # Cases
-caseman__Client_Cases:
-    sf_object: Case
-    table: caseman__client_cases
-    record_type: "ClientCase"
-    fields:
-        # Standard Fields
-        Id: sf_id
-        Subject: subject
-        Priority: priority
-        Status: status
-        Origin: origin
-        Description: description
-        SuppliedCompany: SuppliedCompany
-        SuppliedEmail: SuppliedEmail
-        SuppliedName: SuppliedName
-        SuppliedPhone: SuppliedPhone
-
-        # Custom Fields
-        IncidentDateTime__c: IncidentDateTime__c
-        IncidentType__c: IncidentType__c
-        LocationNotes__c: LocationNotes__c
-        Severity__c: Severity__c
-
-    lookups:
-        Branch__c:
-            key_field: branch__c
-            table: caseman__branch_accounts
-        ContactId:
-            table: contacts
-
 caseman__Incidents:
     sf_object: Case
     table: caseman__incident_cases
@@ -189,9 +144,6 @@ caseman__Client_Note_Relationships:
         RelatedObject__c: RelatedObject__c
 
     lookups:
-        Case__c:
-            key_field: case__c
-            table: caseman__client_cases
         ClientNote__c:
             key_field: client_note__c
             table: caseman__client_notes

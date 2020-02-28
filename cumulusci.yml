@@ -81,10 +81,8 @@ tasks:
             record_types:
                 - record_type: Account.caseman__Branch
                   default: True
-                - record_type: Case.caseman__ClientCase
-                  default: True
                 - record_type: Case.caseman__Incident
-                - record_type: Case.None
+                  default: True
 
     update_admin_profile_npsp:
         class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
@@ -114,10 +112,8 @@ tasks:
                   default: true
                 - record_type: Campaign.Default
                   default: true
-                - record_type: Case.caseman__ClientCase
-                  default: True
                 - record_type: Case.caseman__Incident
-                - record_type: Case.None
+                  default: True
 
     run_all_local_tests:
         group: "Tests"
@@ -166,10 +162,6 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
             log_mapping: table
 
     capture_bulk_data:
@@ -187,10 +179,6 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
             log_mapping: table
 
     insert_bulk_data:
@@ -208,10 +196,6 @@ tasks:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
 
     update_client_photo_directories:
         group: "CaseMan: Test Data"

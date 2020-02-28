@@ -1,28 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
-        <fullName>Add_Contact_To_Program</fullName>
-        <categories>Program Engagement</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Add Contact to Program Label</shortDescription>
-        <value>Add Contact to Program</value>
-    </labels>
-    <labels>
         <fullName>Add_Service_Delivery</fullName>
         <categories>Service Delivery</categories>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Add Service Delivery</shortDescription>
         <value>Add Service Delivery</value>
-    </labels>
-    <labels>
-        <fullName>Bulk_Service_Deliveries</fullName>
-        <categories>Service Delivery</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Bulk Service Deliveries Label</shortDescription>
-        <value>Bulk Service Deliveries</value>
     </labels>
     <labels>
         <fullName>Error</fullName>
@@ -107,14 +91,6 @@
         <protected>true</protected>
         <shortDescription>Good morning, First Name!</shortDescription>
         <value>Good morning, {firstName}!</value>
-    </labels>
-    <labels>
-        <fullName>New_Record_Dynamic</fullName>
-        <categories>Lightning Component</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>New [Object] for any object label</shortDescription>
-        <value>New {0}</value>
     </labels>
     <labels>
         <fullName>No_Services_For_Program_Engagement</fullName>

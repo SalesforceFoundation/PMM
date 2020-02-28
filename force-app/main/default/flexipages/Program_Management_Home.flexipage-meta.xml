@@ -4,14 +4,7 @@
         <componentInstances>
             <componentName>homeHeader</componentName>
         </componentInstances>
-        <name>topLeft</name>
-        <type>Region</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <componentInstances>
-            <componentName>homeQuickActions</componentName>
-        </componentInstances>
-        <name>topRight</name>
+        <name>top</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>

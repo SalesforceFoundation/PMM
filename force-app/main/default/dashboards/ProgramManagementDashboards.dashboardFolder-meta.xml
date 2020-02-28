@@ -5,5 +5,5 @@
         <sharedTo>AllInternalUsers</sharedTo>
         <sharedToType>Organization</sharedToType>
     </folderShares>
-    <name>PMDM Dashboards</name>
+    <name>Program Management Dashboards</name>
 </DashboardFolder>

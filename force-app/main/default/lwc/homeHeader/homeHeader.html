@@ -2,7 +2,7 @@
     <template if:false={error}>
         <template if:true={welcomeMessage}>
             <lightning-layout vertical-align="stretch" pull-to-boundary="small">
-                <lightning-layout-item size="3">
+                <lightning-layout-item size="2">
                     <lightning-avatar
                         src={user.photoUrl}
                         size="large"
@@ -10,7 +10,7 @@
                         class="photo slds-align_absolute-center"
                     ></lightning-avatar>
                 </lightning-layout-item>
-                <lightning-layout-item padding="around-small" size="9">
+                <lightning-layout-item size="10">
                     <lightning-layout
                         multiple-rows="true"
                         vertical-align="center"

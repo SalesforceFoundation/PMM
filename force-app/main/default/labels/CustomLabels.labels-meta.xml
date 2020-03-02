@@ -17,14 +17,6 @@
         <value>Error</value>
     </labels>
     <labels>
-        <fullName>errorPanel_DefaultMessage</fullName>
-        <categories>Lightning Component</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>errorPanel: Default Message</shortDescription>
-        <value>Error retrieving data</value>
-    </labels>
-    <labels>
         <fullName>Warning</fullName>
         <categories></categories>
         <language>en_US</language>
@@ -67,30 +59,6 @@
         <protected>true</protected>
         <shortDescription>Delete</shortDescription>
         <value>Delete</value>
-    </labels>
-    <labels>
-        <fullName>GoodAfternoonFirstName</fullName>
-        <categories>Lightning Component</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Good afternoon, First Name!</shortDescription>
-        <value>Good afternoon, {firstName}!</value>
-    </labels>
-    <labels>
-        <fullName>GoodEveningFirstName</fullName>
-        <categories>Lightning Component</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Good evening, First Name!</shortDescription>
-        <value>Good evening, {firstName}!</value>
-    </labels>
-    <labels>
-        <fullName>GoodMorningFirstName</fullName>
-        <categories>Lightning Component</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Good morning, First Name!</shortDescription>
-        <value>Good morning, {firstName}!</value>
     </labels>
     <labels>
         <fullName>No_Services_For_Program_Engagement</fullName>
@@ -170,14 +138,6 @@
         <protected>true</protected>
         <shortDescription>Error</shortDescription>
         <value>Error</value>
-    </labels>
-    <labels>
-        <fullName>Util_ShowDetails</fullName>
-        <categories>UI</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Show Details</shortDescription>
-        <value>Show Details</value>
     </labels>
     <labels>
         <fullName>Util_Unknown_Error</fullName>

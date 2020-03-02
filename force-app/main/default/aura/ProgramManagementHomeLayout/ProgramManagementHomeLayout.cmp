@@ -3,18 +3,10 @@
     description="Program Management Home"
     access="global"
 >
-    <aura:attribute access="global" name="top" type="Aura.Component[]" />
     <aura:attribute access="global" name="sidebar" type="Aura.Component[]" />
     <aura:attribute access="global" name="main" type="Aura.Component[]" />
 
     <div>
-        <div class="header slds-p-horizontal_medium slds-p-vertical_large">
-            <lightning:layout>
-                <lightning:layoutItem flexibility="auto">
-                    {!v.top}
-                </lightning:layoutItem>
-            </lightning:layout>
-        </div>
         <div class="content slds-p-around_medium slds-p-top_large">
             <lightning:layout>
                 <lightning:layoutItem size="9" class="sidebar slds-m-right_medium">

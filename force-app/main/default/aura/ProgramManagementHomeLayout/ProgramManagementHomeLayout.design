@@ -1,8 +1,5 @@
 <design:component label="Program Management Home">
     <flexipage:template>
-        <flexipage:region name="top" label="Top Region" defaultWidth="LARGE">
-            <flexipage:formfactor type="MEDIUM" width="MEDIUM" />
-        </flexipage:region>
         <flexipage:region name="main" label="Main Region" defaultWidth="MEDIUM">
             <flexipage:formfactor type="MEDIUM" width="SMALL" />
         </flexipage:region>

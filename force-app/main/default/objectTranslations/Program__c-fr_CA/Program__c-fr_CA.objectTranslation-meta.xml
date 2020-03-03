@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>La date de début doit être antérieure à la date de fin</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Layout</layout>
+        <sections>
+            <label>Détails supplémentaires</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>Liens personnalisés</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nom du programme</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nom du programme</label>
+    </standardFields>
+</CustomObjectTranslation>

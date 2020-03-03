@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Role__c</name>
+    <help>These picklist values describe a Contact&#39;s relationship with the Program Engagement. Default values are Client, Volunteer, and Service Provider. You can edit the picklist values displayed for this field.</help>
+    <label>Role</label>
+    <picklistValues>
+        <masterLabel>Client</masterLabel>
+        <translation>Client</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Volunteer</masterLabel>
+        <translation>Volunteer</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Service Provider</masterLabel>
+        <translation>Service Provider</translation>
+    </picklistValues>
+</CustomFieldTranslation>

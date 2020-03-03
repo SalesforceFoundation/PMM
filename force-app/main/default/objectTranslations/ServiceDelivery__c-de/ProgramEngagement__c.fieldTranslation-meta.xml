@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ProgramEngagement__c</name>
+    <help>Ein Nachschlagewert für die Programmteilnahme für die erbrachte Leistung.</help>
+    <relationshipLabel>Erbrachte Leistungen</relationshipLabel>
+    <label>Programmteilnahme</label>
+</CustomFieldTranslation>

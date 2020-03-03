@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Contact__c</name>
+    <help>Une référence au contact qui s&#39;engage dans votre programme. Le nom du contact est utilisé avec le nom du programme dans le processus intitulé Modèle : Nom de l&#39;engagement dans le programme, qui remplit le Nom de l&#39;engagement dans le programme.</help>
+    <relationshipLabel>Engagements dans le programme</relationshipLabel>
+    <label>Contact</label>
+</CustomFieldTranslation>

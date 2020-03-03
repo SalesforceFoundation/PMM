@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>EndDate__c</name>
+    <help>The date a Contact completes or leaves the Program. If the Program Engagement stage Completed or Withdrawn, the End Date is set to TODAY() by the Process Builder process titled Template: Program Engagement Name. Clone the process template to edit it.</help>
+    <label>End Date</label>
+</CustomFieldTranslation>

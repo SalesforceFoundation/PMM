@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>EndDate__c</name>
+    <help>個人がプログラムを完了または脱退した日付。個人がプログラムを完了または脱退した日付。プログラムエンゲージメントフェーズが [完了] または [取り下げる] の場合、終了日は、[テンプレート: プログラムエンゲージメント名] というタイトルのプロセスビルダープロセスで TODAY() に設定されます。プロセスを編集するには、プロセステンプレートをコピーします。</help>
+    <label>終了日</label>
+</CustomFieldTranslation>

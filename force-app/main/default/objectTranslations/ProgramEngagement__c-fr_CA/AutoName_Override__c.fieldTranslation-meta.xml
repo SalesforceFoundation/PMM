@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AutoName_Override__c</name>
+    <help>Lorsque cette option est sélectionnée, le Nom de l&#39;engagement dans le programme peut être modifié après avoir été créé par le processus du générateur intitulé Modèle : Nom de l&#39;engagement dans le programme.</help>
+    <label>Remplacement du nom automatique</label>
+</CustomFieldTranslation>

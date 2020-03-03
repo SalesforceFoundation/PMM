@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AutonameOverride__c</name>
+    <help>これをオンにした場合、[テンプレート: サービス提供名] というタイトルのプロセスビルダープロセスでサービス名が作成された後、サービス名を編集できます。</help>
+    <label>自動名の上書き</label>
+</CustomFieldTranslation>

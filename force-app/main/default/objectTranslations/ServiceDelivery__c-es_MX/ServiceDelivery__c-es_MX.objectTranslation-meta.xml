@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Service Delivery Layout</layout>
+        <sections>
+            <label>Información adicional</label>
+            <section>Additional Information</section>
+        </sections>
+        <sections>
+            <label>Vínculos personalizados</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nombre de Entrega de servicio</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nombre de Entrega de servicio</label>
+    </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Entrega de servicio</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Entregas de servicio</value>
+    </caseValues>
+</CustomObjectTranslation>

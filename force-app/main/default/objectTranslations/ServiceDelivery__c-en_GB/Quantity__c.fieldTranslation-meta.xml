@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Quantity__c</name>
+    <help>The Quantity of a Service Delivery is a numeric field that accepts decimals expressed in the Unit of Measurement set in the Service. For example a Contact receiving a half hour of job coaching where the Unit of Measure is hours, the Quantity is .5.</help>
+    <label>Quantity</label>
+</CustomFieldTranslation>

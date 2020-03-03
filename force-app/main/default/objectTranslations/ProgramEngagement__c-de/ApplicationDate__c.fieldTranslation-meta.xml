@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ApplicationDate__c</name>
+    <help>Datum der Bewerbung des Kontakts für das Programm. In Phase &quot;PT&quot; legt der Prozessgenerator das Bewerbungsdatum mit dem Prozess &quot;Vorlage: Name der Programmteilnahme&quot; auf TODAY() fest. Vorlage klonen und bearbeiten, um den Prozess zu bearbeiten.</help>
+    <label>Bewerbungsdatum</label>
+</CustomFieldTranslation>

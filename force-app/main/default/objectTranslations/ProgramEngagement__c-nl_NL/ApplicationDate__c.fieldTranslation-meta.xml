@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ApplicationDate__c</name>
+    <help>Datum van aanvraag van contactpersoon bij programma. Als PB-fase Toegepast is, stelt de Processamensteller Datum van aanvraag in op TODAY() via proces met naam Sjabloon: Naam van programmabetrokkenheid. Kloon desgewenst de sjabloon en bewerk deze.</help>
+    <label>Datum van aanvraag</label>
+</CustomFieldTranslation>

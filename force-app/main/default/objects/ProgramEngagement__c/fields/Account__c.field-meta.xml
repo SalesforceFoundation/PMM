@@ -4,7 +4,7 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <description>To be populated if the benefits delivered through Program Engagement accrue to the members of the Contact's Household Account, for example, a Program Engagement with a Food Bank. If the benefit accrues only to the individual Contact, leave this field blank.</description>
     <externalId>false</externalId>
-    <inlineHelpText>To be populated if the benefits delivered through Program Engagement accrue to the members of the Contact's Household Account, for example, a Program Engagement with a Food Bank. If the benefit accrues only to the individual Contact, leave this field blank.</inlineHelpText>
+    <inlineHelpText>To be populated if the benefits delivered through Program Engagement accrue to the members of the Contact's Household Account, for example, a Program Engagement with a Food Bank.</inlineHelpText>
     <label>Household Account</label>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Program Engagements</relationshipLabel>

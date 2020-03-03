@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Role__c</name>
+    <help>Diese Werte in der Auswahlliste beschreiben die Beziehung eines Kontakts zu seiner Programmteilnahme. Die Standardwerte sind &quot;Kunde&quot;, &quot;Freiwilliger&quot; und &quot;Leistungsanbieter&quot;. Die für dieses Feld angezeigten Werte der Auswahlliste lassen sich bearbeiten.</help>
+    <label>Rolle</label>
+    <picklistValues>
+        <masterLabel>Client</masterLabel>
+        <translation>Kunde</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Volunteer</masterLabel>
+        <translation>Freiwilliger</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Service Provider</masterLabel>
+        <translation>Leistungsanbieter</translation>
+    </picklistValues>
+</CustomFieldTranslation>

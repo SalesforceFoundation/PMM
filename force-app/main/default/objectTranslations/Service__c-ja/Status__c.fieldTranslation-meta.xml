@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Status__c</name>
+    <help>この選択リスト値は、サービスの状況を示します。選択リストのデフォルト値は、[計画済み]、[有効]、[完了]、および [キャンセル] です。この項目に表示する選択リスト値は編集できます。</help>
+    <label>状況</label>
+    <picklistValues>
+        <masterLabel>Planned</masterLabel>
+        <translation>計画済み</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Active</masterLabel>
+        <translation>有効</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation>完了</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Cancelled</masterLabel>
+        <translation>キャンセル</translation>
+    </picklistValues>
+</CustomFieldTranslation>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Quantity__c</name>
+    <help>サービス提供の数量は、サービスで設定されている測定単位で表わされる十進数を受け入れる数値項目です。たとえば、個人が 30 分のジョブコーチングを受けた場合、測定単位は時間、数量は .5 になります。</help>
+    <label>数量</label>
+</CustomFieldTranslation>

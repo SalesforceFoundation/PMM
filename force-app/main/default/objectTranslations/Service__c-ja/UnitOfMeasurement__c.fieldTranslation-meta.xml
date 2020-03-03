@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>UnitOfMeasurement__c</name>
+    <help>このサービスを追跡するために使用する単位 (例: 時間、食事、セッション、提供、キット)。測定単位を定義することで、このサービスの提供を測定する方法を標準化します。</help>
+    <label>測定単位</label>
+</CustomFieldTranslation>

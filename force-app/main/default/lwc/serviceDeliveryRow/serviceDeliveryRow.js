@@ -155,6 +155,10 @@ export default class ServiceDeliveryRow extends LightningElement {
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
 
+        this.updateComboBoxValues(fieldName, fieldVal);
+    }
+
+    updateComboBoxValues(fieldName, fieldVal) {
         if (fieldName === this.fields.programEngagement.fieldApiName) {
             this._valuesToSave = []; //If the engagement changes, wipe stored values.
             this._filteredValues[ENGAGEMENTS].forEach(element => {
@@ -197,6 +201,10 @@ export default class ServiceDeliveryRow extends LightningElement {
                 }
             } else if (element.apiName !== this.fields.contact.fieldApiName) {
                 element.disabled = true;
+            }
+
+            if (element.value && element.showFilteredInput) {
+                this.updateComboBoxValues(element.apiName, element.value);
             }
         });
     }

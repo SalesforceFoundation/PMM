@@ -14,6 +14,16 @@ Use the following commands to create a PMDM scratch org with or without the foll
 - PMDM + NPSP + Case Management: `cci flow run caseman_org --org caseman_npsp`
 - PMDM namespaced + NPSP + Case Management: `cci flow run caseman_org_namespaced --org caseman_npsp_namespaced`
 
+# Capturing test data from scratch orgs
+
+**NOTE**: To capture story telling data correctly , we will need to spin up an org with `npsp`, `caseman` and `pmdm` applications loaded.
+
+Use the below listed steps to capture data from a scratch org:
+- From the `pmdm` repo use `cci flow run caseman_org --org caseman_npsp` flow to create a scratch org with `npsp`, `caseman` and `pmdm` applications
+- Once the org is spun up go ahead and make the necessary changes to the data
+- Now to capture the changes use `cci flow run capture_bulk_data --org caseman_npsp` flow to capture the changes to the  `data.sql` file
+
+
 # Code Formatting
 
 We are in trial to use [prettier](https://prettier.io/docs/en/cli.html) and [prettier-plugin-apex](https://github.com/dangmai/prettier-plugin-apex) to format our `classes`, `lwc`, and `aura`.

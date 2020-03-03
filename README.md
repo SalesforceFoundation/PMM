@@ -9,20 +9,6 @@ Use the following commands to create a PMDM scratch org with or without the foll
 - PMDM namespaced only: `cci flow run dev_org_namespaced --org dev_namespaced`
 - PMDM + NPSP: `cci flow run dev_org --org npsp`
 - PMDM namespaced + NPSP: `cci flow run dev_org_namespaced --org npsp_namespaced`
-- PMDM + Case Management: `cci flow run caseman_org --org caseman`
-- PMDM namespaced + Case Management: `cci flow run caseman_org_namespaced --org caseman_namespaced`
-- PMDM + NPSP + Case Management: `cci flow run caseman_org --org caseman_npsp`
-- PMDM namespaced + NPSP + Case Management: `cci flow run caseman_org_namespaced --org caseman_npsp_namespaced`
-
-# Capturing test data from scratch orgs
-
-**NOTE**: To capture story telling data correctly , we will need to spin up an org with `npsp`, `caseman` and `pmdm` applications loaded.
-
-Use the below listed steps to capture data from a scratch org:
-- From the `pmdm` repo use `cci flow run caseman_org --org caseman_npsp` flow to create a scratch org with `npsp`, `caseman` and `pmdm` applications
-- Once the org is spun up go ahead and make the necessary changes to the data
-- Now to capture the changes use `cci flow run capture_bulk_data --org caseman_npsp` flow to capture the changes to the  `data.sql` file
-
 
 # Code Formatting
 

@@ -45,9 +45,11 @@ Create a Service Delivery via UI
     click Save Button
     Wait Until Modal Is Closed
     current page should be                 Details                                ServiceDelivery__c
-    Page Should Contain                    ${quantity}
-    Page Should Contain                    &{service}[Name]
-    Page Should Contain                    &{program_engagement}[Name]
+    verify details  Quantity    contains    ${quantity}
+    verify details     Service     contains     &{service}[Name]
+    verify details  Program Engagement  contains    &{program_engagement}[Name]
+    page should not contain      ${service_delivery_name}
+    verify page contains related list   Files
     ${service_delivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
     ${service_id} =            Save Current Record ID For Deletion     Service__c
     ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
@@ -70,7 +72,8 @@ Create a Service Delivery via UI with Auto Name Override
     click Save Button
     Wait Until Modal Is Closed
     current page should be                 Details                                ServiceDelivery__c
-    Page Should Contain                    ${service_delivery_name}
+    verify details  Service Delivery Name   contains    ${service_delivery_name}
+    verify page contains related list   Files
     ${service_delivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
     ${service_id} =            Save Current Record ID For Deletion     Service__c
     ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

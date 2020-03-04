@@ -17,9 +17,10 @@ pmdm_lex_locators = {
     "page_header": "//div[contains(@class, 'slds-page-header')]/descendant::span[text()='{}}']",
     "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
     'confirm': {
-        'check_value':'//div[contains(@class, "forcePageBlockItem")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span',
-        'check_status':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-text',
-        'check_numbers':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-number',
+        "details": "//div[contains(@class, 'slds-form-element')][.//span[text()='{}']]//following-sibling::div[.//span[contains(@class, 'test-id__field-value')]]/span",
+     #   'check_value':'//div[contains(@class, "forcePageBlockItem")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span',
+     #   'check_status':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-text',
+      #  'check_numbers':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-number',
     },
     "new_record": {
         "title": "//h2[contains(@class, 'inlineTitle') and text()='{}']",
@@ -36,7 +37,8 @@ pmdm_lex_locators = {
     },
     'related': {
         'button': "//article[contains(@class, 'forceRelatedListCardDesktop')][.//img][.//span[@title='{}']]//a[@title='{}']",
-        "new_record_link": "//table[contains(@class,'forceRecordLayout')]/tbody/tr/th/div[contains(@class,'outputLookupContainer')]//a[contains(text(),'{}')]"
+        "new_record_link": "//table[contains(@class,'forceRecordLayout')]/tbody/tr/th/div[contains(@class,'outputLookupContainer')]//a[contains(text(),'{}')]",
+        "related_list": "//span[contains(@class,'slds-card') and @title='{}']",
     }
 }
 
@@ -63,9 +65,9 @@ bulk_service_delivery_locators = {
     "select_value":"//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(@title,'{}')]",
     "select_popup":"//div[contains(@class,'slds-listbox')]",
     "lookup_field_row1": "//div[3]//input[@placeholder='{}']",
-    "lookup_field_row2": "//div[4]//input[@placeholder='{}']",
+    "lookup_field_row2": "//div[4]/c-service-delivery-row//input[@placeholder='{}']",
     "text_field_row1":"//div[3]//input[@class='slds-input' and contains(@name,'{}')]",
-    "text_field_row2":"//div[4]//input[@class='slds-input' and contains(@name,'{}')]",
+    "text_field_row2":"//div[4]/c-service-delivery-row//input[@class='slds-input' and contains(@name,'{}')]",
     "button":"//button[@class='slds-button slds-button_brand' and @type='button' and text()='{}']",
     "error_message":"//div[@class='slds-text-color_error' and text()='{}']",
     "persist_save":"//lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",

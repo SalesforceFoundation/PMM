@@ -51,7 +51,6 @@ Setup Test Data
 *** Test Cases ***
 
 Add service delivery on bulk service delivery
-    [tags]  unstable
     [Documentation]                        This test adds service deliveries on bulk service delivery
     Go To Page                             BasePage                               ServiceDelivery__c
     verify current page                    Service Deliveries

@@ -28,20 +28,6 @@ orgs:
             config_file: orgs/npsp.json
             days: 7
             namespaced: True
-        caseman:
-            config_file: orgs/dev.json
-            days: 7
-        caseman_namespaced:
-            config_file: orgs/dev.json
-            days: 7
-            namespaced: True
-        caseman_npsp:
-            config_file: orgs/npsp.json
-            days: 7
-        caseman_npsp_namespaced:
-            config_file: orgs/npsp.json
-            days: 7
-            namespaced: True
 
 tasks:
     cache_namespaces_in_org_config:
@@ -74,18 +60,6 @@ tasks:
         options:
             package_xml: lib/admin_profile.xml
 
-    update_admin_profile_caseman:
-        class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
-        options:
-            package_xml: lib/caseman.profile.xml
-            record_types:
-                - record_type: Account.caseman__Branch
-                  default: True
-                - record_type: Case.caseman__ClientCase
-                  default: True
-                - record_type: Case.caseman__Incident
-                - record_type: Case.None
-
     update_admin_profile_npsp:
         class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
         options:
@@ -99,25 +73,6 @@ tasks:
                   default: true
                 - record_type: Campaign.Default
                   default: true
-
-    update_admin_profile_caseman_npsp:
-        class_path: cumulusci.tasks.salesforce.UpdateAdminProfile
-        options:
-            package_xml: lib/caseman.npsp.profile.xml
-            record_types:
-                - record_type: Account.HH_Account
-                - record_type: Account.Organization
-                  default: true
-                - record_type: Account.caseman__Branch
-                  person_account_default: true
-                - record_type: Opportunity.Donation
-                  default: true
-                - record_type: Campaign.Default
-                  default: true
-                - record_type: Case.caseman__ClientCase
-                  default: True
-                - record_type: Case.caseman__Incident
-                - record_type: Case.None
 
     run_all_local_tests:
         group: "Tests"
@@ -144,53 +99,18 @@ tasks:
         options:
             command: "force:source:status"
 
-    add_caseman_dependency:
-        group: Impact Engineering
-        description: Installs CaseMan with dependencies
-        class_path: cumulusci.tasks.salesforce.UpdateDependencies
-        options:
-            dependencies:
-                - github: "https://github.com/SalesforceFoundation/caseman"
-            include_beta: True
-
     log_bulk_data_mapping:
         group: "Data: Bulk"
         description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
         class_path: tasks.BulkData.LogMapping
         options:
             package_mapping_directories:
-                - data/bulk/mapping/caseman
                 - data/bulk/mapping/npsp
                 - data/bulk/mapping/pmdm
             pre_mapping_configs:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
-            log_mapping: table
-
-    capture_bulk_data:
-        group: "Data: Bulk"
-        description: "Captures a snapshot of org's bulk data to sql_path.  Only uses in an org with all possible packages installed."
-        class_path: tasks.BulkData.CaptureData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            package_mapping_directories:
-                - data/bulk/mapping/caseman
-                - data/bulk/mapping/npsp
-                - data/bulk/mapping/pmdm
-            pre_mapping_configs:
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
             log_mapping: table
 
     insert_bulk_data:
@@ -201,32 +121,12 @@ tasks:
             sql_path: data/bulk/data.sql
             ignore_row_errors: True
             package_mapping_directories:
-                - data/bulk/mapping/caseman
                 - data/bulk/mapping/npsp
                 - data/bulk/mapping/pmdm
             pre_mapping_configs:
                 - path: data/bulk/mapping/Household_Accounts.yml
                 - path: data/bulk/mapping/Organization_Accounts.yml
                 - path: data/bulk/mapping/Contacts.yml
-            post_mapping_configs:
-                - path: data/bulk/mapping/unpackaged/caseman.yml
-                  when_all_namespaces:
-                      - caseman
-
-    update_client_photo_directories:
-        group: "CaseMan: Test Data"
-        description: "Update client photo directories after capture_test_data"
-        class_path: "tasks.UpdateClientPhotoDirectories.UpdateClientPhotoDirectories"
-        options:
-            directory_path: "data/bulk/client-photos"
-            sql_path: "data/bulk/data.sql"
-
-    upload_client_photos:
-        group: "Data: Bulk: CaseMan"
-        description: "Upload client photos and link to client records"
-        class_path: "tasks.UploadClientPhotos.UploadClientPhotos"
-        options:
-            directory_path: "data/bulk/client-photos"
 
     uninstall_packaged_incremental:
         description: Deletes any metadata from the package in the target org not in the local workspace
@@ -274,12 +174,6 @@ flows:
                 options:
                     path: "data/scripts/update_all_records_as_recently_viewed.apex"
 
-    caseman_post_insert_bulk_data:
-        steps:
-            100:
-                task: upload_client_photos
-                when: "'caseman' in org_config.namespace_info.namespaces"
-
     npsp_post_insert_bulk_data:
         steps:
             100:
@@ -296,62 +190,19 @@ flows:
                     path: "data/scripts/npsp/set_npsp_gender_relationship_setting.apex"
                 when: "'npsp' in org_config.namespace_info.namespaces"
 
-    caseman_pre_insert_bulk_data:
-        steps:
-            10:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname ManageCases"
-                when: "'caseman' in org_config.namespace_info.namespaces"
-            20:
-                task: dx
-                options:
-                    command: "force:user:permset:assign --permsetname ManagePrograms"
-                when: "'caseman' in org_config.namespace_info.namespaces"
-
     insert_bulk_data:
         steps:
             010:
                 flow: npsp_pre_insert_bulk_data
-            020:
-                flow: caseman_pre_insert_bulk_data
             100:
                 task: insert_bulk_data
             210:
                 flow: npsp_post_insert_bulk_data
-            220:
-                flow: caseman_post_insert_bulk_data
 
     update_admin_profile:
         steps:
             01:
                 task: cache_namespaces_in_org_config
-            10:
-                task: update_admin_profile
-                when: "'caseman' not in org_config.namespace_info.namespaces and 'npsp' not in org_config.namespace_info.namespaces"
-            20:
-                task: update_admin_profile_caseman
-                when: "'caseman' in org_config.namespace_info.namespaces and 'npsp' not in org_config.namespace_info.namespaces"
-            30:
-                task: update_admin_profile_npsp
-                when: "'caseman' not in org_config.namespace_info.namespaces and 'npsp' in org_config.namespace_info.namespaces"
-            40:
-                task: update_admin_profile_caseman_npsp
-                when: "'caseman' in org_config.namespace_info.namespaces and 'npsp' in org_config.namespace_info.namespaces"
-
-    caseman_org:
-        steps:
-            100:
-                task: add_caseman_dependency
-            200:
-                flow: dev_org
-
-    caseman_org_namespaced:
-        steps:
-            100:
-                task: add_caseman_dependency
-            200:
-                flow: dev_org_namespaced
 
     config_unmanaged:
         steps:
@@ -362,6 +213,8 @@ flows:
 
     config_unmanaged_namespaced:
         steps:
+            10:
+                task: update_admin_profile
             100:
                 flow: update_admin_profile
             200:

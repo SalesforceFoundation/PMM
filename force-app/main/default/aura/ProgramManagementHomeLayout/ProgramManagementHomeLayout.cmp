@@ -9,10 +9,10 @@
     <div>
         <div class="content slds-p-around_medium slds-p-top_large">
             <lightning:layout>
-                <lightning:layoutItem size="9" class="sidebar slds-m-right_medium">
+                <lightning:layoutItem size="9">
                     {!v.main}
                 </lightning:layoutItem>
-                <lightning:layoutItem flexibility="grow" class="slds-p-left_medium">
+                <lightning:layoutItem size="3" class="sidebar slds-p-left_small">
                     {!v.sidebar}
                 </lightning:layoutItem>
             </lightning:layout>

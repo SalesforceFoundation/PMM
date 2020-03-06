@@ -168,9 +168,9 @@
     </dashboardGridLayout>
     <dashboardType>SpecifiedUser</dashboardType>
     <isGridLayout>true</isGridLayout>
-    <runningUser>test-rivor8lqoidk@example.com</runningUser>
+    <runningUser>test-tkswo6c0m7xa@example.com</runningUser>
     <textColor>#000000</textColor>
-    <title>Sample PMDM Dashboard</title>
+    <title>Sample Program Management Dashboard</title>
     <titleColor>#000000</titleColor>
     <titleSize>12</titleSize>
 </Dashboard>

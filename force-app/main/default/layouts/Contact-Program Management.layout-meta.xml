@@ -272,6 +272,7 @@
         </relatedContentItems>
     </relatedContent>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Program__c</fields>
         <fields>Account__c</fields>
@@ -280,6 +281,7 @@
         <relatedList>ProgramEngagement__c.Contact__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>DeliveryDate__c</fields>
         <fields>Quantity__c</fields>

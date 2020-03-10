@@ -5,7 +5,7 @@
     <description>A lookup to the Contact engaging in your Program. The Contact name is used with the Program Name in the Process Builder process titled Template: Program Engagement Name that populates the Program Engagement Name.</description>
     <externalId>false</externalId>
     <inlineHelpText>A lookup to the Contact engaging in your Program. The Contact name is used with the Program Name in the Process Builder process titled Template: Program Engagement Name that populates the Program Engagement Name.</inlineHelpText>
-    <label>Contact</label>
+    <label>Client</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Program Engagements</relationshipLabel>
     <relationshipName>Program_Engagements</relationshipName>

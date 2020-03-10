@@ -77,25 +77,19 @@
                 <flexComponentProperties>
                     <decimalPrecision>-1</decimalPrecision>
                     <flexTableColumn>
-                        <reportColumn>FK_Service__c.Program__c</reportColumn>
-                        <showSubTotal>false</showSubTotal>
-                        <showTotal>false</showTotal>
-                        <type>grouping</type>
-                    </flexTableColumn>
-                    <flexTableColumn>
                         <reportColumn>FK_NAME</reportColumn>
                         <showSubTotal>false</showSubTotal>
                         <showTotal>false</showTotal>
                         <type>grouping</type>
                     </flexTableColumn>
                     <flexTableColumn>
-                        <reportColumn>s!ServiceDelivery__c.Quantity__c</reportColumn>
+                        <reportColumn>ServiceDelivery__c.UnitOfMeasurement__c</reportColumn>
                         <showSubTotal>false</showSubTotal>
                         <showTotal>false</showTotal>
-                        <type>aggregate</type>
+                        <type>grouping</type>
                     </flexTableColumn>
                     <flexTableColumn>
-                        <reportColumn>RowCount</reportColumn>
+                        <reportColumn>s!ServiceDelivery__c.Quantity__c</reportColumn>
                         <showSubTotal>false</showSubTotal>
                         <showTotal>false</showTotal>
                         <type>aggregate</type>
@@ -127,7 +121,7 @@
     <dashboardType>SpecifiedUser</dashboardType>
     <description>Dashboard designed for the Program Management App Home Page</description>
     <isGridLayout>true</isGridLayout>
-    <runningUser>test-6coxxu6kiznc@example.com</runningUser>
+    <runningUser>test-bbyjrnozbofw@example.com</runningUser>
     <textColor>#000000</textColor>
     <title>Program Management Home Page</title>
     <titleColor>#000000</titleColor>

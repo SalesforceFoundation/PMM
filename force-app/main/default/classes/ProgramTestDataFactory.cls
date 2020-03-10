@@ -20,7 +20,7 @@ public with sharing class ProgramTestDataFactory {
         Program__c program2 = new Program__c();
         program2.Name = 'Program 2';
         program2.Status__c = 'Active';
-        program2.StartDate__c = Date.today().addDays(30);
+        program2.StartDate__c = Date.today();
         program2.EndDate__c = Date.today().addDays(90);
         programs.add(program2);
 

@@ -15,5 +15,5 @@
   EndDate__c &gt; Program__r.EndDate__c
  )
 )</errorConditionFormula>
-    <errorMessage>End date cannot be later than program end date/earlier than program start date</errorMessage>
+    <errorMessage>Select an end date that&#39;s on or after the program start date and on or before the program end date.</errorMessage>
 </ValidationRule>

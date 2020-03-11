@@ -1,0 +1,48 @@
+<template>
+    <div class="style-target"></div>
+    <c-modal header={labels.newProgramEngagement}>
+        <div class="slds-p-vertical_small">
+            <lightning-record-edit-form
+                object-api-name={objectApiName}
+                record-id={recordId}
+                contact-id={contactId}
+            >
+                <lightning-card>
+                    <lightning-layout multiple-rows="true">
+                        <template for:each={localFieldSet} for:item="field">
+                            <lightning-layout-item
+                                key={field.apiName}
+                                size="6"
+                                padding="around-small"
+                            >
+                                {field.value}
+                                <lightning-input-field
+                                    field-name={field.apiName}
+                                    value={field.value}
+                                ></lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+                    <lightning-layout slot="footer" horizontal-align="end">
+                        <lightning-layout-item size="2" padding="around-small">
+                            <lightning-button
+                                label={labels.cancel}
+                                title={labels.cancel}
+                                variant="brand"
+                                class="slds-m-left_x-small"
+                                onclick={handleClose}
+                            ></lightning-button>
+                            <lightning-button
+                                label={labels.save}
+                                title={labels.save}
+                                variant="brand"
+                                class="slds-m-left_x-small"
+                                onclick={handleSave}
+                            ></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-card>
+            </lightning-record-edit-form>
+        </div>
+    </c-modal>
+</template>

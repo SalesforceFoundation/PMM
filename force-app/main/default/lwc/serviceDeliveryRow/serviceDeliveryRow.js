@@ -37,6 +37,7 @@ const SERVICES = "services";
 export default class ServiceDeliveryRow extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
+    @api selectedContact;
     @api recordId;
     @api index;
     @api rowCount;
@@ -44,6 +45,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track isError;
     @track isSaved;
     @track rowError;
+
     @api
     get defaultValues() {
         return this.localDefaultValues;
@@ -118,11 +120,17 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
-                if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {
+                if (result) {
                     this.isError = true;
-                    this.rowError = [this.labels.selectedContactWarning];
                 }
-                this._filteredValues = result;
+                let engagements = result[ENGAGEMENTS].slice(0);
+                engagements.push({
+                    label: "+ New Program Engagement",
+                    value: "New Program Engagement",
+                    program: "",
+                });
+                let tempResult = { ...result, engagements };
+                this._filteredValues = tempResult;
                 this.handleContactChange();
             })
             .catch(err => {
@@ -133,6 +141,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleInputChange(event) {
         if (event.target.fieldName === this.fields.contact.fieldApiName) {
             if (event.detail.value && event.detail.value.length) {
+                this.selectedContact = event.detail.value[0];
                 this.handleGetServicesEngagements(event.detail.value[0]);
             } else {
                 this.handleResetContact();
@@ -155,7 +164,14 @@ export default class ServiceDeliveryRow extends LightningElement {
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
 
-        this.updateComboBoxValues(fieldName, fieldVal);
+        if (fieldVal !== "New Program Engagement") {
+            this.updateComboBoxValues(fieldName, fieldVal);
+        } else {
+            this.template.querySelector(
+                "c-new-program-engagement"
+            ).contactId = this.selectedContact;
+            this.template.querySelector("c-new-program-engagement").showModal();
+        }
     }
 
     updateComboBoxValues(fieldName, fieldVal) {
@@ -183,7 +199,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleContactChange() {
         //Make our fieldset mutable the first time it's manipulated.
         this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
-
         this.localFieldSet.forEach(element => {
             if (element.apiName === this.fields.service.fieldApiName) {
                 element.showFilteredInput = true;
@@ -196,6 +211,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 element.options = this._filteredValues[ENGAGEMENTS].slice(0);
                 element.placeholder = this.labels.selectEngagement;
                 element.disabled = false;
+
                 if (this.noContactPrograms) {
                     element.disabled = true;
                 }

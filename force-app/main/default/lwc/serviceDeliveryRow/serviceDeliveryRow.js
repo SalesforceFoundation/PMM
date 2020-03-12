@@ -40,6 +40,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api selectedContact;
     @api recordId;
     @api index;
+    @api programEngagementId;
     @api rowCount;
     @track isSaving;
     @track isError;
@@ -123,7 +124,9 @@ export default class ServiceDeliveryRow extends LightningElement {
                 if (result) {
                     this.isError = true;
                 }
+
                 let engagements = result[ENGAGEMENTS].slice(0);
+
                 engagements.push({
                     label: "+ New Program Engagement",
                     value: "New Program Engagement",
@@ -167,9 +170,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         if (fieldVal !== "New Program Engagement") {
             this.updateComboBoxValues(fieldName, fieldVal);
         } else {
-            this.template.querySelector(
-                "c-new-program-engagement"
-            ).contactId = this.selectedContact;
             this.template.querySelector("c-new-program-engagement").showModal();
         }
     }
@@ -203,7 +203,18 @@ export default class ServiceDeliveryRow extends LightningElement {
             if (element.apiName === this.fields.service.fieldApiName) {
                 element.showFilteredInput = true;
                 element.isService = true;
-                element.options = this._filteredValues[SERVICES].slice(0);
+                if (!this.programEngagementId) {
+                    element.options = this._filteredValues[SERVICES].slice(0);
+                } else {
+                    let result = [];
+                    this._filteredValues[SERVICES].forEach(filteredVal => {
+                        if (filteredVal.program === this._targetProgram) {
+                            result.push(filteredVal);
+                        }
+                    });
+                    element.options = result.slice(0);
+                }
+
                 element.placeholder = this.labels.selectService;
             } else if (element.apiName === this.fields.programEngagement.fieldApiName) {
                 element.showFilteredInput = true;
@@ -211,6 +222,10 @@ export default class ServiceDeliveryRow extends LightningElement {
                 element.options = this._filteredValues[ENGAGEMENTS].slice(0);
                 element.placeholder = this.labels.selectEngagement;
                 element.disabled = false;
+
+                if (this.programEngagementId) {
+                    element.value = this.programEngagementId;
+                }
 
                 if (this.noContactPrograms) {
                     element.disabled = true;
@@ -391,5 +406,14 @@ export default class ServiceDeliveryRow extends LightningElement {
             }
         `;
         this.template.querySelector("div.style-target").appendChild(style);
+    }
+
+    onsave(event) {
+        if (event.detail) {
+            this.programEngagementId = event.detail;
+            if (this.selectedContact) {
+                this.handleGetServicesEngagements(this.selectedContact);
+            }
+        }
     }
 }

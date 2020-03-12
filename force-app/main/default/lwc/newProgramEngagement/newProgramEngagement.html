@@ -6,6 +6,7 @@
                 object-api-name={objectApiName}
                 record-id={recordId}
                 contact-id={contactId}
+                onsuccess={handleSuccess}
             >
                 <lightning-card>
                     <lightning-layout multiple-rows="true">
@@ -15,7 +16,6 @@
                                 size="6"
                                 padding="around-small"
                             >
-                                {field.value}
                                 <lightning-input-field
                                     field-name={field.apiName}
                                     value={field.value}

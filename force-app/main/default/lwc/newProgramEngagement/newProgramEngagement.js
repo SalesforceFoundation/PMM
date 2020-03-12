@@ -12,14 +12,6 @@ import saveMessage from "@salesforce/label/c.SaveMessage";
 import save from "@salesforce/label/c.Save";
 
 export default class NewProgramEngagement extends LightningElement {
-    /*@api
-    get fieldSet() {
-        return this.localFieldSet;
-    }
-    set fieldSet(value) {
-        this.localFieldSet = value;
-    }*/
-
     fields = {
         contact: CONTACT_FIELD,
     };
@@ -48,15 +40,18 @@ export default class NewProgramEngagement extends LightningElement {
     @api
     showModal() {
         this.template.querySelector("c-modal").show();
+        this.getContactId();
     }
 
     @api
     hideModal() {
         this.template.querySelector("c-modal").hide();
+        this.clearAllValues();
     }
 
     handleClose() {
         this.hideModal();
+        this.clearAllValues();
     }
 
     handleSave() {
@@ -65,41 +60,24 @@ export default class NewProgramEngagement extends LightningElement {
         this.hideModal();
     }
 
-    defaultContactLookup() {
-        console.log("fieldSet : " + JSON.stringify(this.fieldSet));
-        if (this.fieldSet) {
-            console.log("this.fieldSet : " + JSON.stringify(this.fieldSet));
-            this.localFieldSet = [...this.fieldSet];
-            console.log("this.fieldSet mutable : " + JSON.stringify(this.localFieldSet));
-            this.localFieldSet.forEach(element => {
-                console.log("element : " + JSON.stringify(element));
-                if (element.apiName === "Stage__c") {
-                    //console.log("element : " + JSON.stringify(element));
-                    element.value = "Enrolled";
-                    //console.log("element : " + JSON.stringify(element));
-                }
-                //this.localFieldSet.push(element);
-            });
-            /*let test = [...this.fieldSet]
-                .map(element => ({ ...element }))
-                .forEach(element => {
-                    if (element.apiName === "Stage__c") {
-                        //console.log("element : " + JSON.stringify(element));
-                        //element.value = "Enrolled";
-                        //console.log("element : " + JSON.stringify(element));
-                    }
-                    /*if (element.apiName === this.fields.contact.fieldApiName) {
-                        console.log("element : " + JSON.stringify(element));
-                        element.value = this.contactId;
-                        console.log("element : " + JSON.stringify(element));
-                    }
-                });*/
-            console.log("test : " + JSON.stringify(this.test));
-        }
+    handleSuccess(event) {
+        this.dispatchEvent(new CustomEvent("save", { detail: event.detail.id }));
     }
 
-    renderedCallback() {
-        console.log("renderedcallback");
-        this.defaultContactLookup();
+    clearAllValues() {
+        this.template.querySelectorAll("lightning-input-field").forEach(element => {
+            element.value = "";
+        });
+    }
+
+    getContactId() {
+        this.localFieldSet = [];
+        this.fieldSet.forEach(element => {
+            element = Object.assign({}, element);
+            if (element.apiName === this.fields.contact.fieldApiName) {
+                element.value = this.contactId;
+            }
+            this.localFieldSet.push(element);
+        });
     }
 }

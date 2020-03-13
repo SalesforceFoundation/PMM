@@ -150,6 +150,14 @@ tasks:
             path: unpackaged/tests/serviceDeliveryModal
             namespace_inject: $project_config.project__package__namespace
 
+    deploy_dev_config:
+        group: "pmdm: Config"
+        description: Deploys the post-install configuration for an unmanaged DE org
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/dev
+            namespace_inject: $project_config.project__package__namespace
+
 flows:
     capture_bulk_data:
         steps:
@@ -224,11 +232,15 @@ flows:
         steps:
             200:
                 flow: config_unmanaged
+            201:
+                task: deploy_dev_config
 
     config_dev:
         steps:
             200:
                 flow: config_unmanaged
+            201:
+                task: deploy_dev_config
 
     config_dev_namespaced:
         steps:
@@ -236,6 +248,8 @@ flows:
                 task: deploy_post
             200:
                 flow: config_unmanaged_namespaced
+            201:
+                task: deploy_dev_config
 
     dev_org_namespaced:
         steps:

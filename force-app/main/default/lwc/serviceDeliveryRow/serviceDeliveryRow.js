@@ -411,7 +411,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     onsave(event) {
         if (event.detail) {
             this.programEngagementId = event.detail;
-            if (this.selectedContact) {
+            if (this.selectedContact && this.programEngagementId) {
                 this.handleGetServicesEngagements(this.selectedContact);
             }
         }

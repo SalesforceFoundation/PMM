@@ -51,7 +51,6 @@ export default class NewProgramEngagement extends LightningElement {
 
     handleClose() {
         this.hideModal();
-        this.clearAllValues();
     }
 
     handleSave() {

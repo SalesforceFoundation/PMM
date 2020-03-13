@@ -77,36 +77,38 @@
                 <flexComponentProperties>
                     <decimalPrecision>-1</decimalPrecision>
                     <flexTableColumn>
-                        <reportColumn>FK_Service__c.Program__c</reportColumn>
-                        <showSubTotal>false</showSubTotal>
-                        <showTotal>false</showTotal>
-                        <type>detail</type>
-                    </flexTableColumn>
-                    <flexTableColumn>
                         <reportColumn>FK_NAME</reportColumn>
                         <showSubTotal>false</showSubTotal>
                         <showTotal>false</showTotal>
-                        <type>detail</type>
-                    </flexTableColumn>
-                    <flexTableColumn>
-                        <reportColumn>ServiceDelivery__c.Quantity__c</reportColumn>
-                        <showSubTotal>false</showSubTotal>
-                        <showTotal>false</showTotal>
-                        <type>detail</type>
+                        <type>grouping</type>
                     </flexTableColumn>
                     <flexTableColumn>
                         <reportColumn>ServiceDelivery__c.UnitOfMeasurement__c</reportColumn>
                         <showSubTotal>false</showSubTotal>
                         <showTotal>false</showTotal>
-                        <type>detail</type>
+                        <type>grouping</type>
+                    </flexTableColumn>
+                    <flexTableColumn>
+                        <reportColumn>s!ServiceDelivery__c.Quantity__c</reportColumn>
+                        <showSubTotal>false</showSubTotal>
+                        <showTotal>false</showTotal>
+                        <type>aggregate</type>
                     </flexTableColumn>
                     <flexTableSortInfo>
-                        <sortColumn>ServiceDelivery__c.Quantity__c</sortColumn>
                         <sortOrder>1</sortOrder>
                     </flexTableSortInfo>
                     <hideChatterPhotos>true</hideChatterPhotos>
                 </flexComponentProperties>
-                <groupingSortProperties/>
+                <groupingSortProperties>
+                    <groupingSorts>
+                        <groupingLevel>g1</groupingLevel>
+                        <sortOrder>a</sortOrder>
+                    </groupingSorts>
+                    <groupingSorts>
+                        <groupingLevel>g2</groupingLevel>
+                        <sortOrder>a</sortOrder>
+                    </groupingSorts>
+                </groupingSortProperties>
                 <header>Services Delivered (Year to Date)</header>
                 <report>ProgramManagementReports/Services_Delivered_Year_to_Date_MY</report>
             </dashboardComponent>
@@ -119,7 +121,7 @@
     <dashboardType>SpecifiedUser</dashboardType>
     <description>Dashboard designed for the Program Management App Home Page</description>
     <isGridLayout>true</isGridLayout>
-    <runningUser>test-tkswo6c0m7xa@example.com</runningUser>
+    <runningUser>test-bbyjrnozbofw@example.com</runningUser>
     <textColor>#000000</textColor>
     <title>Program Management Home Page</title>
     <titleColor>#000000</titleColor>

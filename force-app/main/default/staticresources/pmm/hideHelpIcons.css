@@ -9,9 +9,10 @@
     padding-left: 4px;
 }
 span[title="New Program Engagement"] {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: bolder;
     color: #00396b;
+    font-variant: small-caps;
 }
 span[title="New Program Engagement"]::before {
     content: " + ";

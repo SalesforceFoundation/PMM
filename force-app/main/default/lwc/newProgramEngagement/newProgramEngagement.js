@@ -38,6 +38,7 @@ export default class NewProgramEngagement extends LightningElement {
 
     @api
     showModal() {
+        this.handleLoad();
         this.template.querySelector("c-modal").show();
     }
 
@@ -73,6 +74,7 @@ export default class NewProgramEngagement extends LightningElement {
                 element = Object.assign({}, element);
                 if (element.apiName === this.fields.contact.fieldApiName) {
                     element.value = this.contactId;
+                    element.disabled = true;
                 }
                 this.localFieldSet.push(element);
             });

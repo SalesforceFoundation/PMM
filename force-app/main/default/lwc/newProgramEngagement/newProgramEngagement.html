@@ -1,50 +1,43 @@
 <template>
-    <div class="style-target"></div>
-    <c-modal header={labels.newProgramEngagement} ondialogclose={handleClose}>
-        <div class="slds-p-vertical_small">
-            <lightning-record-edit-form
-                object-api-name={objectApiName}
-                record-id={recordId}
-                contact-id={contactId}
-                onsuccess={handleSuccess}
-                onload={handleLoad}
-            >
-                <lightning-messages></lightning-messages>
-                <lightning-card>
-                    <lightning-layout multiple-rows="true">
-                        <template for:each={localFieldSet} for:item="field">
-                            <lightning-layout-item
-                                key={field.apiName}
-                                size="6"
-                                padding="around-small"
-                            >
-                                <lightning-input-field
-                                    field-name={field.apiName}
-                                    value={field.value}
-                                ></lightning-input-field>
-                            </lightning-layout-item>
-                        </template>
-                    </lightning-layout>
-                    <lightning-layout slot="footer" horizontal-align="end">
-                        <lightning-layout-item size="2" padding="around-small">
-                            <lightning-button
-                                label={labels.cancel}
-                                title={labels.cancel}
-                                variant="brand"
-                                class="slds-m-left_x-small"
-                                onclick={handleClose}
-                            ></lightning-button>
-                            <lightning-button
-                                label={labels.save}
-                                title={labels.save}
-                                variant="brand"
-                                class="slds-m-left_x-small"
-                                type="submit"
-                            ></lightning-button>
-                        </lightning-layout-item>
-                    </lightning-layout>
-                </lightning-card>
-            </lightning-record-edit-form>
-        </div>
-    </c-modal>
+    <lightning-record-edit-form
+        object-api-name={objectApiName}
+        record-id={recordId}
+        contact-id={contactId}
+        onsuccess={handleSuccess}
+    >
+        <c-modal header={labels.newProgramEngagement} ondialogclose={handleClose}>
+            <lightning-messages></lightning-messages>
+            <lightning-layout multiple-rows="true">
+                <template for:each={localFieldSet} for:item="field">
+                    <lightning-layout-item
+                        key={field.apiName}
+                        padding="around-small"
+                        size="6"
+                    >
+                        <lightning-input-field
+                            field-name={field.apiName}
+                            value={field.value}
+                            disabled={field.disabled}
+                        ></lightning-input-field>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+
+            <div slot="footer">
+                <lightning-button
+                    label={labels.cancel}
+                    title={labels.cancel}
+                    variant="neutral"
+                    onclick={handleClose}
+                ></lightning-button>
+                <lightning-button
+                    label={labels.save}
+                    title={labels.save}
+                    variant="brand"
+                    class="slds-p-left_medium"
+                    type="submit"
+                ></lightning-button>
+            </div>
+        </c-modal>
+    </lightning-record-edit-form>
 </template>

@@ -129,7 +129,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
                 let engagements = result[ENGAGEMENTS].slice(0);
                 engagements.push({
-                    label: newProgramEngagement,
+                    label: "\u254B   " + newProgramEngagement,
                     value: newProgramEngagement,
                     program: "",
                 });

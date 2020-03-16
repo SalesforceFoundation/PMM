@@ -22,7 +22,7 @@ export default class NewProgramEngagement extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
     @wire(getFieldSet, {
-        objectName: "ProgramEngagement__c",
+        objectName: PROGRAMENGAGEMENT_OBJECT.objectApiName,
         fieldSetName: "CreateProgramEngagement",
     })
     wiredFields({ error, data }) {

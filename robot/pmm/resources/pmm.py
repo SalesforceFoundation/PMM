@@ -5,11 +5,11 @@ from cumulusci.robotframework.utils import selenium_retry
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.keys import Keys
 
-from pmdm_locators import pmdm_lex_locators
+from pmm_locators import pmm_lex_locators
 
 
 @selenium_retry
-class pmdm(object):
+class pmm(object):
     ROBOT_LIBRARY_SCOPE = "GLOBAL"
     ROBOT_LIBRARY_VERSION = 1.0
 
@@ -45,39 +45,39 @@ class pmdm(object):
     def new_random_string(self, len=5):
         return ''.join(random.choice(string.ascii_lowercase) for _ in range(len))
 
-    def generate_new_string(self, prefix="PMDM Robot"):
+    def generate_new_string(self, prefix="PMM Robot"):
         return "{PREFIX} {RANDOM}".format(
             PREFIX=prefix,
             RANDOM=self.new_random_string(len=5)
         )
 
     def page_should_contain_text(self, text):
-        locator = pmdm_lex_locators["text"].format(text)
+        locator = pmm_lex_locators["text"].format(text)
         self.selenium.page_should_contain_element(locator)
 
     def click_wrapper_related_list_button(self,heading,button_title):
         """Clicks a button in the heading of a related list when the related list is enclosed in wrapper.
            Waits for a modal to open after clicking the button.
         """
-        locator = pmdm_lex_locators["related"]["button"].format(heading, button_title)
+        locator = pmm_lex_locators["related"]["button"].format(heading, button_title)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script('arguments[0].click()', element)
 
     def populate_lookup(self,title, value):
         """populate the lookup field"""
-        locator = pmdm_lex_locators["new_record"]["lookup_field"].format(title)
+        locator = pmm_lex_locators["new_record"]["lookup_field"].format(title)
         self.selenium.click_element(locator)
         self.selenium.clear_element_text(locator)
         self.selenium.get_webelement(locator).send_keys(value)
 
-        locator_val = pmdm_lex_locators["new_record"]["lookup_value"].format(value)
+        locator_val = pmm_lex_locators["new_record"]["lookup_value"].format(value)
         self.selenium.wait_until_page_contains_element(locator_val,
                                                        error="value is not available")
         self.selenium.click_element(locator_val)
 
     def click_save_button(self):
         """ Click on the save button """
-        locator_save = pmdm_lex_locators["new_record"]["button"].format("Save")
+        locator_save = pmm_lex_locators["new_record"]["button"].format("Save")
         self.selenium.wait_until_element_is_enabled(locator_save, error="Save button is not enabled")
         self.selenium.click_element(locator_save)
 
@@ -89,23 +89,23 @@ class pmdm(object):
         return id
 
     def click_new_related_record_link(self, value):
-        locator = pmdm_lex_locators["related"]["new_record_link"].format(value)
+        locator = pmm_lex_locators["related"]["new_record_link"].format(value)
         self.selenium.set_focus_to_element(locator)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script('arguments[0].click()', element)
 
     def select_auto_name_override_checkbox(self,label):
-        locator = pmdm_lex_locators["checkbox"].format(label)
+        locator = pmm_lex_locators["checkbox"].format(label)
         self.selenium.get_webelement(locator).click()
 
     def verify_page_contains_related_list(self,label):
         """Check if the page contains the related list"""
-        locator = pmdm_lex_locators["related"]["related_list"].format(label)
+        locator = pmm_lex_locators["related"]["related_list"].format(label)
         self.selenium.page_should_contain_element(locator)
 
     def verify_details(self, field, status, value):
         """verify information on the account details page"""
-        locator = pmdm_lex_locators["confirm"]["details"].format(field)
+        locator = pmm_lex_locators["confirm"]["details"].format(field)
         actual_value = self.selenium.get_webelement(locator).text
         if status.upper() == "contains":
             assert value == actual_value, "Expected value to be {} but found {}".format(

@@ -9,7 +9,7 @@
 __pycache__
 
 # Robot Framework results
-robot/pmdm/results/
+robot/pmm/results/
 
 # Editors
 *.sublime-project

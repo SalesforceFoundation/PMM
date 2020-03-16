@@ -1,13 +1,15 @@
 <template>
     <div class="style-target"></div>
-    <c-modal header={labels.newProgramEngagement}>
+    <c-modal header={labels.newProgramEngagement} ondialogclose={handleClose}>
         <div class="slds-p-vertical_small">
             <lightning-record-edit-form
                 object-api-name={objectApiName}
                 record-id={recordId}
                 contact-id={contactId}
                 onsuccess={handleSuccess}
+                onload={handleLoad}
             >
+                <lightning-messages></lightning-messages>
                 <lightning-card>
                     <lightning-layout multiple-rows="true">
                         <template for:each={localFieldSet} for:item="field">
@@ -37,7 +39,7 @@
                                 title={labels.save}
                                 variant="brand"
                                 class="slds-m-left_x-small"
-                                onclick={handleSave}
+                                type="submit"
                             ></lightning-button>
                         </lightning-layout-item>
                     </lightning-layout>

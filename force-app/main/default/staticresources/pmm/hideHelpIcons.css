@@ -8,3 +8,12 @@
     display: inline;
     padding-left: 4px;
 }
+span[title="New Program Engagement"] {
+    font-size: 13px;
+    font-weight: bolder;
+    color: #00396b;
+}
+span[title="New Program Engagement"]::before {
+    content: " + ";
+    font-size: 19px;
+}

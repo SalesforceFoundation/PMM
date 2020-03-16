@@ -142,7 +142,8 @@
     <template if:true={selectedContact}>
         <c-new-program-engagement
             contact-id={selectedContact}
-            onsave={onsave}
+            onsave={onSave}
+            oncancel={onCancel}
         ></c-new-program-engagement>
     </template>
 </template>

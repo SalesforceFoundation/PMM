@@ -22,6 +22,7 @@ import selectService from "@salesforce/label/c.Select_Service";
 import selectEngagement from "@salesforce/label/c.Select_Program_Engagement";
 import selectedContactWarning from "@salesforce/label/c.Service_Delivery_Contact_Without_Programs";
 import noServiceWarning from "@salesforce/label/c.No_Services_For_Program_Engagement";
+import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
@@ -92,6 +93,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         selectedContactWarning,
         selectEngagement,
         selectService,
+        newProgramEngagement,
         success,
         saved,
         saving,
@@ -126,10 +128,9 @@ export default class ServiceDeliveryRow extends LightningElement {
                 }
 
                 let engagements = result[ENGAGEMENTS].slice(0);
-
                 engagements.push({
-                    label: "+ New Program Engagement",
-                    value: "New Program Engagement",
+                    label: newProgramEngagement,
+                    value: newProgramEngagement,
                     program: "",
                 });
                 let tempResult = { ...result, engagements };
@@ -167,7 +168,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
 
-        if (fieldVal !== "New Program Engagement") {
+        if (fieldVal !== newProgramEngagement) {
             this.updateComboBoxValues(fieldName, fieldVal);
         } else {
             this.template.querySelector("c-new-program-engagement").showModal();
@@ -408,12 +409,18 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.template.querySelector("div.style-target").appendChild(style);
     }
 
-    onsave(event) {
+    onSave(event) {
         if (event.detail) {
             this.programEngagementId = event.detail;
             if (this.selectedContact && this.programEngagementId) {
                 this.handleGetServicesEngagements(this.selectedContact);
             }
         }
+    }
+
+    onCancel() {
+        this.template.querySelectorAll("lightning-combobox").forEach(element => {
+            element.value = null;
+        });
     }
 }

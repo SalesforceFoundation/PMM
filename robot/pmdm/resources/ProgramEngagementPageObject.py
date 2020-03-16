@@ -6,7 +6,7 @@ from pmdm_locators import pmdm_lex_locators
 from BaseObjects import BasePMDMPage
 
 
-@pageobject("Listing", "ProgramEngagement__c")
+@pageobject("Listing", "ProgramEngagement")
 class ProgramEngagementListingPage(BasePMDMPage, ListingPage):
     object_name = "None"
 

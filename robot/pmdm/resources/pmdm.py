@@ -98,5 +98,24 @@ class pmdm(object):
         locator = pmdm_lex_locators["checkbox"].format(label)
         self.selenium.get_webelement(locator).click()
 
+    def verify_page_contains_related_list(self,label):
+        """Check if the page contains the related list"""
+        locator = pmdm_lex_locators["related"]["related_list"].format(label)
+        self.selenium.page_should_contain_element(locator)
+
+    def verify_details(self, field, status, value):
+        """verify information on the account details page"""
+        locator = pmdm_lex_locators["confirm"]["details"].format(field)
+        actual_value = self.selenium.get_webelement(locator).text
+        if status.upper() == "contains":
+            assert value == actual_value, "Expected value to be {} but found {}".format(
+                value, actual_value
+            )
+        elif status.upper() == "does not contain":
+            assert (
+                    value != actual_value
+            ), "Expected value {} and actual value {} should not match".format(
+                value, actual_value
+            )
 
 

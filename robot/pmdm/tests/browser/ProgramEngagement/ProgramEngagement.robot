@@ -3,7 +3,6 @@
 Resource       robot/pmdm/resources/pmdm.robot
 Library        cumulusci.robotframework.PageObjects
 ...            robot/pmdm/resources/pmdm.py
-...            robot/pmdm/resources/ProgramPageObject.py
 ...            robot/pmdm/resources/ProgramEngagementPageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
@@ -29,25 +28,27 @@ Setup Test Data
 
 Create Program Engagemnet from Program Object
 
-    [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-    [tags]                                  W-037565   feature:Program Engagement
-
-     Go To Page                             Details              Program__c                   object_id=&{program}[Id]
-     page should contain                    &{program}[Name]
-     Click Wrapper Related List Button      Program Engagements     New
-     Current Page Should Be                 NewProgramEngagement                   ProgramEngagement__c
+     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
+     [tags]                                  W-037565   feature:Program Engagement
+     Go To Page     Listing     ProgramEngagement__c
+     Click Object Button     New
+     Current Page Should Be     NewProgramEngagement    ProgramEngagement__c
      Populate New Program Engagement Form   Program Engagement Name= ${program_engagement_name}
      ...                                    Stage=Applied
      ...                                    Role=Client
      ...                                    Start Date=${start_date}
      ...                                    End Date=${end_date}
      populate lookup                        Search Contacts         &{contact}[FirstName] &{contact}[LastName]
+     populate lookup                        Search Programs         &{program}[Name]
      Click Save Button
      Wait Until Modal Is Closed
-     current page should be                 Details                                 Program__c
-     click new related record link          &{program}[Name]
+     current page should be                 Details                                ProgramEngagement__c
+     verify details     Program     contains                  &{program}[Name]
+     verify details     Contact     contains                &{contact}[FirstName] &{contact}[LastName]
+     Page Should Not Contain                ${program_engagement_name}
+     verify page contains related list      Service Deliveries
      ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
-     Page Should Contain                   ${program_engagement_name}
+    # Page Should Contain                   ${program_engagement_name}
 
 
 Create Program Engagement with Auto Name Override
@@ -57,9 +58,8 @@ Create Program Engagement with Auto Name Override
 
     [tags]                                  W-037577   feature:Program Engagement
 
-     Go To Page                             Details              Program__c                   object_id=&{program}[Id]
-     page should contain                    &{program}[Name]
-     Click Wrapper Related List Button      Program Engagements     New
+     Go To Page                             Listing                               ProgramEngagement__c
+     Click Object Button                    New
      Current Page Should Be                 NewProgramEngagement                   ProgramEngagement__c
      Populate New Program Engagement Form   Program Engagement Name= ${program_engagement_name}
      ...                                    Stage=Applied
@@ -67,10 +67,12 @@ Create Program Engagement with Auto Name Override
      ...                                    Start Date=${start_date}
      ...                                    End Date=${end_date}
      populate lookup                        Search Contacts         &{contact}[FirstName] &{contact}[LastName]
+     populate lookup                        Search Programs         &{program}[Name]
      Select Auto Name Override Checkbox     Auto-Name Override
      Click Save Button
      Wait Until Modal Is Closed
-     current page should be                 Details                                 Program__c
-     click new related record link          ${program_engagement_name}
+     current page should be                 Details                                ProgramEngagement__c
+     verify details     Program Engagement Name     contains         ${program_engagement_name}
+     verify page contains related list      Service Deliveries
      ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
-     Page Should Contain                   ${program_engagement_name}
+     #Page Should Contain                   ${program_engagement_name}

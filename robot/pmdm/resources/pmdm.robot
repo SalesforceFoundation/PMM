@@ -64,3 +64,16 @@ API Create Program Engagement
     &{program_engagement} =     Salesforce Get  ProgramEngagement__c  ${program_engagement_id}
     Store Session Record      ProgramEngagement__c  ${program_engagement_id}
     [Return]         &{program_engagement}
+
+API Create Program Cohort
+    ${program_cohort_name} =  Generate New String
+    [Arguments]       ${program_id}  &{fields}
+    ${program_cohort_id} =  Salesforce Insert  ProgramCohort__c
+    ...                  Name=${program_cohort_name}
+    ...                  Status__c=Active
+    ...                  Program__c=${program_id}
+    ...                  Description__c=Robot program cohort created via API
+    ...                  &{fields}
+    &{program_cohort} =     Salesforce Get  ProgramCohort__c  ${program_cohort_id}
+    Store Session Record      ProgramCohort__c  ${program_cohort_id}
+    [Return]         &{program_cohort}

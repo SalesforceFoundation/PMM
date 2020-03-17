@@ -118,4 +118,11 @@ class pmdm(object):
                 value, actual_value
             )
 
+    def click_quick_action_button(self,title):
+        """ Click on quick action buttons """
+        locator = pmdm_lex_locators["quick_actions"].format(title)
+        self.selenium.wait_until_element_is_enabled(locator, error="Button is not enabled")
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script('arguments[0].click()', element)
+
 

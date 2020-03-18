@@ -48,7 +48,6 @@ Create Program Engagemnet
      Page Should Not Contain                ${program_engagement_name}
      verify page contains related list      Service Deliveries
      ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
-    # Page Should Contain                   ${program_engagement_name}
 
 
 Create Program Engagement with Auto Name Override
@@ -75,4 +74,3 @@ Create Program Engagement with Auto Name Override
      verify details     Program Engagement Name     contains         ${program_engagement_name}
      verify page contains related list      Service Deliveries
      ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
-     #Page Should Contain                   ${program_engagement_name}

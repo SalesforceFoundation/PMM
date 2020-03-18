@@ -21,13 +21,6 @@ class NewProgramEngagementPage(BasePMDMPage, BasePage):
         self.selenium.wait_until_location_contains("/new", timeout=60, message="Record view did not open in 1 min")
         self.selenium.location_should_contain("/lightning/o/ProgramEngagement__c/",message="Section title is not 'New Program Engagement' as expected")
 
-    def verify_current_page(self, label):
-        """ Verify we are on the page
-                by verifying the section title"""
-        locator = pmdm_lex_locators["new_record"]["title"].format(label)
-        self.selenium.wait_until_page_contains_element(locator,
-                                                       error="Section title is not as expected")
-
     def populate_new_program_engagement_form(self, **kwargs):
         """ Populates new program engagement form with the field-value pairs """
         for key, value in kwargs.items():

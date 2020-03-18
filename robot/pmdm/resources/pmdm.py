@@ -125,4 +125,11 @@ class pmdm(object):
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script('arguments[0].click()', element)
 
+    def verify_current_page(self, label):
+        """ Verify we are on the page
+                    by verifying the section title"""
+        locator = pmdm_lex_locators["new_record"]["title"].format(label)
+        self.selenium.wait_until_page_contains_element(locator,
+                                                       error="Section title is not as expected")
+
 

@@ -36,6 +36,7 @@ Create a new service delivery using quick action
      current page should be                 Details                                 ProgramEngagement__c
      Load Related List  Service Deliveries
      click new related record link    &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
-     sleep  5s
+     verify details     Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
+     ${servicedelivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
      ${service_id} =            Save Current Record ID For Deletion     Service__c
      ${programengagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

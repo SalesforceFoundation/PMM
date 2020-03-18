@@ -40,5 +40,6 @@ Add contact to program quick action
      current page should be                 Details                                 Program__c
      Load Related List  Program Engagements
      click new related record link    &{program}[Name] - &{contact}[FirstName] &{contact}[LastName]
+     verify details     Program Engagement Name     contains    &{program}[Name] - &{contact}[FirstName] &{contact}[LastName]
      ${programcohort_id} =            Save Current Record ID For Deletion     ProgramCohort__c
      ${programengagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

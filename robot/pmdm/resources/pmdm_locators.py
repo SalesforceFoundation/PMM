@@ -18,12 +18,9 @@ pmdm_lex_locators = {
     "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
     'confirm': {
         "details": "//div[contains(@class, 'slds-form-element')][.//span[text()='{}']]//following-sibling::div[.//span[contains(@class, 'test-id__field-value')]]/span",
-     #   'check_value':'//div[contains(@class, "forcePageBlockItem")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span',
-     #   'check_status':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-text',
-      #  'check_numbers':'//div[contains(@class, "field-label-container")][.//span[text()="{}"]]//following-sibling::div[.//span[contains(@class, "test-id__field-value")]]/span//lightning-formatted-number',
     },
     "new_record": {
-        "title": "//h2[contains(@class, 'inlineTitle') and text()='{}']",
+        "title": "//h2[contains(@class, 'title') and text()='{}']",
         "text_field": "//div[contains(@class, 'uiInput')][.//label[contains(@class, 'uiLabel')][.//span[text()='{}']]]//*[self::input or self::textarea]",
         "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
         "dropdown_popup": "//div[@class='select-options' and @role='menu']",
@@ -39,7 +36,9 @@ pmdm_lex_locators = {
         'button': "//article[contains(@class, 'forceRelatedListCardDesktop')][.//img][.//span[@title='{}']]//a[@title='{}']",
         "new_record_link": "//table[contains(@class,'forceRecordLayout')]/tbody/tr/th/div[contains(@class,'outputLookupContainer')]//a[contains(text(),'{}')]",
         "related_list": "//span[contains(@class,'slds-card') and @title='{}']",
-    }
+    },
+    "quick_actions":"//button[@class='slds-button slds-button_neutral' and text()='{}']",
+
 }
 
 program_engagement_locators = {

@@ -1,11 +1,11 @@
 *** Settings ***
 
 Resource       cumulusci/robotframework/Salesforce.robot
-Library        pmdm.py
+Library        pmm.py
 Library        DateTime
 
 *** Keywords ***
-Go To PMDM App
+Go To PMM App
     Open App Launcher
     Wait Until Element Is visible           //div[contains(@class,'slds-app-launcher__tile-body')]//a[ text()='Program Management']
     Click Link                              //div[contains(@class,'slds-app-launcher__tile-body')]//a[ text()='Program Management']
@@ -16,7 +16,7 @@ API Create Program
     ${program_id} =  Salesforce Insert  Program__c
     ...               Name=${program_name}
     ...               ProgramIssueArea__c=Employment
-    ...               Description__c=PMDM Robot Program
+    ...               Description__c=PMM Robot Program
     ...               ShortSummary__c=created via API
     ...               TargetPopulation__c=Youth Target Population
     ...               Status__c=Active
@@ -43,7 +43,7 @@ API Create Service
     ${service_id} =  Salesforce Insert  Service__c
     ...                  Name=${service_name}
     ...                  Program__c=${program_id}
-    ...                  Description__c=PMDM Robot service
+    ...                  Description__c=PMM Robot service
     ...                  UnitOfMeasurement__c=Hours
     ...                  Status__c=Active
     ...                  &{fields}

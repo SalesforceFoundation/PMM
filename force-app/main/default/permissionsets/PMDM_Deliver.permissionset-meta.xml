@@ -9,6 +9,11 @@
         <enabled>true</enabled>
     </classAccesses>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>Contact.IsClient__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>ProgramCohort__c.Description__c</field>
         <readable>true</readable>

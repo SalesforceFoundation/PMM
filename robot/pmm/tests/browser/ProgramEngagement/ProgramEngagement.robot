@@ -26,7 +26,7 @@ Setup Test Data
 
 *** Test Cases ***
 
-Create Program Engagemnet from Program Object
+Create Program Engagemnet
 
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
      [tags]                                  W-037565   feature:Program Engagement
@@ -44,11 +44,10 @@ Create Program Engagemnet from Program Object
      Wait Until Modal Is Closed
      current page should be                 Details                                ProgramEngagement__c
      verify details     Program     contains                  &{program}[Name]
-     verify details     Contact     contains                &{contact}[FirstName] &{contact}[LastName]
+     verify details     Client     contains                &{contact}[FirstName] &{contact}[LastName]
      Page Should Not Contain                ${program_engagement_name}
      verify page contains related list      Service Deliveries
      ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
-    # Page Should Contain                   ${program_engagement_name}
 
 
 Create Program Engagement with Auto Name Override
@@ -75,4 +74,3 @@ Create Program Engagement with Auto Name Override
      verify details     Program Engagement Name     contains         ${program_engagement_name}
      verify page contains related list      Service Deliveries
      ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
-     #Page Should Contain                   ${program_engagement_name}

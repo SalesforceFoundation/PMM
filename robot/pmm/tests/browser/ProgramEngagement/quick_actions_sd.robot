@@ -1,10 +1,10 @@
 *** Settings ***
 
-Resource       robot/pmdm/resources/pmdm.robot
+Resource       robot/pmm/resources/pmm.robot
 Library        cumulusci.robotframework.PageObjects
-...            robot/pmdm/resources/pmdm.py
-...            robot/pmdm/resources/ProgramEngagementPageObject.py
-...            robot/pmdm/resources/ServiceDeliveryPageObject.py
+...            robot/pmm/resources/pmm.py
+...            robot/pmm/resources/ProgramEngagementPageObject.py
+...            robot/pmm/resources/ServiceDeliveryPageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data

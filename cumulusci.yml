@@ -1,13 +1,13 @@
 minimum_cumulusci_version: "2.5.9"
 project:
-    name: pmdm
+    name: PMM
     package:
-        name: Program Management Data Model
+        name: Program Management Module
         namespace: pmdm
         api_version: "46.0"
     source_format: sfdx
     git:
-        repo_url: https://github.com/SalesforceFoundation/PMDM
+        repo_url: https://github.com/SalesforceFoundation/PMM
         prefix_beta: uat/
         prefix_release: release/
     dependencies:
@@ -42,19 +42,19 @@ tasks:
 
     robot:
         options:
-            suites: robot/pmdm/tests
+            suites: robot/pmm/tests
             options:
-                outputdir: robot/pmdm/results
+                outputdir: robot/pmm/results
 
     robot_testdoc:
         options:
-            path: robot/pmdm/tests
-            output: robot/pmdm/doc/pmdm_tests.html
+            path: robot/pmm/tests
+            output: robot/pmm/doc/pmm_tests.html
 
     robot_libdoc:
         options:
-            path: robot/pmdm/resources/pmdm.py,robot/pmdm/resources/pmdm.robot,robot/pmdm/resources/*PageObject.py
-            output: robot/pmdm/doc/Keywords.html
+            path: robot/pmm/resources/pmm.py,robot/pmm/resources/pmm.robot,robot/pmm/resources/*PageObject.py
+            output: robot/pmm/doc/Keywords.html
 
     update_admin_profile:
         options:
@@ -143,7 +143,7 @@ tasks:
                     - LogACall
 
     deploy_service_delivery_modal_test:
-        group: "pmdm: tests"
+        group: "PMM: Tests"
         description: Deploys a testModal component to test serviceDeliveryModal component
         class_path: cumulusci.tasks.salesforce.Deploy
         options:
@@ -151,7 +151,7 @@ tasks:
             namespace_inject: $project_config.project__package__namespace
 
     deploy_dev_config:
-        group: "pmdm: Config"
+        group: "PMM: Config"
         description: Deploys the post-install configuration for an unmanaged DE org
         class_path: cumulusci.tasks.salesforce.Deploy
         options:

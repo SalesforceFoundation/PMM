@@ -123,10 +123,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
-                if (result) {
-                    this.isError = true;
-                }
-
                 let engagements = result[ENGAGEMENTS].slice(0);
                 engagements.push({
                     label: "\u254B   " + newProgramEngagement,
@@ -134,6 +130,11 @@ export default class ServiceDeliveryRow extends LightningElement {
                     program: "",
                 });
                 let tempResult = { ...result, engagements };
+
+                if (tempResult && !tempResult[SERVICES]) {
+                    this.isError = true;
+                }
+
                 this._filteredValues = tempResult;
                 this.handleContactChange();
             })

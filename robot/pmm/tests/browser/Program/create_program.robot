@@ -42,7 +42,7 @@ Create a Program via UI
     ...                                    Start Date=${start_date}
     ...                                    End Date=${end_date}
     ...                                    Program Issue Area=Education
-    Click Save Button
+    Click modal button  Save
     Wait Until Modal Is Closed
     current page should be                 Details                                 Program__c
     verify details  Program Name    contains    ${program_name}

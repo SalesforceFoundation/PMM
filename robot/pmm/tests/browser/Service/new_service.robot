@@ -17,20 +17,22 @@ Setup Test Data
     Set suite variable      ${Description}
     ${unit_of_measurement} =   Generate Random String
     Set suite variable      ${unit_of_measurement}
+    &{program} =    API Create Program
+    Store Session Record  Program__c                              &{program}[Id]
+    Set suite variable    &{program}
 
 *** Test Cases ***
-Create Service from Program Object
-
-     Go To Page                             Listing                               Service__c
+Create Service from top nav
+     Go To Page         Listing         Service__c
      Click Object Button                    New
-     Load Page Object  NewService  Service__c
-     verify current page    New Service
+     Current Page Should Be                 NewService                   Service__c
      Populate New Service Form   Service Name= ${service_name}
      ...                         Description= ${Description}
      ...                         Unit of Measurement= ${unit_of_measurement}
      ...                         Status=Active
-     Click Save Button
+     populate lookup                        Search Programs        &{program}[Name]
+     click modal button     Save
      Wait Until Modal Is Closed
-     current page should be                 Details                                 Program__c
-     Page Should Contain                   ${service_name}
+     verify details     Program     contains                  &{program}[Name]
+     verify details     Service Name     contains                ${service_name}
      ${service_id} =            Save Current Record ID For Deletion     Service__c

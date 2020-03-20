@@ -42,7 +42,7 @@ Create a Service Delivery via UI
     populate lookup                        Search Contacts         &{contact}[FirstName] &{contact}[LastName]
     populate lookup                        Search Program Engagements         &{program_engagement}[Name]
     populate lookup                        Search Services         &{service}[Name]
-    click Save Button
+    click Modal button  Save
     Wait Until Modal Is Closed
     current page should be                 Details                                ServiceDelivery__c
     verify details  Quantity    contains    ${quantity}
@@ -69,7 +69,7 @@ Create a Service Delivery via UI with Auto Name Override
     populate lookup                        Search Program Engagements         &{program_engagement}[Name]
     populate lookup                        Search Services         &{service}[Name]
     Select Auto Name Override Checkbox     Auto-name Override
-    click Save Button
+    click modal button  Save
     Wait Until Modal Is Closed
     current page should be                 Details                                ServiceDelivery__c
     verify details  Service Delivery Name   contains    ${service_delivery_name}

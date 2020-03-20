@@ -34,7 +34,7 @@ Create Service from Program Object
      ...                         Description= ${Description}
      ...                         Unit of Measurement= ${unit_of_measurement}
      ...                         Status=Active
-     Click Save Button
+     Click modal button     Save
      Wait Until Modal Is Closed
      current page should be                 Details                                 Program__c
      Page Should Contain                   ${service_name}

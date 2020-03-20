@@ -28,4 +28,13 @@
         <name>Name</name>
         <label>Programmacohort</label>
     </standardFields>
+    <gender>Neuter</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Programmacohort</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Programmacohorten</value>
+    </caseValues>
 </CustomObjectTranslation>

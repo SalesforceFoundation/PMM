@@ -3,7 +3,6 @@
 Resource       robot/pmm/resources/pmm.robot
 Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/pmm.py
-...            robot/pmm/resources/ProgramPageObject.py
 ...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
@@ -23,19 +22,17 @@ Setup Test Data
     Set suite variable    &{program}
 
 *** Test Cases ***
-
-Create Service from Program Object
-
-     Go To Page      Details              Program__c                   object_id=&{program}[Id]
-     page should contain                    &{program}[Name]
-     Click Wrapper Related List Button      Services     New
+Create Service from top nav
+     Go To Page         Listing         Service__c
+     Click Object Button                    New
      Current Page Should Be                 NewService                   Service__c
      Populate New Service Form   Service Name= ${service_name}
      ...                         Description= ${Description}
      ...                         Unit of Measurement= ${unit_of_measurement}
      ...                         Status=Active
-     Click modal button     Save
+     populate lookup                        Search Programs        &{program}[Name]
+     click modal button     Save
      Wait Until Modal Is Closed
-     current page should be                 Details                                 Program__c
-     Page Should Contain                   ${service_name}
+     verify details     Program     contains                  &{program}[Name]
+     verify details     Service Name     contains                ${service_name}
      ${service_id} =            Save Current Record ID For Deletion     Service__c

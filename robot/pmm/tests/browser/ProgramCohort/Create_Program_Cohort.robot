@@ -36,7 +36,7 @@ Create Program Cohort from Program Object
      ...                                    Start Date=${start_date}
      ...                                    End Date=${end_date}
      ...                                    Description=New Program Cohort via Robot Test
-     Click Save Button
+     Click modal button     Save
      Wait Until Modal Is Closed
      current page should be                 Details                                 Program__c
      click new related record link         ${program_cohort}

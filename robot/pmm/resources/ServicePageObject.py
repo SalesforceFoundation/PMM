@@ -6,7 +6,7 @@ from pmm_locators import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
-@pageobject("Listing", "Service__c")
+@pageobject("Listing", "Service")
 class ServiceListingPage(BasePMMPage, ListingPage):
     object_name = "None"
 

@@ -69,7 +69,6 @@ Add service delivery on bulk service delivery
     verify persist save icon    Saved
 
 Verify Service delivery on service delivery listview page
-    [tags]  unstable
     [Documentation]                        This test verifies that the added service deliveries on bulk service delivery
     ...                                    exists on service delivery list page.
     Go To Page                             Listing                               ServiceDelivery__c
@@ -77,7 +76,6 @@ Verify Service delivery on service delivery listview page
     Page Should Contain                    &{contact2}[FirstName] &{contact2}[LastName]
 
 Verify error message when there are no services associated with the program
-    [tags]  unstable
     [Documentation]                        This test verifies that an error message is displayed when there are no
     ...                                    services associated with the program.
     Go To Page                             BasePage                               ServiceDelivery__c

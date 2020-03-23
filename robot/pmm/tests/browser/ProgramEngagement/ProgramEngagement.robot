@@ -40,7 +40,7 @@ Create Program Engagemnet
      ...                                    End Date=${end_date}
      populate lookup                        Search Contacts         &{contact}[FirstName] &{contact}[LastName]
      populate lookup                        Search Programs         &{program}[Name]
-     Click Save Button
+     Click modal button     Save
      Wait Until Modal Is Closed
      current page should be                 Details                                ProgramEngagement__c
      verify details     Program     contains                  &{program}[Name]
@@ -68,7 +68,7 @@ Create Program Engagement with Auto Name Override
      populate lookup                        Search Contacts         &{contact}[FirstName] &{contact}[LastName]
      populate lookup                        Search Programs         &{program}[Name]
      Select Auto Name Override Checkbox     Auto-Name Override
-     Click Save Button
+     Click modal button     Save
      Wait Until Modal Is Closed
      current page should be                 Details                                ProgramEngagement__c
      verify details     Program Engagement Name     contains         ${program_engagement_name}

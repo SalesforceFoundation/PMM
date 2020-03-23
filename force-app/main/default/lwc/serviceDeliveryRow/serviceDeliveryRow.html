@@ -139,4 +139,11 @@
             ></lightning-button>
         </div>
     </c-modal>
+    <template if:true={selectedContact}>
+        <c-new-program-engagement
+            contact-id={selectedContact}
+            onsave={onSave}
+            oncancel={onCancel}
+        ></c-new-program-engagement>
+    </template>
 </template>

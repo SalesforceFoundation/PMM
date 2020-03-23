@@ -9,8 +9,9 @@ public with sharing class ServiceDeliveryController {
             throw new AuraHandledException(e.getMessage());
         }
     }
-
-    @AuraEnabled(cacheable=true)
+    //removed cacheable = true so the picklist values will be rendered when
+    //a new program engagement record is created
+    @AuraEnabled
     public static Map<String, List<Object>> getServicesAndEngagements(Id contactId) {
         try {
             return service.getServicesEngagementsByContactId(contactId);

@@ -1,0 +1,43 @@
+<template>
+    <lightning-record-edit-form
+        object-api-name={objectApiName}
+        record-id={recordId}
+        contact-id={contactId}
+        onsuccess={handleSuccess}
+    >
+        <c-modal header={labels.newProgramEngagement} ondialogclose={handleClose}>
+            <lightning-messages></lightning-messages>
+            <lightning-layout multiple-rows="true">
+                <template for:each={localFieldSet} for:item="field">
+                    <lightning-layout-item
+                        key={field.apiName}
+                        padding="around-small"
+                        size="6"
+                    >
+                        <lightning-input-field
+                            field-name={field.apiName}
+                            value={field.value}
+                            disabled={field.disabled}
+                        ></lightning-input-field>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+
+            <div slot="footer">
+                <lightning-button
+                    label={labels.cancel}
+                    title={labels.cancel}
+                    variant="neutral"
+                    onclick={handleClose}
+                ></lightning-button>
+                <lightning-button
+                    label={labels.save}
+                    title={labels.save}
+                    variant="brand"
+                    class="slds-p-left_medium"
+                    type="submit"
+                ></lightning-button>
+            </div>
+        </c-modal>
+    </lightning-record-edit-form>
+</template>

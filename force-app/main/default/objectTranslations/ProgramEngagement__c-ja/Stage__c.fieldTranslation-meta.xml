@@ -25,6 +25,6 @@
     </picklistValues>
     <picklistValues>
         <masterLabel>Withdrawn</masterLabel>
-        <translation>取り下げる</translation>
+        <translation>取り下げ済み</translation>
     </picklistValues>
 </CustomFieldTranslation>

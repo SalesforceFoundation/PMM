@@ -16,4 +16,13 @@
         <name>Name</name>
         <label>Naam van servicelevering</label>
     </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Servicelevering</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Serviceleveringen</value>
+    </caseValues>
 </CustomObjectTranslation>

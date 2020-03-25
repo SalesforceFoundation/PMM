@@ -20,4 +20,13 @@
         <name>Name</name>
         <label>Programmanaam</label>
     </standardFields>
+    <gender>Neuter</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Programma</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Programma&#39;s</value>
+    </caseValues>
 </CustomObjectTranslation>

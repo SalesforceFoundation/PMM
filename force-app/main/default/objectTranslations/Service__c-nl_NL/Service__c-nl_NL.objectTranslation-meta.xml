@@ -12,4 +12,13 @@
         <name>Name</name>
         <label>Naam van service</label>
     </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Service</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Services</value>
+    </caseValues>
 </CustomObjectTranslation>

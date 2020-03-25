@@ -16,8 +16,8 @@
         <translation>登録済み</translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>In Progress</masterLabel>
-        <translation>進行中</translation>
+        <masterLabel>Active</masterLabel>
+        <translation>Active</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Completed</masterLabel>

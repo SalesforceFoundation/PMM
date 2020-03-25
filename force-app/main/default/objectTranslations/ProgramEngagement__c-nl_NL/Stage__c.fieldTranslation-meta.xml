@@ -16,8 +16,8 @@
         <translation>Geregistreerd</translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>In Progress</masterLabel>
-        <translation>In Uitvoering</translation>
+        <masterLabel>Active</masterLabel>
+        <translation>Active</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Completed</masterLabel>

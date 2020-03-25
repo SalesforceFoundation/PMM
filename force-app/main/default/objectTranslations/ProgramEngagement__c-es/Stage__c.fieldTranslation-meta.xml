@@ -16,8 +16,8 @@
         <translation>Inscrito</translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>In Progress</masterLabel>
-        <translation>En curso</translation>
+        <masterLabel>Active</masterLabel>
+        <translation>Active</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Completed</masterLabel>

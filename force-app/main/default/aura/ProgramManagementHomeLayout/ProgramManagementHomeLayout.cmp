@@ -1,0 +1,21 @@
+<aura:component
+    implements="lightning:homeTemplate"
+    description="Program Management Home"
+    access="global"
+>
+    <aura:attribute access="global" name="sidebar" type="Aura.Component[]" />
+    <aura:attribute access="global" name="main" type="Aura.Component[]" />
+
+    <div>
+        <div class="content slds-p-around_medium slds-p-top_large">
+            <lightning:layout>
+                <lightning:layoutItem size="9">
+                    {!v.main}
+                </lightning:layoutItem>
+                <lightning:layoutItem size="3" class="sidebar slds-p-left_small">
+                    {!v.sidebar}
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+    </div>
+</aura:component>

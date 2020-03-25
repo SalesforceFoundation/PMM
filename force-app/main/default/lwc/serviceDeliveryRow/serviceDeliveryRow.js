@@ -3,6 +3,7 @@ import { showToast, handleError, debouncify } from "c/util";
 import { deleteRecord } from "lightning/uiRecordApi";
 import { fireEvent } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
+import { loadStyle } from "lightning/platformResourceLoader";
 
 import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryController.getServicesAndEngagements";
 
@@ -21,11 +22,14 @@ import selectService from "@salesforce/label/c.Select_Service";
 import selectEngagement from "@salesforce/label/c.Select_Program_Engagement";
 import selectedContactWarning from "@salesforce/label/c.Service_Delivery_Contact_Without_Programs";
 import noServiceWarning from "@salesforce/label/c.No_Services_For_Program_Engagement";
+import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+
+import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const DELAY = 1000;
 const ENGAGEMENTS = "engagements";
@@ -34,13 +38,16 @@ const SERVICES = "services";
 export default class ServiceDeliveryRow extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
+    @api selectedContact;
     @api recordId;
     @api index;
+    @api programEngagementId;
     @api rowCount;
     @track isSaving;
     @track isError;
     @track isSaved;
     @track rowError;
+
     @api
     get defaultValues() {
         return this.localDefaultValues;
@@ -86,6 +93,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         selectedContactWarning,
         selectEngagement,
         selectService,
+        newProgramEngagement,
         success,
         saved,
         saving,
@@ -99,6 +107,10 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
 
+    connectedCallback() {
+        loadStyle(this, pmmFolder + "/hideHelpIcons.css");
+    }
+
     autoSave() {
         let deliverySubmit = this.template.querySelector(".sd-submit");
         if (deliverySubmit) {
@@ -111,21 +123,30 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
-                if (result && (!result[SERVICES] || !result[ENGAGEMENTS].length)) {
+                let engagements = result[ENGAGEMENTS].slice(0);
+                engagements.push({
+                    label: "\u254B   " + newProgramEngagement,
+                    value: newProgramEngagement,
+                    program: "",
+                });
+                let tempResult = { ...result, engagements };
+
+                if (tempResult && !tempResult[SERVICES]) {
                     this.isError = true;
-                    this.rowError = [this.labels.selectedContactWarning];
                 }
-                this._filteredValues = result;
+
+                this._filteredValues = tempResult;
                 this.handleContactChange();
             })
-            .catch(error => {
-                this.rowError = handleError(error,false);
+            .catch(err => {
+                this.rowError = handleError(err, false);
             });
     }
 
     handleInputChange(event) {
         if (event.target.fieldName === this.fields.contact.fieldApiName) {
             if (event.detail.value && event.detail.value.length) {
+                this.selectedContact = event.detail.value[0];
                 this.handleGetServicesEngagements(event.detail.value[0]);
             } else {
                 this.handleResetContact();
@@ -148,6 +169,14 @@ export default class ServiceDeliveryRow extends LightningElement {
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
 
+        if (fieldVal !== newProgramEngagement) {
+            this.updateComboBoxValues(fieldName, fieldVal);
+        } else {
+            this.template.querySelector("c-new-program-engagement").showModal();
+        }
+    }
+
+    updateComboBoxValues(fieldName, fieldVal) {
         if (fieldName === this.fields.programEngagement.fieldApiName) {
             this._valuesToSave = []; //If the engagement changes, wipe stored values.
             this._filteredValues[ENGAGEMENTS].forEach(element => {
@@ -172,29 +201,48 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleContactChange() {
         //Make our fieldset mutable the first time it's manipulated.
         this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
-
         this.localFieldSet.forEach(element => {
             if (element.apiName === this.fields.service.fieldApiName) {
                 element.showFilteredInput = true;
                 element.isService = true;
-                element.options = this._filteredValues[SERVICES];
+                if (!this.programEngagementId) {
+                    element.options = this._filteredValues[SERVICES].slice(0);
+                } else {
+                    let result = [];
+                    this._filteredValues[SERVICES].forEach(filteredVal => {
+                        if (filteredVal.program === this._targetProgram) {
+                            result.push(filteredVal);
+                        }
+                    });
+                    element.options = result.slice(0);
+                }
+
                 element.placeholder = this.labels.selectService;
             } else if (element.apiName === this.fields.programEngagement.fieldApiName) {
                 element.showFilteredInput = true;
                 element.isEngagement = true;
-                element.options = this._filteredValues[ENGAGEMENTS];
+                element.options = this._filteredValues[ENGAGEMENTS].slice(0);
                 element.placeholder = this.labels.selectEngagement;
                 element.disabled = false;
+
+                if (this.programEngagementId) {
+                    element.value = this.programEngagementId;
+                }
+
                 if (this.noContactPrograms) {
                     element.disabled = true;
                 }
             } else if (element.apiName !== this.fields.contact.fieldApiName) {
                 element.disabled = true;
             }
+
+            if (element.value && element.showFilteredInput) {
+                this.updateComboBoxValues(element.apiName, element.value);
+            }
         });
     }
 
-    handleLoad(event) {
+    handleLoad() {
         this.processDefaults();
     }
 
@@ -244,8 +292,8 @@ export default class ServiceDeliveryRow extends LightningElement {
                     this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));
                     fireEvent(this.pageRef, "serviceDeliveryDelete", deletedRecordId);
                 })
-                .catch(error => {
-                    handleError(error);
+                .catch(err => {
+                    handleError(err);
                 });
         } else {
             this.dispatchEvent(new CustomEvent("delete", { detail: this.index }));
@@ -320,7 +368,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(element => {
                 for (let [key, value] of Object.entries(this.localDefaultValues)) {
-                    if (element.apiName.endsWith(key)) {
+                    if (element.apiName === key) {
                         element.value = this.localDefaultValues[key];
                         if (element.apiName === this.fields.contact.fieldApiName) {
                             hasContact = true;
@@ -360,5 +408,20 @@ export default class ServiceDeliveryRow extends LightningElement {
             }
         `;
         this.template.querySelector("div.style-target").appendChild(style);
+    }
+
+    onSave(event) {
+        if (event.detail) {
+            this.programEngagementId = event.detail;
+            if (this.selectedContact && this.programEngagementId) {
+                this.handleGetServicesEngagements(this.selectedContact);
+            }
+        }
+    }
+
+    onCancel() {
+        this.template.querySelectorAll("lightning-combobox").forEach(element => {
+            element.value = null;
+        });
     }
 }

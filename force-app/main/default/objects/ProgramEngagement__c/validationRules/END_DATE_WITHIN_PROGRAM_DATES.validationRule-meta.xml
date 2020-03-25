@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>END_DATE_WITHIN_PROGRAM_DATES</fullName>
+    <active>true</active>
+    <description>The Program Engagement End Date must fall within the Program Start and End Dates when specified.</description>
+    <errorConditionFormula>OR( 
+ AND(
+  NOT(ISBLANK(EndDate__c)),
+  NOT(ISBLANK(Program__r.StartDate__c)),
+  EndDate__c &lt; Program__r.StartDate__c
+ ),
+ AND(
+  NOT(ISBLANK(EndDate__c)),
+  NOT(ISBLANK(Program__r.EndDate__c)),
+  EndDate__c &gt; Program__r.EndDate__c
+ )
+)</errorConditionFormula>
+    <errorMessage>Select an end date that&#39;s on or after the program start date and on or before the program end date.</errorMessage>
+</ValidationRule>

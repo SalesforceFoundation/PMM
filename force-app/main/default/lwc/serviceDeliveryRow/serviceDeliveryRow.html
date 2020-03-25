@@ -1,6 +1,6 @@
 <template>
     <div class="style-target"></div>
-    <div class="slds-p-vertical_small">
+    <div class="slds-p-vertical_small hideHelpText">
         <lightning-record-edit-form
             onload={handleLoad}
             onsuccess={handleSuccess}
@@ -26,6 +26,7 @@
                                     placeholder={field.placeholder}
                                     options={field.options}
                                     disabled={field.disabled}
+                                    value={field.value}
                                 >
                                 </lightning-combobox>
                             </template>
@@ -138,4 +139,11 @@
             ></lightning-button>
         </div>
     </c-modal>
+    <template if:true={selectedContact}>
+        <c-new-program-engagement
+            contact-id={selectedContact}
+            onsave={onSave}
+            oncancel={onCancel}
+        ></c-new-program-engagement>
+    </template>
 </template>

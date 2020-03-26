@@ -70,6 +70,7 @@ bulk_service_delivery_locators = {
     "error_message": "//div[@class='slds-text-color_error' and text()='{}']",
     "persist_save": "//lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
     "persist_warning": "//lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
+    "pick_listbox":"//span[@class='slds-media__body']/span[contains(text(),'{}')]",
 }
 
 account_locators = {}

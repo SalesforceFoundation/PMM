@@ -73,6 +73,12 @@ class NewProgramEngagementPage(BasePMMPage, BasePage):
                 )
                 self.selenium.set_focus_to_element(locator)
                 self.selenium.get_webelement(locator).send_keys(value)
+            elif key == "Application Date":
+                locator = pmm_lex_locators["new_record"]["text_field"].format(
+                    "Application Date"
+                )
+                self.selenium.set_focus_to_element(locator)
+                self.selenium.get_webelement(locator).send_keys(value)
             else:
                 assert False, "Key provided by name '{}' does not exist".format(key)
 

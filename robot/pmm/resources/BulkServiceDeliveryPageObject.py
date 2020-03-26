@@ -103,3 +103,15 @@ class BulkServiceDeliveryBasePage(BasePMMPage, BasePage):
         self.selenium.wait_until_page_contains_element(
             locator, error=" Incorrect icon displayed "
         )
+
+    def select_listbox(self, title, value):
+        """populate program engagement and services field for 1st row"""
+        locator = bulk_service_delivery_locators["lookup_field_row1"].format(title)
+        self.selenium.get_webelement(locator).click()
+        popup_loc = bulk_service_delivery_locators["select_popup"]
+        self.selenium.wait_until_page_contains_element(
+            popup_loc, error="The dropdown did not open"
+        )
+        value_loc = bulk_service_delivery_locators["pick_listbox"].format(value)
+        element_click = self.selenium.driver.find_element_by_xpath(value_loc)
+        self.selenium.driver.execute_script("arguments[0].click()", element_click)

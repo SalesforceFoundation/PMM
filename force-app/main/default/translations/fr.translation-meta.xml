@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customLabels>
+        <name>Add_Service_Delivery</name>
+        <label>Ajouter une livraison de services</label>
+    </customLabels>
+    <customLabels>
+        <name>Error</name>
+        <label>Erreur</label>
+    </customLabels>
+    <customLabels>
+        <name>Warning</name>
+        <label>Avertissement</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel</name>
+        <label>Annuler</label>
+    </customLabels>
+    <customLabels>
+        <name>Close</name>
+        <label>Fermer</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete</name>
+        <label>Confirmer la suppression</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete_Row</name>
+        <label>Voulez-vous vraiment supprimer cette ligne ?</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete</name>
+        <label>Supprimer</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Services_For_Program_Engagement</name>
+        <label>Aucun service trouvé, choisissez un autre engagement dans un programme.</label>
+    </customLabels>
+    <customLabels>
+        <name>Record_Deleted</name>
+        <label>Votre enregistrement a été supprimé</label>
+    </customLabels>
+    <customLabels>
+        <name>Required</name>
+        <label>Obligatoire</label>
+    </customLabels>
+    <customLabels>
+        <name>Saved</name>
+        <label>Enregistré</label>
+    </customLabels>
+    <customLabels>
+        <name>Saving</name>
+        <label>Enregistrement en cours</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Program_Engagement</name>
+        <label>Sélectionnez un engagement dans un programme</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service</name>
+        <label>Sélectionnez un service</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Deliveries</name>
+        <label>Livraisons de services</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Delivery_Contact_Without_Programs</name>
+        <label>Avant d&#39;enregistrer une livraison de services, inscrivez d&#39;abord ce client à un programme avec des services actifs.</label>
+    </customLabels>
+    <customLabels>
+        <name>Success</name>
+        <label>Réussi</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Error</name>
+        <label>Erreur</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Unknown_Error</name>
+        <label>Erreur inconnue</label>
+    </customLabels>
+    <customTabs>
+        <name>Bulk_Service_Deliveries</name>
+        <label>Livraisons de services en masse</label>
+    </customTabs>
+    <customApplications>
+        <name>Program_Management</name>
+        <label>Program Management</label>
+    </customApplications>
+    <quickActions>
+        <name>Contact.AddContactToProgram</name>
+        <label>Ajouter un contact au programme</label>
+    </quickActions>
+    <quickActions>
+        <name>Program__c.AddContactToProgram</name>
+        <label>Ajouter un contact au programme</label>
+    </quickActions>
+</Translations>

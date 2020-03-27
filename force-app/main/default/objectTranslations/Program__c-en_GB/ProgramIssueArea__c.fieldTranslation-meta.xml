@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ProgramIssueArea__c</name>
+    <help>Picklist values describe the issue area addressed by the Program. You can edit the picklist values displayed for this field.</help>
+    <label>Program Issue Area</label>
+    <picklistValues>
+        <masterLabel>Housing</masterLabel>
+        <translation>Housing</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Employment</masterLabel>
+        <translation>Employment</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Education</masterLabel>
+        <translation>Education</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Legal</masterLabel>
+        <translation>Legal</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Counseling</masterLabel>
+        <translation>Counselling</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Food and Nutrition</masterLabel>
+        <translation>Food and Nutrition</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Advocacy</masterLabel>
+        <translation>Advocacy</translation>
+    </picklistValues>
+</CustomFieldTranslation>

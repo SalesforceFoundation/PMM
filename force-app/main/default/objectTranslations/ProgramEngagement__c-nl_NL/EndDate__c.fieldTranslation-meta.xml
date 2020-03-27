@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>EndDate__c</name>
+    <help>Datum waarop contactpersoon programma voltooit of verlaat. Als PB-fase Voltooid/Ingetrokken is, stelt de Processamensteller Datum van aanvraag in op TODAY() via proces met naam Sjabloon: Naam van programmabetrokkenheid. Kloon de sjabloon voor bewerken.</help>
+    <label>Einddatum</label>
+</CustomFieldTranslation>

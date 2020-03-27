@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Quantity__c</name>
+    <help>Hoeveelheid van een servicelevering is een numeriek veld met mogelijk decimalen zoals uitgedrukt bij Meeteenheid, ingesteld voor de service, bijv. een contactpersoon ontvangt 30 min. aan coaching, met UoM ingesteld op uren en Hoeveelheid op .5 (0,5).</help>
+    <label>Hoeveelheid</label>
+</CustomFieldTranslation>

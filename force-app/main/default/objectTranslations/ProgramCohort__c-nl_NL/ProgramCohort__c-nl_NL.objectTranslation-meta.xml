@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>Einddatum moet liggen tussen begin- en einddatum van het programma.</errorMessage>
+        <name>END_DATE_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Begindatum moet zijn vóór einddatum</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Begindatum moet liggen binnen het bereik van de begin- en einddatum van het gerelateerde programma.</errorMessage>
+        <name>START_DATE_PROGRAM_DATES</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Cohort Layout</layout>
+        <sections>
+            <label>Aanvullende gegevens</label>
+            <section>Additional Information</section>
+        </sections>
+        <sections>
+            <label>Aangepaste koppelingen</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Programmacohort</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Programmacohort</label>
+    </standardFields>
+    <gender>Neuter</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Programmacohort</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Programmacohorten</value>
+    </caseValues>
+</CustomObjectTranslation>

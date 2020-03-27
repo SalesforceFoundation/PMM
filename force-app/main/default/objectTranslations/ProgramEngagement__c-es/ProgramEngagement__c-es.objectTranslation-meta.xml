@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>La cuenta seleccionada no coincide con la cuenta del contacto relacionado</errorMessage>
+        <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>La fecha de finalización debe ser posterior a la fecha de solicitud</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>La fecha de inicio debe ser anterior a la fecha de solicitud</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_START_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>La fecha de inicio debe ser anterior a la fecha de finalización.</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Engagement Layout</layout>
+        <sections>
+            <label>Detalles adicionales</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>Vínculos personalizados</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nombre de Participación en programa</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nombre de Participación en programa</label>
+    </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Participación en programa</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Participaciones en programa</value>
+    </caseValues>
+</CustomObjectTranslation>

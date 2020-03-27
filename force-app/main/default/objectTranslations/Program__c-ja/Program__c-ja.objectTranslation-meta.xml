@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>開始日は終了日よりも前である必要があります</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Layout</layout>
+        <sections>
+            <label>追加の詳細</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>カスタムリンク</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>プログラム名</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>プログラム名</label>
+    </standardFields>
+    <caseValues>
+        <plural>false</plural>
+        <value>プログラム</value>
+    </caseValues>
+</CustomObjectTranslation>

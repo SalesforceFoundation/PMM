@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>Start Date must be before End Date</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Layout</layout>
+        <sections>
+            <label>Additional Details</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>Custom Links</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Program Name</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Program Name</label>
+    </standardFields>
+    <startsWith>Consonant</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Program</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Programs</value>
+    </caseValues>
+</CustomObjectTranslation>

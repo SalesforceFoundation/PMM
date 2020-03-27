@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>選択した団体が、関連する個人の団体に一致しません。</errorMessage>
+        <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>終了日は申請日よりも後である必要があります。</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>開始日は申請日よりも後である必要があります。</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_START_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>開始日は終了日よりも前である必要があります</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Engagement Layout</layout>
+        <sections>
+            <label>追加の詳細</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>カスタムリンク</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>プログラムエンゲージメント名</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>プログラムエンゲージメント名</label>
+    </standardFields>
+    <caseValues>
+        <plural>false</plural>
+        <value>プログラムエンゲージメント</value>
+    </caseValues>
+</CustomObjectTranslation>

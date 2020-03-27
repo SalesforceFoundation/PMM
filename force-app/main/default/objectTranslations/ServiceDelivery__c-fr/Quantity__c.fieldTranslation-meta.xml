@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Quantity__c</name>
+    <help>La Quantité d&#39;une Livraison de services est un champ numérique qui accepte les valeurs décimales de l&#39;unité de mesure définie pour le service. Par exemple, si un contact reçoit un accompagnement de 30 minutes avec une unité en heures, la quantité est 0,5.</help>
+    <label>Quantité</label>
+</CustomFieldTranslation>

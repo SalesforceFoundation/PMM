@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Account__c</name>
+    <help>Agrega la Cuenta de hogar del contacto si la Entrega de servicio tiene potencial para beneficiar a todo el hogar. Por ej. las comidas de un banco de alimentos. Si la Entrega de servicio solo beneficia al contacto individual, deje este campo en blanco.</help>
+    <relationshipLabel>Entregas de servicio</relationshipLabel>
+    <label>Cuenta de hogar</label>
+</CustomFieldTranslation>

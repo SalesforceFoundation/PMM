@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>End Date must be within the Program Start and End Dates</errorMessage>
+        <name>END_DATE_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Start Date must be before End Date</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Start Date must be within the range of the related Program Start and End Dates.</errorMessage>
+        <name>START_DATE_PROGRAM_DATES</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Cohort Layout</layout>
+        <sections>
+            <label>Additional Information</label>
+            <section>Additional Information</section>
+        </sections>
+        <sections>
+            <label>Custom Links</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Program Cohort</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Program Cohort</label>
+    </standardFields>
+    <startsWith>Consonant</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Program Cohort</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Program Cohorts</value>
+    </caseValues>
+</CustomObjectTranslation>

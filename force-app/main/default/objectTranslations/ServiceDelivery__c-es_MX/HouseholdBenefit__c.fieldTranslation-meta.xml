@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>HouseholdBenefit__c</name>
+    <help>Marque la casilla si desea seguir que el beneficio de Entrega de servicio se aplique a todo el hogar. Si la Entrega de servicio solo beneficia al contacto individual, deje la casilla sin marcar.</help>
+    <label>Beneficio de hogar</label>
+</CustomFieldTranslation>

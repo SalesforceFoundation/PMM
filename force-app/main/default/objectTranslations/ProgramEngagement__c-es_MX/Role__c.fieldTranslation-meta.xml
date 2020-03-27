@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Role__c</name>
+    <help>Estos valores de lista de selección describen la relación del contacto con la Participación en programa. Los valores predeterminados son Cliente, Voluntario y Proveedor de servicios. Puede modificar los valores de la lista mostrados para este campo.</help>
+    <label>Función</label>
+    <picklistValues>
+        <masterLabel>Client</masterLabel>
+        <translation>Cliente</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Volunteer</masterLabel>
+        <translation>Voluntario</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Service Provider</masterLabel>
+        <translation>Proveedor de servicios</translation>
+    </picklistValues>
+</CustomFieldTranslation>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Account__c</name>
+    <help>In te vullen als uitkeringen verstrekt via Programmabetrokkenheid toekomen aan huishoudenaccountleden van de contactpersoon, bijvoorbeeld programmabetrokkenheid bij een voedselbank. Bij toekomen aan alleen de individuele contactpersoon is dit veld blanco.</help>
+    <relationshipLabel>Programmabetrokkenheden</relationshipLabel>
+    <label>Huishoudenaccount</label>
+</CustomFieldTranslation>

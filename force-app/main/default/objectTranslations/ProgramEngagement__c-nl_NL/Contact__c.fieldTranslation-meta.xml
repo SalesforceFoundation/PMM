@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Contact__c</name>
+    <help>Opzoekopdracht naar contactpersoon betrokken bij programma. Naam van Contactpersoon wordt gebruikt bij Naam van programma in proces van Processamensteller met titel Sjabloon: Naam van programmabetrokkenheid, dat Naam van programmabetrokkenheid invult.</help>
+    <relationshipLabel>Programmabetrokkenheden</relationshipLabel>
+    <label>Contactpersoon</label>
+</CustomFieldTranslation>

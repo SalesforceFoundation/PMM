@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Account__c</name>
+    <help>À remplir si les avantages du programme bénéficient aux membres du Compte de foyer du contact, par exemple un programme de banque alimentaire. Si la livraison de services bénéficie uniquement au contact individuel, laissez ce champ vide.</help>
+    <relationshipLabel>Engagements dans le programme</relationshipLabel>
+    <label>Compte de foyer</label>
+</CustomFieldTranslation>

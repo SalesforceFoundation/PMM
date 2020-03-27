@@ -141,9 +141,6 @@ tasks:
                     - NewOpportunity
                     - NewTask
                     - LogACall
-            ignore_types:
-                - RecordType
-                - CustomObjectTranslation
 
     deploy_service_delivery_modal_test:
         group: "PMM: Tests"

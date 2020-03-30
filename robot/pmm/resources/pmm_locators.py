@@ -71,6 +71,13 @@ bulk_service_delivery_locators = {
     "persist_save": "//lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
     "persist_warning": "//lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
     "pick_listbox":"//span[@class='slds-media__body']/span[contains(text(),'{}')]",
+    "new_prog_engagement": {
+        "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']]//input[contains(@class,'slds-input')]",
+        "dropdown_popup": "//div[contains(@class,'slds-listbox')]",
+        "dropdown_value": "//span[@class='slds-truncate' and @title='{}']",
+        "text_field": "//lightning-layout-item[contains(@class,'slds-p-around_small')][.//label[@class='slds-form-element__label' and text()='{}']]//input[@class='slds-input']",
+    }
+
 }
 
 account_locators = {}

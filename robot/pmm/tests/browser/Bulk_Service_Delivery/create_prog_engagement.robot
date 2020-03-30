@@ -39,8 +39,8 @@ Create program engagement from BSDT
     populate contact lookup           Search Contacts         &{contact}[FirstName] &{contact}[LastName]
     select listbox      Select Program Engagement   New Program Engagement
     Load Page Object  NewProgramEngagement  ProgramEngagement__c
-    verify current page    New Program Engagement
-    Populate New Program Engagement Form   Stage=Applied
+   # verify current page    New Program Engagement
+    Populate Program Engagement bsdt form   Stage=Applied
     ...                                    Role=Client
     ...                                    Application Date=${application_date}
     ...                                    Start Date=${start_date}

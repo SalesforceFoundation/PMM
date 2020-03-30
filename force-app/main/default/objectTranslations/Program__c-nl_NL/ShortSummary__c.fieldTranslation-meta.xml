@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ShortSummary__c</name>
+    <help>Een korte programmasamenvatting die wordt weergegeven in lijstweergaven van Programma.</help>
+    <label>Korte samenvatting</label>
+</CustomFieldTranslation>

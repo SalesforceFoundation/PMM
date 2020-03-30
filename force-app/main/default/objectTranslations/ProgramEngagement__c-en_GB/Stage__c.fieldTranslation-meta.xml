@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Stage__c</name>
+    <help>These Picklist values describe a Contact&#39;s stage of engagement in a Program. Default values are, Applied, Application Denied, Enrolled, Active, Completed, Withdrawn. You can edit the picklist values. Stage is displayed in a Path at the top of the page.</help>
+    <label>Stage</label>
+    <picklistValues>
+        <masterLabel>Applied</masterLabel>
+        <translation>Applied</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Application Denied</masterLabel>
+        <translation>Application Denied</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Enrolled</masterLabel>
+        <translation>Enrolled</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Active</masterLabel>
+        <translation>Active</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation>Completed</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Withdrawn</masterLabel>
+        <translation>Withdrawn</translation>
+    </picklistValues>
+</CustomFieldTranslation>

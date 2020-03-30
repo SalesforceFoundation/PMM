@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>StartDate__c</name>
+    <help>Startdatum des Programms für den Kontakt. In der PT-Phase auf &quot;Eingeschrieben&quot; oder &quot;Aktiv&quot; legt der Prozess &quot;Vorlage: Name der Programmteilnahme&quot; des Prozessgenerators das Anfangsdatum auf TODAY() fest. Prozessvorlage klonen, um sie zu bearbeiten.</help>
+    <label>Startdatum</label>
+</CustomFieldTranslation>

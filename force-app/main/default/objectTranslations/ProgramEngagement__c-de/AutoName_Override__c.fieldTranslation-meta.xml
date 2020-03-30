@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AutoName_Override__c</name>
+    <help>Wenn diese Option aktiviert ist, kann der Name der Programmteilnahme nach der Erstellung durch den Prozess des Prozessgenerators mit dem Titel &quot;Vorlage: &quot;Name der Programmteilnahme&quot; bearbeitet werden.</help>
+    <label>Überschreiben der Auto-Benennung</label>
+</CustomFieldTranslation>

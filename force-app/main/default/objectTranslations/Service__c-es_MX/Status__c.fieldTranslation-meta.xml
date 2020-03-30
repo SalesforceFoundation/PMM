@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Status__c</name>
+    <help>Estos valores de la lista de selección describen el estado del Servicio. Los valores predeterminados son Planificado, Activo, Completado y Cancelado. La lista de selección puede modificarse.</help>
+    <label>Estado</label>
+    <picklistValues>
+        <masterLabel>Planned</masterLabel>
+        <translation>Planificado</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Active</masterLabel>
+        <translation>Activo</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation>Completado</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Cancelled</masterLabel>
+        <translation>Cancelado</translation>
+    </picklistValues>
+</CustomFieldTranslation>

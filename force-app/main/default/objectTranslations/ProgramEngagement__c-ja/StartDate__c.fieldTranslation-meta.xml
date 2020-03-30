@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>StartDate__c</name>
+    <help>個人がプログラムを開始した日付。プログラムエンゲージメントフェーズが [登録済み] または [有効] に設定されている場合、開始日は [テンプレート: プログラムエンゲージメント名] というタイトルのプロセスビルダープロセスで TODAY() に設定されます。プロセスを編集するには、プロセステンプレートをコピーします。</help>
+    <label>開始日</label>
+</CustomFieldTranslation>

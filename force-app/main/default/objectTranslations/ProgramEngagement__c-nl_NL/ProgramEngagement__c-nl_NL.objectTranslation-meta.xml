@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>Geselecteerd account komt niet overeen met account van gerelateerde contactpersoon</errorMessage>
+        <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Einddatum moet na de datum van aanvraag liggen</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Begindatum moet na de datum van aanvraag liggen</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_START_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Begindatum moet zijn vóór einddatum</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Engagement Layout</layout>
+        <sections>
+            <label>Aanvullende gegevens</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>Aangepaste koppelingen</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Naam van programmabetrokkenheid</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Naam van programmabetrokkenheid</label>
+    </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Programmabetrokkenheid</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Programmabetrokkenheden</value>
+    </caseValues>
+</CustomObjectTranslation>

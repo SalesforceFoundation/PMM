@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>UnitOfMeasurement__c</name>
+    <help>De meeteenheid die wordt gebruikt voor het bijhouden van deze service, bijv. uren, maaltijden, sessies, leveringen, pakketten, enz. Het definiëren van een meeteenheid standaardiseert de manier waarop levering van de service wordt gemeten.</help>
+    <label>Meeteenheid</label>
+</CustomFieldTranslation>

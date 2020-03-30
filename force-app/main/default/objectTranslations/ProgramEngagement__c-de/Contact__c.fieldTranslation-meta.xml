@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Contact__c</name>
+    <help>Ein Nachschlagewert für den Kontakt, der an Ihrem Programm teilnimmt. Der Prozess des Prozessgenerators mit dem Titel &quot;Vorlage: Name der Programmteilnahme&quot; verwendet den Kontaktnamen mit dem Programmnamen und füllt &quot;Name der Programmteilnahme&quot; daraus auf.</help>
+    <relationshipLabel>Programmteilnahme</relationshipLabel>
+    <label>Kontakt</label>
+</CustomFieldTranslation>

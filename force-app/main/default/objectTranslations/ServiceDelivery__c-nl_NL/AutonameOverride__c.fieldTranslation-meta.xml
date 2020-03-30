@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AutonameOverride__c</name>
+    <help>Indien aangevinkt, kan Naam van service worden bewerkt nadat deze is gemaakt door proces van Processamensteller met naam Sjabloon: Naam van servicelevering.</help>
+    <label>Autom. overschrijving van naam</label>
+</CustomFieldTranslation>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ApplicationDate__c</name>
+    <help>La date à laquelle le contact a postulé. Si l&#39;étape d&#39;engagement est Postulé, la Date de candidature est définie sur TODAY() par le processus intitulé Modèle : Nom de l&#39;engagement dans le programme. Pour changer le processus, clonez-le, puis modifiez-le.</help>
+    <label>Date de candidature</label>
+</CustomFieldTranslation>

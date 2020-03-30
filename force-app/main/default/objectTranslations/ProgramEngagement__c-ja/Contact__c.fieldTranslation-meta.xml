@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Contact__c</name>
+    <help>プログラムに参加している個人への参照。[テンプレート: プログラムエンゲージメント名] というタイトルのプロセスビルダープロセスでこの個人名をプログラム名と共に使用してプログラムエンゲージメント名を入力します。</help>
+    <relationshipLabel>プログラムエンゲージメント</relationshipLabel>
+    <label>個人</label>
+</CustomFieldTranslation>

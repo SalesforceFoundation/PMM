@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ProgramEngagement__c</name>
+    <help>Una búsqueda de la Participación en programa para la Entrega de servicio.</help>
+    <relationshipLabel>Entregas de servicio</relationshipLabel>
+    <label>Participación en programa</label>
+</CustomFieldTranslation>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>StartDate__c</name>
+    <help>La date à laquelle le contact commence le programme. Si l&#39;étape d&#39;engagement est Inscrit ou En cours, la Date de début est définie sur TODAY() par le processus intitulé Modèle : Nom de l&#39;engagement dans le programme. Pour modifier le modèle, clonez-le.</help>
+    <label>Date de début</label>
+</CustomFieldTranslation>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customLabels>
+        <name>Add_Service_Delivery</name>
+        <label>Add Service Delivery</label>
+    </customLabels>
+    <customLabels>
+        <name>Error</name>
+        <label>Error</label>
+    </customLabels>
+    <customLabels>
+        <name>Warning</name>
+        <label>Warning</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel</name>
+        <label>Cancel</label>
+    </customLabels>
+    <customLabels>
+        <name>Close</name>
+        <label>Close</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete</name>
+        <label>Confirm Delete</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete_Row</name>
+        <label>Are you sure you want to delete this row?</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete</name>
+        <label>Delete</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Services_For_Program_Engagement</name>
+        <label>No services found, choose another program engagement.</label>
+    </customLabels>
+    <customLabels>
+        <name>Record_Deleted</name>
+        <label>Your record has been deleted</label>
+    </customLabels>
+    <customLabels>
+        <name>Required</name>
+        <label>Required</label>
+    </customLabels>
+    <customLabels>
+        <name>Saved</name>
+        <label>Saved</label>
+    </customLabels>
+    <customLabels>
+        <name>Saving</name>
+        <label>Saving</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Program_Engagement</name>
+        <label>Select Program Engagement</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service</name>
+        <label>Select Service</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Deliveries</name>
+        <label>Service Deliveries</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Delivery_Contact_Without_Programs</name>
+        <label>To save a service delivery, first enrol this client in a program with active services.</label>
+    </customLabels>
+    <customLabels>
+        <name>Success</name>
+        <label>Success</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Error</name>
+        <label>Error</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Unknown_Error</name>
+        <label>Unknown Error</label>
+    </customLabels>
+    <customTabs>
+        <name>Bulk_Service_Deliveries</name>
+        <label>Bulk Service Deliveries</label>
+    </customTabs>
+    <customApplications>
+        <name>Program_Management</name>
+        <label>Program Management</label>
+    </customApplications>
+    <quickActions>
+        <name>Contact.AddContactToProgram</name>
+        <label>Add Contact to Program</label>
+    </quickActions>
+    <quickActions>
+        <name>Program__c.AddContactToProgram</name>
+        <label>Add Contact to Program</label>
+    </quickActions>
+</Translations>

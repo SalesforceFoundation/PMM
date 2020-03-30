@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Stage__c</name>
+    <help>Ces valeurs décrivent l&#39;étape d&#39;engagement d&#39;un contact dans un programme. Les valeurs par défaut sont Postulé, Candidature refusée, Inscrit, En cours, Terminé et Retiré, que vous pouvez modifier. L&#39;étape est affichée dans un parcours en haut de la page.</help>
+    <label>Étape</label>
+    <picklistValues>
+        <masterLabel>Applied</masterLabel>
+        <translation>Postulé</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Application Denied</masterLabel>
+        <translation>Candidature refusée</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Enrolled</masterLabel>
+        <translation>Inscrit</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Active</masterLabel>
+        <translation>Active</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation>Terminé</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Withdrawn</masterLabel>
+        <translation>Retiré</translation>
+    </picklistValues>
+</CustomFieldTranslation>

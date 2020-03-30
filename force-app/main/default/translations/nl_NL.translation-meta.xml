@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customLabels>
+        <name>Add_Service_Delivery</name>
+        <label>Servicelevering toevoegen</label>
+    </customLabels>
+    <customLabels>
+        <name>Error</name>
+        <label>Fout</label>
+    </customLabels>
+    <customLabels>
+        <name>Warning</name>
+        <label>Waarschuwing</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel</name>
+        <label>Annuleren</label>
+    </customLabels>
+    <customLabels>
+        <name>Close</name>
+        <label>Gesloten</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete</name>
+        <label>Verwijderen bevestigen</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete_Row</name>
+        <label>Weet u zeker dat u deze rij wilt verwijderen?</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete</name>
+        <label>Verwijderen</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Services_For_Program_Engagement</name>
+        <label>Geen services gevonden; kies een andere programmabetrokkenheid.</label>
+    </customLabels>
+    <customLabels>
+        <name>Record_Deleted</name>
+        <label>Uw record is verwijderd</label>
+    </customLabels>
+    <customLabels>
+        <name>Required</name>
+        <label>Verplicht</label>
+    </customLabels>
+    <customLabels>
+        <name>Saved</name>
+        <label>Opgeslagen</label>
+    </customLabels>
+    <customLabels>
+        <name>Saving</name>
+        <label>Bezig met opslaan</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Program_Engagement</name>
+        <label>Programmabetrokkenheid selecteren</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service</name>
+        <label>Service selecteren</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Deliveries</name>
+        <label>Serviceleveringen</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Delivery_Contact_Without_Programs</name>
+        <label>Voor het opslaan van deze servicelevering registreert u deze cliënt eerst bij een programma met actieve services.</label>
+    </customLabels>
+    <customLabels>
+        <name>Success</name>
+        <label>Geslaagd</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Error</name>
+        <label>Fout</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Unknown_Error</name>
+        <label>Onbekende fout</label>
+    </customLabels>
+    <customTabs>
+        <name>Bulk_Service_Deliveries</name>
+        <label>Serviceleveringen in bulk</label>
+    </customTabs>
+    <customApplications>
+        <name>Program_Management</name>
+        <label>Program Management</label>
+    </customApplications>
+    <quickActions>
+        <name>Contact.AddContactToProgram</name>
+        <label>Contactpersoon toevoegen aan programma</label>
+    </quickActions>
+    <quickActions>
+        <name>Program__c.AddContactToProgram</name>
+        <label>Contactpersoon toevoegen aan programma</label>
+    </quickActions>
+</Translations>

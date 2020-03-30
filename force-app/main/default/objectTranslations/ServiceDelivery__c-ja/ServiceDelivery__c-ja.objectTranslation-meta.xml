@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Service Delivery Layout</layout>
+        <sections>
+            <label>追加情報</label>
+            <section>Additional Information</section>
+        </sections>
+        <sections>
+            <label>カスタムリンク</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>サービス提供名</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>サービス提供名</label>
+    </standardFields>
+    <caseValues>
+        <plural>false</plural>
+        <value>サービス提供</value>
+    </caseValues>
+</CustomObjectTranslation>

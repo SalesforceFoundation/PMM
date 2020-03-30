@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>EndDate__c</name>
+    <help>La date à laquelle un contact termine ou quitte le programme. Si l&#39;étape d&#39;engagement est Terminé ou Retiré, la Date de fin est définie sur TODAY() par le processus Modèle : Nom de l&#39;engagement dans le programme. Pour modifier le modèle, clonez-le.</help>
+    <label>Date de fin</label>
+</CustomFieldTranslation>

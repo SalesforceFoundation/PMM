@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>Begindatum moet zijn vóór einddatum</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Layout</layout>
+        <sections>
+            <label>Aanvullende gegevens</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>Aangepaste koppelingen</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Programmanaam</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Programmanaam</label>
+    </standardFields>
+    <gender>Neuter</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Programma</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Programma&#39;s</value>
+    </caseValues>
+</CustomObjectTranslation>

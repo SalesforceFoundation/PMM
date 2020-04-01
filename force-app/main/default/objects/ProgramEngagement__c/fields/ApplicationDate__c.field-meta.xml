@@ -3,7 +3,7 @@
     <fullName>ApplicationDate__c</fullName>
     <description>If the Program Engagement stage is Applied, the Application Date is set to TODAY() by the Process Builder process, Template: Program Engagement. Clone the template to edit it.</description>
     <externalId>false</externalId>
-    <inlineHelpText>If the Program Engagement stage is Applied, the Application Date is set to TODAY() by the Process Builder process, Template: Program Engagement. Clone the template to edit it.</inlineHelpText>
+    <inlineHelpText>If the Program Engagement stage is Applied, the Application Date defaults to today if left blank.</inlineHelpText>
     <label>Application Date</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

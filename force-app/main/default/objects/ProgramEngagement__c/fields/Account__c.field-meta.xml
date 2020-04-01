@@ -2,9 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Account__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <description>Add a lookup to the Household Account if a Program Engagement benefits members of the Contact's Household Account. For example, meals from a food bank. If it benefits only one Contact, leave blank.</description>
+    <description>Select the Household Account if a Program Engagement benefits members of the Contact's Household Account. For example, meals from a food bank. If it benefits only one Contact, leave blank.</description>
     <externalId>false</externalId>
-    <inlineHelpText>Add a lookup to the Household Account if a Program Engagement benefits members of the Contact's Household Account. For example, meals from a food bank. If it benefits only one Contact, leave blank.</inlineHelpText>
+    <inlineHelpText>Select the Household Account if a Program Engagement benefits members of the Contact's Household Account. For example, meals from a food bank. If it benefits only one Contact, leave blank.</inlineHelpText>
     <label>Household Account</label>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Program Engagements</relationshipLabel>

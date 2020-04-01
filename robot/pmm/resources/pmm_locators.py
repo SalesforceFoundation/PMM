@@ -24,7 +24,7 @@ pmm_lex_locators = {
         "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
         "dropdown_popup": "//div[@class='select-options' and @role='menu']",
         "dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
-        "button": "//button[contains(@class, 'slds-button') and @type='button' and @title = '{}']",
+        "button": "//button[contains(@class, 'slds-button') and @title = '{}']",
         "lookup_field": "//div[contains(@class, 'autocompleteWrapper')]//input[@title='{}']",
         "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']",
         "open_date_picker": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]//div//a[contains(@class,'datePicker-openIcon display')]",
@@ -58,8 +58,8 @@ service_delivery_locators = {}
 
 bulk_service_delivery_locators = {
     "page_header": "//div[@class='slds-p-horizontal_small slds-text-heading_large slds-m-bottom_x-large' and text()='{}']",
-    "lookup_contact": "//input[contains(@class,'slds-input slds-combobox__input') and contains(@placeholder,'{}')]",
-    "select_contact": "//span[contains(@class,'slds-listbox__option-text')]/lightning-base-combobox-formatted-text[@class='slds-truncate' and @title='{}']",
+    "lookup_bsdt_field": "//input[contains(@class,'slds-input slds-combobox__input') and contains(@placeholder,'{}')]",
+    "select_bsdt_value": "//span[contains(@class,'slds-listbox__option-text')]/lightning-base-combobox-formatted-text[@class='slds-truncate' and @title='{}']",
     "select_value": "//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(@title,'{}')]",
     "select_popup": "//div[contains(@class,'slds-listbox')]",
     "lookup_field_row1": "//div[3]//input[@placeholder='{}']",
@@ -72,10 +72,12 @@ bulk_service_delivery_locators = {
     "persist_warning": "//lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
     "pick_listbox":"//span[@class='slds-media__body']/span[contains(text(),'{}')]",
     "new_prog_engagement": {
+        "title":"//h2[contains(@class,'slds-text-heading_medium') and text()='{}']",
         "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']]//input[contains(@class,'slds-input')]",
         "dropdown_popup": "//div[contains(@class,'slds-listbox')]",
         "dropdown_value": "//span[@class='slds-truncate' and @title='{}']",
-        "text_field": "//lightning-layout-item[contains(@class,'slds-p-around_small')][.//label[@class='slds-form-element__label' and text()='{}']]//input[@class='slds-input']",
+        "text_field": "//div[contains(@class,'slds-form-element')][.//label[@class='slds-form-element__label' and text()='{}']]//input[@class='slds-input']",
+
     }
 
 }

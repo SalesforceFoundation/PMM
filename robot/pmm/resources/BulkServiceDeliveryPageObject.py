@@ -24,14 +24,14 @@ class BulkServiceDeliveryBasePage(BasePMMPage, BasePage):
             error="The header for this page is not 'Bulk Service Delivery' as expected",
         )
 
-    def populate_contact_lookup(self, title, value):
+    def populate_bsdt_lookup(self, title, value):
         """populate the lookup field on bulk service delivery"""
-        locator = bulk_service_delivery_locators["lookup_contact"].format(title)
+        locator = bulk_service_delivery_locators["lookup_bsdt_field"].format(title)
         self.selenium.click_element(locator)
         self.selenium.clear_element_text(locator)
         self.selenium.get_webelement(locator).send_keys(value)
 
-        locator_val = bulk_service_delivery_locators["select_contact"].format(value)
+        locator_val = bulk_service_delivery_locators["select_bsdt_value"].format(value)
         self.selenium.wait_until_page_contains_element(
             locator_val, error="value is not available"
         )
@@ -115,3 +115,11 @@ class BulkServiceDeliveryBasePage(BasePMMPage, BasePage):
         value_loc = bulk_service_delivery_locators["pick_listbox"].format(value)
         element_click = self.selenium.driver.find_element_by_xpath(value_loc)
         self.selenium.driver.execute_script("arguments[0].click()", element_click)
+
+    def verify_dialog_title(self, label):
+        """ Verify we are on the Bulk Service Deliveries page by verifying the header title """
+        locator = bulk_service_delivery_locators["new_prog_engagement"]["title"].format(label)
+        self.selenium.wait_until_page_contains_element(
+            locator,
+            error="The header for this page is not  as expected",
+        )

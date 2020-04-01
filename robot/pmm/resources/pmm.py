@@ -75,11 +75,11 @@ class pmm(object):
         )
         self.selenium.click_element(locator_val)
 
-    def click_save_button(self):
+    def click_dialog_button(self,title):
         """ Click on the save button """
-        locator_save = pmm_lex_locators["new_record"]["button"].format("Save")
+        locator_save = pmm_lex_locators["new_record"]["button"].format(title)
         self.selenium.wait_until_element_is_enabled(
-            locator_save, error="Save button is not enabled"
+            locator_save, error="button is not enabled"
         )
         self.selenium.click_element(locator_save)
 

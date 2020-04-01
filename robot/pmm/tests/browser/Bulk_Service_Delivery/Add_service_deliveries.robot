@@ -54,14 +54,14 @@ Add service delivery on bulk service delivery
     [Documentation]                        This test adds service deliveries on bulk service delivery
     Go To Page                             BasePage                               ServiceDelivery__c
     verify current page                    Service Deliveries
-    populate contact lookup           Search Contacts         &{contact1}[FirstName] &{contact1}[LastName]
+    populate bsdt lookup           Search Contacts         &{contact1}[FirstName] &{contact1}[LastName]
     populate row1 fields           Select Program Engagement         &{program_engagement1}[Name]
     populate row1 fields          Select Service         &{service1}[Name]
     input row1 data  Quantity    ${quantity1}
     sleep   2s
     verify persist save icon    Saved
     click button    Add Service Delivery
-    populate contact lookup           Search Contacts         &{contact2}[FirstName] &{contact2}[LastName]
+    populate bsdt lookup           Search Contacts         &{contact2}[FirstName] &{contact2}[LastName]
     populate row2 fields           Select Program Engagement         &{program_engagement2}[Name]
     populate row2 fields          Select Service         &{service2}[Name]
     input row2 data  Quantity    ${quantity2}
@@ -72,27 +72,18 @@ Verify Service delivery on service delivery listview page
     [Documentation]                        This test verifies that the added service deliveries on bulk service delivery
     ...                                    exists on service delivery list page.
     Go To Page                             Listing                               ServiceDelivery__c
-    Page Should Contain                    &{contact1}[FirstName] &{contact1}[LastName]
-    Page Should Contain                    &{contact2}[FirstName] &{contact2}[LastName]
+    Page Should Contain                    &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
+    Page Should Contain                    &{contact2}[FirstName] &{contact2}[LastName] - &{service2}[Name]
 
 Verify error message when there are no services associated with the program
     [Documentation]                        This test verifies that an error message is displayed when there are no
     ...                                    services associated with the program.
     Go To Page                             BasePage                               ServiceDelivery__c
     verify current page                    Service Deliveries
-    populate contact lookup           Search Contacts         &{contact3}[FirstName] &{contact3}[LastName]
+    populate bsdt lookup           Search Contacts         &{contact3}[FirstName] &{contact3}[LastName]
     populate row1 fields           Select Program Engagement         &{program_engagement3}[Name]
     verify error message    No services found, choose another program engagement.
     verify persist warning icon    No services found, choose another program engagement.
 
-Verify error message when contact is not enrolled on a program
-    [tags]  unstable
-    [Documentation]                        This test verifies that an error message is displayed when the contact is
-    ...                                    not associated with any program
-    Go To Page                             BasePage                               ServiceDelivery__c
-    verify current page                    Service Deliveries
-    populate contact lookup           Search Contacts         &{contact4}[FirstName] &{contact4}[LastName]
-    verify error message    To save a service delivery, first enroll this client in a program with active services.
-    verify persist warning icon    To save a service delivery, first enroll this client in a program with active services.
 
 

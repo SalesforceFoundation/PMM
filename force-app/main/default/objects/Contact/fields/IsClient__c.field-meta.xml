@@ -2,7 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>IsClient__c</fullName>
     <defaultValue>false</defaultValue>
+    <description>A checkbox to mark the Contact a client findable via Client Search. Add field to the Client Card field set to create a badge displayed under the client photo.</description>
     <externalId>false</externalId>
+    <inlineHelpText>A checkbox to mark the Contact a client findable via Client Search. Also used to create a badge displayed under the client photo.</inlineHelpText>
     <label>Client</label>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Checkbox</type>

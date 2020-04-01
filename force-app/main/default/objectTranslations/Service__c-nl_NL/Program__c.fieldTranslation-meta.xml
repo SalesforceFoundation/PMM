@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>Program__c</name>
-    <help>Een opzoekopdracht naar het programma waarvan de service onderdeel is.</help>
-    <relationshipLabel>Diensten</relationshipLabel>
-    <label>Programma</label>
-</CustomFieldTranslation>

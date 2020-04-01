@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>Contact__c</name>
-    <help>Ein Nachschlagewert für den Kontakt, der die erbrachte Leistung empfängt.</help>
-    <relationshipLabel>Erbrachte Leistungen</relationshipLabel>
-    <label>Kontakt</label>
-</CustomFieldTranslation>

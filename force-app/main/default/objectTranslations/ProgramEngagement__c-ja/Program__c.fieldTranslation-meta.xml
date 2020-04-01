@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>Program__c</name>
-    <help>個人が申請している、個人が参加している、または個人が参加していたプログラムへの参照。</help>
-    <relationshipLabel>プログラムエンゲージメント</relationshipLabel>
-    <label>プログラム</label>
-</CustomFieldTranslation>

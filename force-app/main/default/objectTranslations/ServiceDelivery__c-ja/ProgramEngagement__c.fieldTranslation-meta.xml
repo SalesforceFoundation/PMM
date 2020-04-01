@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>ProgramEngagement__c</name>
-    <help>サービス提供のプログラムエンゲージメントへの参照。</help>
-    <relationshipLabel>サービス提供</relationshipLabel>
-    <label>プログラムエンゲージメント</label>
-</CustomFieldTranslation>

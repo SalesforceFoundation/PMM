@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>Der ausgewählte Account stimmt nicht mit dem Account des Kontakts überein</errorMessage>
+        <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Das Enddatum muss später als das Bewerbungsdatum sein</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Das Anfangsdatum muss später als das Bewerbungsdatum sein</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_START_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Das Anfangsdatum muss vor dem Enddatum liegen</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Engagement Layout</layout>
+        <sections>
+            <label>Weitere Details</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>Benutzerdefinierte Links</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Name der Programmteilnahme</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Name der Programmteilnahme</label>
+    </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <caseType>Nominative</caseType>
+        <value>Programmteilnahme</value>
+    </caseValues>
+    <caseValues>
+        <plural>false</plural>
+        <caseType>Accusative</caseType>
+        <value>Programmteilnahme</value>
+    </caseValues>
+    <caseValues>
+        <plural>false</plural>
+        <caseType>Dative</caseType>
+        <value>Programmteilnahme</value>
+    </caseValues>
+    <caseValues>
+        <plural>false</plural>
+        <caseType>Genitive</caseType>
+        <value>Programmteilnahme</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <caseType>Nominative</caseType>
+        <value>Programmteilnahmen</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <caseType>Accusative</caseType>
+        <value>Programmteilnahmen</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <caseType>Dative</caseType>
+        <value>Programmteilnahmen</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <caseType>Genitive</caseType>
+        <value>Programmteilnahmen</value>
+    </caseValues>
+</CustomObjectTranslation>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>Program__c</name>
-    <help>該当のサービスが含まれるプログラムへの参照。</help>
-    <relationshipLabel>サービス</relationshipLabel>
-    <label>プログラム</label>
-</CustomFieldTranslation>

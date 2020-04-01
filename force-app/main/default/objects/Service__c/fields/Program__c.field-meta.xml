@@ -2,9 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Program__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
-    <description>A lookup to the Program that the Service is a part of.</description>
     <externalId>false</externalId>
-    <inlineHelpText>A lookup to the Program that the Service is a part of.</inlineHelpText>
     <label>Program</label>
     <referenceTo>Program__c</referenceTo>
     <relationshipLabel>Services</relationshipLabel>

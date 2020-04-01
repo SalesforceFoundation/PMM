@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>HouseholdBenefit__c</name>
-    <help>Markieren Sie das Kontrollkästchen, wenn Sie festhalten möchten, dass die erbrachte Leistung dem gesamten Haushalt zugute kommt. Wenn die Leistungserbringung nur dem einzelnen Kontakt nützt, lassen Sie das Kontrollkästchen unmarkiert.</help>
-    <label>Haushaltsunterstützung</label>
-</CustomFieldTranslation>

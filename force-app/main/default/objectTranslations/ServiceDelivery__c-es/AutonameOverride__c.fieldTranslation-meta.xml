@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2020, salesforce.com, inc.
+  ~  * All rights reserved.
+  ~  * SPDX-License-Identifier: BSD-3-Clause
+  ~  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  ~  */
+  -->
+
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>AutonameOverride__c</name>
     <help>Cuando se marca, el Nombre de servicio puede modificarse después de haberse creado por el proceso de Process Builder titulado Plantilla: Nombre de Entrega de servicio.</help>

@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2020, salesforce.com, inc.
+  ~  * All rights reserved.
+  ~  * SPDX-License-Identifier: BSD-3-Clause
+  ~  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  ~  */
+  -->
+
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Account__c</name>
     <help>Fügen Sie den Haushalt-Account des Kontakts hinzu, wenn die erbrachte Leistung potenziell für den gesamten Haushalt nützlich ist. Beispiel: Mahlzeiten einer Tafel. Wenn die erbrachte Leistung nur dem individuellen Kontakt nützt, lassen Sie das Feld leer.</help>

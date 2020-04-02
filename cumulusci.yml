@@ -261,3 +261,15 @@ flows:
                 flow: config_dev_namespaced
             4:
                 task: snapshot_changes
+
+plans:
+    install:
+        slug: install
+        title: Install Nonprofit Cloud Program Management Module
+        tier: primary
+        is_listed: True
+        steps:
+            1:
+                task: update_dependencies
+            2:
+                task: install_managed

@@ -1,0 +1,32 @@
+{
+    "product": {
+        "title": {
+            "message": "Program Management Module (PMM)",
+            "description": "name of product"
+        },
+        "short_description": {
+            "message": "Track, manage, and deliver programs",
+            "description": "tagline of product"
+        },
+        "description": {
+            "message": "Welcome to the Program Management Module (PMM) Installer!\r\n\r\nProgram Management Module is a standard framework to track, manage and deliver programs, services, and service deliveries.\r\n\r\n*IMPORTANT*: Salesforce does not recommend installing upgrades directly in production organizations. Instead, install Program Management Module in one of your free sandbox environments or a developer organization first.\r\n\r\n*Hold for paragraph from legal if needed*\r\n\r\nOnce you've installed Program Management, check out the resources in our documentation:\r\n\r\n* <Program Management Module Documentation>\r\n\r\nQuestions? Become a member of the <Program Management Module> customer group in the Power of Us Hub.",
+            "description": "shown on product detail page (markdown)"
+        },
+        "error_message": {
+            "message": "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include \u201cPMM\u201d in the subject line and include in your comment the installation link shown here.",
+            "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:install": {
+        "title": {
+            "message": "Install Nonprofit Cloud Program Management Module",
+            "description": "title of installation plan"
+        }
+    },
+    "steps": {
+        "Install {product} {version}": {
+            "message": "Install {product} {version}",
+            "description": "title of installation step"
+        }
+    }
+}

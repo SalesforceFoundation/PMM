@@ -37,6 +37,7 @@ pmm_lex_locators = {
         "related_list": "//span[contains(@class,'slds-card') and @title='{}']",
     },
     "quick_actions":"//button[@class='slds-button slds-button_neutral' and text()='{}']",
+    "listview_link":"//a[contains(@class,'slds-truncate') and text()='{}']",
 
 }
 

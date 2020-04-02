@@ -137,3 +137,7 @@ class pmm(object):
             locator, error="Section title is not as expected"
         )
 
+    def click_listview_link(self,title):
+        locator=pmm_lex_locators["listview_link"].format(title)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script('arguments[0].click()', element)

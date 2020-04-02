@@ -5,6 +5,7 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/pmm.py
 ...            robot/pmm/resources/BulkServiceDeliveryPageObject.py
 ...            robot/pmm/resources/ServiceDeliveryPageObject.py
+...            robot/pmm/resources/ProgramEngagementPageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
@@ -45,9 +46,6 @@ Setup Test Data
     &{program_engagement3} =    API Create Program Engagement   &{Program3}[Id]  &{contact3}[Id]
     Set suite variable    &{program_engagement3}
 
-    &{contact4} =         API Create Contact
-    Set suite variable    &{contact4}
-
 *** Test Cases ***
 
 Add service delivery on bulk service delivery
@@ -74,6 +72,9 @@ Verify Service delivery on service delivery listview page
     Go To Page                             Listing                               ServiceDelivery__c
     Page Should Contain                    &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
     Page Should Contain                    &{contact2}[FirstName] &{contact2}[LastName] - &{service2}[Name]
+    click listview link     &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
+    verify details  Service Delivery Name   contains    &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
+
 
 Verify error message when there are no services associated with the program
     [Documentation]                        This test verifies that an error message is displayed when there are no
@@ -84,6 +85,16 @@ Verify error message when there are no services associated with the program
     populate row1 fields           Select Program Engagement         &{program_engagement3}[Name]
     verify error message    No services found, choose another program engagement.
     verify persist warning icon    No services found, choose another program engagement.
-
-
+    Go To Page                             Listing                               ServiceDelivery__c
+    click listview link     &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
+    verify details  Service Delivery Name   contains    &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
+    ${service_delivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
+    ${service_id} =            Save Current Record ID For Deletion     Service__c
+    ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
+    Go To Page                             Listing                               ServiceDelivery__c
+    click listview link     &{contact2}[FirstName] &{contact2}[LastName] - &{service2}[Name]
+    verify details  Service Delivery Name   contains    &{contact2}[FirstName] &{contact2}[LastName] - &{service2}[Name]
+    ${service_delivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
+    ${service_id} =            Save Current Record ID For Deletion     Service__c
+    ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
 

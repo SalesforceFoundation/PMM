@@ -34,6 +34,7 @@ Setup Test Data
 *** Test Cases ***
 Create program engagement from BSDT
     [Documentation]                        This test adds service deliveries on bulk service delivery
+    [tags]                                  W-040316   feature:Service Delivery
     Go To Page                             BasePage                               ServiceDelivery__c
     verify current page                    Service Deliveries
     populate bsdt lookup           Search Contacts         &{contact}[FirstName] &{contact}[LastName]
@@ -52,4 +53,8 @@ Create program engagement from BSDT
     sleep   2s
     verify persist save icon    Saved
     Go To Page                             Listing                               ServiceDelivery__c
-    Page Should Contain                    &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
+    click listview link     &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
+    verify details  Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
+    ${service_delivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
+    ${service_id} =            Save Current Record ID For Deletion     Service__c
+    ${programengagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

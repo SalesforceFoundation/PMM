@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Description__c</fullName>
-    <description>A description of the Program that states its purpose and goals.</description>
     <externalId>false</externalId>
-    <inlineHelpText>A description of the Program that states its purpose and goals.</inlineHelpText>
     <label>Description</label>
     <length>32768</length>
     <trackTrending>false</trackTrending>

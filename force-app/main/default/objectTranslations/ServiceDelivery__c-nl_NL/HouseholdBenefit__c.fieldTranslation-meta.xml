@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>HouseholdBenefit__c</name>
-    <help>Vink het vakje aan als u wilt bijhouden of het voordeel van Servicelevering van toepassing is op het gehele huishouden. Als Servicelevering van toepassing is op alleen de individuele contactpersoon, laat u dit vakje niet-aangevinkt.</help>
-    <label>Voordeel voor huishouden</label>
-</CustomFieldTranslation>

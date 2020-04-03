@@ -20,6 +20,8 @@ Setup Test Data
     Set suite variable      ${application_date}
     ${start_date} =           Get Current Date   result_format=%m/%d/%Y  increment=30 days
     Set suite variable      ${start_date}
+    ${today} =  Get Current Date   result_format=%Y-%m-%d
+    Set suite variable      ${today}
 
     &{contact} =         API Create Contact
     Set suite variable    &{contact}
@@ -53,8 +55,8 @@ Create program engagement from BSDT
     sleep   2s
     verify persist save icon    Saved
     Go To Page                             Listing                               ServiceDelivery__c
-    click listview link     &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
-    verify details  Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
+    click listview link     &{contact}[FirstName] &{contact}[LastName] ${today} : &{service}[Name]
+    verify details  Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] ${today} : &{service}[Name]
     ${service_delivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
     ${service_id} =            Save Current Record ID For Deletion     Service__c
     ${programengagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

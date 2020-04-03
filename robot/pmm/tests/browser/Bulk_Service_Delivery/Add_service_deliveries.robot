@@ -17,6 +17,8 @@ Setup Test Data
     Set suite variable      ${quantity1}
     ${quantity2} =   Generate Random String    2     [NUMBERS]
     Set suite variable      ${quantity2}
+    ${today} =  Get Current Date   result_format=%Y-%m-%d
+    Set suite variable      ${today}
 
     &{contact1} =         API Create Contact
     Set suite variable    &{contact1}
@@ -70,10 +72,10 @@ Verify Service delivery on service delivery listview page
     [Documentation]                        This test verifies that the added service deliveries on bulk service delivery
     ...                                    exists on service delivery list page.
     Go To Page                             Listing                               ServiceDelivery__c
-    Page Should Contain                    &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
-    Page Should Contain                    &{contact2}[FirstName] &{contact2}[LastName] - &{service2}[Name]
-    click listview link     &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
-    verify details  Service Delivery Name   contains    &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
+    Page Should Contain                    &{contact1}[FirstName] &{contact1}[LastName] ${today} : &{service1}[Name]
+    Page Should Contain                    &{contact2}[FirstName] &{contact2}[LastName] ${today} : &{service2}[Name]
+    click listview link     &{contact1}[FirstName] &{contact1}[LastName] ${today} : &{service1}[Name]
+    verify details  Service Delivery Name   contains    &{contact1}[FirstName] &{contact1}[LastName] ${today} : &{service1}[Name]
 
 
 Verify error message when there are no services associated with the program
@@ -86,14 +88,14 @@ Verify error message when there are no services associated with the program
     verify error message    No services found, choose another program engagement.
     verify persist warning icon    No services found, choose another program engagement.
     Go To Page                             Listing                               ServiceDelivery__c
-    click listview link     &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
-    verify details  Service Delivery Name   contains    &{contact1}[FirstName] &{contact1}[LastName] - &{service1}[Name]
+    click listview link     &{contact1}[FirstName] &{contact1}[LastName] ${today} : &{service1}[Name]
+    verify details  Service Delivery Name   contains    &{contact1}[FirstName] &{contact1}[LastName] ${today} : &{service1}[Name]
     ${service_delivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
     ${service_id} =            Save Current Record ID For Deletion     Service__c
     ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c
     Go To Page                             Listing                               ServiceDelivery__c
-    click listview link     &{contact2}[FirstName] &{contact2}[LastName] - &{service2}[Name]
-    verify details  Service Delivery Name   contains    &{contact2}[FirstName] &{contact2}[LastName] - &{service2}[Name]
+    click listview link     &{contact2}[FirstName] &{contact2}[LastName] ${today} : &{service2}[Name]
+    verify details  Service Delivery Name   contains    &{contact2}[FirstName] &{contact2}[LastName] ${today} : &{service2}[Name]
     ${service_delivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
     ${service_id} =            Save Current Record ID For Deletion     Service__c
     ${program_engagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

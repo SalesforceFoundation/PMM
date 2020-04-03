@@ -22,6 +22,8 @@ Setup Test Data
     Set suite variable    &{program_cohort}
     ${start_date} =         Get Current Date   result_format=%m/%d/%Y   increment=1 day
     Set suite variable      ${start_date}
+    ${result_date} =    Get Current Date  result_format=%Y-%m-%d  increment=1 day
+    Set suite variable      ${result_date}
 
 *** Test Cases ***
 Add contact to program quick action
@@ -39,7 +41,7 @@ Add contact to program quick action
      Wait Until Modal Is Closed
      current page should be                 Details                                 Program__c
      Load Related List  Program Engagements
-     click new related record link    &{program}[Name] - &{contact}[FirstName] &{contact}[LastName]
-     verify details     Program Engagement Name     contains    &{program}[Name] - &{contact}[FirstName] &{contact}[LastName]
+     click new related record link    &{contact}[FirstName] &{contact}[LastName] ${result_date} : &{program}[Name]
+     verify details     Program Engagement Name     contains    &{contact}[FirstName] &{contact}[LastName] ${result_date} : &{program}[Name]
      ${programcohort_id} =            Save Current Record ID For Deletion     ProgramCohort__c
      ${programengagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

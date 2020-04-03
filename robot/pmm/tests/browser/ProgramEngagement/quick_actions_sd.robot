@@ -21,6 +21,8 @@ Setup Test Data
     Set suite variable    &{program_engagement}
     &{service} =    API Create Service   &{Program}[Id]
     Set suite variable    &{service}
+    ${today} =  Get Current Date   result_format=%Y-%m-%d
+    Set suite variable      ${today}
 
 *** Test Cases ***
 Create a new service delivery using quick action
@@ -35,8 +37,8 @@ Create a new service delivery using quick action
      Wait Until Modal Is Closed
      current page should be                 Details                                 ProgramEngagement__c
      Load Related List  Service Deliveries
-     click new related record link    &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
-     verify details     Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] - &{service}[Name]
+     click new related record link    &{contact}[FirstName] &{contact}[LastName] ${today} : &{service}[Name]
+     verify details     Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] ${today} : &{service}[Name]
      ${servicedelivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
      ${service_id} =            Save Current Record ID For Deletion     Service__c
      ${programengagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

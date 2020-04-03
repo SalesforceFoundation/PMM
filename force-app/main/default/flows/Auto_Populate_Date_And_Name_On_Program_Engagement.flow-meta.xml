@@ -356,7 +356,7 @@
                 <stringValue>TODAY() </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_11_myRule_10_A1_1350662026</name>
+        <name>formula_11_myRule_10_A1_8320439972</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -364,12 +364,38 @@
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>[ProgramEngagement__c].Program__c.Name + &#39; - &#39; + [ProgramEngagement__c].Contact__c.FirstName + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName</stringValue>
+                <stringValue>IF(
+LEN(
+[ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
+IF(
+NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [ProgramEngagement__c].Program__c.Name) &gt; 77,
+LEFT(([ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
+IF (NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10)) +
+&#39; : &#39; + [ProgramEngagement__c].Program__c.Name),77)
++ &#39;...&#39;, [ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
+IF(
+NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [ProgramEngagement__c].Program__c.Name
+)</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_2_myRule_1_A1_7626922944</name>
+        <name>formula_2_myRule_1_A1_0842822395</name>
         <dataType>String</dataType>
-        <expression>{!myVariable_current.Program__r.Name} + &#39; - &#39; + {!myVariable_current.Contact__r.FirstName} + &#39; &#39; + {!myVariable_current.Contact__r.LastName}</expression>
+        <expression>IF(
+LEN(
+{!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
+IF(
+NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
+&#39; : &#39; + {!myVariable_current.Program__r.Name}) &gt; 77,
+LEFT(({!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
+IF (NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
+&#39; : &#39; + {!myVariable_current.Program__r.Name}),77)
++ &#39;...&#39;, {!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
+IF(
+NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
+&#39; : &#39; + {!myVariable_current.Program__r.Name}
+)</expression>
     </formulas>
     <formulas>
         <processMetadataValues>
@@ -378,7 +404,7 @@
                 <stringValue>TODAY()</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_5_myRule_4_A1_2455343682</name>
+        <name>formula_5_myRule_4_A1_2191869034</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -389,7 +415,7 @@
                 <stringValue>TODAY() </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_8_myRule_7_A1_7942756698</name>
+        <name>formula_8_myRule_7_A1_1573222795</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -404,7 +430,7 @@
         <dataType>Boolean</dataType>
         <expression> NOT({!myVariable_current.AutoName_Override__c})</expression>
     </formulas>
-    <interviewLabel>Template_Program_Engagement_Name-1_InterviewLabel</interviewLabel>
+    <interviewLabel>Auto_Populate_Date_And_Name_On_Program_Engagement-2_InterviewLabel</interviewLabel>
     <isTemplate>true</isTemplate>
     <label>Template: Program Engagement Name</label>
     <processMetadataValues>
@@ -507,7 +533,7 @@
             </processMetadataValues>
             <field>EndDate__c</field>
             <value>
-                <elementReference>formula_11_myRule_10_A1_1350662026</elementReference>
+                <elementReference>formula_11_myRule_10_A1_8320439972</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -590,7 +616,7 @@
             </processMetadataValues>
             <field>Name</field>
             <value>
-                <elementReference>formula_2_myRule_1_A1_7626922944</elementReference>
+                <elementReference>formula_2_myRule_1_A1_0842822395</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -670,7 +696,7 @@
             </processMetadataValues>
             <field>ApplicationDate__c</field>
             <value>
-                <elementReference>formula_5_myRule_4_A1_2455343682</elementReference>
+                <elementReference>formula_5_myRule_4_A1_2191869034</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -750,7 +776,7 @@
             </processMetadataValues>
             <field>StartDate__c</field>
             <value>
-                <elementReference>formula_8_myRule_7_A1_7942756698</elementReference>
+                <elementReference>formula_8_myRule_7_A1_1573222795</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>

@@ -13,21 +13,15 @@ public class Stub implements System.StubProvider {
                 parameters.add(new Stub.Parameter(parameterTypes[i], parameterNames[i]));
             }
 
-            this
-                .setMessage(
-                    String.format(
-                        'No {0} found in getHandleableMethods() matching signature: {1}',
-                        new List<String>{
-                            Stub.Method.class.getName(),
-                            Stub.getSignature(
-                                void.class,
-                                returnType,
-                                methodName,
-                                parameters
-                            )
-                        }
-                    )
-                );
+            this.setMessage(
+                String.format(
+                    'No {0} found in getHandleableMethods() matching signature: {1}',
+                    new List<String>{
+                        Stub.Method.class.getName(),
+                        Stub.getSignature(void.class, returnType, methodName, parameters)
+                    }
+                )
+            );
         }
     }
 
@@ -78,7 +72,7 @@ public class Stub implements System.StubProvider {
             this.actualMethodsCalled,
             String.format(
                 'Asserting {0} getExpectedMethodsCalled() equals {0} getActualMethodsCalled()',
-                new List<String>{(List<Stub.Method>.class).getName()}
+                new List<String>{ (List<Stub.Method>.class).getName() }
             )
         );
     }
@@ -312,7 +306,7 @@ public class Stub implements System.StubProvider {
                     throw new Stub.NullParameterException(
                         String.format(
                             '{0} parameters cannot be null',
-                            new List<String>{listStubParametersType.getName()}
+                            new List<String>{ listStubParametersType.getName() }
                         )
                     );
                 }
@@ -381,17 +375,15 @@ public class Stub implements System.StubProvider {
         public void setExceptionThrownBeforeReturningValue(
             Exception exceptionThrownBeforeReturningValue
         ) {
-            this
-                .exceptionThrownBeforeReturningValue = exceptionThrownBeforeReturningValue;
+            this.exceptionThrownBeforeReturningValue = exceptionThrownBeforeReturningValue;
         }
 
         public void setExceptionThrownBeforeReturningValue(String exceptionMessage) {
-            this
-                .setExceptionThrownBeforeReturningValue(
-                    exceptionMessage == null
-                        ? null
-                        : new Stub.MethodException(exceptionMessage)
-                );
+            this.setExceptionThrownBeforeReturningValue(
+                exceptionMessage == null
+                    ? null
+                    : new Stub.MethodException(exceptionMessage)
+            );
         }
 
         public Boolean isThrowingExceptionBeforeReturningValue() {
@@ -442,8 +434,7 @@ public class Stub implements System.StubProvider {
             final String methodSignature = this.getSignature();
 
             for (Integer i = 0; i < this.getParametersSize(); i++) {
-                this
-                    .parameters[i]
+                this.parameters[i]
                     .assertArgument(expectedArguments[i], actualArguments[i], i, this);
             }
         }
@@ -482,7 +473,7 @@ public class Stub implements System.StubProvider {
         public override String toString() {
             return String.format(
                 '[{0}: {1}]',
-                new List<String>{this.instanceType.getName(), this.signature}
+                new List<String>{ this.instanceType.getName(), this.signature }
             );
         }
     }

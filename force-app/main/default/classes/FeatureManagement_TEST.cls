@@ -2,6 +2,7 @@
 public with sharing class FeatureManagement_TEST {
     private static final String ACTIVE_PROGRAMS = 'ActivePrograms';
     private static final Integer NUMBER_OF_ACTIVE_PROGRAMS = 10;
+    private static final String FAKE_EXCEPTION = 'You asked for it!';
 
     @IsTest
     private static void shouldSetPackageIntegerValue() {
@@ -64,15 +65,28 @@ public with sharing class FeatureManagement_TEST {
     }
 
     public class FeatureParameter implements FeatureManagement.FeatureParameter {
-        public Integer sendCount = 0;
+        private Integer sendCount = 0;
+        private Boolean throwsException = false;
 
         public void send() {
+            if (throwsException) {
+                throw new FakeException(FAKE_EXCEPTION);
+            }
+
             sendCount++;
-            System.debug('Send count: ' + sendCount);
         }
 
         public Integer getSendCount() {
             return sendCount;
         }
+
+        public FeatureParameter withThrowException() {
+            throwsException = true;
+
+            return this;
+        }
+    }
+
+    private class FakeException extends Exception {
     }
 }

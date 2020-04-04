@@ -47,14 +47,9 @@ public with sharing class FeatureParameters {
             final Object value = getValue();
 
             if (value instanceof Integer) {
-                System.debug(getName() + ': ' + value);
                 FeatureManagement.getInstance()
                     .setPackageIntegerValue(getName(), (Integer) value);
             }
-        }
-
-        public Integer getSendCount() {
-            return -1;
         }
 
         private String getName() {

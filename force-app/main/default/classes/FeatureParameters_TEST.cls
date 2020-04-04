@@ -57,29 +57,25 @@ public with sharing class FeatureParameters_TEST {
         featureManagementStub.assertMethodsCalled();
     }
 
-    // ----------     Method Stubs     ---------- //
-    public class GetAll extends Stub.Method {
-        public List<FeatureManagement.FeatureParameter> returnValue;
+    @IsTest
+    private static void shouldCreateTheQueryBuilderOnDemand() {
+        QueryBuilder queryBuilder = new FeatureParameters.ActivePrograms().queryBuilder;
 
-        public GetAll() {
-            super(
-                FeatureParameters.class,
-                List<FeatureManagement.FeatureParameter>.class,
-                'getAll',
-                new List<Stub.Parameter>{}
-            );
-        }
+        System.assertNotEquals(
+            null,
+            queryBuilder,
+            'Expected the queryBuilder to auto create on demand.'
+        );
+    }
 
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof FeatureParameters;
-        }
+    @IsTest
+    private static void shouldCreateTheFinderOnDemand() {
+        Finder finder = new FeatureParameters.ActivePrograms().finder;
 
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{};
-        }
-
-        public override Object getReturnValue() {
-            return this.returnValue;
-        }
+        System.assertNotEquals(
+            null,
+            finder,
+            'Expected the finder to auto create on demand.'
+        );
     }
 }

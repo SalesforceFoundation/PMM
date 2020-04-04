@@ -151,6 +151,14 @@
         <value>Success</value>
     </labels>
     <labels>
+        <fullName>TelemetryException</fullName>
+        <categories>Exception</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Error capturing metrics.</shortDescription>
+        <value>An error occurred when attempting to capture usage metrics.</value>
+    </labels>
+    <labels>
         <fullName>Util_Error</fullName>
         <categories>Exception</categories>
         <language>en_US</language>

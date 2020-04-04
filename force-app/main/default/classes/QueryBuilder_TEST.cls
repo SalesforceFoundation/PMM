@@ -88,6 +88,51 @@ public with sharing class QueryBuilder_TEST {
     }
 
     @IsTest
+    private static void shouldBuildSoqlQueryWithOrderBy() {
+        final String expectedSoqlQuery = 'SELECT Id FROM Account ORDER BY Id';
+        final String actualSoqlQuery = new QueryBuilder()
+            .withSObjectType(Account.SObjectType)
+            .withOrderBy('Id')
+            .buildSoqlQuery();
+
+        System.assertEquals(
+            expectedSoqlQuery,
+            actualSoqlQuery,
+            'The soql query string with the order by was not as expected.'
+        );
+    }
+
+    @IsTest
+    private static void shouldBuildSoqlQueryWithLimit() {
+        final String expectedSoqlQuery = 'SELECT Id FROM Account LIMIT 1';
+        final String actualSoqlQuery = new QueryBuilder()
+            .withSObjectType(Account.SObjectType)
+            .withLimit(1)
+            .buildSoqlQuery();
+
+        System.assertEquals(
+            expectedSoqlQuery,
+            actualSoqlQuery,
+            'The soql query string with limit was not as expected.'
+        );
+    }
+
+    @IsTest
+    private static void shouldNotAddWhereClauseForEmptyCondition() {
+        final String expectedSoqlQuery = 'SELECT Id FROM Account';
+        final String actualSoqlQuery = new QueryBuilder()
+            .withSObjectType(Account.SObjectType)
+            .withCondition('')
+            .buildSoqlQuery();
+
+        System.assertEquals(
+            expectedSoqlQuery,
+            actualSoqlQuery,
+            'The soql query string with a blank condition was not as expected.'
+        );
+    }
+
+    @IsTest
     private static void throwsExceptionWhenSObjectTypeIsMissing() {
         final String expectedException = System.Label.MissingSObjectType;
         String actualException;

@@ -37,13 +37,19 @@ public with sharing class TelemetryQueueable_TEST {
 
     @IsTest
     private static void shouldSendFeatureParameter() {
+        telemetryQueueable.featureParameters = new List<FeatureManagement.FeatureParameter>{
+            featureParameterStub
+        };
+        // NOTE: When the Queueable gets enqueued, it and all of its instance variables are serialized and persisted.
+        // When the Queueable is actually kicked off in its own transaction (regardless of Test.startTest() malarky),
+        // it's been deserialized into new instances, so your unit test can't actually hold a shared reference to the
+        // object that's passed to the Queueable instance that gets executed.
+        // Workaround: call execute() synchronously
+        // Thanks Mr. Reed!
         Test.startTest();
-        telemetryQueueable.enqueue(
-            new List<FeatureManagement.FeatureParameter>{ featureParameterStub }
-        );
+        telemetryQueueable.execute(null);
         Test.stopTest();
 
-        //TODO: Is this a bug or am I too tired to see my mistake?
         System.assertEquals(
             1,
             featureParameterStub.getSendCount(),
@@ -51,34 +57,24 @@ public with sharing class TelemetryQueueable_TEST {
         );
     }
 
-    // ----------     Method Stubs     ---------- //
-    public class Enqueue extends Stub.Method {
-        private List<FeatureManagement.FeatureParameter> featureParameters;
+    @IsTest
+    private static void throwsExceptionWhenFeatureParameterSendFails() {
+        String actualException;
+        telemetryQueueable.featureParameters = new List<FeatureManagement.FeatureParameter>{
+            featureParameterStub.withThrowException()
+        };
 
-        public Enqueue() {
-            super(
-                TelemetryQueueable.class,
-                Void.class,
-                'enqueue',
-                new List<Stub.Parameter>{
-                    new Stub.Parameter(
-                        List<FeatureManagement.FeatureParameter>.class,
-                        'featureParameters'
-                    )
-                }
-            );
+        Test.startTest();
+        try {
+            telemetryQueueable.execute(null);
+        } catch (Exception ex) {
+            actualException = ex.getMessage();
         }
 
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof TelemetryQueueable;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return this.featureParameters;
-        }
-
-        public override Object getReturnValue() {
-            return Void.class;
-        }
+        System.assertEquals(
+            System.Label.TelemetryException,
+            actualException,
+            'Expected the telemetry exception to be thrown.'
+        );
     }
 }

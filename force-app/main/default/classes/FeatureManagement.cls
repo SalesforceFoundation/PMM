@@ -18,8 +18,8 @@ public without sharing class FeatureManagement {
         return System.FeatureManagement.checkPackageIntegerValue(apiName);
     }
 
+    // ----------     Interface     ---------- //
     public interface FeatureParameter {
         void send();
-        Integer getSendCount();
     }
 }

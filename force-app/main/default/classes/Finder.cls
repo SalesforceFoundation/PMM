@@ -1,4 +1,4 @@
-public with sharing class Finder {
+public inherited sharing class Finder {
     private QueryBuilder queryBuilder;
 
     public Finder(QueryBuilder queryBuilder) {

@@ -1,4 +1,4 @@
-public without sharing class FeatureManagement {
+public inherited sharing class FeatureManagement {
     @TestVisible
     private static FeatureManagement instance;
 

@@ -1,4 +1,4 @@
-public with sharing class FeatureParameters {
+public inherited sharing class FeatureParameters {
     @TestVisible
      private enum DeveloperName {
         ACTIVE_PROGRAMS
@@ -13,7 +13,7 @@ public with sharing class FeatureParameters {
     }
 
     @TestVisible
-    private class ActivePrograms implements FeatureManagement.FeatureParameter {
+    private inherited sharing class ActivePrograms implements FeatureManagement.FeatureParameter {
         @TestVisible
         private QueryBuilder queryBuilder {
             get {

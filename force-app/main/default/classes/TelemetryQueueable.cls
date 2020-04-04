@@ -1,4 +1,4 @@
-public without sharing class TelemetryQueueable implements System.Queueable {
+public inherited sharing class TelemetryQueueable implements System.Queueable {
     @TestVisible
     private List<FeatureManagement.FeatureParameter> featureParameters;
 

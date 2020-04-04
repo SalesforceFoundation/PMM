@@ -1,5 +1,5 @@
 @IsTest
-public class BasicStub implements System.StubProvider {
+public with sharing class BasicStub implements System.StubProvider {
     private Map<String, List<MethodCall>> methodCallsByMethodKey = new Map<String, List<MethodCall>>();
     private Map<String, Object> returnValueByMethodKey = new Map<String, Object>();
     private Set<String> methodCallsToThrowException = new Set<String>();

@@ -1,4 +1,4 @@
-public with sharing class QueryBuilder {
+public inherited sharing class QueryBuilder {
     private SObjectType sObjectType;
     private List<String> selectFields = new List<String>();
     private List<String> conditions = new List<String>();

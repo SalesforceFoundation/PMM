@@ -1,5 +1,5 @@
 @IsTest
-private class InstallScript_TEST {
+private with sharing class InstallScript_TEST {
     private static TelemetryService_TEST.SendUsageMetrics sendUsageMetricsMethod;
     private static Stub telemetryServiceStub;
     private static TelemetryService telemetryService;

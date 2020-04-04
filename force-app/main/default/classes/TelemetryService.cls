@@ -1,4 +1,4 @@
-public without sharing class TelemetryService {
+public inherited sharing class TelemetryService {
     @TestVisible
     private FeatureParameters featureParameters {
         get {

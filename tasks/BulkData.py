@@ -36,7 +36,11 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
     }
 
     def get_project_namespace(self):
-        return self.org_config.config.get("project_namespace") if self.org_config.config.get("project_namespace") else super().get_project_namespace()
+        ns = self.org_config.config.get("project_namespace") if self.org_config.config.get("project_namespace") else super().get_project_namespace()
+        if ns in self.get_namespaces():
+            return None
+        else:
+            return ns
 
     def get_available_package_mappings(self):
         rows = [

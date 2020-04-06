@@ -22,39 +22,30 @@ public with sharing class FeatureParameters_TEST {
         final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS.name()
             .remove('_');
         final Integer expectedValue = 10;
-        final Integer ordinalValue = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS.ordinal();
+        Integer ordinalValue = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS.ordinal();
 
-        Finder_Test.FindCount findCountMethod = new Finder_Test.FindCount();
-        findCountMethod.returnValue = expectedValue;
-        final Stub finderStub = new Stub(new List<Stub.Method>{ findCountMethod });
-
-        FeatureManagement_TEST.SetPackageIntegerValue setPackageIntegerValueMethod = new FeatureManagement_TEST.SetPackageIntegerValue();
-        setPackageIntegerValueMethod.apiName = expectedName;
-        setPackageIntegerValueMethod.value = expectedValue;
-        final Stub featureManagementStub = new Stub(
-            new List<Stub.Method>{ setPackageIntegerValueMethod }
-        );
-        FeatureManagement.instance = (FeatureManagement) Test.createStub(
-            FeatureManagement.class,
-            featureManagementStub
-        );
+        BasicStub featureManagementStub = new BasicStub(FeatureManagement.class);
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
 
         List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
             .getAll();
         FeatureParameters.ActivePrograms activeProgramsParameter = (FeatureParameters.ActivePrograms) allFeatureParameters[
             ordinalValue
         ];
-        activeProgramsParameter.finder = (Finder) Test.createStub(
-            Finder.class,
-            finderStub
-        );
+        BasicStub finderStub = new BasicStub(Finder.class)
+            .withReturnValue('findCount', expectedValue);
+        activeProgramsParameter.finder = (Finder) finderStub.createMock();
 
         Test.startTest();
         activeProgramsParameter.send();
         Test.stopTest();
 
-        finderStub.assertMethodsCalled();
-        featureManagementStub.assertMethodsCalled();
+        finderStub.assertCalled('findCount');
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
     }
 
     @IsTest

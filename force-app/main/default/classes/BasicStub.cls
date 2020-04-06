@@ -4,6 +4,7 @@ public with sharing class BasicStub implements System.StubProvider {
     private Map<String, Object> returnValueByMethodKey = new Map<String, Object>();
     private Set<String> methodCallsToThrowException = new Set<String>();
     private Type objType;
+    public String testExceptionMessage = 'You asked for it!';
 
     public BasicStub(Type objType) {
         this.objType = objType;
@@ -72,7 +73,7 @@ public with sharing class BasicStub implements System.StubProvider {
         record(methodCall);
 
         if (methodCallsToThrowException.contains(methodCall.getMethodKey())) {
-            throw new StubException('You asked for it!');
+            throw new StubException(testExceptionMessage);
         }
 
         if (returnValueByMethodKey.containsKey(methodCall.getMethodKey())) {

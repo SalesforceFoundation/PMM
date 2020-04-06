@@ -1,42 +1,39 @@
 @IsTest
 private with sharing class InstallScript_TEST {
-    private static TelemetryService_TEST.SendUsageMetrics sendUsageMetricsMethod;
-    private static Stub telemetryServiceStub;
+    private static BasicStub telemetryServiceStub = new BasicStub(TelemetryService.class);
     private static TelemetryService telemetryService;
     private static InstallScript installScript = new InstallScript();
 
     @IsTest
     private static void shouldNotCallTelemetryServiceOnInstall() {
-        setupTelemetryServiceStubWithNoMethods();
+        telemetryService = (TelemetryService) telemetryServiceStub.createMock();
         Test.testInstall(installScript, null);
 
-        telemetryServiceStub.assertMethodsCalled();
+        telemetryServiceStub.assertNotCalled('sendUsageMetrics');
     }
 
     @IsTest
     private static void shouldCallTelemetryServiceOnUpdate() {
-        setupTelemetryServiceStub();
+        telemetryService = (TelemetryService) telemetryServiceStub.createMock();
         installScript.telemetryService = telemetryService;
         Test.testInstall(installScript, new Version(1, 0));
 
-        telemetryServiceStub.assertMethodsCalled();
+        telemetryServiceStub.assertCalled('sendUsageMetrics');
     }
 
     @IsTest
     private static void shouldCallTelemetryServiceOnPush() {
-        setupTelemetryServiceStub();
+        telemetryService = (TelemetryService) telemetryServiceStub.createMock();
         installScript.telemetryService = telemetryService;
         Test.testInstall(installScript, new Version(1, 0), true);
 
-        telemetryServiceStub.assertMethodsCalled();
+        telemetryServiceStub.assertCalled('sendUsageMetrics');
     }
 
     @IsTest
     private static void shouldSendEmailWhenExceptionIsThrown() {
-        setupTelemetryServiceStub();
-        sendUsageMetricsMethod.setExceptionThrownBeforeReturningValue(
-            new TestException('Intentionally Exceptional')
-        );
+        telemetryServiceStub.withThrowException('sendUsageMetrics');
+        telemetryService = (TelemetryService) telemetryServiceStub.createMock();
         installScript.telemetryService = telemetryService;
 
         Test.testInstall(installScript, new Version(1, 0), true);
@@ -59,29 +56,5 @@ private with sharing class InstallScript_TEST {
             telemetryService,
             'Expected an instance of the telemetry service to be created.'
         );
-    }
-
-    // ----------     Helpers     ---------- //
-    private static void setupTelemetryServiceStub() {
-        sendUsageMetricsMethod = new TelemetryService_TEST.SendUsageMetrics();
-        telemetryServiceStub = new Stub(new List<Stub.Method>{ sendUsageMetricsMethod });
-
-        telemetryService = (TelemetryService) Test.createStub(
-            TelemetryService.class,
-            telemetryServiceStub
-        );
-    }
-
-    private static void setupTelemetryServiceStubWithNoMethods() {
-        sendUsageMetricsMethod = new TelemetryService_TEST.SendUsageMetrics();
-        telemetryServiceStub = new Stub(new List<Stub.Method>());
-
-        telemetryService = (TelemetryService) Test.createStub(
-            TelemetryService.class,
-            telemetryServiceStub
-        );
-    }
-
-    private class TestException extends Exception {
     }
 }

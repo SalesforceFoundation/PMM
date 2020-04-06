@@ -34,36 +34,7 @@ public with sharing class FeatureManagement_TEST {
         );
     }
 
-    // ----------     Method Stubs     ---------- //
-    public class SetPackageIntegerValue extends Stub.Method {
-        public String apiName;
-        public Integer value;
-
-        public SetPackageIntegerValue() {
-            super(
-                FeatureManagement.class,
-                Void.class,
-                'setPackageIntegerValue',
-                new List<Stub.Parameter>{
-                    new Stub.Parameter(String.class, 'apiName'),
-                    new Stub.Parameter(Integer.class, 'value')
-                }
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof FeatureManagement;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{ this.apiName, this.value };
-        }
-
-        public override Object getReturnValue() {
-            return Void.class;
-        }
-    }
-
+    // ----------     Test Implementation     ---------- //
     public class FeatureParameter implements FeatureManagement.FeatureParameter {
         private Integer sendCount = 0;
         private Boolean throwsException = false;

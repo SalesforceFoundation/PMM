@@ -1,14 +1,15 @@
 @IsTest
 public with sharing class TelemetryQueueable_TEST {
     private static TelemetryQueueable telemetryQueueable = new TelemetryQueueable();
-    private static FeatureManagement_TEST.FeatureParameter featureParameterStub = new FeatureManagement_TEST.FeatureParameter();
+    // Implementing the interface in the test class because we cannot stub an inner class
+    private static FeatureManagement_TEST.FeatureParameter testParameter = new FeatureManagement_TEST.FeatureParameter();
 
     @IsTest
     private static void shouldEnqueueJob() {
         final String className = TelemetryQueueable.class.getName();
         Test.startTest();
         telemetryQueueable.enqueue(
-            new List<FeatureManagement.FeatureParameter>{ featureParameterStub }
+            new List<FeatureManagement.FeatureParameter>{ testParameter }
         );
         Test.stopTest();
 
@@ -38,7 +39,7 @@ public with sharing class TelemetryQueueable_TEST {
     @IsTest
     private static void shouldSendFeatureParameter() {
         telemetryQueueable.featureParameters = new List<FeatureManagement.FeatureParameter>{
-            featureParameterStub
+            testParameter
         };
         // NOTE: When the Queueable gets enqueued, it and all of its instance variables are serialized and persisted.
         // When the Queueable is actually kicked off in its own transaction (regardless of Test.startTest() malarky),
@@ -52,7 +53,7 @@ public with sharing class TelemetryQueueable_TEST {
 
         System.assertEquals(
             1,
-            featureParameterStub.getSendCount(),
+            testParameter.getSendCount(),
             'Expected each parameter to be sent.'
         );
     }
@@ -61,7 +62,7 @@ public with sharing class TelemetryQueueable_TEST {
     private static void throwsExceptionWhenFeatureParameterSendFails() {
         String actualException;
         telemetryQueueable.featureParameters = new List<FeatureManagement.FeatureParameter>{
-            featureParameterStub.withThrowException()
+            testParameter.withThrowException()
         };
 
         Test.startTest();

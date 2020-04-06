@@ -48,28 +48,4 @@ public with sharing class TelemetryService_TEST {
             'Expected the feature parameters instance to be created on demand.'
         );
     }
-
-    // ----------     Method Stubs     ---------- //
-    public class SendUsageMetrics extends Stub.Method {
-        public SendUsageMetrics() {
-            super(
-                TelemetryService.class,
-                Void.class,
-                'sendUsageMetrics',
-                new List<Stub.Parameter>{}
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof TelemetryService;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{};
-        }
-
-        public override Object getReturnValue() {
-            return Void.class;
-        }
-    }
 }

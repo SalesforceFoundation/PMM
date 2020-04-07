@@ -5,6 +5,7 @@ project:
         name: Program Management Module
         namespace: pmdm
         api_version: "46.0"
+        install_class: InstallScript
     source_format: sfdx
     git:
         repo_url: https://github.com/SalesforceFoundation/PMM

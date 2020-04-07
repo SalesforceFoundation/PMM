@@ -32,6 +32,32 @@ private with sharing class InstallScript_TEST {
 
     @IsTest
     private static void shouldSendEmailWhenExceptionIsThrown() {
+        String actualException;
+        telemetryServiceStub.withThrowException('sendUsageMetrics');
+        telemetryService = (TelemetryService) telemetryServiceStub.createMock();
+        installScript.telemetryService = telemetryService;
+        installScript.emailTo = null;
+
+        try {
+            Test.testInstall(installScript, new Version(1, 0), true);
+        } catch (Exception ex) {
+            actualException = ex.getMessage();
+        }
+
+        System.assertEquals(
+            null,
+            actualException,
+            'Exception should have been caught and the install should continue.'
+        );
+        System.assertEquals(
+            0,
+            Limits.getEmailInvocations(),
+            'Expected the email to have thrown an exception and fail.'
+        );
+    }
+
+    @IsTest
+    private static void shouldContinueInstallWhenEmailFails() {
         telemetryServiceStub.withThrowException('sendUsageMetrics');
         telemetryService = (TelemetryService) telemetryServiceStub.createMock();
         installScript.telemetryService = telemetryService;

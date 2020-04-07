@@ -1,10 +1,11 @@
 public without sharing class InstallScript implements InstallHandler {
     private static final String EMAIL_REPLY_TO = 'donotreply@salesforce.org';
-    private static final String EMAIL_TO = 'errors@salesforcefoundation.org';
     private static final String EMAIL_SUBJECT = 'PMM Install Errors';
     private static final String EMAIL_SENDER = 'PMM Install Script';
     private static final String EMAIL_MESSAGE = 'Org ID {0} encountered this error: {1}';
     private InstallContext context;
+    @TestVisible
+    private String emailTo = 'errors@salesforcefoundation.org';
 
     @TestVisible
     private TelemetryService telemetryService {
@@ -55,7 +56,7 @@ public without sharing class InstallScript implements InstallHandler {
             mail.setReplyTo(EMAIL_REPLY_TO);
             mail.setSenderDisplayName(EMAIL_SENDER);
             mail.setSubject(EMAIL_SUBJECT);
-            mail.setToAddresses(new List<String>{ EMAIL_TO });
+            mail.setToAddresses(new List<String>{ emailTo });
             mail.setPlainTextBody(message);
 
             Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{ mail });

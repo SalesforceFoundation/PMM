@@ -9,6 +9,13 @@
         <value>Add Service Delivery</value>
     </labels>
     <labels>
+        <fullName>Anonymous</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Anonymous</shortDescription>
+        <value>Anonymous</value>
+    </labels>
+    <labels>
         <fullName>Cancel</fullName>
         <language>en_US</language>
         <protected>true</protected>

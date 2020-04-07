@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>Contact__c</name>
-    <help>Una búsqueda del contacto que participa en su programa. El nombre del contacto se utiliza con Nombre de programa en el proceso de Process Builder titulado Plantilla: Nombre de Participación en programa que rellena el Nombre de Participación en programa.</help>
-    <relationshipLabel>Participaciones en programa</relationshipLabel>
-    <label>Contacto</label>
-</CustomFieldTranslation>

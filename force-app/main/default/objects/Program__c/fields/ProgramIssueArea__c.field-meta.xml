@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ProgramIssueArea__c</fullName>
-    <description>Picklist values describe the issue area addressed by the Program. You can edit the picklist values displayed for this field.</description>
+    <description>The issue area addressed by the Program. Values are determined by your Admin.</description>
     <externalId>false</externalId>
-    <inlineHelpText>Picklist values describe the issue area addressed by the Program. You can edit the picklist values displayed for this field.</inlineHelpText>
+    <inlineHelpText>The issue area addressed by the Program. Values are determined by your Admin.</inlineHelpText>
     <label>Program Issue Area</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

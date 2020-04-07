@@ -2,9 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Contact__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
-    <description>A lookup to the Contact receiving the Service Delivery.</description>
     <externalId>false</externalId>
-    <inlineHelpText>A lookup to the Contact receiving the Service Delivery.</inlineHelpText>
     <label>Client</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Service Deliveries</relationshipLabel>

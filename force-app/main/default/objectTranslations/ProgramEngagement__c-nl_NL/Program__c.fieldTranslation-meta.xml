@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>Program__c</name>
-    <help>Opzoekopdracht naar het programma waarvoor/waaraan Contactpersoon een aanvraag indient, deelneemt of heeft deelgenomen.</help>
-    <relationshipLabel>Programmabetrokkenheden</relationshipLabel>
-    <label>Programma</label>
-</CustomFieldTranslation>

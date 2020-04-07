@@ -3,10 +3,10 @@ public with sharing class TelemetryQueueable_TEST {
     private static TelemetryQueueable telemetryQueueable = new TelemetryQueueable();
     // Implementing the interface in the test class because we cannot stub an inner class
     private static FeatureManagement_TEST.FeatureParameter testParameter = new FeatureManagement_TEST.FeatureParameter();
+    private static final String APEX_CLASS_NAME = 'TelemetryQueueable';
 
     @IsTest
     private static void shouldEnqueueJob() {
-        final String className = TelemetryQueueable.class.getName();
         Test.startTest();
         telemetryQueueable.enqueue(
             new List<FeatureManagement.FeatureParameter>{ testParameter }
@@ -16,7 +16,7 @@ public with sharing class TelemetryQueueable_TEST {
         List<AsyncApexJob> asyncJobs = [
             SELECT Id
             FROM AsyncApexJob
-            WHERE ApexClass.Name = :className
+            WHERE ApexClass.Name = :APEX_CLASS_NAME
         ];
         System.assertEquals(1, asyncJobs.size(), 'Expected the job to be enqueued.');
     }

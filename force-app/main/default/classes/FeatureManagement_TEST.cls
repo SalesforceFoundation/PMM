@@ -6,7 +6,6 @@ public with sharing class FeatureManagement_TEST {
 
     @IsTest
     private static void shouldSetPackageIntegerValue() {
-        // TODO: Verify this does not actually set the integer value for the org!
         FeatureManagement.getInstance()
             .setPackageIntegerValue(ACTIVE_PROGRAMS, NUMBER_OF_ACTIVE_PROGRAMS);
 

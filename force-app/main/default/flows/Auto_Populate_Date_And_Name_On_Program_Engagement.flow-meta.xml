@@ -356,7 +356,7 @@
                 <stringValue>TODAY() </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_11_myRule_10_A1_9668454680</name>
+        <name>formula_11_myRule_10_A1_5830083055</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -378,11 +378,24 @@ IF(
 NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
 &#39; : &#39; + [ProgramEngagement__c].Program__c.Name
 ), 
-[ProgramEngagement__c].Program__c.Name + &#39; - &#39; + $Label.Anonymous )
+IF(
+LEN(
+$Label.Anonymous+ &#39; &#39; +
+IF(
+NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [ProgramEngagement__c].Program__c.Name) &gt; 77,
+LEFT(($Label.Anonymous + &#39; &#39; +
+IF (NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10)) +
+&#39; : &#39; + [ProgramEngagement__c].Program__c.Name),77)
++ &#39;...&#39;, $Label.Anonymous + &#39; &#39; +
+IF(
+NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [ProgramEngagement__c].Program__c.Name
+))
 </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_2_myRule_1_A1_8853239994</name>
+        <name>formula_2_myRule_1_A1_0369733698</name>
         <dataType>String</dataType>
         <expression>IF(NOT(ISBLANK({!myVariable_current.Contact__c})),IF(
 LEN(
@@ -398,7 +411,20 @@ IF(
 NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
 &#39; : &#39; + {!myVariable_current.Program__r.Name}
 ), 
-{!myVariable_current.Program__r.Name} + &#39; - &#39; + {!$Label.Anonymous} )</expression>
+IF(
+LEN(
+{!$Label.Anonymous}+ &#39; &#39; +
+IF(
+NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
+&#39; : &#39; + {!myVariable_current.Program__r.Name}) &gt; 77,
+LEFT(({!$Label.Anonymous} + &#39; &#39; +
+IF (NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
+&#39; : &#39; + {!myVariable_current.Program__r.Name}),77)
++ &#39;...&#39;, {!$Label.Anonymous} + &#39; &#39; +
+IF(
+NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
+&#39; : &#39; + {!myVariable_current.Program__r.Name}
+))</expression>
     </formulas>
     <formulas>
         <processMetadataValues>
@@ -407,7 +433,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                 <stringValue>TODAY()</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_5_myRule_4_A1_7101312674</name>
+        <name>formula_5_myRule_4_A1_1951843420</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -418,7 +444,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                 <stringValue>TODAY() </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_8_myRule_7_A1_7251953083</name>
+        <name>formula_8_myRule_7_A1_0428341055</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -433,7 +459,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <dataType>Boolean</dataType>
         <expression> NOT({!myVariable_current.AutoName_Override__c})</expression>
     </formulas>
-    <interviewLabel>Auto_Populate_Date_And_Name_On_Program_Engagement-8_InterviewLabel</interviewLabel>
+    <interviewLabel>Auto_Populate_Date_And_Name_On_Program_Engagement-9_InterviewLabel</interviewLabel>
     <isTemplate>true</isTemplate>
     <label>Template: Program Engagement Name</label>
     <processMetadataValues>
@@ -536,7 +562,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
             </processMetadataValues>
             <field>EndDate__c</field>
             <value>
-                <elementReference>formula_11_myRule_10_A1_9668454680</elementReference>
+                <elementReference>formula_11_myRule_10_A1_5830083055</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -619,7 +645,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
             </processMetadataValues>
             <field>Name</field>
             <value>
-                <elementReference>formula_2_myRule_1_A1_8853239994</elementReference>
+                <elementReference>formula_2_myRule_1_A1_0369733698</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -699,7 +725,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
             </processMetadataValues>
             <field>ApplicationDate__c</field>
             <value>
-                <elementReference>formula_5_myRule_4_A1_7101312674</elementReference>
+                <elementReference>formula_5_myRule_4_A1_1951843420</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -779,7 +805,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
             </processMetadataValues>
             <field>StartDate__c</field>
             <value>
-                <elementReference>formula_8_myRule_7_A1_7251953083</elementReference>
+                <elementReference>formula_8_myRule_7_A1_0428341055</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>

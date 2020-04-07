@@ -6,67 +6,67 @@
         <visible>true</visible>
     </applicationVisibilities>
     <classAccesses>
-        <apexClass>FieldSetController</apexClass>
+        <apexClass>%%%NAMESPACE%%%FieldSetController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>FieldSetController_TEST</apexClass>
+        <apexClass>%%%NAMESPACE%%%FieldSetController_TEST</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>FieldSetService</apexClass>
+        <apexClass>%%%NAMESPACE%%%FieldSetService</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>FieldSetService_TEST</apexClass>
+        <apexClass>%%%NAMESPACE%%%FieldSetService_TEST</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ProgramEngagementSelector</apexClass>
+        <apexClass>%%%NAMESPACE%%%ProgramEngagementSelector</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ProgramEngagementSelector_TEST</apexClass>
+        <apexClass>%%%NAMESPACE%%%ProgramEngagementSelector_TEST</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ProgramService</apexClass>
+        <apexClass>%%%NAMESPACE%%%ProgramService</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ProgramService_TEST</apexClass>
+        <apexClass>%%%NAMESPACE%%%ProgramService_TEST</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ProgramTestDataFactory</apexClass>
+        <apexClass>%%%NAMESPACE%%%ProgramTestDataFactory</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ServiceDeliveryController</apexClass>
+        <apexClass>%%%NAMESPACE%%%ServiceDeliveryController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ServiceDeliveryController_TEST</apexClass>
+        <apexClass>%%%NAMESPACE%%%ServiceDeliveryController_TEST</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ServiceSelector</apexClass>
+        <apexClass>%%%NAMESPACE%%%ServiceSelector</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ServiceSelector_TEST</apexClass>
+        <apexClass>%%%NAMESPACE%%%ServiceSelector_TEST</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ServiceService</apexClass>
+        <apexClass>%%%NAMESPACE%%%ServiceService</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ServiceService_TEST</apexClass>
+        <apexClass>%%%NAMESPACE%%%ServiceService_TEST</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>Stub</apexClass>
+        <apexClass>%%%NAMESPACE%%%Stub</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <custom>true</custom>
@@ -89,25 +89,10 @@
         <editable>true</editable>
         <field>Account.BillingAddress</field>
         <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.CleanStatus</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.DandbCompanyId</field>
-        <readable>true</readable>
-    </fieldPermissions>
+    </fieldPermissions>    
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.Description</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.DunsNumber</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -118,21 +103,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.Industry</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Account.Jigsaw</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.NaicsCode</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.NaicsDesc</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -172,27 +142,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Account.Sic</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Account.SicDesc</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Account.Site</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Account.TickerSymbol</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.Tradestyle</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -203,11 +153,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.Website</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.YearStarted</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -228,11 +173,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Contact.Birthdate</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.CleanStatus</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -277,13 +217,8 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Contact.IsClient__c</field>
+        <field>%%%NAMESPACE%%%Contact.IsClient__c</field>
         <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Contact.Jigsaw</field>
-        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -329,19 +264,19 @@
         <layout>Contact-%%%NAMESPACE%%%Program Management</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>ProgramCohort__c-%%%NAMESPACE%%%Program Cohort Layout</layout>
+        <layout>%%%NAMESPACE%%%ProgramCohort__c-%%%NAMESPACE%%%Program Cohort Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>ProgramEngagement__c-%%%NAMESPACE%%%Program Engagement Layout</layout>
+        <layout>%%%NAMESPACE%%%ProgramEngagement__c-%%%NAMESPACE%%%Program Engagement Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Program__c-%%%NAMESPACE%%%Program Layout</layout>
+        <layout>%%%NAMESPACE%%%Program__c-%%%NAMESPACE%%%Program Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>ServiceDelivery__c-%%%NAMESPACE%%%Service Delivery Layout</layout>
+        <layout>%%%NAMESPACE%%%ServiceDelivery__c-%%%NAMESPACE%%%Service Delivery Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Service__c-%%%NAMESPACE%%%Service Layout</layout>
+        <layout>%%%NAMESPACE%%%Service__c-%%%NAMESPACE%%%Service Layout</layout>
     </layoutAssignments>
     <objectPermissions>
         <allowCreate>true</allowCreate>
@@ -362,27 +297,27 @@
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <tabVisibilities>
-        <tab>Bulk_Service_Deliveries</tab>
+        <tab>%%%NAMESPACE%%%Bulk_Service_Deliveries</tab>
         <visibility>Hidden</visibility>
     </tabVisibilities>
     <tabVisibilities>
-        <tab>ProgramCohort__c</tab>
+        <tab>%%%NAMESPACE%%%ProgramCohort__c</tab>
         <visibility>Hidden</visibility>
     </tabVisibilities>
     <tabVisibilities>
-        <tab>ProgramEngagement__c</tab>
+        <tab>%%%NAMESPACE%%%ProgramEngagement__c</tab>
         <visibility>Hidden</visibility>
     </tabVisibilities>
     <tabVisibilities>
-        <tab>Program__c</tab>
+        <tab>%%%NAMESPACE%%%Program__c</tab>
         <visibility>Hidden</visibility>
     </tabVisibilities>
     <tabVisibilities>
-        <tab>ServiceDelivery__c</tab>
+        <tab>%%%NAMESPACE%%%ServiceDelivery__c</tab>
         <visibility>Hidden</visibility>
     </tabVisibilities>
     <tabVisibilities>
-        <tab>Service__c</tab>
+        <tab>%%%NAMESPACE%%%Service__c</tab>
         <visibility>Hidden</visibility>
     </tabVisibilities>
     <tabVisibilities>

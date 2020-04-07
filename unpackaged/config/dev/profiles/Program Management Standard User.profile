@@ -217,7 +217,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>%%%NAMESPACE%%%Contact.IsClient__c</field>
+        <field>Contact.%%%NAMESPACE%%%IsClient__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>

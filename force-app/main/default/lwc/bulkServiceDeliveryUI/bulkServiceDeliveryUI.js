@@ -5,7 +5,6 @@ import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
 import Label_Required from "@salesforce/label/c.Required";
 
-import serviceDeliveries from "@salesforce/label/c.Service_Deliveries";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
@@ -25,7 +24,6 @@ export default class BulkServiceDeliveryUI extends LightningElement {
         addServiceDelivery: addServiceDelivery,
         saved: saved,
         saving: saving,
-        serviceDeliveries: serviceDeliveries,
         required: Label_Required,
     };
     fields = {

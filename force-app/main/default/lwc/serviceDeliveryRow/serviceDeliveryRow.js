@@ -107,10 +107,6 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
 
-    connectedCallback() {
-        loadStyle(this, pmmFolder + "/hideHelpIcons.css");
-    }
-
     autoSave() {
         let deliverySubmit = this.template.querySelector(".sd-submit");
         if (deliverySubmit) {

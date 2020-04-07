@@ -121,14 +121,6 @@
         <value>Select Service</value>
     </labels>
     <labels>
-        <fullName>Service_Deliveries</fullName>
-        <categories>Service Delivery</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Service Deliveries</shortDescription>
-        <value>Service Deliveries</value>
-    </labels>
-    <labels>
         <fullName>Service_Delivery_Contact_Without_Programs</fullName>
         <language>en_US</language>
         <protected>true</protected>

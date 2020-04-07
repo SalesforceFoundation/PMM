@@ -1,57 +1,13 @@
 <template>
     <lightning-card>
-        <div class="slds-p-left_medium slds-p-right_xx-large">
-            <div
-                class="slds-p-horizontal_small slds-text-heading_large slds-m-bottom_x-large"
-            >
-                {labels.serviceDeliveries}
-            </div>
-            <div class="slds-text-title_caps">
-                <lightning-layout class="slds-grid_vertical-align-center">
-                    <template for:each={fieldSet} for:item="field">
-                        <lightning-layout-item
-                            size={field.size}
-                            key={field.apiName}
-                            class="slds-p-horizontal_small"
-                        >
-                            <template if:true={field.isRequired}>
-                                <strong>{field.label}</strong>
-                                <template if:true={field.helpText}>
-                                    <lightning-helptext
-                                        content={field.helpText}
-                                        icon-name="utility:info"
-                                        class="displayHelpText"
-                                    ></lightning-helptext>
-                                </template>
-                                <strong
-                                    style="color: red;"
-                                    class="slds-p-left_xx-small"
-                                    aria-label={labels.required}
-                                    >*</strong
-                                >
-                            </template>
-
-                            <template if:false={field.isRequired}>
-                                <strong>{field.label}</strong>
-                                <template if:true={field.helpText}>
-                                    <lightning-helptext
-                                        content={field.helpText}
-                                        icon-name="utility:info"
-                                        class="displayHelpText"
-                                    ></lightning-helptext>
-                                </template>
-                            </template>
-                        </lightning-layout-item>
-                    </template>
-                    <lightning-layout-item
-                        size="1"
-                        class="slds-p-horizontal_xx-small"
-                    ></lightning-layout-item>
-                </lightning-layout>
-            </div>
+        <div class="slds-p-horizontal_medium">
             <template if:true={serviceDeliveries}>
                 <template for:each={serviceDeliveries} for:item="delivery">
-                    <div key={delivery.index}>
+                    <div
+                        key={delivery.index}
+                        class="slds-box slds-m-bottom_medium"
+                        style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10)"
+                    >
                         <c-service-delivery-row
                             default-values={defaultValues}
                             field-set={fieldSet}

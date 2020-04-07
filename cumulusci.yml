@@ -21,24 +21,16 @@ orgs:
         prerelease:
             config_file: orgs/prerelease.json
             days: 7
-        npsp:
-            config_file: orgs/npsp.json
-            days: 7
-        npsp_namespaced:
-            config_file: orgs/npsp.json
-            days: 7
-            namespaced: True
+
+sources:
+    npsp:
+        github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
     cache_namespaces_in_org_config:
         description: Caches namespaces information in org_config
         class_path: tasks.namespaces.CacheNamespaces
         group: Namespaces
-
-    namespace_execute_anonymous:
-        description: Execute anonymous apex via the tooling api if namespace is used.
-        class_path: tasks.namespaces.ExecuteAnonymousTask
-        group: Salesforce
 
     robot:
         options:
@@ -87,6 +79,23 @@ tasks:
                 - "unable to obtain exclusive access to this record"
                 - "UNABLE_TO_LOCK_ROW"
             retry_always: True
+
+    disable_npsp_triggers:
+        class_path: cumulusci.tasks.salesforce.trigger_handlers.SetTDTMHandlerStatus
+        description: "Disable all NPSP Trigger Handlers"
+        options:
+            active: False
+            namespace: npsp
+            restore_file: trigger_status.yml
+    
+    restore_npsp_triggers:
+        class_path: cumulusci.tasks.salesforce.trigger_handlers.SetTDTMHandlerStatus
+        description: "Restore all NPSP Trigger Handlers"
+        options:
+            restore: True
+            namespace: npsp
+            restore_file: trigger_status.yml
+
     dx:
         group: "Salesforce DX"
         description: "Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option"
@@ -168,64 +177,29 @@ flows:
 
     insert_data:
         steps:
-            010:
+            1:
                 task: cache_namespaces_in_org_config
-            100:
-                flow: insert_bulk_data
-            210:
-                task: execute_anon
-                options:
-                    path: "data/scripts/delete_sample_contacts_and_accounts.apex"
-
-            999:
+            2:
+                task: disable_npsp_triggers
+                when: "'npsp' in org_config.namespace_info.namespaces"
+            3:
+                task: insert_bulk_data
+            4:
+                task: restore_npsp_triggers
+                when: "'npsp' in org_config.namespace_info.namespaces"
+            5:
                 task: execute_anon
                 options:
                     path: "data/scripts/update_all_records_as_recently_viewed.apex"
 
-    npsp_post_insert_bulk_data:
-        steps:
-            100:
-                task: execute_anon
-                options:
-                    path: "data/scripts/npsp/de-duplicate_npsp_relationships.apex"
-                when: "'npsp' in org_config.namespace_info.namespaces"
-
-    npsp_pre_insert_bulk_data:
-        steps:
-            010:
-                task: execute_anon
-                options:
-                    path: "data/scripts/npsp/set_npsp_gender_relationship_setting.apex"
-                when: "'npsp' in org_config.namespace_info.namespaces"
-
-    insert_bulk_data:
-        steps:
-            010:
-                flow: npsp_pre_insert_bulk_data
-            100:
-                task: insert_bulk_data
-            210:
-                flow: npsp_post_insert_bulk_data
-
-    update_admin_profile:
-        steps:
-            01:
-                task: cache_namespaces_in_org_config
-
     config_unmanaged:
         steps:
-            101:
-                flow: update_admin_profile
-            200:
+            3:
                 flow: insert_data
 
-    config_unmanaged_namespaced:
+    config_managed:
         steps:
-            10:
-                task: update_admin_profile
-            100:
-                flow: update_admin_profile
-            200:
+            3:
                 flow: insert_data
 
     config_qa:
@@ -242,25 +216,15 @@ flows:
             201:
                 task: deploy_dev_config
 
-    config_dev_namespaced:
+    config_regression:
         steps:
-            100:
-                task: deploy_post
-            200:
-                flow: config_unmanaged_namespaced
-            201:
-                task: deploy_dev_config
+            0.5:
+                flow: install_npsp
 
-    dev_org_namespaced:
+    install_npsp:
         steps:
             1:
-                flow: dependencies
-            2:
-                flow: deploy_unmanaged
-            3:
-                flow: config_dev_namespaced
-            4:
-                task: snapshot_changes
+                flow: npsp:install_prod
 
 plans:
     install:

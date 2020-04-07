@@ -248,6 +248,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isError = true;
         // TODO: show this in a tooltip on the lightning:icon on hover and keyboard focus; probably slds-tooltip
         this.rowError = handleError(event, false, "dismissible", true);
+        event.detail.index = this.index;
+        this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
     }
 
     handleSuccess(event) {
@@ -255,6 +257,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
+        this.dispatchEvent(new CustomEvent("clearerror", { detail: this.index }));
     }
 
     handleSubmit(event) {
@@ -390,20 +393,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleSaveEnd() {
         this.isSaving = false;
         this.isSaved = true;
-    }
-
-    //Temporary CSS Overrides.
-    //TODO : Update when shadow-dom styling options are available.
-    renderedCallback() {
-        if (this.hasRendered) return;
-        this.hasRendered = true;
-        const style = document.createElement("style");
-        style.innerText = `
-        .sd-input .slds-form-element__help {
-            position: absolute;
-            }
-        `;
-        this.template.querySelector("div.style-target").appendChild(style);
     }
 
     onSave(event) {

@@ -16,6 +16,20 @@
         <value>Cancel</value>
     </labels>
     <labels>
+        <fullName>Done</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Done</shortDescription>
+        <value>Done</value>
+    </labels>
+    <labels>
+        <fullName>Add_Entry</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Entry</shortDescription>
+        <value>Add Entry</value>
+    </labels>
+    <labels>
         <fullName>Close</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -127,6 +141,14 @@
         <protected>true</protected>
         <shortDescription>Service Deliveries</shortDescription>
         <value>Service Deliveries</value>
+    </labels>
+    <labels>
+        <fullName>Service_Deliveries_Added</fullName>
+        <categories>Service Delivery</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service Deliveries Added</shortDescription>
+        <value>Service Deliveries Added</value>
     </labels>
     <labels>
         <fullName>Service_Delivery_Contact_Without_Programs</fullName>

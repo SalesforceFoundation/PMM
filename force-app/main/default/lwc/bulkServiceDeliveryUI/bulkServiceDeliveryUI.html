@@ -1,38 +1,64 @@
 <template>
-    <lightning-card>
-        <div class="slds-p-horizontal_medium">
-            <template if:true={serviceDeliveries}>
-                <template for:each={serviceDeliveries} for:item="delivery">
+    <div class="bsdt">
+        <lightning-card>
+            <div class="slds-p-horizontal_medium">
+                <template if:true={serviceDeliveries}>
+                    <template for:each={serviceDeliveries} for:item="delivery">
+                        <div
+                            key={delivery.index}
+                            class="slds-box slds-m-bottom_medium bsdt-shadow"
+                        >
+                            <c-service-delivery-row
+                                default-values={defaultValues}
+                                field-set={fieldSet}
+                                index={delivery.index}
+                                ondelete={handleDelete}
+                                onerror={handleRowError}
+                                onclearerror={handleClearError}
+                                row-count={rowCount}
+                            ></c-service-delivery-row>
+                        </div>
+                    </template>
+                </template>
+                <template if:true={hideFooter}>
                     <div
-                        key={delivery.index}
-                        class="slds-box slds-m-bottom_medium"
-                        style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10)"
+                        class="slds-m-top_xx-large slds-p-top_xx-large slds-p-bottom_xx-large"
                     >
-                        <c-service-delivery-row
-                            default-values={defaultValues}
-                            field-set={fieldSet}
-                            index={delivery.index}
-                            ondelete={handleDelete}
-                            row-count={rowCount}
-                        ></c-service-delivery-row>
+                        <lightning-layout class="slds-grid_vertical-align-center">
+                            <lightning-layout-item
+                                flexibility="auto, no-grow"
+                                class="slds-p-left_small"
+                            >
+                                <lightning-button
+                                    variant="brand"
+                                    icon-name="utility:add"
+                                    label={labels.addServiceDelivery}
+                                    onclick={addDelivery}
+                                ></lightning-button>
+                            </lightning-layout-item>
+                        </lightning-layout>
                     </div>
                 </template>
-            </template>
-            <div class="slds-m-top_xx-large slds-p-top_xx-large slds-p-bottom_xx-large">
-                <lightning-layout class="slds-grid_vertical-align-center">
-                    <lightning-layout-item
-                        flexibility="auto, no-grow"
-                        class="slds-p-left_small"
-                    >
-                        <lightning-button
-                            variant="brand"
-                            icon-name="utility:add"
-                            label={labels.addServiceDelivery}
-                            onclick={addDelivery}
-                        ></lightning-button>
-                    </lightning-layout-item>
-                </lightning-layout>
             </div>
-        </div>
-    </lightning-card>
+
+            <template if:false={hideFooter}>
+                <div slot="footer" class="slds-text-align_right">
+                    <lightning-button
+                        variant="brand-outline"
+                        icon-name="utility:add"
+                        label={labels.addEntry}
+                        onclick={addDelivery}
+                        class="slds-p-right_medium"
+                    ></lightning-button>
+                    <lightning-button
+                        onclick={handleDone}
+                        variant="brand"
+                        label={labels.done}
+                        disabled={resetDisabled}
+                        title={doneButtonTitle}
+                    ></lightning-button>
+                </div>
+            </template>
+        </lightning-card>
+    </div>
 </template>

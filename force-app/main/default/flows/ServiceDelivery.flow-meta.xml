@@ -33,12 +33,13 @@
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>[ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [ServiceDelivery__c].Contact__c.LastName + &#39; - &#39; + [ServiceDelivery__c].Service__c.Name </stringValue>
+                <stringValue>IF(LEN([ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([ServiceDelivery__c].DeliveryDate__c)),  TEXT([ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [ServiceDelivery__c].Service__c.Name) &gt; 77, LEFT([ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([ServiceDelivery__c].DeliveryDate__c)),  TEXT([ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [ServiceDelivery__c].Service__c.Name, 77) + &#39;...&#39;, [ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([ServiceDelivery__c].DeliveryDate__c)),  TEXT([ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [ServiceDelivery__c].Service__c.Name)
+</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_2_myRule_1_A1_0086551460</name>
+        <name>formula_2_myRule_1_A1_8034733450</name>
         <dataType>String</dataType>
-        <expression>{!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; - &#39; + {!myVariable_current.Service__r.Name}</expression>
+        <expression>IF(LEN({!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; + IF (NOT(ISBLANK({!myVariable_current.DeliveryDate__c})),  TEXT({!myVariable_current.DeliveryDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+ &#39; : &#39; + {!myVariable_current.Service__r.Name}) &gt; 77, LEFT({!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; + IF (NOT(ISBLANK({!myVariable_current.DeliveryDate__c})),  TEXT({!myVariable_current.DeliveryDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+ &#39; : &#39; + {!myVariable_current.Service__r.Name}, 77) + &#39;...&#39;, {!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; + IF (NOT(ISBLANK({!myVariable_current.DeliveryDate__c})),  TEXT({!myVariable_current.DeliveryDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+ &#39; : &#39; + {!myVariable_current.Service__r.Name})</expression>
     </formulas>
     <formulas>
         <processMetadataValues>
@@ -51,7 +52,7 @@
         <dataType>Boolean</dataType>
         <expression>NOT({!myVariable_current.AutonameOverride__c} )</expression>
     </formulas>
-    <interviewLabel>Template_Service_Delivery_Name-1_InterviewLabel</interviewLabel>
+    <interviewLabel>ServiceDelivery-2_InterviewLabel</interviewLabel>
     <isTemplate>true</isTemplate>
     <label>Template: Service Delivery Name</label>
     <processMetadataValues>
@@ -154,7 +155,7 @@
             </processMetadataValues>
             <field>Name</field>
             <value>
-                <elementReference>formula_2_myRule_1_A1_0086551460</elementReference>
+                <elementReference>formula_2_myRule_1_A1_8034733450</elementReference>
             </value>
         </inputAssignments>
         <object>ServiceDelivery__c</object>

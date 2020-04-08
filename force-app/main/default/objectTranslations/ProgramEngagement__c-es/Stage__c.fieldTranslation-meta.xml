@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Stage__c</name>
-    <help>Estos valores de lista describen la etapa de la participación de un contacto en un programa. Los valores son Solicitado, Solicitud denegada, Inscrito, En curso, Completado y Retirado. Puede modificarlos. La etapa aparece en una ruta arriba en la página.</help>
+    <help>Estos valores de lista de selección describen la etapa de un contacto de una participación en un programa y se muestran en una ruta. Los valores vienen determinados por su administrador.</help>
     <label>Etapa</label>
     <picklistValues>
         <masterLabel>Applied</masterLabel>
@@ -17,7 +17,7 @@
     </picklistValues>
     <picklistValues>
         <masterLabel>Active</masterLabel>
-        <translation>Active</translation>
+        <translation>Activo</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Completed</masterLabel>

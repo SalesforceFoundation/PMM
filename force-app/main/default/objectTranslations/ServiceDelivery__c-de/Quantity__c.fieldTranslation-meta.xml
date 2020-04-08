@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Quantity__c</name>
-    <help>Die Anzahl einer erbrachten Leistung ist ein numerisches Feld, das Dezimalzahlen für die in der Leistung festgelegte Maßeinheit akzeptiert. Beispiel: eine halbstündige Berufsberatung für einen Kontakt bedeutet bei der Maßeinheit Stunden die Anzahl 0,5.</help>
+    <help>Ein zweistelliges numerisches Feld für die Anzahl der erbrachten Leistung, ausgedrückt in der Maßeinheit des Dienstes. Beispiel: eine halbe Stunde Nachhilfe bedeutet bei der Maßeinheit Stunden 0,5.</help>
     <label>Anzahl</label>
 </CustomFieldTranslation>

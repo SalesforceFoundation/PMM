@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Role__c</name>
-    <help>Deze keuzelijstwaarden beschrijven de relatie van een contactpersoon met Programmabetrokkenheid. Standaardwaarden zijn Cliënt, Vrijwilliger en Serviceaanbieder. U kunt de voor dit veld weergegeven keuzelijstwaarden bewerken.</help>
+    <help>Een relatie van een contact met de programmabetrokkenheid. Waarden worden bepaald door uw beheerder.</help>
     <label>Rol</label>
     <picklistValues>
         <masterLabel>Client</masterLabel>

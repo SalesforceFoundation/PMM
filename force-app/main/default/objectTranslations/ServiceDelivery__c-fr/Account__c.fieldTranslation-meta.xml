@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Account__c</name>
-    <help>Ajoutez le Compte de foyer du contact si la livraison de services peut bénéficier à l&#39;ensemble du foyer, par exemple les repas d&#39;une banque alimentaire. Si la livraison de services bénéficie uniquement au contact individuel, laissez ce champ vide.</help>
+    <help>Sélectionnez le compte de foyer si la livraison de services profite aux membres du compte de foyer du contact. Par exemple, les repas d’une banque alimentaire. Si elle ne profite qu’à un contact, laissez ce champ vide.</help>
     <relationshipLabel>Livraisons de services</relationshipLabel>
     <label>Compte de foyer</label>
 </CustomFieldTranslation>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>AutoName_Override__c</name>
-    <help>Indien aangevinkt, kan Naam van programmabetrokkenheid worden bewerkt nadat deze is gemaakt door proces van Processamensteller met naam Sjabloon: Naam van programmabetrokkenheid.</help>
+    <help>Als dit is gecontroleerd, kan de programmabetrokkenheid-naam handmatig worden bepaald. Deze wordt niet automatisch aangemaakt.</help>
     <label>Autom. overschrijving van naam</label>
 </CustomFieldTranslation>

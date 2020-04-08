@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Program__c</name>
-    <help>A lookup to the Program being segmented by the Program Cohort.</help>
+    <help>The Program that this Program Cohort belongs to.</help>
     <relationshipLabel>Program Cohorts</relationshipLabel>
     <label>Program</label>
 </CustomFieldTranslation>

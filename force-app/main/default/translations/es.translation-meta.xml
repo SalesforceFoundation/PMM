@@ -5,14 +5,6 @@
         <label>Agregar entrega de servicio</label>
     </customLabels>
     <customLabels>
-        <name>Error</name>
-        <label>Error</label>
-    </customLabels>
-    <customLabels>
-        <name>Warning</name>
-        <label>Advertencia</label>
-    </customLabels>
-    <customLabels>
         <name>Cancel</name>
         <label>Cancelar</label>
     </customLabels>
@@ -33,6 +25,14 @@
         <label>Eliminar</label>
     </customLabels>
     <customLabels>
+        <name>Error</name>
+        <label>Error</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Program_Engagement</name>
+        <label>Nueva participación en programa</label>
+    </customLabels>
+    <customLabels>
         <name>No_Services_For_Program_Engagement</name>
         <label>No se encontraron servicios, seleccione otra participación en programa.</label>
     </customLabels>
@@ -43,6 +43,14 @@
     <customLabels>
         <name>Required</name>
         <label>Obligatorio</label>
+    </customLabels>
+    <customLabels>
+        <name>Save</name>
+        <label>Guardar</label>
+    </customLabels>
+    <customLabels>
+        <name>SaveMessage</name>
+        <label>Nuevo registro de participación en programa creado</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -79,6 +87,10 @@
     <customLabels>
         <name>Util_Unknown_Error</name>
         <label>Error desconocido</label>
+    </customLabels>
+    <customLabels>
+        <name>Warning</name>
+        <label>Advertencia</label>
     </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>

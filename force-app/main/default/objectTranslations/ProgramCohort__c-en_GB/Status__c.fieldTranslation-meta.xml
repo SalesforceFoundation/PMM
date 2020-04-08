@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Status__c</name>
-    <help>Picklist values describe the status of the Program Cohort. The picklist&#39;s default values are, planned, active, completed, and cancelled. You can edit the picklist values displayed for this field.</help>
+    <help>The status of the Program Cohort. Values are determined by your Admin.</help>
     <label>Status</label>
     <picklistValues>
         <masterLabel>Planned</masterLabel>

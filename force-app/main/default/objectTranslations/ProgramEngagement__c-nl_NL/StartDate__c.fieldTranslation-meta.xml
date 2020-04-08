@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>StartDate__c</name>
-    <help>Datum van start van contactpersoon met programma. Als PB-fase Ingeschreven/Actief is, stelt de Processamensteller Datum van aanvraag in op TODAY() via proces met naam Sjabloon: Naam van programmabetrokkenheid. Kloon de sjabloon voor bewerken.</help>
+    <help>Als de programmabetrokkenheid-fase is aangemeld of actief, wordt de startdatum op vandaag gezet als niets wordt ingevuld.</help>
     <label>Begindatum</label>
 </CustomFieldTranslation>

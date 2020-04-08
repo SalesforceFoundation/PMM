@@ -1,0 +1,32 @@
+{
+    "product": {
+        "title": {
+            "message": "Módulo de gestión de programas (PMM)",
+            "description": "name of product"
+        },
+        "short_description": {
+            "message": "Siga, gestione y entregue programas",
+            "description": "tagline of product"
+        },
+        "description": {
+            "message": "¡Le damos la bienvenida al Instalador del Módulo de gestión de programas (PMM)!\r\n\r\nEl Módulo de gestión de programas es un marco de trabajo estándar para el seguimiento, la gestión y la entrega de programas, servicios y entregas de servicio.\r\n\r\n*IMPORTANTE*: Salesforce no recomienda instalar actualizaciones directamente en organizaciones de producción. En su lugar, instale el Módulo de gestión de programas en uno de sus entornos sandbox u organizaciones de desarrollador gratuitos primero.\r\n\r\n*Espacio para párrafo legal si fuese necesario*\r\n\r\nUna vez instalado el Módulo de gestión de programas, consulte los recursos en nuestra documentación.\r\n\r\n* <Documentación del Módulo de gestión de programas>\r\n\r\n¿Preguntas? Conviértase en miembro del grupo de clientes <Program Management Module> en Power of Us Hub.",
+            "description": "shown on product detail page (markdown)"
+        },
+        "error_message": {
+            "message": "Para obtener ayuda sobre este error, diríjase a <a href='https://help.salesforce.com/'>help.salesforce.com</a>, encuentre el área Asistencia y Servicios y registre un ticket de asistencia técnica con Salesforce. Incluya “PMM” en la línea de asunto y también en sus comentarios el vínculo de instalación que se muestra aquí.",
+            "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:install": {
+        "title": {
+            "message": "Instalar el Módulo de gestión del programas de Nonprofit Cloud",
+            "description": "title of installation plan"
+        }
+    },
+    "steps": {
+        "Install {product} {version}": {
+            "message": "Instalar {product} {version}",
+            "description": "title of installation step"
+        }
+    }
+}

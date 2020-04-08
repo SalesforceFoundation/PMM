@@ -1,6 +1,6 @@
 import { LightningElement, api, track, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
-import { showToast, handleError } from "c/util";
+import { handleError } from "c/util";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { loadStyle } from "lightning/platformResourceLoader";
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
@@ -147,7 +147,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     showRowCountToast() {
-        console.log(JSON.parse(JSON.stringify(this.serviceDeliveryObject)));
         let count = 0;
         this.serviceDeliveries.forEach(element => {
             if (element.hasSaved) {
@@ -181,7 +180,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         }
     }
 
-    get resetDisabled() {
+    get isDoneDisabled() {
         return Object.keys(this.errors).length > 0;
     }
 

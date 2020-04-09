@@ -194,7 +194,7 @@
                 <leftValueReference>myVariable_current.Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>In Progress</stringValue>
+                    <stringValue>Active</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -231,7 +231,7 @@
             <connector>
                 <targetReference>myRule_7_A1</targetReference>
             </connector>
-            <label>Stage is Enrolled or In Progress</label>
+            <label>Stage is Enrolled or Active</label>
         </rules>
     </decisions>
     <decisions>

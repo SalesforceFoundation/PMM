@@ -194,7 +194,7 @@
                 <leftValueReference>myVariable_current.Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>In Progress</stringValue>
+                    <stringValue>Active</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -231,7 +231,7 @@
             <connector>
                 <targetReference>myRule_7_A1</targetReference>
             </connector>
-            <label>Stage is Enrolled or In Progress</label>
+            <label>Stage is Enrolled or Active</label>
         </rules>
     </decisions>
     <decisions>
@@ -366,17 +366,17 @@
             <value>
                 <stringValue>IF(
 LEN(
-[ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
+[%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
 IF(
-NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
-&#39; : &#39; + [ProgramEngagement__c].Program__c.Name) &gt; 77,
-LEFT(([ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
-IF (NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10)) +
-&#39; : &#39; + [ProgramEngagement__c].Program__c.Name),77)
-+ &#39;...&#39;, [ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
+NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name) &gt; 77,
+LEFT(([%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
+IF (NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10)) +
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name),77)
++ &#39;...&#39;, [%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
 IF(
-NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
-&#39; : &#39; + [ProgramEngagement__c].Program__c.Name
+NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name
 )</stringValue>
             </value>
         </processMetadataValues>
@@ -423,7 +423,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue> NOT([ProgramEngagement__c].AutoName_Override__c) </stringValue>
+                <stringValue> NOT([%%%NAMESPACE%%%ProgramEngagement__c].AutoName_Override__c) </stringValue>
             </value>
         </processMetadataValues>
         <name>formula_myRule_1</name>
@@ -477,7 +477,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <processMetadataValues>
             <name>reference</name>
             <value>
-                <stringValue>[ProgramEngagement__c]</stringValue>
+                <stringValue>[%%%NAMESPACE%%%ProgramEngagement__c]</stringValue>
             </value>
         </processMetadataValues>
         <processMetadataValues>
@@ -557,7 +557,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <processMetadataValues>
             <name>reference</name>
             <value>
-                <stringValue>[ProgramEngagement__c]</stringValue>
+                <stringValue>[%%%NAMESPACE%%%ProgramEngagement__c]</stringValue>
             </value>
         </processMetadataValues>
         <processMetadataValues>
@@ -640,7 +640,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <processMetadataValues>
             <name>reference</name>
             <value>
-                <stringValue>[ProgramEngagement__c]</stringValue>
+                <stringValue>[%%%NAMESPACE%%%ProgramEngagement__c]</stringValue>
             </value>
         </processMetadataValues>
         <processMetadataValues>
@@ -720,7 +720,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <processMetadataValues>
             <name>reference</name>
             <value>
-                <stringValue>[ProgramEngagement__c]</stringValue>
+                <stringValue>[%%%NAMESPACE%%%ProgramEngagement__c]</stringValue>
             </value>
         </processMetadataValues>
         <processMetadataValues>

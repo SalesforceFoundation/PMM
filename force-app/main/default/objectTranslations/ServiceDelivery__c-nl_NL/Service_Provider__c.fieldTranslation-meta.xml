@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ /*
-  ~  * Copyright (c) 2020, salesforce.com, inc.
-  ~  * All rights reserved.
-  ~  * SPDX-License-Identifier: BSD-3-Clause
-  ~  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
-  ~  */
-  -->
-
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Service_Provider__c</name>
     <help>Een opzoekopdracht naar een serviceaanbieder die intern is voor uw organisatie, of naar die van een partnerorganisatie wier serviceaanbieders als contactpersonen zijn  toegevoegd aan uw database.</help>

@@ -33,7 +33,7 @@
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>IF(LEN([ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([ServiceDelivery__c].DeliveryDate__c)),  TEXT([ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [ServiceDelivery__c].Service__c.Name) &gt; 77, LEFT([ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([ServiceDelivery__c].DeliveryDate__c)),  TEXT([ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [ServiceDelivery__c].Service__c.Name, 77) + &#39;...&#39;, [ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([ServiceDelivery__c].DeliveryDate__c)),  TEXT([ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [ServiceDelivery__c].Service__c.Name)
+                <stringValue>IF(LEN([%%%NAMESPACE%%%ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([%%%NAMESPACE%%%ServiceDelivery__c].DeliveryDate__c)),  TEXT([%%%NAMESPACE%%%ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [%%%NAMESPACE%%%ServiceDelivery__c].Service__c.Name) &gt; 77, LEFT([%%%NAMESPACE%%%ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([%%%NAMESPACE%%%ServiceDelivery__c].DeliveryDate__c)),  TEXT([%%%NAMESPACE%%%ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [%%%NAMESPACE%%%ServiceDelivery__c].Service__c.Name, 77) + &#39;...&#39;, [%%%NAMESPACE%%%ServiceDelivery__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ServiceDelivery__c].Contact__c.LastName + &#39; &#39; + IF (NOT(ISBLANK([%%%NAMESPACE%%%ServiceDelivery__c].DeliveryDate__c)),  TEXT([%%%NAMESPACE%%%ServiceDelivery__c].DeliveryDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ServiceDelivery__c].CreatedDate),10 ))+ &#39; : &#39; + [%%%NAMESPACE%%%ServiceDelivery__c].Service__c.Name)
 </stringValue>
             </value>
         </processMetadataValues>
@@ -45,7 +45,7 @@
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>NOT([ServiceDelivery__c].AutonameOverride__c )</stringValue>
+                <stringValue>NOT([%%%NAMESPACE%%%ServiceDelivery__c].AutonameOverride__c )</stringValue>
             </value>
         </processMetadataValues>
         <name>formula_myRule_1</name>
@@ -99,7 +99,7 @@
         <processMetadataValues>
             <name>reference</name>
             <value>
-                <stringValue>[ServiceDelivery__c]</stringValue>
+                <stringValue>[%%%NAMESPACE%%%ServiceDelivery__c]</stringValue>
             </value>
         </processMetadataValues>
         <processMetadataValues>

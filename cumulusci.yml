@@ -27,6 +27,31 @@ sources:
         github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
+    inject_namespaced_org_flow:
+        description: "Selectively inject namespace references into Flow metadata"
+        class_path: cumulusci.tasks.util.FindReplace
+        options:
+            path: force-app/main/default/flows
+            find: "%%%NAMESPACE%%%"
+            replace: "pmdm__"
+            file_pattern: "*"
+
+    clear_namespaced_org_flow:
+        description: "Selectively inject namespace references into Flow metadata"
+        class_path: cumulusci.tasks.util.FindReplace
+        options:
+            path: force-app/main/default/flows
+            find: "%%%NAMESPACE%%%"
+            replace: ""
+            file_pattern: "*"
+
+    source_revert:
+        description: "Preserve the source so it can be modified during deployment"
+        class_path: tasks.GenericSrcRevert.GenericSrcRevert
+        options:
+            path: force-app/main/default/flows
+            revert_path: force-app-bak
+
     cache_namespaces_in_org_config:
         description: Caches namespaces information in org_config
         class_path: tasks.namespaces.CacheNamespaces
@@ -87,7 +112,7 @@ tasks:
             active: False
             namespace: npsp
             restore_file: trigger_status.yml
-    
+
     restore_npsp_triggers:
         class_path: cumulusci.tasks.salesforce.trigger_handlers.SetTDTMHandlerStatus
         description: "Restore all NPSP Trigger Handlers"
@@ -225,7 +250,22 @@ flows:
         steps:
             1:
                 flow: npsp:install_prod
-
+    deploy_unmanaged:
+        steps:
+            2.98:
+                task: source_revert
+                options:
+                    revert: False
+            2.99:
+                task: inject_namespaced_org_flow
+                when: org_config.namespaced
+            2.999:
+                task: clear_namespaced_org_flow
+                when: not org_config.namespaced
+            4.099:
+                task: source_revert
+                options:
+                    revert: True
 plans:
     install:
         slug: install

@@ -33,10 +33,10 @@ public with sharing class ServiceService_TEST {
 
     @IsTest
     private static void testGetServicesEngagementsByContactId() {
-        Id contactId = Util_TEST.mockId(Contact.SObjectType);
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
 
         Program__c program1 = new Program__c();
-        program1.Id = Util_TEST.mockId(Program__c.SObjectType);
+        program1.Id = TestUtil.mockId(Program__c.SObjectType);
         program1.Name = 'Program 1';
         program1.Status__c = 'Active';
         program1.StartDate__c = Date.today();
@@ -50,7 +50,7 @@ public with sharing class ServiceService_TEST {
         engagement1.Role__c = 'Client';
 
         Service__c service1 = new Service__c();
-        service1.Id = Util_TEST.mockId(Service__c.SObjectType);
+        service1.Id = TestUtil.mockId(Service__c.SObjectType);
         service1.Name = 'Service 1';
         service1.Program__c = program1.Id;
         service1.Status__c = 'Active';

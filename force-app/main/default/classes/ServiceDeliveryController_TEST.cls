@@ -62,7 +62,7 @@ public with sharing class ServiceDeliveryController_TEST {
 
     @isTest
     private static void testGetServicesAndEngagements() {
-        Id contactId = Util_TEST.mockId(Contact.SObjectType);
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
         Map<String, List<Object>> expected = new Map<String, List<Object>>();
         expected.put('engagements', new List<Object>());
         expected.put('services', new List<Object>());
@@ -94,7 +94,7 @@ public with sharing class ServiceDeliveryController_TEST {
 
     @isTest
     private static void testGetServicesAndEngagementsWithException() {
-        Id contactId = Util_TEST.mockId(Contact.SObjectType);
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
         Map<String, List<Object>> expected = new Map<String, List<Object>>();
         expected.put('engagements', new List<Object>());
         expected.put('services', new List<Object>());

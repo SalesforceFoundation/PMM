@@ -11,10 +11,10 @@
 public with sharing class ProgramService_TEST {
     @isTest
     private static void testGetProgramNamesByIdForContact() {
-        Id contactId = Util_TEST.mockId(Contact.SObjectType);
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
 
         Program__c program1 = new Program__c();
-        program1.Id = Util_TEST.mockId(Program__c.SObjectType);
+        program1.Id = TestUtil.mockId(Program__c.SObjectType);
         program1.Name = 'Program 1';
         program1.Status__c = 'Active';
         program1.StartDate__c = Date.today();

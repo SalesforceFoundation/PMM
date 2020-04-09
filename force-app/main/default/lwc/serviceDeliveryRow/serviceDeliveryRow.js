@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 import { LightningElement, wire, track, api } from "lwc";
 import { showToast, handleError, debouncify } from "c/util";
 import { deleteRecord } from "lightning/uiRecordApi";

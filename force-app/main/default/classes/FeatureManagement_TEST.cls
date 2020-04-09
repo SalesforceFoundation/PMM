@@ -2,7 +2,7 @@
 public with sharing class FeatureManagement_TEST {
     private static final String ACTIVE_PROGRAMS = 'ActivePrograms';
     private static final Integer NUMBER_OF_ACTIVE_PROGRAMS = 10;
-    private static final String FAKE_EXCEPTION = 'You asked for it!';
+    private static final String FAKE_EXCEPTION = 'Exception thrown by Test!';
 
     @IsTest
     private static void shouldSetPackageIntegerValue() {

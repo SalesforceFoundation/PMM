@@ -1,5 +1,8 @@
 @IsTest
-public with sharing class Util_TEST {
+/**
+ * Utility methods for test classes
+ */
+public with sharing class TestUtil {
     public static Integer counter {
         get {
             if (counter == null) {

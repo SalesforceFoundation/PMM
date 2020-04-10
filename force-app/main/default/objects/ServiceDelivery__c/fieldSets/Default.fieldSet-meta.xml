@@ -5,7 +5,7 @@
     <displayedFields>
         <field>Contact__c</field>
         <isFieldManaged>false</isFieldManaged>
-        <isRequired>true</isRequired>
+        <isRequired>false</isRequired>
     </displayedFields>
     <displayedFields>
         <field>ProgramEngagement__c</field>

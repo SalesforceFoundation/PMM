@@ -74,6 +74,7 @@ export default class BulkServiceDeliveryUI extends LightningElement {
 
             if (field.apiName === this.fields.contact.fieldApiName) {
                 field.disabled = false;
+                field.isRequired = true;
             }
             this.fieldSet.push(field);
         });

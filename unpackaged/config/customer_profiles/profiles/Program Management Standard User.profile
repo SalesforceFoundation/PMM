@@ -66,7 +66,7 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>%%%NAMESPACE%%%Stub</apexClass>
+        <apexClass>%%%NAMESPACE%%%BasicStub</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <custom>true</custom>

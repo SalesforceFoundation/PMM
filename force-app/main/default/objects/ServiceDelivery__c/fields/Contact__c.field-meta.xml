@@ -7,7 +7,7 @@
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Service Deliveries</relationshipLabel>
     <relationshipName>Service_Deliveries</relationshipName>
-    <required>true</required>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

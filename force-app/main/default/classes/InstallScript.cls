@@ -5,7 +5,7 @@ public without sharing class InstallScript implements InstallHandler {
     private static final String EMAIL_MESSAGE = 'Org ID {0} encountered this error: {1}';
     private InstallContext context;
     @TestVisible
-    private String emailTo = 'errors@salesforcefoundation.org';
+    private String emailTo = 'jennifer.bennett@salesforce.com';
 
     @TestVisible
     private TelemetryService telemetryService {

@@ -267,6 +267,13 @@ flows:
                 task: source_revert
                 options:
                     revert: True
+
+    deploy_packaging:
+        steps:
+            3.01:
+                task: inject_namespaced_org_flow
+                options:
+                    path: "src/flows"
 plans:
     install:
         slug: install

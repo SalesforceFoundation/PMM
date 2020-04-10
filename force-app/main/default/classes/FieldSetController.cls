@@ -25,7 +25,7 @@ public with sharing class FieldSetController {
         try {
             return fieldSetService.getFieldSetForLWC(objectName, fieldSetName);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+            throw Util.getAuraHandledException(e);
         }
     }
 }

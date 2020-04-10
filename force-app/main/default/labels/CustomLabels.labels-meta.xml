@@ -51,6 +51,14 @@
         <value>Error</value>
     </labels>
     <labels>
+        <fullName>MissingSObjectType</fullName>
+        <categories>Exception</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Missing SObject Type</shortDescription>
+        <value>The SObject Type value is required.</value>
+    </labels>
+    <labels>
         <fullName>New_Program_Engagement</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -141,6 +149,14 @@
         <protected>true</protected>
         <shortDescription>Success</shortDescription>
         <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>TelemetryException</fullName>
+        <categories>Exception</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Error capturing metrics.</shortDescription>
+        <value>An error occurred when attempting to capture usage metrics.</value>
     </labels>
     <labels>
         <fullName>Util_Error</fullName>

@@ -74,32 +74,4 @@ public with sharing class ServiceSelector_TEST {
         }
         Test.stopTest();
     }
-
-    public class GetServicesByProgramIdsMethod extends Stub.method {
-        public Set<Id> programIds;
-        public List<Service__c> returnValue;
-
-        public GetServicesByProgramIdsMethod() {
-            super(
-                ServiceSelector.class,
-                List<Service__c>.class,
-                'getServicesByProgramIds',
-                new List<Stub.Parameter>{
-                    new Stub.Parameter(Set<Id>.class, 'programIds')
-                }
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof ServiceSelector;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{ this.programIds };
-        }
-
-        public override Object getReturnValue() {
-            return this.returnValue;
-        }
-    }
 }

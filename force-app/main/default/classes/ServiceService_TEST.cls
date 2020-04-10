@@ -31,37 +31,12 @@ public with sharing class ServiceService_TEST {
         }
     }
 
-    public class GetBulkFieldsMethod extends Stub.Method {
-        public List<Object> returnValue;
-
-        public GetBulkFieldsMethod() {
-            super(
-                ServiceService.class,
-                List<Object>.class,
-                'getBulkFields',
-                new List<Stub.Parameter>()
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof ServiceService;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>();
-        }
-
-        public override Object getReturnValue() {
-            return this.returnValue;
-        }
-    }
-
-    @isTest
+    @IsTest
     private static void testGetServicesEngagementsByContactId() {
-        Id contactId = Stub.generateFakeId(Schema.SObjectType.Contact);
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
 
         Program__c program1 = new Program__c();
-        program1.Id = Stub.generateFakeId(Schema.SObjectType.Program__c);
+        program1.Id = TestUtil.mockId(Program__c.SObjectType);
         program1.Name = 'Program 1';
         program1.Status__c = 'Active';
         program1.StartDate__c = Date.today();
@@ -75,42 +50,26 @@ public with sharing class ServiceService_TEST {
         engagement1.Role__c = 'Client';
 
         Service__c service1 = new Service__c();
-        service1.Id = Stub.generateFakeId(Schema.SObjectType.Service__c);
+        service1.Id = TestUtil.mockId(Service__c.SObjectType);
         service1.Name = 'Service 1';
         service1.Program__c = program1.Id;
         service1.Status__c = 'Active';
         service1.UnitOfMeasurement__c = 'Hours';
 
-        ProgramEngagementSelector_TEST.GetProgramEngagementsByContactIdMethod getProgramEngagementsByContactIdMethod = new ProgramEngagementSelector_TEST.GetProgramEngagementsByContactIdMethod();
-        getProgramEngagementsByContactIdMethod.contactId = contactId;
-        getProgramEngagementsByContactIdMethod.returnValue = new List<ProgramEngagement__c>{
+        List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>{
             engagement1
         };
-
-        ServiceSelector_TEST.GetServicesByProgramIdsMethod getServicesByProgramIdsMethod = new ServiceSelector_TEST.GetServicesByProgramIdsMethod();
-        getServicesByProgramIdsMethod.programIds = new Set<Id>{ program1.Id };
-        getServicesByProgramIdsMethod.returnValue = new List<Service__c>{ service1 };
-
-        final List<Stub.Method> expectedMethodsCalled = new List<Stub.Method>{
-            getProgramEngagementsByContactIdMethod,
-            getServicesByProgramIdsMethod
-        };
+        List<Service__c> services = new List<Service__c>{ service1 };
+        BasicStub engagementSelectorStub = new BasicStub(ProgramEngagementSelector.class)
+            .withReturnValue('getProgramEngagementsByContactId', Id.class, engagements);
+        BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class)
+            .withReturnValue('getServicesByProgramIds', Set<Id>.class, services);
 
         Test.startTest();
 
-        final Stub stub = new Stub(expectedMethodsCalled);
-
         final ServiceService service = new ServiceService();
-
-        service.serviceSelector = (ServiceSelector) Test.createStub(
-            ServiceSelector.class,
-            stub
-        );
-
-        service.engagementSelector = (ProgramEngagementSelector) Test.createStub(
-            ProgramEngagementSelector.class,
-            stub
-        );
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+        service.engagementSelector = (ProgramEngagementSelector) engagementSelectorStub.createMock();
 
         final Map<String, List<Object>> actual = service.getServicesEngagementsByContactId(
             contactId
@@ -126,33 +85,15 @@ public with sharing class ServiceService_TEST {
             System.assert(!objList.isEmpty());
         }
 
-        // Assert the actual methods called by Stub Provider equal the expected methods called.
-        stub.assertMethodsCalled();
-    }
-
-    public class GetServicesEngagementsByContactIdMethod extends Stub.Method {
-        public Id contactId;
-        public Map<String, List<Object>> returnValue;
-
-        public GetServicesEngagementsByContactIdMethod() {
-            super(
-                ServiceService.class,
-                Map<String, List<Object>>.class,
-                'getServicesEngagementsByContactId',
-                new List<Stub.Parameter>{ new Stub.Parameter(Id.class, 'contactId') }
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof ServiceService;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{ this.contactId };
-        }
-
-        public override Object getReturnValue() {
-            return this.returnValue;
-        }
+        serviceSelectorStub.assertCalledWith(
+            'getServicesByProgramIds',
+            Set<Id>.class,
+            new Set<Id>{ program1.Id }
+        );
+        engagementSelectorStub.assertCalledWith(
+            'getProgramEngagementsByContactId',
+            Id.class,
+            contactId
+        );
     }
 }

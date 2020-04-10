@@ -17,7 +17,7 @@
     <referenceTo>ProgramEngagement__c</referenceTo>
     <relationshipLabel>Service Deliveries</relationshipLabel>
     <relationshipName>ServiceDeliveries</relationshipName>
-    <required>true</required>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

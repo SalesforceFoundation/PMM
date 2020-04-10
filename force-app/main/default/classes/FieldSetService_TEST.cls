@@ -54,37 +54,4 @@ public with sharing class FieldSetService_TEST {
 
         System.assertEquals(fieldSet.getFields().size(), fieldsResult.size());
     }
-
-    /**
-     * @description This is a stub method for the getFieldSet method in the FieldSetController Class
-     */
-    public class GetFieldSetForLWCMethod extends Stub.Method {
-        public String objectName;
-        public String fieldSetName;
-        public List<Map<String, String>> returnValue;
-
-        public GetFieldSetForLWCMethod() {
-            super(
-                FieldSetController.class,
-                List<Map<String, String>>.class,
-                'getFieldSetForLWC',
-                new List<Stub.Parameter>{
-                    new Stub.Parameter(String.class, 'objectName'),
-                    new Stub.Parameter(String.class, 'fieldSetName')
-                }
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof FieldSetService;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{ this.objectName, this.fieldSetName };
-        }
-
-        public override Object getReturnValue() {
-            return this.returnValue;
-        }
-    }
 }

@@ -75,30 +75,4 @@ public with sharing class ProgramEngagementSelector_TEST {
         }
         Test.stopTest();
     }
-
-    public class GetProgramEngagementsByContactIdMethod extends Stub.method {
-        public Id contactId;
-        public List<ProgramEngagement__c> returnValue;
-
-        public GetProgramEngagementsByContactIdMethod() {
-            super(
-                ProgramEngagementSelector.class,
-                List<ProgramEngagement__c>.class,
-                'getProgramEngagementsByContactId',
-                new List<Stub.Parameter>{ new Stub.Parameter(Id.class, 'contactId') }
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof ProgramEngagementSelector;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{ this.contactId };
-        }
-
-        public override Object getReturnValue() {
-            return this.returnValue;
-        }
-    }
 }

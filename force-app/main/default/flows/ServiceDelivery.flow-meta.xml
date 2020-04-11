@@ -58,7 +58,7 @@
     <processMetadataValues>
         <name>ObjectType</name>
         <value>
-            <stringValue>ServiceDelivery__c</stringValue>
+            <stringValue>%%%NAMESPACE%%%ServiceDelivery__c</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -158,7 +158,7 @@
                 <elementReference>formula_2_myRule_1_A1_1499724460</elementReference>
             </value>
         </inputAssignments>
-        <object>ServiceDelivery__c</object>
+        <object>%%%NAMESPACE%%%ServiceDelivery__c</object>
     </recordUpdates>
     <startElementReference>myDecision</startElementReference>
     <status>Active</status>
@@ -168,7 +168,7 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>true</isOutput>
-        <objectType>ServiceDelivery__c</objectType>
+        <objectType>%%%NAMESPACE%%%ServiceDelivery__c</objectType>
     </variables>
     <variables>
         <name>myVariable_old</name>
@@ -176,6 +176,6 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
-        <objectType>ServiceDelivery__c</objectType>
+        <objectType>%%%NAMESPACE%%%ServiceDelivery__c</objectType>
     </variables>
 </Flow>

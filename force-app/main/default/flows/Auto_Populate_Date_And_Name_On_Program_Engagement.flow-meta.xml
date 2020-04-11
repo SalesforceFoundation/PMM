@@ -465,7 +465,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
     <processMetadataValues>
         <name>ObjectType</name>
         <value>
-            <stringValue>ProgramEngagement__c</stringValue>
+            <stringValue>%%%NAMESPACE%%%ProgramEngagement__c</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -565,7 +565,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                 <elementReference>formula_11_myRule_10_A1_5830083055</elementReference>
             </value>
         </inputAssignments>
-        <object>ProgramEngagement__c</object>
+        <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
     </recordUpdates>
     <recordUpdates>
         <processMetadataValues>
@@ -648,7 +648,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                 <elementReference>formula_2_myRule_1_A1_0369733698</elementReference>
             </value>
         </inputAssignments>
-        <object>ProgramEngagement__c</object>
+        <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
     </recordUpdates>
     <recordUpdates>
         <processMetadataValues>
@@ -728,7 +728,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                 <elementReference>formula_5_myRule_4_A1_1951843420</elementReference>
             </value>
         </inputAssignments>
-        <object>ProgramEngagement__c</object>
+        <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
     </recordUpdates>
     <recordUpdates>
         <processMetadataValues>
@@ -808,7 +808,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                 <elementReference>formula_8_myRule_7_A1_0428341055</elementReference>
             </value>
         </inputAssignments>
-        <object>ProgramEngagement__c</object>
+        <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
     </recordUpdates>
     <startElementReference>myDecision</startElementReference>
     <status>Active</status>
@@ -818,7 +818,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>true</isOutput>
-        <objectType>ProgramEngagement__c</objectType>
+        <objectType>%%%NAMESPACE%%%ProgramEngagement__c</objectType>
     </variables>
     <variables>
         <name>myVariable_old</name>
@@ -826,6 +826,6 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
-        <objectType>ProgramEngagement__c</objectType>
+        <objectType>%%%NAMESPACE%%%ProgramEngagement__c</objectType>
     </variables>
 </Flow>

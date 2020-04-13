@@ -11,7 +11,7 @@
     <labels>
         <fullName>Anonymous</fullName>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>Anonymous</shortDescription>
         <value>Anonymous</value>
     </labels>

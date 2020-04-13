@@ -380,14 +380,14 @@ NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),
 ), 
 IF(
 LEN(
-$Label.Anonymous+ &#39; &#39; +
+$Label.%%%NAMESPACE%%%Anonymous+ &#39; &#39; +
 IF(
 NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
 &#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name) &gt; 77,
-LEFT(($Label.Anonymous + &#39; &#39; +
+LEFT(($Label.%%%NAMESPACE%%%Anonymous + &#39; &#39; +
 IF (NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10)) +
 &#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name),77)
-+ &#39;...&#39;, $Label.Anonymous + &#39; &#39; +
++ &#39;...&#39;, $Label.%%%NAMESPACE%%%Anonymous + &#39; &#39; +
 IF(
 NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
 &#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name
@@ -413,14 +413,14 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
 ), 
 IF(
 LEN(
-{!$Label.Anonymous}+ &#39; &#39; +
+{!$Label.%%%NAMESPACE%%%Anonymous}+ &#39; &#39; +
 IF(
 NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
 &#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}) &gt; 77,
-LEFT(({!$Label.Anonymous} + &#39; &#39; +
+LEFT(({!$Label.%%%NAMESPACE%%%Anonymous} + &#39; &#39; +
 IF (NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
 &#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}),77)
-+ &#39;...&#39;, {!$Label.Anonymous} + &#39; &#39; +
++ &#39;...&#39;, {!$Label.%%%NAMESPACE%%%Anonymous} + &#39; &#39; +
 IF(
 NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
 &#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}

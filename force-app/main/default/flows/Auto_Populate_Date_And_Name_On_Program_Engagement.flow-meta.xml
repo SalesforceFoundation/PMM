@@ -74,7 +74,7 @@
                         <stringValue>Picklist</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.Stage__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Applied</stringValue>
@@ -105,7 +105,7 @@
                         <stringValue>Boolean</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.ApplicationDate__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%ApplicationDate__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -160,7 +160,7 @@
                         <stringValue>Picklist</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.Stage__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Enrolled</stringValue>
@@ -191,7 +191,7 @@
                         <stringValue>Picklist</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.Stage__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Active</stringValue>
@@ -222,7 +222,7 @@
                         <stringValue>Boolean</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.StartDate__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%StartDate__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -274,7 +274,7 @@
                         <stringValue>Picklist</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.Stage__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Completed</stringValue>
@@ -305,7 +305,7 @@
                         <stringValue>Picklist</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.Stage__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Withdrawn</stringValue>
@@ -336,7 +336,7 @@
                         <stringValue>Boolean</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.EndDate__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%EndDate__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -364,66 +364,66 @@
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>IF(NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].Contact__c)),IF(
+                <stringValue>IF(NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Contact__c)),IF(
 LEN(
-[%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
+[%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Contact__c.LastName + &#39; &#39; +
 IF(
-NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
-&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name) &gt; 77,
-LEFT(([%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
-IF (NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10)) +
-&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name),77)
-+ &#39;...&#39;, [%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
+NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name) &gt; 77,
+LEFT(([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Contact__c.LastName + &#39; &#39; +
+IF (NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10)) +
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name),77)
++ &#39;...&#39;, [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Contact__c.FirstName  + &#39; &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Contact__c.LastName + &#39; &#39; +
 IF(
-NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
-&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name
+NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name
 ), 
 IF(
 LEN(
 $Label.Anonymous+ &#39; &#39; +
 IF(
-NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
-&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name) &gt; 77,
+NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name) &gt; 77,
 LEFT(($Label.Anonymous + &#39; &#39; +
-IF (NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10)) +
-&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name),77)
+IF (NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10)) +
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name),77)
 + &#39;...&#39;, $Label.Anonymous + &#39; &#39; +
 IF(
-NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
-&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].Program__c.Name
+NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),  TEXT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c) , LEFT(TEXT([%%%NAMESPACE%%%ProgramEngagement__c].CreatedDate),10 ))+
+&#39; : &#39; + [%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.Name
 ))
 </stringValue>
             </value>
         </processMetadataValues>
         <name>formula_2_myRule_1_A1_0369733698</name>
         <dataType>String</dataType>
-        <expression>IF(NOT(ISBLANK({!myVariable_current.Contact__c})),IF(
+        <expression>IF(NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%Contact__c})),IF(
 LEN(
-{!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
+{!myVariable_current.%%%NAMESPACE%%%Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.%%%NAMESPACE%%%Contact__r.LastName} + &#39; &#39; +
 IF(
-NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
-&#39; : &#39; + {!myVariable_current.Program__r.Name}) &gt; 77,
-LEFT(({!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
-IF (NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
-&#39; : &#39; + {!myVariable_current.Program__r.Name}),77)
-+ &#39;...&#39;, {!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
+NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
+&#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}) &gt; 77,
+LEFT(({!myVariable_current.%%%NAMESPACE%%%Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.%%%NAMESPACE%%%Contact__r.LastName} + &#39; &#39; +
+IF (NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
+&#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}),77)
++ &#39;...&#39;, {!myVariable_current.%%%NAMESPACE%%%Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.%%%NAMESPACE%%%Contact__r.LastName} + &#39; &#39; +
 IF(
-NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
-&#39; : &#39; + {!myVariable_current.Program__r.Name}
+NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
+&#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}
 ), 
 IF(
 LEN(
 {!$Label.Anonymous}+ &#39; &#39; +
 IF(
-NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
-&#39; : &#39; + {!myVariable_current.Program__r.Name}) &gt; 77,
+NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
+&#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}) &gt; 77,
 LEFT(({!$Label.Anonymous} + &#39; &#39; +
-IF (NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
-&#39; : &#39; + {!myVariable_current.Program__r.Name}),77)
+IF (NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
+&#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}),77)
 + &#39;...&#39;, {!$Label.Anonymous} + &#39; &#39; +
 IF(
-NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
-&#39; : &#39; + {!myVariable_current.Program__r.Name}
+NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVariable_current.%%%NAMESPACE%%%StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
+&#39; : &#39; + {!myVariable_current.%%%NAMESPACE%%%Program__r.Name}
 ))</expression>
     </formulas>
     <formulas>
@@ -452,12 +452,12 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue> NOT([%%%NAMESPACE%%%ProgramEngagement__c].AutoName_Override__c) </stringValue>
+                <stringValue> NOT([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%AutoName_Override__c) </stringValue>
             </value>
         </processMetadataValues>
         <name>formula_myRule_1</name>
         <dataType>Boolean</dataType>
-        <expression> NOT({!myVariable_current.AutoName_Override__c})</expression>
+        <expression> NOT({!myVariable_current.%%%NAMESPACE%%%AutoName_Override__c})</expression>
     </formulas>
     <interviewLabel>Auto_Populate_Date_And_Name_On_Program_Engagement-9_InterviewLabel</interviewLabel>
     <isTemplate>true</isTemplate>
@@ -560,7 +560,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                     <stringValue>Formula</stringValue>
                 </value>
             </processMetadataValues>
-            <field>EndDate__c</field>
+            <field>%%%NAMESPACE%%%EndDate__c</field>
             <value>
                 <elementReference>formula_11_myRule_10_A1_5830083055</elementReference>
             </value>
@@ -723,7 +723,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                     <stringValue>Formula</stringValue>
                 </value>
             </processMetadataValues>
-            <field>ApplicationDate__c</field>
+            <field>%%%NAMESPACE%%%ApplicationDate__c</field>
             <value>
                 <elementReference>formula_5_myRule_4_A1_1951843420</elementReference>
             </value>
@@ -803,7 +803,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                     <stringValue>Formula</stringValue>
                 </value>
             </processMetadataValues>
-            <field>StartDate__c</field>
+            <field>%%%NAMESPACE%%%StartDate__c</field>
             <value>
                 <elementReference>formula_8_myRule_7_A1_0428341055</elementReference>
             </value>

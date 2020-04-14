@@ -54,7 +54,7 @@
     </formulas>
     <interviewLabel>ServiceDelivery-4_InterviewLabel</interviewLabel>
     <isTemplate>true</isTemplate>
-    <label>Template: Service Delivery Name</label>
+    <label>Template : Service Delivery Object</label>
     <processMetadataValues>
         <name>ObjectType</name>
         <value>

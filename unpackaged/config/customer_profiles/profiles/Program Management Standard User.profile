@@ -328,7 +328,7 @@
         <tab>standard-Contact</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
-    <userLicense>Salesforce Platform</userLicense>
+    <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>
         <name>ActivitiesAccess</name>

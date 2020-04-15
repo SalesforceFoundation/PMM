@@ -72,7 +72,9 @@ export default class NewProgramEngagement extends LightningElement {
         const allInputFields = this.template.querySelectorAll("lightning-input-field");
         if (allInputFields) {
             allInputFields.forEach(field => {
-                field.reset();
+                if (field.value !== this.contactId) {
+                    field.reset();
+                }
             });
         }
     }

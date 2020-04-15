@@ -394,6 +394,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
             if (hasContact) {
                 this.handleGetServicesEngagements(contactId);
+                this.selectedContact = contactId;
             }
         }
     }
@@ -408,20 +409,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleSaveEnd() {
         this.isSaving = false;
         this.isSaved = true;
-    }
-
-    //Temporary CSS Overrides.
-    //TODO : Update when shadow-dom styling options are available.
-    renderedCallback() {
-        if (this.hasRendered) return;
-        this.hasRendered = true;
-        const style = document.createElement("style");
-        style.innerText = `
-        .sd-input .slds-form-element__help {
-            position: absolute;
-            }
-        `;
-        this.template.querySelector("div.style-target").appendChild(style);
     }
 
     onSave(event) {

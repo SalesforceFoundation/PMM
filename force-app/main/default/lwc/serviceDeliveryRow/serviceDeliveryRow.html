@@ -14,7 +14,7 @@
             onload={handleLoad}
             onsuccess={handleSuccess}
             onsubmit={handleSubmit}
-            onerror={handleError}
+            onerror={handleSaveError}
             record-id={recordId}
             object-api-name={serviceDeliveryObject}
         >
@@ -63,39 +63,14 @@
                         </lightning-layout-item>
                         <lightning-layout-item size="12">
                             <lightning-layout>
-                                <template if:true={noContactPrograms}>
-                                    <lightning-layout-item
-                                        size="12"
-                                        padding="around-small"
-                                    >
-                                        <div class="slds-text-color_error">
-                                            {labels.selectedContactWarning}
-                                        </div>
-                                    </lightning-layout-item>
-                                </template>
-                                <template if:true={noServicesForPE}>
-                                    <lightning-layout-item
-                                        size="12"
-                                        padding="around-small"
-                                    >
-                                        <div class="slds-text-color_error">
-                                            {labels.noServiceWarning}
-                                        </div>
-                                    </lightning-layout-item>
-                                </template>
                                 <template if:true={isError}>
                                     <lightning-layout-item
                                         size="12"
                                         padding="around-small"
                                     >
-                                        <template for:each={rowError} for:item="error">
-                                            <div
-                                                class="slds-text-color_error"
-                                                key={error}
-                                            >
-                                                {error}
-                                            </div>
-                                        </template>
+                                        <div class="slds-text-color_error" key={error}>
+                                            {rowError}
+                                        </div>
                                     </lightning-layout-item>
                                 </template>
                             </lightning-layout>

@@ -383,6 +383,11 @@ export default class ServiceDeliveryRow extends LightningElement {
                             hasContact = true;
                             contactId = value;
                         }
+                        if (
+                            element.apiName === this.fields.programEngagement.fieldApiName
+                        ) {
+                            this.programEngagementId = value;
+                        }
                     }
                 }
             });

@@ -193,6 +193,14 @@ tasks:
             path: unpackaged/config/dev
             namespace_inject: $project_config.project__package__namespace
 
+    deploy_customer_profiles:
+        group: "PMM: Config"
+        description: Deploys the post-install configuration for an unmanaged DE org
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/customer_profiles
+            namespace_inject: $project_config.project__package__namespace
+
 flows:
     capture_bulk_data:
         steps:
@@ -227,6 +235,10 @@ flows:
         steps:
             3:
                 flow: insert_data
+            4:
+                task: deploy_customer_profiles
+                options:
+                    unmanaged: False
 
     config_qa:
         steps:
@@ -234,6 +246,8 @@ flows:
                 flow: config_unmanaged
             201:
                 task: deploy_dev_config
+            202:
+                task: deploy_customer_profiles
 
     config_dev:
         steps:
@@ -241,6 +255,8 @@ flows:
                 flow: config_unmanaged
             201:
                 task: deploy_dev_config
+            202:
+                task: deploy_customer_profiles
 
     config_regression:
         steps:

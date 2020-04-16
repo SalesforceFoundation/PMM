@@ -377,7 +377,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(element => {
                 for (let [key, value] of Object.entries(this.localDefaultValues)) {
-                    if (element.apiName === key && value) {
+                    if (element.apiName === key && value != null) {
                         element.value = this.localDefaultValues[key];
                         if (element.apiName === this.fields.contact.fieldApiName) {
                             hasContact = true;

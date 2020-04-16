@@ -20,6 +20,7 @@ import saving from "@salesforce/label/c.Saving";
 import success from "@salesforce/label/c.Success";
 import serviceDeliveriesAdded from "@salesforce/label/c.Service_Deliveries_Added";
 import Label_Required from "@salesforce/label/c.Required";
+import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
@@ -52,6 +53,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         required: Label_Required,
         success: success,
         serviceDeliveriesAdded: serviceDeliveriesAdded,
+        rowsWithErrors: rowsWithErrors,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -133,16 +135,16 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     handleRowError(event) {
-        this.errors[event.detail.index] = event.detail.detail;
+        let errorIndex = event.detail.index;
+        this.errors[errorIndex] = "error";
         this.renderErrors();
     }
 
     handleClearError(event) {
-        let result = this.serviceDeliveries.find(({ index }) => index === event.detail);
+        let errorIndex = event.detail;
+        let result = this.serviceDeliveries.find(({ index }) => index === errorIndex);
         result.hasSaved = true;
-        if (this.errors[event.detail]) {
-            this.handleDeleteError(event.detail);
-        }
+        this.handleDeleteError(errorIndex);
     }
 
     handleDeleteError(index) {
@@ -192,13 +194,5 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     get isDoneDisabled() {
         return Object.keys(this.errors).length > 0;
-    }
-
-    get doneButtonTitle() {
-        let result = "";
-        Object.values(this.errors).forEach(value => {
-            result += value + "\n";
-        });
-        return result;
     }
 }

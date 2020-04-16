@@ -252,7 +252,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleCustomError() {
-        let eventDetail = { index: this.index, detail: this.rowError };
+        let eventDetail = { index: this.index };
         this.dispatchEvent(new CustomEvent("error", { detail: eventDetail }));
     }
 

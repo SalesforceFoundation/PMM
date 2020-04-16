@@ -210,4 +210,11 @@
         <shortDescription>Warning</shortDescription>
         <value>Warning</value>
     </labels>
+    <labels>
+        <fullName>Rows_With_Errors</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You have rows with errors</shortDescription>
+        <value>You have rows with errors</value>
+    </labels>
 </CustomLabels>

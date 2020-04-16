@@ -176,7 +176,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                 const event = new ShowToastEvent({
                     title: this.labels.success,
                     variant: "success",
-                    mode: "pester",
+                    mode: "sticky",
                     message: "{0}",
                     messageData: [
                         {

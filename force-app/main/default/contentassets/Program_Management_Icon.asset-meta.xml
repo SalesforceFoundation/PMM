@@ -10,8 +10,8 @@
     </relationships>
     <versions>
         <version>
-            <number>1</number>
-            <pathOnClient>Program Management Icon.png</pathOnClient>
+            <number>2</number>
+            <pathOnClient>ProgramManagementModule.png</pathOnClient>
         </version>
     </versions>
 </ContentAsset>

@@ -13,8 +13,16 @@
         <name>APPLICATION_DATE_BEFORE_START_DATE</name>
     </validationRules>
     <validationRules>
+        <errorMessage>Wählen Sie ein Enddatum aus, das am oder nach dem Anfangsdatum des Programms und am oder vor dem Enddatum des Programms liegt.</errorMessage>
+        <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
         <errorMessage>Das Anfangsdatum muss vor dem Enddatum liegen</errorMessage>
         <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Wählen Sie ein Anfangsdatum aus, das am oder nach dem Anfangsdatum des Programms und am oder vor dem Enddatum des Programms liegt.</errorMessage>
+        <name>START_DATE_WITHIN_PROGRAM_DATES</name>
     </validationRules>
     <layouts>
         <layout>Program Engagement Layout</layout>

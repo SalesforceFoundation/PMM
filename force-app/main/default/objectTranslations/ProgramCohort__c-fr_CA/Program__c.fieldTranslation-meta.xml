@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Program__c</name>
-    <help>Une référence au programme segmenté par la Cohorte de programmes.</help>
+    <help>Le programme auquel cette cohorte de programmes appartient.</help>
     <relationshipLabel>Cohortes de programmes</relationshipLabel>
     <label>Programme</label>
 </CustomFieldTranslation>

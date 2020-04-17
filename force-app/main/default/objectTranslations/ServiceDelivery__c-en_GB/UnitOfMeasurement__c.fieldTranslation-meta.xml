@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>UnitOfMeasurement__c</name>
-    <help>The unit used to track this service. For example: hours, meals, sessions, deliveries, kits, etc. This is a formula field that displays the UnitOfMeasurement__c field from the Service object.</help>
+    <help>The Unit of Measurement from the related Service.</help>
     <label>Unit of Measurement</label>
 </CustomFieldTranslation>

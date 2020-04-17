@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Status__c</name>
-    <help>Los valores de la lista de selección describen el estado del programa. Los valores predeterminados son Planificado, Activo, Completado y Cancelado. La lista de selección puede modificarse.</help>
+    <help>El estado del programa. Los valores vienen determinados por su administrador.</help>
     <label>Estado</label>
     <picklistValues>
         <masterLabel>Planned</masterLabel>

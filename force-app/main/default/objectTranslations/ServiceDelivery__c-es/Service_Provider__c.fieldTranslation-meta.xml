@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Service_Provider__c</name>
-    <help>Una búsqueda de un proveedor de servicios interno de su organización o de una organización asociada cuyos proveedores de servicios se han agregado como contactos en su base de datos.</help>
+    <help>Un proveedor de servicios interno o un proveedor de servicios de una organización asociada que se agregó como un contacto en su base de datos.</help>
     <relationshipLabel>Entregas de servicio (Proveedor de servicios)</relationshipLabel>
     <label>Proveedor de servicios</label>
 </CustomFieldTranslation>

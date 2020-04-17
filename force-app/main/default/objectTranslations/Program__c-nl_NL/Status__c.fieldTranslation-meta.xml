@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Status__c</name>
-    <help>Keuzelijstwaarden beschrijven de status van het programma. Standaardwaarden van de keuzelijst zijn: Gepland, Actief, Voltooid en Geannuleerd. De keuzelijst kan worden bewerkt.</help>
+    <help>De status van het programma. Waarden worden bepaald door uw beheerder.</help>
     <label>Status</label>
     <picklistValues>
         <masterLabel>Planned</masterLabel>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>ApplicationDate__c</name>
-    <help>個人がプログラムに申請した日付。プログラムエンゲージメントフェーズが [申請済み] の場合、申請日は [テンプレート: プログラムエンゲージメント名] というタイトルのプロセスビルダープロセスで TODAY() に設定されます。プロセスを編集するには、テンプレートをコピーしてプロセスを編集します。</help>
+    <help>プログラムエンゲージメントフェーズが [申請済み] の場合、これが空白のままになっていると、申請日はデフォルトで今日になります。</help>
     <label>申請日</label>
 </CustomFieldTranslation>

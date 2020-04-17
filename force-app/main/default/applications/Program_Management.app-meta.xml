@@ -65,7 +65,7 @@
     <brand>
         <headerColor>#0070D2</headerColor>
         <logo>Program_Management_Icon</logo>
-        <logoVersion>1</logoVersion>
+        <logoVersion>2</logoVersion>
         <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
     </brand>
     <formFactors>Large</formFactors>

@@ -9,120 +9,128 @@
 
 <template>
     <div class="style-target"></div>
-    <div class="slds-p-vertical_small hideHelpText">
+    <div class="slds-p-top_small hideHelpText">
         <lightning-record-edit-form
             onload={handleLoad}
             onsuccess={handleSuccess}
             onsubmit={handleSubmit}
-            onerror={handleError}
+            onerror={handleSaveError}
             record-id={recordId}
             object-api-name={serviceDeliveryObject}
         >
-            <lightning-layout class="slds-grid_vertical-align-end">
-                <template for:each={localFieldSet} for:item="field">
-                    <lightning-layout-item
-                        key={field.apiName}
-                        size={field.size}
-                        padding="horizontal-small"
-                    >
-                        <div class="sd-input" data-field={field.apiName}>
-                            <template if:true={field.showFilteredInput}>
-                                <lightning-combobox
-                                    name={field.apiName}
-                                    label={field.label}
-                                    variant="label-hidden"
-                                    onchange={handleComboChange}
-                                    placeholder={field.placeholder}
-                                    options={field.options}
-                                    disabled={field.disabled}
-                                    value={field.value}
+            <lightning-layout class="slds-grid_vertical-align-center">
+                <lightning-layout-item size="10">
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12">
+                            <lightning-layout multiple-rows="true">
+                                <template for:each={localFieldSet} for:item="field">
+                                    <lightning-layout-item
+                                        key={field.apiName}
+                                        padding="horizontal-small"
+                                        size="12"
+                                        small-device-size="6"
+                                        medium-device-size="4"
+                                        large-device-size="2"
+                                        class="slds-m-bottom_medium"
+                                    >
+                                        <div class="sd-input" data-field={field.apiName}>
+                                            <template if:true={field.showFilteredInput}>
+                                                <lightning-combobox
+                                                    name={field.apiName}
+                                                    label={field.label}
+                                                    onchange={handleComboChange}
+                                                    placeholder={field.placeholder}
+                                                    options={field.options}
+                                                    disabled={field.disabled}
+                                                    value={field.value}
+                                                >
+                                                </lightning-combobox>
+                                            </template>
+                                            <template if:false={field.showFilteredInput}>
+                                                <lightning-input-field
+                                                    data-name={field.apiName}
+                                                    field-name={field.apiName}
+                                                    onchange={handleInputChange}
+                                                    disabled={field.disabled}
+                                                    value={field.value}
+                                                    class="inline-label"
+                                                ></lightning-input-field>
+                                            </template>
+                                        </div>
+                                    </lightning-layout-item>
+                                </template>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-layout>
+                                <template if:true={isError}>
+                                    <lightning-layout-item
+                                        size="12"
+                                        padding="around-small"
+                                    >
+                                        <div class="slds-text-color_error" key={error}>
+                                            {rowError}
+                                        </div>
+                                    </lightning-layout-item>
+                                </template>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+                <lightning-layout-item size="2">
+                    <lightning-layout>
+                        <lightning-layout-item
+                            size="8"
+                            class="slds-p-top_xx-small slds-text-align_right"
+                        >
+                            <template if:true={isSaving}>
+                                <div
+                                    class="slds-is-relative slds-p-top_large slds-text-align_right slds-m-left_x-large"
+                                    role="alert"
                                 >
-                                </lightning-combobox>
+                                    <lightning-spinner
+                                        alternative-text={labels.saving}
+                                        size="small"
+                                    ></lightning-spinner>
+                                </div>
                             </template>
-                            <template if:false={field.showFilteredInput}>
-                                <lightning-input-field
-                                    data-name={field.apiName}
-                                    field-name={field.apiName}
-                                    variant="label-hidden"
-                                    onchange={handleInputChange}
-                                    disabled={field.disabled}
-                                    value={field.value}
-                                ></lightning-input-field>
+                            <template if:true={isSaved} role="alert">
+                                <lightning-icon
+                                    tabindex="0"
+                                    icon-name="utility:success"
+                                    alternative-text={labels.saved}
+                                    size="x-small"
+                                    variant="success"
+                                    title={labels.saved}
+                                ></lightning-icon>
+                                <span class="slds-p-left_small">{labels.saved}</span>
                             </template>
-                        </div>
-                    </lightning-layout-item>
-                </template>
-                <lightning-layout-item
-                    class="slds-p-right_large"
-                    flexibility="auto, no-grow"
-                >
-                    <lightning-button-icon
-                        icon-name="utility:delete"
-                        alternative-text={labels.deleteLabel}
-                        class="slds-m-left_x-small"
-                        onclick={handleShowModal}
-                        disabled={isDeleteDisabled}
-                    >
-                    </lightning-button-icon>
-                </lightning-layout-item>
-                <lightning-layout-item>
-                    <template if:true={isSaving}>
-                        <div class="slds-is-relative spinner-container" role="alert">
-                            <lightning-spinner
-                                alternative-text={labels.saving}
-                                size="small"
-                            ></lightning-spinner>
-                        </div>
-                    </template>
-                    <template if:true={isSaved} role="alert">
-                        <lightning-icon
-                            tabindex="0"
-                            icon-name="utility:success"
-                            alternative-text={labels.saved}
-                            size="small"
-                            aria-describedby="help"
-                            variant="success"
-                            title={labels.saved}
-                        ></lightning-icon>
-                    </template>
-                    <template if:true={isError} role="alert">
-                        <lightning-icon
-                            tabindex="0"
-                            icon-name="utility:warning"
-                            alternative-text={labels.error}
-                            size="small"
-                            aria-describedby="help"
-                            variant="error"
-                            title={rowError}
-                        ></lightning-icon>
-                    </template>
+                            <template if:true={isError} role="alert">
+                                <lightning-icon
+                                    tabindex="0"
+                                    icon-name="utility:warning"
+                                    alternative-text={labels.error}
+                                    size="x-small"
+                                    variant="error"
+                                    title={rowError}
+                                ></lightning-icon>
+                                <span class="slds-p-left_small">{labels.error}</span>
+                            </template>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-text-align_right" size="4">
+                            <lightning-button-icon
+                                icon-name="utility:delete"
+                                alternative-text={labels.deleteLabel}
+                                class="slds-m-left_x-small"
+                                onclick={handleShowModal}
+                                disabled={isDeleteDisabled}
+                            >
+                            </lightning-button-icon>
+                        </lightning-layout-item>
+                    </lightning-layout>
                 </lightning-layout-item>
             </lightning-layout>
-            <lightning-layout>
-                <template if:true={noContactPrograms}>
-                    <lightning-layout-item size="12" padding="around-small">
-                        <div class="slds-text-color_error">
-                            {labels.selectedContactWarning}
-                        </div>
-                    </lightning-layout-item>
-                </template>
-                <template if:true={noServicesForPE}>
-                    <lightning-layout-item size="12" padding="around-small">
-                        <div class="slds-text-color_error">
-                            {labels.noServiceWarning}
-                        </div>
-                    </lightning-layout-item>
-                </template>
-                <template if:true={isError}>
-                    <lightning-layout-item size="12" padding="around-small">
-                        <template for:each={rowError} for:item="error">
-                            <div class="slds-text-color_error" key={error}>
-                                {error}
-                            </div>
-                        </template>
-                    </lightning-layout-item>
-                </template>
-            </lightning-layout>
+
             <lightning-button
                 class="slds-p-left_medium sd-submit slds-hide"
                 variant="neutral"

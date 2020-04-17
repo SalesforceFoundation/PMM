@@ -15,6 +15,8 @@ import serviceDeliveries from "@salesforce/label/c.Service_Deliveries";
 export default class ServiceDeliveryModal extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
+    @api hideFooter;
+
     @track defaultValues;
 
     labels = {

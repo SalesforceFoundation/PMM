@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Contact__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
-    <description>The Contact engaging in your Program. The Contact name is used with the Program Name in the the Process Builder process titled Template: Program Engagement Name that populates the Program Engagement Name.</description>
+    <description>The Contact engaging in your Program. The Contact name is used with the Program Name in the the Process Builder process titled Template: Program Engagement Object that populates the Program Engagement Name.</description>
     <externalId>false</externalId>
     <label>Client</label>
     <referenceTo>Contact</referenceTo>

@@ -1,0 +1,32 @@
+{
+    "product": {
+        "title": {
+            "message": "Module Programmabeheer (PMM)",
+            "description": "name of product"
+        },
+        "short_description": {
+            "message": "Bijhouden, beheren en leveren van programma's",
+            "description": "tagline of product"
+        },
+        "description": {
+            "message": "Welkom bij de installer van de module Programmabeheer (PMM)!\r\n\r\nDe module Programmabeheer is een standaard framework voor het bijhouden, beheren en leveren van programma's, diensten en bestellingen.\r\n\r\n*BELANGRIJK*: Salesforce raad niet aan, de upgrades direct in productieorganisaties te installeren. Installeer de module Programmabeheer in plaats hiervan eerst in een van uw vrije sandboxomgevingen of in een ontwikkelorganisatie.\r\n\r\n*De wettelijke richtlijnen gaan voor de tekst in de paragraaf*\r\n\r\nKijk na het installeren van Programmabeheer bij de resources in onze documentatie:\r\n\r\n* <Documentatie module Programmabeheer>\r\n\r\nVragen? Word lid van de klantengroep <Module Programmabeheer> in de Power of Us Hub.",
+            "description": "shown on product detail page (markdown)"
+        },
+        "error_message": {
+            "message": "Ga voor assistentie bij deze fout naar <a href='https://help.salesforce.com/'>help.salesforce.com</a>, zoek het gebied Ondersteuning en services, en leg een ticket voor technische ondersteuning vast bij Salesforce. Vermeld \"PMM\" in de onderwerpregel en neem in uw opmerking de hier getoonde installatiekoppeling op.",
+            "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:install": {
+        "title": {
+            "message": "Installeer de Nonprofit Cloud Module Programmabeheer",
+            "description": "title of installation plan"
+        }
+    },
+    "steps": {
+        "Install {product} {version}": {
+            "message": "{product} {version} installeren",
+            "description": "title of installation step"
+        }
+    }
+}

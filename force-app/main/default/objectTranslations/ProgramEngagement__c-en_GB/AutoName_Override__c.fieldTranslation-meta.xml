@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>AutoName_Override__c</name>
-    <help>When this is checked, the Program Engagement Name can be edited after it has been created by the Process Builder process titled Template: Program Engagement Object.</help>
+    <help>When this is checked, the Program Engagement Name can be manually defined. It will not be auto-named.</help>
     <label>Auto-Name Override</label>
 </CustomFieldTranslation>

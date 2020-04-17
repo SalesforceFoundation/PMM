@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>UnitOfMeasurement__c</name>
-    <help>L&#39;unité utilisée pour suivre ce service, par exemple heures, repas, sessions, livraisons, kits, etc. La définition d&#39;une unité permet de standardiser la méthode de mesure de la livraison de ce service.</help>
+    <help>L&#39;unité utilisée pour suivre le service, par exemple heures, repas, sessions, livraisons, kits, etc. La définition d&#39;une unité permet de standardiser la méthode de mesure de la livraison du service.</help>
     <label>Unité de mesure</label>
 </CustomFieldTranslation>

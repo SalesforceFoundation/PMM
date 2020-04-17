@@ -5,14 +5,6 @@
         <label>Add Service Delivery</label>
     </customLabels>
     <customLabels>
-        <name>Error</name>
-        <label>Error</label>
-    </customLabels>
-    <customLabels>
-        <name>Warning</name>
-        <label>Warning</label>
-    </customLabels>
-    <customLabels>
         <name>Cancel</name>
         <label>Cancel</label>
     </customLabels>
@@ -33,6 +25,14 @@
         <label>Delete</label>
     </customLabels>
     <customLabels>
+        <name>Error</name>
+        <label>Error</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Program_Engagement</name>
+        <label>New Program Engagement</label>
+    </customLabels>
+    <customLabels>
         <name>No_Services_For_Program_Engagement</name>
         <label>No services found, choose another program engagement.</label>
     </customLabels>
@@ -43,6 +43,14 @@
     <customLabels>
         <name>Required</name>
         <label>Required</label>
+    </customLabels>
+    <customLabels>
+        <name>Save</name>
+        <label>Save</label>
+    </customLabels>
+    <customLabels>
+        <name>SaveMessage</name>
+        <label>New Program Engagement record created</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -79,6 +87,10 @@
     <customLabels>
         <name>Util_Unknown_Error</name>
         <label>Unknown Error</label>
+    </customLabels>
+    <customLabels>
+        <name>Warning</name>
+        <label>Warning</label>
     </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>

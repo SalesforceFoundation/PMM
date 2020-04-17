@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Stage__c</name>
-    <help>この選択リスト値は、プログラムでの個人のエンゲージメントのフェーズを示します。デフォルト値は、[申請済み]、[申請却下]、[登録済み]、[有効]、[完了]、および [取り下げる] です。選択リスト値は編集できます。フェーズはページ上部のパスに表示されます。</help>
+    <help>この選択リスト値は、プログラムでの個人のエンゲージメントのフェーズを示すものであり、パスに表示されます。値は管理者が決定します。</help>
     <label>フェーズ</label>
     <picklistValues>
         <masterLabel>Applied</masterLabel>
@@ -17,7 +17,7 @@
     </picklistValues>
     <picklistValues>
         <masterLabel>Active</masterLabel>
-        <translation>Active</translation>
+        <translation>有効</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Completed</masterLabel>

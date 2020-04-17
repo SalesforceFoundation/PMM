@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Stage__c</name>
-    <help>Diese Werte in der Auswahlliste beschreiben die Beziehung eines Kontakts zu seiner Programmteilnahme. Die Standardwerte sind &quot;Kunde&quot;, &quot;Freiwilliger&quot; und &quot;Leistungsanbieter&quot;. Die für dieses Feld angezeigten Werte der Auswahlliste lassen sich bearbeiten.</help>
+    <help>Diese Werte der Auswahlliste beschreiben die Teilnahmephase eines Kontakts an einem Programm und werden in einem Pfad angezeigt. Die Werte werden von Ihrem Administrator festgelegt.</help>
     <label>Phase</label>
     <picklistValues>
         <masterLabel>Applied</masterLabel>
@@ -17,7 +17,7 @@
     </picklistValues>
     <picklistValues>
         <masterLabel>Active</masterLabel>
-        <translation>Active</translation>
+        <translation>Aktiv</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Completed</masterLabel>

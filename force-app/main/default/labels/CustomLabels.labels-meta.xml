@@ -9,11 +9,32 @@
         <value>Add Service Delivery</value>
     </labels>
     <labels>
+        <fullName>Anonymous</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Anonymous</shortDescription>
+        <value>Anonymous</value>
+    </labels>
+    <labels>
         <fullName>Cancel</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Cancel</shortDescription>
         <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>Done</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Done</shortDescription>
+        <value>Done</value>
+    </labels>
+    <labels>
+        <fullName>Add_Entry</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Entry</shortDescription>
+        <value>Add Entry</value>
     </labels>
     <labels>
         <fullName>Close</fullName>
@@ -49,6 +70,14 @@
         <protected>true</protected>
         <shortDescription>Error</shortDescription>
         <value>Error</value>
+    </labels>
+    <labels>
+        <fullName>MissingSObjectType</fullName>
+        <categories>Exception</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Missing SObject Type</shortDescription>
+        <value>The SObject Type value is required.</value>
     </labels>
     <labels>
         <fullName>New_Program_Engagement</fullName>
@@ -129,6 +158,14 @@
         <value>Service Deliveries</value>
     </labels>
     <labels>
+        <fullName>Service_Deliveries_Added</fullName>
+        <categories>Service Delivery</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service Deliveries Added</shortDescription>
+        <value>Service Deliveries Added</value>
+    </labels>
+    <labels>
         <fullName>Service_Delivery_Contact_Without_Programs</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -141,6 +178,14 @@
         <protected>true</protected>
         <shortDescription>Success</shortDescription>
         <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>TelemetryException</fullName>
+        <categories>Exception</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Error capturing metrics.</shortDescription>
+        <value>An error occurred when attempting to capture usage metrics.</value>
     </labels>
     <labels>
         <fullName>Util_Error</fullName>
@@ -164,5 +209,12 @@
         <protected>true</protected>
         <shortDescription>Warning</shortDescription>
         <value>Warning</value>
+    </labels>
+    <labels>
+        <fullName>Rows_With_Errors</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You have rows with errors</shortDescription>
+        <value>You have rows with errors</value>
     </labels>
 </CustomLabels>

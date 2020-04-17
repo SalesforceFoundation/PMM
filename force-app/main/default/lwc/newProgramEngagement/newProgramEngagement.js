@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { handleError, showToast } from "c/util";
@@ -60,11 +69,14 @@ export default class NewProgramEngagement extends LightningElement {
     }
 
     clearAllValues() {
-        this.template.querySelectorAll("lightning-input-field").forEach(element => {
-            if (element.value !== this.contactId) {
-                element.value = "";
-            }
-        });
+        const allInputFields = this.template.querySelectorAll("lightning-input-field");
+        if (allInputFields) {
+            allInputFields.forEach(field => {
+                if (field.value !== this.contactId) {
+                    field.reset();
+                }
+            });
+        }
     }
 
     handleLoad() {

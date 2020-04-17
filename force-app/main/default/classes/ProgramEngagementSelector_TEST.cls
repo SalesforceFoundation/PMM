@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 @isTest
 public with sharing class ProgramEngagementSelector_TEST {
     @isTest
@@ -65,31 +74,5 @@ public with sharing class ProgramEngagementSelector_TEST {
             System.assertEquals(new List<ProgramEngagement__c>(), actual);
         }
         Test.stopTest();
-    }
-
-    public class GetProgramEngagementsByContactIdMethod extends Stub.method {
-        public Id contactId;
-        public List<ProgramEngagement__c> returnValue;
-
-        public GetProgramEngagementsByContactIdMethod() {
-            super(
-                ProgramEngagementSelector.class,
-                List<ProgramEngagement__c>.class,
-                'getProgramEngagementsByContactId',
-                new List<Stub.Parameter>{ new Stub.Parameter(Id.class, 'contactId') }
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof ProgramEngagementSelector;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{ this.contactId };
-        }
-
-        public override Object getReturnValue() {
-            return this.returnValue;
-        }
     }
 }

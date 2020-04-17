@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>EndDate__c</fullName>
-    <description>If the Program Engagement stage is Completed or Withdrawn, the End Date is set to TODAY() by the Process Builder process Template: Program Engagement. Clone the process template to edit it.</description>
+    <description>If the Program Engagement stage is Completed or Withdrawn, the End Date is set to TODAY() by the Process Builder process Template: Program Engagement Object. Clone the process template to edit it.</description>
     <externalId>false</externalId>
     <inlineHelpText>If the Program Engagement Stage is Completed or Withdrawn, the End Date defaults to today if left blank.</inlineHelpText>
     <label>End Date</label>

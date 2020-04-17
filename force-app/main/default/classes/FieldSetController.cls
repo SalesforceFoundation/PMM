@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 public with sharing class FieldSetController {
     @TestVisible
     private static FieldSetService fieldSetService = new FieldSetService();
@@ -16,7 +25,7 @@ public with sharing class FieldSetController {
         try {
             return fieldSetService.getFieldSetForLWC(objectName, fieldSetName);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+            throw Util.getAuraHandledException(e);
         }
     }
 }

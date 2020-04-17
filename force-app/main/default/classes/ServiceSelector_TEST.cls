@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 @isTest
 public with sharing class ServiceSelector_TEST {
     @isTest
@@ -64,33 +73,5 @@ public with sharing class ServiceSelector_TEST {
             System.assertEquals(new List<Service__c>(), actual);
         }
         Test.stopTest();
-    }
-
-    public class GetServicesByProgramIdsMethod extends Stub.method {
-        public Set<Id> programIds;
-        public List<Service__c> returnValue;
-
-        public GetServicesByProgramIdsMethod() {
-            super(
-                ServiceSelector.class,
-                List<Service__c>.class,
-                'getServicesByProgramIds',
-                new List<Stub.Parameter>{
-                    new Stub.Parameter(Set<Id>.class, 'programIds')
-                }
-            );
-        }
-
-        public override Boolean isInstanceOf(Object instance) {
-            return instance instanceof ServiceSelector;
-        }
-
-        public override List<Object> getExpectedArguments() {
-            return new List<Object>{ this.programIds };
-        }
-
-        public override Object getReturnValue() {
-            return this.returnValue;
-        }
     }
 }

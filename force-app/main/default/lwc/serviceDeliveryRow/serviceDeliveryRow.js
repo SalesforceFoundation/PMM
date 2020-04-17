@@ -12,7 +12,6 @@ import { showToast, handleError, debouncify } from "c/util";
 import { deleteRecord } from "lightning/uiRecordApi";
 import { fireEvent } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
-import { loadStyle } from "lightning/platformResourceLoader";
 
 import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryController.getServicesAndEngagements";
 
@@ -37,8 +36,6 @@ import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
-
-import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const DELAY = 1000;
 const ENGAGEMENTS = "engagements";
@@ -78,7 +75,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track hasQuantity = false;
     @track saveMessage;
 
-    noContactPrograms = false;
     _defaultsSet = false;
     _filteredValues;
     _valuesToSave = [];
@@ -116,10 +112,6 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
 
-    connectedCallback() {
-        loadStyle(this, pmmFolder + "/hideHelpIcons.css");
-    }
-
     autoSave() {
         let deliverySubmit = this.template.querySelector(".sd-submit");
         if (deliverySubmit) {
@@ -128,7 +120,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleGetServicesEngagements(contactId) {
-        this.noContactPrograms = false;
         this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
@@ -171,7 +162,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
         this._filteredValues = [];
         this._valuesToSave = [];
-        this.noContactPrograms = false;
     }
 
     handleComboChange(event) {
@@ -237,10 +227,6 @@ export default class ServiceDeliveryRow extends LightningElement {
                 if (this.programEngagementId) {
                     element.value = this.programEngagementId;
                 }
-
-                if (this.noContactPrograms) {
-                    element.disabled = true;
-                }
             } else if (element.apiName !== this.fields.contact.fieldApiName) {
                 element.disabled = true;
             }
@@ -255,12 +241,19 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.processDefaults();
     }
 
-    handleError(event) {
+    handleSaveError(event) {
         this.isSaving = false;
         this.isSaved = false;
         this.isError = true;
         // TODO: show this in a tooltip on the lightning:icon on hover and keyboard focus; probably slds-tooltip
         this.rowError = handleError(event, false, "dismissible", true);
+        event.detail.index = this.index;
+        this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
+    }
+
+    handleCustomError() {
+        let eventDetail = { index: this.index };
+        this.dispatchEvent(new CustomEvent("error", { detail: eventDetail }));
     }
 
     handleSuccess(event) {
@@ -268,6 +261,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
+        this.dispatchEvent(new CustomEvent("clearerror", { detail: this.index }));
     }
 
     handleSubmit(event) {
@@ -344,6 +338,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                     this.isError = true;
                     this.rowError = [this.labels.noServiceWarning];
                     element.disabled = true;
+                    this.handleCustomError();
                 }
             } else if (
                 element.apiName !== this.fields.contact.fieldApiName &&

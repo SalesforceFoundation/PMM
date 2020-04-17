@@ -377,11 +377,16 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(element => {
                 for (let [key, value] of Object.entries(this.localDefaultValues)) {
-                    if (element.apiName === key) {
+                    if (element.apiName === key && value != null) {
                         element.value = this.localDefaultValues[key];
                         if (element.apiName === this.fields.contact.fieldApiName) {
                             hasContact = true;
                             contactId = value;
+                        }
+                        if (
+                            element.apiName === this.fields.programEngagement.fieldApiName
+                        ) {
+                            this.programEngagementId = value;
                         }
                     }
                 }
@@ -389,6 +394,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
             if (hasContact) {
                 this.handleGetServicesEngagements(contactId);
+                this.selectedContact = contactId;
             }
         }
     }
@@ -403,20 +409,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleSaveEnd() {
         this.isSaving = false;
         this.isSaved = true;
-    }
-
-    //Temporary CSS Overrides.
-    //TODO : Update when shadow-dom styling options are available.
-    renderedCallback() {
-        if (this.hasRendered) return;
-        this.hasRendered = true;
-        const style = document.createElement("style");
-        style.innerText = `
-        .sd-input .slds-form-element__help {
-            position: absolute;
-            }
-        `;
-        this.template.querySelector("div.style-target").appendChild(style);
     }
 
     onSave(event) {

@@ -293,7 +293,7 @@ flows:
 plans:
     install:
         slug: install
-        title: Install Nonprofit Cloud Program Management Module
+        title: Install Program Management Module
         tier: primary
         is_listed: True
         steps:

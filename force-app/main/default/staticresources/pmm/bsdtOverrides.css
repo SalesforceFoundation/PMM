@@ -1,0 +1,26 @@
+.bsdt .slds-card__body {
+    max-height: 600px;
+    overflow-y: scroll;
+    min-height: 350px;
+}
+
+.bsdt .slds-card__footer {
+    background-color: rgb(240, 240, 240);
+}
+
+.bsdt .sd-input .slds-form-element__help {
+    position: absolute;
+}
+.bsdt label.slds-form-element__label {
+    white-space: nowrap;
+    word-break: keep-all;
+}
+
+.bsdt lightning-input.slds-form-element {
+    overflow: visible;
+    white-space: nowrap;
+}
+
+.bsdt .bsdt-shadow {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+}

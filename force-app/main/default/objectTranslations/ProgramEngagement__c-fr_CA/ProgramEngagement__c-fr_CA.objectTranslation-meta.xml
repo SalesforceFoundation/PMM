@@ -13,8 +13,16 @@
         <name>APPLICATION_DATE_BEFORE_START_DATE</name>
     </validationRules>
     <validationRules>
+        <errorMessage>Sélectionnez une date de fin identique ou postérieure à la date de début du programme et identique ou antérieure à la date de fin du programme.</errorMessage>
+        <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
         <errorMessage>La date de début doit être antérieure à la date de fin</errorMessage>
         <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Sélectionnez une date de début identique ou postérieure à la date de début du programme et identique ou antérieure à la date de fin du programme.</errorMessage>
+        <name>START_DATE_WITHIN_PROGRAM_DATES</name>
     </validationRules>
     <layouts>
         <layout>Program Engagement Layout</layout>

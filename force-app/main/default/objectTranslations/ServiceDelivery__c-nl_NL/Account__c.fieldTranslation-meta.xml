@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Account__c</name>
-    <help>Voeg Huishoudenaccount van de contactpersoon toe als potentieel het gehele huishouden van Servicelevering kan profiteren, bijvoorbeeld maaltijden van een voedselbank. Als Servicelevering alleen de individuele contactpersoon dient, laat u dit veld blanco.</help>
+    <help>Selecteer de huishoudenaccount als de levering van de dienst voordelen biedt voor leden van het huishoudenaccount van het contact. Bijvoorbeeld maaltijden van een voedselbank. Laat dit open als er slechts één contact voordeel van heeft.</help>
     <relationshipLabel>Serviceleveringen</relationshipLabel>
     <label>Huishoudenaccount</label>
 </CustomFieldTranslation>

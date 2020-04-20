@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Service_Provider__c</name>
-    <help>Ein Nachschlagewert für einen Leistungsanbieter, der intern in Ihrer Organisation oder von Partnerorganisationen, deren Leistungsanbieter Ihrer Datenbank als Kontakte hinzugefügt wurden, verwendet wird.</help>
+    <help>Ein interner Leistungsanbieter oder der Leistungsanbieter einer Partnerorganisation, der Ihrer Datenbank als Kontakt hinzugefügt wurde.</help>
     <relationshipLabel>Erbrachte Leistungen (Leistungsanbieter)</relationshipLabel>
     <label>Leistungsanbieter</label>
 </CustomFieldTranslation>

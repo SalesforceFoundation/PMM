@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>EndDate__c</name>
-    <help>Programmabschluss- oder -enddatum für einen Kontakt. In der PT-Phase &quot;Abgeschlossen&quot; oder &quot;Zurückgezogen&quot; legt der Prozess &quot;Vorlage: Name der Programmteilnahme&quot; d. Prozessgenerators das Enddatum auf TODAY() fest. Zum Bearbeiten Prozessvorlage klonen.</help>
+    <help>Wenn die Phase der Programmteilnahme &quot;Abgeschlossen&quot; oder &quot;Zurückgezogen&quot; ist, ist der Standardwert für das Enddatum der heutige Tag, wenn im Feld keine Angabe gemacht wird.</help>
     <label>Enddatum</label>
 </CustomFieldTranslation>

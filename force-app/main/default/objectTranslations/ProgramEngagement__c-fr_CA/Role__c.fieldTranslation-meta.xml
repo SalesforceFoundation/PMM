@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Role__c</name>
-    <help>Ces valeurs de liste de sélection précisent la relation d&#39;un contact avec l&#39;engagement dans le programme. Les valeurs par défaut sont Client, Bénévole et Fournisseur de services. Vous pouvez modifier les valeurs qui sont affichées dans ce champ.</help>
+    <help>La relation d’un contact avec l’engagement dans le programme. Les valeurs sont déterminées par votre administrateur.</help>
     <label>Rôle</label>
     <picklistValues>
         <masterLabel>Client</masterLabel>

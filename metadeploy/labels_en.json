@@ -13,7 +13,7 @@
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
-            "message": "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include \u201cPMM\u201d in the subject line and include in your comment the installation link shown here.",
+            "message": "To get help with this error, go to <a href='https://help.salesforce.com/'>help.salesforce.com</a>, find the Support & Services area and log a technical support ticket with Salesforce. Include \u201cPMM\u201d in the subject line and include in your comment the installation link shown here.",
             "description": "shown after failed installation (markdown)"
         }
     },

@@ -1,0 +1,32 @@
+{
+    "product": {
+        "title": {
+            "message": "Program Management Module (PMM)",
+            "description": "name of product"
+        },
+        "short_description": {
+            "message": "プログラムの追跡、管理、提供",
+            "description": "tagline of product"
+        },
+        "description": {
+            "message": "Program Management Module (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nProgram Management Module はプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、Program Management Module を無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\n*必要に応じて法務からの文章を待つ*\r\n\r\nProgram Management のインストールが完了したら、各種資料を確認してください。\r\n\r\n* <Program Management Module ドキュメント>\r\n\r\nご質問がある場合は、Power of Us Hub の <Program Management Module> カスタマーグループにご参加ください。",
+            "description": "shown on product detail page (markdown)"
+        },
+        "error_message": {
+            "message": "このエラーについて支援を受けるには、<a href='https://help.salesforce.com/'>help.salesforce.com</a> にアクセスし、[サポートとサービス] 領域を見つけて、Salesforce でテクニカルサポートのチケットを登録してください。件名行に「PMM」を含め、コメントにはここに表示されているインストールリンクを含めてください。",
+            "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:install": {
+        "title": {
+            "message": "Nonprofit Cloud Program Management Module のインストール",
+            "description": "title of installation plan"
+        }
+    },
+    "steps": {
+        "Install {product} {version}": {
+            "message": "{product} {version} のインストール",
+            "description": "title of installation step"
+        }
+    }
+}

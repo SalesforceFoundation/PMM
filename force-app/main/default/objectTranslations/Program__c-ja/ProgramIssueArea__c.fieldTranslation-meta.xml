@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>ProgramIssueArea__c</name>
-    <help>選択リスト値は、プログラムで対処する問題領域を示します。この項目に表示する選択リスト値は編集できます。</help>
+    <help>プログラムで対処する問題領域。値は管理者が決定します。</help>
     <label>プログラムの問題領域</label>
     <picklistValues>
         <masterLabel>Housing</masterLabel>

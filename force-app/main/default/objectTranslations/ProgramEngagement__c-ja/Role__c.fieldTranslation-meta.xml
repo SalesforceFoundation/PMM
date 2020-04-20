@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Role__c</name>
-    <help>この選択リスト値は、プログラムエンゲージメントとの個人のリレーションを示します。デフォルト値は、[クライアント]、[ボランティア]、および [サービスプロバイダ] です。この項目に表示する選択リスト値は編集できます。</help>
+    <help>プログラムエンゲージメントと個人のリレーション。値は管理者が決定します。</help>
     <label>役割</label>
     <picklistValues>
         <masterLabel>Client</masterLabel>

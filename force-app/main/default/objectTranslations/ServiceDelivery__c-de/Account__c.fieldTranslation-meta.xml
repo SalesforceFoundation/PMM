@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Account__c</name>
-    <help>Fügen Sie den Haushalt-Account des Kontakts hinzu, wenn die erbrachte Leistung potenziell für den gesamten Haushalt nützlich ist. Beispiel: Mahlzeiten einer Tafel. Wenn die erbrachte Leistung nur dem individuellen Kontakt nützt, lassen Sie das Feld leer.</help>
+    <help>Wählen Sie den Haushalt-Account aus, wenn Mitglieder des Haushalt-Accounts des Kontakts von der erbrachten Leistung profitieren. Beispielsweise bei Mahlzeiten von einer Tafel. Lassen Sie das Feld leer, wenn nur der Kontakt profitiert.</help>
     <relationshipLabel>Erbrachte Leistungen</relationshipLabel>
     <label>Haushalt-Account</label>
 </CustomFieldTranslation>

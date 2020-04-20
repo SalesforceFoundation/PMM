@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Status__c</name>
-    <help>Ces valeurs de liste de sélection précisent le statut de la Cohorte de programmes. Les valeurs par défaut de la liste sont Planifié, Actif, Terminé et Annulé. Vous pouvez modifier les valeurs affichées dans ce champ.</help>
+    <help>Le statut de la cohorte de programme. Les valeurs sont déterminées par votre administrateur.</help>
     <label>Statut</label>
     <picklistValues>
         <masterLabel>Planned</masterLabel>

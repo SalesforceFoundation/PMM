@@ -5,14 +5,6 @@
         <label>Servicelevering toevoegen</label>
     </customLabels>
     <customLabels>
-        <name>Error</name>
-        <label>Fout</label>
-    </customLabels>
-    <customLabels>
-        <name>Warning</name>
-        <label>Waarschuwing</label>
-    </customLabels>
-    <customLabels>
         <name>Cancel</name>
         <label>Annuleren</label>
     </customLabels>
@@ -33,6 +25,14 @@
         <label>Verwijderen</label>
     </customLabels>
     <customLabels>
+        <name>Error</name>
+        <label>Fout</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Program_Engagement</name>
+        <label>Nieuwe programmabetrokkenheid</label>
+    </customLabels>
+    <customLabels>
         <name>No_Services_For_Program_Engagement</name>
         <label>Geen services gevonden; kies een andere programmabetrokkenheid.</label>
     </customLabels>
@@ -43,6 +43,14 @@
     <customLabels>
         <name>Required</name>
         <label>Verplicht</label>
+    </customLabels>
+    <customLabels>
+        <name>Save</name>
+        <label>Opslaan</label>
+    </customLabels>
+    <customLabels>
+        <name>SaveMessage</name>
+        <label>Nieuw record voor programmabetrokkenheid gemaakt</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -79,6 +87,10 @@
     <customLabels>
         <name>Util_Unknown_Error</name>
         <label>Onbekende fout</label>
+    </customLabels>
+    <customLabels>
+        <name>Warning</name>
+        <label>Waarschuwing</label>
     </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>

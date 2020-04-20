@@ -34,7 +34,7 @@
         <criteriaItems>
             <column>ProgramEngagement__c.Stage__c</column>
             <isUnlocked>true</isUnlocked>
-            <operator>equals</operator>
+            <operator>greaterOrEqual</operator>
             <value>Enrolled</value>
         </criteriaItems>
         <language>en_US</language>

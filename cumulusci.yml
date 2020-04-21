@@ -301,3 +301,9 @@ plans:
                 task: update_dependencies
             2:
                 task: install_managed
+            3:
+                task: deploy_customer_profiles
+                ui_options:
+                    name: "Deploy Program Management Profile"
+                options:
+                    unmanaged: False

@@ -19,7 +19,7 @@
     },
     "plan:install": {
         "title": {
-            "message": "Installeer de Nonprofit Cloud Module Programmabeheer",
+            "message": "Installeer de Nonprofit Cloud-module Programmabeheer",
             "description": "title of installation plan"
         }
     },

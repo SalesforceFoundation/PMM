@@ -1,7 +1,7 @@
 {
     "product": {
         "title": {
-            "message": "Program Management Module (PMM)",
+            "message": "プログラム管理モジュール (PMM)",
             "description": "name of product"
         },
         "short_description": {
@@ -9,7 +9,7 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Program Management Module (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nProgram Management Module はプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、Program Management Module を無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\n*必要に応じて法務からの文章を待つ*\r\n\r\nProgram Management のインストールが完了したら、各種資料を確認してください。\r\n\r\n* <Program Management Module ドキュメント>\r\n\r\nご質問がある場合は、Power of Us Hub の <Program Management Module> カスタマーグループにご参加ください。",
+            "message": "プログラム管理モジュール (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nプログラム管理モジュールはプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、プログラム管理モジュールを無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\n*必要に応じて法務部からの文章を待つ*\r\n\r\nプログラム管理のインストールが完了したら、各種資料を確認してください。\r\n\r\n* <プログラム管理モジュールドキュメント>\r\n\r\nご質問がある場合は、Power of Us Hub の <プログラム管理モジュール> カスタマーグループにご参加ください。",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
@@ -19,7 +19,7 @@
     },
     "plan:install": {
         "title": {
-            "message": "Nonprofit Cloud Program Management Module のインストール",
+            "message": "Nonprofit Cloud プログラム管理モジュールのインストール",
             "description": "title of installation plan"
         }
     },

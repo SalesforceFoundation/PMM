@@ -1,7 +1,7 @@
 {
     "product": {
         "title": {
-            "message": "Program Management Module (PMM)",
+            "message": "Module de gestion de programme (MGP)",
             "description": "name of product"
         },
         "short_description": {
@@ -9,17 +9,17 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Bienvenue dans le programme d’installation du Program Management Module (PMM) !\r\n\r\nLe Program Management Module est un cadre standard pour assurer le suivi, la gestion et la livraison de programmes, de services et de livraison de services.\r\n\r\n*IMPORTANT* : Salesforce recommande de ne pas installer les mises à niveau directement dans les organisations de production. Au lieu de cela, installez d’abord le Program Management Module dans l’un de vos environnements sandbox ou dans une organisation de développeurs.\r\n\r\n*Paragraphe légal si nécessaire*\r\n\r\nAprès avoir installé Program Management, consultez les ressources dans notre documentation :\r\n\r\n* <Program Management Module Documentation>\r\n\r\nVous avez des questions? Devenez membre du groupe de clients <Program Management Module> dans le hub Power of Us.",
+            "message": "Bienvenue dans le programme d’installation de Module de gestion de programme (MGP) !\r\n\r\nModule de gestion de programme est un cadre standard pour assurer le suivi, la gestion et la livraison de programmes, de services et de livraison de services.\r\n\r\n*IMPORTANT* : Salesforce recommande de ne pas installer les mises à niveau directement dans les organisations de production. Au lieu de cela, installez d’abord Module de gestion de programme dans l’un de vos environnements sandbox ou dans une organisation de développeurs.\r\n\r\n*Paragraphe légal si nécessaire*\r\n\r\nAprès avoir installé Module de gestion de programme, consultez les ressources dans notre documentation :\r\n\r\n* <Documentation sur Module de gestion de programme>\r\n\r\nVous avez des questions? Devenez membre du groupe de clients <Module de gestion de programme> dans le hub Power of Us.",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
-            "message": "Pour obtenir de l’aide sur cette erreur, accédez à <a href='https://help.salesforce.com/'>help.salesforce.com</a>, recherchez la zone Support et services, et enregistrez un billet de demande d’assistance avec Salesforce. Incluez « PMM » dans la ligne d'objet et insérez dans votre commentaire le lien d’installation affiché ici.",
+            "message": "Pour obtenir de l’aide sur cette erreur, accédez à <a href='https://help.salesforce.com/'>help.salesforce.com</a>, recherchez la zone Support et services, et enregistrez un billet de demande d’assistance avec Salesforce. Incluez « MGP » dans la ligne d'objet et insérez dans votre commentaire le lien d’installation affiché ici.",
             "description": "shown after failed installation (markdown)"
         }
     },
     "plan:install": {
         "title": {
-            "message": "Installer Nonprofit Cloud Program Management Module",
+            "message": "Installer Module de gestion de programme Nonprofit Cloud",
             "description": "title of installation plan"
         }
     },

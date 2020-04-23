@@ -22,9 +22,9 @@ public without sharing class InstallScript implements InstallHandler {
     public void onInstall(InstallContext context) {
         this.context = context;
 
-        // RESET: if (!isUpgrade()) {
-        //     return;
-        // }
+        if (!isUpgrade()) {
+            return;
+        }
 
         sendUsageMetrics();
     }

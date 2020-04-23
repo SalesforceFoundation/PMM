@@ -72,10 +72,10 @@ public with sharing class TelemetryQueueable_TEST {
             actualException = ex.getMessage();
         }
 
-        // RESET: System.assertEquals(
-        //     System.Label.TelemetryException,
-        //     actualException,
-        //     'Expected the telemetry exception to be thrown.'
-        // );
+        System.assertEquals(
+            System.Label.TelemetryException,
+            actualException,
+            'Expected the telemetry exception to be thrown.'
+        );
     }
 }

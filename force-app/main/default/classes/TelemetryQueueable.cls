@@ -19,8 +19,7 @@ public without sharing class TelemetryQueueable implements System.Queueable {
                 featureParameter.send();
             }
         } catch (Exception ex) {
-            // RESET: throw new TelemetryException(System.Label.TelemetryException);
-            throw new TelemetryException(ex.getMessage());
+            throw new TelemetryException(System.Label.TelemetryException);
         }
     }
 

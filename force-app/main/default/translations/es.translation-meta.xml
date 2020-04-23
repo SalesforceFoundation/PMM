@@ -98,7 +98,7 @@
     </customTabs>
     <customApplications>
         <name>Program_Management</name>
-        <label>Program Management</label>
+        <label>Gestión de programas</label>
     </customApplications>
     <quickActions>
         <name>Contact.AddContactToProgram</name>

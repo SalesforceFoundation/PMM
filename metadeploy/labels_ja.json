@@ -9,7 +9,7 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "プログラム管理モジュール (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nプログラム管理モジュールはプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、プログラム管理モジュールを無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\n*必要に応じて法務部からの文章を待つ*\r\n\r\nプログラム管理のインストールが完了したら、各種資料を確認してください。\r\n\r\n* <プログラム管理モジュールドキュメント>\r\n\r\nご質問がある場合は、Power of Us Hub の <プログラム管理モジュール> カスタマーグループにご参加ください。",
+            "message": "プログラム管理モジュール (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nプログラム管理モジュールはプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、プログラム管理モジュールを無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\nSalesforce.org Program Management Module (“PMM”) is an extensible application with open source and closed source components to address the unique core needs of program management. PMM utilizes a Salesforce.com, Inc. (“Salesforce”) managed package to provide nonprofits with a path to centralize programmatic information in order to more effectively manage and deliver programs and services. Program Management Module provides out-of-the-box translations for Spanish, French, German, Dutch, and Japanese.\r\n\r\nプログラム管理のインストールが完了したら、各種資料を確認してください。\r\n\r\n* [プログラム管理モジュールドキュメント](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\nご質問がある場合は、Power of Us Hub の [プログラム管理モジュール](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) カスタマーグループにご参加ください。",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {

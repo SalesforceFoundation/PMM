@@ -69,4 +69,22 @@ public with sharing class FeatureParameters_TEST {
             'Expected the finder to auto create on demand.'
         );
     }
+
+    @IsTest
+    private static void shouldPassActualActivePrograms() {
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS.name()
+            .remove('_');
+        final Integer expectedValue = 0;
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.ActivePrograms().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
 }

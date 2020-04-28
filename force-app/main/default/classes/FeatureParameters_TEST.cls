@@ -1,5 +1,9 @@
 @IsTest
 public with sharing class FeatureParameters_TEST {
+    private static final BasicStub featureManagementStub = new BasicStub(
+        FeatureManagement.class
+    );
+
     @IsTest
     private static void shouldRetrunAllParameters() {
         List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
@@ -24,7 +28,6 @@ public with sharing class FeatureParameters_TEST {
         final Integer expectedValue = 10;
         Integer ordinalValue = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS.ordinal();
 
-        BasicStub featureManagementStub = new BasicStub(FeatureManagement.class);
         FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
 
         List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()

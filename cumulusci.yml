@@ -296,6 +296,10 @@ plans:
         title: Install Program Management Module
         tier: primary
         is_listed: True
+        checks:
+            - when: "'.my.' not in org_config.instance_url"
+              action: error
+              message: "Please enable My Domain in your org prior to installing."
         steps:
             1:
                 task: update_dependencies

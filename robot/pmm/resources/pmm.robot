@@ -20,6 +20,7 @@ API Create Program
     ...               ShortSummary__c=created via API
     ...               TargetPopulation__c=Youth Target Population
     ...               Status__c=Active
+    ...                  &{fields}
     &{program} =     Salesforce Get  Program__c  ${program_id}
     Store Session Record    Program__c  ${program_id}
     [Return]         &{program}

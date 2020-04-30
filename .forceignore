@@ -9,3 +9,5 @@
 # uncomment the flexipages below during active development to avoid pulling changes
 # force-app/main/default/flexipages/CaseManagementHome.flexipage
 # force-app/main/default/flexipages/Program_Engagement_Record_Page.flexipage
+# force-app/main/default/flows
+

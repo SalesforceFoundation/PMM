@@ -7,60 +7,39 @@
  *
  */
 
-@isTest
+@IsTest
 public with sharing class ServiceDeliveryController_TEST {
-    @isTest
+    private static BasicStub serviceStub = new BasicStub(ServiceService.class);
+
+    @IsTest
     private static void testGetFieldSet() {
         final List<Object> expected = new List<Object>();
-
-        ServiceService_TEST.GetBulkFieldsMethod getBulkFieldsMethod = new ServiceService_Test.GetBulkFieldsMethod();
-        getBulkFieldsMethod.returnValue = expected;
-
-        final List<Stub.Method> expectedMethodsCalled = new List<Stub.Method>{
-            getBulkFieldsMethod
-        };
+        serviceStub.withReturnValue('getBulkFields', expected);
 
         Test.startTest();
 
-        final Stub stub = new Stub(expectedMethodsCalled);
-
-        ServiceDeliveryController.service = (ServiceService) Test.createStub(
-            ServiceService.class,
-            stub
-        );
+        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
 
         final List<Object> actual = ServiceDeliveryController.getFieldSet();
 
         Test.stopTest();
 
-        System.assertEquals(true, expected == actual);
-
-        stub.assertMethodsCalled();
+        System.assertEquals(
+            true,
+            expected === actual,
+            'Expected the controller to return the field set from the service.'
+        );
+        serviceStub.assertCalled('getBulkFields');
     }
 
     @isTest
     private static void testGetFieldSetWithException() {
         final List<Object> expected = new List<Object>();
-        final String expectedExceptionMessage = 'Script-thrown exception';
-
-        ServiceService_TEST.GetBulkFieldsMethod getBulkFieldsMethod = new ServiceService_Test.GetBulkFieldsMethod();
-        getBulkFieldsMethod.returnValue = expected;
-        getBulkFieldsMethod.setExceptionThrownBeforeReturningValue(
-            expectedExceptionMessage
-        );
-
-        final List<Stub.Method> expectedMethodsCalled = new List<Stub.Method>{
-            getBulkFieldsMethod
-        };
+        serviceStub.withThrowException('getBulkFields');
 
         Test.startTest();
 
-        final Stub stub = new Stub(expectedMethodsCalled);
-
-        ServiceDeliveryController.service = (ServiceService) Test.createStub(
-            ServiceService.class,
-            stub
-        );
+        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
         final List<Object> actual;
         Exception actualException;
 
@@ -72,34 +51,30 @@ public with sharing class ServiceDeliveryController_TEST {
 
         Test.stopTest();
 
-        System.assertEquals(expectedExceptionMessage, actualException.getMessage());
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service'
+        );
 
-        stub.assertMethodsCalled();
+        serviceStub.assertCalled('getBulkFields');
     }
 
     @isTest
     private static void testGetServicesAndEngagements() {
-        Id contactId = Stub.generateFakeId(Schema.SObjectType.Contact);
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
         Map<String, List<Object>> expected = new Map<String, List<Object>>();
         expected.put('engagements', new List<Object>());
         expected.put('services', new List<Object>());
 
-        ServiceService_TEST.GetServicesEngagementsByContactIdMethod getServicesEngagementsByContactIdMethod = new ServiceService_TEST.GetServicesEngagementsByContactIdMethod();
-        getServicesEngagementsByContactIdMethod.contactId = contactId;
-        getServicesEngagementsByContactIdMethod.returnValue = expected;
-
-        final List<Stub.Method> expectedMethodsCalled = new List<Stub.Method>{
-            getServicesEngagementsByContactIdMethod
-        };
+        serviceStub.withReturnValue(
+            'getServicesEngagementsByContactId',
+            Id.class,
+            expected
+        );
 
         Test.startTest();
-
-        final Stub stub = new Stub(expectedMethodsCalled);
-
-        ServiceDeliveryController.service = (ServiceService) Test.createStub(
-            ServiceService.class,
-            stub
-        );
+        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
 
         final Map<String, Object> actual = ServiceDeliveryController.getServicesAndEngagements(
             contactId
@@ -110,37 +85,23 @@ public with sharing class ServiceDeliveryController_TEST {
         Set<String> expectedKeySet = new Set<String>{ 'engagements', 'services' };
         System.assertEquals(expectedKeySet, actual.keySet());
 
-        // Assert the actual methods called by Stub Provider equal the expected methods called.
-        stub.assertMethodsCalled();
+        serviceStub.assertCalledWith(
+            'getServicesEngagementsByContactId',
+            Id.class,
+            contactId
+        );
     }
 
     @isTest
     private static void testGetServicesAndEngagementsWithException() {
-        Id contactId = Stub.generateFakeId(Schema.SObjectType.Contact);
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
         Map<String, List<Object>> expected = new Map<String, List<Object>>();
         expected.put('engagements', new List<Object>());
         expected.put('services', new List<Object>());
-        final String expectedExceptionMessage = 'Script-thrown exception';
-
-        ServiceService_TEST.GetServicesEngagementsByContactIdMethod getServicesEngagementsByContactIdMethod = new ServiceService_TEST.GetServicesEngagementsByContactIdMethod();
-        getServicesEngagementsByContactIdMethod.contactId = contactId;
-        getServicesEngagementsByContactIdMethod.returnValue = expected;
-        getServicesEngagementsByContactIdMethod.setExceptionThrownBeforeReturningValue(
-            expectedExceptionMessage
-        );
-
-        final List<Stub.Method> expectedMethodsCalled = new List<Stub.Method>{
-            getServicesEngagementsByContactIdMethod
-        };
+        serviceStub.withThrowException('getServicesEngagementsByContactId', Id.class);
 
         Test.startTest();
-
-        final Stub stub = new Stub(expectedMethodsCalled);
-
-        ServiceDeliveryController.service = (ServiceService) Test.createStub(
-            ServiceService.class,
-            stub
-        );
+        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
 
         final Map<String, List<Object>> actual;
         Exception actualException;
@@ -153,8 +114,16 @@ public with sharing class ServiceDeliveryController_TEST {
 
         Test.stopTest();
 
-        System.assertEquals(expectedExceptionMessage, actualException.getMessage());
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
 
-        stub.assertMethodsCalled();
+        serviceStub.assertCalledWith(
+            'getServicesEngagementsByContactId',
+            Id.class,
+            contactId
+        );
     }
 }

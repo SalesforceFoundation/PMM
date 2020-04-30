@@ -1081,10 +1081,10 @@ INSERT INTO "pmdm__ProgramEngagement__c" VALUES(15,'Financial Literacy Program -
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(16,'ESL Program - Yusef Flores','','false','','Client','Enrolled','2020-01-06','','135','8','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(17,'Financial Literacy Program - Semaj Wall','','false','','Client','Active','2019-09-09','','136','9','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(18,'ESL Program - Semaj Wall','','false','','Client','Active','2019-10-01','','136','8','');
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(19,'Financial Literacy Program - Frankie Waller','','false','','Client','Active','2019-12-19','','137','9','');
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(19,'Financial Literacy Program - Frankie Waller','','false','','Client','Active','2019-12-01','','137','9','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(20,'No More Food Deserts Advocacy - Eliezer Bray','','false','','Volunteer','Enrolled','2020-02-08','','138','5','');
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(21,'Financial Literacy Program - Steven Harper','2020-02-03','false','','Client','Enrolled','2020-02-03','','140','9','');
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(22,'Financial Literacy Program - Lucia Cain','','false','','Client','Enrolled','2020-01-06','','40','9','');
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(21,'Financial Literacy Program - Steven Harper','2019-09-10','false','','Client','Enrolled','2019-10-10','','140','9','');
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(22,'Financial Literacy Program - Lucia Cain','','false','','Client','Enrolled','2019-11-06','','40','9','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(23,'Financial Literacy Program - Alice Irwin','','false','','Client','Enrolled','2019-12-02','','45','9','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(24,'Remedial Reading Program - Fabian Hughes','2019-12-02','false','','Client','Enrolled','2019-12-19','','46','1','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(25,'School Lunch Program - Fabian Hughes','','false','','Client','Active','2019-09-09','','46','10','');
@@ -1127,7 +1127,7 @@ INSERT INTO "pmdm__ProgramEngagement__c" VALUES(61,'Housing Assistance Program -
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(62,'Financial Literacy Program - Jason Barnes','2019-08-23','false','','Client','Active','2019-09-09','','30','9','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(63,'After School Program, Ages 11-13 - Maya Johnson','','false','','Client','Enrolled','2019-12-02','','89','3','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(64,'ESL Program - Barbara Johnson','2019-07-03','false','','Client','Active','2019-09-09','','90','8','');
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(65,'Drug and Alcohol Recovery Management - Neil Huerta','','false','','Client','Enrolled','2020-01-08','','173','6','');
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(65,'Drug and Alcohol Recovery Management - Neil Huerta','','false','','Client','Enrolled','2019-01-08','','173','6','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(66,'Remedial Reading Program - Tom Higgins','2019-04-12','false','','Client','Active','2019-09-09','','152','1','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(67,'School Lunch Program - Tom Higgins','2019-06-08','false','','Client','Enrolled','2019-09-03','','152','10','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(68,'After School Program, Ages 11-13 - Tom Higgins','2019-08-29','false','','Client','Active','2019-09-03','','152','3','');

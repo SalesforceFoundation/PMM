@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>AutoName_Override__c</name>
-    <help>これをオンにした場合、[テンプレート: プログラムエンゲージメント名] というタイトルのプロセスビルダープロセスでプログラムエンゲージメント名が作成された後、プログラムエンゲージメント名を編集できます。</help>
+    <help>これをオンにした場合、プログラムエンゲージメント名を手動で定義できます。プログラムエンゲージメントは自動で命名されません。</help>
     <label>自動名の上書き</label>
 </CustomFieldTranslation>

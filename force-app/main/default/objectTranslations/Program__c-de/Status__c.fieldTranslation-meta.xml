@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Status__c</name>
-    <help>Die Werte der Auswahlliste beschreiben den Status des Programms. Die Standardwerte der Auswahlliste sind &quot;Geplant&quot;, &quot;Aktiv&quot;, &quot;Abgeschlossen&quot; und &quot;Eingestellt&quot;. Die Auswahlliste kann bearbeitet werden.</help>
+    <help>Der Status des Programms. Die Werte werden von Ihrem Administrator festgelegt.</help>
     <label>Status</label>
     <picklistValues>
         <masterLabel>Planned</masterLabel>

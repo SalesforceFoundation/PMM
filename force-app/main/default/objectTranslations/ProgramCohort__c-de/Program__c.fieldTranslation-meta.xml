@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Program__c</name>
-    <help>Ein Nachschlagewert für das Programm, das in Programmuntergruppen aufgeteilt wird.</help>
+    <help>Das Programm, zu dem diese Programmuntergruppe gehört.</help>
     <relationshipLabel>Programmuntergruppen</relationshipLabel>
     <label>Programm</label>
 </CustomFieldTranslation>

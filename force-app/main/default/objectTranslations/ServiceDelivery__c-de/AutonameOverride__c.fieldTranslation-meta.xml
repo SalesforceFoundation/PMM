@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>AutonameOverride__c</name>
-    <help>Wenn diese Option aktiviert ist, kann der Leistungsname nach dem Erstellen durch den Vorgang &quot;Vorlage: Name der erbrachten Leistung&quot; des Prozessgenerators bearbeitet werden.</help>
+    <help>Wenn diese Option aktiviert ist, kann der Name der erbrachten Leistung manuell definiert werden. Sie wird nicht automatisch benannt.</help>
     <label>Überschreiben der Auto-Benennung</label>
 </CustomFieldTranslation>

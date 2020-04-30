@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Account__c</name>
-    <help>Populate if the benefits of the Program Engagement accrue to members of the Contact&#39;s Household Account, for example, a PE with a Food Bank. If the benefit accrues only to the individual Contact, leave this field blank.</help>
+    <help>Select the Household Account if a Program Engagement benefits members of the Contact&#39;s Household Account. For example, meals from a food bank. If it benefits only one Contact, leave blank.</help>
     <relationshipLabel>Program Engagements</relationshipLabel>
     <label>Household Account</label>
 </CustomFieldTranslation>

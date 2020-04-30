@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>UnitOfMeasurement__c</name>
-    <help>Die Einheit, die zum Nachverfolgen dieser Leistung verwendet wird. Beispielsweise Stunden, Mahlzeiten, Sitzungen, Lieferungen, Ausstattung usw. Dies ist ein Formelfeld, das das Feld &quot;Maßeinheit__c&quot; aus dem Leistungsobjekt anzeigt.</help>
+    <help>Die Maßeinheit des zugeordneten Diensts.</help>
     <label>Maßeinheit</label>
 </CustomFieldTranslation>

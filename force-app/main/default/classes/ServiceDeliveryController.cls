@@ -15,7 +15,7 @@ public with sharing class ServiceDeliveryController {
         try {
             return service.getBulkFields();
         } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+            throw Util.getAuraHandledException(e);
         }
     }
     //removed cacheable = true so the picklist values will be rendered when
@@ -25,7 +25,7 @@ public with sharing class ServiceDeliveryController {
         try {
             return service.getServicesEngagementsByContactId(contactId);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+            throw Util.getAuraHandledException(e);
         }
     }
 }

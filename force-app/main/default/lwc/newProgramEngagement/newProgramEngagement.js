@@ -69,11 +69,14 @@ export default class NewProgramEngagement extends LightningElement {
     }
 
     clearAllValues() {
-        this.template.querySelectorAll("lightning-input-field").forEach(element => {
-            if (element.value !== this.contactId) {
-                element.value = "";
-            }
-        });
+        const allInputFields = this.template.querySelectorAll("lightning-input-field");
+        if (allInputFields) {
+            allInputFields.forEach(field => {
+                if (field.value !== this.contactId) {
+                    field.reset();
+                }
+            });
+        }
     }
 
     handleLoad() {

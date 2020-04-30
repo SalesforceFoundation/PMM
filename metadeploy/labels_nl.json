@@ -9,7 +9,7 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Welkom bij de installer van de module Programmabeheer (PMM)!\r\n\r\nDe module Programmabeheer is een standaard framework voor het bijhouden, beheren en leveren van programma's, diensten en bestellingen.\r\n\r\n*BELANGRIJK*: Salesforce raad niet aan, de upgrades direct in productieorganisaties te installeren. Installeer de module Programmabeheer in plaats hiervan eerst in een van uw vrije sandboxomgevingen of in een ontwikkelorganisatie.\r\n\r\n*De wettelijke richtlijnen gaan voor de tekst in de paragraaf*\r\n\r\nKijk na het installeren van Programmabeheer bij de resources in onze documentatie:\r\n\r\n* <Documentatie module Programmabeheer>\r\n\r\nVragen? Word lid van de klantengroep <Module Programmabeheer> in de Power of Us Hub.",
+            "message": "Welkom bij de installer van de module Programmabeheer (PMM)!\r\n\r\nDe module Programmabeheer is een standaard framework voor het bijhouden, beheren en leveren van programma's, diensten en bestellingen.\r\n\r\n*BELANGRIJK*: Salesforce raad niet aan, de upgrades direct in productieorganisaties te installeren. Installeer de module Programmabeheer in plaats hiervan eerst in een van uw vrije sandboxomgevingen of in een ontwikkelorganisatie.\r\n\r\nKijk na het installeren van Programmabeheer bij de resources in onze documentatie:\r\n\r\n* <Documentatie module Programmabeheer>\r\n\r\nVragen? Word lid van de klantengroep <Module Programmabeheer> in de Power of Us Hub.",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {

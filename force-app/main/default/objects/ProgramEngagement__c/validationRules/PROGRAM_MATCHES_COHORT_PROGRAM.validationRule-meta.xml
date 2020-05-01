@@ -8,5 +8,5 @@
 !ISBLANK(ProgramCohort__c),
 ProgramCohort__r.Program__c != Program__c
 )</errorConditionFormula>
-    <errorMessage>The Program does not match the related Program Cohort&#39;s Program.</errorMessage>
+    <errorMessage>Select a Program Cohort that matches the Program.</errorMessage>
 </ValidationRule>

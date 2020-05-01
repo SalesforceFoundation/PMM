@@ -8,5 +8,5 @@
 !ISBLANK(Service__c),
 Service__r.Program__c != ProgramEngagement__r.Program__c
 )</errorConditionFormula>
-    <errorMessage>The Service&#39;s Program does not match the Program Engagement&#39;s Program</errorMessage>
+    <errorMessage>Select a Program Engagement that matches the Program of the related Service.</errorMessage>
 </ValidationRule>

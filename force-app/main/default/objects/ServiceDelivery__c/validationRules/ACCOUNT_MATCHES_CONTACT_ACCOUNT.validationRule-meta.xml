@@ -8,5 +8,5 @@
 !ISBLANK(Account__c),
 Contact__r.AccountId !=  Account__c
 )</errorConditionFormula>
-    <errorMessage>Selected Account does not match the related Contact&amp;#39;s Account</errorMessage>
+    <errorMessage>Select an Account that matches the related Contact.</errorMessage>
 </ValidationRule>

@@ -41,7 +41,7 @@ Add contact to program quick action
      Wait Until Modal Is Closed
      current page should be                 Details                                 Program__c
      Load Related List  Program Engagements
-     click new related record link    &{contact}[FirstName] &{contact}[LastName] ${result_date} : &{program}[Name]
-     verify details     Program Engagement Name     contains    &{contact}[FirstName] &{contact}[LastName] ${result_date} : &{program}[Name]
+     click new related record link    &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
+     verify details     Program Engagement Name     contains    &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
      ${programcohort_id} =            Save Current Record ID For Deletion     ProgramCohort__c
      ${programengagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

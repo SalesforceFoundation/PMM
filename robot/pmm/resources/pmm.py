@@ -6,6 +6,13 @@
 import logging
 import time, random, string
 
+import logging
+import warnings
+import time
+import random
+import string
+
+
 from cumulusci.robotframework.utils import selenium_retry
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.keys import Keys
@@ -144,5 +151,11 @@ class pmm(object):
 
     def click_listview_link(self,title):
         locator=pmm_lex_locators["listview_link"].format(title)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script('arguments[0].click()', element)
+
+    def click_toast_message(self,value):
+        """Verifies that toast contains specified value"""
+        locator=pmm_lex_locators["toast_msg"].format(value)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script('arguments[0].click()', element)

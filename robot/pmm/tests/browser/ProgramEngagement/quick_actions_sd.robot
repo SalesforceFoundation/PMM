@@ -37,8 +37,8 @@ Create a new service delivery using quick action
      Wait Until Modal Is Closed
      current page should be                 Details                                 ProgramEngagement__c
      Load Related List  Service Deliveries
-     click new related record link    &{contact}[FirstName] &{contact}[LastName] ${today} : &{service}[Name]
-     verify details     Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] ${today} : &{service}[Name]
+     click new related record link    &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
+     verify details     Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
      ${servicedelivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
      ${service_id} =            Save Current Record ID For Deletion     Service__c
      ${programengagement_id} =            Save Current Record ID For Deletion     ProgramEngagement__c

@@ -42,16 +42,11 @@ Create a Program via UI
     ...                                    Start Date=${start_date}
     ...                                    End Date=${end_date}
     ...                                    Program Issue Area=Education
-    Click modal button  Save
+    Click modal button                     Save
     Wait Until Modal Is Closed
     current page should be                 Details                                 Program__c
-    verify details  Program Name    contains    ${program_name}
-    verify page contains related list  Services
-    verify page contains related list  Program Engagements
-    verify page contains related list  Program Cohorts
-    verify page contains related list  Files
-
-
-
-
-
+    verify details                         Program Name    contains    ${program_name}
+    verify page contains related list      Services
+    verify page contains related list      Program Engagements
+    verify page contains related list      Program Cohorts
+    verify page contains related list      Files

@@ -22,6 +22,8 @@ Setup Test Data
     Set suite variable      ${start_date}
     ${today} =              Get Current Date   result_format=%Y-%m-%d
     Set suite variable      ${today}
+    ${created_date} =       Get Current Date   result_format=%Y-%m-%d  increment=30 days
+    Set suite variable      ${created_date}
 
     &{contact} =            API Create Contact
     Set suite variable      &{contact}
@@ -57,9 +59,12 @@ Create program engagement from BSDT
     sleep                                   2s
     click button                            Done
     click toast message                     1 Service Deliveries Added
-    current page should be                  Listing                    ServiceDelivery__c
     click listview link                     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
+    current page should be                  Details                    ServiceDelivery__c
     verify details                          Service Delivery Name      contains     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
-    ${service_delivery_id} =    Save Current Record ID For Deletion     ServiceDelivery__c
-    ${service_id} =             Save Current Record ID For Deletion     Service__c
+    ${service_delivery_id} =    Save Current Record ID For Deletion    ServiceDelivery__c
+    ${service_id} =             Save Current Record ID For Deletion    Service__c
+    Go To Page                              Listing                    ProgramEngagement__c
+    click listview link                     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{program}[Name]
+    verify details                          Program Engagement Name    contains     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{Program}[Name]
     ${programengagement_id} =   Save Current Record ID For Deletion     ProgramEngagement__c

@@ -36,5 +36,11 @@
             "message": "Deploy Program Management Profile",
             "description": "title of installation step"
         }
+    },
+    "checks": {
+        "Please enable My Domain in your org prior to installing.": {
+            "message": "Please enable My Domain in your org prior to installing.",
+            "description": "shown if validation fails"
+        }
     }
 }

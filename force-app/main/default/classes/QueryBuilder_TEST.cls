@@ -21,7 +21,7 @@ public with sharing class QueryBuilder_TEST {
             'SELECT count() FROM Account WHERE ' + condition;
         final String actualCountQuery = new QueryBuilder()
             .withSObjectType(Account.SObjectType)
-            .withCondition(condition)
+            .addCondition(condition)
             .buildCountQuery();
 
         System.assertEquals(
@@ -37,7 +37,7 @@ public with sharing class QueryBuilder_TEST {
             String.valueOf(Account.Id),
             String.valueOf(Account.Name)
         };
-        final String expectedSoqlQuery = 'SELECT Id, Name FROM Account';
+        final String expectedSoqlQuery = 'SELECT id, name FROM Account';
         final String actualSoqlQuery = new QueryBuilder()
             .withSObjectType(Account.SObjectType)
             .withSelectFields(fields)
@@ -53,7 +53,7 @@ public with sharing class QueryBuilder_TEST {
     @IsTest
     private static void shouldBuildSoqlQueryWithIdWhenWithoutFields() {
         final List<String> fields = new List<String>{ String.valueOf(Account.Id) };
-        final String expectedSoqlQuery = 'SELECT Id FROM Account';
+        final String expectedSoqlQuery = 'SELECT id FROM Account';
         final String actualSoqlQuery = new QueryBuilder()
             .withSObjectType(Account.SObjectType)
             .buildSoqlQuery();
@@ -73,11 +73,11 @@ public with sharing class QueryBuilder_TEST {
         };
         final String condition = 'Name = \'Test Account\'';
         final String expectedSoqlQuery =
-            'SELECT Id, Name FROM Account WHERE ' + condition;
+            'SELECT id, name FROM Account WHERE ' + condition;
         final String actualSoqlQuery = new QueryBuilder()
             .withSObjectType(Account.SObjectType)
             .withSelectFields(fields)
-            .withCondition(condition)
+            .addCondition(condition)
             .buildSoqlQuery();
 
         System.assertEquals(
@@ -89,7 +89,7 @@ public with sharing class QueryBuilder_TEST {
 
     @IsTest
     private static void shouldBuildSoqlQueryWithOrderBy() {
-        final String expectedSoqlQuery = 'SELECT Id FROM Account ORDER BY Id';
+        final String expectedSoqlQuery = 'SELECT id FROM Account ORDER BY Id';
         final String actualSoqlQuery = new QueryBuilder()
             .withSObjectType(Account.SObjectType)
             .withOrderBy('Id')
@@ -104,7 +104,7 @@ public with sharing class QueryBuilder_TEST {
 
     @IsTest
     private static void shouldBuildSoqlQueryWithLimit() {
-        final String expectedSoqlQuery = 'SELECT Id FROM Account LIMIT 1';
+        final String expectedSoqlQuery = 'SELECT id FROM Account LIMIT 1';
         final String actualSoqlQuery = new QueryBuilder()
             .withSObjectType(Account.SObjectType)
             .withLimit(1)
@@ -119,10 +119,10 @@ public with sharing class QueryBuilder_TEST {
 
     @IsTest
     private static void shouldNotAddWhereClauseForEmptyCondition() {
-        final String expectedSoqlQuery = 'SELECT Id FROM Account';
+        final String expectedSoqlQuery = 'SELECT id FROM Account';
         final String actualSoqlQuery = new QueryBuilder()
             .withSObjectType(Account.SObjectType)
-            .withCondition('')
+            .addCondition('')
             .buildSoqlQuery();
 
         System.assertEquals(

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PROGRAM_MATCHES_COHORT_PROGRAM</fullName>
+    <active>true</active>
+    <description>The Program must match the Program Cohort&#39;s Program when Program Cohort is populated.</description>
+    <errorConditionFormula>AND(
+!ISBLANK(Program__c),
+!ISBLANK(ProgramCohort__c),
+ProgramCohort__r.Program__c != Program__c
+)</errorConditionFormula>
+    <errorMessage>Select a Program Cohort that matches the Program.</errorMessage>
+</ValidationRule>

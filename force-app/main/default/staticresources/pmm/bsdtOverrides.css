@@ -1,6 +1,4 @@
 .bsdt .slds-card__body {
-    max-height: 600px;
-    overflow-y: scroll;
     min-height: 350px;
 }
 

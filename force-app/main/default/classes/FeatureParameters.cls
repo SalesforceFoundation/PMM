@@ -4,6 +4,14 @@ public inherited sharing class FeatureParameters {
         ACTIVE_PROGRAMS,
         ACTIVE_PROGRAMS_WITH_ENGAGEMENTS_LAST30
     }
+
+    private static final String ACTIVE_PROGRAM_CONDITION =
+        String.valueOf(Program__c.Status__c) +
+        ' = ' +
+        '\'Active\'';
+
+    private static final String CREATED_LAST_30_CONDITION = 'CreatedDate = LAST_N_DAYS:30';
+
     @TestVisible
     private List<FeatureManagement.FeatureParameter> featureParameters = new List<FeatureManagement.FeatureParameter>();
 
@@ -40,11 +48,7 @@ public inherited sharing class FeatureParameters {
                 if (queryBuilder == null) {
                     queryBuilder = new QueryBuilder()
                         .withSObjectType(Program__c.SObjectType)
-                        .withCondition(
-                            String.valueOf(Program__c.Status__c) +
-                            ' = ' +
-                            '\'Active\''
-                        );
+                        .addCondition(ACTIVE_PROGRAM_CONDITION);
                 }
 
                 return queryBuilder;
@@ -89,7 +93,8 @@ public inherited sharing class FeatureParameters {
                 if (queryBuilder == null) {
                     queryBuilder = new QueryBuilder()
                         .withSObjectType(Program__c.SObjectType)
-                        .withConditions(buildConditions());
+                        .addCondition(ACTIVE_PROGRAM_CONDITION)
+                        .addCondition('Id IN (' + buildProgramEngagementQuery() + ')');
                 }
 
                 return queryBuilder;
@@ -126,19 +131,14 @@ public inherited sharing class FeatureParameters {
             return finder.findCount();
         }
 
-        private List<String> buildConditions() {
-            List<String> conditions = new List<String>();
-            String programEngagementQuery = new QueryBuilder()
+        private String buildProgramEngagementQuery() {
+            return new QueryBuilder()
                 .withSObjectType(ProgramEngagement__c.SObjectType)
                 .withSelectFields(
                     new List<String>{ String.valueOf(ProgramEngagement__c.Program__c) }
                 )
-                .withCondition('CreatedDate = LAST_N_DAYS:30')
+                .addCondition(CREATED_LAST_30_CONDITION)
                 .buildSoqlQuery();
-            conditions.add(String.valueOf(Program__c.Status__c) + ' = ' + '\'Active\'');
-            conditions.add('Id IN (' + programEngagementQuery + ')');
-
-            return conditions;
         }
     }
 }

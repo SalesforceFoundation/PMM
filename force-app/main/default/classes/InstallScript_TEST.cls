@@ -7,6 +7,7 @@ private with sharing class InstallScript_TEST {
     @IsTest
     private static void shouldNotCallTelemetryServiceOnInstall() {
         telemetryService = (TelemetryService) telemetryServiceStub.createMock();
+        installScript.telemetryService = telemetryService;
         Test.testInstall(installScript, null);
 
         telemetryServiceStub.assertNotCalled('sendUsageMetrics');

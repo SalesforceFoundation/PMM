@@ -19,12 +19,8 @@ public inherited sharing class QueryBuilder {
         return this;
     }
 
-    public QueryBuilder withCondition(String condition) {
-        return withConditions(new List<String>{ condition });
-    }
-
-    public QueryBuilder withConditions(List<String> conditions) {
-        this.conditions.addAll(conditions);
+    public QueryBuilder addCondition(String condition) {
+        conditions.add(condition);
         return this;
     }
 
@@ -39,12 +35,10 @@ public inherited sharing class QueryBuilder {
     }
 
     public String buildSoqlQuery() {
-        List<String> uniqueSelectFields = buildSelectFields();
-
         return String.format(
             'SELECT {0} FROM {1}{2}{3}{4}',
             new List<String>{
-                String.join(uniqueSelectFields, ', '),
+                buildSelectFields(),
                 sObjectType.getDescribe().getName(),
                 buildWhereClause(),
                 buildOrderBy(),
@@ -62,20 +56,20 @@ public inherited sharing class QueryBuilder {
         );
     }
 
-    private List<String> buildSelectFields() {
+    private String buildSelectFields() {
         validate();
 
         Set<String> fields = new Set<String>();
 
         if (selectFields == null || selectFields.isEmpty()) {
-            fields.add('Id');
+            fields.add('id');
         } else {
             for (String field : selectFields) {
-                fields.add(field);
+                fields.add(field.toLowerCase());
             }
         }
 
-        return new List<String>(fields);
+        return String.join(new List<String>(fields), ', ');
     }
 
     private void validate() {

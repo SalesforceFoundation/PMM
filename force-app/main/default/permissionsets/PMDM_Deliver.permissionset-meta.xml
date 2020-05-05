@@ -5,6 +5,10 @@
         <visible>true</visible>
     </applicationVisibilities>
     <classAccesses>
+        <apexClass>FieldSetController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>ServiceDeliveryController</apexClass>
         <enabled>true</enabled>
     </classAccesses>

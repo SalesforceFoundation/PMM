@@ -195,4 +195,11 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     get isDoneDisabled() {
         return Object.keys(this.errors).length > 0;
     }
+
+    get doneTitleLabel() {
+        if (this.isDoneDisabled) {
+            return this.labels.rowsWithErrors;
+        }
+        return this.labels.done;
+    }
 }

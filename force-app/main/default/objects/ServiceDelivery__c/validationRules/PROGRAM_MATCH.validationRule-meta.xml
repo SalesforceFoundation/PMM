@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PROGRAM_MATCH</fullName>
+    <active>true</active>
+    <description>The Service&#39;s Program must match the Program Engagement&#39;s Program when Program Engagement is populated.</description>
+    <errorConditionFormula>AND(
+!ISBLANK(ProgramEngagement__c),
+!ISBLANK(Service__c),
+Service__r.Program__c != ProgramEngagement__r.Program__c
+)</errorConditionFormula>
+    <errorMessage>Select a Program Engagement that matches the Program of the related Service.</errorMessage>
+</ValidationRule>

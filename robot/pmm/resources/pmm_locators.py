@@ -4,11 +4,6 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 pmm_lex_locators = {
-    "app_launcher": {
-        "waffle": "//div[contains(@class, 'slds-icon-waffle')]",
-        "select-option": "//li[contains(@class,'oneAppLauncherItem')]//a[@title='{}']",
-        "app_link": "//div[contains(@class, 'slds-section slds-is-open')]//section[@id='cards']//a[@class='appTileTitle' and text()='{}']",
-    },
     "text": "//*[contains(text(), '{}')]",
     "placeholder_lookup": {
         "lookup1": "//div[@class='slds-lookup__result-text' and contains(text(), '{}')]",
@@ -29,7 +24,7 @@ pmm_lex_locators = {
         "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
         "dropdown_popup": "//div[@class='select-options' and @role='menu']",
         "dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
-        "button": "//button[contains(@class, 'slds-button') and @type='button' and @title = '{}']",
+        "button": "//button[contains(@class, 'slds-button') and @title = '{}']",
         "lookup_field": "//div[contains(@class, 'autocompleteWrapper')]//input[@title='{}']",
         "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']",
         "open_date_picker": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]//div//a[contains(@class,'datePicker-openIcon display')]",
@@ -42,42 +37,30 @@ pmm_lex_locators = {
         "related_list": "//span[contains(@class,'slds-card') and @title='{}']",
     },
     "quick_actions":"//button[@class='slds-button slds-button_neutral' and text()='{}']",
+    "listview_link":"//a[contains(@class,'slds-truncate') and text()='{}']",
+    "toast_msg":"//div[@class='slds-truncate' and text()='{}']",
 
+    "bulk_service_delivery_locators": {
+        "page_header": "//header[contains(@class,'flexipageHeader')]//h2[@class='truncate' and text()='{}']",
+        "lookup_bsdt_field": "//input[contains(@class,'slds-input slds-combobox__input') and contains(@placeholder,'{}')]",
+        "select_bsdt_value": "//span[contains(@class,'slds-listbox__option-text')]/lightning-base-combobox-formatted-text[@class='slds-truncate' and @title='{}']",
+        "select_value": "//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(@title,'{}')]",
+        "select_popup": "//div[contains(@class,'slds-listbox')]",
+        "lookup_field_row1": "//div[contains(@class,'slds-box')][1]//div[contains(@class,'slds-combobox__form-element')]/input[@placeholder='{}']",
+        "lookup_field_row2": "//div[contains(@class,'slds-box')][2]//div[contains(@class,'slds-combobox__form-element')]/input[@placeholder='{}']",
+        "text_field_row1": "//div[contains(@class,'slds-box')][1]//div[contains(@class,'slds-form-element__control')]/input[contains(@name,'{}')]",
+        "text_field_row2": "//div[contains(@class,'slds-box')][2]//div[contains(@class,'slds-form-element__control')]/input[contains(@name,'{}')]",
+        "button": "//button[contains(@class,'slds-button') and text()='{}']",
+        "error_message": "//div[@class='slds-text-color_error' and text()='{}']",
+        "persist_save": "//lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
+        "persist_warning": "//lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
+        "pick_listbox":"//span[@class='slds-media__body']/span[contains(text(),'{}')]",
+        "new_prog_engagement": {
+            "title":"//h2[contains(@class,'slds-text-heading_medium') and text()='{}']",
+            "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']]//input[contains(@class,'slds-input')]",
+            "dropdown_popup": "//div[contains(@class,'slds-listbox')]",
+            "dropdown_value": "//span[@class='slds-truncate' and @title='{}']",
+            "text_field": "//div[contains(@class,'slds-form-element')][.//label[@class='slds-form-element__label' and text()='{}']]//input[@class='slds-input']",
+        },
+    },
 }
-
-program_engagement_locators = {
-
-}
-
-program_cohort_locators = {
-
-}
-
-program_engagement_locators = {}
-
-program_cohort_locators = {}
-
-service_locators = {}
-
-service_delivery_locators = {}
-
-bulk_service_delivery_locators = {
-    "page_header": "//div[@class='slds-p-horizontal_small slds-text-heading_large slds-m-bottom_x-large' and text()='{}']",
-    "lookup_contact": "//input[contains(@class,'slds-input slds-combobox__input') and contains(@placeholder,'{}')]",
-    "select_contact": "//span[contains(@class,'slds-listbox__option-text')]/lightning-base-combobox-formatted-text[@class='slds-truncate' and @title='{}']",
-    "select_value": "//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(@title,'{}')]",
-    "select_popup": "//div[contains(@class,'slds-listbox')]",
-    "lookup_field_row1": "//div[3]//input[@placeholder='{}']",
-    "lookup_field_row2": "//div[4]/c-service-delivery-row//input[@placeholder='{}']",
-    "text_field_row1": "//div[3]//input[@class='slds-input' and contains(@name,'{}')]",
-    "text_field_row2": "//div[4]/c-service-delivery-row//input[@class='slds-input' and contains(@name,'{}')]",
-    "button": "//button[@class='slds-button slds-button_brand' and @type='button' and text()='{}']",
-    "error_message": "//div[@class='slds-text-color_error' and text()='{}']",
-    "persist_save": "//lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
-    "persist_warning": "//lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
-}
-
-account_locators = {}
-
-contact_locators = {}
-

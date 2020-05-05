@@ -78,6 +78,12 @@ class NewProgramEngagementPage(BasePMMPage, BasePage):
                 )
                 self.selenium.set_focus_to_element(locator)
                 self.selenium.get_webelement(locator).send_keys(value)
+            elif key == "Application Date":
+                locator = pmm_lex_locators["new_record"]["text_field"].format(
+                    "Application Date"
+                )
+                self.selenium.set_focus_to_element(locator)
+                self.selenium.get_webelement(locator).send_keys(value)
             else:
                 assert False, "Key provided by name '{}' does not exist".format(key)
 
@@ -117,6 +123,56 @@ class NewProgramEngagementPage(BasePMMPage, BasePage):
                 )
                 self.selenium.set_focus_to_element(locator)
                 self.selenium.get_webelement(locator).send_keys(value)
+            else:
+                assert False, "Key provided by name '{}' does not exist".format(key)
+
+    def populate_program_engagement_bsdt_form(self, **kwargs):
+        """ Populates new program engagement form with the field-value pairs """
+        for key, value in kwargs.items():
+            if key == "Role":
+                locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["dropdown_field"].format(
+                    "Role"
+                )
+                self.selenium.set_focus_to_element(locator)
+                self.selenium.get_webelement(locator).click()
+                popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["dropdown_popup"]
+                self.selenium.wait_until_page_contains_element(
+                    popup_loc, error="Role field dropdown did not open"
+                )
+                value_loc = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["dropdown_value"].format(
+                    value
+                )
+                element = self.selenium.driver.find_element_by_xpath(value_loc)
+                self.selenium.driver.execute_script("arguments[0].click()", element)
+            elif key == "Stage":
+                locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["dropdown_field"].format(
+                    "Stage"
+                )
+                self.selenium.get_webelement(locator).click()
+                popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["dropdown_popup"]
+                self.selenium.wait_until_page_contains_element(
+                    popup_loc, error="Stage field dropdown did not open"
+                )
+                value_loc = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["dropdown_value"].format(
+                    value
+                )
+                element = self.selenium.driver.find_element_by_xpath(value_loc)
+                self.selenium.driver.execute_script("arguments[0].click()", element)
+            elif key == "Application Date":
+                locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["text_field"].format(
+                    "Application Date"
+                )
+                self.selenium.set_focus_to_element(locator)
+                self.selenium.get_webelement(locator).send_keys(value)
+            elif key == "Start Date":
+                locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["text_field"].format(
+                    "Start Date"
+                )
+                self.selenium.set_focus_to_element(locator)
+                self.selenium.get_webelement(locator).send_keys(value)
+            else:
+                assert False, "Key provided by name '{}' does not exist".format(key)
+
 
 
 @pageobject("Details", "ProgramEngagement__c")

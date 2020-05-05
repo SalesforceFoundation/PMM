@@ -20,9 +20,10 @@ API Create Program
     ...               ShortSummary__c=created via API
     ...               TargetPopulation__c=Youth Target Population
     ...               Status__c=Active
-    &{program} =     Salesforce Get  Program__c  ${program_id}
+    ...               &{fields}
+    &{program} =      Salesforce Get  Program__c  ${program_id}
     Store Session Record    Program__c  ${program_id}
-    [Return]         &{program}
+    [Return]                &{program}
 
 API Create Contact
     [Arguments]      &{fields}
@@ -33,9 +34,9 @@ API Create Contact
     ...                  FirstName=${first_name}
     ...                  LastName=${last_name}
     ...                  &{fields}
-    &{contact} =     Salesforce Get  Contact  ${contact_id}
+    &{contact} =              Salesforce Get  Contact  ${contact_id}
     Store Session Record      Contact  ${contact_id}
-    [Return]         &{contact}
+    [Return]                  &{contact}
 
 API Create Service
     ${service_name} =  Generate New String
@@ -47,9 +48,9 @@ API Create Service
     ...                  UnitOfMeasurement__c=Hours
     ...                  Status__c=Active
     ...                  &{fields}
-    &{service} =     Salesforce Get  Service__c  ${service_id}
+    &{service} =              Salesforce Get  Service__c  ${service_id}
     Store Session Record      Service__c  ${service_id}
-    [Return]         &{service}
+    [Return]                  &{service}
 
 API Create Program Engagement
     ${program_engagement_name} =  Generate Random String
@@ -62,8 +63,8 @@ API Create Program Engagement
     ...                  Role__c=Client
     ...                  &{fields}
     &{program_engagement} =     Salesforce Get  ProgramEngagement__c  ${program_engagement_id}
-    Store Session Record      ProgramEngagement__c  ${program_engagement_id}
-    [Return]         &{program_engagement}
+    Store Session Record        ProgramEngagement__c  ${program_engagement_id}
+    [Return]                    &{program_engagement}
 
 API Create Program Cohort
     ${program_cohort_name} =  Generate New String
@@ -74,6 +75,6 @@ API Create Program Cohort
     ...                  Program__c=${program_id}
     ...                  Description__c=Robot program cohort created via API
     ...                  &{fields}
-    &{program_cohort} =     Salesforce Get  ProgramCohort__c  ${program_cohort_id}
+    &{program_cohort} =       Salesforce Get  ProgramCohort__c  ${program_cohort_id}
     Store Session Record      ProgramCohort__c  ${program_cohort_id}
-    [Return]         &{program_cohort}
+    [Return]                  &{program_cohort}

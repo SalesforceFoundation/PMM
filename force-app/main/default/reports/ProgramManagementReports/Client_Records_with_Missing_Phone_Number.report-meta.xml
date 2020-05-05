@@ -23,6 +23,12 @@
             <operator>equals</operator>
             <value/>
         </criteriaItems>
+        <criteriaItems>
+            <column>Contact.IsClient__c</column>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>1</value>
+        </criteriaItems>
         <language>en_US</language>
     </filter>
     <format>Summary</format>

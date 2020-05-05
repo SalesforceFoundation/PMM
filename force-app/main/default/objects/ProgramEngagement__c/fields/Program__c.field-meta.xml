@@ -5,7 +5,7 @@
     <externalId>false</externalId>
     <label>Program</label>
     <lookupFilter>
-        <active>true</active>
+        <active>false</active>
         <filterItems>
             <field>Program__c.Status__c</field>
             <operation>equals</operation>

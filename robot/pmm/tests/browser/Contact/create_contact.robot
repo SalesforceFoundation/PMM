@@ -3,6 +3,7 @@
 Resource        robot/pmm/resources/pmm.robot
 Library         cumulusci.robotframework.PageObjects
 ...             robot/pmm/resources/pmm.py
+...             robot/pmm/resources/ContactPageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data

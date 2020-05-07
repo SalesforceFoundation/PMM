@@ -68,10 +68,10 @@ Add service delivery on bulk service delivery
     verify persist save icon    Saved
     sleep                       2s
     click button                Done
-    click toast message         2 Service Deliveries Added
-    current page should be      Listing                         ServiceDelivery__c
+    Go To Page                  Listing                         ServiceDelivery__c
     Page Should Contain         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     Page Should Contain         &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
+    sleep                       2s
     click listview link         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     verify details              Service Delivery Name           contains              &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
 

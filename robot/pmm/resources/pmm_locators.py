@@ -21,7 +21,7 @@ pmm_lex_locators = {
     },
     "new_record": {
         "label":"//div[./*/*[text()='{}']]",
-        "title": "//h2[contains(@class, 'title') and text()='{}']",
+        "title": "//h2[contains(@class, 'inlineTitle') or contains(@class,'title') and text()='{}']",
         "text_field": "//div[contains(@class, 'uiInput')][.//label[contains(@class, 'uiLabel')][.//span[text()='{}']]]//*[self::input or self::textarea]",
         "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
         "dropdown_popup": "//div[@class='select-options' and @role='menu']",
@@ -64,6 +64,7 @@ pmm_lex_locators = {
             "dropdown_popup": "//div[contains(@class,'slds-listbox')]",
             "dropdown_value": "//span[@class='slds-truncate' and @title='{}']",
             "text_field": "//div[contains(@class,'slds-form-element')][.//label[@class='slds-form-element__label' and text()='{}']]//input[@class='slds-input']",
+            "button": "//button[contains(@class,'slds-button') and @title = '{}']",
         },
     },
 }

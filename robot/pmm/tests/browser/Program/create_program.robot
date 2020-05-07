@@ -37,8 +37,8 @@ Create a Program via UI
     ...                                    Short Summary=${short_summary}
     ...                                    Target Population=${target_population}
     ...                                    Description=${description}
-    ...                                    Start Date=1
-    ...                                    End Date=28
+    ...                                    Start Date=10
+    ...                                    End Date=25
     ...                                    Program Issue Area=Education
     Click modal button                     Save
     Wait Until Modal Is Closed

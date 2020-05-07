@@ -31,13 +31,12 @@ Create Program Engagemnet
      Current Page Should Be                  NewProgramEngagement    ProgramEngagement__c
      verify current page title               New Program Engagement
      Populate modal Form                     Program Engagement Name= ${program_engagement_name}
-     ...                                     Auto-name Override=checked
      ...                                     Stage=Applied
-     ...                                     Search Contacts                        &{contact}[FirstName] &{contact}[LastName]
-     ...                                     Search Programs                        &{program}[Name]
+     ...                                     Client=&{contact}[FirstName] &{contact}[LastName]
+     ...                                     Program=&{program}[Name]
      ...                                     Role=Client
-     ...                                     Start Date=1
-     ...                                     End Date=28
+     ...                                     Start Date=10
+     ...                                     End Date=25
      Click modal button                      Save
      Wait Until Modal Is Closed
      current page should be                  Details                  ProgramEngagement__c
@@ -60,13 +59,13 @@ Create Program Engagement with Auto Name Override
      Current Page Should Be                 NewProgramEngagement                   ProgramEngagement__c
      verify current page title              New Program Engagement
      Populate modal Form                    Program Engagement Name= ${program_engagement_name}
-     ...                                    Auto-name Override=checked
+     ...                                    Auto-Name Override=checked
      ...                                    Stage=Applied
-     ...                                    Search Contacts                        &{contact}[FirstName] &{contact}[LastName]
-     ...                                    Search Programs                        &{program}[Name]
+     ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
+     ...                                    Program=&{program}[Name]
      ...                                    Role=Client
-     ...                                    Start Date=1
-     ...                                    End Date=28
+     ...                                    Start Date=10
+     ...                                    End Date=25
      Click modal button                     Save
      Wait Until Modal Is Closed
      current page should be                 Details                                ProgramEngagement__c

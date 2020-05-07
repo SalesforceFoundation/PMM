@@ -20,9 +20,7 @@ Setup Test Data
     Set suite variable    &{contact}
     &{program_cohort} =   API Create Program Cohort  &{Program}[Id]
     Set suite variable    &{program_cohort}
-    ${start_date} =       Get Current Date   result_format=%m/%d/%Y   increment=1 day
-    Set suite variable    ${start_date}
-    ${result_date} =      Get Current Date  result_format=%Y-%m-%d  increment=1 day
+    ${result_date} =       Get Current Date   result_format=%Y-%m-%d
     Set suite variable    ${result_date}
 
 *** Test Cases ***
@@ -36,7 +34,7 @@ Add contact to program quick action
      ...                              Role=Client
      ...                              Stage=Enrolled
      ...                              Program Cohort=&{program_cohort}[Name]
-     ...                              Start Date=${start_date}
+     ...                              Start Date=Today
      Click Modal button               Save
      Wait Until Modal Is Closed
      current page should be           Details                                 Program__c

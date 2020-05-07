@@ -31,8 +31,8 @@ Create Program Cohort from Program Object
      Populate modal Form                    Program Cohort= ${program_cohort}
      ...                                    Status=Planned
      ...                                    Description=New Program Cohort via Robot Test
-     ...                                    Start Date=1
-     ...                                    End Date=28
+     ...                                    Start Date=10
+     ...                                    End Date=25
      Click modal button                     Save
      Wait Until Modal Is Closed
      current page should be                 Details                                 Program__c

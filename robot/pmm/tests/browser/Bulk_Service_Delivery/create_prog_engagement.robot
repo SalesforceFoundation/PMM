@@ -45,11 +45,11 @@ Create program engagement from BSDT
     select listbox                          Select Program Engagement       New Program Engagement
     Load Page Object                        NewProgramEngagement            ProgramEngagement__c
     verify dialog title                     New Program Engagement
-    Populate modal form                     Stage=Applied
+    Populate Program Engagement bsdt form   Stage=Applied
     ...                                     Role=Client
-    ...                                     Application Date=1
-    ...                                     Start Date=5
-    ...                                     Programs=&{program}[Name]
+    ...                                     Application Date=${application_date}
+    ...                                     Start Date=${start_date}
+    populate bsdt lookup                    Search Programs             &{program}[Name]
     Click dialog button                     Save
     Wait Until Modal Is Closed
     populate row1 fields                    Select Service                  &{service}[Name]

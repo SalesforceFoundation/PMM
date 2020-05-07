@@ -29,7 +29,7 @@ Create a Contact
     verify current page title              New Contact
     Populate modal Form                    First Name=${first_name}
     ...                                    Last Name=${last_name}
-    ...                                    Client=selected
+    ...                                    Client=checked
     ...                                    Email=user@example.com
     ...                                    Description=${description}
     Click modal button                     Save

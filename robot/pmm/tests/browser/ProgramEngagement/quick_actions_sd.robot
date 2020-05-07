@@ -23,6 +23,8 @@ Setup Test Data
     Set suite variable          &{service}
     ${today} =                  Get Current Date                result_format=%Y-%m-%d
     Set suite variable          ${today}
+    ${quantity} =               Generate Random String    2     [NUMBERS]
+    Set suite variable          ${quantity}
 
 *** Test Cases ***
 Create a new service delivery using quick action
@@ -30,15 +32,16 @@ Create a new service delivery using quick action
      page should contain         &{program_engagement}[Name]
      click quick action button   Create New Service Delivery
      Load Page Object            NewServiceDelivery  ServiceDelivery__c
-     verify current page         Create New Service Delivery
-     populate lookup             Search Contacts      &{contact}[FirstName] &{contact}[LastName]
-     populate lookup             Search Services      &{service}[Name]
+     verify current page title   Create New Service Delivery
+     populate modal form         Client=&{contact}[FirstName] &{contact}[LastName]
+     ...                         Service=&{service}[Name]
+     ...                         Quantity=${quantity}
      Click Modal button          Save
      Wait Until Modal Is Closed
      current page should be      Details              ProgramEngagement__c
      Load Related List           Service Deliveries
      click new related record link  &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
      verify details             Service Delivery Name   contains    &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
-     ${servicedelivery_id} =            Save Current Record ID For Deletion     ServiceDelivery__c
-     ${service_id} =                    Save Current Record ID For Deletion     Service__c
-     ${programengagement_id} =          Save Current Record ID For Deletion     ProgramEngagement__c
+     ${servicedelivery_id} =    Save Current Record ID For Deletion     ServiceDelivery__c
+     ${service_id} =            Save Current Record ID For Deletion     Service__c
+     ${programengagement_id} =  Save Current Record ID For Deletion     ProgramEngagement__c

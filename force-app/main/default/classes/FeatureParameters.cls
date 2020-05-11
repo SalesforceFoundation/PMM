@@ -1,9 +1,14 @@
-/* When a new telemetry feature parameter needs to be added we need to modify this class and do the following : 
-1. Need to add a new DeveloperName enum.
-2. Need to add a new when statement to the makeFeatureParameter method.
-3. Need to create a new inner class similar to the other inner classes added for feature parameters and 
+/* The below comments were created as part of https://github.com/SalesforceFoundation/PMM/pull/205. 
+Refer to the PR for any additional reference.
+
+When a new telemetry feature parameter needs to be added we need to modify this class and do the following : 
+1. Create a featureParameter manually under the featureParameters folder. Make sure the file name of the new
+featureParameter has the data type included. Refer to the existing featureParameter files in that folder.
+2. Need to add a new DeveloperName enum.
+3. Need to add a new when statement to the makeFeatureParameter method.
+4. Need to create a new inner class similar to the other inner classes added for feature parameters and 
 update the methods within the inner class accordingly
-4. Modify FeatureParameters_TEST class to add tests for the newly created inner class*/
+5. Modify FeatureParameters_TEST class to add tests for the newly created inner class*/
 
 public inherited sharing class FeatureParameters {
     @TestVisible
@@ -158,7 +163,7 @@ public inherited sharing class FeatureParameters {
         private string programField =
             ServiceDelivery__c.ProgramEngagement__c.getDescribe().getRelationshipName() +
             '.' +
-            String.valueOf(ProgramEngagement__c.program__c);
+            String.valueOf(ProgramEngagement__c.Program__c);
 
         private String activeServiceDelivery =
             ServiceDelivery__c.ProgramEngagement__c.getDescribe().getRelationshipName() +
@@ -214,7 +219,7 @@ public inherited sharing class FeatureParameters {
             List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) finder.findRecords();
             Set<Id> programIds = new Set<Id>();
             for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {
-                programIds.add(serviceDelivery.programengagement__r.program__c);
+                programIds.add(serviceDelivery.programengagement__r.Program__c);
             }
             return programIds.size();
         }

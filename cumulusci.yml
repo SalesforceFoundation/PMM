@@ -12,7 +12,8 @@ project:
         prefix_beta: uat/
         prefix_release: release/
     dependencies:
-        - github: https://github.com/SalesforceFoundation/sfdo-base
+        - namespace: sfdobase
+          version: 1.0
 orgs:
     scratch:
         dev_namespaced:

@@ -35,120 +35,6 @@
         <processMetadataValues>
             <name>index</name>
             <value>
-                <numberValue>4.0</numberValue>
-            </value>
-        </processMetadataValues>
-        <name>myDecision12</name>
-        <label>myDecision12</label>
-        <locationX>50</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>default</defaultConnectorLabel>
-        <rules>
-            <name>myRule_13</name>
-            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
-            <conditions>
-                <processMetadataValues>
-                    <name>inputDataType</name>
-                    <value>
-                        <stringValue>Picklist</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>leftHandSideType</name>
-                    <value>
-                        <stringValue>Picklist</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>operatorDataType</name>
-                    <value>
-                        <stringValue>String</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>rightHandSideType</name>
-                    <value>
-                        <stringValue>Picklist</stringValue>
-                    </value>
-                </processMetadataValues>
-                <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Completed</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <processMetadataValues>
-                    <name>inputDataType</name>
-                    <value>
-                        <stringValue>Picklist</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>leftHandSideType</name>
-                    <value>
-                        <stringValue>Picklist</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>operatorDataType</name>
-                    <value>
-                        <stringValue>String</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>rightHandSideType</name>
-                    <value>
-                        <stringValue>Picklist</stringValue>
-                    </value>
-                </processMetadataValues>
-                <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Withdrawn</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <processMetadataValues>
-                    <name>inputDataType</name>
-                    <value>
-                        <stringValue>Boolean</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>leftHandSideType</name>
-                    <value>
-                        <stringValue>Date</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>operatorDataType</name>
-                    <value>
-                        <stringValue>Date</stringValue>
-                    </value>
-                </processMetadataValues>
-                <processMetadataValues>
-                    <name>rightHandSideType</name>
-                    <value>
-                        <stringValue>Boolean</stringValue>
-                    </value>
-                </processMetadataValues>
-                <leftValueReference>myVariable_current.%%%NAMESPACE%%%EndDate__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>myRule_13_A1</targetReference>
-            </connector>
-            <label>Stage is Completed or Withdrawn</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <processMetadataValues>
-            <name>index</name>
-            <value>
                 <numberValue>1.0</numberValue>
             </value>
         </processMetadataValues>
@@ -277,7 +163,7 @@
                 <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Enrolled</stringValue>
+                    <stringValue>Active</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -314,7 +200,7 @@
             <connector>
                 <targetReference>myRule_7_A1</targetReference>
             </connector>
-            <label>Stage is Enrolled</label>
+            <label>Stage is Active</label>
         </rules>
     </decisions>
     <decisions>
@@ -328,13 +214,10 @@
         <label>myDecision9</label>
         <locationX>50</locationX>
         <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>myDecision12</targetReference>
-        </defaultConnector>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
             <name>myRule_10</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
             <conditions>
                 <processMetadataValues>
                     <name>inputDataType</name>
@@ -363,7 +246,38 @@
                 <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Active</stringValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <processMetadataValues>
+                    <name>inputDataType</name>
+                    <value>
+                        <stringValue>Picklist</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>leftHandSideType</name>
+                    <value>
+                        <stringValue>Picklist</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>operatorDataType</name>
+                    <value>
+                        <stringValue>String</stringValue>
+                    </value>
+                </processMetadataValues>
+                <processMetadataValues>
+                    <name>rightHandSideType</name>
+                    <value>
+                        <stringValue>Picklist</stringValue>
+                    </value>
+                </processMetadataValues>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%Stage__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Withdrawn</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -391,7 +305,7 @@
                         <stringValue>Boolean</stringValue>
                     </value>
                 </processMetadataValues>
-                <leftValueReference>myVariable_current.%%%NAMESPACE%%%StartDate__c</leftValueReference>
+                <leftValueReference>myVariable_current.%%%NAMESPACE%%%EndDate__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -400,7 +314,7 @@
             <connector>
                 <targetReference>myRule_10_A1</targetReference>
             </connector>
-            <label>Stage is Active</label>
+            <label>Stage is Completed or Withdrawn</label>
         </rules>
     </decisions>
     <description>This process builder process will set the Applied Date, Start Date and End Date based on the stage the program engagement record is in.</description>
@@ -408,21 +322,10 @@
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>IF([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.%%%NAMESPACE%%%StartDate__c &lt;TODAY() , TODAY(), NULL)</stringValue>
-            </value>
-        </processMetadataValues>
-        <name>formula_11_myRule_10_A1_5344082454</name>
-        <dataType>Date</dataType>
-        <expression>IF({!myVariable_current.%%%NAMESPACE%%%Program__r.%%%NAMESPACE%%%StartDate__c} &lt;TODAY() , TODAY(), NULL)</expression>
-    </formulas>
-    <formulas>
-        <processMetadataValues>
-            <name>originalFormula</name>
-            <value>
                 <stringValue>TODAY() </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_14_myRule_13_A1_3373508410</name>
+        <name>formula_11_myRule_10_A1_9228346885</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -461,7 +364,7 @@ NOT(ISBLANK([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)),
 </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_2_myRule_1_A1_1713836136</name>
+        <name>formula_2_myRule_1_A1_3915232854</name>
         <dataType>String</dataType>
         <expression>IF(NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%Contact__c})),IF(
 LEN(
@@ -499,7 +402,7 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
                 <stringValue>IF(NOT(ISNULL([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c)), IF ([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%StartDate__c &gt; TODAY(), TODAY(), NULL), TODAY())</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_5_myRule_4_A1_2072210695</name>
+        <name>formula_5_myRule_4_A1_9452998888</name>
         <dataType>Date</dataType>
         <expression>IF(NOT(ISNULL({!myVariable_current.%%%NAMESPACE%%%StartDate__c})), IF ({!myVariable_current.%%%NAMESPACE%%%StartDate__c} &gt; TODAY(), TODAY(), NULL), TODAY())</expression>
     </formulas>
@@ -507,12 +410,12 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>TODAY() </stringValue>
+                <stringValue>IF([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.%%%NAMESPACE%%%StartDate__c &lt;TODAY() , TODAY(), NULL)</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_8_myRule_7_A1_0813250530</name>
+        <name>formula_8_myRule_7_A1_6369948895</name>
         <dataType>Date</dataType>
-        <expression>TODAY()</expression>
+        <expression>IF({!myVariable_current.%%%NAMESPACE%%%Program__r.%%%NAMESPACE%%%StartDate__c} &lt;TODAY() , TODAY(), NULL)</expression>
     </formulas>
     <formulas>
         <processMetadataValues>
@@ -525,7 +428,7 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
         <dataType>Boolean</dataType>
         <expression> NOT({!myVariable_current.%%%NAMESPACE%%%AutoName_Override__c})</expression>
     </formulas>
-    <interviewLabel>Auto_Populate_Date_And_Name_On_Program_Engagement-4_InterviewLabel</interviewLabel>
+    <interviewLabel>Auto_Populate_Date_And_Name_On_Program_Engagement-2_InterviewLabel</interviewLabel>
     <isTemplate>true</isTemplate>
     <label>Template: Program Engagement Object</label>
     <processMetadataValues>
@@ -579,88 +482,8 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
             <name>referenceTargetField</name>
         </processMetadataValues>
         <name>myRule_10_A1</name>
-        <label>Update Start Date</label>
-        <locationX>1000</locationX>
-        <locationY>200</locationY>
-        <filters>
-            <processMetadataValues>
-                <name>implicit</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </processMetadataValues>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>myVariable_current.Id</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <processMetadataValues>
-                <name>dataType</name>
-                <value>
-                    <stringValue>Date</stringValue>
-                </value>
-            </processMetadataValues>
-            <processMetadataValues>
-                <name>isRequired</name>
-                <value>
-                    <booleanValue>false</booleanValue>
-                </value>
-            </processMetadataValues>
-            <processMetadataValues>
-                <name>leftHandSideLabel</name>
-                <value>
-                    <stringValue>Start Date</stringValue>
-                </value>
-            </processMetadataValues>
-            <processMetadataValues>
-                <name>leftHandSideReferenceTo</name>
-                <value>
-                    <stringValue/>
-                </value>
-            </processMetadataValues>
-            <processMetadataValues>
-                <name>rightHandSideType</name>
-                <value>
-                    <stringValue>Formula</stringValue>
-                </value>
-            </processMetadataValues>
-            <field>%%%NAMESPACE%%%StartDate__c</field>
-            <value>
-                <elementReference>formula_11_myRule_10_A1_5344082454</elementReference>
-            </value>
-        </inputAssignments>
-        <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
-    </recordUpdates>
-    <recordUpdates>
-        <processMetadataValues>
-            <name>evaluationType</name>
-            <value>
-                <stringValue>always</stringValue>
-            </value>
-        </processMetadataValues>
-        <processMetadataValues>
-            <name>extraTypeInfo</name>
-        </processMetadataValues>
-        <processMetadataValues>
-            <name>isChildRelationship</name>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </processMetadataValues>
-        <processMetadataValues>
-            <name>reference</name>
-            <value>
-                <stringValue>[%%%NAMESPACE%%%ProgramEngagement__c]</stringValue>
-            </value>
-        </processMetadataValues>
-        <processMetadataValues>
-            <name>referenceTargetField</name>
-        </processMetadataValues>
-        <name>myRule_13_A1</name>
         <label>Update End Date</label>
-        <locationX>1300</locationX>
+        <locationX>1000</locationX>
         <locationY>200</locationY>
         <filters>
             <processMetadataValues>
@@ -708,7 +531,7 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
             </processMetadataValues>
             <field>%%%NAMESPACE%%%EndDate__c</field>
             <value>
-                <elementReference>formula_14_myRule_13_A1_3373508410</elementReference>
+                <elementReference>formula_11_myRule_10_A1_9228346885</elementReference>
             </value>
         </inputAssignments>
         <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
@@ -791,7 +614,7 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
             </processMetadataValues>
             <field>Name</field>
             <value>
-                <elementReference>formula_2_myRule_1_A1_1713836136</elementReference>
+                <elementReference>formula_2_myRule_1_A1_3915232854</elementReference>
             </value>
         </inputAssignments>
         <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
@@ -871,7 +694,7 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
             </processMetadataValues>
             <field>%%%NAMESPACE%%%ApplicationDate__c</field>
             <value>
-                <elementReference>formula_5_myRule_4_A1_2072210695</elementReference>
+                <elementReference>formula_5_myRule_4_A1_9452998888</elementReference>
             </value>
         </inputAssignments>
         <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
@@ -951,7 +774,7 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
             </processMetadataValues>
             <field>%%%NAMESPACE%%%StartDate__c</field>
             <value>
-                <elementReference>formula_8_myRule_7_A1_0813250530</elementReference>
+                <elementReference>formula_8_myRule_7_A1_6369948895</elementReference>
             </value>
         </inputAssignments>
         <object>%%%NAMESPACE%%%ProgramEngagement__c</object>

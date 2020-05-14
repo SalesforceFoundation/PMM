@@ -13,12 +13,12 @@ Suite Teardown  Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
-    ${quantity1} =   Generate Random String    2     [NUMBERS]
-    Set suite variable      ${quantity1}
-    ${quantity2} =   Generate Random String    2     [NUMBERS]
-    Set suite variable      ${quantity2}
-    ${today} =       Get Current Date          result_format=%Y-%m-%d
-    Set suite variable      ${today}
+    ${quantity1} =              Generate Random String          2     [NUMBERS]
+    Set suite variable          ${quantity1}
+    ${quantity2} =              Generate Random String          2     [NUMBERS]
+    Set suite variable          ${quantity2}
+    ${today} =                  Get Current Date                result_format=%Y-%m-%d
+    Set suite variable          ${today}
 
     &{contact1} =               API Create Contact
     Set suite variable          &{contact1}
@@ -68,10 +68,10 @@ Add service delivery on bulk service delivery
     verify persist save icon    Saved
     sleep                       2s
     click button                Done
-    click toast message         2 Service Deliveries Added
-    current page should be      Listing                         ServiceDelivery__c
+    Go To Page                  Listing                         ServiceDelivery__c
     Page Should Contain         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     Page Should Contain         &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
+    sleep                       2s
     click listview link         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     verify details              Service Delivery Name           contains              &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
 
@@ -79,21 +79,21 @@ Add service delivery on bulk service delivery
 Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no
     ...                         services associated with the program.
-    Go To Page                  BasePage                        ServiceDelivery__c
+    Go To Page                  BasePage                                ServiceDelivery__c
     verify current page         Bulk Service Deliveries
-    populate bsdt lookup        Search Contacts                 &{contact3}[FirstName] &{contact3}[LastName]
-    populate row1 fields        Select Program Engagement       &{program_engagement3}[Name]
+    populate bsdt lookup        Search Contacts                         &{contact3}[FirstName] &{contact3}[LastName]
+    populate row1 fields        Select Program Engagement               &{program_engagement3}[Name]
     verify error message        No services found, choose another program engagement.
     verify persist warning icon  No services found, choose another program engagement.
-    Go To Page                  Listing                         ServiceDelivery__c
+    Go To Page                  Listing                                 ServiceDelivery__c
     click listview link         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
-    verify details              Service Delivery Name            contains             &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
+    verify details              Service Delivery Name                   contains                &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     ${service_delivery_id} =    Save Current Record ID For Deletion     ServiceDelivery__c
     ${service_id} =             Save Current Record ID For Deletion     Service__c
     ${program_engagement_id} =  Save Current Record ID For Deletion     ProgramEngagement__c
-    Go To Page                  Listing                          ServiceDelivery__c
+    Go To Page                  Listing                                 ServiceDelivery__c
     click listview link         &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
-    verify details              Service Delivery Name            contains             &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
+    verify details              Service Delivery Name                   contains                &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
     ${service_delivery_id} =    Save Current Record ID For Deletion     ServiceDelivery__c
     ${service_id} =             Save Current Record ID For Deletion     Service__c
     ${program_engagement_id} =  Save Current Record ID For Deletion     ProgramEngagement__c

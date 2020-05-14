@@ -30,9 +30,10 @@ Create Service from Program Object
      page should contain                    &{program}[Name]
      Click Wrapper Related List Button      Services             New
      Current Page Should Be                 NewService           Service__c
-     Populate New Service Form              Service Name= ${service_name}
-     ...                                    Description= ${Description}
-     ...                                    Unit of Measurement= ${unit_of_measurement}
+     verify current page title              New Service
+     Populate modal Form                    Service Name=${service_name}
+     ...                                    Description=${Description}
+     ...                                    Unit of Measurement=${unit_of_measurement}
      ...                                    Status=Active
      Click modal button                     Save
      Wait Until Modal Is Closed

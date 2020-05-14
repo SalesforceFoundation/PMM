@@ -39,11 +39,11 @@ Setup Test Data
 Create program engagement from BSDT
     [Documentation]                         This test adds service deliveries on bulk service delivery
     [tags]                                  W-040316   feature:Service Delivery
-    Go To Page                              BasePage                    ServiceDelivery__c
+    Go To Page                              BasePage                        ServiceDelivery__c
     verify current page                     Bulk Service Deliveries
-    populate bsdt lookup                    Search Contacts             &{contact}[FirstName] &{contact}[LastName]
-    select listbox                          Select Program Engagement   New Program Engagement
-    Load Page Object                        NewProgramEngagement        ProgramEngagement__c
+    populate bsdt lookup                    Search Contacts                 &{contact}[FirstName] &{contact}[LastName]
+    select listbox                          Select Program Engagement       New Program Engagement
+    Load Page Object                        NewProgramEngagement            ProgramEngagement__c
     verify dialog title                     New Program Engagement
     Populate Program Engagement bsdt form   Stage=Applied
     ...                                     Role=Client
@@ -52,19 +52,19 @@ Create program engagement from BSDT
     populate bsdt lookup                    Search Programs             &{program}[Name]
     Click dialog button                     Save
     Wait Until Modal Is Closed
-    populate row1 fields                    Select Service             &{service}[Name]
-    input row1 data                         Quantity                   ${quantity}
+    populate row1 fields                    Select Service                  &{service}[Name]
+    input row1 data                         Quantity                        ${quantity}
     sleep                                   2s
     verify persist save icon                Saved
     sleep                                   2s
     click button                            Done
     click toast message                     1 Service Deliveries Added
     click listview link                     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
-    current page should be                  Details                    ServiceDelivery__c
-    verify details                          Service Delivery Name      contains     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
-    ${service_delivery_id} =    Save Current Record ID For Deletion    ServiceDelivery__c
-    ${service_id} =             Save Current Record ID For Deletion    Service__c
-    Go To Page                              Listing                    ProgramEngagement__c
+    current page should be                  Details                         ServiceDelivery__c
+    verify details                          Service Delivery Name           contains     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
+    ${service_delivery_id} =                Save Current Record ID For Deletion    ServiceDelivery__c
+    ${service_id} =                         Save Current Record ID For Deletion    Service__c
+    Go To Page                              Listing                         ProgramEngagement__c
     click listview link                     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{program}[Name]
-    verify details                          Program Engagement Name    contains     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{Program}[Name]
-    ${programengagement_id} =   Save Current Record ID For Deletion     ProgramEngagement__c
+    verify details                          Program Engagement Name     contains     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{Program}[Name]
+    ${programengagement_id} =               Save Current Record ID For Deletion      ProgramEngagement__c

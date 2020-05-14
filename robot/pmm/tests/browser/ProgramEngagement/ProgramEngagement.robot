@@ -13,10 +13,6 @@ Suite Teardown  Delete Records and Close Browser
 Setup Test Data
     ${program_engagement_name} =   Generate Random String
     Set suite variable      ${program_engagement_name}
-    ${start_date} =         Get Current Date   result_format=%m/%d/%Y   increment=1 day
-    Set suite variable      ${start_date}
-    ${end_date} =           Get Current Date   result_format=%m/%d/%Y  increment=180 days
-    Set suite variable      ${end_date}
     &{contact} =            API Create Contact
     Set suite variable      &{contact}
     &{program} =            API Create Program
@@ -33,13 +29,14 @@ Create Program Engagemnet
      Go To Page                              Listing                 ProgramEngagement__c
      Click Object Button                     New
      Current Page Should Be                  NewProgramEngagement    ProgramEngagement__c
-     Populate New Program Engagement Form    Program Engagement Name= ${program_engagement_name}
+     verify current page title               New Program Engagement
+     Populate modal Form                     Program Engagement Name= ${program_engagement_name}
      ...                                     Stage=Applied
+     ...                                     Client=&{contact}[FirstName] &{contact}[LastName]
+     ...                                     Program=&{program}[Name]
      ...                                     Role=Client
-     ...                                     Start Date=${start_date}
-     ...                                     End Date=${end_date}
-     populate lookup                         Search Contacts         &{contact}[FirstName] &{contact}[LastName]
-     populate lookup                         Search Programs         &{program}[Name]
+     ...                                     Start Date=10
+     ...                                     End Date=25
      Click modal button                      Save
      Wait Until Modal Is Closed
      current page should be                  Details                  ProgramEngagement__c
@@ -60,14 +57,15 @@ Create Program Engagement with Auto Name Override
      Go To Page                             Listing                                ProgramEngagement__c
      Click Object Button                    New
      Current Page Should Be                 NewProgramEngagement                   ProgramEngagement__c
-     Populate New Program Engagement Form   Program Engagement Name= ${program_engagement_name}
+     verify current page title              New Program Engagement
+     Populate modal Form                    Program Engagement Name= ${program_engagement_name}
+     ...                                    Auto-Name Override=checked
      ...                                    Stage=Applied
+     ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
+     ...                                    Program=&{program}[Name]
      ...                                    Role=Client
-     ...                                    Start Date=${start_date}
-     ...                                    End Date=${end_date}
-     populate lookup                        Search Contacts                        &{contact}[FirstName] &{contact}[LastName]
-     populate lookup                        Search Programs                        &{program}[Name]
-     Select Auto Name Override Checkbox     Auto-Name Override
+     ...                                    Start Date=10
+     ...                                    End Date=25
      Click modal button                     Save
      Wait Until Modal Is Closed
      current page should be                 Details                                ProgramEngagement__c

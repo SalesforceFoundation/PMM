@@ -20,28 +20,26 @@ Setup Test Data
     Set suite variable    &{contact}
     &{program_cohort} =   API Create Program Cohort  &{Program}[Id]
     Set suite variable    &{program_cohort}
-    ${start_date} =       Get Current Date   result_format=%m/%d/%Y   increment=1 day
-    Set suite variable    ${start_date}
-    ${result_date} =      Get Current Date  result_format=%Y-%m-%d  increment=1 day
+    ${result_date} =       Get Current Date   result_format=%Y-%m-%d
     Set suite variable    ${result_date}
 
 *** Test Cases ***
 Add contact to program quick action
-     Go To Page                       Details                   Program__c              object_id=&{program}[Id]
+     Go To Page                       Details                                 Program__c              object_id=&{program}[Id]
      page should contain              &{program}[Name]
      click quick action button        Add Contact to Program
-     Load Page Object                 NewProgramEngagement      ProgramEngagement__c
-     verify current page              Add Contact to Program
-     Populate Program Engagement quickaction form               Role=Client
-     ...                                                        Stage=Enrolled
-     ...                                                        Start Date=${start_date}
-     populate lookup                  Search Contacts           &{contact}[FirstName] &{contact}[LastName]
-     populate lookup                  Search Program Cohorts    &{program_cohort}[Name]
+     Load Page Object                 NewProgramEngagement                    ProgramEngagement__c
+     verify current page title        Add Contact to Program
+     Populate Modal form              Client=&{contact}[FirstName] &{contact}[LastName]
+     ...                              Role=Client
+     ...                              Stage=Enrolled
+     ...                              Program Cohort=&{program_cohort}[Name]
+     ...                              Start Date=Today
      Click Modal button               Save
      Wait Until Modal Is Closed
-     current page should be           Details                   Program__c
+     current page should be           Details                                 Program__c
      Load Related List                Program Engagements
      click new related record link    &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
-     verify details                   Program Engagement Name     contains              &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
-     ${programcohort_id} =       Save Current Record ID For Deletion     ProgramCohort__c
-     ${programengagement_id} =   Save Current Record ID For Deletion     ProgramEngagement__c
+     verify details                   Program Engagement Name                 contains                &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
+     ${programcohort_id} =            Save Current Record ID For Deletion     ProgramCohort__c
+     ${programengagement_id} =        Save Current Record ID For Deletion     ProgramEngagement__c

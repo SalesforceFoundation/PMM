@@ -127,3 +127,11 @@ class BulkServiceDeliveryBasePage(BasePMMPage, BasePage):
             locator,
             error="The header for this page is not  as expected",
         )
+
+    def click_dialog_button(self,title):
+        """ Click on the save button """
+        locator_save = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["button"].format(title)
+        self.selenium.wait_until_element_is_enabled(
+            locator_save, error="button is not enabled"
+        )
+        self.selenium.click_element(locator_save)

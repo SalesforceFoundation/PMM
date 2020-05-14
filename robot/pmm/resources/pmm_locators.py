@@ -5,6 +5,7 @@
 
 pmm_lex_locators = {
     "text": "//*[contains(text(), '{}')]",
+    "placeholder": "//*[contains(@placeholder,'{}')]",
     "placeholder_lookup": {
         "lookup1": "//div[@class='slds-lookup__result-text' and contains(text(), '{}')]",
         "lookup2": "//mark[text() = '{}']/ancestor::a",
@@ -19,7 +20,8 @@ pmm_lex_locators = {
         "details": "//div[contains(@class, 'slds-form-element')][.//span[text()='{}']]//following-sibling::div[.//span[contains(@class, 'test-id__field-value')]]/span",
     },
     "new_record": {
-        "title": "//h2[contains(@class, 'title') and text()='{}']",
+        "label":"//div[./*/*[text()='{}']]",
+        "title": "//h2[contains(@class, 'inlineTitle') or contains(@class,'title') and text()='{}']",
         "text_field": "//div[contains(@class, 'uiInput')][.//label[contains(@class, 'uiLabel')][.//span[text()='{}']]]//*[self::input or self::textarea]",
         "dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
         "dropdown_popup": "//div[@class='select-options' and @role='menu']",
@@ -29,7 +31,8 @@ pmm_lex_locators = {
         "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']",
         "open_date_picker": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]//div//a[contains(@class,'datePicker-openIcon display')]",
         "datepicker_popup": "//table[@class='calGrid' and @role='grid']",
-        "select_date": "//div[contains(@class,'uiDatePickerGrid')]/table[@class='calGrid']//button[contains(@class,'slds-button') and text()='{}']",
+        "select_date": "//div[contains(@class,'uiDatePickerGrid')]/table[@class='calGrid']//*[text()='{}']",
+        "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
     },
     "related": {
         "button": "//article[contains(@class, 'forceRelatedListCardDesktop')][.//img][.//span[@title='{}']]//a[@title='{}']",
@@ -61,6 +64,7 @@ pmm_lex_locators = {
             "dropdown_popup": "//div[contains(@class,'slds-listbox')]",
             "dropdown_value": "//span[@class='slds-truncate' and @title='{}']",
             "text_field": "//div[contains(@class,'slds-form-element')][.//label[@class='slds-form-element__label' and text()='{}']]//input[@class='slds-input']",
+            "button": "//button[contains(@class,'slds-button') and @title = '{}']",
         },
     },
 }

@@ -1,7 +1,7 @@
 {
     "product": {
         "title": {
-            "message": "Module Programmabeheer (PMM)",
+            "message": "Program Management Module (PMM)",
             "description": "name of product"
         },
         "short_description": {
@@ -9,7 +9,7 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Welkom bij de installer van de module Programmabeheer (PMM)!\r\n\r\nDe module Programmabeheer is een standaard framework voor het bijhouden, beheren en leveren van programma's, diensten en bestellingen.\r\n\r\n*BELANGRIJK*: Salesforce raad niet aan, de upgrades direct in productieorganisaties te installeren. Installeer de module Programmabeheer in plaats hiervan eerst in een van uw vrije sandboxomgevingen of in een ontwikkelorganisatie.\r\n\r\n*De wettelijke richtlijnen gaan voor de tekst in de paragraaf*\r\n\r\nKijk na het installeren van Programmabeheer bij de resources in onze documentatie:\r\n\r\n* <Documentatie module Programmabeheer>\r\n\r\nVragen? Word lid van de klantengroep <Module Programmabeheer> in de Power of Us Hub.",
+            "message": "Welkom bij de installer van de Program Management Module (PMM)!\r\n\r\nProgram Management Module is een standaard framework voor het bijhouden, beheren en leveren van programma's, diensten en bestellingen.\r\n\r\n*BELANGRIJK*: Salesforce raad niet aan, de upgrades direct in productieorganisaties te installeren. Installeer de Program Management Module in plaats hiervan eerst in een van uw vrije sandboxomgevingen of in een ontwikkelorganisatie.\r\n\r\n*De wettelijke richtlijnen gaan voor de tekst in de paragraaf*\r\n\r\nKijk na het installeren van Programmabeheer bij de resources in onze documentatie:\r\n\r\n* <Documentatie Program Management Module>\r\n\r\nVragen? Word lid van de klantengroep <Program Management Module> in de Power of Us Hub.",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
@@ -23,15 +23,15 @@
     },
     "plan:install": {
         "title": {
-            "message": "Module Programmabeheer installeren",
+            "message": "Program Management Module installeren",
             "description": "title of installation plan"
         },
         "preflight_message": {
-            "message": "Hiermee installeert u de module Programmabeheer in uw organisatie.",
+            "message": "Hiermee installeert u de Program Management Module in uw organisatie.",
             "description": "shown before user starts installation (markdown)"
         },
         "post_install_message": {
-            "message": "Bedankt voor het installeren van de module Programmabeheer. Ga naar het [klantforum van de module Programmabeheer](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) in de Power of Us Hub als u vragen over de module Programmabeheer hebt.",
+            "message": "Bedankt voor het installeren van de Program Management Module. Ga naar het [klantenforum van de Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) in de Power of Us Hub als u vragen over de Program Management Module hebt.",
             "description": "shown after successful installation (markdown)"
         },
         "error_message": {

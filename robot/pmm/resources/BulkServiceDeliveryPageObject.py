@@ -11,7 +11,7 @@ from BaseObjects import BasePMMPage
 
 @pageobject("BasePage", "BulkServiceDelivery")
 class BulkServiceDeliveryBasePage(BasePMMPage, BasePage):
-    object_name = "ServiceDelivery__c"
+    object_name = "ServiceDelivery"
 
     def _go_to_page(self, **kwargs):
         """To go to Bulk Service Delivery page"""

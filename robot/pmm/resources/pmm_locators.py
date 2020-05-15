@@ -4,7 +4,9 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 pmm_lex_locators = {
+    "app_link":"//div[contains(@class,'slds-app-launcher__tile-body')]//span/p[@class='slds-truncate' and text()='Program Management']",
     "text": "//*[contains(text(), '{}')]",
+    "page_title":"//div[contains(@class,'entityNameTitle') and text()='{}']",
     "placeholder": "//*[contains(@placeholder,'{}')]",
     "placeholder_lookup": {
         "lookup1": "//div[@class='slds-lookup__result-text' and contains(text(), '{}')]",

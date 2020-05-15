@@ -23,6 +23,7 @@ Setup Test Data
 Create a Contact 
 
     [Documentation]                        This test creates a Contact and verifies the details of the contact
+    Go To PMM App
     Go To Page                             Listing                              Contact
     Click Object Button                    New
     Load Page object                       NewContact                           Contact

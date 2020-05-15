@@ -31,9 +31,8 @@ Create a Program via UI
     [Documentation]                        This test creates Program and verifies that the Program record
     ...                                    has all the values from the form
     Go To PMM App
-    Go To Page                             Listing                               Program__c
+    Go To Page                             Listing                               ${ns}Program__c
     Click Object Button                    New
-    Current Page Should Be                 NewProgram                            ${ns}Program__c
     verify current page title              New Program
     Populate modal Form                    Program Name=${program_name}
     ...                                    Status=Active

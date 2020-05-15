@@ -37,7 +37,7 @@ Create a Service Delivery via UI
     [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
     ...                                    has all the values from the form
     Go To PMM App
-    Go To Page                             Listing                                 ServiceDelivery__c
+    Go To Page                             Listing                                 ${ns}ServiceDelivery__c
     Click Object Button                    New
     Load Page Object                       NewServiceDelivery                      ${ns}ServiceDelivery__c
     verify current page title              New Service Delivery
@@ -63,8 +63,7 @@ Create a Service Delivery via UI
 Create a Service Delivery via UI with Auto Name Override
     [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
     ...                                    has all the values from the form
-    Go To PMM App
-    Go To Page                             Listing                                ServiceDelivery__c
+    Go To Page                             Listing                                ${ns}ServiceDelivery__c
     Click Object Button                    New
     Load Page Object                       NewServiceDelivery                     ${ns}ServiceDelivery__c
     verify current page title              New Service Delivery

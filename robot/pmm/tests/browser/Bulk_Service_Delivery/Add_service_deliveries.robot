@@ -55,7 +55,7 @@ Setup Test Data
 Add service delivery on bulk service delivery
     [Documentation]             This test adds service deliveries on bulk service delivery
     Go To PMM App
-    Go To Page                  BasePage                        ServiceDelivery__c
+    Go To Page                  BasePage                        ${ns}ServiceDelivery__c
     verify current page         Bulk Service Deliveries
     populate bsdt lookup        Search Contacts                 &{contact1}[FirstName] &{contact1}[LastName]
     populate row1 fields        Select Program Engagement       &{program_engagement1}[Name]
@@ -71,7 +71,7 @@ Add service delivery on bulk service delivery
     verify persist save icon    Saved
     sleep                       2s
     click button                Done
-    Go To Page                  Listing                         ServiceDelivery__c
+    Go To Page                  Listing                         ${ns}ServiceDelivery__c
     Page Should Contain         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     Page Should Contain         &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
     sleep                       2s
@@ -82,20 +82,19 @@ Add service delivery on bulk service delivery
 Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no
     ...                         services associated with the program.
-    Go To PMM App
-    Go To Page                  BasePage                                ServiceDelivery__c
+    Go To Page                  BasePage                                ${ns}ServiceDelivery__c
     verify current page         Bulk Service Deliveries
     populate bsdt lookup        Search Contacts                         &{contact3}[FirstName] &{contact3}[LastName]
     populate row1 fields        Select Program Engagement               &{program_engagement3}[Name]
     verify error message        No services found, choose another program engagement.
     verify persist warning icon  No services found, choose another program engagement.
-    Go To Page                  Listing                                 ServiceDelivery__c
+    Go To Page                  Listing                                 ${ns}ServiceDelivery__c
     click listview link         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     verify details              Service Delivery Name                   contains                &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     ${service_delivery_id} =    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
     ${service_id} =             Save Current Record ID For Deletion     ${ns}Service__c
     ${program_engagement_id} =  Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
-    Go To Page                  Listing                                 ServiceDelivery__c
+    Go To Page                  Listing                                 ${ns}ServiceDelivery__c
     click listview link         &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
     verify details              Service Delivery Name                   contains                &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
     ${service_delivery_id} =    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c

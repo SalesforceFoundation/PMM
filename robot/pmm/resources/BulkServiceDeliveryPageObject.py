@@ -13,10 +13,36 @@ from BaseObjects import BasePMMPage
 class BulkServiceDeliveryBasePage(BasePMMPage, BasePage):
     object_name = "ServiceDelivery"
 
+    def get_namespace_prefix(self, name):
+        parts = name.split('__')
+        if parts[-1] == 'c':
+            parts = parts[:-1]
+        if len(parts) > 1:
+            return 'pmdm__'
+        else:
+            return ''
+
+    def get_pmm_namespace_prefix(self):
+        if not hasattr(self.cumulusci, '_describe_result'):
+            self.cumulusci._describe_result = self.cumulusci.sf.describe()
+        objects = self.cumulusci._describe_result['sobjects']
+        program_object = [o for o in objects if o['label'] == 'Program'][0]
+        return self.get_namespace_prefix(program_object['name'])
+
+    def get_org_namespace_prefix(self):
+        if self.cumulusci.org.namespaced:
+            return "pmdm__"
+        else:
+            return ""
+
     def _go_to_page(self, **kwargs):
         """To go to Bulk Service Delivery page"""
         url = self.cumulusci.org.lightning_base_url
-        url = "{}/lightning/n/Bulk_Service_Deliveries".format(url)
+        ns = self.get_org_namespace_prefix
+        if ns == 'pmdm__':
+            url = "{}/lightning/n/pmdm__Bulk_Service_Deliveries".format(url)
+        else:
+            url = "{}/lightning/n/Bulk_Service_Deliveries".format(url)
         self.selenium.go_to(url)
         self.salesforce.wait_until_loading_is_complete()
 

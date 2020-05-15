@@ -28,9 +28,10 @@ Create Program Engagemnet
 
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
      [tags]                                  W-037565   feature:Program Engagement
-     Go To Page                              Listing                 ProgramEngagement__c
+     Go To PMM App
+     Go To Page                              Listing                                ${ns}ProgramEngagement__c
      Click Object Button                     New
-     Current Page Should Be                  NewProgramEngagement    ${ns}ProgramEngagement__c
+     Load Page Object                        NewProgramEngagement                   ${ns}ProgramEngagement__c
      verify current page title               New Program Engagement
      Populate modal Form                     Program Engagement Name= ${program_engagement_name}
      ...                                     Stage=Applied
@@ -55,8 +56,7 @@ Create Program Engagement with Auto Name Override
      ...                                    and Checking Auto-Name Override checkbox. Verify PE name is same as what user added.
 
     [tags]                                  W-037577   feature:Program Engagement
-     Go To PMM App
-     Go To Page                             Listing                                ProgramEngagement__c
+     Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Load Page Object                       NewProgramEngagement                   ${ns}ProgramEngagement__c
      verify current page title              New Program Engagement

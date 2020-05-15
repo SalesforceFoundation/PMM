@@ -251,3 +251,7 @@ class pmm(object):
         self.selenium.wait_until_page_contains_element(
             locator, error="Section title is not as expected"
         )
+
+    def logns(self):
+        ns = self.get_pmm_namespace_prefix
+        print("ns valus", ns)

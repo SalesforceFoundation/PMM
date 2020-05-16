@@ -50,8 +50,12 @@ class pmm(object):
     def selenium(self):
         return self.builtin.get_library_instance("SeleniumLibrary")
 
+   # def check_if_element_exists(self, xpath):
+    #    elements = int(self.selenium.get_matching_xpath_count(xpath))
+     #   return True if elements > 0 else False
+
     def check_if_element_exists(self, xpath):
-        elements = int(self.selenium.get_matching_xpath_count(xpath))
+        elements =self.selenium.get_element_count(xpath)
         return True if elements > 0 else False
 
     def new_random_string(self, len=5):
@@ -74,27 +78,6 @@ class pmm(object):
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
 
-    def populate_lookup(self, title, value):
-        """populate the lookup field"""
-        locator = pmm_lex_locators["new_record"]["lookup_field"].format(title)
-        self.selenium.click_element(locator)
-        self.selenium.clear_element_text(locator)
-        self.selenium.get_webelement(locator).send_keys(value)
-
-        locator_val = pmm_lex_locators["new_record"]["lookup_value"].format(value)
-        self.selenium.wait_until_page_contains_element(
-            locator_val, error="value is not available"
-        )
-        self.selenium.click_element(locator_val)
-
-    def click_dialog_button(self,title):
-        """ Click on the save button """
-        locator_save = pmm_lex_locators["new_record"]["button"].format(title)
-        self.selenium.wait_until_element_is_enabled(
-            locator_save, error="button is not enabled"
-        )
-        self.selenium.click_element(locator_save)
-
     def save_current_record_id_for_deletion(self, object_name):
         """Gets the current page record id and stores it for specified object
            in order to delete record during suite teardown """
@@ -107,10 +90,6 @@ class pmm(object):
         self.selenium.set_focus_to_element(locator)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
-
-    def select_auto_name_override_checkbox(self, label):
-        locator = pmm_lex_locators["checkbox"].format(label)
-        self.selenium.get_webelement(locator).click()
 
     def verify_page_contains_related_list(self, label):
         """Check if the page contains the related list"""
@@ -141,7 +120,7 @@ class pmm(object):
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
 
-    def verify_current_page(self, label):
+    def verify_current_page_title(self, label):
         """ Verify we are on the page
                     by verifying the section title"""
         locator = pmm_lex_locators["new_record"]["title"].format(label)
@@ -159,3 +138,87 @@ class pmm(object):
         locator=pmm_lex_locators["toast_msg"].format(value)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script('arguments[0].click()', element)
+
+
+    def populate_modal_form(self,**kwargs):
+        """Populates modal form with the field-value pairs
+        supported keys are any input, textarea, lookup, checkbox, date and dropdown fields"""
+
+        for key, value in kwargs.items():
+            locator = pmm_lex_locators["new_record"]["label"].format(key)
+            if self.check_if_element_exists(locator):
+                ele=self.selenium.get_webelements(locator)
+                for e in ele:
+                    classname=e.get_attribute("class")
+                    #                     print("key is {} and class is {}".format(key,classname))
+                    if "Lookup" in classname and "readonly" not in classname:
+                        self.salesforce.populate_lookup_field(key,value)
+                        print("Executed populate lookup field for {}".format(key))
+                        break
+                    elif "Select" in classname and "readonly" not in classname:
+                        self.select_value_from_dropdown(key,value)
+                        print("Executed select value from dropdown for {}".format(key))
+                        break
+                    elif "Checkbox" in classname and "readonly" not in classname:
+                        if value == "checked":
+                            locator = pmm_lex_locators["new_record"]["checkbox"].format(key)
+                            self.selenium.get_webelement(locator).click()
+                            break
+                    elif "Date" in classname and "readonly" not in classname:
+                        self.open_date_picker(key)
+                        self.pick_date(value)
+                        print("Executed open date picker and pick date for {}".format(key))
+                        break
+                    else:
+                        try :
+                            self.search_field_by_value(key,value)
+                            print("Executed search field by value for {}".format(key))
+                        except Exception :
+                            try :
+                                self.salesforce.populate_field(key,value)
+                                print("Executed populate field for {}".format(key))
+
+                            except Exception:
+                                print ("class name for key {} did not match with field type supported by this keyword".format(key))
+
+            else:
+                raise Exception("Locator for {} is not found on the page".format(key))
+
+
+
+    def select_value_from_dropdown(self,dropdown,value):
+        """Select given value in the dropdown field"""
+        locator = pmm_lex_locators['new_record']['dropdown_field'].format(dropdown)
+        self.selenium.get_webelement(locator).click()
+        popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
+        self.selenium.wait_until_page_contains_element(
+            popup_loc, error="Status field dropdown did not open"
+        )
+        value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(
+            value
+        )
+        self.selenium.click_link(value_loc)
+
+    def open_date_picker(self, title):
+        locator = pmm_lex_locators["new_record"]["open_date_picker"].format(title)
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).click()
+        popup_loc = pmm_lex_locators['new_record']['datepicker_popup']
+        self.selenium.wait_until_page_contains_element(popup_loc, error="Date picker did not open ")
+
+    def pick_date(self, value):
+        """To pick a date from the date picker"""
+        locator=pmm_lex_locators["new_record"]["select_date"].format(value)
+        self.selenium.set_focus_to_element(locator)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script('arguments[0].click()', element)
+
+    def search_field_by_value(self, fieldname, value):
+         """ Searches the field with the placeholder given by 'fieldname' for the given 'value'
+         """
+         xpath = pmm_lex_locators["placeholder"].format(fieldname)
+         field = self.selenium.get_webelement(xpath)
+         self.selenium.clear_element_text(field)
+         field.send_keys(value)
+         time.sleep(2)
+         field.send_keys(Keys.ENTER)

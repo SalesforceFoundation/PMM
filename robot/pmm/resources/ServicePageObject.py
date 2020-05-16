@@ -30,43 +30,6 @@ class NewServicePage(BasePMMPage, BasePage):
             message="Section title is not 'New Service' as expected",
         )
 
-    def populate_new_service_form(self, **kwargs):
-        """ Populates new service form with the field-value pairs """
-        for key, value in kwargs.items():
-            if key == "Service Name":
-                locator = pmm_lex_locators["new_record"]["text_field"].format(
-                    "Service Name"
-                )
-                self.selenium.set_focus_to_element(locator)
-                self.selenium.get_webelement(locator).send_keys(value)
-            elif key == "Description":
-                locator = pmm_lex_locators["new_record"]["text_field"].format(
-                    "Description"
-                )
-                self.selenium.set_focus_to_element(locator)
-                self.selenium.get_webelement(locator).send_keys(value)
-            elif key == "Unit of Measurement":
-                locator = pmm_lex_locators["new_record"]["text_field"].format(
-                    "Unit of Measurement"
-                )
-                self.selenium.set_focus_to_element(locator)
-                self.selenium.get_webelement(locator).send_keys(value)
-            elif key == "Status":
-                locator = pmm_lex_locators["new_record"]["dropdown_field"].format(
-                    "Status"
-                )
-                self.selenium.get_webelement(locator).click()
-                popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
-                self.selenium.wait_until_page_contains_element(
-                    popup_loc, error="Status field dropdown did not open"
-                )
-                value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(
-                    value
-                )
-                self.selenium.click_link(value_loc)
-            else:
-                assert False, "Key provided by name '{}' does not exist".format(key)
-
 
 @pageobject("Details", "Service__c")
 class ServiceDetailPage(BasePMMPage, DetailPage):

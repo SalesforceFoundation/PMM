@@ -19,10 +19,7 @@ Setup Test Data
     Set suite variable      ${target_population}
     ${description} =        Generate Random String
     Set suite variable      ${description}
-    ${start_date} =         Get Current Date   result_format=%m/%d/%Y   increment=1 day
-    Set suite variable      ${start_date}
-    ${end_date} =           Get Current Date   result_format=%m/%d/%Y  increment=180 days
-    Set suite variable      ${end_date}
+
 
 
 *** Test Cases ***
@@ -34,13 +31,14 @@ Create a Program via UI
     Go To Page                             Listing                               Program__c
     Click Object Button                    New
     Current Page Should Be                 NewProgram                           Program__c
-    Populate New Program Form              Program Name=${program_name}
-    ...                                    Short Summary=${short_summary}
+    verify current page title              New Program
+    Populate modal Form                    Program Name=${program_name}
     ...                                    Status=Active
+    ...                                    Short Summary=${short_summary}
     ...                                    Target Population=${target_population}
     ...                                    Description=${description}
-    ...                                    Start Date=${start_date}
-    ...                                    End Date=${end_date}
+    ...                                    Start Date=10
+    ...                                    End Date=25
     ...                                    Program Issue Area=Education
     Click modal button                     Save
     Wait Until Modal Is Closed

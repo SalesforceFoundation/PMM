@@ -9,16 +9,15 @@ from pmm_locators import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
-@pageobject("BasePage", "BulkServiceDelivery")
-class BulkServiceDeliveryBasePage(BasePMMPage, BasePage):
-    object_name = "ServiceDelivery"
-
+@pageobject("Custom", "Bulk_Service_Deliveries")
+class BulkServiceDeliveryPage(BasePage):
+    
     def get_namespace_prefix(self, name):
         parts = name.split('__')
         if parts[-1] == 'c':
             parts = parts[:-1]
         if len(parts) > 1:
-            return 'pmdm__'
+            return parts[0] + '__'
         else:
             return ''
 
@@ -29,29 +28,24 @@ class BulkServiceDeliveryBasePage(BasePMMPage, BasePage):
         program_object = [o for o in objects if o['label'] == 'Program'][0]
         return self.get_namespace_prefix(program_object['name'])
 
-    def get_org_namespace_prefix(self):
-        if self.cumulusci.org.namespaced:
-            return "pmdm__"
-        else:
-            return ""
-
     def _go_to_page(self, **kwargs):
         """To go to Bulk Service Delivery page"""
-        url = self.cumulusci.org.lightning_base_url
-        ns = self.get_org_namespace_prefix
-        if ns == 'pmdm__':
-            url = "{}/lightning/n/pmdm__Bulk_Service_Deliveries".format(url)
+        url_template = "{root}/lightning/n/{object}"
+        ns = self.get_pmm_namespace_prefix()
+        if ns == "pmdm__":
+            url = url_template.format(root=self.cumulusci.org.lightning_base_url, object='pmdm__Bulk_Service_Deliveries')
         else:
-            url = "{}/lightning/n/Bulk_Service_Deliveries".format(url)
+            url = url_template.format(root=self.cumulusci.org.lightning_base_url, object='Bulk_Service_Deliveries')
         self.selenium.go_to(url)
         self.salesforce.wait_until_loading_is_complete()
+
 
     def verify_current_page(self, label):
         """ Verify we are on the Bulk Service Deliveries page by verifying the header title """
         locator = pmm_lex_locators["bulk_service_delivery_locators"]["page_header"].format(label)
         self.selenium.wait_until_page_contains_element(
             locator,
-            error="The header for this page is not 'Bulk Service Delivery' as expected",
+            error="The header for this page is not 'Bulk Service Deliveries' as expected",
         )
 
     def populate_bsdt_lookup(self, title, value):

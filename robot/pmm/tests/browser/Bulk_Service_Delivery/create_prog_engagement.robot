@@ -42,7 +42,7 @@ Create program engagement from BSDT
     [Documentation]                         This test adds service deliveries on bulk service delivery
     [tags]                                  W-040316   feature:Service Delivery
     Go To PMM App
-    Go To Page                              BasePage                        ServiceDelivery__c
+    Go To Page                              Custom                          ${ns}Bulk_Service_Deliveries
     verify current page                     Bulk Service Deliveries
     populate bsdt lookup                    Search Contacts                 &{contact}[FirstName] &{contact}[LastName]
     select listbox                          Select Program Engagement       New Program Engagement
@@ -67,7 +67,7 @@ Create program engagement from BSDT
     verify details                          Service Delivery Name           contains     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
     ${service_delivery_id} =                Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
     ${service_id} =                         Save Current Record ID For Deletion    ${ns}Service__c
-    Go To Page                              Listing                         ProgramEngagement__c
+    Go To Page                              Listing                         ${ns}ProgramEngagement__c
     click listview link                     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{program}[Name]
-    verify details                          Program Engagement Name     contains     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{Program}[Name]
+    verify details                          Program Engagement Name         contains     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{Program}[Name]
     ${programengagement_id} =               Save Current Record ID For Deletion      ${ns}ProgramEngagement__c

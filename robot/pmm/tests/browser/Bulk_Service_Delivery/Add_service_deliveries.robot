@@ -55,7 +55,7 @@ Setup Test Data
 Add service delivery on bulk service delivery
     [Documentation]             This test adds service deliveries on bulk service delivery
     Go To PMM App
-    Go To Page                  BasePage                        ${ns}ServiceDelivery__c
+    Go To Page                  Custom                          ${ns}Bulk_Service_Deliveries
     verify current page         Bulk Service Deliveries
     populate bsdt lookup        Search Contacts                 &{contact1}[FirstName] &{contact1}[LastName]
     populate row1 fields        Select Program Engagement       &{program_engagement1}[Name]
@@ -82,7 +82,7 @@ Add service delivery on bulk service delivery
 Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no
     ...                         services associated with the program.
-    Go To Page                  BasePage                                ${ns}ServiceDelivery__c
+    Go To Page                  Custom                                  ${ns}Bulk_Service_Deliveries
     verify current page         Bulk Service Deliveries
     populate bsdt lookup        Search Contacts                         &{contact3}[FirstName] &{contact3}[LastName]
     populate row1 fields        Select Program Engagement               &{program_engagement3}[Name]

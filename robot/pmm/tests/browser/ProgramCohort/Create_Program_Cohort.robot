@@ -38,6 +38,6 @@ Create Program Cohort from Program Object
      Wait Until Modal Is Closed
      verify page header                     Program
      click new related record link          ${program_cohort}
-     verify details                         Program Cohort                 contains                ${program_cohort}
+     verify details                         Program Cohort                          contains                    ${program_cohort}
      ${program_cohort_id} =                 Save Current Record ID For Deletion     ${ns}ProgramCohort__c
  

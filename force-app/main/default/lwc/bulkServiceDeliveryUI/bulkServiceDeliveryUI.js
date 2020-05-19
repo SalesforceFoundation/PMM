@@ -33,7 +33,7 @@ import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Default";
-const DOUBLE_TYPE = "DOUBLE";
+const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
@@ -112,7 +112,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             // Client lookup is size 3
             // Everything else is size 2
             // This means that the field set we ship with is exactly 12 wide
-            if (field.type === DOUBLE_TYPE) {
+            if (SHORT_DATA_TYPES.includes(field.type)) {
                 field.size = 1;
             } else if (field.apiName === this.fields.programEngagement.fieldApiName) {
                 field.size = 4;

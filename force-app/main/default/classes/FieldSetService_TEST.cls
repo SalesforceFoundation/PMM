@@ -30,8 +30,6 @@ public with sharing class FieldSetService_TEST {
             fieldsResultByApiName.put(String.valueof(fieldMap.get('apiName')), fieldMap);
         }
 
-        System.debug(JSON.serializePretty(fieldsResultByApiName));
-
         for (Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
             //special casing for label overrides
             String expectedLabel;

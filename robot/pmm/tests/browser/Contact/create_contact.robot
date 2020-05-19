@@ -30,6 +30,9 @@ Create a Contact
     verify current page title              New Contact
     Populate modal Form                    First Name=${first_name}
     ...                                    Last Name=${last_name}
+    ...                                    Client=checked
+    ...                                    Email=user@example.com
+    ...                                    Description=${description}
     Click modal button                     Save
     Wait Until Modal Is Closed
     current page should be                 Details                              Contact

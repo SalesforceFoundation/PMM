@@ -37,3 +37,8 @@ Create a Contact
     Wait Until Modal Is Closed
     current page should be                 Details                              Contact
     verify details                         Name                                 contains            ${first_name} ${last_name}
+    verify details                         Email                                contains            user@example.com
+    verify details                         Description                          contains            ${description}
+    verify page contains related list      Program Engagements
+    verify page contains related list      Service Deliveries
+    verify page contains related list      Files

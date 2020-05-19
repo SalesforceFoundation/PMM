@@ -18,21 +18,23 @@ Setup Test Data
     ${unit_of_measurement} =    Generate Random String
     Set suite variable          ${unit_of_measurement}
     &{program} =                API Create Program
-    Store Session Record        Program__c        &{program}[Id]
+    Store Session Record        Program__c         &{program}[Id]
     Set suite variable          &{program}
 
 *** Test Cases ***
 Create Service from top nav
-     Go To Page                  Listing          Service__c
-     Click Object Button         New
-     Current Page Should Be      NewService       Service__c
-     Populate New Service Form   Service Name= ${service_name}
-     ...                         Description= ${Description}
-     ...                         Unit of Measurement= ${unit_of_measurement}
-     ...                         Status=Active
-     populate lookup             Search Programs  &{program}[Name]
-     click modal button          Save
+     Go To Page                             Listing           Service__c
+     Click Object Button                    New
+     Current Page Should Be                 NewService        Service__c
+     verify current page title              New Service
+     Populate modal Form                    Service Name=${service_name}
+     ...                                    Program=&{program}[Name]
+     ...                                    Description=${Description}
+     ...                                    Unit of Measurement=${unit_of_measurement}
+     ...                                    Status=Active
+     click modal button                     Save
      Wait Until Modal Is Closed
-     verify details              Program           contains          &{program}[Name]
-     verify details              Service Name       contains          ${service_name}
-     ${service_id} =             Save Current Record ID For Deletion     Service__c
+     verify details                         Program            contains          &{program}[Name]
+     verify details                         Service Name       contains          ${service_name}
+     verify page contains related list      Service Deliveries
+     ${service_id} =                        Save Current Record ID For Deletion     Service__c

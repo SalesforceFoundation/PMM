@@ -30,52 +30,6 @@ class NewProgramCohortPage(BasePMMPage, BasePage):
             message="Section title is not 'New Program Cohort' as expected",
         )
 
-    def populate_new_program_cohort_form(self, **kwargs):
-
-        """ Populates new Program Cohort form with the field-value pairs """
-
-        for key, value in kwargs.items():
-            if key == "Program Cohort":
-                locator = pmm_lex_locators["new_record"]["text_field"].format(
-                    "Program Cohort"
-                )
-                self.selenium.set_focus_to_element(locator)
-                self.selenium.get_webelement(locator).send_keys(value)
-            elif key == "Status":
-                locator = pmm_lex_locators["new_record"]["dropdown_field"].format(
-                    "Status"
-                )
-                self.selenium.get_webelement(locator).click()
-                popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
-                self.selenium.wait_until_page_contains_element(
-                    popup_loc, error="Stage field dropdown did not open"
-                )
-                value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(
-                    value
-                )
-                self.selenium.click_link(value_loc)
-            elif key == "Start Date":
-                locator = pmm_lex_locators["new_record"]["text_field"].format(
-                    "Start Date"
-                )
-                self.selenium.set_focus_to_element(locator)
-                self.selenium.get_webelement(locator).send_keys(value)
-            elif key == "End Date":
-                locator = pmm_lex_locators["new_record"]["text_field"].format(
-                    "End Date"
-                )
-                self.selenium.set_focus_to_element(locator)
-                self.selenium.get_webelement(locator).send_keys(value)
-            elif key == "Description":
-                locator = pmm_lex_locators["new_record"]["text_field"].format(
-                    "Description"
-                )
-                self.selenium.set_focus_to_element(locator)
-                self.selenium.get_webelement(locator).send_keys(value)
-            else:
-                assert False, "Key provided by name '{}' does not exist".format(key)
-
-
 @pageobject("Details", "ProgramCohort__c")
 class ProgramCohortDetailPage(BasePMMPage, DetailPage):
     def _is_current_page(self):

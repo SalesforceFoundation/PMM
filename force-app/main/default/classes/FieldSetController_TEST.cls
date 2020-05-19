@@ -19,14 +19,14 @@ public with sharing class FieldSetController_TEST {
 
         fieldSetServiceStub.withReturnValue(
             'getFieldSetForLWC',
-            new List<Type>{ String.class, Object.class },
+            new List<Type>{ String.class, String.class },
             expected
         );
 
         Test.startTest();
 
         FieldSetController.fieldSetService = (FieldSetService) fieldSetServiceStub.createMock();
-        final List<Object> actual = FieldSetController.getFieldSetForLWC(
+        final List<Map<String, Object>> actual = FieldSetController.getFieldSetForLWC(
             objectName,
             fieldSetName
         );

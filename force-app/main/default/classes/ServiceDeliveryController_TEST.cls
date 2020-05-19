@@ -11,55 +11,6 @@
 public with sharing class ServiceDeliveryController_TEST {
     private static BasicStub serviceStub = new BasicStub(ServiceService.class);
 
-    @IsTest
-    private static void testGetFieldSet() {
-        final List<Object> expected = new List<Object>();
-        serviceStub.withReturnValue('getBulkFields', expected);
-
-        Test.startTest();
-
-        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
-
-        final List<Object> actual = ServiceDeliveryController.getFieldSet();
-
-        Test.stopTest();
-
-        System.assertEquals(
-            true,
-            expected === actual,
-            'Expected the controller to return the field set from the service.'
-        );
-        serviceStub.assertCalled('getBulkFields');
-    }
-
-    @isTest
-    private static void testGetFieldSetWithException() {
-        final List<Object> expected = new List<Object>();
-        serviceStub.withThrowException('getBulkFields');
-
-        Test.startTest();
-
-        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
-        final List<Object> actual;
-        Exception actualException;
-
-        try {
-            actual = ServiceDeliveryController.getFieldSet();
-        } catch (Exception e) {
-            actualException = e;
-        }
-
-        Test.stopTest();
-
-        System.assertEquals(
-            serviceStub.testExceptionMessage,
-            actualException.getMessage(),
-            'Expected the controller to rethrow the exception from the service'
-        );
-
-        serviceStub.assertCalled('getBulkFields');
-    }
-
     @isTest
     private static void testGetServicesAndEngagements() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);

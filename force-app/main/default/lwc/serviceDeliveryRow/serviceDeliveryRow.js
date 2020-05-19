@@ -36,7 +36,7 @@ import quantity from "@salesforce/label/c.Quantity";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
-import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
+import UNIT_OF_MEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
 const DELAY = 1000;
@@ -110,7 +110,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         contact: CONTACT_FIELD,
         service: SERVICE_FIELD,
         programEngagement: PROGRAMENGAGEMENT_FIELD,
-        unitMeasurement: UNITMEASUREMENT_FIELD,
+        unitOfMeasurement: UNIT_OF_MEASUREMENT_FIELD,
     };
 
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
@@ -264,8 +264,10 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
-        this.unitOfMeasureValue =
-            event.detail.fields[this.fields.unitMeasurement.fieldApiName].value;
+        if (event.detail.fields[this.fields.unitOfMeasurement.fieldApiName]) {
+            this.unitOfMeasureValue =
+                event.detail.fields[this.fields.unitOfMeasurement.fieldApiName].value;
+        }
         this.dispatchEvent(new CustomEvent("clearerror", { detail: this.index }));
     }
 

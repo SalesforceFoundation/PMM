@@ -10,14 +10,6 @@
 public with sharing class ServiceDeliveryController {
     public static ServiceService service = new ServiceService();
 
-    @AuraEnabled(cacheable=true)
-    public static List<Object> getFieldSet() {
-        try {
-            return service.getBulkFields();
-        } catch (Exception e) {
-            throw Util.getAuraHandledException(e);
-        }
-    }
     //removed cacheable = true so the picklist values will be rendered when
     //a new program engagement record is created
     @AuraEnabled

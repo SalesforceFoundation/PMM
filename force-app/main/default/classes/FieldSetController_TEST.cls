@@ -15,11 +15,11 @@ public with sharing class FieldSetController_TEST {
     private static void whenGetFieldSetReturnsSuccessfully() {
         String objectName = 'ProgramEngagement__c';
         String fieldSetName = 'CreateProgramEngagement';
-        final List<Map<String, String>> expected = new List<Map<String, String>>();
+        final List<Map<String, Object>> expected = new List<Map<String, Object>>();
 
         fieldSetServiceStub.withReturnValue(
             'getFieldSetForLWC',
-            new List<Type>{ String.class, String.class },
+            new List<Type>{ String.class, Object.class },
             expected
         );
 

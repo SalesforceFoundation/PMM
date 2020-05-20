@@ -107,8 +107,8 @@ def get_all_paths(path):
 
 
 def find_dictionary_file():
-    """Return the filepath of the .ignorable_strings.json dictionary file."""
-    file_name = ".ignorable_strings.json"
+    """Return the filepath of the .labelauditignore.json dictionary file."""
+    file_name = ".labelauditignore.json"
     parent_directories = [Path().resolve()] + list(Path().resolve().parents)
     for directory in parent_directories:
         file_path = directory / file_name

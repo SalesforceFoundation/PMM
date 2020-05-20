@@ -19,6 +19,8 @@ import success from "@salesforce/label/c.Success";
 import saveMessage from "@salesforce/label/c.SaveMessage";
 import save from "@salesforce/label/c.Save";
 
+const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
+
 export default class NewProgramEngagement extends LightningElement {
     fields = {
         contact: CONTACT_FIELD,
@@ -32,7 +34,7 @@ export default class NewProgramEngagement extends LightningElement {
 
     @wire(getFieldSet, {
         objectName: PROGRAMENGAGEMENT_OBJECT.objectApiName,
-        fieldSetName: "CreateProgramEngagement",
+        fieldSetName: CREATE_PROGRAM_ENGAGEMENT_FIELD_SET,
     })
     wiredFields({ error, data }) {
         if (data) {

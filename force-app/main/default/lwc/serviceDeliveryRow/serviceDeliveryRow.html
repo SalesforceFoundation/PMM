@@ -30,31 +30,64 @@
                                         size="12"
                                         small-device-size="6"
                                         medium-device-size="4"
-                                        large-device-size="2"
+                                        large-device-size={field.size}
                                         class="slds-m-bottom_medium"
                                     >
                                         <div class="sd-input" data-field={field.apiName}>
                                             <template if:true={field.showFilteredInput}>
+                                                <div
+                                                    class="slds-form-element__label slds-truncate"
+                                                    title={field.label}
+                                                >
+                                                    {field.label}
+                                                </div>
                                                 <lightning-combobox
                                                     name={field.apiName}
-                                                    label={field.label}
                                                     onchange={handleComboChange}
                                                     placeholder={field.placeholder}
                                                     options={field.options}
                                                     disabled={field.disabled}
                                                     value={field.value}
+                                                    variant="label-hidden"
                                                 >
                                                 </lightning-combobox>
                                             </template>
                                             <template if:false={field.showFilteredInput}>
-                                                <lightning-input-field
-                                                    data-name={field.apiName}
-                                                    field-name={field.apiName}
-                                                    onchange={handleInputChange}
-                                                    disabled={field.disabled}
-                                                    value={field.value}
-                                                    class="inline-label"
-                                                ></lightning-input-field>
+                                                <template if:true={field.isQuantityField}>
+                                                    <div
+                                                        class="slds-form-element__label slds-truncate"
+                                                        title={unitOfMeasureValue}
+                                                    >
+                                                        {unitOfMeasureValue}
+                                                    </div>
+                                                    <lightning-input-field
+                                                        data-name={field.apiName}
+                                                        field-name={field.apiName}
+                                                        onchange={handleInputChange}
+                                                        disabled={field.disabled}
+                                                        value={field.value}
+                                                        variant="label-hidden"
+                                                        class="hideHelpText"
+                                                    ></lightning-input-field>
+                                                </template>
+                                                <template
+                                                    if:false={field.isQuantityField}
+                                                >
+                                                    <div
+                                                        class="slds-form-element__label slds-truncate"
+                                                        title={field.label}
+                                                    >
+                                                        {field.label}
+                                                    </div>
+                                                    <lightning-input-field
+                                                        data-name={field.apiName}
+                                                        field-name={field.apiName}
+                                                        onchange={handleInputChange}
+                                                        disabled={field.disabled}
+                                                        value={field.value}
+                                                        variant="label-hidden"
+                                                    ></lightning-input-field>
+                                                </template>
                                             </template>
                                         </div>
                                     </lightning-layout-item>

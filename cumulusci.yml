@@ -177,6 +177,10 @@ tasks:
                     - NewOpportunity
                     - NewTask
                     - LogACall
+            ignore_types:
+                - RecordType
+                - Flow
+                - FlowDefinition
 
     deploy_service_delivery_modal_test:
         group: "PMM: Tests"
@@ -270,27 +274,27 @@ flows:
                 flow: npsp:install_prod
     deploy_unmanaged:
         steps:
-            2.98:
-                task: source_revert
-                options:
-                    revert: False
-            2.99:
-                task: inject_namespaced_org_flow
-                when: org_config.namespaced
-            2.999:
-                task: clear_namespaced_org_flow
-                when: not org_config.namespaced
-            4.099:
-                task: source_revert
-                options:
-                    revert: True
+            #2.98:
+            #    task: source_revert
+            #    options:
+            #        revert: False
+            #2.99:
+            #    task: inject_namespaced_org_flow
+            #    when: org_config.namespaced
+            #2.999:
+            #    task: clear_namespaced_org_flow
+            #    when: not org_config.namespaced
+            #4.099:
+            #    task: source_revert
+            #    options:
+            #        revert: True
 
-    deploy_packaging:
-        steps:
-            3.01:
-                task: inject_namespaced_org_flow
-                options:
-                    path: "src/flows"
+    #deploy_packaging:
+    #    steps:
+    #        3.01:
+    #            task: inject_namespaced_org_flow
+    #            options:
+    #                path: "src/flows"
 plans:
     install:
         slug: install

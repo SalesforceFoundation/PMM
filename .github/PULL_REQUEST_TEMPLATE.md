@@ -10,7 +10,6 @@
 
 # Definition of Done
   Refer to [Asteroids DoD document](https://salesforce.quip.com/iq2mAy4i62oM) to see any additional details for the items below
-- [ ] Code does not reference translatable strings in its logic
 - [ ] Place holder data is incorporated (Refer to [Case Management Sample Data document](https://quip.com/cbFcAPJF8t0z))
 - [ ] Base axe-core JEST test included for any new LWC (No critical violations)
 - [ ] CRUD/FLS is enforced in Apex

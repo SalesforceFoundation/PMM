@@ -12,17 +12,17 @@ public with sharing class FieldSetService {
     }
 
     /**
-     * @description "Casts" a FieldSet into a List<Map<String, Object>> with 'apiName' and 'label' keys.
+     * @description "Casts" a FieldSet into a List<Map<String, Object>> with 'apiName', 'label', etc keys.
      * This is used by a Lightning Web Component to leverage an admin-controlled field set.
      * @param string objectName
      * @param string fieldSetName
-     * @return      List<Map<String, String>> list of fields, each with apiName and label keys
+     * @return      List<Map<String, Object>> list of fields, each with apiName, label, etc keys
      */
-    public List<Map<String, String>> getFieldSetForLWC(
+    public List<Map<String, Object>> getFieldSetForLWC(
         String objectName,
         String fieldSetName
     ) {
-        List<Map<String, String>> fields = new List<Map<String, String>>();
+        List<Map<String, Object>> fields = new List<Map<String, Object>>();
 
         Schema.FieldSet fieldSet;
 
@@ -45,18 +45,21 @@ public with sharing class FieldSetService {
     }
 
     /**
-     * @description "Casts" a FieldSetMember into a Map<String, Object> with 'apiName' and 'label' keys.
+     * @description "Casts" a FieldSetMember into a Map<String, Object> with 'apiName' and 'label', etc. keys.
      * An array of these is used by a Lightning Web Component to leverage an admin-controlled field set.
      *
      * @param field FieldSetMember
-     * @return      Map<String, String>
+     * @return      Map<String, Object>
      */
-    public Map<String, String> getFieldForLWC(FieldSetMember field) {
+    public Map<String, Object> getFieldForLWC(FieldSetMember field) {
         String label = field.getLabel();
 
-        return new Map<String, String>{
+        return new Map<String, Object>{
             'apiName' => field.getFieldPath(),
-            'label' => label
+            'label' => label,
+            'type' => field.getType().name(),
+            'isRequired' => !field.getSObjectField().getDescribe().isNillable(),
+            'helpText' => field.getSObjectField().getDescribe().getInlineHelpText()
         };
     }
 }

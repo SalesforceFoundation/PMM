@@ -17,20 +17,18 @@ public with sharing class FieldSetService_TEST {
 
         Schema.FieldSet fieldSet = Schema.SObjectType.ProgramEngagement__c.FieldSets.CreateProgramEngagement;
 
-        List<Map<String, String>> fieldsResult = fieldSetService.getFieldSetForLWC(
+        List<Map<String, Object>> fieldsResult = fieldSetService.getFieldSetForLWC(
             'ProgramEngagement__c',
             'CreateProgramEngagement'
         );
 
         Test.stopTest();
 
-        Map<String, Map<String, String>> fieldsResultByApiName = new Map<String, Map<String, String>>();
+        Map<String, Map<String, Object>> fieldsResultByApiName = new Map<String, Map<String, Object>>();
 
-        for (Map<String, String> fieldMap : fieldsResult) {
-            fieldsResultByApiName.put(fieldMap.get('apiName'), fieldMap);
+        for (Map<String, Object> fieldMap : fieldsResult) {
+            fieldsResultByApiName.put(String.valueof(fieldMap.get('apiName')), fieldMap);
         }
-
-        System.debug(JSON.serializePretty(fieldsResultByApiName));
 
         for (Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
             //special casing for label overrides
@@ -49,6 +47,11 @@ public with sharing class FieldSetService_TEST {
             System.assertEquals(
                 fieldSetMember.getFieldPath(),
                 fieldsResultByApiName.get(fieldSetMember.getFieldPath()).get('apiName')
+            );
+
+            System.assertEquals(
+                String.valueOf(fieldSetMember.getType()),
+                fieldsResultByApiName.get(fieldSetMember.getFieldPath()).get('type')
             );
         }
 

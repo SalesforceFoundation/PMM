@@ -14,12 +14,14 @@ Suite Teardown  Delete Records and Close Browser
 Setup Test Data
     ${service_delivery_name} =       Generate Random String
     Set suite variable               ${service_delivery_name}
+    ${ns} =                          Get PMM Namespace Prefix
+    Set suite variable               ${ns}
     &{contact} =                     API Create Contact
     Set suite variable               &{contact}
     &{contact1} =                    API Create Contact
     Set suite variable               &{contact1}
     &{program} =                     API Create Program
-    Store Session Record             Program__c               &{program}[Id]
+    Store Session Record             ${ns}Program__c                 &{program}[Id]
     Set suite variable               &{program}
     &{program_engagement} =          API Create Program Engagement   &{Program}[Id]  &{contact}[Id]
     Set suite variable               &{program_engagement}
@@ -34,9 +36,10 @@ Setup Test Data
 Create a Service Delivery via UI
     [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
     ...                                    has all the values from the form
-    Go To Page                             Listing                                   ServiceDelivery__c
+    Go To PMM App
+    Go To Page                             Listing                                 ${ns}ServiceDelivery__c
     Click Object Button                    New
-    Current Page Should Be                 NewServiceDelivery                      ServiceDelivery__c
+    Load Page Object                       NewServiceDelivery                      ${ns}ServiceDelivery__c
     verify current page title              New Service Delivery
     Populate modal Form                    Service Delivery Name=${service_delivery_name}
     ...                                    Service=&{service}[Name]
@@ -46,23 +49,23 @@ Create a Service Delivery via UI
     ...                                    Quantity=${quantity}
     click Modal button                     Save
     Wait Until Modal Is Closed
-    current page should be                 Details                                 ServiceDelivery__c
+    verify page header                     Service Delivery
     verify details                         Quantity                                contains             ${quantity}
     verify details                         Service                                 contains             &{service}[Name]
     verify details                         Program Engagement                      contains             &{program_engagement}[Name]
     page should not contain                ${service_delivery_name}
     verify page contains related list      Files
-    ${service_delivery_id} =               Save Current Record ID For Deletion     ServiceDelivery__c
-    ${service_id} =                        Save Current Record ID For Deletion     Service__c
-    ${program_engagement_id} =             Save Current Record ID For Deletion     ProgramEngagement__c
+    ${service_delivery_id} =               Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
+    ${service_id} =                        Save Current Record ID For Deletion     ${ns}Service__c
+    ${program_engagement_id} =             Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
 
 Create a Service Delivery via UI with Auto Name Override
     [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
     ...                                    has all the values from the form
-    Go To Page                             Listing                                ServiceDelivery__c
+    Go To Page                             Listing                                ${ns}ServiceDelivery__c
     Click Object Button                    New
-    Current Page Should Be                 NewServiceDelivery                     ServiceDelivery__c
+    Load Page Object                       NewServiceDelivery                     ${ns}ServiceDelivery__c
     verify current page title              New Service Delivery
     Populate modal Form                    Service Delivery Name=${service_delivery_name}
     ...                                    Service=&{service}[Name]
@@ -73,9 +76,9 @@ Create a Service Delivery via UI with Auto Name Override
     ...                                    Auto-name Override=checked
     click modal button                     Save
     Wait Until Modal Is Closed
-    current page should be                 Details                                 ServiceDelivery__c
+    verify page header                     Service Delivery
     verify details                         Service Delivery Name                   contains             ${service_delivery_name}
     verify page contains related list      Files
-    ${service_delivery_id} =               Save Current Record ID For Deletion     ServiceDelivery__c
-    ${service_id} =                        Save Current Record ID For Deletion     Service__c
-    ${program_engagement_id} =             Save Current Record ID For Deletion     ProgramEngagement__c
+    ${service_delivery_id} =               Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
+    ${service_id} =                        Save Current Record ID For Deletion     ${ns}Service__c
+    ${program_engagement_id} =             Save Current Record ID For Deletion     ${ns}ProgramEngagement__c

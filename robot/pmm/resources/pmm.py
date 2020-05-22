@@ -50,9 +50,30 @@ class pmm(object):
     def selenium(self):
         return self.builtin.get_library_instance("SeleniumLibrary")
 
-   # def check_if_element_exists(self, xpath):
-    #    elements = int(self.selenium.get_matching_xpath_count(xpath))
-     #   return True if elements > 0 else False
+    def get_namespace_prefix(self, name):
+        parts = name.split('__')
+        if parts[-1] == 'c':
+            parts = parts[:-1]
+        if len(parts) > 1:
+            return parts[0] + '__'
+        else:
+            return ''
+
+    def get_pmm_namespace_prefix(self):
+        if not hasattr(self.cumulusci, '_describe_result'):
+            self.cumulusci._describe_result = self.cumulusci.sf.describe()
+        objects = self.cumulusci._describe_result['sobjects']
+        program_object = [o for o in objects if o['label'] == 'Program'][0]
+        return self.get_namespace_prefix(program_object['name'])
+
+    def click_app_link(self):
+        locator = pmm_lex_locators["app_link"]
+        self.selenium.wait_until_page_contains_element(
+            locator, error="App not found"
+        )
+        self.selenium.set_focus_to_element(locator)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element)
 
     def check_if_element_exists(self, xpath):
         elements =self.selenium.get_element_count(xpath)
@@ -222,3 +243,15 @@ class pmm(object):
          field.send_keys(value)
          time.sleep(2)
          field.send_keys(Keys.ENTER)
+
+    def verify_page_header(self, label):
+        """ Verify we are on the page
+                    by verifying the section title"""
+        locator = pmm_lex_locators["page_title"].format(label)
+        self.selenium.wait_until_page_contains_element(
+            locator, error="Section title is not as expected"
+        )
+
+    def logns(self):
+        ns = self.get_pmm_namespace_prefix
+        print("ns valus", ns)

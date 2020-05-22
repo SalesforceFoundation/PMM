@@ -11,6 +11,8 @@ Suite Teardown  Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    ${ns} =                 Get PMM Namespace Prefix
+    Set suite variable      ${ns}
     ${program_name} =       Generate Random String
     Set suite variable      ${program_name}
     ${short_summary} =      Generate Random String
@@ -28,9 +30,9 @@ Create a Program via UI
 
     [Documentation]                        This test creates Program and verifies that the Program record
     ...                                    has all the values from the form
-    Go To Page                             Listing                               Program__c
+    Go To PMM App
+    Go To Page                             Listing                               ${ns}Program__c
     Click Object Button                    New
-    Current Page Should Be                 NewProgram                           Program__c
     verify current page title              New Program
     Populate modal Form                    Program Name=${program_name}
     ...                                    Status=Active
@@ -42,7 +44,7 @@ Create a Program via UI
     ...                                    Program Issue Area=Education
     Click modal button                     Save
     Wait Until Modal Is Closed
-    current page should be                 Details                                 Program__c
+    verify page header                     Program
     verify details                         Program Name    contains    ${program_name}
     verify page contains related list      Services
     verify page contains related list      Program Engagements

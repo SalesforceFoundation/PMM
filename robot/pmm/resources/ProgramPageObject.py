@@ -13,7 +13,7 @@ from BaseObjects import BasePMMPage
 
 @pageobject("Listing", "Program")
 class ProgramListingPage(BasePMMPage, ListingPage):
-    object_name = "None"
+    object_name = "Program"
 
 
 @pageobject("NewProgram", "Program__c")

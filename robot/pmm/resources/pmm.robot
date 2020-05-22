@@ -7,22 +7,22 @@ Library        DateTime
 *** Keywords ***
 Go To PMM App
     Open App Launcher
-    Wait Until Element Is visible           //div[contains(@class,'slds-app-launcher__tile-body')]//a[ text()='Program Management']
-    Click Link                              //div[contains(@class,'slds-app-launcher__tile-body')]//a[ text()='Program Management']
+    Click App Link
 
 API Create Program
-    [Arguments]      &{fields}
-    ${program_name} =  Generate New String
-    ${program_id} =  Salesforce Insert  Program__c
-    ...               Name=${program_name}
-    ...               ProgramIssueArea__c=Employment
-    ...               Description__c=PMM Robot Program
-    ...               ShortSummary__c=created via API
-    ...               TargetPopulation__c=Youth Target Population
-    ...               Status__c=Active
-    ...               &{fields}
-    &{program} =      Salesforce Get  Program__c  ${program_id}
-    Store Session Record    Program__c  ${program_id}
+    [Arguments]         &{fields}
+    ${program_name} =   Generate New String
+    ${ns} =             Get PMM Namespace Prefix
+    ${program_id} =     Salesforce Insert  ${ns}Program__c
+    ...                 Name=${program_name}
+    ...                 ${ns}ProgramIssueArea__c=Employment
+    ...                 ${ns}Description__c=PMM Robot Program
+    ...                 ${ns}ShortSummary__c=created via API
+    ...                 ${ns}TargetPopulation__c=Youth Target Population
+    ...                 ${ns}Status__c=Active
+    ...                 &{fields}
+    &{program} =        Salesforce Get  ${ns}Program__c  ${program_id}
+    Store Session Record    ${ns}Program__c  ${program_id}
     [Return]                &{program}
 
 API Create Contact
@@ -40,41 +40,44 @@ API Create Contact
 
 API Create Service
     ${service_name} =  Generate New String
-    [Arguments]       ${program_id}  &{fields}
-    ${service_id} =  Salesforce Insert  Service__c
-    ...                  Name=${service_name}
-    ...                  Program__c=${program_id}
-    ...                  Description__c=PMM Robot service
-    ...                  UnitOfMeasurement__c=Hours
-    ...                  Status__c=Active
-    ...                  &{fields}
-    &{service} =              Salesforce Get  Service__c  ${service_id}
-    Store Session Record      Service__c  ${service_id}
+    ${ns} =            Get PMM Namespace Prefix
+    [Arguments]        ${program_id}  &{fields}
+    ${service_id} =    Salesforce Insert  ${ns}Service__c
+    ...                     Name=${service_name}
+    ...                     ${ns}Program__c=${program_id}
+    ...                     ${ns}Description__c=PMM Robot service
+    ...                     ${ns}UnitOfMeasurement__c=Hours
+    ...                     ${ns}Status__c=Active
+    ...                     &{fields}
+    &{service} =              Salesforce Get  ${ns}Service__c  ${service_id}
+    Store Session Record      ${ns}Service__c  ${service_id}
     [Return]                  &{service}
 
 API Create Program Engagement
     ${program_engagement_name} =  Generate Random String
-    [Arguments]       ${program_id}     ${contact_id}   &{fields}
-    ${program_engagement_id} =  Salesforce Insert  ProgramEngagement__c
-    ...                  Name=${program_engagement_name}
-    ...                  Program__c=${program_id}
-    ...                  Contact__c=${contact_id}
-    ...                  Stage__c=Enrolled
-    ...                  Role__c=Client
-    ...                  &{fields}
-    &{program_engagement} =     Salesforce Get  ProgramEngagement__c  ${program_engagement_id}
-    Store Session Record        ProgramEngagement__c  ${program_engagement_id}
+    ${ns} =                       Get PMM Namespace Prefix
+    [Arguments]                   ${program_id}     ${contact_id}   &{fields}
+    ${program_engagement_id} =    Salesforce Insert  ${ns}ProgramEngagement__c
+    ...                             Name=${program_engagement_name}
+    ...                             ${ns}Program__c=${program_id}
+    ...                             ${ns}Contact__c=${contact_id}
+    ...                             ${ns}Stage__c=Enrolled
+    ...                             ${ns}Role__c=Client
+    ...                             &{fields}
+    &{program_engagement} =     Salesforce Get  ${ns}ProgramEngagement__c  ${program_engagement_id}
+    Store Session Record        ${ns}ProgramEngagement__c  ${program_engagement_id}
     [Return]                    &{program_engagement}
 
 API Create Program Cohort
     ${program_cohort_name} =  Generate New String
-    [Arguments]       ${program_id}  &{fields}
-    ${program_cohort_id} =  Salesforce Insert  ProgramCohort__c
-    ...                  Name=${program_cohort_name}
-    ...                  Status__c=Active
-    ...                  Program__c=${program_id}
-    ...                  Description__c=Robot program cohort created via API
-    ...                  &{fields}
-    &{program_cohort} =       Salesforce Get  ProgramCohort__c  ${program_cohort_id}
-    Store Session Record      ProgramCohort__c  ${program_cohort_id}
+    ${ns} =                   Get PMM Namespace Prefix
+    [Arguments]               ${program_id}  &{fields}
+    ${program_cohort_id} =  Salesforce Insert  ${ns}ProgramCohort__c
+    ...                         Name=${program_cohort_name}
+    ...                         ${ns}Status__c=Active
+    ...                         ${ns}Program__c=${program_id}
+    ...                         ${ns}Description__c=Robot program cohort created via API
+    ...                         &{fields}
+    &{program_cohort} =       Salesforce Get  ${ns}ProgramCohort__c  ${program_cohort_id}
+    Store Session Record      ${ns}ProgramCohort__c  ${program_cohort_id}
     [Return]                  &{program_cohort}

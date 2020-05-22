@@ -26,6 +26,11 @@
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
+    <availableFields>
+        <field>UnitOfMeasurement__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
     <description>Used in the Bulk Service Delivery UI</description>
     <displayedFields>
         <field>Contact__c</field>
@@ -49,11 +54,6 @@
     </displayedFields>
     <displayedFields>
         <field>Quantity__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </displayedFields>
-    <displayedFields>
-        <field>UnitOfMeasurement__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </displayedFields>

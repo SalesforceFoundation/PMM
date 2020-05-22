@@ -183,4 +183,41 @@ public with sharing class FeatureParameters_TEST {
             new List<Object>{ expectedName, expectedValue }
         );
     }
+
+    @IsTest
+    private static void shouldPassActualActiveProgramsWithServiceDeliveriesLast30() {
+        set<Id> programIds = new Set<Id>();
+
+        List<ServiceDelivery__c> serviceDeliveries = [
+            SELECT ProgramEngagement__r.Program__c
+            FROM ServiceDelivery__c
+            WHERE
+                ProgramEngagement__r.Program__r.Status__c = 'Active'
+                AND CreatedDate = LAST_N_DAYS:30
+        ];
+
+        for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {
+            programIds.add(serviceDelivery.ProgramEngagement__r.Program__c);
+        }
+
+        System.assert(
+            !programIds.isEmpty(),
+            'Sanity check: Test setup should have generated at least 1 active record with a related program engagement.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30.name()
+            .remove('_');
+        final Integer expectedValue = programIds.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.ActiveProgramsWithServiceDeliveriesLast30().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
 }

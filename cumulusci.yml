@@ -177,6 +177,10 @@ tasks:
                     - NewOpportunity
                     - NewTask
                     - LogACall
+            ignore_types:
+                - RecordType
+                - Flow
+                - FlowDefinition
 
     deploy_service_delivery_modal_test:
         group: "PMM: Tests"

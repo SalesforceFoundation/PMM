@@ -13,10 +13,9 @@ from BaseObjects import BasePMMPage
 
 @pageobject("Listing", "Service")
 class ServiceListingPage(BasePMMPage, ListingPage):
-    object_name = "None"
-
-
-@pageobject("NewService", "Service__c")
+    object_name = "Service"
+   
+@pageobject("NewService", "Service")
 class NewServicePage(BasePMMPage, BasePage):
     def _is_current_page(self):
         """ Verify we are on the New Service modal page
@@ -31,17 +30,6 @@ class NewServicePage(BasePMMPage, BasePage):
         )
 
 
-@pageobject("Details", "Service__c")
+@pageobject("Details", "Service")
 class ServiceDetailPage(BasePMMPage, DetailPage):
-    def _is_current_page(self):
-        """ Verify we are on the Program detail page
-            by verifying that the url contains '/view'
-        """
-        self.selenium.wait_until_location_contains(
-            "/view", timeout=60, message="Detail view did not open in 1 min"
-        )
-        self.selenium.location_should_contain(
-            "/lightning/r/Service__c/",
-            message="Current page is not a Service record detail view",
-        )
-
+     object_name = "Service"

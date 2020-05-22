@@ -13,7 +13,7 @@ from BaseObjects import BasePMMPage
 
 @pageobject("Listing", "ServiceDelivery")
 class ServiceDeliveryListingPage(BasePMMPage, ListingPage):
-    object_name = "None"
+    object_name = "ServiceDelivery"
 
 
 @pageobject("NewServiceDelivery", "ServiceDelivery__c")
@@ -31,7 +31,7 @@ class NewServiceDeliveryPage(BasePMMPage, BasePage):
         )
 
 
-
+        
 @pageobject("Details", "ServiceDelivery__c")
 class ServiceDeliveryDetailPage(BasePMMPage, DetailPage):
     def _is_current_page(self):

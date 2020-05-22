@@ -94,6 +94,13 @@
         <value>No services found, choose another program engagement.</value>
     </labels>
     <labels>
+        <fullName>Quantity</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Placeholder for Bulk Service Delivery Tool until it returns the Unit of Measure</shortDescription>
+        <value>Quantity</value>
+    </labels>
+    <labels>
         <fullName>Record_Deleted</fullName>
         <language>en_US</language>
         <protected>true</protected>

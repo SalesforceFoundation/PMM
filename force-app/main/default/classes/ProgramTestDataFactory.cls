@@ -73,6 +73,18 @@ public with sharing class ProgramTestDataFactory {
             services.add(service2);
 
             insert services;
+
+            List<ServiceDelivery__c> serviceDeliveries = new List<ServiceDelivery__c>();
+
+            ServiceDelivery__c serviceDelivery1 = new ServiceDelivery__c();
+            serviceDelivery1.ProgramEngagement__c = engagement1.Id;
+            serviceDelivery1.Contact__c = con.Id;
+            serviceDelivery1.DeliveryDate__c = System.today();
+            serviceDelivery1.Quantity__c = 10;
+            serviceDelivery1.Service__c = service1.Id;
+            serviceDeliveries.add(serviceDelivery1);
+
+            insert serviceDeliveries;
         }
     }
 }

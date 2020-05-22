@@ -25,11 +25,15 @@ import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
+import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
-import getFieldSet from "@salesforce/apex/ServiceDeliveryController.getFieldSet";
+import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
+
+const FIELD_SET_NAME = "Default";
+const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
@@ -38,7 +42,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track isSaving = false;
     @track saveMessage;
     @track fieldSet = [];
-    @track hasQuantity = false;
     @track rowCount = this.serviceDeliveries.length;
     @track errors = {};
 
@@ -59,13 +62,17 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         contact: CONTACT_FIELD,
         unitMeasurement: UNITMEASUREMENT_FIELD,
         quantity: QUANTITY_FIELD,
+        programEngagement: PROGRAM_ENGAGEMENT_FIELD,
     };
     _deliveryIndex = 1;
 
-    @wire(getFieldSet)
+    @wire(getFieldSet, {
+        objectName: SERVICEDELIVERY_OBJECT.objectApiName,
+        fieldSetName: FIELD_SET_NAME,
+    })
     wiredFields({ error, data }) {
         if (data) {
-            this.configureFieldSize(data.map(a => ({ ...a })));
+            this.configureFieldSet(data.map(a => ({ ...a })));
         } else if (error) {
             handleError(error);
         }
@@ -81,6 +88,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     connectedCallback() {
         loadStyle(this, pmmFolder + "/bsdtOverrides.css");
+        loadStyle(this, pmmFolder + "/hideHelpIcons.css");
 
         this.serviceDeliveryPage = {
             type: "standard__objectPage",
@@ -94,14 +102,22 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         );
     }
 
-    configureFieldSize(fieldSet) {
+    configureFieldSet(fieldSet) {
         fieldSet.forEach(field => {
             field.disabled = true;
+            field.isQuantityField = false;
 
-            if (field.apiName === this.fields.quantity.fieldApiName) {
+            // Number fields are size 1
+            // Program Engagment lookup is size 4
+            // Client lookup is size 3
+            // Everything else is size 2
+            // This means that the field set we ship with is exactly 12 wide
+            if (SHORT_DATA_TYPES.includes(field.type)) {
                 field.size = 1;
-            } else if (field.apiName === this.fields.unitMeasurement.fieldApiName) {
-                field.size = 1.5;
+            } else if (field.apiName === this.fields.programEngagement.fieldApiName) {
+                field.size = 4;
+            } else if (field.apiName === this.fields.contact.fieldApiName) {
+                field.size = 3;
             } else {
                 field.size = 2;
             }
@@ -109,6 +125,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             if (field.apiName === this.fields.contact.fieldApiName) {
                 field.disabled = false;
                 field.isRequired = true;
+            } else if (field.apiName === this.fields.quantity.fieldApiName) {
+                field.isQuantityField = true;
             }
             this.fieldSet.push(field);
         });
@@ -130,7 +148,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.handleDeleteError(event.detail);
     }
 
-    handleDone(event) {
+    handleDone() {
         this.resetUI();
     }
 

@@ -274,20 +274,20 @@ flows:
                 flow: npsp:install_prod
     deploy_unmanaged:
         steps:
-            2.98:
-                task: source_revert
-                options:
-                    revert: False
+            #2.98:
+            #    task: source_revert
+            #    options:
+            #        revert: False
             #2.99:
             #    task: inject_namespaced_org_flow
             #    when: org_config.namespaced
             #2.999:
             #    task: clear_namespaced_org_flow
             #    when: not org_config.namespaced
-            4.099:
-                task: source_revert
-                options:
-                    revert: True
+            #4.099:
+            #    task: source_revert
+            #    options:
+            #        revert: True
 
     #deploy_packaging:
     #    steps:

@@ -15,10 +15,10 @@ public with sharing class FieldSetController {
      * @description Gets a custom pmm fieldset for a given object in a data structure LWC can use
      * @param       String objectName
      * @param       String fieldSetName
-     * @return      List<Map<String, String>> list of fields, each with apiName and label keys
+     * @return      List<Map<String, Object>> list of fields, each with apiName, label, etc keys
      */
     @AuraEnabled(cacheable=true)
-    public static List<Map<String, String>> getFieldSetForLWC(
+    public static List<Map<String, Object>> getFieldSetForLWC(
         String objectName,
         String fieldSetName
     ) {

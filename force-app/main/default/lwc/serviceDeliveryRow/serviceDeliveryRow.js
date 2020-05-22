@@ -31,10 +31,12 @@ import selectEngagement from "@salesforce/label/c.Select_Program_Engagement";
 import selectedContactWarning from "@salesforce/label/c.Service_Delivery_Contact_Without_Programs";
 import noServiceWarning from "@salesforce/label/c.No_Services_For_Program_Engagement";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
+import quantity from "@salesforce/label/c.Quantity";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
+import UNIT_OF_MEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
 const DELAY = 1000;
@@ -53,6 +55,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track isError;
     @track isSaved;
     @track rowError;
+    @track unitOfMeasureValue = quantity;
 
     @api
     get defaultValues() {
@@ -72,7 +75,6 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     @track localDefaultValues;
     @track localFieldSet;
-    @track hasQuantity = false;
     @track saveMessage;
 
     _defaultsSet = false;
@@ -108,6 +110,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         contact: CONTACT_FIELD,
         service: SERVICE_FIELD,
         programEngagement: PROGRAMENGAGEMENT_FIELD,
+        unitOfMeasurement: UNIT_OF_MEASUREMENT_FIELD,
     };
 
     autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
@@ -261,6 +264,10 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
+        if (event.detail.fields[this.fields.unitOfMeasurement.fieldApiName]) {
+            this.unitOfMeasureValue =
+                event.detail.fields[this.fields.unitOfMeasurement.fieldApiName].value;
+        }
         this.dispatchEvent(new CustomEvent("clearerror", { detail: this.index }));
     }
 

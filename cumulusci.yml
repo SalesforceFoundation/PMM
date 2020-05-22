@@ -278,23 +278,23 @@ flows:
                 task: source_revert
                 options:
                     revert: False
-            2.99:
-                task: inject_namespaced_org_flow
-                when: org_config.namespaced
-            2.999:
-                task: clear_namespaced_org_flow
-                when: not org_config.namespaced
+            #2.99:
+            #    task: inject_namespaced_org_flow
+            #    when: org_config.namespaced
+            #2.999:
+            #    task: clear_namespaced_org_flow
+            #    when: not org_config.namespaced
             4.099:
                 task: source_revert
                 options:
                     revert: True
 
-    deploy_packaging:
-        steps:
-            3.01:
-                task: inject_namespaced_org_flow
-                options:
-                    path: "src/flows"
+    #deploy_packaging:
+    #    steps:
+    #        3.01:
+    #            task: inject_namespaced_org_flow
+    #            options:
+    #                path: "src/flows"
 plans:
     install:
         slug: install

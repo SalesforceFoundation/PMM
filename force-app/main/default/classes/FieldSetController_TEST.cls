@@ -15,7 +15,7 @@ public with sharing class FieldSetController_TEST {
     private static void whenGetFieldSetReturnsSuccessfully() {
         String objectName = 'ProgramEngagement__c';
         String fieldSetName = 'CreateProgramEngagement';
-        final List<Map<String, String>> expected = new List<Map<String, String>>();
+        final List<Map<String, Object>> expected = new List<Map<String, Object>>();
 
         fieldSetServiceStub.withReturnValue(
             'getFieldSetForLWC',
@@ -26,7 +26,7 @@ public with sharing class FieldSetController_TEST {
         Test.startTest();
 
         FieldSetController.fieldSetService = (FieldSetService) fieldSetServiceStub.createMock();
-        final List<Object> actual = FieldSetController.getFieldSetForLWC(
+        final List<Map<String, Object>> actual = FieldSetController.getFieldSetForLWC(
             objectName,
             fieldSetName
         );

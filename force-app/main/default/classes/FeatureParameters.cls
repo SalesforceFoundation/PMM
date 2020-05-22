@@ -1,8 +1,21 @@
+/* The below comments were created as part of https://github.com/SalesforceFoundation/PMM/pull/205. 
+Refer to the PR for any additional reference.
+
+When a new telemetry feature parameter needs to be added we need to modify this class and do the following : 
+1. Create a featureParameter manually under the featureParameters folder. Make sure the file name of the new
+featureParameter has the data type included. Refer to the existing featureParameter files in that folder.
+2. Need to add a new DeveloperName enum.
+3. Need to add a new when statement to the makeFeatureParameter method.
+4. Need to create a new inner class similar to the other inner classes added for feature parameters and 
+update the methods within the inner class accordingly
+5. Modify FeatureParameters_TEST class to add tests for the newly created inner class*/
+
 public inherited sharing class FeatureParameters {
     @TestVisible
      private enum DeveloperName {
         ACTIVE_PROGRAMS,
-        ACTIVE_PROGRAMS_WITH_ENGAGEMENTS_LAST30
+        ACTIVE_PROGRAMS_WITH_ENGAGEMENTS_LAST30,
+        ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30
     }
 
     private static final String ACTIVE_PROGRAM_CONDITION =
@@ -33,6 +46,9 @@ public inherited sharing class FeatureParameters {
             }
             when ACTIVE_PROGRAMS_WITH_ENGAGEMENTS_LAST30 {
                 return new ActiveProgramsWithEngagementsLast30();
+            }
+            when ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30 {
+                return new ActiveProgramsWithServiceDeliveriesLast30();
             }
             when else {
                 return null;
@@ -139,6 +155,73 @@ public inherited sharing class FeatureParameters {
                 )
                 .addCondition(CREATED_LAST_30_CONDITION)
                 .buildSoqlQuery();
+        }
+    }
+
+    @TestVisible
+    private inherited sharing class ActiveProgramsWithServiceDeliveriesLast30 implements FeatureManagement.FeatureParameter {
+        private string programField =
+            ServiceDelivery__c.ProgramEngagement__c.getDescribe().getRelationshipName() +
+            '.' +
+            String.valueOf(ProgramEngagement__c.Program__c);
+
+        private String activeServiceDelivery =
+            ServiceDelivery__c.ProgramEngagement__c.getDescribe().getRelationshipName() +
+            '.' +
+            ProgramEngagement__c.Program__c.getDescribe().getRelationshipName() +
+            '.' +
+            String.valueOf(Program__c.Status__c) +
+            ' = \'Active\'';
+
+        @TestVisible
+        private QueryBuilder queryBuilder {
+            get {
+                if (queryBuilder == null) {
+                    queryBuilder = new QueryBuilder()
+                        .withSObjectType(ServiceDelivery__c.SObjectType)
+                        .withSelectFields(new List<String>{ programField })
+                        .addCondition(activeServiceDelivery)
+                        .addCondition(CREATED_LAST_30_CONDITION);
+                }
+
+                return queryBuilder;
+            }
+            set;
+        }
+
+        @TestVisible
+        private Finder finder {
+            get {
+                if (finder == null) {
+                    finder = new Finder(queryBuilder);
+                }
+
+                return finder;
+            }
+            set;
+        }
+
+        public void send() {
+            final Object value = getValue();
+
+            if (value instanceof Integer) {
+                FeatureManagement.getInstance()
+                    .setPackageIntegerValue(getName(), (Integer) value);
+            }
+        }
+
+        private String getName() {
+            return DeveloperName.ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30.name()
+                .remove('_');
+        }
+
+        private Object getValue() {
+            List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) finder.findRecords();
+            Set<Id> programIds = new Set<Id>();
+            for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {
+                programIds.add(serviceDelivery.programengagement__r.Program__c);
+            }
+            return programIds.size();
         }
     }
 }

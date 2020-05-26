@@ -105,6 +105,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         saved,
         saving,
         error,
+        quantity,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -264,9 +265,13 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
-        if (event.detail.fields[this.fields.unitOfMeasurement.fieldApiName]) {
+        if (
+            event.detail.fields[this.fields.unitOfMeasurement.fieldApiName].value !== null
+        ) {
             this.unitOfMeasureValue =
                 event.detail.fields[this.fields.unitOfMeasurement.fieldApiName].value;
+        } else if (this.unitOfMeasureValue !== this.labels.quantity) {
+            this.unitOfMeasureValue = this.labels.quantity;
         }
         this.dispatchEvent(new CustomEvent("clearerror", { detail: this.index }));
     }

@@ -26,11 +26,6 @@
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
-    <availableFields>
-        <field>UnitOfMeasurement__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
     <description>Used in the Bulk Service Delivery UI</description>
     <displayedFields>
         <field>Contact__c</field>

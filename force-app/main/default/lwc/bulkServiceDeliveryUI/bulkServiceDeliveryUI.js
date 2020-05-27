@@ -34,7 +34,6 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Default";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
-const AUTOSAVESTART = "autosavestart";
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
@@ -176,7 +175,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     handleAutoSave(event) {
-        if (event.detail === AUTOSAVESTART) {
+        if (event.detail.isStart) {
             this.isAddEntryDisabled = true;
             this.isDoneButtonDisabled = true;
         } else {

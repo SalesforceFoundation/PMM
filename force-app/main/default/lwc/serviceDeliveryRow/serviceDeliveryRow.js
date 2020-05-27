@@ -42,7 +42,6 @@ import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 const DELAY = 1000;
 const ENGAGEMENTS = "engagements";
 const SERVICES = "services";
-const AUTOSAVESTART = "autosavestart";
 
 export default class ServiceDeliveryRow extends LightningElement {
     @wire(CurrentPageReference) pageRef;
@@ -253,7 +252,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         // TODO: show this in a tooltip on the lightning:icon on hover and keyboard focus; probably slds-tooltip
         this.rowError = handleError(event, false, "dismissible", true);
         event.detail.index = this.index;
-        this.dispatchEvent(new CustomEvent("autosave"));
+        this.dispatchEvent(new CustomEvent("autosave", { detail: { isStart: false } }));
         this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
     }
 
@@ -409,7 +408,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleSaveStart() {
-        this.dispatchEvent(new CustomEvent("autosave", { detail: AUTOSAVESTART }));
+        this.dispatchEvent(new CustomEvent("autosave", { detail: { isStart: true } }));
         this.saveMessage = "...";
         this.isSaving = true;
         this.isSaved = false;
@@ -417,7 +416,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleSaveEnd() {
-        this.dispatchEvent(new CustomEvent("autosave"));
+        this.dispatchEvent(new CustomEvent("autosave", { detail: { isStart: false } }));
         this.isSaving = false;
         this.isSaved = true;
     }

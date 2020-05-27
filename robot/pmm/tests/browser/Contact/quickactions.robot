@@ -35,6 +35,8 @@ Setup Test Data
 
 *** Test Cases ***
 Add contact to program quick action
+     [Documentation]                  Add a contact to a program using quick action and verify the record
+     [tags]                           W-037575  feature:Program Engagement
      Go To PMM App
      Go To Page                       Details                                 Contact              object_id=&{contact}[Id]
      page should contain              &{contact}[Name]
@@ -56,6 +58,8 @@ Add contact to program quick action
      ${programengagement_id} =        Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
      
 Add service delivery on a contact
+     [Documentation]                  Add a service delivery on a contact and verify the record
+     [tags]                           W-037575  feature:Service Delivery
      Go To Page                       Details                                 Contact                  object_id=&{contact}[Id]
      page should contain              &{contact}[Name]
      click object button              Create New Service Delivery

@@ -25,6 +25,7 @@
                                 onerror={handleRowError}
                                 onclearerror={handleClearError}
                                 row-count={rowCount}
+                                onautosave={handleAutoSave}
                             ></c-service-delivery-row>
                         </div>
                     </template>
@@ -58,6 +59,7 @@
                         label={labels.addEntry}
                         onclick={addDelivery}
                         class="slds-p-right_medium"
+                        disabled={isAddEntryDisabled}
                     ></lightning-button>
                     <lightning-button
                         onclick={handleDone}

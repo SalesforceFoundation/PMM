@@ -34,6 +34,7 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Default";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
+const AUTOSAVESTART = "autosavestart";
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
@@ -44,6 +45,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track fieldSet = [];
     @track rowCount = this.serviceDeliveries.length;
     @track errors = {};
+    @track isAddEntryDisabled = false;
+    @track isDoneButtonDisabled = false;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -172,6 +175,16 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         }
     }
 
+    handleAutoSave(event) {
+        if (event.detail === AUTOSAVESTART) {
+            this.isAddEntryDisabled = true;
+            this.isDoneButtonDisabled = true;
+        } else {
+            this.isAddEntryDisabled = false;
+            this.isDoneButtonDisabled = false;
+        }
+    }
+
     renderErrors() {
         this.errors = Object.assign({}, this.errors);
     }
@@ -211,7 +224,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     get isDoneDisabled() {
-        return Object.keys(this.errors).length > 0;
+        if (Object.keys(this.errors).length > 0) {
+            this.isDoneButtonDisabled = Object.keys(this.errors).length > 0;
+        }
+        return this.isDoneButtonDisabled;
     }
 
     get doneTitleLabel() {

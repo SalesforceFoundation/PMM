@@ -41,7 +41,6 @@ Add contact to program quick action
      Go To Page                       Details                                 Contact              object_id=&{contact}[Id]
      page should contain              &{contact}[Name]
      click object button              Add Contact to Program
-     Load Page Object                 NewProgramEngagement                    ${ns}ProgramEngagement__c
      verify current page title        Add Contact to Program
      Populate Modal form              Program=&{program}[Name]
      ...                              Role=Client
@@ -63,7 +62,6 @@ Add service delivery on a contact
      Go To Page                       Details                                 Contact                  object_id=&{contact}[Id]
      page should contain              &{contact}[Name]
      click object button              Create New Service Delivery
-     Load Page Object                 NewServiceDelivery                      ${ns}ServiceDelivery__c
      verify current page title        Create New Service Delivery
      populate modal form              Program Engagement=&{program_engagement}[Name]
      ...                              Service=&{service}[Name]

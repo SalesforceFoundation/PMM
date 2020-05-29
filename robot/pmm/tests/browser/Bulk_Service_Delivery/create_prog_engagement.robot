@@ -14,6 +14,8 @@ Suite Teardown  Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    ${ns} =                 Get PMM Namespace Prefix
+    Set suite variable      ${ns}
     ${quantity} =           Generate Random String    2     [NUMBERS]
     Set suite variable      ${quantity}
     ${application_date} =   Get Current Date   result_format=%m/%d/%Y   increment=1 day
@@ -28,7 +30,7 @@ Setup Test Data
     &{contact} =            API Create Contact
     Set suite variable      &{contact}
     &{program} =            API Create Program
-    Store Session Record    Program__c                   &{program}[Id]
+    Store Session Record    ${ns}Program__c              &{program}[Id]
     Set suite variable      &{program}
     &{program_cohort} =     API Create Program Cohort    &{Program}[Id]
     Set suite variable      &{program_cohort}
@@ -39,17 +41,18 @@ Setup Test Data
 Create program engagement from BSDT
     [Documentation]                         This test adds service deliveries on bulk service delivery
     [tags]                                  W-040316   feature:Service Delivery
-    Go To Page                              BasePage                        ServiceDelivery__c
+    Go To PMM App
+    Go To Page                              Custom                          ${ns}Bulk_Service_Deliveries
     verify current page                     Bulk Service Deliveries
     populate bsdt lookup                    Search Contacts                 &{contact}[FirstName] &{contact}[LastName]
     select listbox                          Select Program Engagement       New Program Engagement
-    Load Page Object                        NewProgramEngagement            ProgramEngagement__c
+    Load Page Object                        NewProgramEngagement            ${ns}ProgramEngagement__c
     verify dialog title                     New Program Engagement
     Populate Program Engagement bsdt form   Stage=Applied
     ...                                     Role=Client
     ...                                     Application Date=${application_date}
     ...                                     Start Date=${start_date}
-    populate bsdt lookup                    Search Programs             &{program}[Name]
+    populate bsdt lookup                    Search Programs                 &{program}[Name]
     Click dialog button                     Save
     Wait Until Modal Is Closed
     populate row1 fields                    Select Service                  &{service}[Name]
@@ -60,11 +63,11 @@ Create program engagement from BSDT
     click button                            Done
     click toast message                     1 Service Deliveries Added
     click listview link                     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
-    current page should be                  Details                         ServiceDelivery__c
+    verify page header                      Service Delivery
     verify details                          Service Delivery Name           contains     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
-    ${service_delivery_id} =                Save Current Record ID For Deletion    ServiceDelivery__c
-    ${service_id} =                         Save Current Record ID For Deletion    Service__c
-    Go To Page                              Listing                         ProgramEngagement__c
+    ${service_delivery_id} =                Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
+    ${service_id} =                         Save Current Record ID For Deletion    ${ns}Service__c
+    Go To Page                              Listing                         ${ns}ProgramEngagement__c
     click listview link                     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{program}[Name]
-    verify details                          Program Engagement Name     contains     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{Program}[Name]
-    ${programengagement_id} =               Save Current Record ID For Deletion      ProgramEngagement__c
+    verify details                          Program Engagement Name         contains     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{Program}[Name]
+    ${programengagement_id} =               Save Current Record ID For Deletion      ${ns}ProgramEngagement__c

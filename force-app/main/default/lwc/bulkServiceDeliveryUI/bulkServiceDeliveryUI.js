@@ -176,13 +176,17 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     handleSuccess(event) {
         this.isAddEntryDisabled = false;
 
-        //If previously there was an error and then the record saved successfully the below piece of code removes that error
-        //by calling the handleDeleteError method
-        let errorIndex = event.target.index;
-        let result = this.serviceDeliveries.find(({ index }) => index === errorIndex);
-        result.hasSaved = true;
-        this.handleDeleteError(errorIndex);
+        let rowIndex = event.target.index;
+        let serviceDelivery = this.serviceDeliveries.find(
+            ({ index }) => index === rowIndex
+        );
+        serviceDelivery.hasSaved = true;
+        this.handleDeleteError(rowIndex);
 
+        this.setDoneDisabled();
+    }
+
+    setDoneDisabled() {
         if (Object.keys(this.errors).length > 0) {
             this.isDoneDisabled = true;
         } else {

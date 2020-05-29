@@ -45,7 +45,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track rowCount = this.serviceDeliveries.length;
     @track errors = {};
     @track isAddEntryDisabled = false;
-    @track isDoneButtonDisabled = false;
+    @track isDoneDisabled = false;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -157,14 +157,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     handleRowError(event) {
         let errorIndex = event.detail.index;
         this.errors[errorIndex] = "error";
+        this.isAddEntryDisabled = false;
         this.renderErrors();
-    }
-
-    handleClearError(event) {
-        let errorIndex = event.detail;
-        let result = this.serviceDeliveries.find(({ index }) => index === errorIndex);
-        result.hasSaved = true;
-        this.handleDeleteError(errorIndex);
     }
 
     handleDeleteError(index) {
@@ -174,13 +168,25 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         }
     }
 
-    handleAutoSave(event) {
-        if (event.detail.isStart) {
-            this.isAddEntryDisabled = true;
-            this.isDoneButtonDisabled = true;
+    handleSubmit() {
+        this.isAddEntryDisabled = true;
+        this.isDoneDisabled = true;
+    }
+
+    handleSuccess(event) {
+        this.isAddEntryDisabled = false;
+
+        //If previously there was an error and then the record saved successfully the below piece of code removes that error
+        //by calling the handleDeleteError method
+        let errorIndex = event.target.index;
+        let result = this.serviceDeliveries.find(({ index }) => index === errorIndex);
+        result.hasSaved = true;
+        this.handleDeleteError(errorIndex);
+
+        if (Object.keys(this.errors).length > 0) {
+            this.isDoneDisabled = true;
         } else {
-            this.isAddEntryDisabled = false;
-            this.isDoneButtonDisabled = false;
+            this.isDoneDisabled = false;
         }
     }
 
@@ -220,13 +226,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                 this.dispatchEvent(event);
             });
         }
-    }
-
-    get isDoneDisabled() {
-        if (Object.keys(this.errors).length > 0) {
-            this.isDoneButtonDisabled = Object.keys(this.errors).length > 0;
-        }
-        return this.isDoneButtonDisabled;
     }
 
     get doneTitleLabel() {

@@ -21,11 +21,11 @@
                                 default-values={defaultValues}
                                 field-set={fieldSet}
                                 index={delivery.index}
+                                onsubmit={handleSubmit}
+                                onsuccess={handleSuccess}
                                 ondelete={handleDelete}
                                 onerror={handleRowError}
-                                onclearerror={handleClearError}
                                 row-count={rowCount}
-                                onautosave={handleAutoSave}
                             ></c-service-delivery-row>
                         </div>
                     </template>

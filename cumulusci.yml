@@ -328,9 +328,3 @@ plans:
                     name: "Deploy Program Management Profile"
                 options:
                     unmanaged: False
-            4:
-                task: deploy_post_config
-                ui_options:
-                    name: "Deploy Process Builder Processes"
-                options:
-                    unmanaged: False

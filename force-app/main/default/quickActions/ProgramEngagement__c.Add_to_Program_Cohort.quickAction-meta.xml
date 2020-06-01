@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>This quick action can be used to update Program Cohort on Program Engagement records in mass.</description>
-    <label>Add to Cohort</label>
+    <description>This quick action bulk updates the Program Cohort on multiple Program Engagement records.</description>
+    <label>Add to Program Cohort</label>
     <optionsCreateFeedItem>false</optionsCreateFeedItem>
     <quickActionLayout>
         <layoutSectionStyle>TwoColumnsLeftToRight</layoutSectionStyle>

@@ -206,6 +206,14 @@ tasks:
             path: unpackaged/config/customer_profiles
             namespace_inject: $project_config.project__package__namespace
 
+    deploy_post_config:
+        group: "PMM: Config"
+        description: Deploys the post-install configuration to create and activate process builder processes
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/post
+            namespace_inject: $project_config.project__package__namespace
+
 flows:
     capture_bulk_data:
         steps:
@@ -244,6 +252,10 @@ flows:
                 task: deploy_customer_profiles
                 options:
                     unmanaged: False
+            5:
+                task: deploy_post_config
+                options:
+                    unmanaged: False
 
     config_qa:
         steps:
@@ -251,6 +263,8 @@ flows:
                 flow: config_unmanaged
             201:
                 task: deploy_dev_config
+            201.1:
+                task: deploy_post_config
             202:
                 task: deploy_customer_profiles
 
@@ -260,6 +274,8 @@ flows:
                 flow: config_unmanaged
             201:
                 task: deploy_dev_config
+            201.1:
+                task: deploy_post_config
             202:
                 task: deploy_customer_profiles
 
@@ -310,5 +326,11 @@ plans:
                 task: deploy_customer_profiles
                 ui_options:
                     name: "Deploy Program Management Profile"
+                options:
+                    unmanaged: False
+            4:
+                task: deploy_post_config
+                ui_options:
+                    name: "Deploy Process Builder Processes"
                 options:
                     unmanaged: False

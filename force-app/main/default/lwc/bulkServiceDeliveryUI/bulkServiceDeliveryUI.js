@@ -165,6 +165,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         if (this.errors[index]) {
             delete this.errors[index];
             this.renderErrors();
+            this.setDoneDisabled();
         }
     }
 

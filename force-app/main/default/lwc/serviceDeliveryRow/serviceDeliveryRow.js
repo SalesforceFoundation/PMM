@@ -273,7 +273,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         } else if (this.unitOfMeasureValue !== this.labels.quantity) {
             this.unitOfMeasureValue = this.labels.quantity;
         }
-        this.dispatchEvent(new CustomEvent("clearerror", { detail: this.index }));
     }
 
     handleSubmit(event) {

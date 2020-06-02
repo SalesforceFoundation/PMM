@@ -21,9 +21,10 @@
                                 default-values={defaultValues}
                                 field-set={fieldSet}
                                 index={delivery.index}
+                                onsubmit={handleSubmit}
+                                onsuccess={handleSuccess}
                                 ondelete={handleDelete}
                                 onerror={handleRowError}
-                                onclearerror={handleClearError}
                                 row-count={rowCount}
                             ></c-service-delivery-row>
                         </div>
@@ -58,6 +59,7 @@
                         label={labels.addEntry}
                         onclick={addDelivery}
                         class="slds-p-right_medium"
+                        disabled={isAddEntryDisabled}
                     ></lightning-button>
                     <lightning-button
                         onclick={handleDone}

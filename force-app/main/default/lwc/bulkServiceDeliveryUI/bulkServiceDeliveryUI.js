@@ -44,6 +44,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track fieldSet = [];
     @track rowCount = this.serviceDeliveries.length;
     @track errors = {};
+    @track isAddEntryDisabled = false;
+    @track isDoneDisabled = false;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -155,20 +157,41 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     handleRowError(event) {
         let errorIndex = event.detail.index;
         this.errors[errorIndex] = "error";
+        this.isAddEntryDisabled = false;
         this.renderErrors();
-    }
-
-    handleClearError(event) {
-        let errorIndex = event.detail;
-        let result = this.serviceDeliveries.find(({ index }) => index === errorIndex);
-        result.hasSaved = true;
-        this.handleDeleteError(errorIndex);
     }
 
     handleDeleteError(index) {
         if (this.errors[index]) {
             delete this.errors[index];
             this.renderErrors();
+            this.setDoneDisabled();
+        }
+    }
+
+    handleSubmit() {
+        this.isAddEntryDisabled = true;
+        this.isDoneDisabled = true;
+    }
+
+    handleSuccess(event) {
+        this.isAddEntryDisabled = false;
+
+        let rowIndex = event.target.index;
+        let serviceDelivery = this.serviceDeliveries.find(
+            ({ index }) => index === rowIndex
+        );
+        serviceDelivery.hasSaved = true;
+        this.handleDeleteError(rowIndex);
+
+        this.setDoneDisabled();
+    }
+
+    setDoneDisabled() {
+        if (Object.keys(this.errors).length > 0) {
+            this.isDoneDisabled = true;
+        } else {
+            this.isDoneDisabled = false;
         }
     }
 
@@ -208,10 +231,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                 this.dispatchEvent(event);
             });
         }
-    }
-
-    get isDoneDisabled() {
-        return Object.keys(this.errors).length > 0;
     }
 
     get doneTitleLabel() {

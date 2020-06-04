@@ -17,7 +17,6 @@ describe("c-modal", () => {
     let element;
 
     afterEach(() => {
-        // The jsdom instance is shared across test cases in a single file so reset the DOM
         while (document.body.firstChild) {
             document.body.removeChild(document.body.firstChild);
         }
@@ -34,22 +33,21 @@ describe("c-modal", () => {
 
         return Promise.resolve().then(() => {
             const modalContainer = element.shadowRoot.querySelector("div");
-            modalContainer.classList.add(CSS_CLASS);
-
             //verify that the css class on the outer div is modal-hidden by default
             expect(modalContainer.classList.value).toBe(CSS_CLASS);
         });
     });
 
     it("displays header and does not display the slot when header property is not blank", () => {
-        const HEADERSTRING = "Modal Header";
-        element.header = HEADERSTRING;
+        const HEADER_STRING = "Modal Header";
+        element.header = HEADER_STRING;
         document.body.appendChild(element);
 
         return Promise.resolve().then(() => {
             //verify that the header is displayed
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer).not.toBeNull();
+            expect(headerContainer.textContent).toBe(HEADER_STRING);
 
             //verify that the header slot is not displayed because the header is present
             const slotContainer = element.shadowRoot.querySelector(".header-slot");
@@ -72,8 +70,6 @@ describe("c-modal", () => {
     });
 
     it("closes the modal when the close button is clicked", () => {
-        const HEADERSTRING = "Modal Header";
-        element.header = HEADERSTRING;
         document.body.appendChild(element);
 
         let buttonContainer = element.shadowRoot.querySelector("lightning-button-icon");
@@ -86,6 +82,21 @@ describe("c-modal", () => {
 
         return Promise.resolve().then(() => {
             expect(handler).toHaveBeenCalled();
+        });
+    });
+
+    it("changes the css class when the modal is shown or hidden", () => {
+        document.body.appendChild(element);
+        return Promise.resolve().then(() => {
+            const modalContainer = element.shadowRoot.querySelector("div");
+            element.show();
+
+            //verify that there is no CSS class present
+            expect(modalContainer.classList.value).toBe("");
+
+            element.hide();
+            //verify that the CSS class exists
+            expect(modalContainer.classList.value).toBe(CSS_CLASS);
         });
     });
 });

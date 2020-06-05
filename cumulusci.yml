@@ -301,6 +301,13 @@ plans:
         title: Install Program Management Module
         tier: primary
         is_listed: True
+        preflight_message: "This will install Program Management Module in your org."
+        post_install_message: "Thanks for installing Program Management Module. Please visit the [Program Management Module customer forum group](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) on the Power of Us Hub for any questions about Program Management Module."
+        error_message: "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include “PMM” in the subject line and include in your comment the installation link shown here."
+        checks:
+            - when: "'.my.' not in org_config.instance_url"
+              action: error
+              message: "Please enable My Domain in your org prior to installing."
         steps:
             1:
                 task: update_dependencies

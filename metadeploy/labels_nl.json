@@ -1,7 +1,7 @@
 {
     "product": {
         "title": {
-            "message": "Module Programmabeheer (PMM)",
+            "message": "Program Management Module (PMM)",
             "description": "name of product"
         },
         "short_description": {
@@ -9,24 +9,50 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Welkom bij de installer van de module Programmabeheer (PMM)!\r\n\r\nDe module Programmabeheer is een standaard framework voor het bijhouden, beheren en leveren van programma's, diensten en bestellingen.\r\n\r\n*BELANGRIJK*: Salesforce raad niet aan, de upgrades direct in productieorganisaties te installeren. Installeer de module Programmabeheer in plaats hiervan eerst in een van uw vrije sandboxomgevingen of in een ontwikkelorganisatie.\r\n\r\n*De wettelijke richtlijnen gaan voor de tekst in de paragraaf*\r\n\r\nKijk na het installeren van Programmabeheer bij de resources in onze documentatie:\r\n\r\n* <Documentatie module Programmabeheer>\r\n\r\nVragen? Word lid van de klantengroep <Module Programmabeheer> in de Power of Us Hub.",
+            "message": "Welkom bij de installer van de Program Management Module (PMM)!\r\n\r\nProgram Management Module is een standaard framework voor het bijhouden, beheren en leveren van programma's, diensten en bestellingen.\r\n\r\n*BELANGRIJK*: Salesforce raad niet aan, de upgrades direct in productieorganisaties te installeren. Installeer de Program Management Module in plaats hiervan eerst in een van uw vrije sandboxomgevingen of in een ontwikkelorganisatie.\r\n\r\nSalesforce.org Program Management Module ('PMM') is een uitbreidbare toepassing met open source- en closed source-onderdelen voor de unieke kernbehoeften van programmabeheer. PMM maakt gebruik van een door salesforce.com, Inc. ('Salesforce') beheerd pakket om organisaties zonder winstbejag te voorzien van een manier om programma-informatie te centraliseren en programma's en diensten efficiënter te beheren en leveren.\r\n\r\nKijk na het installeren van Programmabeheer bij de resources in onze documentatie:\r\n\r\n* [Documentatie Program Management Module](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\nVragen? Word lid van de klantengroep [Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) in de Power of Us Hub.",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
-            "message": "Ga voor assistentie bij deze fout naar <a href='https://help.salesforce.com/'>help.salesforce.com</a>, zoek het gebied Ondersteuning en services, en leg een ticket voor technische ondersteuning vast bij Salesforce. Vermeld \"PMM\" in de onderwerpregel en neem in uw opmerking de hier getoonde installatiekoppeling op.",
+            "message": "Ga voor assistentie bij deze fout naar [help.salesforce.com](https://help.salesforce.com/), zoek het gebied Ondersteuning en services, en maak een ticket voor technische ondersteuning bij Salesforce. Vermeld \"PMM\" in de onderwerpregel en neem in uw opmerking de hier getoonde installatiekoppeling op.",
             "description": "shown after failed installation (markdown)"
+        },
+        "click_through_agreement": {
+            "message": "De Program Management Module-technologie (\"PMM\") is een open-source pakket dat is gelicentieerd door salesforce.com, Inc. of een van haar gelieerde ondernemingen (\"SFDC\") volgens de BSD-3-clausulelicentie, die men aantreft op https://opensource.org/licenses/BSD-3-Clause. Als u het PMM-pakket installeert, wordt het SFDO Base-pakket, een closed-source technologie die is gelicentieerd door SFDC volgens een eigendomsrechtelijk beschermde licentie voor beperkt gebruik, automatisch geïnstalleerd in uw Salesforce-organisatie. \r\n\r\nDOOR PMM TE INSTALLEREN, GAAT U AKKOORD MET DE BIJBEHORENDE LICENTIE [https://github.com/SalesforceFoundation/PMM/blob/master/LICENSE.txt](https://github.com/SalesforceFoundation/PMM/blob/master/LICENSE.txt) EN DE SFDO BASE-LICENTIE [https://github.com/SalesforceFoundation/ProductLicenses/blob/master/SFDOBase.md](https://github.com/SalesforceFoundation/ProductLicenses/blob/master/SFDOBase.md).\r\n\r\nELKE HOOFDABONNEMENTSOVEREENKOMST (\"MASTER SUBSCRIPTION AGREEMENT\") DIE U OF UW ENTITEIT MOGELIJK HEEFT MET SFDC, IS NIET VAN TOEPASSING OP UW GEBRUIK VAN PMM OF SFDO BASE. EEN GELIEERDE ONDERNEMING WIL ZEGGEN EEN ENTITEIT DIE DIRECT OF INDIRECT ZEGGENSCHAP HEEFT OVER, ONDER ZEGGENSCHAP STAAT VAN, OF ONDER GEZAMENLIJKE ZEGGENSCHAP MET DE DESBETREFFENDE ENTITEIT STAAT. VOOR DE TOEPASSING VAN DEZE DEFINITIE BETEKENT 'ZEGGENSCHAP' HET DIRECTE OF INDIRECTE EIGENDOM VAN OF ZEGGENSCHAP OVER MEER DAN 50% VAN DE STEMGERECHTIGDE BELANGEN VAN DE DESBETREFFENDE ENTITEIT. SALESFORCE.ORG LLC IS EEN GELIEERDE ONDERNEMING VAN SALESFORCE.COM, INC. \r\n\r\nPMM EN SFDO BASE ZIJN NIET-SFDC-TOEPASSINGEN OF TOEPASSINGEN VAN DERDE PARTIJEN, EN GEEN SERVICES, OP GROND VAN ENIGE HOOFDABONNEMENTSOVEREENKOMST DIE U HEBT MET SFDC. PMM EN SFDO BASE WORDEN GELEVERD \"AS IS\" EN ZOALS BESCHIKBAAR, WAARBIJ SFDC GEEN ENKELE GARANTIE OF WAARBORG GEEFT MET BETREKKING TOT PMM OF SFDO BASE, NOCH EXPLICIET, NOCH IMPLICIET, VAN RECHTSWEGE OF ANDERS, INCLUSIEF, DOCH NIET BEPERKT TOT, ALLE IMPLICIETE GARANTIES VAN VERKOOPBAARHEID, GESCHIKTHEID VOOR EEN BEPAALD DOEL, VRIJ ZIJN VAN DEFECTEN OF NIET-INBREUK, MET INACHTNEMING VAN DE MAXIMALE DOOR DE VAN TOEPASSING ZIJNDE WET TOEGESTANE OMVANG. HET IS U VERBODEN BESCHERMDE GEZONDHEIDSINFORMATIE TE VERSTREKKEN IN PMM EN SFDO BASE.\r\n\r\nSFDC TREFT GEEN AANSPRAKELIJKHEID VOORTVLOEIEND UIT OF GERELATEERD AAN UW GEBRUIK VAN PMM OF SFDO BASE VOOR ENIGE DIRECTE SCHADE OF VOOR ENIGE GEDERFDE WINSTEN, OMZETTEN, GOODWILL OF INDIRECTE, SPECIALE, INCIDENTELE, VOORTVLOEIENDE, VOORBEELD-, DEKKINGS-, BEDRIJFSONDERBREKINGS- OF ALS STRAF OPGELEGDE SCHADE, ONGEACHT OF EEN ACTIE PLAATSVINDT IN CONTRACT OF ALS ONRECHTMATIGE DAAD EN ONGEACHT ENIGE AANSPRAKELIJKHEIDSTHEORIE, ZELFS INDIEN OP DE HOOGTE GEBRACHT VAN DE MOGELIJKHEID VAN DERGELIJKE SCHADE, OF ALS EEN OPLOSSING ANDERSZINS MISLUKT OF NIET SLAAGT IN ZIJN OORSPRONKELIJKE OPZET. DE VOORAFGAANDE AFWIJZING VAN AANSPRAKELIJKHEID IS NIET VAN TOEPASSING IN DE MATE ZOALS VERBONDEN DOOR DE WET. SFDC WIJST ALLE AANSPRAKELIJKHEID EN VERPLICHTINGEN TOT SCHADELOOSSTELLING AF VOOR ALLE NADEEL OF SCHADE VEROORZAAKT DOOR ALLE OF ENIGE EXTERNE HOSTINGPROVIDERS. \r\n\r\nDEZE OVEREENKOMST IS UITSLUITEND ONDERWORPEN AAN EN MOET UITSLUITEND WORDEN UITGELEGD DOOR TOEPASSING VAN HET RECHT VAN DE VERENIGDE STATEN EN DE STAAT CALIFORNIË, ONGEACHT DE EVENTUELE CONFLICTEN MET WETTELIJKE BEPALINGEN. DE STAAT EN FEDERALE RECHTBANKEN IN SAN FRANCISCO, CALIFORNIË HEBBEN EXCLUSIEVE BEVOEGDHEID OM UITSPRAAK TE DOEN OVER ENIG GESCHIL DAT ONTSTAAT UIT OF VERBAND HOUDT MET DEZE OVEREENKOMST. ELKE PARTIJ STEMT HIERBIJ IN MET DE JURISDICTIE VAN DERGELIJKE RECHTBANKEN EN ZIET AF VAN ENIG RECHT DAT DE PARTIJ IN ANDERE OMSTANDIGHEDEN ZOU HEBBEN OM DE TOEPASSELIJKHEID VAN DERGELIJKE FORA TE BETWISTEN.",
+            "description": "legal text shown in modal dialog"
         }
     },
     "plan:install": {
         "title": {
-            "message": "Installeer de Nonprofit Cloud-module Programmabeheer",
+            "message": "Program Management Module installeren",
             "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Hiermee installeert u de Program Management Module in uw organisatie.",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Bedankt voor het installeren van de Program Management Module. Ga naar het [klantenforum van de Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) in de Power of Us Hub als u vragen over de Program Management Module hebt.",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "Ga voor assistentie bij deze fout naar [help.salesforce.com](https://help.salesforce.com/), zoek het gebied Ondersteuning en services, en leg een ticket voor technische ondersteuning vast bij Salesforce. Vermeld \"PMM\" in de onderwerpregel en neem in uw opmerking de hier getoonde installatiekoppeling op.",
+            "description": "shown after failed installation (markdown)"
         }
     },
     "steps": {
         "Install {product} {version}": {
             "message": "{product} {version} installeren",
             "description": "title of installation step"
+        },
+        "Deploy Program Management Profile": {
+            "message": "Programmabeheer-profiel implementeren",
+            "description": "title of installation step"
+        }
+    },
+    "checks": {
+        "Please enable My Domain in your org prior to installing.": {
+            "message": "Schakel vóór de installatie Mijn domein in uw organisatie in.",
+            "description": "shown if validation fails"
         }
     }
 }

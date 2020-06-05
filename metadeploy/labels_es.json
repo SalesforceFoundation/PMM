@@ -1,7 +1,7 @@
 {
     "product": {
         "title": {
-            "message": "Módulo de gestión de programas (PMM)",
+            "message": "Program Management Module (PMM)",
             "description": "name of product"
         },
         "short_description": {
@@ -9,24 +9,50 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "¡Le damos la bienvenida al Instalador del Módulo de gestión de programas (PMM)!\r\n\r\nEl Módulo de gestión de programas es un marco de trabajo estándar para el seguimiento, la gestión y la entrega de programas, servicios y entregas de servicio.\r\n\r\n*IMPORTANTE*: Salesforce no recomienda instalar actualizaciones directamente en organizaciones de producción. En su lugar, instale el Módulo de gestión de programas en uno de sus entornos sandbox u organizaciones de desarrollador gratuitos primero.\r\n\r\n*Espacio para párrafo legal si fuese necesario*\r\n\r\nUna vez instalado el Módulo de gestión de programas, consulte los recursos en nuestra documentación.\r\n\r\n* <Documentación del Módulo de gestión de programas>\r\n\r\n¿Preguntas? Conviértase en miembro del grupo de clientes <Módulo de gestión de programas> en Power of Us Hub.",
+            "message": "¡Le damos la bienvenida al Instalador de Program Management Module (PMM)!\r\n\r\nProgram Management Module es un marco de trabajo estándar para el seguimiento, la gestión y la entrega de programas, servicios y entregas de servicio.\r\n\r\n*IMPORTANTE*: Salesforce no recomienda instalar actualizaciones directamente en organizaciones de producción. En su lugar, instale Program Management Module en uno de sus entornos sandbox u organizaciones de desarrollador gratuitos primero.\r\n\r\nProgram Management Module («PMM») de Salesforce.org es una aplicación ampliable con componentes de código abierto y cerrado para abordar las necesidades básicas específicas de la gestión de programas. PMM utiliza un paquete gestionado de salesforce.com, Inc. (en adelante, «Salesforce») para proporcionar a las organizaciones sin ánimo de lucro una vía destinada a centralizar la información sobre programas con el fin de gestionar y ofrecer programas y servicios electrónicos de manera más eficaz.\r\n\r\nUna vez instalado Program Management Module, consulte los recursos en nuestra documentación.\r\n\r\n* [Documentación de Program Management Module](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\n¿Preguntas? Conviértase en miembro del grupo de clientes [Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) en Power of Us Hub.",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
-            "message": "Para obtener ayuda sobre este error, diríjase a <a href='https://help.salesforce.com/'>help.salesforce.com</a>, encuentre el área Asistencia y Servicios y registre un ticket de asistencia técnica con Salesforce. Incluya “PMM” en la línea de asunto y también en sus comentarios el vínculo de instalación que se muestra aquí.",
+            "message": "Para obtener ayuda sobre este error, diríjase a [help.salesforce.com](https://help.salesforce.com/), encuentre el área Asistencia y Servicios y registre un ticket de asistencia técnica con Salesforce. Incluya “PMM” en la línea de asunto e incluya su comentario en el vínculo de instalación que se muestra aquí.",
             "description": "shown after failed installation (markdown)"
+        },
+        "click_through_agreement": {
+            "message": "La tecnología de Program Management Module (“PMM”) es un paquete de código abierto con licencia de salesforce.com, Inc. o una de sus Filiales (“SFDC”) bajo la Licencia de la cláusula BSD-3, que se encuentra en https://opensource.org/licenses/BSD-3-Clause. Cuando instale el paquete PMM, el paquete Base de SFDO, una tecnología de código cerrado con licencia de SFDC bajo una licencia de uso limitado en propiedad, se instalará automáticamente en su organización de Salesforce. \r\n\r\nAL INSTALAR PMM, ESTÁ DE ACUERDO CON SU LICENCIA [https://github.com/SalesforceFoundation/PMM/blob/master/LICENSE.txt](https://github.com/SalesforceFoundation/PMM/blob/master/LICENSE.txt) Y LA LICENCIA DE LA BASE DE SFDO [https://github.com/SalesforceFoundation/ProductLicenses/blob/master/SFDOBase.md](https://github.com/SalesforceFoundation/ProductLicenses/blob/master/SFDOBase.md).\r\n\r\nCUALQUIER ACUERDO DE SUSCRIPCIÓN PRINCIPAL QUE TENGA USTED O SU ENTIDAD CON SFDC NO SE APLICARÁ AL USO DE PMM O BASE DE SFDO. UNA “FILIAL” SIGNIFICA CUALQUIER ENTIDAD QUE CONTROLE DIRECTA O INDIRECTAMENTE, O QUE ESTÉ CONTROLADA O BAJO EL CONTROL COMÚN DE LA ENTIDAD QUE ES OBJETO. “CONTROL”, PARA EL PROPÓSITO DE ESTA DEFINICIÓN, SIGNIFICA PROPIEDAD O CONTROL DIRECTO O INDIRECTO DE MÁS DEL 50% DE LOS INTERESES CON CAPACIDAD DE VOTO DE LA ENTIDAD QUE ES OBJETO. SALESFORCE.ORG LLC ES UNA FILIAL DE SALESFORCE.COM, INC. \r\n\r\nPMM Y LA BASE DE SFDO SON APLICACIONES QUE NO SON DE SFDC O APLICACIONES EXTERNAS, Y NO SERVICIOS, BAJO CUALQUIER ACUERDO DE SUSCRIPCIÓN PRINCIPAL QUE TENGA CON SFDC. PMM Y LA BASE DE SFDO SE PROPORCIONAN “TAL CUAL” Y SEGÚN SU DISPONIBILIDAD. SFDC NO OFRECE NINGÚN TIPO DE GARANTÍA REFERENTE A PMM O LA BASE DE SFDO, YA SEA EXPRESA, IMPLÍCITA O ESTATUTARIA, INCLUYENDO, SIN LIMITACIÓN, A CUALQUIER GARANTÍA IMPLÍCITA DE COMERCIABILIDAD, ADECUACIÓN PARA UN PROPÓSITO EN PARTICULAR, ESTAR LIBRE DE DEFECTOS O NO INFRACCIÓN HASTA EL ÁMBITO MÁXIMO PERMITIDO POR LA LEGISLACIÓN APLICABLE. SE PROHÍBE QUE USTED ENVÍE INFORMACIÓN SANITARIA PROTEGIDA A PMM Y LA BASE DE SFDO.\r\n\r\nSFDC NO TENDRÁ NINGÚN TIPO DE RESPONSABILIDAD PROVENIENTE O RELACIONADA CON SU USO DE PMM O LA BASE DE SFDO POR CUALQUIER DAÑO DIRECTO O POR CUALQUIER PÉRDIDA DE BENEFICIOS, INGRESOS, BUENA FE O DAÑOS INDIRECTOS, CONSECUENTES , EJEMPLARES, CUBIERTOS, DE INTERRUPCIÓN COMERCIAL O PUNITIVOS, INDEPENDIENTEMENTE DE QUE LA ACCIÓN ESTÉ EN CONTRATO O SEA EXTRACONTRACTUAL E INDEPENDIENTEMENTE DE LA TEORÍA DE LA RESPONSABILIDAD, INCLUSO SI SE ADVIRTIÓ DE LA POSIBILIDAD DE DICHOS DAÑOS O SI UN REMEDIO NO CUBRE SU PROPÓSITO ESENCIAL. LA RENUNCIA ANTERIOR NO SE APLICARÁ HASTA EL ÁMBITO PROHIBIDO POR LA LEGISLACIÓN. SFDC RECHAZA TODA RESPONSABILIDAD Y OBLIGACIONES DE INDEMNIZACIÓN POR CUALQUIER LESIÓN O DAÑO PROVOCADO POR LOS PROVEEDORES DE ALOJAMIENTO EXTERNOS. \r\n\r\nESTE ACUERDO ESTARÁ REGIDO EN EXCLUSIVA Y SE INTERPRETARÁ EN EXCLUSIVA SEGÚN LA LEGISLACIÓN DE LOS ESTADOS UNIDOS Y EL ESTADO DE CALIFORNIA, SIN TENER EN CUENTA SU CONFLICTO DE DISPOSICIONES LEGALES. LOS TRIBUNALES ESTATALES Y FEDERALES UBICADOS EN SAN FRANCISCO, CALIFORNIA TENDRÁN LA JURISDICCIÓN EXCLUSIVA DE ADJUDICAR CUALQUIER DISPUTA PROVENIENTE O RELACIONADA CON ESTE ACUERDO. CADA PARTE POR LA PRESENTE CONSIENTE LA JURISDICCIÓN DE DICHOS TRIBUNALES Y RENUNCIA A CUALQUIER DERECHO QUE PODRÍA TENER PARA IMPUGNAR LA IDONEIDAD DE DICHOS FOROS.",
+            "description": "legal text shown in modal dialog"
         }
     },
     "plan:install": {
         "title": {
-            "message": "Instalar el Módulo de gestión del programas de Nonprofit Cloud",
+            "message": "Instalar Program Management Module",
             "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Esta acción instalará Program Management Module en su organización.",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Gracias por instalar Program Management Module. Visite el [grupo del foro de clientes de Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) en el Power of Us Hub para formular cualquier pregunta sobre Program Management Module.",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "Para obtener ayuda sobre este error, diríjase a [help.salesforce.com](https://help.salesforce.com/), encuentre el área Asistencia y Servicios y registre un ticket de asistencia técnica con Salesforce. Incluya “PMM” en la línea de asunto y también en sus comentarios el vínculo de instalación que se muestra aquí.",
+            "description": "shown after failed installation (markdown)"
         }
     },
     "steps": {
         "Install {product} {version}": {
             "message": "Instalar {product} {version}",
             "description": "title of installation step"
+        },
+        "Deploy Program Management Profile": {
+            "message": "Implementar el perfil de gestión de programas",
+            "description": "title of installation step"
+        }
+    },
+    "checks": {
+        "Please enable My Domain in your org prior to installing.": {
+            "message": "Active Mi dominio en su organización antes de realizar la instalación.",
+            "description": "shown if validation fails"
         }
     }
 }

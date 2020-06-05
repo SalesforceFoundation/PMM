@@ -1,7 +1,7 @@
 {
     "product": {
         "title": {
-            "message": "プログラム管理モジュール (PMM)",
+            "message": "Program Management Module (PMM)",
             "description": "name of product"
         },
         "short_description": {
@@ -9,24 +9,50 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "プログラム管理モジュール (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nプログラム管理モジュールはプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、プログラム管理モジュールを無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\n*必要に応じて法務部からの文章を待つ*\r\n\r\nプログラム管理のインストールが完了したら、各種資料を確認してください。\r\n\r\n* <プログラム管理モジュールドキュメント>\r\n\r\nご質問がある場合は、Power of Us Hub の <プログラム管理モジュール> カスタマーグループにご参加ください。",
+            "message": "Program Management Module (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nProgram Management Module はプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、Program Management Module を無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\nSalesforce.org Program Management Module（以下「PMM」といいます）は、プログラム管理に特有の核心的ニーズに対処するためのオープンソース及びクローズドソースコンポーネントから成る拡張可能なアプリケーションです。PMMは、プログラム情報を一元化して、プログラム及びサービスをより効果的に管理・提供するための方策を非営利団体に提供するために、salesforce.com, Inc.（以下「Salesforce」といいます）の管理パッケージを利用しています。\r\n\r\nプログラム管理のインストールが完了したら、各種資料を確認してください。\r\n\r\n* [Program Management Module ドキュメント](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\nご質問がある場合は、Power of Us Hub の [Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) カスタマーグループにご参加ください。",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
-            "message": "このエラーについて支援を受けるには、<a href='https://help.salesforce.com/'>help.salesforce.com</a> にアクセスし、[サポートとサービス] 領域を見つけて、Salesforce でテクニカルサポートのチケットを登録してください。件名行に「PMM」を含め、コメントにはここに表示されているインストールリンクを含めてください。",
+            "message": "このエラーについて支援を受けるには、[help.salesforce.com](https://help.salesforce.com/) にアクセスし、[サポートとサービス] 領域を見つけて、Salesforce でテクニカルサポートのチケットを登録してください。件名行に「PMM」を含め、コメントにはここに表示されているインストールリンクを含めてください。",
             "description": "shown after failed installation (markdown)"
+        },
+        "click_through_agreement": {
+            "message": "Program Management Module  (「PMM」) テクノロジは、Salesforce.com, Inc. またはその関連会社の 1 つ (「SFDC」) が 3 条項 BSD ライセンス (https://opensource.org/licenses/BSD-3-Clause) の下でライセンスを供与するオープンソースパッケージです。PMM パッケージをインストールすると、SFDO Base パッケージ (SFDC が独自の使用制限付きライセンスの下でライセンスを供与するクローズドソーステクノロジ) が Salesforce 組織に自動的にインストールされます。\r\n\r\nお客様は PMM をインストールすることにより、そのライセンス [https://github.com/SalesforceFoundation/PMM/blob/master/LICENSE.txt](https://github.com/SalesforceFoundation/PMM/blob/master/LICENSE.txt) 及び SFDO Base ライセンス [https://github.com/SalesforceFoundation/ProductLicenses/blob/master/SFDOBase.md](https://github.com/SalesforceFoundation/ProductLicenses/blob/master/SFDOBase.md) に同意したことになります。\r\n\r\nお客様またはお客様の法人と SFDC との間のマスターサブスクリプション契約は、PMM または SFDO Base の使用には適用されません。「関連会社」とは、該当法人を直接的または間接的に支配している、該当法人により支配されている、または該当法人との共同支配下にある法人を意味します。この定義の目的における「支配」とは、該当法人の議決権持分の 50% を超える直接的または間接的な所有権または支配を意味します。SALESFORCE.ORG LLC は SALESFORCE.COM, INC. の関連会社です。\r\n\r\nPMM 及び SFDO Base は SFDC 以外のアプリケーションまたはサードパーティアプリケーションで、お客様と SFDC との間のマスターサブスクリプション契約に基づくサービスではありません。PMM 及び SFDO Base は「現状有姿」及び「現状渡し」で提供され、SFDC は、準拠法により許容される最大限において、明示的、黙字的、法律上、その他一切の PMM または SFDO Base に関するいかなる保証 (商品性、特定の目的に対する適合性、欠陥がないこと、不侵害の黙示的な保証を含むが、それに限定されない) も行いません。お客様は、保護対象保険情報を PMM 及び SFDO Base に送信することを禁じられています。\r\n\r\nSFDC は、お客様の PMM または SFDO Base の使用に起因するまたはそれに関連する直接の損害、または利益、収入、業務上の信用の喪失、または間接的、特別、偶発的、派生的、懲罰的、補償、事業の中断による損害に関して、その行為が契約内か不法行為かどうか、あるいは責任論に関係なく、そのような損害の発生の可能性について予告がなされていた場合であっても、救済措置がその本来の目的を果たせなかった場合であっても、一切の責任を負わないものとします。上記の免責事項は、法律で禁止されている範囲においては適用されません。SFDC は、サードパーティのホスティングプロバイダによる損傷または損害について、あらゆる法的責任および賠償義務を負わないものとします。\r\n\r\n本契約は、米国及びカリフォルニア州の法律のみに準拠し、その法律のみに従って解釈されるものとし、抵触法条項を考慮しません。カリフォルニア州サンフランシスコに所在する州及び連邦裁判所は、本契約に起因または関連するいかなる紛争を解決するための専属管轄権を有するものとします。各当事者は本契約により、かかる裁判所の管轄権に同意し、かかる法廷の適切性に異議を申し立てる権利を放棄します。",
+            "description": "legal text shown in modal dialog"
         }
     },
     "plan:install": {
         "title": {
-            "message": "Nonprofit Cloud プログラム管理モジュールのインストール",
+            "message": "Program Management Module のインストール",
             "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "これにより、組織に Program Management Module がインストールされます。",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Program Management Module をインストールしていただきありがとうございます。Program Management Module に関するあらゆる質問については、Power of Us Hub の Program Management Module のカスタマーフォーラムグループ (https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) にアクセスしてください。",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "このエラーについて支援を受けるには、[help.salesforce.com](https://help.salesforce.com/) にアクセスし、[サポートとサービス] 領域を見つけて、Salesforce でテクニカルサポートのチケットを登録してください。件名行に「PMM」を含め、コメントにはここに表示されているインストールリンクを含めてください。",
+            "description": "shown after failed installation (markdown)"
         }
     },
     "steps": {
         "Install {product} {version}": {
             "message": "{product} {version} のインストール",
             "description": "title of installation step"
+        },
+        "Deploy Program Management Profile": {
+            "message": "プログラム管理モジュールのリリース",
+            "description": "title of installation step"
+        }
+    },
+    "checks": {
+        "Please enable My Domain in your org prior to installing.": {
+            "message": "インストールの前に組織で [私のドメイン] を有効にしてください。",
+            "description": "shown if validation fails"
         }
     }
 }

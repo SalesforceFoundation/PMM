@@ -12,8 +12,8 @@ import NewProgramEngagement from "c/newProgramEngagement";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import { CurrentPageReference } from "lightning/navigation";
 import cancel from "@salesforce/label/c.Cancel";
-//import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
-//import { ShowToastEventName } from "lightning/platformShowToastEvent";
+import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
+import { ShowToastEventName } from "lightning/platformShowToastEvent";
 import {
     registerApexTestWireAdapter,
     registerTestWireAdapter,
@@ -59,6 +59,30 @@ describe("c-new-program-engagement", () => {
                 expect(inputFields[index].fieldName).toBe(field.apiName);
                 index++;
             });
+        });
+    });
+
+    it("saves the record and closes the modal", () => {
+        const recordId = "a011700000AvQRWAA3";
+        const handler = jest.fn();
+
+        document.body.appendChild(element);
+        element.showModal();
+
+        element.addEventListener("save", handler);
+        element.addEventListener(ShowToastEventName, handler);
+
+        let modalContainer = element.shadowRoot.querySelector("c-modal");
+        expect(modalContainer.header).toBe(newProgramEngagement);
+
+        const recordEditForm = element.shadowRoot.querySelector(
+            "lightning-record-edit-form"
+        );
+
+        recordEditForm.dispatchEvent(new CustomEvent("success", { detail: recordId }));
+
+        return Promise.resolve().then(() => {
+            expect(handler).toHaveBeenCalled();
         });
     });
 

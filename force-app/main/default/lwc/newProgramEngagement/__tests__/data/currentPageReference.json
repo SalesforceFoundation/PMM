@@ -1,7 +1,7 @@
 {
     "type": "standard__navItemPage",
     "attributes": {
-        "apiName": "Wire"
+        "apiName": "Bulk_Service_Deliveries"
     },
     "state": {}
 }

@@ -16,22 +16,18 @@ const CSS_CLASS = "modal-hidden";
 describe("c-modal", () => {
     let element;
 
-    afterEach(() => {
-        while (document.body.firstChild) {
-            document.body.removeChild(document.body.firstChild);
-        }
-    });
+    afterEach(global.clearDOM);
 
     beforeEach(() => {
         element = createElement("c-modal", {
             is: Modal,
         });
+
+        document.body.appendChild(element);
     });
 
     it("does not display the modal dialog by default based on the css class", () => {
-        document.body.appendChild(element);
-
-        return Promise.resolve().then(() => {
+        return global.flushPromises().then(() => {
             const modalContainer = element.shadowRoot.querySelector("div");
             //verify that the css class on the outer div is modal-hidden by default
             expect(modalContainer.classList.value).toBe(CSS_CLASS);
@@ -41,9 +37,8 @@ describe("c-modal", () => {
     it("displays header and does not display the slot when header property is not blank", () => {
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
-        document.body.appendChild(element);
 
-        return Promise.resolve().then(() => {
+        return global.flushPromises().then(() => {
             //verify that the header is displayed
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer).not.toBeNull();
@@ -56,9 +51,7 @@ describe("c-modal", () => {
     });
 
     it("does not display header and displays the slot when header property is blank", () => {
-        document.body.appendChild(element);
-
-        return Promise.resolve().then(() => {
+        return global.flushPromises().then(() => {
             //verify that the header is not displayed
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer).toBeNull();
@@ -70,8 +63,6 @@ describe("c-modal", () => {
     });
 
     it("closes the modal when the close button is clicked", () => {
-        document.body.appendChild(element);
-
         let buttonContainer = element.shadowRoot.querySelector("lightning-button-icon");
         expect(buttonContainer.title).not.toBe(null);
         expect(buttonContainer.title).toBe(closeLabel);
@@ -80,14 +71,13 @@ describe("c-modal", () => {
         element.addEventListener("dialogclose", handler);
         buttonContainer.click();
 
-        return Promise.resolve().then(() => {
+        return global.flushPromises().then(() => {
             expect(handler).toHaveBeenCalled();
         });
     });
 
     it("changes the css class when the modal is shown or hidden", () => {
-        document.body.appendChild(element);
-        return Promise.resolve().then(() => {
+        return global.flushPromises().then(() => {
             const modalContainer = element.shadowRoot.querySelector("div");
             element.show();
 
@@ -98,5 +88,15 @@ describe("c-modal", () => {
             //verify that the CSS class exists
             expect(modalContainer.classList.value).toBe(CSS_CLASS);
         });
+    });
+
+    // This jest test below validates that the component is accessible
+    it("is accessible", async () => {
+        const h2Container = element.shadowRoot.querySelector("h2");
+        let slot = document.createElement("span");
+        slot.textContent = "Test Accessibility";
+        h2Container.attachShadow({ mode: "open" }).appendChild(slot.cloneNode(true));
+        // assert that DOM is accessible (using extended preset-rule)
+        await expect(element).toBeAccessible();
     });
 });

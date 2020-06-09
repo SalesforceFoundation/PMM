@@ -29,11 +29,7 @@ const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference
 describe("c-new-program-engagement", () => {
     let element;
 
-    afterEach(() => {
-        while (document.body.firstChild) {
-            document.body.removeChild(document.body.firstChild);
-        }
-    });
+    afterEach(global.clearDOM);
 
     beforeEach(() => {
         element = createElement("c-new-program-engagement", {
@@ -50,7 +46,7 @@ describe("c-new-program-engagement", () => {
 
         element.showModal();
 
-        return Promise.resolve().then(() => {
+        return global.flushPromises().then(() => {
             const inputFields = element.shadowRoot.querySelectorAll(
                 "lightning-input-field"
             );
@@ -81,7 +77,7 @@ describe("c-new-program-engagement", () => {
 
         recordEditForm.dispatchEvent(new CustomEvent("success", { detail: recordId }));
 
-        return Promise.resolve().then(() => {
+        return global.flushPromises().then(() => {
             expect(handler).toHaveBeenCalled();
         });
     });
@@ -98,8 +94,14 @@ describe("c-new-program-engagement", () => {
         element.addEventListener("cancel", handler);
         buttonContainer.click();
 
-        return Promise.resolve().then(() => {
+        return global.flushPromises().then(() => {
             expect(handler).toHaveBeenCalled();
         });
+    });
+
+    it("is accessible", async () => {
+        document.body.appendChild(element);
+        // assert that DOM is accessible (using extended preset-rule)
+        await expect(element).toBeAccessible();
     });
 });

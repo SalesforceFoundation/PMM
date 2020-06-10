@@ -46,7 +46,7 @@ describe("c-new-program-engagement", () => {
 
         element.showModal();
 
-        return global.flushPromises().then(() => {
+        return global.flushPromises().then(async () => {
             const inputFields = element.shadowRoot.querySelectorAll(
                 "lightning-input-field"
             );
@@ -55,6 +55,8 @@ describe("c-new-program-engagement", () => {
                 expect(inputFields[index].fieldName).toBe(field.apiName);
                 index++;
             });
+
+            await expect(element).toBeAccessible();
         });
     });
 
@@ -77,8 +79,9 @@ describe("c-new-program-engagement", () => {
 
         recordEditForm.dispatchEvent(new CustomEvent("success", { detail: recordId }));
 
-        return global.flushPromises().then(() => {
+        return global.flushPromises().then(async () => {
             expect(handler).toHaveBeenCalled();
+            await expect(element).toBeAccessible();
         });
     });
 
@@ -94,8 +97,9 @@ describe("c-new-program-engagement", () => {
         element.addEventListener("cancel", handler);
         buttonContainer.click();
 
-        return global.flushPromises().then(() => {
+        return global.flushPromises().then(async () => {
             expect(handler).toHaveBeenCalled();
+            await expect(element).toBeAccessible();
         });
     });
 

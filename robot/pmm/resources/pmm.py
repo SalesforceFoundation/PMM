@@ -252,6 +252,9 @@ class pmm(object):
             locator, error="Section title is not as expected"
         )
 
-    def logns(self):
-        ns = self.get_pmm_namespace_prefix
-        print("ns valus", ns)
+    def verify_modal_error(self,message):
+        """ Verify error message is displayed on the modal"""
+        locator = pmm_lex_locators["new_record"]["error_message"].format(message)
+        self.selenium.wait_until_page_contains_element(
+            locator, error="Error message is not displayed"
+        )

@@ -50,3 +50,15 @@ Create a Program via UI
     verify page contains related list      Program Engagements
     verify page contains related list      Program Cohorts
     verify page contains related list      Files
+
+Date validation on new program dialog
+    Go To PMM App
+    Go To Page                             Listing                               ${ns}Program__c
+    Click Object Button                    New
+    verify current page title              New Program
+    Populate modal Form                    Program Name=${program_name}
+    ...                                    Status=Active
+    ...                                    Start Date=25
+    ...                                    End Date=10
+    Click modal button                     Save
+    verify modal error                     Start Date must be before End Date

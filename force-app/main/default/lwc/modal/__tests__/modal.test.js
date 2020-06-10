@@ -70,9 +70,6 @@ describe("c-modal", () => {
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
 
-        const headerContainer = element.shadowRoot.querySelector(".header-string");
-        expect(headerContainer.textContent).toBe(HEADER_STRING);
-
         let buttonContainer = element.shadowRoot.querySelector("lightning-button-icon");
         expect(buttonContainer.title).not.toBe(null);
         expect(buttonContainer.title).toBe(closeLabel);
@@ -82,6 +79,8 @@ describe("c-modal", () => {
         buttonContainer.click();
 
         return global.flushPromises().then(async () => {
+            const headerContainer = element.shadowRoot.querySelector(".header-string");
+            expect(headerContainer.textContent).toBe(HEADER_STRING);
             expect(handler).toHaveBeenCalled();
             await expect(element).toBeAccessible();
         });
@@ -92,20 +91,19 @@ describe("c-modal", () => {
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
 
-        const headerContainer = element.shadowRoot.querySelector(".header-string");
-        expect(headerContainer.textContent).toBe(HEADER_STRING);
-
         return global.flushPromises().then(async () => {
+            const headerContainer = element.shadowRoot.querySelector(".header-string");
+            expect(headerContainer.textContent).toBe(HEADER_STRING);
+
             const modalContainer = element.shadowRoot.querySelector("div");
             element.show();
-
             //verify that there is no CSS class present
             expect(modalContainer.classList.value).toBe("");
+            await expect(element).toBeAccessible();
 
             element.hide();
             //verify that the CSS class exists
             expect(modalContainer.classList.value).toBe(CSS_CLASS);
-            await expect(element).toBeAccessible();
         });
     });
 

@@ -45,7 +45,7 @@
             "description": "title of installation step"
         },
         "Deploy Program Management Profile": {
-            "message": "プログラム管理モジュールのリリース",
+            "message": "プログラムマネジメントプロファイルのリリース",
             "description": "title of installation step"
         }
     },

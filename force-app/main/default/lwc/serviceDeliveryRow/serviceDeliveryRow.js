@@ -160,15 +160,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             } else {
                 this.autoSaveAfterDebounce();
             }
-        } /* else if (
-            event.target.fieldName !== this.fields.programEngagement.fieldApiName &&
-            this.firstFieldSetElement !== event.target.fieldName
-        ) {
-            this.enableFields();
-            this.autoSaveAfterDebounce();
-        } */ else if (
-            this.firstFieldSetElement !== this.fields.contact.fieldApiName
-        ) {
+        } else if (this.firstFieldSetElement !== this.fields.contact.fieldApiName) {
             this.programEngagementId = event.detail.value[0];
             this.handleGetServicesEngagements();
         } else if (

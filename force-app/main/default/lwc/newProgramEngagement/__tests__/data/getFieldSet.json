@@ -1,0 +1,48 @@
+[
+    {
+        "apiName": "Contact__c",
+        "label": "Client",
+        "type": "REFERENCE",
+        "isRequired": true
+    },
+    {
+        "apiName": "Program__c",
+        "label": "Program",
+        "type": "REFERENCE",
+        "isRequired": true
+    },
+    {
+        "apiName": "Stage__c",
+        "label": "Stage",
+        "type": "PICKLIST",
+        "isRequired": true,
+        "helpText": "These Picklist values describe a Contact's stage of engagement in a Program and are displayed in a Path. Values are determined by your Admin."
+    },
+    {
+        "apiName": "Role__c",
+        "label": "Role",
+        "type": "PICKLIST",
+        "isRequired": true,
+        "helpText": "A Contact's relationship with the Program Engagement. Values are determined by your Admin."
+    },
+    {
+        "apiName": "ApplicationDate__c",
+        "label": "Application Date",
+        "type": "DATE",
+        "isRequired": false,
+        "helpText": "If the Program Engagement stage is Applied, the Application Date defaults to today if left blank."
+    },
+    {
+        "apiName": "StartDate__c",
+        "label": "Start Date",
+        "type": "DATE",
+        "isRequired": false,
+        "helpText": "If the Program Engagement Stage is Enrolled or Active, the Start Date defaults to today if left blank."
+    },
+    {
+        "apiName": "ProgramCohort__c",
+        "label": "Program Cohort",
+        "type": "REFERENCE",
+        "isRequired": false
+    }
+]

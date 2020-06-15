@@ -62,3 +62,6 @@ Cumulus
 
 # cci
 force-app-bak
+
+#logs
+junit.xml

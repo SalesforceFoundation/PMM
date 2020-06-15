@@ -51,6 +51,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api index;
     @api programEngagementId;
     @api rowCount;
+    @api firstFieldSetElement;
     @track isSaving;
     @track isError;
     @track isSaved;
@@ -148,14 +149,33 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleInputChange(event) {
-        if (event.target.fieldName === this.fields.contact.fieldApiName) {
-            if (event.detail.value && event.detail.value.length) {
-                this.selectedContact = event.detail.value[0];
-                this.handleGetServicesEngagements(event.detail.value[0]);
+        if (this.firstFieldSetElement === this.fields.contact.fieldApiName) {
+            if (event.target.fieldName === this.fields.contact.fieldApiName) {
+                if (event.detail.value && event.detail.value.length) {
+                    this.selectedContact = event.detail.value[0];
+                    this.handleGetServicesEngagements(event.detail.value[0]);
+                } else {
+                    this.handleResetContact();
+                }
             } else {
-                this.handleResetContact();
+                this.autoSaveAfterDebounce();
             }
-        } else {
+        } /* else if (
+            event.target.fieldName !== this.fields.programEngagement.fieldApiName &&
+            this.firstFieldSetElement !== event.target.fieldName
+        ) {
+            this.enableFields();
+            this.autoSaveAfterDebounce();
+        } */ else if (
+            this.firstFieldSetElement !== this.fields.contact.fieldApiName
+        ) {
+            this.programEngagementId = event.detail.value[0];
+            this.handleGetServicesEngagements();
+        } else if (
+            event.target.fieldName !== this.fields.programEngagement.fieldApiName &&
+            this.firstFieldSetElement !== event.target.fieldName
+        ) {
+            this.enableFields();
             this.autoSaveAfterDebounce();
         }
     }
@@ -206,30 +226,49 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
         this.localFieldSet.forEach(element => {
             if (element.apiName === this.fields.service.fieldApiName) {
-                element.showFilteredInput = true;
-                element.isService = true;
-                if (!this.programEngagementId) {
-                    element.options = this._filteredValues[SERVICES].slice(0);
+                if (this.firstFieldSetElement !== this.fields.service.fieldApiName) {
+                    element.showFilteredInput = true;
+                    element.isService = true;
+                    if (!this.programEngagementId) {
+                        element.options = this._filteredValues[SERVICES].slice(0);
+                    } else {
+                        let result = [];
+                        this._filteredValues[SERVICES].forEach(filteredVal => {
+                            if (filteredVal.program === this._targetProgram) {
+                                result.push(filteredVal);
+                            }
+                        });
+                        element.options = result.slice(0);
+                    }
                 } else {
-                    let result = [];
-                    this._filteredValues[SERVICES].forEach(filteredVal => {
-                        if (filteredVal.program === this._targetProgram) {
-                            result.push(filteredVal);
-                        }
-                    });
-                    element.options = result.slice(0);
+                    this.enableFields();
+                    this.autoSaveAfterDebounce();
                 }
 
                 element.placeholder = this.labels.selectService;
             } else if (element.apiName === this.fields.programEngagement.fieldApiName) {
-                element.showFilteredInput = true;
-                element.isEngagement = true;
-                element.options = this._filteredValues[ENGAGEMENTS].slice(0);
-                element.placeholder = this.labels.selectEngagement;
-                element.disabled = false;
+                if (this.firstFieldSetElement === this.fields.contact.fieldApiName) {
+                    element.showFilteredInput = true;
+                    element.isEngagement = true;
+                    element.options = this._filteredValues[ENGAGEMENTS].slice(0);
+                    element.placeholder = this.labels.selectEngagement;
+                    element.disabled = false;
 
-                if (this.programEngagementId) {
-                    element.value = this.programEngagementId;
+                    if (this.programEngagementId) {
+                        element.value = this.programEngagementId;
+                    }
+                } else {
+                    this._filteredValues[ENGAGEMENTS].forEach(filteredVal => {
+                        if (this.programEngagementId === filteredVal.value) {
+                            this._targetProgram = filteredVal.program;
+                        }
+                    });
+
+                    if (this._targetProgram) {
+                        this.enableServiceInputWithOptions();
+                    }
+
+                    element.disabled = false;
                 }
             } else if (element.apiName !== this.fields.contact.fieldApiName) {
                 element.disabled = true;
@@ -341,10 +380,15 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
 
         this.localFieldSet.forEach(element => {
-            if (element.apiName === this.fields.service.fieldApiName) {
+            if (
+                element.apiName === this.fields.service.fieldApiName &&
+                this.firstFieldSetElement !== this.fields.service.fieldApiName
+            ) {
                 this.isError = false;
-                element.disabled = false;
+
                 element.options = result;
+                element.disabled = false;
+
                 if (!result.length) {
                     this.isError = true;
                     this.rowError = [this.labels.noServiceWarning];
@@ -356,6 +400,9 @@ export default class ServiceDeliveryRow extends LightningElement {
                 element.apiName !== this.fields.programEngagement.fieldApiName
             ) {
                 element.disabled = true;
+            } else if (this.firstFieldSetElement === this.fields.service.fieldApiName) {
+                this.enableFields();
+                this.autoSaveAfterDebounce();
             }
         });
     }

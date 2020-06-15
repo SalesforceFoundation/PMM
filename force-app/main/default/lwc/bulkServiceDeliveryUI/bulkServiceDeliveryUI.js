@@ -32,7 +32,7 @@ import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
-const FIELD_SET_NAME = "Default";
+const FIELD_SET_NAME = "Bulk_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
@@ -46,6 +46,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track errors = {};
     @track isAddEntryDisabled = false;
     @track isDoneDisabled = false;
+    @track firstFieldSetElementApiName;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -105,10 +106,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     configureFieldSet(fieldSet) {
+        this.firstFieldSetElementApiName = fieldSet[0].apiName;
         fieldSet.forEach(field => {
             field.disabled = true;
             field.isQuantityField = false;
-
             // Number fields are size 1
             // Program Engagment lookup is size 4
             // Client lookup is size 3
@@ -124,7 +125,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                 field.size = 2;
             }
 
-            if (field.apiName === this.fields.contact.fieldApiName) {
+            //if (field.apiName === this.fields.contact.fieldApiName) {
+            if (this.firstFieldSetElementApiName === field.apiName) {
                 field.disabled = false;
                 field.isRequired = true;
             } else if (field.apiName === this.fields.quantity.fieldApiName) {

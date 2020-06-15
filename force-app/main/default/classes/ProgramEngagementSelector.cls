@@ -15,11 +15,22 @@ public with sharing class ProgramEngagementSelector {
         if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {
             return new List<ProgramEngagement__c>();
         }
-        List<ProgramEngagement__c> queriedEngagements = [
+        List<ProgramEngagement__c> queriedEngagements = new List<ProgramEngagement__c>();
+
+        String query = 'SELECT Id, Name, Program__c, Program__r.Name';
+        query += ' FROM ProgramEngagement__c';
+
+        System.debug('contactId ' + contactId);
+        if (contactId != null) {
+            query += ' WHERE Contact__c = \'' + contactId + '\'';
+        }
+
+        queriedEngagements = Database.query(query);
+        /* List<ProgramEngagement__c> queriedEngagements = [
             SELECT Id, Name, Program__c, Program__r.Name
             FROM ProgramEngagement__c
-            WHERE Contact__c = :contactId
-        ];
+            //WHERE Contact__c = :contactId
+        ]; */
 
         return Security.stripInaccessible(AccessType.READABLE, queriedEngagements)
             .getRecords();

@@ -46,7 +46,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track errors = {};
     @track isAddEntryDisabled = false;
     @track isDoneDisabled = false;
-    @track firstFieldSetElementApiName;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -106,7 +105,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     configureFieldSet(fieldSet) {
-        this.firstFieldSetElementApiName = fieldSet[0].apiName;
+        let firstFieldSetElementApiName = fieldSet[0].apiName;
         fieldSet.forEach(field => {
             field.disabled = true;
             field.isQuantityField = false;
@@ -125,8 +124,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                 field.size = 2;
             }
 
-            //if (field.apiName === this.fields.contact.fieldApiName) {
-            if (this.firstFieldSetElementApiName === field.apiName) {
+            if (firstFieldSetElementApiName === field.apiName) {
                 field.disabled = false;
                 field.isRequired = true;
             } else if (field.apiName === this.fields.quantity.fieldApiName) {

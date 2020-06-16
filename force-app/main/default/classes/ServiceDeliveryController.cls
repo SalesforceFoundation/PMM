@@ -20,4 +20,15 @@ public with sharing class ServiceDeliveryController {
             throw Util.getAuraHandledException(e);
         }
     }
+
+    @AuraEnabled
+    public static Map<String, String> getServicesByProgramEngagementId(
+        Id programEngagementId
+    ) {
+        try {
+            return service.getServicesByProgramEngagementId(programEngagementId);
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+    }
 }

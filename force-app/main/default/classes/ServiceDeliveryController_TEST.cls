@@ -77,4 +77,83 @@ public with sharing class ServiceDeliveryController_TEST {
             contactId
         );
     }
+
+    @isTest
+    private static void testGetServicesByProgramEngagementIds() {
+        Id programEngagementId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
+        Id programId = TestUtil.mockId(Program__c.SObjectType);
+        String name = 'service name';
+
+        Map<String, String> expected = new Map<String, String>();
+        expected.put('value', serviceId);
+        expected.put('label', name);
+        expected.put('program', programId);
+
+        serviceStub.withReturnValue(
+            'getServicesByProgramEngagementId',
+            Id.class,
+            expected
+        );
+
+        Test.startTest();
+        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
+
+        final Map<String, String> actual = ServiceDeliveryController.getServicesByProgramEngagementId(
+            programEngagementId
+        );
+
+        Test.stopTest();
+
+        Set<String> expectedKeySet = new Set<String>{ 'value', 'label', 'program' };
+        List<String> expectedValue = new List<String>{ serviceId, name, programId };
+
+        System.assertEquals(expectedKeySet, actual.keySet());
+        System.assertEquals(expectedValue, actual.values());
+
+        serviceStub.assertCalledWith(
+            'getServicesByProgramEngagementId',
+            Id.class,
+            programEngagementId
+        );
+    }
+
+    @isTest
+    private static void testGetServicesByProgramEngagementIdsException() {
+        Id programEngagementId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+        Id serviceId = TestUtil.mockId(Program__c.SObjectType);
+
+        Map<String, String> expected = new Map<String, String>();
+        expected.put('value', serviceId);
+
+        serviceStub.withThrowException('getServicesByProgramEngagementId', Id.class);
+
+        Test.startTest();
+        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
+
+        final Map<String, String> actual;
+        Exception actualException;
+
+        try {
+            actual = ServiceDeliveryController.getServicesByProgramEngagementId(
+                programEngagementId
+            );
+        } catch (Exception e) {
+            actualException = e;
+        }
+
+        Test.stopTest();
+
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+
+        serviceStub.assertCalledWith(
+            'getServicesByProgramEngagementId',
+            Id.class,
+            programEngagementId
+        );
+    }
 }

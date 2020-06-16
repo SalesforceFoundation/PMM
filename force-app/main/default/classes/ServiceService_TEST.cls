@@ -74,4 +74,55 @@ public with sharing class ServiceService_TEST {
             contactId
         );
     }
+
+    @IsTest
+    private static void testGetServicesByProgramEngagementId() {
+        Id programEngagementId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+
+        Program__c program1 = new Program__c();
+        program1.Id = TestUtil.mockId(Program__c.SObjectType);
+        program1.Name = 'Program 1';
+        program1.Status__c = 'Active';
+        program1.StartDate__c = Date.today();
+        program1.EndDate__c = Date.today().addDays(30);
+
+        ProgramEngagement__c engagement1 = new ProgramEngagement__c();
+        engagement1.Name = 'Engagement 1';
+        engagement1.Stage__c = 'Enrolled';
+        engagement1.Program__c = program1.Id;
+        engagement1.Role__c = 'Client';
+
+        Service__c service1 = new Service__c();
+        service1.Id = TestUtil.mockId(Service__c.SObjectType);
+        service1.Name = 'Service 1';
+        service1.Program__c = program1.Id;
+        service1.Status__c = 'Active';
+        service1.UnitOfMeasurement__c = 'Hours';
+
+        List<Service__c> services = new List<Service__c>{ service1 };
+        BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class)
+            .withReturnValue('getServicesByProgramEngagementId', Id.class, services);
+
+        Test.startTest();
+
+        final ServiceService service = new ServiceService();
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+
+        final Map<String, String> actual = service.getServicesByProgramEngagementId(
+            programEngagementId
+        );
+
+        Test.stopTest();
+
+        Set<String> expectedKeySet = new Set<String>{ 'label', 'program', 'value' };
+
+        System.assertEquals(expectedKeySet, actual.keySet());
+        System.assertNotEquals(null, actual.values());
+
+        serviceSelectorStub.assertCalledWith(
+            'getServicesByProgramEngagementId',
+            Id.class,
+            programEngagementId
+        );
+    }
 }

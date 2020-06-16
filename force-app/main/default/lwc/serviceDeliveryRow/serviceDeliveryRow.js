@@ -14,6 +14,7 @@ import { fireEvent } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
 
 import getServicesAndEngagements from "@salesforce/apex/ServiceDeliveryController.getServicesAndEngagements";
+import getServicesByProgramEngagementId from "@salesforce/apex/ServiceDeliveryController.getServicesByProgramEngagementId";
 
 import deleteLabel from "@salesforce/label/c.Delete";
 import cancel from "@salesforce/label/c.Cancel";
@@ -51,12 +52,23 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api index;
     @api programEngagementId;
     @api rowCount;
-    @api firstFieldSetElement;
     @track isSaving;
     @track isError;
     @track isSaved;
     @track rowError;
     @track unitOfMeasureValue = quantity;
+    @track localDefaultValues;
+    @track localFieldSet;
+    @track saveMessage;
+    @track hasContact = false;
+    @track hasProgramEngagement = false;
+    @track isServiceFiltered = false;
+
+    _defaultsSet = false;
+    _filteredValues;
+    _valuesToSave = [];
+    _targetProgram;
+    _filteredServices;
 
     @api
     get defaultValues() {
@@ -73,15 +85,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     set fieldSet(value) {
         this.localFieldSet = value;
     }
-
-    @track localDefaultValues;
-    @track localFieldSet;
-    @track saveMessage;
-
-    _defaultsSet = false;
-    _filteredValues;
-    _valuesToSave = [];
-    _targetProgram;
 
     ERROR = error;
     WARNING = warning;
@@ -124,6 +127,17 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
+    checkFieldExists() {
+        this.localFieldSet.forEach(element => {
+            if (element.apiName === this.fields.contact.fieldApiName) {
+                this.hasContact = true;
+            }
+            if (element.apiName === this.fields.programEngagement.fieldApiName) {
+                this.hasProgramEngagement = true;
+            }
+        });
+    }
+
     handleGetServicesEngagements(contactId) {
         this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
@@ -148,28 +162,57 @@ export default class ServiceDeliveryRow extends LightningElement {
             });
     }
 
-    handleInputChange(event) {
-        if (this.firstFieldSetElement === this.fields.contact.fieldApiName) {
-            if (event.target.fieldName === this.fields.contact.fieldApiName) {
-                if (event.detail.value && event.detail.value.length) {
-                    this.selectedContact = event.detail.value[0];
-                    this.handleGetServicesEngagements(event.detail.value[0]);
+    handleGetServicesForProgramEngagement(programEngagementId) {
+        this.isError = false;
+
+        getServicesByProgramEngagementId({ programEngagementId: programEngagementId })
+            .then(result => {
+                if (result) {
+                    this._filteredServices = result;
                 } else {
-                    this.handleResetContact();
+                    this.isError = true;
                 }
+
+                this.enableServiceInputWithOptions();
+            })
+            .catch(err => {
+                this.rowError = handleError(err, false);
+            });
+    }
+
+    handleInputChange(event) {
+        console.log(event.target.fieldName);
+        if (event.target.fieldName === this.fields.contact.fieldApiName) {
+            if (event.detail.value && event.detail.value.length) {
+                this.selectedContact = event.detail.value[0];
+                this.handleGetServicesEngagements(event.detail.value[0]);
             } else {
-                this.autoSaveAfterDebounce();
+                this.handleResetContact();
             }
-        } else if (this.firstFieldSetElement !== this.fields.contact.fieldApiName) {
-            this.programEngagementId = event.detail.value[0];
-            this.handleGetServicesEngagements();
         } else if (
-            event.target.fieldName !== this.fields.programEngagement.fieldApiName &&
-            this.firstFieldSetElement !== event.target.fieldName
+            event.target.fieldName === this.fields.programEngagement.fieldApiName
         ) {
-            this.enableFields();
+            this.isServiceFiltered = true;
+            this.handleGetServicesForProgramEngagement(event.detail.value[0]);
+        } else if (event.target.fieldName === this.fields.service.fieldApiName) {
+            this.handleEnableFieldOnInputChange(event.target.fieldName);
+            this.autoSaveAfterDebounce();
+        } else {
             this.autoSaveAfterDebounce();
         }
+    }
+
+    handleEnableFieldOnInputChange(event) {
+        //Getting this error Uncaught TypeError: 'set' on proxy: when trying to enable an element
+        //on Input field change and we suspect that since the record edit form is updating the values on the same array and
+        //that is the reason why we are cloning the object here
+
+        this.localFieldSet = JSON.parse(JSON.stringify(this.localFieldSet));
+        this.localFieldSet.forEach(element => {
+            if (event !== element.apiName) {
+                element.disabled = false;
+            }
+        });
     }
 
     handleResetContact() {
@@ -217,51 +260,50 @@ export default class ServiceDeliveryRow extends LightningElement {
         //Make our fieldset mutable the first time it's manipulated.
         this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
         this.localFieldSet.forEach(element => {
-            if (element.apiName === this.fields.service.fieldApiName) {
-                if (this.firstFieldSetElement !== this.fields.service.fieldApiName) {
-                    element.showFilteredInput = true;
-                    element.isService = true;
-                    if (!this.programEngagementId) {
-                        element.options = this._filteredValues[SERVICES].slice(0);
-                    } else {
-                        let result = [];
-                        this._filteredValues[SERVICES].forEach(filteredVal => {
-                            if (filteredVal.program === this._targetProgram) {
-                                result.push(filteredVal);
-                            }
-                        });
-                        element.options = result.slice(0);
-                    }
+            if (
+                this.hasProgramEngagement &&
+                element.apiName === this.fields.service.fieldApiName
+            ) {
+                element.showFilteredInput = true;
+                element.isService = true;
+                if (!this.programEngagementId) {
+                    element.options = this._filteredValues[SERVICES].slice(0);
                 } else {
-                    this.enableFields();
-                    this.autoSaveAfterDebounce();
+                    let result = [];
+                    this._filteredValues[SERVICES].forEach(filteredVal => {
+                        if (filteredVal.program === this._targetProgram) {
+                            result.push(filteredVal);
+                        }
+                    });
+                    element.options = result.slice(0);
                 }
 
                 element.placeholder = this.labels.selectService;
-            } else if (element.apiName === this.fields.programEngagement.fieldApiName) {
-                if (this.firstFieldSetElement === this.fields.contact.fieldApiName) {
-                    element.showFilteredInput = true;
-                    element.isEngagement = true;
-                    element.options = this._filteredValues[ENGAGEMENTS].slice(0);
-                    element.placeholder = this.labels.selectEngagement;
-                    element.disabled = false;
+            } else if (
+                this.hasContact &&
+                element.apiName === this.fields.programEngagement.fieldApiName
+            ) {
+                element.showFilteredInput = true;
+                element.isEngagement = true;
+                element.options = this._filteredValues[ENGAGEMENTS].slice(0);
+                element.placeholder = this.labels.selectEngagement;
+                element.disabled = false;
 
-                    if (this.programEngagementId) {
-                        element.value = this.programEngagementId;
-                    }
-                } else {
-                    this._filteredValues[ENGAGEMENTS].forEach(filteredVal => {
-                        if (this.programEngagementId === filteredVal.value) {
-                            this._targetProgram = filteredVal.program;
-                        }
-                    });
-
-                    if (this._targetProgram) {
-                        this.enableServiceInputWithOptions();
-                    }
-
-                    element.disabled = false;
+                if (this.programEngagementId) {
+                    element.value = this.programEngagementId;
                 }
+
+                this._filteredValues[ENGAGEMENTS].forEach(filteredVal => {
+                    if (this.programEngagementId === filteredVal.value) {
+                        this._targetProgram = filteredVal.program;
+                    }
+                });
+
+                if (this._targetProgram) {
+                    this.enableServiceInputWithOptions();
+                }
+
+                element.disabled = false;
             } else if (element.apiName !== this.fields.contact.fieldApiName) {
                 element.disabled = true;
             }
@@ -273,6 +315,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleLoad() {
+        this.checkFieldExists();
         this.processDefaults();
     }
 
@@ -365,22 +408,35 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     enableServiceInputWithOptions() {
         let result = [];
-        this._filteredValues[SERVICES].forEach(element => {
-            if (element.program === this._targetProgram) {
-                result.push(element);
-            }
-        });
+
+        if (this._filteredValues) {
+            this._filteredValues[SERVICES].forEach(element => {
+                if (element.program === this._targetProgram) {
+                    result.push(element);
+                }
+            });
+        }
+
+        if (this._filteredServices) {
+            result.push(this._filteredServices);
+        }
+
+        if (this.isServiceFiltered) {
+            this.localFieldSet = JSON.parse(JSON.stringify(this.localFieldSet));
+        }
 
         this.localFieldSet.forEach(element => {
             if (
                 element.apiName === this.fields.service.fieldApiName &&
-                this.firstFieldSetElement !== this.fields.service.fieldApiName
+                this.hasProgramEngagement
             ) {
                 this.isError = false;
+                if (this.isServiceFiltered) {
+                    element.showFilteredInput = true;
+                }
 
-                element.options = result;
                 element.disabled = false;
-
+                element.options = result;
                 if (!result.length) {
                     this.isError = true;
                     this.rowError = [this.labels.noServiceWarning];
@@ -392,9 +448,6 @@ export default class ServiceDeliveryRow extends LightningElement {
                 element.apiName !== this.fields.programEngagement.fieldApiName
             ) {
                 element.disabled = true;
-            } else if (this.firstFieldSetElement === this.fields.service.fieldApiName) {
-                this.enableFields();
-                this.autoSaveAfterDebounce();
             }
         });
     }
@@ -416,16 +469,15 @@ export default class ServiceDeliveryRow extends LightningElement {
             !this._defaultsSet
         ) {
             this._defaultsSet = true;
-            let hasContact = false;
             let contactId = "";
 
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
+
             this.localFieldSet.forEach(element => {
                 for (let [key, value] of Object.entries(this.localDefaultValues)) {
                     if (element.apiName === key && value != null) {
                         element.value = this.localDefaultValues[key];
                         if (element.apiName === this.fields.contact.fieldApiName) {
-                            hasContact = true;
                             contactId = value;
                         }
                         if (
@@ -437,7 +489,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 }
             });
 
-            if (hasContact) {
+            if (this.hasContact) {
                 this.handleGetServicesEngagements(contactId);
                 this.selectedContact = contactId;
             }

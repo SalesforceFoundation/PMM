@@ -108,16 +108,15 @@ public with sharing class ServiceService_TEST {
         final ServiceService service = new ServiceService();
         service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
 
-        final Map<String, String> actual = service.getServicesByProgramEngagementId(
+        final Map<String, List<Object>> actual = service.getServicesByProgramEngagementId(
             programEngagementId
         );
 
         Test.stopTest();
 
-        Set<String> expectedKeySet = new Set<String>{ 'label', 'program', 'value' };
+        Set<String> expectedKeySet = new Set<String>{ 'services' };
 
         System.assertEquals(expectedKeySet, actual.keySet());
-        System.assertNotEquals(null, actual.values());
 
         serviceSelectorStub.assertCalledWith(
             'getServicesByProgramEngagementId',

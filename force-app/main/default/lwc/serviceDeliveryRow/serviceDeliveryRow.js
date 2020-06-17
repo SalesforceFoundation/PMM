@@ -52,6 +52,8 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api index;
     @api programEngagementId;
     @api rowCount;
+    @api hasContact;
+    @api hasProgramEngagement;
     @track isSaving;
     @track isError;
     @track isSaved;
@@ -60,8 +62,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track localDefaultValues;
     @track localFieldSet;
     @track saveMessage;
-    @track hasContact = false;
-    @track hasProgramEngagement = false;
     @track isServiceFiltered = false;
 
     _defaultsSet = false;
@@ -168,7 +168,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         getServicesByProgramEngagementId({ programEngagementId: programEngagementId })
             .then(result => {
                 if (result) {
-                    this._filteredServices = result;
+                    this._filteredServices = result[SERVICES].slice(0);
                 } else {
                     this.isError = true;
                 }
@@ -202,14 +202,14 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-    handleEnableFieldOnInputChange(event) {
+    handleEnableFieldOnInputChange(fieldApiName) {
         //Getting this error Uncaught TypeError: 'set' on proxy: when trying to enable an element
         //on Input field change and we suspect that since the record edit form is updating the values on the same array and
         //that is the reason why we are cloning the object here
 
         this.localFieldSet = JSON.parse(JSON.stringify(this.localFieldSet));
         this.localFieldSet.forEach(element => {
-            if (event !== element.apiName) {
+            if (fieldApiName !== element.apiName) {
                 element.disabled = false;
             }
         });
@@ -251,7 +251,8 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         //If the service value changes, attempt to save the record.
         if (fieldName === this.fields.service.fieldApiName) {
-            this.enableFields();
+            this.enableDisableFields();
+
             this.autoSaveAfterDebounce();
         }
     }
@@ -315,7 +316,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleLoad() {
-        this.checkFieldExists();
         this.processDefaults();
     }
 
@@ -398,10 +398,43 @@ export default class ServiceDeliveryRow extends LightningElement {
         modal.hide();
     }
 
-    enableFields() {
+    enableDisableFields() {
         this.localFieldSet.forEach(element => {
-            if (element.apiName !== this.fields.contact.fieldApiName) {
+            if (this.hasContact && element.apiName !== this.fields.contact.fieldApiName) {
                 element.disabled = false;
+            } else if (
+                this.hasContact &
+                (element.apiName === this.fields.contact.fieldApiName)
+            ) {
+                element.disabled = true;
+            }
+
+            if (
+                !this.hasContact &&
+                this.hasProgramEngagement &&
+                element.apiName !== this.fields.programEngagement.fieldApiName
+            ) {
+                element.disabled = false;
+            } else if (
+                !this.hasContact &&
+                this.hasProgramEngagement &&
+                element.apiName === this.fields.programEngagement.fieldApiName
+            ) {
+                element.disabled = true;
+            }
+
+            if (
+                !this.hasContact &&
+                !this.hasProgramEngagement &&
+                element.apiName !== this.fields.service.fieldApiName
+            ) {
+                element.disabled = false;
+            } else if (
+                !this.hasContact &&
+                !this.hasProgramEngagement &&
+                element.apiName === this.fields.service.fieldApiName
+            ) {
+                element.disabled = true;
             }
         });
     }
@@ -418,7 +451,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         if (this._filteredServices) {
-            result.push(this._filteredServices);
+            result = this._filteredServices;
         }
 
         if (this.isServiceFiltered) {
@@ -506,6 +539,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleSaveEnd() {
         this.isSaving = false;
         this.isSaved = true;
+        this.enableDisableFields();
     }
 
     onSave(event) {

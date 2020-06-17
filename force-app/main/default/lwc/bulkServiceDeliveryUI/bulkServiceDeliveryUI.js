@@ -26,6 +26,7 @@ import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
+import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
@@ -46,6 +47,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track errors = {};
     @track isAddEntryDisabled = false;
     @track isDoneDisabled = false;
+    @track hasContact = false;
+    @track hasProgramEngagement = false;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -65,6 +68,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         unitMeasurement: UNITMEASUREMENT_FIELD,
         quantity: QUANTITY_FIELD,
         programEngagement: PROGRAM_ENGAGEMENT_FIELD,
+        service: SERVICE_FIELD,
     };
     _deliveryIndex = 1;
 
@@ -104,8 +108,21 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         );
     }
 
+    checkFieldsExists(fieldSet) {
+        if (fieldSet) {
+            fieldSet.forEach(element => {
+                if (element.apiName === this.fields.contact.fieldApiName) {
+                    this.hasContact = true;
+                }
+                if (element.apiName === this.fields.programEngagement.fieldApiName) {
+                    this.hasProgramEngagement = true;
+                }
+            });
+        }
+    }
+
     configureFieldSet(fieldSet) {
-        let firstFieldSetElementApiName = fieldSet[0].apiName;
+        this.checkFieldsExists(fieldSet);
         fieldSet.forEach(field => {
             field.disabled = true;
             field.isQuantityField = false;
@@ -124,7 +141,21 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                 field.size = 2;
             }
 
-            if (firstFieldSetElementApiName === field.apiName) {
+            if (this.hasContact && field.apiName === this.fields.contact.fieldApiName) {
+                field.disabled = false;
+                field.isRequired = true;
+            } else if (
+                !this.hasContact &&
+                this.hasProgramEngagement &&
+                field.apiName === this.fields.programEngagement.fieldApiName
+            ) {
+                field.disabled = false;
+                field.isRequired = true;
+            } else if (
+                !this.hasContact &&
+                !this.hasProgramEngagement &&
+                field.apiName === this.fields.service.fieldApiName
+            ) {
                 field.disabled = false;
                 field.isRequired = true;
             } else if (field.apiName === this.fields.quantity.fieldApiName) {

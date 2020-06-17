@@ -9,24 +9,50 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Welcome to the Program Management Module (PMM) Installer!\r\n\r\nProgram Management Module is a standard framework to track, manage and deliver programs, services, and service deliveries.\r\n\r\n*IMPORTANT*: Salesforce does not recommend installing upgrades directly in production organisations. Instead, install Program Management Module in one of your free sandbox environments or a developer organization first.\r\n\r\n*Hold for paragraph from legal if needed*\r\n\r\nOnce you've installed Program Management, check out the resources in our documentation:\r\n\r\n* <Program Management Module Documentation>\r\n\r\nQuestions? Become a member of the <Program Management Module> customer group in the Power of Us Hub.",
+            "message": "Welcome to the Program Management Module (PMM) Installer!\r\n\r\nProgram Management Module is a standard framework to track, manage and deliver programs, services, and service deliveries.\r\n\r\n*IMPORTANT*: Salesforce does not recommend installing upgrades directly in production organisations. Instead, install Program Management Module in one of your free sandbox environments or a developer organisation first.\r\n\r\nSalesforce.org Program Management Module (“PMM”) is an extensible application with open source and closed source components to address the unique core needs of program management. PMM utilizes a Salesforce.com, Inc. (“Salesforce”) managed package to provide nonprofits with a path to centralize programmatic information in order to more effectively manage and deliver programs and services.\r\n\r\nOnce you've installed Program Management, check out the resources in our documentation:\r\n\r\n* [Program Management Module Documentation](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\nQuestions? Become a member of the [Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) customer group in the Power of Us Hub.",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
-            "message": "To get help with this error, go to <a href='https://help.salesforce.com/'>help.salesforce.com</a>, find the Support & Services area and log a technical support ticket with Salesforce. Include \u201cPMM\u201d in the subject line and include in your comment the installation link shown here.",
+            "message": "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include “PMM” in the subject line and include in your comment the installation link shown here.",
             "description": "shown after failed installation (markdown)"
+        },
+        "click_through_agreement": {
+            "message": "The Program Management Module (“PMM”) technology is an open-source package licensed by salesforce.com, Inc. or one of its Affiliates (“SFDC”) under the BSD-3 Clause Licence, found at https://opensource.org/licenses/BSD-3-Clause. When you install the PMM package, the SFDO Base package, a closed-source technology licensed by SFDC under a proprietary limited use licence, will automatically be installed into your Salesforce org. \r\n\r\nBY INSTALLING PMM, YOU AGREE TO ITS LICENCE [https://github.com/SalesforceFoundation/PMM/blob/master/LICENSE.txt](https://github.com/SalesforceFoundation/PMM/blob/master/LICENSE.txt) AND THE SFDO BASE LICENCE [https://github.com/SalesforceFoundation/ProductLicenses/blob/master/SFDOBase.md](https://github.com/SalesforceFoundation/ProductLicenses/blob/master/SFDOBase.md).\r\n\r\nANY MASTER SUBSCRIPTION AGREEMENT YOU OR YOUR ENTITY MAY HAVE WITH SFDC DOES NOT APPLY TO YOUR USE OF PMM OR SFDO BASE.  AN “AFFILIATE” MEANS ANY ENTITY THAT DIRECTLY OR INDIRECTLY CONTROLS, IS CONTROLLED BY, OR IS UNDER COMMON CONTROL WITH THE SUBJECT ENTITY. “CONTROL,” FOR PURPOSES OF THIS DEFINITION, MEANS DIRECT OR INDIRECT OWNERSHIP OR CONTROL OF MORE THAN 50% OF THE VOTING INTERESTS OF THE SUBJECT ENTITY.  SALESFORCE.ORG LLC IS AN AFFILIATE OF SALESFORCE.COM, INC. \r\n\r\nPMM AND SFDO BASE ARE NON-SFDC APPLICATIONS OR THIRD-PARTY APPLICATIONS, AND NOT SERVICES, UNDER ANY MASTER SUBSCRIPTION AGREEMENT YOU HAVE WITH SFDC. PMM AND SFDO BASE ARE PROVIDED “AS IS” AND AS AVAILABLE. SFDC MAKES NO WARRANTY OF ANY KIND REGARDING PMM OR SFDO BASE, WHETHER EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING BUT NOT LIMITED TO ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, FREEDOM FROM DEFECTS OR NON-INFRINGEMENT, TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW.  YOU ARE PROHIBITED FROM SUBMITTING PROTECTED HEALTH INFORMATION INTO PMM AND SFDO BASE.\r\n\r\nSFDC WILL NOT HAVE ANY LIABILITY ARISING OUT OF OR RELATED TO YOUR USE OF PMM OR SFDO BASE FOR ANY DIRECT DAMAGES OR FOR ANY LOST PROFITS, REVENUES, GOODWILL OR INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL, EXEMPLARY, COVER, BUSINESS INTERRUPTION OR PUNITIVE DAMAGES, WHETHER AN ACTION IS IN CONTRACT OR TORT AND REGARDLESS OF THE THEORY OF LIABILITY, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR IF A REMEDY OTHERWISE FAILS OF ITS ESSENTIAL PURPOSE. THE FOREGOING DISCLAIMER WILL NOT APPLY TO THE EXTENT PROHIBITED BY LAW. SFDC DISCLAIMS ALL LIABILITY AND INDEMNIFICATION OBLIGATIONS FOR ANY HARM OR DAMAGES CAUSED BY ANY THIRD-PARTY HOSTING PROVIDERS. \r\n\r\nTHIS AGREEMENT SHALL BE GOVERNED EXCLUSIVELY BY, AND CONSTRUED EXCLUSIVELY IN ACCORDANCE WITH, THE LAWS OF THE UNITED STATES AND THE STATE OF CALIFORNIA, WITHOUT REGARD TO ITS CONFLICT OF LAWS PROVISIONS. THE STATE AND FEDERAL COURTS LOCATED IN SAN FRANCISCO, CALIFORNIA SHALL HAVE EXCLUSIVE JURISDICTION TO ADJUDICATE ANY DISPUTE ARISING OUT OF OR RELATING TO THIS AGREEMENT. EACH PARTY HEREBY CONSENTS TO THE JURISDICTION OF SUCH COURTS AND WAIVES ANY RIGHT IT MAY OTHERWISE HAVE TO CHALLENGE THE APPROPRIATENESS OF SUCH FORUMS.",
+            "description": "legal text shown in modal dialog"
         }
     },
     "plan:install": {
         "title": {
-            "message": "Install Nonprofit Cloud Program Management Module",
+            "message": "Install Program Management Module",
             "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "This will install Program Management Module in your org.",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Thanks for installing Program Management Module. Please visit the [Program Management Module customer forum group](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) on the Power of Us Hub for any questions about Program Management Module.",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include “PMM” in the subject line and include in your comment the installation link shown here.",
+            "description": "shown after failed installation (markdown)"
         }
     },
     "steps": {
         "Install {product} {version}": {
             "message": "Install {product} {version}",
             "description": "title of installation step"
+        },
+        "Deploy Program Management Profile": {
+            "message": "Deploy Program Management Profile",
+            "description": "title of installation step"
+        }
+    },
+    "checks": {
+        "Please enable My Domain in your org prior to installing.": {
+            "message": "Please enable My Domain in your org prior to installing.",
+            "description": "shown if validation fails"
         }
     }
 }

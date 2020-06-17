@@ -1,5 +1,5 @@
 {
     "packageDirectories": [{ "path": "force-app", "default": true }],
     "namespace": "pmdm",
-    "sourceApiVersion": "46.0"
+    "sourceApiVersion": "48.0"
 }

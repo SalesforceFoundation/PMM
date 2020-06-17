@@ -1132,10 +1132,10 @@ INSERT INTO "pmdm__ProgramEngagement__c" VALUES(66,'Remedial Reading Program - T
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(67,'School Lunch Program - Tom Higgins','2019-06-08','false','','Client','Enrolled','2019-09-03','','152','10','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(68,'After School Program, Ages 11-13 - Tom Higgins','2019-08-29','false','','Client','Active','2019-09-03','','152','3','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(69,'ESL Program - Ariella Branch','','false','','Client','Enrolled','2020-02-03','','162','8','');
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(70,'Job Readiness Program - Anthony Hill','','false','','Client','Enrolled','2019-12-19','','35','2','1');
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(70,'Job Readiness Program - Anthony Hill','','false','','Client','Enrolled','2019-12-19','','35','2','6');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(71,'Housing Assistance Program - Emelia Mercer','','false','','Client','Active','2019-10-02','','80','7','');
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(72,'Job Readiness Program - Arlene Baker','2019-06-19','false','','Client','Active','2019-09-04','','157','2','1');
-INSERT INTO "pmdm__ProgramEngagement__c" VALUES(73,'Job Readiness Program - Robin Brooks','2019-09-02','false','','Client','Active','2019-09-04','','26','2','1');
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(72,'Job Readiness Program - Arlene Baker','2019-06-19','false','','Client','Active','2019-09-04','','157','2','6');
+INSERT INTO "pmdm__ProgramEngagement__c" VALUES(73,'Job Readiness Program - Robin Brooks','2019-09-02','false','','Client','Active','2019-09-04','','26','2','6');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(74,'Drug and Alcohol Recovery Management - Robin Brooks','2019-08-24','false','','Client','Active','2019-09-03','','26','6','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(75,'Job Readiness Program - Joe Salinas','','false','','Client','Enrolled','2020-02-06','','149','2','');
 INSERT INTO "pmdm__ProgramEngagement__c" VALUES(76,'ESL Program - Samir Neal','','false','','Client','Active','2019-09-09','','92','8','');

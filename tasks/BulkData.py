@@ -10,6 +10,7 @@ from cumulusci.tasks.salesforce import BaseSalesforceApiTask
 from cumulusci.core.utils import process_bool_arg
 from cumulusci.utils import os_friendly_path
 from cumulusci.tasks.bulkdata import LoadData, ExtractData
+from cumulusci.tasks.bulkdata.mapping_parser import MappingSteps
 
 
 class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
@@ -241,7 +242,7 @@ class MappingGenerator(NamespaceInfo, BaseSalesforceApiTask):
 
         self.log_combined_mapping(mapping)
 
-        return mapping
+        return MappingSteps.parse_obj(mapping).__root__
 
 
 class LogMapping(MappingGenerator):
@@ -270,7 +271,7 @@ class CreateMapping(MappingGenerator):
             f.write(
                 "\n".join(
                     Util.print_mapping_as_list(
-                        self.mapping, self.options.get("mapping_tab_size")
+                        self.mapping.dict(), self.options.get("mapping_tab_size")
                     )
                 )
             )
@@ -312,7 +313,7 @@ class CaptureData(ExtractData, MappingGenerator):
     }
 
     def _init_mapping(self):
-        self.mappings = self.get_combined_mapping()
+        self.mapping = self.get_combined_mapping()
 
 
 class Util:

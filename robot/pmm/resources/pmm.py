@@ -60,6 +60,7 @@ class pmm(object):
             return ''
 
     def get_pmm_namespace_prefix(self):
+        """ gets the namespace prefix for the objects """
         if not hasattr(self.cumulusci, '_describe_result'):
             self.cumulusci._describe_result = self.cumulusci.sf.describe()
         objects = self.cumulusci._describe_result['sobjects']
@@ -67,6 +68,7 @@ class pmm(object):
         return self.get_namespace_prefix(program_object['name'])
 
     def click_app_link(self):
+        """ clicks on the app link on the app launcher """
         locator = pmm_lex_locators["app_link"]
         self.selenium.wait_until_page_contains_element(
             locator, error="App not found"
@@ -83,11 +85,13 @@ class pmm(object):
         return "".join(random.choice(string.ascii_lowercase) for _ in range(len))
 
     def generate_new_string(self, prefix="PMM Robot"):
+        """ generates a random string with PMM Robot prefix """
         return "{PREFIX} {RANDOM}".format(
             PREFIX=prefix, RANDOM=self.new_random_string(len=5)
         )
 
     def page_should_contain_text(self, text):
+        """ Verifies if the page contains the given text """
         locator = pmm_lex_locators["text"].format(text)
         self.selenium.page_should_contain_element(locator)
 
@@ -107,6 +111,7 @@ class pmm(object):
         return id
 
     def click_new_related_record_link(self, value):
+        """ clicks on a link on the related list given the link """
         locator = pmm_lex_locators["related"]["new_record_link"].format(value)
         self.selenium.set_focus_to_element(locator)
         element = self.selenium.driver.find_element_by_xpath(locator)
@@ -150,6 +155,7 @@ class pmm(object):
         )
 
     def click_listview_link(self,title):
+        """ clicks on a link on the listview page, given the link """
         locator=pmm_lex_locators["listview_link"].format(title)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script('arguments[0].click()', element)
@@ -221,6 +227,7 @@ class pmm(object):
         self.selenium.click_link(value_loc)
 
     def open_date_picker(self, title):
+        """ opens the date picker given the field name """
         locator = pmm_lex_locators["new_record"]["open_date_picker"].format(title)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
@@ -252,6 +259,9 @@ class pmm(object):
             locator, error="Section title is not as expected"
         )
 
-    def logns(self):
-        ns = self.get_pmm_namespace_prefix
-        print("ns valus", ns)
+    def verify_modal_error(self,message):
+        """ Verify error message is displayed on the modal"""
+        locator = pmm_lex_locators["new_record"]["error_message"].format(message)
+        self.selenium.wait_until_page_contains_element(
+            locator, error="Error message is not displayed"
+        )

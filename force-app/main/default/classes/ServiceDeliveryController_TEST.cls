@@ -102,7 +102,7 @@ public with sharing class ServiceDeliveryController_TEST {
         System.assertEquals(
             expected.size(),
             actual.size(),
-            'Expected the size of both expected and actual are the same'
+            'Expected the controller to return the list returned by the service'
         );
 
         serviceStub.assertCalledWith(
@@ -139,6 +139,8 @@ public with sharing class ServiceDeliveryController_TEST {
             actualException.getMessage(),
             'Expected the controller to rethrow the exception from the service.'
         );
+
+        System.assertEquals(null, actual);
 
         serviceStub.assertCalledWith(
             'getServicesByProgramEngagementId',

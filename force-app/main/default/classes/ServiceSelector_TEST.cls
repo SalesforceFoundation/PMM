@@ -113,8 +113,14 @@ public with sharing class ServiceSelector_TEST {
         );
         Test.stopTest();
 
-        System.assert(!expectedIds.isEmpty());
-        System.assert(!actual.isEmpty());
+        System.assert(
+            !expectedIds.isEmpty(),
+            'Expected the query returned a set of serviceIds'
+        );
+        System.assert(
+            !actual.isEmpty(),
+            'Expected the selector returned a set of serviceIds'
+        );
         for (Service__c service : actual) {
             System.assert(expectedIds.contains(service.Id));
         }

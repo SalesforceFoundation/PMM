@@ -173,6 +173,14 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.handleContactInputChange(event);
         this.handleProgramEngagementInputChange(event);
         this.handleServiceInputChange(event);
+
+        if (
+            event.target.fieldName !== this.fields.contact.fieldApiName &&
+            event.target.fieldName !== this.fields.programEngagement.fieldApiName &&
+            event.target.fieldName !== this.fields.service.fieldApiName
+        ) {
+            this.autoSaveAfterDebounce();
+        }
     }
 
     handleContactInputChange(event) {
@@ -180,22 +188,14 @@ export default class ServiceDeliveryRow extends LightningElement {
             return;
         }
 
-        if (
-            event.target.fieldName === this.fields.contact.fieldApiName &&
-            this.hasContactField &&
-            this.hasProgramEngagementField
-        ) {
+        if (this.hasContactField && this.hasProgramEngagementField) {
             if (event.detail.value && event.detail.value.length) {
                 this.selectedContact = event.detail.value[0];
                 this.handleGetServicesEngagements(event.detail.value[0]);
             } else {
                 this.handleResetContact();
             }
-        } else if (
-            event.target.fieldName === this.fields.contact.fieldApiName &&
-            this.hasContactField &&
-            !this.hasProgramEngagementField
-        ) {
+        } else if (this.hasContactField && !this.hasProgramEngagementField) {
             this.handleEnableFieldOnInputChange(event.target.fieldName);
         }
     }
@@ -205,11 +205,9 @@ export default class ServiceDeliveryRow extends LightningElement {
             return;
         }
 
-        if (event.target.fieldName === this.fields.programEngagement.fieldApiName) {
-            if (event.detail.value && event.detail.value.length) {
-                this.isServiceFiltered = true;
-                this.handleGetServicesForProgramEngagement(event.detail.value[0]);
-            }
+        if (event.detail.value && event.detail.value.length) {
+            this.isServiceFiltered = true;
+            this.handleGetServicesForProgramEngagement(event.detail.value[0]);
         }
     }
 
@@ -218,11 +216,9 @@ export default class ServiceDeliveryRow extends LightningElement {
             return;
         }
 
-        if (event.target.fieldName === this.fields.service.fieldApiName) {
-            this.handleEnableFieldOnInputChange(event.target.fieldName);
-            this.enableDisableFieldsOnSaveAndInputChange();
-            this.autoSaveAfterDebounce();
-        }
+        this.handleEnableFieldOnInputChange(event.target.fieldName);
+        this.enableDisableFieldsOnSaveAndInputChange();
+        this.autoSaveAfterDebounce();
     }
 
     handleEnableFieldOnInputChange(fieldApiName) {

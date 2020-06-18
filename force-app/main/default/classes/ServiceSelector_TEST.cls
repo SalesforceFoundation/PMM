@@ -9,7 +9,7 @@
 
 @isTest
 public with sharing class ServiceSelector_TEST {
-    @isTest
+    @IsTest
     private static void testGetServicesByProgramIds() {
         ProgramTestDataFactory.insertTestData(true);
 
@@ -39,7 +39,7 @@ public with sharing class ServiceSelector_TEST {
         }
     }
 
-    @isTest
+    @IsTest
     private static void testGetServicesByProgramIdsNoAccess() {
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
         Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
@@ -75,7 +75,7 @@ public with sharing class ServiceSelector_TEST {
         Test.stopTest();
     }
 
-    @isTest
+    @IsTest
     private static void testGetServicesByProgramEngagementId() {
         ProgramTestDataFactory.insertTestData(true);
         Program__c program1 = [
@@ -120,7 +120,7 @@ public with sharing class ServiceSelector_TEST {
         }
     }
 
-    @isTest
+    @IsTest
     private static void testGetServicesByProgramEngagementIdNoAccess() {
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
         Integer random = Integer.valueOf(math.rint(math.random() * 1000000));

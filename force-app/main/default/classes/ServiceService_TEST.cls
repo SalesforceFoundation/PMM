@@ -100,6 +100,8 @@ public with sharing class ServiceService_TEST {
         service1.UnitOfMeasurement__c = 'Hours';
 
         List<Service__c> services = new List<Service__c>{ service1 };
+        List<Object> expected = new List<Object>{ 'label' };
+
         BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class)
             .withReturnValue('getServicesByProgramEngagementId', Id.class, services);
 
@@ -108,15 +110,17 @@ public with sharing class ServiceService_TEST {
         final ServiceService service = new ServiceService();
         service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
 
-        final Map<String, List<Object>> actual = service.getServicesByProgramEngagementId(
+        final List<Object> actual = service.getServicesByProgramEngagementId(
             programEngagementId
         );
 
         Test.stopTest();
 
-        Set<String> expectedKeySet = new Set<String>{ 'services' };
-
-        System.assertEquals(expectedKeySet, actual.keySet());
+        System.assertEquals(
+            expected.size(),
+            actual.size(),
+            'Expected the size of both expected and actual are the same'
+        );
 
         serviceSelectorStub.assertCalledWith(
             'getServicesByProgramEngagementId',

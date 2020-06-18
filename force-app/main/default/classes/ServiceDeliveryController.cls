@@ -22,9 +22,7 @@ public with sharing class ServiceDeliveryController {
     }
 
     @AuraEnabled
-    public static Map<String, List<Object>> getServicesByProgramEngagementId(
-        Id programEngagementId
-    ) {
+    public static List<Object> getServicesByProgramEngagementId(Id programEngagementId) {
         try {
             return service.getServicesByProgramEngagementId(programEngagementId);
         } catch (Exception e) {

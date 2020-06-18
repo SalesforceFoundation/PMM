@@ -11,7 +11,7 @@
 public with sharing class ServiceDeliveryController_TEST {
     private static BasicStub serviceStub = new BasicStub(ServiceService.class);
 
-    @isTest
+    @IsTest
     private static void testGetServicesAndEngagements() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);
         Map<String, List<Object>> expected = new Map<String, List<Object>>();
@@ -43,7 +43,7 @@ public with sharing class ServiceDeliveryController_TEST {
         );
     }
 
-    @isTest
+    @IsTest
     private static void testGetServicesAndEngagementsWithException() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);
         Map<String, List<Object>> expected = new Map<String, List<Object>>();
@@ -78,12 +78,11 @@ public with sharing class ServiceDeliveryController_TEST {
         );
     }
 
-    @isTest
+    @IsTest
     private static void testGetServicesByProgramEngagementIds() {
         Id programEngagementId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
 
-        Map<String, List<Object>> expected = new Map<String, List<Object>>();
-        expected.put('services', new List<Object>());
+        List<Object> expected = new List<Object>();
 
         serviceStub.withReturnValue(
             'getServicesByProgramEngagementId',
@@ -94,14 +93,17 @@ public with sharing class ServiceDeliveryController_TEST {
         Test.startTest();
         ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
 
-        final Map<String, Object> actual = ServiceDeliveryController.getServicesByProgramEngagementId(
+        final List<Object> actual = ServiceDeliveryController.getServicesByProgramEngagementId(
             programEngagementId
         );
 
         Test.stopTest();
 
-        Set<String> expectedKeySet = new Set<String>{ 'services' };
-        System.assertEquals(expectedKeySet, actual.keySet());
+        System.assertEquals(
+            expected.size(),
+            actual.size(),
+            'Expected the size of both expected and actual are the same'
+        );
 
         serviceStub.assertCalledWith(
             'getServicesByProgramEngagementId',
@@ -110,17 +112,16 @@ public with sharing class ServiceDeliveryController_TEST {
         );
     }
 
-    @isTest
+    @IsTest
     private static void testGetServicesByProgramEngagementIdsException() {
         Id programEngagementId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
-        Map<String, List<Object>> expected = new Map<String, List<Object>>();
-        expected.put('services', new List<Object>());
+
         serviceStub.withThrowException('getServicesByProgramEngagementId', Id.class);
 
         Test.startTest();
         ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
 
-        final Map<String, List<Object>> actual;
+        final List<Object> actual;
         Exception actualException;
 
         try {

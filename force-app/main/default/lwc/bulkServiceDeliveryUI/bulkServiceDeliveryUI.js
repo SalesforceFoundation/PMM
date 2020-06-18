@@ -47,8 +47,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track errors = {};
     @track isAddEntryDisabled = false;
     @track isDoneDisabled = false;
-    @track hasContact = false;
-    @track hasProgramEngagement = false;
+    @track hasContactField = false;
+    @track hasProgramEngagementField = false;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
@@ -112,10 +112,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         if (fieldSet) {
             fieldSet.forEach(element => {
                 if (element.apiName === this.fields.contact.fieldApiName) {
-                    this.hasContact = true;
+                    this.hasContactField = true;
                 }
                 if (element.apiName === this.fields.programEngagement.fieldApiName) {
-                    this.hasProgramEngagement = true;
+                    this.hasProgramEngagementField = true;
                 }
             });
         }
@@ -141,19 +141,22 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                 field.size = 2;
             }
 
-            if (this.hasContact && field.apiName === this.fields.contact.fieldApiName) {
+            if (
+                this.hasContactField &&
+                field.apiName === this.fields.contact.fieldApiName
+            ) {
                 field.disabled = false;
                 field.isRequired = true;
             } else if (
-                !this.hasContact &&
-                this.hasProgramEngagement &&
+                !this.hasContactField &&
+                this.hasProgramEngagementField &&
                 field.apiName === this.fields.programEngagement.fieldApiName
             ) {
                 field.disabled = false;
                 field.isRequired = true;
             } else if (
-                !this.hasContact &&
-                !this.hasProgramEngagement &&
+                !this.hasContactField &&
+                !this.hasProgramEngagementField &&
                 field.apiName === this.fields.service.fieldApiName
             ) {
                 field.disabled = false;

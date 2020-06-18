@@ -51,22 +51,17 @@ public with sharing class ServiceService {
         return result;
     }
 
-    public Map<String, List<Object>> getServicesByProgramEngagementId(
-        Id programEngagamentId
-    ) {
+    public List<Object> getServicesByProgramEngagementId(Id programEngagamentId) {
         String serviceProgram = Schema.SObjectType.Service__c.Fields.Program__c.getName();
-        Map<String, List<Object>> allServices = new Map<String, List<Object>>();
-        allServices.put('services', new List<Object>());
+        List<Object> allServices = new List<Object>();
 
         for (
             Service__c service : serviceSelector.getServicesByProgramEngagementId(
                 programEngagamentId
             )
         ) {
-            allServices.get('services')
-                .add(convertObjectToOption(service, serviceProgram));
+            allServices.add(convertObjectToOption(service, serviceProgram));
         }
-
         return allServices;
     }
 }

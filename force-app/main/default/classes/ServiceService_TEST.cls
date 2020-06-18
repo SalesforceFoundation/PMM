@@ -9,6 +9,11 @@
 
 @isTest
 public with sharing class ServiceService_TEST {
+    private static BasicStub engagementSelectorStub = new BasicStub(
+        ProgramEngagementSelector.class
+    );
+    private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
+
     @IsTest
     private static void testGetServicesEngagementsByContactId() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);
@@ -38,10 +43,16 @@ public with sharing class ServiceService_TEST {
             engagement1
         };
         List<Service__c> services = new List<Service__c>{ service1 };
-        BasicStub engagementSelectorStub = new BasicStub(ProgramEngagementSelector.class)
-            .withReturnValue('getProgramEngagementsByContactId', Id.class, engagements);
-        BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class)
-            .withReturnValue('getServicesByProgramIds', Set<Id>.class, services);
+        engagementSelectorStub.withReturnValue(
+            'getProgramEngagementsByContactId',
+            Id.class,
+            engagements
+        );
+        serviceSelectorStub.withReturnValue(
+            'getServicesByProgramIds',
+            Set<Id>.class,
+            services
+        );
 
         Test.startTest();
 
@@ -100,10 +111,21 @@ public with sharing class ServiceService_TEST {
         service1.UnitOfMeasurement__c = 'Hours';
 
         List<Service__c> services = new List<Service__c>{ service1 };
-        List<Object> expected = new List<Object>{ 'label' };
 
-        BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class)
-            .withReturnValue('getServicesByProgramEngagementId', Id.class, services);
+        final List<Object> expected = new List<Object>{
+            'label=' +
+            Service1.Name +
+            ', program=' +
+            program1.Id +
+            ', value=' +
+            service1.Id
+        };
+
+        serviceSelectorStub.withReturnValue(
+            'getServicesByProgramEngagementId',
+            Id.class,
+            services
+        );
 
         Test.startTest();
 

@@ -170,24 +170,20 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleInputChange(event) {
-        this.handleContactInputChange(event);
-        this.handleProgramEngagementInputChange(event);
-        this.handleServiceInputChange(event);
-
-        if (
-            event.target.fieldName !== this.fields.contact.fieldApiName &&
-            event.target.fieldName !== this.fields.programEngagement.fieldApiName &&
-            event.target.fieldName !== this.fields.service.fieldApiName
+        if (event.target.fieldName === this.fields.contact.fieldApiName) {
+            this.handleContactInputChange(event);
+        } else if (
+            event.target.fieldName === this.fields.programEngagement.fieldApiName
         ) {
+            this.handleProgramEngagementInputChange(event);
+        } else if (event.target.fieldName === this.fields.service.fieldApiName) {
+            this.handleServiceInputChange(event.target.fieldName);
+        } else {
             this.autoSaveAfterDebounce();
         }
     }
 
     handleContactInputChange(event) {
-        if (event.target.fieldName !== this.fields.contact.fieldApiName) {
-            return;
-        }
-
         if (this.hasContactField && this.hasProgramEngagementField) {
             if (event.detail.value && event.detail.value.length) {
                 this.selectedContact = event.detail.value[0];
@@ -201,22 +197,14 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleProgramEngagementInputChange(event) {
-        if (event.target.fieldName !== this.fields.programEngagement.fieldApiName) {
-            return;
-        }
-
         if (event.detail.value && event.detail.value.length) {
             this.isServiceFiltered = true;
             this.handleGetServicesForProgramEngagement(event.detail.value[0]);
         }
     }
 
-    handleServiceInputChange(event) {
-        if (event.target.fieldName !== this.fields.service.fieldApiName) {
-            return;
-        }
-
-        this.handleEnableFieldOnInputChange(event.target.fieldName);
+    handleServiceInputChange(fieldName) {
+        this.handleEnableFieldOnInputChange(fieldName);
         this.enableDisableFieldsOnSaveAndInputChange();
         this.autoSaveAfterDebounce();
     }
@@ -543,9 +531,17 @@ export default class ServiceDeliveryRow extends LightningElement {
                 }
             });
 
-            if (this.hasContactField && contactId !== "") {
+            if (this.hasContactField && contactId) {
                 this.handleGetServicesEngagements(contactId);
                 this.selectedContact = contactId;
+            }
+
+            if (
+                !this.hasContactField &&
+                this.hasProgramEngagementField &&
+                this.programEngagementId
+            ) {
+                this.handleGetServicesForProgramEngagement(this.programEngagementId);
             }
         }
     }

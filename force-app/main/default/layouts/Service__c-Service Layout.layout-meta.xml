@@ -71,7 +71,7 @@
             <sortOrder>0</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>NewServiceDelivery</actionName>
+            <actionName>Service__c.CreateServiceDelivery</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>1</sortOrder>
         </platformActionListItems>
@@ -88,7 +88,7 @@
     </platformActionList>
     <quickActionList>
         <quickActionListItems>
-            <quickActionName>NewServiceDelivery</quickActionName>
+            <quickActionName>Service__c.CreateServiceDelivery</quickActionName>
         </quickActionListItems>
         <quickActionListItems>
             <quickActionName>FeedItem.TextPost</quickActionName>

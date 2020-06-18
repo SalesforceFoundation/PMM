@@ -111,15 +111,12 @@ public with sharing class ServiceService_TEST {
         service1.UnitOfMeasurement__c = 'Hours';
 
         List<Service__c> services = new List<Service__c>{ service1 };
+        Map<String, String> expectedValues = new Map<String, String>();
+        expectedValues.put('label', Service1.Name);
+        expectedValues.put('program', program1.Id);
+        expectedValues.put('value', service1.Id);
 
-        final List<Object> expected = new List<Object>{
-            'label=' +
-            Service1.Name +
-            ', program=' +
-            program1.Id +
-            ', value=' +
-            service1.Id
-        };
+        final List<object> expected = new List<Object>{ expectedValues };
 
         serviceSelectorStub.withReturnValue(
             'getServicesByProgramEngagementId',
@@ -137,6 +134,11 @@ public with sharing class ServiceService_TEST {
         );
 
         Test.stopTest();
+        System.assertEquals(
+            expected,
+            actual,
+            'Expected that both expected and actual have the same values'
+        );
 
         System.assertEquals(
             expected.size(),

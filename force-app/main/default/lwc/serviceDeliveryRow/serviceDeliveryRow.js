@@ -127,17 +127,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-    checkFieldExists() {
-        this.localFieldSet.forEach(element => {
-            if (element.apiName === this.fields.contact.fieldApiName) {
-                this.hasContact = true;
-            }
-            if (element.apiName === this.fields.programEngagement.fieldApiName) {
-                this.hasProgramEngagement = true;
-            }
-        });
-    }
-
     handleGetServicesEngagements(contactId) {
         this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
@@ -181,8 +170,11 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleInputChange(event) {
-        console.log(event.target.fieldName);
-        if (event.target.fieldName === this.fields.contact.fieldApiName) {
+        if (
+            event.target.fieldName === this.fields.contact.fieldApiName &&
+            this.hasContact &&
+            this.hasProgramEngagement
+        ) {
             if (event.detail.value && event.detail.value.length) {
                 this.selectedContact = event.detail.value[0];
                 this.handleGetServicesEngagements(event.detail.value[0]);
@@ -190,12 +182,19 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this.handleResetContact();
             }
         } else if (
+            event.target.fieldName === this.fields.contact.fieldApiName &&
+            this.hasContact &&
+            !this.hasProgramEngagement
+        ) {
+            this.handleEnableFieldOnInputChange(event.target.fieldName);
+        } else if (
             event.target.fieldName === this.fields.programEngagement.fieldApiName
         ) {
             this.isServiceFiltered = true;
             this.handleGetServicesForProgramEngagement(event.detail.value[0]);
         } else if (event.target.fieldName === this.fields.service.fieldApiName) {
             this.handleEnableFieldOnInputChange(event.target.fieldName);
+            this.enableDisableFieldsOnSaveAndInputChange();
             this.autoSaveAfterDebounce();
         } else {
             this.autoSaveAfterDebounce();
@@ -251,8 +250,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         //If the service value changes, attempt to save the record.
         if (fieldName === this.fields.service.fieldApiName) {
-            this.enableDisableFields();
-
+            this.enableDisableFieldsOnSaveAndInputChange();
             this.autoSaveAfterDebounce();
         }
     }
@@ -398,7 +396,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         modal.hide();
     }
 
-    enableDisableFields() {
+    enableDisableFieldsOnSaveAndInputChange() {
         this.localFieldSet.forEach(element => {
             if (this.hasContact && element.apiName !== this.fields.contact.fieldApiName) {
                 element.disabled = false;
@@ -539,7 +537,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleSaveEnd() {
         this.isSaving = false;
         this.isSaved = true;
-        this.enableDisableFields();
+        this.enableDisableFieldsOnSaveAndInputChange();
     }
 
     onSave(event) {

@@ -541,6 +541,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this.hasProgramEngagementField &&
                 this.programEngagementId
             ) {
+                this.isServiceFiltered = true;
                 this.handleGetServicesForProgramEngagement(this.programEngagementId);
             }
         }

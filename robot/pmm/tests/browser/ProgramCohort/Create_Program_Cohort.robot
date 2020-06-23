@@ -26,34 +26,39 @@ Create Program Cohort
      [Documentation]                        This test creates a program cohort and verifies the details of the page
      [tags]                                 feature:Program Cohort
      Go To PMM App
-     Go To Page                             Listing                                 ${ns}ProgramCohort__c   
+     Go To Page                             Listing                 ${ns}ProgramCohort__c   
      Click Object Button                    New
-     wait for modal                         New                                     Program Cohort
-     Populate modal Form                    Program Cohort=${program_cohort}
-     ...                                    Status=Planned
-     ...                                    Program=${program}[Name]
-     ...                                    Description=New Program Cohort via Robot Test
-     ...                                    Start Date=10
-     ...                                    End Date=25
+     wait for modal                         New                     Program Cohort
+     populate field                         Program Cohort          ${program_cohort}  
+     select value from dropdown             Status                  Planned
+     populate lookup field                  Program                 ${program}[Name]
+     populate field                         Description             New Program Cohort via Robot Test
+     select date from datepicker            Start Date              10
+     select date from datepicker            End Date                25
      Click modal button                     Save
      Wait Until Modal Is Closed
-     verify page header                     Program
-     click new related record link          ${program_cohort}
-     verify details                         Program Cohort                          contains                        ${program_cohort}
+     verify page header                     Program Cohort
+     verify details                         Program Cohort          contains        ${program_cohort}
+     verify details                         Status                  contains        Planned
+     verify details                         Program                 contains        ${program}[Name]
+     verify page contains related list      Program Engagements
+     verify page contains related list      Files
      ${program_cohort_id} =                 Save Current Record ID For Deletion     ${ns}ProgramCohort__c
+
 
 Date validation when Start date is later than end date
      [Documentation]                        This test opens the new program cohort dialog and enters a end date earlier than start date
      ...                                    and verifies that an error message is displayed
      [tags]                                 W-037572  feature:Program Cohort
-     Go To Page                             Listing                                 ${ns}ProgramCohort__c   
+     Go To Page                             Listing                 ${ns}ProgramCohort__c   
      Click Object Button                    New
-     wait for modal                         New                                     Program Cohort
-     Populate modal Form                    Program Cohort=${program_cohort} 
-     ...                                    Status=Planned
-     ...                                    Program=${program}[Name]
-     ...                                    Start Date=25
-     ...                                    End Date=10
+     wait for modal                         New                     Program Cohort
+     populate field                         Program Cohort          ${program_cohort}  
+     select value from dropdown             Status                  Planned
+     populate lookup field                  Program                 ${program}[Name]
+     populate field                         Description             New Program Cohort via Robot Test
+     select date from datepicker            Start Date              25
+     select date from datepicker            End Date                10
      Click modal button                     Save
      verify modal error                     Start Date must be before End Date
 
@@ -78,3 +83,5 @@ Date validation
      Click modal button                     Save
      verify modal error                     End Date must be within the Program Start and End Dates
      verify modal error                     Start Date must be within the range of the related Program Start and End Dates.
+     Click modal button                     Cancel
+     

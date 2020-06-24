@@ -35,7 +35,7 @@ pmm_lex_locators = {
         "datepicker_popup": "//table[@class='calGrid' and @role='grid']",
         "select_date": "//div[contains(@class,'uiDatePickerGrid')]/table[@class='calGrid']//*[text()='{}']",
         "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
-        "error_message":"//div[@class='pageLevelErrors']//ul[@class='errorsList']/li[text()='{}']",
+        'error_message':'//div[@class="pageLevelErrors"]//ul[@class="errorsList"]/li[text()="{}"]',
     },
     "related": {
         "button": "//article[contains(@class, 'forceRelatedListCardDesktop')][.//img][.//span[@title='{}']]//a[@title='{}']",

@@ -12,12 +12,11 @@ Suite Teardown  Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
-    ${ns} =                 Get PMM Namespace Prefix
-    Set suite variable      ${ns}
-    ${program_cohort} =     Generate Random String
-    Set suite variable      ${program_cohort}      
+    ${ns} =                     Get PMM Namespace Prefix
+    Set suite variable          ${ns}
+    ${program_cohort} =         Generate Random String
+    Set suite variable          ${program_cohort}      
     &{program} =                API Create Program  
-    Store Session Record        ${ns}Program__c         ${program}[Id]
     Set suite variable          &{program}
 
 

@@ -11,7 +11,7 @@ from pmm_locators import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
-@pageobject("Listing", "ProgramCohort__c")
+@pageobject("Listing", "ProgramCohort")
 class ProgramCohortListingPage(BasePMMPage, ListingPage):
     object_name = "ProgramCohort"
 

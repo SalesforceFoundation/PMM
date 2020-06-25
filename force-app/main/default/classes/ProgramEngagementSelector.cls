@@ -15,6 +15,7 @@ public with sharing class ProgramEngagementSelector {
         if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {
             return new List<ProgramEngagement__c>();
         }
+
         List<ProgramEngagement__c> queriedEngagements = [
             SELECT Id, Name, Program__c, Program__r.Name
             FROM ProgramEngagement__c

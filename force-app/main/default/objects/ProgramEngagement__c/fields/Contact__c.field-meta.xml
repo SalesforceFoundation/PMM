@@ -8,7 +8,7 @@
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Program Engagements</relationshipLabel>
     <relationshipName>Program_Engagements</relationshipName>
-    <required>true</required>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

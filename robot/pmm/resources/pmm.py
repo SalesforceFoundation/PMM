@@ -192,8 +192,7 @@ class pmm(object):
                             self.selenium.get_webelement(locator).click()
                             break
                     elif "Date" in classname and "readonly" not in classname:
-                        self.open_date_picker(key)
-                        self.pick_date(value)
+                        self.select_date_from_datepicker(key,value)
                         print("Executed open date picker and pick date for {}".format(key))
                         break
                     else:
@@ -211,8 +210,6 @@ class pmm(object):
             else:
                 raise Exception("Locator for {} is not found on the page".format(key))
 
-
-
     def select_value_from_dropdown(self,dropdown,value):
         """Select given value in the dropdown field"""
         locator = pmm_lex_locators['new_record']['dropdown_field'].format(dropdown)
@@ -226,19 +223,16 @@ class pmm(object):
         )
         self.selenium.click_link(value_loc)
 
-    def open_date_picker(self, title):
-        """ opens the date picker given the field name """
+    def select_date_from_datepicker(self,title, value):
+        """ opens the date picker given the field name and picks a date from the date picker"""
         locator = pmm_lex_locators["new_record"]["open_date_picker"].format(title)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
         popup_loc = pmm_lex_locators['new_record']['datepicker_popup']
         self.selenium.wait_until_page_contains_element(popup_loc, error="Date picker did not open ")
-
-    def pick_date(self, value):
-        """To pick a date from the date picker"""
-        locator=pmm_lex_locators["new_record"]["select_date"].format(value)
-        self.selenium.set_focus_to_element(locator)
-        element = self.selenium.driver.find_element_by_xpath(locator)
+        locator_date=pmm_lex_locators["new_record"]["select_date"].format(value)
+        self.selenium.set_focus_to_element(locator_date)
+        element = self.selenium.driver.find_element_by_xpath(locator_date)
         self.selenium.driver.execute_script('arguments[0].click()', element)
 
     def search_field_by_value(self, fieldname, value):

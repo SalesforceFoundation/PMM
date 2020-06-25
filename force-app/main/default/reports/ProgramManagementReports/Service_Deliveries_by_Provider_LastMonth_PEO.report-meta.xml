@@ -39,7 +39,7 @@
     <columns>
         <field>ServiceDelivery__c.UnitOfMeasurement__c</field>
     </columns>
-    <description>This report provides a view of what services your team is spending their time on. It shows all service deliveries delivered last month by service provider. Considering filtering by Service or Program to make more detailed comparisons.</description>
+    <description>Which Services did Service Providers spend their time on last month?</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
@@ -63,6 +63,6 @@
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
         <dateColumn>ServiceDelivery__c.DeliveryDate__c</dateColumn>
-        <interval>INTERVAL_CUSTOM</interval>
+        <interval>INTERVAL_LASTMONTH</interval>
     </timeFrameFilter>
 </Report>

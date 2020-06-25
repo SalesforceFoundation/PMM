@@ -45,7 +45,7 @@
     <columns>
         <field>CUST_OWNER_NAME</field>
     </columns>
-    <description>This report shows how program engagements are progressing through the stages of your programs. It shows all Program Engagements in all programs by Stage. Considering filtering by Program to get a more detailed view of one particular program.</description>
+    <description>How are Program Engagements progressing through the stages of our Programs?</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>

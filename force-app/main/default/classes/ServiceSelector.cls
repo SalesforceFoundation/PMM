@@ -24,4 +24,23 @@ public with sharing class ServiceSelector {
         return Security.stripInaccessible(AccessType.READABLE, queriedServices)
             .getRecords();
     }
+
+    public List<Service__c> getServicesByProgramEngagementId(Id programEngagementId) {
+        if (!Schema.SObjectType.Service__c.isAccessible()) {
+            return new List<Service__c>();
+        }
+
+        List<Service__c> services = [
+            SELECT Id, Name, Program__c
+            FROM Service__c
+            WHERE
+                Program__c IN (
+                    SELECT Program__c
+                    FROM ProgramEngagement__c
+                    WHERE Id = :programEngagementId
+                )
+        ];
+
+        return Security.stripInaccessible(AccessType.READABLE, services).getRecords();
+    }
 }

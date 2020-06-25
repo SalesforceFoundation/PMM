@@ -50,4 +50,18 @@ public with sharing class ServiceService {
         result.put('program', (String) obj.get(programField));
         return result;
     }
+
+    public List<Object> getServicesByProgramEngagementId(Id programEngagamentId) {
+        String serviceProgram = Schema.SObjectType.Service__c.Fields.Program__c.getName();
+        List<Object> allServices = new List<Object>();
+
+        for (
+            Service__c service : serviceSelector.getServicesByProgramEngagementId(
+                programEngagamentId
+            )
+        ) {
+            allServices.add(convertObjectToOption(service, serviceProgram));
+        }
+        return allServices;
+    }
 }

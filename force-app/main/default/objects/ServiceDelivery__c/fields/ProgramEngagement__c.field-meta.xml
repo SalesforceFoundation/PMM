@@ -6,11 +6,17 @@
     <label>Program Engagement</label>
     <lookupFilter>
         <active>true</active>
+        <booleanFilter>1 OR 2</booleanFilter>
         <errorMessage>Contact must match the Contact in the Program Engagement.</errorMessage>
         <filterItems>
             <field>ProgramEngagement__c.Contact__c</field>
             <operation>equals</operation>
             <valueField>$Source.Contact__c</valueField>
+        </filterItems>
+        <filterItems>
+            <field>$Source.Contact__c</field>
+            <operation>equals</operation>
+            <value/>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>

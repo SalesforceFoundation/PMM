@@ -247,19 +247,19 @@ flows:
 
     config_qa:
         steps:
+            100:
+                task: deploy_dev_config
             200:
                 flow: config_unmanaged
-            201:
-                task: deploy_dev_config
             202:
                 task: deploy_customer_profiles
 
     config_dev:
         steps:
+            100:
+                task: deploy_dev_config
             200:
                 flow: config_unmanaged
-            201:
-                task: deploy_dev_config
             202:
                 task: deploy_customer_profiles
 

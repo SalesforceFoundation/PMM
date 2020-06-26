@@ -213,7 +213,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         //Getting this error Uncaught TypeError: 'set' on proxy: when trying to enable an element
         //on Input field change and we suspect that since the record edit form is updating the values on the same array and
         //that is the reason why we are cloning the object here
-
         this.localFieldSet = JSON.parse(JSON.stringify(this.localFieldSet));
         this.localFieldSet.forEach(element => {
             if (fieldApiName !== element.apiName) {
@@ -531,7 +530,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 }
             });
 
-            if (this.hasContactField && contactId) {
+            if (this.hasContactField && this.hasProgramEngagementField && contactId) {
                 this.handleGetServicesEngagements(contactId);
                 this.selectedContact = contactId;
             }
@@ -543,6 +542,10 @@ export default class ServiceDeliveryRow extends LightningElement {
             ) {
                 this.isServiceFiltered = true;
                 this.handleGetServicesForProgramEngagement(this.programEngagementId);
+            }
+
+            if (this.hasContactField && !this.hasProgramEngagementField && contactId) {
+                this.handleEnableFieldOnInputChange(this.fields.contact.fieldApiName);
             }
         }
     }

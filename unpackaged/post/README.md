@@ -1,4 +1,4 @@
-**To add a new unpackaged metadata bundle...**
+## To add a new unpackaged metadata bundle...
 
 1. Create a new folder for the bundle under `unpackaged/post` (e.g., `reports/` for shipping unpackaged reports).
 2. Place all the metadata files you want to ship in this bundle under that folder.
@@ -14,3 +14,8 @@
                         name: "Deploy Folder of Unmanaged Reports"
 ```
 5. Ask the team's embedded release engineer to set up a staging installer to test that the new deploy_post step appears correctly.
+
+## To add more metadata to an existing unpackaged metadata bundle...
+
+1. Follow step 2 above to add the necessary metadata files and potentially folders.
+2. Update the package.xml for the metadata bundle.

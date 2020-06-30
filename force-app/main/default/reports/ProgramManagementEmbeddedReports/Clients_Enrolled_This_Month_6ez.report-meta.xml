@@ -11,7 +11,7 @@
         <chartType>HorizontalBar</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>FK_NAME</groupingColumn>
+        <groupingColumn>ProgramEngagement__c.ProgramCohort__c</groupingColumn>
         <location>CHART_BOTTOM</location>
         <showAxisLabels>false</showAxisLabels>
         <showPercentage>false</showPercentage>
@@ -27,10 +27,14 @@
     <columns>
         <field>CUST_NAME</field>
     </columns>
-    <description>Clients Enrolled This Month by Program</description>
+    <columns>
+        <field>FK_NAME</field>
+    </columns>
+    <description>For use on Program record home</description>
     <filter>
         <criteriaItems>
             <column>ProgramEngagement__c.Stage__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value>Enrolled</value>
@@ -40,10 +44,14 @@
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>FK_NAME</field>
+        <field>ProgramEngagement__c.ProgramCohort__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Clients Enrolled This Month by Program</name>
+    <groupingsDown>
+        <field>ProgramEngagement__c.StartDate__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Clients Enrolled This Month</name>
     <params>
         <name>co</name>
         <value>1</value>

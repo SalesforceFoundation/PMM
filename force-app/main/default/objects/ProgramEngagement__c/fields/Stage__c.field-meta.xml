@@ -23,6 +23,11 @@
                 <label>Application Denied</label>
             </value>
             <value>
+                <fullName>Waitlisted</fullName>
+                <default>false</default>
+                <label>Waitlisted</label>
+            </value>
+            <value>
                 <fullName>Enrolled</fullName>
                 <default>false</default>
                 <label>Enrolled</label>

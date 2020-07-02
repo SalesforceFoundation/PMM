@@ -8,12 +8,14 @@
             <axisBinding>y</axisBinding>
             <column>RowCount</column>
         </chartSummaries>
-        <chartType>HorizontalBar</chartType>
+        <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>ProgramEngagement__c.ProgramCohort__c</groupingColumn>
+        <groupingColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service_Provider__c</groupingColumn>
+        <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <showAxisLabels>false</showAxisLabels>
+        <secondaryGroupingColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service__c</secondaryGroupingColumn>
+        <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
         <showValues>false</showValues>
@@ -28,41 +30,39 @@
         <field>CUST_NAME</field>
     </columns>
     <columns>
-        <field>FK_NAME</field>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%DeliveryDate__c</field>
     </columns>
-    <description>For use on Program record home</description>
-    <filter>
-        <criteriaItems>
-            <column>ProgramEngagement__c.Stage__c</column>
-            <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
-            <operator>equals</operator>
-            <value>Enrolled</value>
-        </criteriaItems>
-        <language>en_US</language>
-    </filter>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Quantity__c</field>
+    </columns>
+    <columns>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%UnitOfMeasurement__c</field>
+    </columns>
+    <description>Which Services did Service Providers spend their time on last month?</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>ProgramEngagement__c.ProgramCohort__c</field>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service_Provider__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <groupingsDown>
-        <field>ProgramEngagement__c.StartDate__c</field>
+        <dateGranularity>Day</dateGranularity>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Clients Enrolled This Month</name>
+    <name>Service Deliveries by Provider LastMonth</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>CustomEntity$ProgramEngagement__c@ProgramEngagement__c.Program__c</reportType>
+    <reportType>CustomEntity$%%%NAMESPACE%%%ServiceDelivery__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>ProgramEngagement__c.StartDate__c</dateColumn>
-        <interval>INTERVAL_THISMONTH</interval>
+        <dateColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%DeliveryDate__c</dateColumn>
+        <interval>INTERVAL_LASTMONTH</interval>
     </timeFrameFilter>
 </Report>

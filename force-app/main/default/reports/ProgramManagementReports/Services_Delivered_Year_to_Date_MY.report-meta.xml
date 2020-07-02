@@ -4,6 +4,7 @@
         <aggregateTypes>Sum</aggregateTypes>
         <field>ServiceDelivery__c.Quantity__c</field>
     </columns>
+    <description>Used on PMM Home Page</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>

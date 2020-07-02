@@ -8,11 +8,13 @@
             <axisBinding>y</axisBinding>
             <column>RowCount</column>
         </chartSummaries>
-        <chartType>HorizontalBar</chartType>
+        <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>ProgramEngagement__c.ProgramCohort__c</groupingColumn>
+        <groupingColumn>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%Stage__c</groupingColumn>
+        <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
+        <secondaryGroupingColumn>FK_NAME</secondaryGroupingColumn>
         <showAxisLabels>false</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -21,6 +23,7 @@
         <summaryAxisRange>Auto</summaryAxisRange>
         <textColor>#000000</textColor>
         <textSize>12</textSize>
+        <title>All Program Engagements by Stage</title>
         <titleColor>#000000</titleColor>
         <titleSize>18</titleSize>
     </chart>
@@ -28,41 +31,44 @@
         <field>CUST_NAME</field>
     </columns>
     <columns>
-        <field>FK_NAME</field>
+        <field>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%Contact__c</field>
     </columns>
-    <description>For use on Program record home</description>
-    <filter>
-        <criteriaItems>
-            <column>ProgramEngagement__c.Stage__c</column>
-            <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
-            <operator>equals</operator>
-            <value>Enrolled</value>
-        </criteriaItems>
-        <language>en_US</language>
-    </filter>
+    <columns>
+        <field>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%ApplicationDate__c</field>
+    </columns>
+    <columns>
+        <field>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%StartDate__c</field>
+    </columns>
+    <columns>
+        <field>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%EndDate__c</field>
+    </columns>
+    <columns>
+        <field>CUST_OWNER_NAME</field>
+    </columns>
+    <description>How are Program Engagements progressing through the stages of our Programs?</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>ProgramEngagement__c.ProgramCohort__c</field>
-        <sortOrder>Asc</sortOrder>
+        <field>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%Stage__c</field>
+        <sortOrder>Desc</sortOrder>
     </groupingsDown>
     <groupingsDown>
-        <field>ProgramEngagement__c.StartDate__c</field>
+        <dateGranularity>Day</dateGranularity>
+        <field>FK_NAME</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Clients Enrolled This Month</name>
+    <name>All Program Engagements by Stage</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>CustomEntity$ProgramEngagement__c@ProgramEngagement__c.Program__c</reportType>
+    <reportType>CustomEntity$%%%NAMESPACE%%%ProgramEngagement__c@%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%Program__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>ProgramEngagement__c.StartDate__c</dateColumn>
-        <interval>INTERVAL_THISMONTH</interval>
+        <dateColumn>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%ApplicationDate__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

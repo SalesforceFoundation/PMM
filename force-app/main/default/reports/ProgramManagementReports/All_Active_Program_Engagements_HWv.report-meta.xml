@@ -3,9 +3,11 @@
     <columns>
         <field>CUST_NAME</field>
     </columns>
+    <description>Used on PMM Home Page</description>
     <filter>
         <criteriaItems>
             <column>ProgramEngagement__c.Stage__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value>Active</value>

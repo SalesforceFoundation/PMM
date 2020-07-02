@@ -319,3 +319,8 @@ plans:
                     name: "Deploy Program Management Profile"
                 options:
                     unmanaged: False
+            4:
+                task: deploy_post
+                ui_options:
+                    reports:
+                        name: "Deploy Folder of Unmanaged Reports"

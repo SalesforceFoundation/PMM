@@ -27,10 +27,11 @@
     <columns>
         <field>CUST_NAME</field>
     </columns>
-    <description>Clients Enrolled This Month by Program</description>
+    <description>Which Programs have Clients been enrolling in this month? Used on sample PMM Dashboard.</description>
     <filter>
         <criteriaItems>
             <column>ProgramEngagement__c.Stage__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value>Enrolled</value>

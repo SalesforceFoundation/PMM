@@ -77,7 +77,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Missing SObject Type</shortDescription>
-        <value>*Your query must include an object.</value>
+        <value>Your query must include an object.</value>
     </labels>
     <labels>
         <fullName>New_Program_Engagement</fullName>
@@ -170,14 +170,14 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Service Deliveries Added</shortDescription>
-        <value>Service Deliveries Added.</value>
+        <value>Service Deliveries added.</value>
     </labels>
     <labels>
         <fullName>Service_Delivery_Contact_Without_Programs</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Warning message when a selected contact has no programs related.</shortDescription>
-        <value>To save a Service Delivery, first enroll this Client in a Program with active Services.</value>
+        <value>To save a Service Delivery, first enroll this client in a Program with active Services.</value>
     </labels>
     <labels>
         <fullName>Success</fullName>

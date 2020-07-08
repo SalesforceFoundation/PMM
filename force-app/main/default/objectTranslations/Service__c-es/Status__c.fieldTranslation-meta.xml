@@ -15,7 +15,7 @@
         <translation>Completado</translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Cancelled</masterLabel>
+        <masterLabel>Canceled</masterLabel>
         <translation>Cancelado</translation>
     </picklistValues>
 </CustomFieldTranslation>

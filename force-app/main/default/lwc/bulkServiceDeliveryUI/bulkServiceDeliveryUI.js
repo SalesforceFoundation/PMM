@@ -35,6 +35,7 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Default";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
+const UNSUPPORTED_FIELD_TYPES = ["TIME"];
 const LATITUDE_SUFFIX = "Latitude__s";
 const LONGITUDE_SUFFIX = "Longitude__s";
 const CUSTOM_FIELD_SUFFIX = "c";
@@ -128,28 +129,32 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     configureFieldSet(fieldSet) {
         this.checkFieldsExists(fieldSet);
         let locationFields = [];
-        let indexOfDuplicateLocationReference = [];
 
-        fieldSet.forEach((field, index) => {
+        let index = fieldSet.length;
+
+        while (index > 0) {
+            index--;
+            let field = fieldSet[index];
             field.disabled = true;
             field.isQuantityField = field.apiName === this.fields.quantity.fieldApiName;
 
-            // If both lat and long are in the field set we need to dedupe
+            if (UNSUPPORTED_FIELD_TYPES.includes(field.type)) {
+                fieldSet.splice(index, 1);
+                continue;
+            }
+
             if (this.processLocationField(field)) {
-                if (locationFields.indexOf(field.apiName)) {
-                    indexOfDuplicateLocationReference.push(index);
-                } else {
-                    locationFields.push(field.apiName);
+                // If both lat and long are in the field set we need to dedupe
+                if (locationFields.includes(field.apiName)) {
+                    fieldSet.splice(index, 1);
+                    continue;
                 }
+                locationFields.push(field.apiName);
             }
             this.setSize(field);
             this.processRequiredFields(field);
-            this.fieldSet.push(field);
-        });
-
-        indexOfDuplicateLocationReference.forEach(index =>
-            this.fieldSet.splice(index, 1)
-        );
+            this.fieldSet.unshift(field);
+        }
     }
 
     processLocationField(field) {
@@ -196,7 +201,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     setSize(field) {
         if (SHORT_DATA_TYPES.includes(field.type)) {
             field.size = 1;
-        } else if (field.apiName === this.fields.programEngagement.fieldApiName) {
+        } else if (
+            field.apiName === this.fields.programEngagement.fieldApiName &&
+            field.isAccessible
+        ) {
             field.size = 4;
         } else if (field.apiName === this.fields.contact.fieldApiName) {
             field.size = 3;

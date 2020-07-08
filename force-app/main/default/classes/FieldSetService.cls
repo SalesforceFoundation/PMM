@@ -38,6 +38,10 @@ public with sharing class FieldSetService {
         }
 
         for (Schema.FieldSetMember field : fieldSet.fields) {
+            if (field.getFieldPath().contains('.')) {
+                continue;
+            }
+
             fields.add(getFieldForLWC(field));
         }
 
@@ -59,7 +63,8 @@ public with sharing class FieldSetService {
             'label' => label,
             'type' => field.getType().name(),
             'isRequired' => !field.getSObjectField().getDescribe().isNillable(),
-            'helpText' => field.getSObjectField().getDescribe().getInlineHelpText()
+            'helpText' => field.getSObjectField().getDescribe().getInlineHelpText(),
+            'isAccessible' => field.getSObjectField().getDescribe().isAccessible()
         };
     }
 }

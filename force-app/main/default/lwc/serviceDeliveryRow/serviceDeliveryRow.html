@@ -89,6 +89,12 @@
                                                     ></lightning-input-field>
                                                 </template>
                                             </template>
+                                            <div
+                                                class="slds-text-color_error"
+                                                if:false={field.isAccessible}
+                                            >
+                                                {labels.fieldAccessError}
+                                            </div>
                                         </div>
                                     </lightning-layout-item>
                                 </template>

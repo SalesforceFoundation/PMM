@@ -91,3 +91,9 @@ API Create Account
     ...                     &{fields}
     &{account} =        Salesforce Get  Account  ${account_id}
     [Return]            &{account}
+
+Capture Screenshot and Delete Records and Close Browser
+    [Documentation]         This keyword will capture a screenshot before closing the browser and deleting records when test fails
+    Run Keyword If Any Tests Failed      Capture Page Screenshot
+    Close Browser
+    Delete Session Records

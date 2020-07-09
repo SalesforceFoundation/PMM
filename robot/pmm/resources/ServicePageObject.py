@@ -30,6 +30,6 @@ class NewServicePage(BasePMMPage, BasePage):
         )
 
 
-@pageobject("Details", "Service")
+@pageobject("Details", "Service__c")
 class ServiceDetailPage(BasePMMPage, DetailPage):
      object_name = "Service"

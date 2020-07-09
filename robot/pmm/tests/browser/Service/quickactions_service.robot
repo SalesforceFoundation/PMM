@@ -3,8 +3,8 @@
 Resource        robot/pmm/resources/pmm.robot
 Library         cumulusci.robotframework.PageObjects
 ...             robot/pmm/resources/pmm.py
-...             robot/pmm/resources/ProgramEngagementPageObject.py
 ...             robot/pmm/resources/ServiceDeliveryPageObject.py
+...             robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
@@ -19,12 +19,15 @@ Setup Test Data
     Set suite variable          &{program}
     &{contact} =                API Create Contact
     Set suite variable          &{contact}
-    &{contact1} =               API Create Contact
-    Set suite variable          &{contact1}
-    &{program_engagement} =     API Create Program Engagement   ${Program}[Id]      ${contact}[Id]
-    Set suite variable          &{program_engagement}
     &{service} =                API Create Service              ${Program}[Id]
     Set suite variable          &{service}
+    &{program_engagement} =     API Create Program Engagement   ${Program}[Id]      ${contact}[Id]
+    Set suite variable          &{program_engagement}
+
+    &{program1} =               API Create Program
+    Set suite variable          &{program1}
+    &{program_engagement1} =    API Create Program Engagement   ${Program1}[Id]      ${contact}[Id]
+    Set suite variable          &{program_engagement1}
 
     ${today} =                  Get Current Date                result_format=%Y-%m-%d
     Set suite variable          ${today}
@@ -32,39 +35,40 @@ Setup Test Data
     Set suite variable          ${quantity}
 
 *** Test Cases ***
-Create a new service delivery using quick action
-     [Documentation]                This test loads the program engagement record, clicks on the new service delivery quick action and creates
+Create a new service delivery on service using quick action
+     [Documentation]                This test loads the service record, clicks on the new service delivery quick action and creates
      ...                            new service delivery record.
-     [tags]                         W-037572  feature:Service Delivery
+     [tags]                         W-042516  feature:Service Delivery
      Go To PMM App
-     Go To Page                     Details                        ${ns}ProgramEngagement__c      object_id=${program_engagement}[Id]
-     Verify Details                 Program Engagement Name        contains                       ${contact}[FirstName] ${contact}[LastName] ${today}: ${program}[Name]
+     Go To Page                     Details                        ${ns}Service__c           object_id=${service}[Id]
+     Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery
      Load Page Object               NewServiceDelivery             ${ns}ServiceDelivery__c
      Verify Current Page Title      Create New Service Delivery
      Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
-     ...                            Service=${service}[Name]
+     ...                            Program Engagement=${program_engagement}[Name]
      ...                            Quantity=${quantity}
      Click Modal Button             Save
      Wait Until Modal Is Closed
-     Verify Page Header             Program Engagement
+     Verify Page Header             Service
      Load Related List              Service Deliveries
      Click New Related Record Link  ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
-     Verify Details                 Service Delivery Name       contains    ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
+     Verify Details                 Service Delivery Name      contains     ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
      ${servicedelivery_id} =        Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
      ${service_id} =                Save Current Record ID For Deletion     ${ns}Service__c
      ${programengagement_id} =      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
-Validate contact on quick action dialog
+Validate service and program engagement lookup to same program
      [Documentation]                This test loads the program engagement record, clicks on the new service delivery quick action and
-     ...                            validates an error message is displayed when a contact not listed on program engagement is entered
+     ...                            validates an error message is displayed when service and program engagement do not lookup to the same program
      [tags]                         W-042516  feature:Service Delivery
-     Go To Page                     Details                        ${ns}ProgramEngagement__c     object_id=${program_engagement}[Id]
-     Verify Details                 Program Engagement Name        contains                      ${contact}[FirstName] ${contact}[LastName] ${today}: ${program}[Name]
+     Go To Page                     Details                        ${ns}Service__c           object_id=${service}[Id]
+     Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery
-     Load Page Object               NewServiceDelivery   ${ns}ServiceDelivery__c
+     Load Page Object               NewServiceDelivery             ${ns}ServiceDelivery__c
      Verify Current Page Title      Create New Service Delivery
-     Populate Modal Form            Client=${contact1}[FirstName] ${contact1}[LastName]
-     ...                            Service=${service}[Name]
+     Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
+     ...                            Program Engagement=${program_engagement1}[Name]
+     ...                            Quantity=${quantity}
      Click Modal Button             Save
-     Verify Modal Error             Contact must match the Contact in the Program Engagement.
+     verify modal Error             Select a Program Engagement that matches the Program of the related Service.

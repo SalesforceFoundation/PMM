@@ -81,3 +81,13 @@ API Create Program Cohort
     &{program_cohort} =       Salesforce Get  ${ns}ProgramCohort__c  ${program_cohort_id}
     Store Session Record      ${ns}ProgramCohort__c  ${program_cohort_id}
     [Return]                  &{program_cohort}
+
+API Create Account
+    [Documentation]     Creates a new account. Account details are passed as key value pairs.
+    [Arguments]         &{fields}
+    ${account_name} =   Generate Random String
+    ${account_id} =     Salesforce Insert  Account
+    ...                     Name=${account_name}
+    ...                     &{fields}
+    &{account} =        Salesforce Get  Account  ${account_id}
+    [Return]            &{account}

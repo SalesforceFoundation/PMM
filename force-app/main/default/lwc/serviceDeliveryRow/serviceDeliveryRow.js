@@ -347,6 +347,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
         if (
+            event.detail.fields[this.fields.unitOfMeasurement.fieldApiName] &&
             event.detail.fields[this.fields.unitOfMeasurement.fieldApiName].value !== null
         ) {
             this.unitOfMeasureValue =

@@ -15,7 +15,7 @@
         <translation>完了</translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Cancelled</masterLabel>
+        <masterLabel>Canceled</masterLabel>
         <translation>キャンセル</translation>
     </picklistValues>
 </CustomFieldTranslation>

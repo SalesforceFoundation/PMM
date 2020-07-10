@@ -35,11 +35,6 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Default";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
-const UNSUPPORTED_FIELD_TYPES = ["TIME"];
-const LATITUDE_SUFFIX = "Latitude__s";
-const LONGITUDE_SUFFIX = "Longitude__s";
-const CUSTOM_FIELD_SUFFIX = "c";
-const LOCATION = "location";
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
@@ -128,89 +123,49 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     configureFieldSet(fieldSet) {
         this.checkFieldsExists(fieldSet);
-        let locationFields = [];
-
-        let index = fieldSet.length;
-
-        while (index > 0) {
-            index--;
-            let field = fieldSet[index];
+        fieldSet.forEach(field => {
             field.disabled = true;
-            field.isQuantityField = field.apiName === this.fields.quantity.fieldApiName;
-
-            if (UNSUPPORTED_FIELD_TYPES.includes(field.type)) {
-                fieldSet.splice(index, 1);
-                continue;
+            field.isQuantityField = false;
+            // Number fields are size 1
+            // Program Engagment lookup is size 4
+            // Client lookup is size 3
+            // Everything else is size 2
+            // This means that the field set we ship with is exactly 12 wide
+            if (SHORT_DATA_TYPES.includes(field.type)) {
+                field.size = 1;
+            } else if (field.apiName === this.fields.programEngagement.fieldApiName) {
+                field.size = 4;
+            } else if (field.apiName === this.fields.contact.fieldApiName) {
+                field.size = 3;
+            } else {
+                field.size = 2;
             }
 
-            if (this.processLocationField(field)) {
-                // If both lat and long are in the field set we need to dedupe
-                if (locationFields.includes(field.apiName)) {
-                    fieldSet.splice(index, 1);
-                    continue;
-                }
-                locationFields.push(field.apiName);
+            if (
+                this.hasContactField &&
+                field.apiName === this.fields.contact.fieldApiName
+            ) {
+                field.disabled = false;
+                field.isRequired = true;
+            } else if (
+                !this.hasContactField &&
+                this.hasProgramEngagementField &&
+                field.apiName === this.fields.programEngagement.fieldApiName
+            ) {
+                field.disabled = false;
+                field.isRequired = true;
+            } else if (
+                !this.hasContactField &&
+                !this.hasProgramEngagementField &&
+                field.apiName === this.fields.service.fieldApiName
+            ) {
+                field.disabled = false;
+                field.isRequired = true;
+            } else if (field.apiName === this.fields.quantity.fieldApiName) {
+                field.isQuantityField = true;
             }
-            this.setSize(field);
-            this.processRequiredFields(field);
-            this.fieldSet.unshift(field);
-        }
-    }
-
-    processLocationField(field) {
-        if (
-            !field.apiName.endsWith(LATITUDE_SUFFIX) &&
-            !field.apiName.endsWith(LONGITUDE_SUFFIX)
-        ) {
-            return false;
-        }
-
-        field.apiName = field.apiName
-            .replace(LATITUDE_SUFFIX, CUSTOM_FIELD_SUFFIX)
-            .replace(LONGITUDE_SUFFIX, CUSTOM_FIELD_SUFFIX);
-        field.type = LOCATION;
-        return true;
-    }
-
-    processRequiredFields(field) {
-        if (this.hasContactField && field.apiName === this.fields.contact.fieldApiName) {
-            field.disabled = false;
-            field.isRequired = true;
-        } else if (
-            !this.hasContactField &&
-            this.hasProgramEngagementField &&
-            field.apiName === this.fields.programEngagement.fieldApiName
-        ) {
-            field.disabled = false;
-            field.isRequired = true;
-        } else if (
-            !this.hasContactField &&
-            !this.hasProgramEngagementField &&
-            field.apiName === this.fields.service.fieldApiName
-        ) {
-            field.disabled = false;
-            field.isRequired = true;
-        }
-    }
-
-    // Number fields are size 1
-    // Program Engagment lookup is size 4
-    // Client lookup is size 3
-    // Everything else is size 2
-    // This means that the field set we ship with is exactly 12 wide
-    setSize(field) {
-        if (SHORT_DATA_TYPES.includes(field.type)) {
-            field.size = 1;
-        } else if (
-            field.apiName === this.fields.programEngagement.fieldApiName &&
-            field.isAccessible
-        ) {
-            field.size = 4;
-        } else if (field.apiName === this.fields.contact.fieldApiName) {
-            field.size = 3;
-        } else {
-            field.size = 2;
-        }
+            this.fieldSet.push(field);
+        });
     }
 
     addDelivery() {

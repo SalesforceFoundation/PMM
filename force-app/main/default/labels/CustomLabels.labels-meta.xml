@@ -216,7 +216,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Unsupported Field Error</shortDescription>
-        <value>You do not have permission to access this field.</value>
+        <value>You can't access this field. Your Salesforce admin can help with that.</value>
     </labels>
     <labels>
         <fullName>Warning</fullName>

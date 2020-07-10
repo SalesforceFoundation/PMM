@@ -21,7 +21,7 @@
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
-    <description>This fieldset will be used in the BSDT modal to create a new program engagement record from there.</description>
+    <description>This field set will be used in Bulk Service Deliveries tab to create a new Program Engagement.</description>
     <displayedFields>
         <field>Contact__c</field>
         <isFieldManaged>false</isFieldManaged>

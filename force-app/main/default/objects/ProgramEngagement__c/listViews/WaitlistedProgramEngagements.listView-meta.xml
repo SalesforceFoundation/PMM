@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WaitlistedProgramEngagements</fullName>
+    <columns>NAME</columns>
+    <columns>Contact__c</columns>
+    <columns>Program__c</columns>
+    <columns>Stage__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Stage__c</field>
+        <operation>equals</operation>
+        <value>Waitlisted</value>
+    </filters>
+    <label>Waitlisted Program Engagements</label>
+</ListView>

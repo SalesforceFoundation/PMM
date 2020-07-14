@@ -37,8 +37,7 @@ Create a Service Delivery via UI
     Go To PMM App
     Go To Page                             Listing                                 ${ns}ServiceDelivery__c
     Click Object Button                    New
-    Load Page Object                       NewServiceDelivery                      ${ns}ServiceDelivery__c
-    Verify Current Page Title              New Service Delivery
+    Wait For Modal                         New                                     Service Delivery
     Populate Modal Form                    Service Delivery Name=${service_delivery_name}
     ...                                    Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
@@ -53,18 +52,14 @@ Create a Service Delivery via UI
     Verify Details                         Program Engagement                      contains             ${program_engagement}[Name]
     Page Should Not Contain                ${service_delivery_name}
     Verify Page Contains Related List      Files
-    ${service_delivery_id} =               Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
-    ${service_id} =                        Save Current Record ID For Deletion     ${ns}Service__c
-    ${program_engagement_id} =             Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
-
+    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
 
 Create a Service Delivery via UI with Auto Name Override
     [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
     ...                                    has all the values from the form
     Go To Page                             Listing                                ${ns}ServiceDelivery__c
     Click Object Button                    New
-    Load Page Object                       NewServiceDelivery                     ${ns}ServiceDelivery__c
-    Verify Current Page Title              New Service Delivery
+    Wait For Modal                         New                                    Service Delivery
     Populate Modal Form                    Service Delivery Name=${service_delivery_name}
     ...                                    Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
@@ -77,9 +72,7 @@ Create a Service Delivery via UI with Auto Name Override
     Verify Page Header                     Service Delivery
     Verify Details                         Service Delivery Name                   contains             ${service_delivery_name}
     Verify Page Contains Related List      Files
-    ${service_delivery_id} =               Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
-    ${service_id} =                        Save Current Record ID For Deletion     ${ns}Service__c
-    ${program_engagement_id} =             Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
+    Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
 
 Validate contact and account lookup to the same household
     [Documentation]                        This test loads the new service delivery dialog and validates that an error message is displayed

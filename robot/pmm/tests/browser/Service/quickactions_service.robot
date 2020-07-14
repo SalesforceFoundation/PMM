@@ -40,10 +40,9 @@ Create a new service delivery on service using quick action
      ...                            new service delivery record.
      [tags]                         W-042516  feature:Service Delivery
      Go To PMM App
-     Go To Page                     Details                        ${ns}Service__c           object_id=${service}[Id]
+     Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery
-     Load Page Object               NewServiceDelivery             ${ns}ServiceDelivery__c
      Verify Current Page Title      Create New Service Delivery
      Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
      ...                            Program Engagement=${program_engagement}[Name]
@@ -54,18 +53,15 @@ Create a new service delivery on service using quick action
      Load Related List              Service Deliveries
      Click New Related Record Link  ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
      Verify Details                 Service Delivery Name      contains     ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
-     ${servicedelivery_id} =        Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
-     ${service_id} =                Save Current Record ID For Deletion     ${ns}Service__c
-     ${programengagement_id} =      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
+     Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
 
 Validate service and program engagement lookup to same program
      [Documentation]                This test loads the program engagement record, clicks on the new service delivery quick action and
      ...                            validates an error message is displayed when service and program engagement do not lookup to the same program
      [tags]                         W-042516  feature:Service Delivery
-     Go To Page                     Details                        ${ns}Service__c           object_id=${service}[Id]
+     Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery
-     Load Page Object               NewServiceDelivery             ${ns}ServiceDelivery__c
      Verify Current Page Title      Create New Service Delivery
      Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
      ...                            Program Engagement=${program_engagement1}[Name]

@@ -11,9 +11,9 @@ from pmm_locators import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
-@pageobject("Listing", "ServiceDelivery")
+@pageobject("Listing", "ServiceDelivery__c")
 class ServiceDeliveryListingPage(BasePMMPage, ListingPage):
-    object_name = "ServiceDelivery"
+    object_name = "ServiceDelivery__c"
 
 
 @pageobject("NewServiceDelivery", "ServiceDelivery__c")

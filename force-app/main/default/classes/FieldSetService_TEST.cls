@@ -128,9 +128,11 @@ public with sharing class FieldSetService_TEST {
     @IsTest
     private static void shouldReturnUILabel() {
         Map<DescribeFieldResult, String> expectedLabelByField = new Map<DescribeFieldResult, String>{
-            SObjectType.Contact.fields.AccountId => 'Account Name',
-            SObjectType.Opportunity.fields.ContactId => 'Full Name',
-            SObjectType.Account.fields.OwnerId => 'Owner'
+            SObjectType.Contact.fields.AccountId => Schema.Account.Name.getDescribe()
+                .getLabel(),
+            SObjectType.Opportunity.fields.ContactId => Schema.Contact.Name.getDescribe()
+                .getLabel(),
+            SObjectType.Account.fields.OwnerId => System.Label.Owner_Field
         };
 
         for (DescribeFieldResult field : expectedLabelByField.keySet()) {

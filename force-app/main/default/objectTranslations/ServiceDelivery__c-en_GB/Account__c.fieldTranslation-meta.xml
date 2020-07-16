@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Account__c</name>
-    <help>Select the Household Account if the Service Delivery benefits members of the Contact&#39;s Household Account. For example, meals from a food bank. If it benefits only one Contact, leave blank.</help>
+    <help>Select the Household Account if the Service Delivery benefits members of the Contact&apos;s Household Account. For example, meals from a food bank. If it benefits only one Contact, leave blank.</help>
     <relationshipLabel>Service Deliveries</relationshipLabel>
     <label>Household Account</label>
 </CustomFieldTranslation>

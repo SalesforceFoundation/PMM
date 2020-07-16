@@ -46,7 +46,8 @@ Create a Service Delivery via UI
     ...                                    Quantity=${quantity}
     Click Modal Button                     Save
     Wait Until Modal Is Closed
-    Verify Page Header                     Service Delivery
+    Current Page Should Be                 Details                                 ServiceDelivery__c
+    #Verify Page Header                     Service Delivery
     Verify Details                         Quantity                                contains             ${quantity}
     Verify Details                         Service                                 contains             ${service}[Name]
     Verify Details                         Program Engagement                      contains             ${program_engagement}[Name]
@@ -55,8 +56,8 @@ Create a Service Delivery via UI
     Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
 
 Create a Service Delivery via UI with Auto Name Override
-    [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
-    ...                                    has all the values from the form
+    [Documentation]                        This test creates Service Delivery record with auto name override selected and verifies
+    ...                                    user entered name is saved as the service delivery name
     Go To Page                             Listing                                ${ns}ServiceDelivery__c
     Click Object Button                    New
     Wait For Modal                         New                                    Service Delivery
@@ -69,7 +70,8 @@ Create a Service Delivery via UI with Auto Name Override
     ...                                    Auto-name Override=checked
     Click Modal Button                     Save
     Wait Until Modal Is Closed
-    Verify Page Header                     Service Delivery
+    Current Page Should Be                 Details                                 ServiceDelivery__c
+   # Verify Page Header                     Service Delivery
     Verify Details                         Service Delivery Name                   contains             ${service_delivery_name}
     Verify Page Contains Related List      Files
     Save Current Record ID For Deletion    ${ns}ServiceDelivery__c

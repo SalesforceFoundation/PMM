@@ -43,13 +43,12 @@ Create a new service delivery on service using quick action
      Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery
-     Verify Current Page Title      Create New Service Delivery
      Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
      ...                            Program Engagement=${program_engagement}[Name]
      ...                            Quantity=${quantity}
      Click Modal Button             Save
      Wait Until Modal Is Closed
-     Verify Page Header             Service
+     Current Page Should Be         Details                        Service__c
      Load Related List              Service Deliveries
      Click New Related Record Link  ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
      Verify Details                 Service Delivery Name      contains     ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
@@ -62,7 +61,6 @@ Validate service and program engagement lookup to same program
      Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery
-     Verify Current Page Title      Create New Service Delivery
      Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
      ...                            Program Engagement=${program_engagement1}[Name]
      ...                            Quantity=${quantity}

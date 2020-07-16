@@ -5,10 +5,11 @@
         <backgroundColor2>#FFFFFF</backgroundColor2>
         <backgroundFadeDir>Diagonal</backgroundFadeDir>
         <chartSummaries>
+            <aggregate>Sum</aggregate>
             <axisBinding>y</axisBinding>
-            <column>RowCount</column>
+            <column>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Quantity__c</column>
         </chartSummaries>
-        <chartType>VerticalColumnStacked</chartType>
+        <chartType>HorizontalBarStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
         <groupingColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service_Provider__c</groupingColumn>

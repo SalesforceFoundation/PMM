@@ -11,9 +11,9 @@ from pmm_locators import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
-@pageobject("Listing", "ServiceDelivery")
+@pageobject("Listing", "ServiceDelivery__c")
 class ServiceDeliveryListingPage(BasePMMPage, ListingPage):
-    object_name = "ServiceDelivery"
+    object_name = "ServiceDelivery__c"
 
 
 @pageobject("NewServiceDelivery", "ServiceDelivery__c")
@@ -45,4 +45,4 @@ class ServiceDeliveryDetailPage(BasePMMPage, DetailPage):
             "/lightning/r/ServiceDelivery__c/",
             message="Current page is not a Service Delivery record detail view",
         )
-
+        self.selenium.wait_until_page_contains("Service Delivery Name")

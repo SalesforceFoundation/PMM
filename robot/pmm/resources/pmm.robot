@@ -81,3 +81,19 @@ API Create Program Cohort
     &{program_cohort} =       Salesforce Get  ${ns}ProgramCohort__c  ${program_cohort_id}
     Store Session Record      ${ns}ProgramCohort__c  ${program_cohort_id}
     [Return]                  &{program_cohort}
+
+API Create Account
+    [Documentation]     Creates a new account. Account details are passed as key value pairs.
+    [Arguments]         &{fields}
+    ${account_name} =   Generate Random String
+    ${account_id} =     Salesforce Insert  Account
+    ...                     Name=${account_name}
+    ...                     &{fields}
+    &{account} =        Salesforce Get  Account  ${account_id}
+    [Return]            &{account}
+
+Capture Screenshot and Delete Records and Close Browser
+    [Documentation]         This keyword will capture a screenshot before closing the browser and deleting records when test fails
+    Run Keyword If Any Tests Failed      Capture Page Screenshot
+    Close Browser
+    Delete Session Records

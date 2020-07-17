@@ -33,7 +33,7 @@ import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
-const FIELD_SET_NAME = "Default";
+const FIELD_SET_NAME = "Bulk_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 const LONG_DATA_TYPES = ["TEXTAREA"];
 

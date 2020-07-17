@@ -138,13 +138,17 @@ class pmm(object):
             )
 
     def click_quick_action_button(self, title):
-        """ Click on quick action buttons """
+        """ Click on quick action buttons and verifies the title of the quick action dialog """
         locator = pmm_lex_locators["quick_actions"].format(title)
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
         )
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
+        locator_title = pmm_lex_locators["new_record"]["title"].format(title)
+        self.selenium.wait_until_page_contains_element(
+            locator, error="Section title is not as expected"
+        )
 
     def verify_current_page_title(self, label):
         """ Verify we are on the page

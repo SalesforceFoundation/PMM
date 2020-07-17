@@ -44,7 +44,7 @@ pmm_lex_locators = {
     },
     "quick_actions":"//button[@class='slds-button slds-button_neutral' and text()='{}']",
     "listview_link":"//a[contains(@class,'slds-truncate') and text()='{}']",
-    "toast_msg":"//div[@class='slds-truncate' and text()='{}']",
+    "toast_msg":"//div[@class='slds-truncate' and contains(text(),'{}')]",
 
     "bulk_service_delivery_locators": {
         "page_header": "//header[contains(@class,'flexipageHeader')]//h2[@class='truncate' and text()='{}']",

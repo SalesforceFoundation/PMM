@@ -9,7 +9,7 @@ Library        cumulusci.robotframework.PageObjects
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
-Suite Teardown  Delete Records and Close Browser
+Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 
 *** Keywords ***
@@ -61,7 +61,7 @@ Create program engagement from BSDT
     verify persist save icon                Saved
     sleep                                   2s
     click button                            Done
-    click toast message                     1 Service Deliveries Added
+    click toast message                     1 Service Deliveries
     click listview link                     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
     verify page header                      Service Delivery
     verify details                          Service Delivery Name           contains     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]

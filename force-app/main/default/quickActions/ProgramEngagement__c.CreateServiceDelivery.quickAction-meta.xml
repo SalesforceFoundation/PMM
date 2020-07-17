@@ -8,6 +8,10 @@
         <field>Name</field>
         <formula>&quot;New Service Delivery&quot;</formula>
     </fieldOverrides>
+    <fieldOverrides>
+        <field>Contact__c</field>
+        <formula>%%%NAMESPACED_ORG%%%ProgramEngagement__c.%%%NAMESPACED_ORG%%%Contact__c</formula>
+    </fieldOverrides>
     <optionsCreateFeedItem>true</optionsCreateFeedItem>
     <quickActionLayout>
         <layoutSectionStyle>TwoColumnsLeftToRight</layoutSectionStyle>

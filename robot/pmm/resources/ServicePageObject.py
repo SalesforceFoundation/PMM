@@ -44,3 +44,4 @@ class ServiceDetailPage(BasePMMPage, DetailPage):
             "/lightning/r/Service__c/",
             message="Current page is not a Service Delivery record detail view",
         )
+        self.selenium.wait_until_page_contains("Service Name")

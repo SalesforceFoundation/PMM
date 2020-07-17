@@ -47,7 +47,6 @@ Create a Service Delivery via UI
     Click Modal Button                     Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
-    #Verify Page Header                     Service Delivery
     Verify Details                         Quantity                                contains             ${quantity}
     Verify Details                         Service                                 contains             ${service}[Name]
     Verify Details                         Program Engagement                      contains             ${program_engagement}[Name]
@@ -71,7 +70,6 @@ Create a Service Delivery via UI with Auto Name Override
     Click Modal Button                     Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
-   # Verify Page Header                     Service Delivery
     Verify Details                         Service Delivery Name                   contains             ${service_delivery_name}
     Verify Page Contains Related List      Files
     Save Current Record ID For Deletion    ${ns}ServiceDelivery__c

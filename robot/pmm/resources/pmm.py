@@ -123,19 +123,19 @@ class pmm(object):
         self.selenium.page_should_contain_element(locator)
 
     def verify_details(self, field, status, value):
-        """verify information on the account details page"""
-        locator = pmm_lex_locators["confirm"]["details"].format(field)
-        actual_value = self.selenium.get_webelement(locator).text
-        if status.upper() == "contains":
-            assert value == actual_value, "Expected value to be {} but found {}".format(
-                value, actual_value
-            )
-        elif status.upper() == "does not contain":
-            assert (
-                value != actual_value
-            ), "Expected value {} and actual value {} should not match".format(
-                value, actual_value
-            )
+        """If status is 'contains' then the specified value should be present in the field
+                        'does not contain' then the specified value should not be present in the field
+        """
+        locator = pmm_lex_locators["confirm"]["details"].format(field,value)
+        actual_value=self.selenium.get_webelement(locator).text
+        print(f"actual value is {actual_value}")
+        print(f"value is {value}")
+        if status == "contains":
+            assert value == actual_value, f"Expected value to be {value} but found {actual_value}"
+        elif status == "does not contain":
+            assert value != actual_value, f"Expected value {value} should not be {actual_value}"
+        else:
+            raise Exception("Valid status not entered")
 
     def click_quick_action_button(self, title):
         """ Click on quick action buttons and verifies the title of the quick action dialog """

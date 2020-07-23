@@ -19,7 +19,8 @@ pmm_lex_locators = {
     "page_header": "//div[contains(@class, 'slds-page-header')]/descendant::span[text()='{}}']",
     "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
     "confirm": {
-        "details": "//div[contains(@class, 'slds-form-element')][.//span[text()='{}']]//following-sibling::div[.//span[contains(@class, 'test-id__field-value')]]/span",
+    #    "details": "//div[contains(@class, 'slds-form-element')][.//span[text()='{}']]//following-sibling::div[.//span[contains(@class, 'test-id__field-value')]]/span",
+         "details":"//div[contains(@class, 'forcePageBlockItem') or contains(@class, 'slds-form-element_stacked')][.//span[text()='{}']]//following-sibling::div[.//span[contains(@class, 'test-id__field-value')]]//*[text()='{}']",
     },
     "new_record": {
         "label":"//div[./*/*[text()='{}']]",
@@ -40,11 +41,12 @@ pmm_lex_locators = {
     "related": {
         "button": "//article[contains(@class, 'forceRelatedListCardDesktop')][.//img][.//span[@title='{}']]//a[@title='{}']",
         "new_record_link": "//table[contains(@class,'forceRecordLayout')]/tbody/tr/th/div[contains(@class,'outputLookupContainer')]//a[contains(text(),'{}')]",
-        "related_list": "//span[contains(@class,'slds-card') and @title='{}']",
+        "related_list": "//a[contains(@class,'slds-card')]/span[contains(@class,'slds-truncate') and @title='{}']",
     },
     "quick_actions":"//button[@class='slds-button slds-button_neutral' and text()='{}']",
     "listview_link":"//a[contains(@class,'slds-truncate') and text()='{}']",
-    "toast_msg":"//div[@class='slds-truncate' and contains(text(),'{}')]",
+    #"toast_msg":"//div[@class='slds-truncate' and contains(text(),'{}')]",
+     "toast_msg":"//span[contains(@class,'toastMessage')]/a[@class='forceActionLink']/div[contains(@title,'{}')]",
 
     "bulk_service_delivery_locators": {
         "page_header": "//header[contains(@class,'flexipageHeader')]//h2[@class='truncate' and text()='{}']",

@@ -47,7 +47,6 @@ Create a Service Delivery via UI
     Click Modal Button                     Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
-    Verify Details                         Quantity                                contains             ${quantity}
     Verify Details                         Service                                 contains             ${service}[Name]
     Verify Details                         Program Engagement                      contains             ${program_engagement}[Name]
     Page Should Not Contain                ${service_delivery_name}

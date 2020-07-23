@@ -9,6 +9,7 @@ Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
 *** Keywords ***
 Setup Test Data
     ${ns} =                     Get PMM Namespace Prefix

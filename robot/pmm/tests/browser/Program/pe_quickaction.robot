@@ -23,7 +23,6 @@ Setup Test Data
     Set suite variable    &{program_cohort}
     ${result_date} =      Get Current Date                result_format=%Y-%m-%d
     Set suite variable    ${result_date}
-
     &{program1} =         API Create Program
     Set suite variable    &{program1}
     &{contact} =          API Create Contact

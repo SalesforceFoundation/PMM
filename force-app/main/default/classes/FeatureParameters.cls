@@ -326,7 +326,9 @@ public inherited sharing class FeatureParameters {
                             '\''
                         )
                         .addCondition(
-                            'Assignee.' +
+                            PermissionSetAssignment.AssigneeId.getDescribe()
+                                .getRelationshipName() +
+                            '.' +
                             String.valueOf(User.IsActive) +
                             ' = ' +
                             true

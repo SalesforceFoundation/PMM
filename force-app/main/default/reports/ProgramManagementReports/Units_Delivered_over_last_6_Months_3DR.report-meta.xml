@@ -35,7 +35,7 @@
     <columns>
         <field>ServiceDelivery__c.UnitOfMeasurement__c</field>
     </columns>
-    <description>For use on Service record home</description>
+    <description>How many Units were delivered over the last 6 months? (For use on Service record home.)</description>
     <filter>
         <booleanFilter>1 OR 2</booleanFilter>
         <criteriaItems>

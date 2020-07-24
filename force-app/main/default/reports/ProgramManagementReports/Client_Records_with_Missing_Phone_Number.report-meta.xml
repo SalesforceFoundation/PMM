@@ -15,7 +15,7 @@
     <columns>
         <field>PHONE1</field>
     </columns>
-    <description>To be used in a dashboard metric component for data hygiene</description>
+    <description>How many Client records are missing phone numbers? (To be used in a dashboard metric component for data hygiene.)</description>
     <filter>
         <criteriaItems>
             <column>PHONE1</column>

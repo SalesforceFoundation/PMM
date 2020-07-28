@@ -35,7 +35,7 @@
     <columns>
         <field>ServiceDelivery__c.UnitOfMeasurement__c</field>
     </columns>
-    <description>For use on Service record home</description>
+    <description>How does the Quantity of Service Deliveries this month compare to previous months? (Used on Service Record Home)</description>
     <filter>
         <booleanFilter>1 OR 2</booleanFilter>
         <criteriaItems>

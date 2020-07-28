@@ -15,7 +15,7 @@
     <columns>
         <field>PHONE1</field>
     </columns>
-    <description>To be used in a dashboard metric component for data hygiene</description>
+    <description>How many Client records are missing phone numbers? (Used on PMM Home Page)</description>
     <filter>
         <criteriaItems>
             <column>PHONE1</column>
@@ -37,7 +37,7 @@
         <field>ADDRESS2_COUNTRY</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Client Records with Missing Phone Number</name>
+    <name>Client Records Missing Phone Number</name>
     <params>
         <name>co</name>
         <value>1</value>

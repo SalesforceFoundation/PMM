@@ -30,7 +30,7 @@
     <columns>
         <field>FK_NAME</field>
     </columns>
-    <description>For use on Program record home</description>
+    <description>How many clients are in Enrolled status who started the program this month? (Used on Program record home)</description>
     <filter>
         <criteriaItems>
             <column>ProgramEngagement__c.Stage__c</column>

@@ -8,7 +8,7 @@ Library        cumulusci.robotframework.PageObjects
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
-Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+#Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
@@ -20,15 +20,16 @@ Setup Test Data
     Set suite variable             &{contact}
     &{program} =                   API Create Program
     Set suite variable             &{program}
-    ${today} =                     Get Current Date                result_format=%m/%d/%Y
+    ${today} =                     Get Current Date               result_format=%-m/%-d/%Y
     Set suite variable             ${today}
     ${created_date} =              Get Current Date               result_format=%Y-%m-%d
     Set suite variable             ${created_date}
 
 *** Test Cases ***
 Autopopulate fields when stage is set to Applied
-     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-     [tags]                                  W-037565   feature:Program Engagement
+     [Documentation]                         Autopopulates application date and PE name with anonymous when the stage is set as 
+     ...                                     applied on new program engagment dialog
+     [tags]                                  W-037569   feature:Program Engagement
      Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
@@ -44,27 +45,10 @@ Autopopulate fields when stage is set to Applied
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
     
-Autopopulate fields when stage is set to Active
-     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-     [tags]                                  W-037565   feature:Program Engagement
-     Go To PMM App
-     Go To Page                              Listing                         ${ns}ProgramEngagement__c
-     Click Object Button                     New
-     Wait For Modal                          New                             Program Engagement
-     Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
-     ...                                     Stage=Active
-     ...                                     Program=&{program}[Name]
-     ...                                     Role=Client
-     Click Modal Button                      Save
-     Wait Until Modal Is Closed
-     Verify Page Header                      Program Engagement
-     Verify Details                          Start Date                 contains                          ${today}
-     Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
-     Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
-
 Autopopulate fields when stage is set to Completed
-     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-     [tags]                                  W-037565   feature:Program Engagement
+     [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
+     ...                                     completed on new program engagment dialog
+     [tags]                                  W-037569   feature:Program Engagement
      Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
@@ -76,13 +60,14 @@ Autopopulate fields when stage is set to Completed
      Click Modal Button                      Save
      Wait Until Modal Is Closed
      Verify Page Header                      Program Engagement
-     Verify Details                          End Date                 contains                          ${today}
+     Verify Details                          End Date                         contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
 Autopopulate fields when stage is set to Withdrawn
-     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-     [tags]                                  W-037565   feature:Program Engagement
+     [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
+     ...                                     withdrawn on new program engagment dialog
+     [tags]                                  W-037569   feature:Program Engagement
      Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
@@ -94,13 +79,14 @@ Autopopulate fields when stage is set to Withdrawn
      Click Modal Button                      Save
      Wait Until Modal Is Closed
      Verify Page Header                      Program Engagement
-     Verify Details                          End Date                 contains                          ${today}
+     Verify Details                          End Date                         contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
 Autopopulate fields when stage is set to Applied and Start Date is today
-     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-     [tags]                                  W-037565   feature:Program Engagement
+     [Documentation]                         Autopopulates PE name with anonymous and verifies that application date is not set to today when  
+     ...                                     the stage is set as applied and start date is set to today on new program engagment dialog
+     [tags]                                  W-037569   feature:Program Engagement
      Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
@@ -113,7 +99,8 @@ Autopopulate fields when stage is set to Applied and Start Date is today
      Click Modal Button                      Save
      Wait Until Modal Is Closed
      Verify Page Header                      Program Engagement
-     Verify Details                          Start Date                        contains                          ${today}
-     Verify Details                          Application Date                  contains                          ''
-     Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
+     Validate Field Value                          Start Date                        contains               ${today}
+     Validate Field Value                          Application Date                  does not contain       ${today}         
+     Verify Details                          Program Engagement Name           contains               Anonymous ${created_date}: ${program}[Name]  
+   #  Should Be Empty                         Application Date         
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c

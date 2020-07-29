@@ -186,7 +186,7 @@ public with sharing class FeatureParameters_TEST {
 
     @IsTest
     private static void shouldPassActualActiveProgramsWithServiceDeliveriesLast30() {
-        set<Id> programIds = new Set<Id>();
+        Set<Id> programIds = new Set<Id>();
 
         List<ServiceDelivery__c> serviceDeliveries = [
             SELECT ProgramEngagement__r.Program__c
@@ -218,6 +218,108 @@ public with sharing class FeatureParameters_TEST {
             'setPackageIntegerValue',
             new List<Type>{ String.class, Integer.class },
             new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldPassActualPermSetDeliver() {
+        deleteExistingPermissionAssignments();
+        assignPermissionSet(FeatureParameters.DELIVER_PERMISSION);
+
+        List<User> users = [
+            SELECT Id
+            FROM User
+            WHERE
+                Id IN (
+                    SELECT AssigneeId
+                    FROM PermissionSetAssignment
+                    WHERE PermissionSet.Name = :FeatureParameters.DELIVER_PERMISSION
+                )
+                AND Id NOT IN (
+                    SELECT AssigneeId
+                    FROM PermissionSetAssignment
+                    WHERE PermissionSet.Name = :FeatureParameters.MANAGE_PERMISSION
+                )
+        ];
+        System.assert(
+            !users.isEmpty(),
+            'Sanity check: There should be at least 1 user found.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.PERM_SET_DELIVER_USERS.name()
+            .remove('_');
+        final Integer expectedValue = users.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.PermSetDeliverUsers().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldPassActualPermSetManage() {
+        deleteExistingPermissionAssignments();
+        assignPermissionSet(FeatureParameters.MANAGE_PERMISSION);
+        List<User> users = [
+            SELECT Id
+            FROM User
+            WHERE
+                Id IN (
+                    SELECT AssigneeId
+                    FROM PermissionSetAssignment
+                    WHERE PermissionSet.Name = :FeatureParameters.MANAGE_PERMISSION
+                )
+        ];
+        System.assert(
+            !users.isEmpty(),
+            'Sanity check: There should be at least 1 user found.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.PERM_SET_MANAGE_USERS.name()
+            .remove('_');
+        final Integer expectedValue = users.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.PermSetManageUsers().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    ////////// Helper Methods //////////
+    private static void deleteExistingPermissionAssignments() {
+        delete [
+            SELECT Id
+            FROM PermissionSetAssignment
+            WHERE
+                AssigneeId = :System.UserInfo.getUserId()
+                AND (PermissionSet.Name = :FeatureParameters.MANAGE_PERMISSION
+                OR PermissionSet.Name = :FeatureParameters.DELIVER_PERMISSION)
+        ];
+    }
+
+    private static void assignPermissionSet(String permissionSetName) {
+        PermissionSet permission = [
+            SELECT Id
+            FROM PermissionSet
+            WHERE Name = :permissionSetName
+            LIMIT 1
+        ];
+
+        insert new PermissionSetAssignment(
+            AssigneeId = System.UserInfo.getUserId(),
+            PermissionSetId = permission.Id
         );
     }
 }

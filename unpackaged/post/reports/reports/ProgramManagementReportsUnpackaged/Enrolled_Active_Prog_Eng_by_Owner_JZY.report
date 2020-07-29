@@ -31,7 +31,7 @@
     <description>How many active and enrolled Program Engagements does each Program Manager have?</description>
     <filter>
         <criteriaItems>
-            <column>ProgramEngagement__c.Stage__c</column>
+            <column>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%Stage__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
@@ -53,13 +53,13 @@
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>CustomEntity$ProgramEngagement__c</reportType>
+    <reportType>CustomEntity$%%%NAMESPACE%%%ProgramEngagement__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>ProgramEngagement__c.ApplicationDate__c</dateColumn>
+        <dateColumn>%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%ApplicationDate__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

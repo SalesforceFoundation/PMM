@@ -15,9 +15,7 @@ public inherited sharing class FeatureParameters {
     private enum DeveloperName {
         ACTIVE_PROGRAMS,
         ACTIVE_PROGRAMS_WITH_ENGAGEMENTS_LAST30,
-        ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30,
-        PERM_SET_DELIVER_USERS,
-        PERM_SET_MANAGE_USERS
+        ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30
     }
 
     private static final String ACTIVE_PROGRAM_CONDITION =

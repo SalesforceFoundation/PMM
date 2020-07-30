@@ -133,7 +133,7 @@ class pmm(object):
         if status == "contains":
             assert value == actual_value, f"Expected value to be {value} but found {actual_value}"
         elif status == "does not contain":
-            assert value != actual_value, f"Expected value to be {value} but found {actual_value}"
+            assert value != actual_value, f"Expected value {value} should not match {actual_value}"
         else:
             raise Exception("Valid status not entered")
 
@@ -263,33 +263,4 @@ class pmm(object):
         self.selenium.wait_until_page_contains_element(
             locator, error="Error message is not displayed"
         )
-
-"""
-    def validate_field_value(self, field,status,value,section=None):
-        """If status is 'contains' then the specified value should be present in the field
-                        'does not contain' then the specified value should not be present in the field
-        """
-        if section is not None:
-            section="text:"+section
-            self.selenium.scroll_element_into_view(section)
-        list_found = False
-        locator = pmm_lex_locators["confirm"]["details"]
-        if status == "contains":
-#         for i in locators:
-            print("inside for loop")
-            # locator = i.format(field,value)
-            print(locator)
-            actual_value=self.selenium.get_webelement(locator).text
-            print(f"actual value is {actual_value}")
-            assert value == actual_value, "Expected {} value to be {} but found {}".format(field,value, actual_value)
-            list_found=True
-        elif status == "does not contain":
-       #     for i in locators:
-        #        locator = i.format(field,value)
-
-            print(f"locator is {locator}")
-            raise Exception(f"{field} should not contain value {value}")
-            list_found = True
-
-        assert list_found, "locator not found"
-        """
+        

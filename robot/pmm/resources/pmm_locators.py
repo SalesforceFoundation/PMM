@@ -19,9 +19,7 @@ pmm_lex_locators = {
     "page_header": "//div[contains(@class, 'slds-page-header')]/descendant::span[text()='{}}']",
     "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
     "confirm": {
-        #"details":"//div[contains(@class, 'forcePageBlockItem') or contains(@class, 'slds-form-element_stacked')][.//span[text()='{}']]//descendant::div[.//span[contains(@class, 'test-id__field-value')]]",
-         "details":"//div[contains(@class, 'forcePageBlockItem') or contains(@class, 'slds-form-element_stacked')][.//span[text()='{}']]//descendant::div[.//span[contains(@class, 'test-id__field-value')]]//*[text()='{}']",
-
+         "details":"//div[contains(@class, 'forcePageBlockItem') or contains(@class, 'slds-form-element_stacked')][.//span[text()='{}']]//descendant::div[.//span[contains(@class, 'test-id__field-value')]]//*[self::a or self::lightning-formatted-number or self::lightning-formatted-text]",
     },
     "new_record": {
         "label":"//div[./*/*[text()='{}']]",

@@ -44,7 +44,7 @@ Autopopulate fields when stage is set to Applied
      Verify Details                          Application Date                 contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
-    
+
 Autopopulate fields when stage is set to Completed
      [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
      ...                                     completed on new program engagment dialog
@@ -99,8 +99,7 @@ Autopopulate fields when stage is set to Applied and Start Date is today
      Click Modal Button                      Save
      Wait Until Modal Is Closed
      Verify Page Header                      Program Engagement
-     Validate Field Value                          Start Date                        contains               ${today}
-     Validate Field Value                          Application Date                  does not contain       ${today}         
-     Verify Details                          Program Engagement Name           contains               Anonymous ${created_date}: ${program}[Name]  
-   #  Should Be Empty                         Application Date         
+     Verify Details                          Start Date                        contains               ${today}
+     Verify Details                          Application Date                  does not contain       ${today}  
+     Verify Details                          Program Engagement Name           contains               Anonymous ${created_date}: ${program}[Name]     
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c

@@ -346,6 +346,8 @@ plans:
                     unmanaged: False
             4:
                 task: deploy_post
+                options:
+                    unmanaged: False
                 ui_options:
                     reports:
                         name: "Deploy Folder of Unmanaged Reports"

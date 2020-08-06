@@ -9,7 +9,7 @@ Library        cumulusci.robotframework.PageObjects
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
-Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+#Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
@@ -53,50 +53,62 @@ Setup Test Data
 *** Test Cases ***
 
 Add service delivery on bulk service delivery
-    [Documentation]             This test adds service deliveries on bulk service delivery
+    [Documentation]             This test adds two service deliveries on bulk service delivery and 
+    ...                         navigates to service delivery listview and verifies that the service delivery 
+    ...                         records are displayed
+    [tags]                      W-040316   feature:Service Delivery
     Go To PMM App
-    Go To Page                  Custom                          ${ns}Bulk_Service_Deliveries
-    verify current page         Bulk Service Deliveries
-    populate bsdt lookup        Search Contacts                 &{contact1}[FirstName] &{contact1}[LastName]
-    populate row1 fields        Select Program Engagement       &{program_engagement1}[Name]
-    populate row1 fields        Select Service                  &{service1}[Name]
-    input row1 data             Quantity                        ${quantity1}
-    sleep                       2s
-    verify persist save icon    Saved
-    click button                Add Entry
-    populate bsdt lookup        Search Contacts                 &{contact2}[FirstName] &{contact2}[LastName]
-    populate row2 fields        Select Program Engagement       &{program_engagement2}[Name]
-    populate row2 fields        Select Service                  &{service2}[Name]
-    input row2 data             Quantity                        ${quantity2}
-    verify persist save icon    Saved
-    sleep                       2s
-    click button                Done
-    Go To Page                  Listing                         ${ns}ServiceDelivery__c
+    Go To Page                  Custom                              Bulk_Service_Deliveries
+    Verify Current Page         Bulk Service Deliveries
+    Populate Bsdt Lookup        1           Client                  &{contact1}[FirstName] &{contact1}[LastName]
+    Populate Bsdt Listbox       1           Program Engagement      &{program_engagement1}[Name]
+    Populate Bsdt Listbox       1           Service                 &{service1}[Name]
+    Populate Bsdt Field         1           Quantity                ${quantity1}
+    Verify Persist Save Icon    1           Saved
+    Click Button                Add Entry
+    Populate Bsdt Lookup        2           Client                  &{contact2}[FirstName] &{contact2}[LastName]
+    Populate Bsdt Listbox       2           Program Engagement      &{program_engagement2}[Name]
+    Populate Bsdt Listbox       2           Service                 &{service2}[Name]
+    Populate Bsdt Field         2           Quantity                ${quantity2}
+    Verify Persist Save Icon    2           Saved
+    Click Button                Done
+    Go To Page                  Listing                             ${ns}ServiceDelivery__c
     Page Should Contain         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
     Page Should Contain         &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
-    sleep                       2s
-    click listview link         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
-    verify details              Service Delivery Name           contains              &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
+    Click Listview Link         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
+    Verify Details              Service Delivery Name           contains              &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
+    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
+    Save Current Record ID For Deletion     ${ns}Service__c
+    Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
 
 Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no
     ...                         services associated with the program.
-    Go To Page                  Custom                                  ${ns}Bulk_Service_Deliveries
-    verify current page         Bulk Service Deliveries
-    populate bsdt lookup        Search Contacts                         &{contact3}[FirstName] &{contact3}[LastName]
-    populate row1 fields        Select Program Engagement               &{program_engagement3}[Name]
+    Go To Page                  Custom                              Bulk_Service_Deliveries
+    Verify Current Page         Bulk Service Deliveries
+    Populate Bsdt Lookup        1           Client                  &{contact3}[FirstName] &{contact3}[LastName]
+    Populate Bsdt Listbox       1           Program Engagement      &{program_engagement3}[Name]
     verify error message        No services found, choose another program engagement.
-    verify persist warning icon  No services found, choose another program engagement.
-    Go To Page                  Listing                                 ${ns}ServiceDelivery__c
-    click listview link         &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
-    verify details              Service Delivery Name                   contains                &{contact1}[FirstName] &{contact1}[LastName] ${today}: &{service1}[Name]
-    ${service_delivery_id} =    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
-    ${service_id} =             Save Current Record ID For Deletion     ${ns}Service__c
-    ${program_engagement_id} =  Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
-    Go To Page                  Listing                                 ${ns}ServiceDelivery__c
-    click listview link         &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
-    verify details              Service Delivery Name                   contains                &{contact2}[FirstName] &{contact2}[LastName] ${today}: &{service2}[Name]
-    ${service_delivery_id} =    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
-    ${service_id} =             Save Current Record ID For Deletion     ${ns}Service__c
-    ${program_engagement_id} =  Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
+    verify persist warning icon  1          No services found, choose another program engagement.
+
+Delete service delivery on bsdt
+    Go To Page                  Custom                              Bulk_Service_Deliveries
+    Verify Current Page         Bulk Service Deliveries
+    Populate Bsdt Lookup        1           Client                  &{contact1}[FirstName] &{contact1}[LastName]
+    Populate Bsdt Listbox       1           Program Engagement      &{program_engagement1}[Name]
+    Populate Bsdt Listbox       1           Service                 &{service1}[Name]
+    Populate Bsdt Field         1           Quantity                ${quantity1}
+    Verify Persist Save Icon    1           Saved
+    Click Bsdt Icon             Delete
+    Verify Dialog Title         Confirm deletion?
+    Click Dialog Button         Delete
+    Wait Until Modal Is Closed
+    Page Should Not Contain     &{contact1}[FirstName] &{contact1}[LastName]
+    Page Should Not Contain     &{program_engagement1}[Name]
+    Page Should Not Contain     &{service1}[Name]
+    
+
+
+
+

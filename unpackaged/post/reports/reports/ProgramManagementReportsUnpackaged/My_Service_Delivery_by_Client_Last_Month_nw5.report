@@ -31,7 +31,7 @@
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>CustomEntity$%%%NAMESPACE%%%ServiceDelivery__c@%%%NAMESPACE%%%ServiceDelivery__c.ProgramEngagement__c</reportType>
+    <reportType>CustomEntity$%%%NAMESPACE%%%ServiceDelivery__c@%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%ProgramEngagement__c</reportType>
     <scope>user</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>

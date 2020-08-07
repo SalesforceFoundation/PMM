@@ -1,7 +1,6 @@
 Account:
     sf_object: Account
     fields:
-        - Id
         - RecordTypeId
         - Name
         - Description
@@ -55,7 +54,6 @@ Account:
 Contact:
     sf_object: Contact
     fields:
-        - Id
         - Salutation
         - FirstName
         - LastName
@@ -141,7 +139,6 @@ Program__c:
     sf_object: Program__c
     fields:
         # Standard Fields
-        - Id
         - Name
 
         # Custom Fields
@@ -158,7 +155,6 @@ ProgramCohort__c:
     table: ProgramCohort__c
     fields:
         # Standard Fields
-        - Id
         - Name
 
         # Custom Fields
@@ -175,7 +171,6 @@ ProgramEngagement__c:
     sf_object: ProgramEngagement__c
     fields:
         # Standard Fields
-        - Id
         - Name
 
         # Custom Fields
@@ -201,7 +196,6 @@ Service__c:
     table: Service__c
     fields:
         # Standard Fields
-        - Id
         - Name
 
         # Custom Fields
@@ -217,7 +211,6 @@ ServiceDelivery__c:
     sf_object: ServiceDelivery__c
     fields:
         # Standard Fields
-        - Id
         - Name
 
         # Custom Fields
@@ -238,7 +231,6 @@ ServiceDelivery__c:
 Opportunity:
     sf_object: Opportunity
     fields:
-        - Id
         - npe01__Contact_Id_for_Role__c
         - npe01__Membership_Origin__c
         - npe01__Member_Level__c
@@ -300,7 +292,6 @@ Opportunity:
 npe4__Relationship__c:
     sf_object: npe4__Relationship__c
     fields:
-        - Id
         - npe4__SYSTEM_SystemCreated__c
         - npe4__Description__c
         - npe4__Status__c
@@ -319,7 +310,6 @@ OpportunityContactRole:
     sf_object: OpportunityContactRole
     table: OpportunityContactRole
     fields:
-        - Id
         - Role
         - IsPrimary
     lookups:

@@ -34,16 +34,8 @@ class BulkServiceDeliveryPage(BasePMMPage,BasePage):
             error="The header for this page is not 'Bulk Service Deliveries' as expected",
         )
 
-    def click_button(self, label):
-        """ Click on the Add service delivery button """
-        locator_save = pmm_lex_locators["bulk_service_delivery_locators"]["button"].format(label)
-        self.selenium.wait_until_element_is_enabled(
-            locator_save, error="Add service delivery button is not enabled"
-        )
-        self.selenium.click_element(locator_save)
-
     def verify_error_message(self, message):
-        """Verify error message"""
+        """Verify error message on bsdt"""
         locator = pmm_lex_locators["bulk_service_delivery_locators"]["error_message"].format(message)
         self.selenium.wait_until_page_contains_element(
             locator, error=" Incorrect message displayed"
@@ -63,20 +55,8 @@ class BulkServiceDeliveryPage(BasePMMPage,BasePage):
             locator, error=" Incorrect icon displayed "
         )
 
-    def select_listbox(self, title, value):
-        """populate program engagement and services field for 1st row"""
-        locator = pmm_lex_locators["bulk_service_delivery_locators"]["lookup_field_row1"].format(title)
-        self.selenium.get_webelement(locator).click()
-        popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_popup"]
-        self.selenium.wait_until_page_contains_element(
-            popup_loc, error="The dropdown did not open"
-        )
-        value_loc = pmm_lex_locators["bulk_service_delivery_locators"]["pick_listbox"].format(value)
-        element_click = self.selenium.driver.find_element_by_xpath(value_loc)
-        self.selenium.driver.execute_script("arguments[0].click()", element_click)
-
     def verify_dialog_title(self, label):
-        """ Verify we are on the Bulk Service Deliveries page by verifying the header title """
+        """Verify dialog title on New PE dialog and Delete dialog """
         locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["title"].format(label)
         self.selenium.wait_until_page_contains_element(
             locator,
@@ -84,7 +64,7 @@ class BulkServiceDeliveryPage(BasePMMPage,BasePage):
         )
 
     def click_dialog_button(self,title):
-        """ Click on the save button """
+        """ Click on a button on new PE dialog and delete dialog """
         locator_save = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["button"].format(title)
         self.selenium.wait_until_element_is_enabled(
             locator_save, error="button is not enabled"
@@ -96,7 +76,7 @@ class BulkServiceDeliveryPage(BasePMMPage,BasePage):
         locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_lookup"].format(row,title)
         self.selenium.click_element(locator)
         self.selenium.get_webelement(locator).send_keys(value)
-        locator_val = pmm_lex_locators["bulk_service_delivery_locators"]["select_bsdt_value"].format(value)
+        locator_val = pmm_lex_locators["bulk_service_delivery_locators"]["select_lookup_value"].format(value)
         self.selenium.wait_until_page_contains_element(
             locator_val, error="value is not available"
         )
@@ -105,21 +85,21 @@ class BulkServiceDeliveryPage(BasePMMPage,BasePage):
         time.sleep(0.5)
 
     def populate_bsdt_field(self, row, label, value):
-        """populate quantity and delivery date for 1st row"""
+        """populate text field on bsdt"""
         locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_field"].format(row,label)
         self.selenium.get_webelement(locator).click()
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).send_keys(value)
 
-    def populate_bsdt_listbox(self, row, title, value):
-        """populate program engagement and services field for 1st row"""
+    def populate_bsdt_dropdown(self, row, title, value):
+        """populate dropdown on bsdt"""
         locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_lookup"].format(row, title)
         self.selenium.get_webelement(locator).click()
         popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_popup"]
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="The dropdown did not open"
         )
-        value_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_value"].format(value)
+        value_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_dropdown_value"].format(value)
         element_click = self.selenium.driver.find_element_by_xpath(value_loc)
         self.selenium.driver.execute_script("arguments[0].click()", element_click)
 

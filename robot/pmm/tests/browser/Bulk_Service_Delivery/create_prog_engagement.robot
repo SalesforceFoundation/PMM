@@ -27,47 +27,42 @@ Setup Test Data
     ${created_date} =       Get Current Date   result_format=%Y-%m-%d  increment=30 days
     Set suite variable      ${created_date}
 
-    &{contact} =            API Create Contact
-    Set suite variable      &{contact}
-    &{program} =            API Create Program
-    Store Session Record    ${ns}Program__c              &{program}[Id]
-    Set suite variable      &{program}
-    &{program_cohort} =     API Create Program Cohort    &{Program}[Id]
-    Set suite variable      &{program_cohort}
-    &{service} =            API Create Service           &{Program}[Id]
-    Set suite variable      &{service}
+    ${contact} =            API Create Contact
+    Set suite variable      ${contact}
+    ${program} =            API Create Program
+    Set suite variable      ${program}
+    ${service} =            API Create Service           ${Program}[Id]
+    Set suite variable      ${service}
 
 *** Test Cases ***
 Create program engagement from BSDT
-    [Documentation]                         This test adds service deliveries on bulk service delivery
+    [Documentation]                         This test adds service deliveries on bulk service delivery by creating
+    ...                                     a new PE on bsdt page
     [tags]                                  W-040316   feature:Service Delivery
     Go To PMM App
-    Go To Page                              Custom                          ${ns}Bulk_Service_Deliveries
-    verify current page                     Bulk Service Deliveries
-    populate bsdt lookup                    Search Contacts                 &{contact}[FirstName] &{contact}[LastName]
-    select listbox                          Select Program Engagement       New Program Engagement
-    Load Page Object                        NewProgramEngagement            ${ns}ProgramEngagement__c
-    verify dialog title                     New Program Engagement
-    Populate Program Engagement bsdt form   Stage=Applied
+    Go To Page                              Custom                              Bulk_Service_Deliveries
+    Verify Current Page                     Bulk Service Deliveries
+    Populate Bsdt Lookup                    1           Client                  ${contact}[FirstName] ${contact}[LastName]
+    Populate Bsdt Dropdown                  1           Program Engagement      New Program Engagement
+    Load Page Object                        NewProgramEngagement                ${ns}ProgramEngagement__c
+    Verify Dialog Title                     New Program Engagement
+    Populate Program Engagement Bsdt Form   Stage=Applied
     ...                                     Role=Client
     ...                                     Application Date=${application_date}
     ...                                     Start Date=${start_date}
-    populate bsdt lookup                    Search Programs                 &{program}[Name]
-    Click dialog button                     Save
+    ...                                     Program=${program}[Name]
+    Click Dialog Button                     Save
     Wait Until Modal Is Closed
-    populate row1 fields                    Select Service                  &{service}[Name]
-    input row1 data                         Quantity                        ${quantity}
-    sleep                                   2s
-    verify persist save icon                Saved
-    sleep                                   2s
-    click button                            Done
-    click toast message                     1 Service Deliveries
-    click listview link                     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
-    verify page header                      Service Delivery
-    verify details                          Service Delivery Name           contains     &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
-    ${service_delivery_id} =                Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
-    ${service_id} =                         Save Current Record ID For Deletion    ${ns}Service__c
+    Populate Bsdt Dropdown                  1           Service                 ${service}[Name]
+    Populate Bsdt Field                     1           Quantity                ${quantity}
+    Verify Persist Save Icon                1           Saved
+    Click Button                            Done
+    Click Toast Message                     1 Service Deliveries
+    Click Listview Link                     ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
+    Verify Details                          Service Delivery Name           contains        ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
+    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
+    Save Current Record ID For Deletion     ${ns}Service__c
     Go To Page                              Listing                         ${ns}ProgramEngagement__c
-    click listview link                     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{program}[Name]
-    verify details                          Program Engagement Name         contains     &{contact}[FirstName] &{contact}[LastName] ${created_date}: &{Program}[Name]
-    ${programengagement_id} =               Save Current Record ID For Deletion      ${ns}ProgramEngagement__c
+    Click Listview Link                     ${contact}[FirstName] ${contact}[LastName] ${created_date}: ${program}[Name]
+    Verify Details                          Program Engagement Name         contains     ${contact}[FirstName] ${contact}[LastName] ${created_date}: ${Program}[Name]
+    Save Current Record ID For Deletion     ${ns}ProgramEngagement__c

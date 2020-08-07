@@ -23,6 +23,9 @@ orgs:
         prerelease:
             config_file: orgs/prerelease.json
             days: 7
+        trial:
+            config_file: orgs/trial.json
+            days: 7
 
 sources:
     npsp:

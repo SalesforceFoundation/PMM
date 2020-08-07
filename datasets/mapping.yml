@@ -313,6 +313,7 @@ npe4__Relationship__c:
             table: Contact
         npe4__ReciprocalRelationship__c:
             table: npe4__Relationship__c
+            after: npe4__Relationship__c
 
 OpportunityContactRole:
     sf_object: OpportunityContactRole

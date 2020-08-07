@@ -47,6 +47,10 @@
         "Deploy Program Management Profile": {
             "message": "Deploy Program Management Profile",
             "description": "title of installation step"
+        },
+        "Deploy Folder of Unmanaged Reports": {
+            "message": "Deploy Folder of Unmanaged Reports",
+            "description": "title of installation step"
         }
     },
     "checks": {

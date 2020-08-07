@@ -232,6 +232,22 @@ flows:
             200:
                 task: update_client_photo_directories
 
+    load_data:
+        steps:
+            1:
+                task: disable_npsp_triggers
+                when: "org_config.has_minimum_package_version('npsp', '1.0')"
+            3:
+                task: insert_bulk_data
+            4:
+                task: restore_npsp_triggers
+                when: "org_config.has_minimum_package_version('npsp', '1.0')"
+            5:
+                task: execute_anon
+                options:
+                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+
+
     insert_data:
         steps:
             1:

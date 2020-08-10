@@ -92,7 +92,7 @@ Date validation when program engagement dates are not within program date range
      ...                                    page, clicks on new and verifes that an error message is displayed when PE date 
      ...                                    range is outside the program date range 
      [tags]                                 W-042238   feature:Program Engagement
-     Go To Page                             Details                                 ${ns}Program__c                   object_id=${program}[Id]
+     Go To Page                             Details                                 Program__c                   object_id=${program}[Id]
      Click Quick Action Button              Edit
      Verify Current Page Title              Edit ${program}[Name]
      Populate Modal Form                    Start Date=12

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%DeliveryDate__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Quantity__c</field>
+    </columns>
+    <columns>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%UnitOfMeasurement__c</field>
+    </columns>
+    <columns>
+        <field>FK_$%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%Program__c</field>
+    </columns>
+    <columns>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service__c</field>
+    </columns>
+    <columns>
+        <field>CUST_OWNER_NAME</field>
+    </columns>
+    <description>How many services did I deliver last month grouped by client?</description>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>FK_$%%%NAMESPACE%%%ProgramEngagement__c.%%%NAMESPACE%%%Contact__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>My Service Delivery by Client Last Month</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$%%%NAMESPACE%%%ServiceDelivery__c@%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%ProgramEngagement__c</reportType>
+    <scope>user</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%DeliveryDate__c</dateColumn>
+        <interval>INTERVAL_LASTMONTH</interval>
+    </timeFrameFilter>
+</Report>

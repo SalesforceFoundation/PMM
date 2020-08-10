@@ -5,8 +5,20 @@
         <label>Agregar entrega de servicio</label>
     </customLabels>
     <customLabels>
+        <name>Anonymous</name>
+        <label>Anónima</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Cancelar</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Listo</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Entry</name>
+        <label>Agregar entrada</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -14,11 +26,11 @@
     </customLabels>
     <customLabels>
         <name>Confirm_Delete</name>
-        <label>Confirmar eliminación</label>
+        <label>¿Confirmar eliminación?</label>
     </customLabels>
     <customLabels>
         <name>Confirm_Delete_Row</name>
-        <label>¿Está seguro de que desea eliminar esta fila?</label>
+        <label>La eliminación de esta fila retira esta entrega de servicio.</label>
     </customLabels>
     <customLabels>
         <name>Delete</name>
@@ -29,6 +41,10 @@
         <label>Error</label>
     </customLabels>
     <customLabels>
+        <name>MissingSObjectType</name>
+        <label>Su consulta debe incluir un objeto.</label>
+    </customLabels>
+    <customLabels>
         <name>New_Program_Engagement</name>
         <label>Nueva participación en programa</label>
     </customLabels>
@@ -37,8 +53,12 @@
         <label>No se encontraron servicios, seleccione otra participación en programa.</label>
     </customLabels>
     <customLabels>
+        <name>Quantity</name>
+        <label>Cantidad</label>
+    </customLabels>
+    <customLabels>
         <name>Record_Deleted</name>
-        <label>Se ha eliminado su registro</label>
+        <label>Registro eliminado.</label>
     </customLabels>
     <customLabels>
         <name>Required</name>
@@ -50,7 +70,7 @@
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
-        <label>Nuevo registro de participación en programa creado</label>
+        <label>Nuevo registro de participación en programa creado.</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -73,12 +93,20 @@
         <label>Entregas de servicio</label>
     </customLabels>
     <customLabels>
+        <name>Service_Deliveries_Added</name>
+        <label>Entregas de servicio agregadas.</label>
+    </customLabels>
+    <customLabels>
         <name>Service_Delivery_Contact_Without_Programs</name>
         <label>Para guardar una entrega de servicio, inscriba primero a este cliente en un programa con servicios activos.</label>
     </customLabels>
     <customLabels>
         <name>Success</name>
         <label>Operación correcta</label>
+    </customLabels>
+    <customLabels>
+        <name>TelemetryException</name>
+        <label>No pudimos recopilar mediciones de telemetría.</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -92,6 +120,10 @@
         <name>Warning</name>
         <label>Advertencia</label>
     </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>Hay filas de la entrega de servicio con errores.</label>
+    </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>Entregas de servicio masivas</label>
@@ -100,6 +132,10 @@
         <name>Program_Management</name>
         <label>Gestión de programas</label>
     </customApplications>
+    <quickActions>
+        <name>ProgramEngagement__c.Add_to_Program_Cohort</name>
+        <label>Agregar a Cohorte de programa</label>
+    </quickActions>
     <quickActions>
         <name>Contact.AddContactToProgram</name>
         <label>Agregar contacto a programa</label>

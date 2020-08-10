@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <validationRules>
-        <errorMessage>Der ausgewählte Account stimmt nicht mit dem Account des Kontakts überein</errorMessage>
+        <errorMessage>Wählen Sie einen Account aus, der dem zugehörigen Kontakt entspricht.</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
     </validationRules>
     <validationRules>
@@ -15,6 +15,10 @@
     <validationRules>
         <errorMessage>Wählen Sie ein Enddatum aus, das am oder nach dem Anfangsdatum des Programms und am oder vor dem Enddatum des Programms liegt.</errorMessage>
         <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Wählen Sie eine Programmuntergruppe aus, die dem Programm entspricht.</errorMessage>
+        <name>PROGRAM_MATCHES_COHORT_PROGRAM</name>
     </validationRules>
     <validationRules>
         <errorMessage>Das Anfangsdatum muss vor dem Enddatum liegen</errorMessage>

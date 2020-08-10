@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <validationRules>
-        <errorMessage>選択した団体が、関連する個人の団体に一致しません。</errorMessage>
+        <errorMessage>関連する取引先責任者に一致する取引先を選択してください。</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
     </validationRules>
     <validationRules>
@@ -15,6 +15,10 @@
     <validationRules>
         <errorMessage>プログラム開始日以降かつプログラム終了日以前の終了日を選択します。</errorMessage>
         <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>プログラムに一致するプログラムコホートを選択してください。</errorMessage>
+        <name>PROGRAM_MATCHES_COHORT_PROGRAM</name>
     </validationRules>
     <validationRules>
         <errorMessage>開始日は終了日よりも前である必要があります</errorMessage>

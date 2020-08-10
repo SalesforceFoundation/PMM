@@ -12,6 +12,10 @@
         <translation>Bewerbung abgelehnt</translation>
     </picklistValues>
     <picklistValues>
+        <masterLabel>Waitlisted</masterLabel>
+        <translation>In Warteliste aufgenommen</translation>
+    </picklistValues>
+    <picklistValues>
         <masterLabel>Enrolled</masterLabel>
         <translation>Eingeschrieben</translation>
     </picklistValues>

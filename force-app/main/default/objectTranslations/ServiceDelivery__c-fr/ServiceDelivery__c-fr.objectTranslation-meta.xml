@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>Sélectionnez un compte qui correspond au contact associé.</errorMessage>
+        <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Sélectionnez un engagement dans le programme qui correspond au programme du service associé.</errorMessage>
+        <name>PROGRAM_MATCH</name>
+    </validationRules>
     <layouts>
         <layout>Service Delivery Layout</layout>
         <sections>

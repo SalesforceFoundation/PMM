@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <validationRules>
-        <errorMessage>Selected Account does not match the related Contact&#39;s Account</errorMessage>
+        <errorMessage>Select an Account that matches the related Contact.</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
     </validationRules>
     <validationRules>
@@ -13,15 +13,19 @@
         <name>APPLICATION_DATE_BEFORE_START_DATE</name>
     </validationRules>
     <validationRules>
-        <errorMessage>Select an end date that&#39;s on or after the program start date and on or before the program end date.</errorMessage>
+        <errorMessage>Select an end date that&apos;s on or after the program start date and on or before the program end date.</errorMessage>
         <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Select a Program Cohort that matches the Program.</errorMessage>
+        <name>PROGRAM_MATCHES_COHORT_PROGRAM</name>
     </validationRules>
     <validationRules>
         <errorMessage>Start Date must be before End Date</errorMessage>
         <name>START_DATE_BEFORE_END_DATE</name>
     </validationRules>
     <validationRules>
-        <errorMessage>Select a start date that&#39;s on or after the program start date and on or before the program end date.</errorMessage>
+        <errorMessage>Select a start date that&apos;s on or after the program start date and on or before the program end date.</errorMessage>
         <name>START_DATE_WITHIN_PROGRAM_DATES</name>
     </validationRules>
     <layouts>

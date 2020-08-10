@@ -5,8 +5,20 @@
         <label>Add Service Delivery</label>
     </customLabels>
     <customLabels>
+        <name>Anonymous</name>
+        <label>Anonymous</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Cancel</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Done</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Entry</name>
+        <label>Add Entry</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -14,11 +26,11 @@
     </customLabels>
     <customLabels>
         <name>Confirm_Delete</name>
-        <label>Confirm Delete</label>
+        <label>Confirm deletion?</label>
     </customLabels>
     <customLabels>
         <name>Confirm_Delete_Row</name>
-        <label>Are you sure you want to delete this row?</label>
+        <label>Deleting this row removes this Service Delivery.</label>
     </customLabels>
     <customLabels>
         <name>Delete</name>
@@ -29,6 +41,10 @@
         <label>Error</label>
     </customLabels>
     <customLabels>
+        <name>MissingSObjectType</name>
+        <label>Your query must include an object.</label>
+    </customLabels>
+    <customLabels>
         <name>New_Program_Engagement</name>
         <label>New Program Engagement</label>
     </customLabels>
@@ -37,8 +53,12 @@
         <label>No services found, choose another program engagement.</label>
     </customLabels>
     <customLabels>
+        <name>Quantity</name>
+        <label>Quantity</label>
+    </customLabels>
+    <customLabels>
         <name>Record_Deleted</name>
-        <label>Your record has been deleted</label>
+        <label>Record deleted.</label>
     </customLabels>
     <customLabels>
         <name>Required</name>
@@ -50,7 +70,7 @@
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
-        <label>New Program Engagement record created</label>
+        <label>New Program Engagement record created.</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -73,12 +93,20 @@
         <label>Service Deliveries</label>
     </customLabels>
     <customLabels>
+        <name>Service_Deliveries_Added</name>
+        <label>Service Deliveries added.</label>
+    </customLabels>
+    <customLabels>
         <name>Service_Delivery_Contact_Without_Programs</name>
-        <label>To save a service delivery, first enrol this client in a program with active services.</label>
+        <label>To save a Service Delivery, first enrol this client in a Program with active Services.</label>
     </customLabels>
     <customLabels>
         <name>Success</name>
         <label>Success</label>
+    </customLabels>
+    <customLabels>
+        <name>TelemetryException</name>
+        <label>We couldn&apos;t collect telemetry metrics.</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -92,6 +120,10 @@
         <name>Warning</name>
         <label>Warning</label>
     </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>There are Service Delivery rows with errors.</label>
+    </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>Bulk Service Deliveries</label>
@@ -100,6 +132,10 @@
         <name>Program_Management</name>
         <label>Program Management</label>
     </customApplications>
+    <quickActions>
+        <name>ProgramEngagement__c.Add_to_Program_Cohort</name>
+        <label>Add to Program Cohort</label>
+    </quickActions>
     <quickActions>
         <name>Contact.AddContactToProgram</name>
         <label>Add Contact to Program</label>

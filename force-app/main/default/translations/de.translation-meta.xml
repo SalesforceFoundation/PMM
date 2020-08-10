@@ -5,8 +5,20 @@
         <label>Leistungserbringung hinzufügen</label>
     </customLabels>
     <customLabels>
+        <name>Anonymous</name>
+        <label>Anonym</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Abbrechen</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Fertig</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Entry</name>
+        <label>Eintrag hinzufügen</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -14,11 +26,11 @@
     </customLabels>
     <customLabels>
         <name>Confirm_Delete</name>
-        <label>Löschen bestätigen</label>
+        <label>Löschung bestätigen?</label>
     </customLabels>
     <customLabels>
         <name>Confirm_Delete_Row</name>
-        <label>Möchten Sie diese Zeile wirklich löschen?</label>
+        <label>Durch das Löschen dieser Zeile wird diese Leistungserbringung entfernt.</label>
     </customLabels>
     <customLabels>
         <name>Delete</name>
@@ -29,6 +41,10 @@
         <label>Fehler</label>
     </customLabels>
     <customLabels>
+        <name>MissingSObjectType</name>
+        <label>Ihre Abfrage muss ein Objekt enthalten.</label>
+    </customLabels>
+    <customLabels>
         <name>New_Program_Engagement</name>
         <label>Neue Programmteilnahme</label>
     </customLabels>
@@ -37,8 +53,12 @@
         <label>Keine Leistungen gefunden, wählen Sie eine andere Programmteilnahme aus.</label>
     </customLabels>
     <customLabels>
+        <name>Quantity</name>
+        <label>Anzahl</label>
+    </customLabels>
+    <customLabels>
         <name>Record_Deleted</name>
-        <label>Ihr Datensatz wurde gelöscht.</label>
+        <label>Datensatz gelöscht.</label>
     </customLabels>
     <customLabels>
         <name>Required</name>
@@ -50,7 +70,7 @@
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
-        <label>Neuer Programmteilnahme-Datensatz erstellt</label>
+        <label>Neuer Programmteilnahme-Datensatz erstellt.</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -73,12 +93,20 @@
         <label>Erbrachte Leistungen</label>
     </customLabels>
     <customLabels>
+        <name>Service_Deliveries_Added</name>
+        <label>Leistungserbringungen hinzugefügt.</label>
+    </customLabels>
+    <customLabels>
         <name>Service_Delivery_Contact_Without_Programs</name>
         <label>Um eine erbrachte Leistung zu speichern, schreiben Sie diesen Kunden zuerst in ein Programm mit aktiven Leistungen ein.</label>
     </customLabels>
     <customLabels>
         <name>Success</name>
         <label>Erfolg</label>
+    </customLabels>
+    <customLabels>
+        <name>TelemetryException</name>
+        <label>Wir konnten keine Telemetrie-Metriken erfassen.</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -92,6 +120,10 @@
         <name>Warning</name>
         <label>Warnung</label>
     </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>Einige Zeilen mit Leistungserbringungen enthalten Fehler.</label>
+    </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>Massenerbringung von Leistungen</label>
@@ -100,6 +132,10 @@
         <name>Program_Management</name>
         <label>Programm-Management</label>
     </customApplications>
+    <quickActions>
+        <name>ProgramEngagement__c.Add_to_Program_Cohort</name>
+        <label>Zu Programmuntergruppe hinzufügen</label>
+    </quickActions>
     <quickActions>
         <name>Contact.AddContactToProgram</name>
         <label>Kontakt zu Programm hinzufügen</label>

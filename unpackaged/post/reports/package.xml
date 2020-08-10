@@ -5,6 +5,8 @@
         <members>ProgramManagementReportsUnpackaged/All_Program_Engagements_by_Stage_QP2</members>
         <members>ProgramManagementReportsUnpackaged/Enrolled_Active_Prog_Eng_by_Owner_JZY</members>
         <members>ProgramManagementReportsUnpackaged/Service_Deliveries_by_Provider_LastMonth_PEO</members>
+        <members>ProgramManagementReportsUnpackaged/My_Service_Deliveries_Last_Month_J5z</members>
+        <members>ProgramManagementReportsUnpackaged/My_Service_Delivery_by_Client_Last_Month_nw5</members>
         <name>Report</name>
     </types>
     <version>48.0</version>

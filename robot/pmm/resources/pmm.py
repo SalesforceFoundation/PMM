@@ -165,8 +165,8 @@ class pmm(object):
         self.selenium.driver.execute_script('arguments[0].click()', element)
 
     def click_toast_message(self,value):
-        """Verifies that toast contains specified value"""
-        locator=pmm_lex_locators["toast_msg"].format(value)
+        """Clicks on the link on toast message"""
+        locator=pmm_lex_locators["toast_link"].format(value)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script('arguments[0].click()', element)
 
@@ -264,3 +264,9 @@ class pmm(object):
             locator, error="Error message is not displayed"
         )
         
+    def verify_toast_message(self,message):
+        """Verifies the toast message contains the given text"""
+        locator=pmm_lex_locators["toast_msg"].format(message)
+        self.selenium.wait_until_page_contains_element(
+            locator, error="Toast message is not displayed"
+        )

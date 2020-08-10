@@ -62,6 +62,15 @@ class NewProgramEngagementPage(BasePMMPage, BasePage):
                 locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["text_field"].format("Start Date")
                 self.selenium.set_focus_to_element(locator)
                 self.selenium.get_webelement(locator).send_keys(value)
+            elif key == "Program":
+                locator = pmm_lex_locators["bulk_service_delivery_locators"]["new_prog_engagement"]["lookup_field"].format("Program")
+                self.selenium.click_element(locator)
+                self.selenium.get_webelement(locator).send_keys(value)
+                locator_val = pmm_lex_locators["bulk_service_delivery_locators"]["select_lookup_value"].format(value)
+                self.selenium.wait_until_page_contains_element(
+                        locator_val, error="value is not available"
+                    )
+                self.selenium.click_element(locator_val)
             else:
                 assert False, "Key provided by name '{}' does not exist".format(key)
 
@@ -80,3 +89,4 @@ class ProgramEngagementDetailPage(BasePMMPage, DetailPage):
             message="Current page is not a Program Engagement record detail view",
         )
         self.selenium.wait_until_page_contains("Program Engagement Name")
+    

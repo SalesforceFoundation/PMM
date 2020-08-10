@@ -49,6 +49,7 @@
                                                     disabled={field.disabled}
                                                     value={field.value}
                                                     variant="label-hidden"
+                                                    if:true={field.isAccessible}
                                                 >
                                                 </lightning-combobox>
                                             </template>
@@ -68,6 +69,7 @@
                                                         value={field.value}
                                                         variant="label-hidden"
                                                         class="hideHelpText"
+                                                        if:true={field.isAccessible}
                                                     ></lightning-input-field>
                                                 </template>
                                                 <template
@@ -86,9 +88,16 @@
                                                         disabled={field.disabled}
                                                         value={field.value}
                                                         variant="label-hidden"
+                                                        if:true={field.isAccessible}
                                                     ></lightning-input-field>
                                                 </template>
                                             </template>
+                                            <div
+                                                class="slds-text-color_error"
+                                                if:false={field.isAccessible}
+                                            >
+                                                {labels.fieldAccessError}
+                                            </div>
                                         </div>
                                     </lightning-layout-item>
                                 </template>

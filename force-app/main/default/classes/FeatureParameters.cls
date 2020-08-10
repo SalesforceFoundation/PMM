@@ -12,7 +12,7 @@ update the methods within the inner class accordingly
 
 public inherited sharing class FeatureParameters {
     @TestVisible
-     private enum DeveloperName {
+    private enum DeveloperName {
         ACTIVE_PROGRAMS,
         ACTIVE_PROGRAMS_WITH_ENGAGEMENTS_LAST30,
         ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30
@@ -22,7 +22,6 @@ public inherited sharing class FeatureParameters {
         String.valueOf(Program__c.Status__c) +
         ' = ' +
         '\'Active\'';
-
     private static final String CREATED_LAST_30_CONDITION = 'CreatedDate = LAST_N_DAYS:30';
 
     @TestVisible

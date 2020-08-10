@@ -7,7 +7,7 @@ Library         cumulusci.robotframework.PageObjects
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
-Suite Teardown  Delete Records and Close Browser
+Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
@@ -32,13 +32,11 @@ Create a Contact
     ...                                    Last Name=${last_name}
     ...                                    Client=checked
     ...                                    Email=user@example.com
-    ...                                    Description=${description}
     Click modal button                     Save
     Wait Until Modal Is Closed
     current page should be                 Details                              Contact
     verify details                         Name                                 contains            ${first_name} ${last_name}
     verify details                         Email                                contains            user@example.com
-    verify details                         Description                          contains            ${description}
     verify page contains related list      Program Engagements
     verify page contains related list      Service Deliveries
     verify page contains related list      Files

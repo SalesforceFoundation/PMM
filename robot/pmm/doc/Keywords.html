@@ -254,7 +254,10 @@
                                     <i>title</i>
                                 </td>
                                 <td class="kwdoc">
-                                    <p>Click on quick action buttons</p>
+                                    <p>
+                                        Click on quick action buttons and verifies the
+                                        title of the quick action dialog
+                                    </p>
                                 </td>
                             </tr>
 
@@ -476,7 +479,12 @@
                                     <i>value</i>
                                 </td>
                                 <td class="kwdoc">
-                                    <p>verify information on the account details page</p>
+                                    <p>
+                                        If status is 'contains' then the specified value
+                                        should be present in the field 'does not contain'
+                                        then the specified value should not be present in
+                                        the field
+                                    </p>
                                 </td>
                             </tr>
 
@@ -559,6 +567,21 @@
                                 <th>Documentation</th>
                             </tr>
 
+                            <tr class="kwrow" id="pmm.robot.API Create Account">
+                                <td class="kwname">
+                                    API Create Account
+                                </td>
+                                <td class="kwargs">
+                                    <i>**fields</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Creates a new account. Account details are passed
+                                        as key value pairs.
+                                    </p>
+                                </td>
+                            </tr>
+
                             <tr class="kwrow" id="pmm.robot.API Create Contact">
                                 <td class="kwname">
                                     API Create Contact
@@ -618,6 +641,24 @@
                                     <i>**fields</i>
                                 </td>
                                 <td class="kwdoc"></td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="pmm.robot.Capture Screenshot and Delete Records and Close Browser"
+                            >
+                                <td class="kwname">
+                                    Capture Screenshot and Delete Records and Close
+                                    Browser
+                                </td>
+                                <td class="kwargs"></td>
+                                <td class="kwdoc">
+                                    <p>
+                                        This keyword will capture a screenshot before
+                                        closing the browser and deleting records when test
+                                        fails
+                                    </p>
+                                </td>
                             </tr>
 
                             <tr class="kwrow" id="pmm.robot.Go To PMM App">
@@ -1680,13 +1721,13 @@
                     </table>
                 </div>
 
-                <div class="section" pageobject="Listing-ServiceDelivery">
+                <div class="section" pageobject="Listing-ServiceDelivery__c">
                     <div class="pageobject-header">
                         <table class="pageobject-header">
                             <tbody>
                                 <tr class="data">
                                     <td title="Page Type">Listing</td>
-                                    <td title="Object Name">ServiceDelivery</td>
+                                    <td title="Object Name">ServiceDelivery__c</td>
                                 </tr>
                                 <tr class="labels">
                                     <td>Page Type</td>
@@ -1791,13 +1832,13 @@
                     <div class="file-path">robot/pmm/resources/ServicePageObject.py</div>
                 </div>
 
-                <div class="section" pageobject="Details-Service">
+                <div class="section" pageobject="Details-Service__c">
                     <div class="pageobject-header">
                         <table class="pageobject-header">
                             <tbody>
                                 <tr class="data">
                                     <td title="Page Type">Details</td>
-                                    <td title="Object Name">Service</td>
+                                    <td title="Object Name">Service__c</td>
                                 </tr>
                                 <tr class="labels">
                                     <td>Page Type</td>
@@ -1943,7 +1984,7 @@
             </div>
         </div>
         <div class="footer">
-            Generated on Tuesday June 23, 11:54 AM - cumulusci v3.14.0
+            Generated on Wednesday July 22, 03:53 PM - cumulusci v3.15.0
         </div>
     </body>
 </html>

@@ -26,9 +26,9 @@
                 <label>Completed</label>
             </value>
             <value>
-                <fullName>Cancelled</fullName>
+                <fullName>Canceled</fullName>
                 <default>false</default>
-                <label>Cancelled</label>
+                <label>Canceled</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -35,6 +35,7 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Bulk_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
+const LONG_DATA_TYPES = ["TEXTAREA"];
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
@@ -135,7 +136,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                 field.size = 1;
             } else if (field.apiName === this.fields.programEngagement.fieldApiName) {
                 field.size = 4;
-            } else if (field.apiName === this.fields.contact.fieldApiName) {
+            } else if (
+                field.apiName === this.fields.contact.fieldApiName ||
+                LONG_DATA_TYPES.includes(field.type)
+            ) {
                 field.size = 3;
             } else {
                 field.size = 2;

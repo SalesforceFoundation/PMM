@@ -27,7 +27,7 @@
     <columns>
         <field>CUST_NAME</field>
     </columns>
-    <description>Which Programs have Clients been enrolling in this month? Used on sample PMM Dashboard.</description>
+    <description>Which Programs have Clients been enrolling in this month? (Used on sample PMM Dashboard.)</description>
     <filter>
         <criteriaItems>
             <column>ProgramEngagement__c.Stage__c</column>

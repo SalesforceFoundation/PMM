@@ -23,12 +23,33 @@ orgs:
         prerelease:
             config_file: orgs/prerelease.json
             days: 7
+        trial:
+            config_file: orgs/trial.json
+            days: 7
 
 sources:
     npsp:
         github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
+    inject_namespaced_org_quick_action:
+        description: "Selectively inject namespace references into QuickAction metadata"
+        class_path: cumulusci.tasks.util.FindReplace
+        options:
+            path: force-app/main/default/quickActions
+            find: "%%%NAMESPACED_ORG%%%"
+            replace: "pmdm__"
+            file_pattern: "*"
+
+    clear_namespaced_org_quick_action:
+        description: "Selectively inject namespace references into QuickAction metadata"
+        class_path: cumulusci.tasks.util.FindReplace
+        options:
+            path: force-app/main/default/quickActions
+            find: "%%%NAMESPACED_ORG%%%"
+            replace: ""
+            file_pattern: "*"
+
     inject_namespaced_org_flow:
         description: "Selectively inject namespace references into Flow metadata"
         class_path: cumulusci.tasks.util.FindReplace
@@ -51,7 +72,7 @@ tasks:
         description: "Preserve the source so it can be modified during deployment"
         class_path: tasks.GenericSrcRevert.GenericSrcRevert
         options:
-            path: force-app/main/default/flows
+            path: force-app/main/default/quickActions
             revert_path: force-app-bak
 
     cache_namespaces_in_org_config:
@@ -274,20 +295,20 @@ flows:
                 flow: npsp:install_prod
     deploy_unmanaged:
         steps:
-            #2.98:
-            #    task: source_revert
-            #    options:
-            #        revert: False
-            #2.99:
-            #    task: inject_namespaced_org_flow
-            #    when: org_config.namespaced
-            #2.999:
-            #    task: clear_namespaced_org_flow
-            #    when: not org_config.namespaced
-            #4.099:
-            #    task: source_revert
-            #    options:
-            #        revert: True
+            2.98:
+                task: source_revert
+                options:
+                    revert: False
+            2.99:
+                task: inject_namespaced_org_quick_action
+                when: org_config.namespaced
+            2.999:
+                task: clear_namespaced_org_quick_action
+                when: not org_config.namespaced
+            4.099:
+                task: source_revert
+                options:
+                    revert: True
 
     #deploy_packaging:
     #    steps:
@@ -295,6 +316,13 @@ flows:
     #            task: inject_namespaced_org_flow
     #            options:
     #                path: "src/flows"
+
+    deploy_packaging:
+        steps:
+            3.01:
+                task: inject_namespaced_org_quick_action
+                options:
+                    path: "src/quickActions"
 plans:
     install:
         slug: install
@@ -321,6 +349,8 @@ plans:
                     unmanaged: False
             4:
                 task: deploy_post
+                options:
+                    unmanaged: False
                 ui_options:
                     reports:
                         name: "Deploy Folder of Unmanaged Reports"

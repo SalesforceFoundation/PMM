@@ -123,28 +123,32 @@ class pmm(object):
         self.selenium.page_should_contain_element(locator)
 
     def verify_details(self, field, status, value):
-        """verify information on the account details page"""
+        """If status is 'contains' then the specified value should be present in the field
+                        'does not contain' then the specified value should not be present in the field
+        """
         locator = pmm_lex_locators["confirm"]["details"].format(field)
-        actual_value = self.selenium.get_webelement(locator).text
-        if status.upper() == "contains":
-            assert value == actual_value, "Expected value to be {} but found {}".format(
-                value, actual_value
-            )
-        elif status.upper() == "does not contain":
-            assert (
-                value != actual_value
-            ), "Expected value {} and actual value {} should not match".format(
-                value, actual_value
-            )
+        actual_value=self.selenium.get_webelement(locator).text
+        print(f"actual value is {actual_value}")
+        print(f"value is {value}")
+        if status == "contains":
+            assert value == actual_value, f"Expected value to be {value} but found {actual_value}"
+        elif status == "does not contain":
+            assert value != actual_value, f"Expected value {value} should not match {actual_value}"
+        else:
+            raise Exception("Valid status not entered")
 
     def click_quick_action_button(self, title):
-        """ Click on quick action buttons """
+        """ Click on quick action buttons and verifies the title of the quick action dialog """
         locator = pmm_lex_locators["quick_actions"].format(title)
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
         )
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
+        locator_title = pmm_lex_locators["new_record"]["title"].format(title)
+        self.selenium.wait_until_page_contains_element(
+            locator, error="Section title is not as expected"
+        )
 
     def verify_current_page_title(self, label):
         """ Verify we are on the page
@@ -259,3 +263,4 @@ class pmm(object):
         self.selenium.wait_until_page_contains_element(
             locator, error="Error message is not displayed"
         )
+        

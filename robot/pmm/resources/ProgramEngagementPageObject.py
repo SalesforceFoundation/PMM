@@ -79,3 +79,4 @@ class ProgramEngagementDetailPage(BasePMMPage, DetailPage):
             "/lightning/r/ProgramEngagement__c/",
             message="Current page is not a Program Engagement record detail view",
         )
+        self.selenium.wait_until_page_contains("Program Engagement Name")

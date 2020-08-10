@@ -33,6 +33,7 @@ import selectedContactWarning from "@salesforce/label/c.Service_Delivery_Contact
 import noServiceWarning from "@salesforce/label/c.No_Services_For_Program_Engagement";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import quantity from "@salesforce/label/c.Quantity";
+import fieldAccessError from "@salesforce/label/c.Util_UnsupportedField";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
@@ -110,6 +111,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         saving,
         error,
         quantity,
+        fieldAccessError,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -345,6 +347,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
         if (
+            event.detail.fields[this.fields.unitOfMeasurement.fieldApiName] &&
             event.detail.fields[this.fields.unitOfMeasurement.fieldApiName].value !== null
         ) {
             this.unitOfMeasureValue =

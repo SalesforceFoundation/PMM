@@ -186,7 +186,7 @@ public with sharing class FeatureParameters_TEST {
 
     @IsTest
     private static void shouldPassActualActiveProgramsWithServiceDeliveriesLast30() {
-        set<Id> programIds = new Set<Id>();
+        Set<Id> programIds = new Set<Id>();
 
         List<ServiceDelivery__c> serviceDeliveries = [
             SELECT ProgramEngagement__r.Program__c

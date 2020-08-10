@@ -269,7 +269,7 @@
                                     <i>value</i>
                                 </td>
                                 <td class="kwdoc">
-                                    <p>Verifies that toast contains specified value</p>
+                                    <p>Clicks on the link on toast message</p>
                                 </td>
                             </tr>
 
@@ -530,6 +530,20 @@
                                 </td>
                             </tr>
 
+                            <tr class="kwrow" id="pmm.py.Verify Toast Message">
+                                <td class="kwname">
+                                    Verify Toast Message
+                                </td>
+                                <td class="kwargs">
+                                    <i>message</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Verifies the toast message contains the given text
+                                    </p>
+                                </td>
+                            </tr>
+
                             <tr class="kwrow" id="pmm.py.Wait For Aura">
                                 <td class="kwname">
                                     Wait For Aura
@@ -720,16 +734,16 @@
 
                             <tr
                                 class="kwrow"
-                                id="BulkServiceDeliveryPageObject.py.Click Button"
+                                id="BulkServiceDeliveryPageObject.py.Click Bsdt Icon"
                             >
                                 <td class="kwname">
-                                    Click Button
+                                    Click Bsdt Icon
                                 </td>
                                 <td class="kwargs">
-                                    <i>label</i>
+                                    <i>icon</i>
                                 </td>
                                 <td class="kwdoc">
-                                    <p>Click on the Add service delivery button</p>
+                                    <p>Click on an icon on bsdt page</p>
                                 </td>
                             </tr>
 
@@ -743,64 +757,11 @@
                                 <td class="kwargs">
                                     <i>title</i>
                                 </td>
-                                <td class="kwdoc"><p>Click on the save button</p></td>
-                            </tr>
-
-                            <tr
-                                class="kwrow"
-                                id="BulkServiceDeliveryPageObject.py.Get Namespace Prefix"
-                            >
-                                <td class="kwname">
-                                    Get Namespace Prefix
-                                </td>
-                                <td class="kwargs">
-                                    <i>name</i>
-                                </td>
-                                <td class="kwdoc"></td>
-                            </tr>
-
-                            <tr
-                                class="kwrow"
-                                id="BulkServiceDeliveryPageObject.py.Get Pmm Namespace Prefix"
-                            >
-                                <td class="kwname">
-                                    Get Pmm Namespace Prefix
-                                </td>
-                                <td class="kwargs"></td>
-                                <td class="kwdoc"></td>
-                            </tr>
-
-                            <tr
-                                class="kwrow"
-                                id="BulkServiceDeliveryPageObject.py.Input Row1 Data"
-                            >
-                                <td class="kwname">
-                                    Input Row1 Data
-                                </td>
-                                <td class="kwargs">
-                                    <i>label</i>,
-
-                                    <i>value</i>
-                                </td>
                                 <td class="kwdoc">
-                                    <p>populate quantity and delivery date for 1st row</p>
-                                </td>
-                            </tr>
-
-                            <tr
-                                class="kwrow"
-                                id="BulkServiceDeliveryPageObject.py.Input Row2 Data"
-                            >
-                                <td class="kwname">
-                                    Input Row2 Data
-                                </td>
-                                <td class="kwargs">
-                                    <i>label</i>,
-
-                                    <i>value</i>
-                                </td>
-                                <td class="kwdoc">
-                                    <p>populate quantity and delivery date for 2nd row</p>
+                                    <p>
+                                        Click on a button on new PE dialog and delete
+                                        dialog
+                                    </p>
                                 </td>
                             </tr>
 
@@ -823,12 +784,48 @@
 
                             <tr
                                 class="kwrow"
+                                id="BulkServiceDeliveryPageObject.py.Populate Bsdt Dropdown"
+                            >
+                                <td class="kwname">
+                                    Populate Bsdt Dropdown
+                                </td>
+                                <td class="kwargs">
+                                    <i>row</i>,
+
+                                    <i>title</i>,
+
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc"><p>populate dropdown on bsdt</p></td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="BulkServiceDeliveryPageObject.py.Populate Bsdt Field"
+                            >
+                                <td class="kwname">
+                                    Populate Bsdt Field
+                                </td>
+                                <td class="kwargs">
+                                    <i>row</i>,
+
+                                    <i>label</i>,
+
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc"><p>populate text field on bsdt</p></td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
                                 id="BulkServiceDeliveryPageObject.py.Populate Bsdt Lookup"
                             >
                                 <td class="kwname">
                                     Populate Bsdt Lookup
                                 </td>
                                 <td class="kwargs">
+                                    <i>row</i>,
+
                                     <i>title</i>,
 
                                     <i>value</i>
@@ -836,66 +833,6 @@
                                 <td class="kwdoc">
                                     <p>
                                         populate the lookup field on bulk service delivery
-                                    </p>
-                                </td>
-                            </tr>
-
-                            <tr
-                                class="kwrow"
-                                id="BulkServiceDeliveryPageObject.py.Populate Row1 Fields"
-                            >
-                                <td class="kwname">
-                                    Populate Row1 Fields
-                                </td>
-                                <td class="kwargs">
-                                    <i>title</i>,
-
-                                    <i>value</i>
-                                </td>
-                                <td class="kwdoc">
-                                    <p>
-                                        populate program engagement and services field for
-                                        1st row
-                                    </p>
-                                </td>
-                            </tr>
-
-                            <tr
-                                class="kwrow"
-                                id="BulkServiceDeliveryPageObject.py.Populate Row2 Fields"
-                            >
-                                <td class="kwname">
-                                    Populate Row2 Fields
-                                </td>
-                                <td class="kwargs">
-                                    <i>title</i>,
-
-                                    <i>value</i>
-                                </td>
-                                <td class="kwdoc">
-                                    <p>
-                                        populate program engagement and services field for
-                                        2nd row
-                                    </p>
-                                </td>
-                            </tr>
-
-                            <tr
-                                class="kwrow"
-                                id="BulkServiceDeliveryPageObject.py.Select Listbox"
-                            >
-                                <td class="kwname">
-                                    Select Listbox
-                                </td>
-                                <td class="kwargs">
-                                    <i>title</i>,
-
-                                    <i>value</i>
-                                </td>
-                                <td class="kwdoc">
-                                    <p>
-                                        populate program engagement and services field for
-                                        1st row
                                     </p>
                                 </td>
                             </tr>
@@ -930,8 +867,8 @@
                                 </td>
                                 <td class="kwdoc">
                                     <p>
-                                        Verify we are on the Bulk Service Deliveries page
-                                        by verifying the header title
+                                        Verify dialog title on New PE dialog and Delete
+                                        dialog
                                     </p>
                                 </td>
                             </tr>
@@ -946,7 +883,7 @@
                                 <td class="kwargs">
                                     <i>message</i>
                                 </td>
-                                <td class="kwdoc"><p>Verify error message</p></td>
+                                <td class="kwdoc"><p>Verify error message on bsdt</p></td>
                             </tr>
 
                             <tr
@@ -957,6 +894,8 @@
                                     Verify Persist Save Icon
                                 </td>
                                 <td class="kwargs">
+                                    <i>row</i>,
+
                                     <i>message</i>
                                 </td>
                                 <td class="kwdoc">
@@ -975,6 +914,8 @@
                                     Verify Persist Warning Icon
                                 </td>
                                 <td class="kwargs">
+                                    <i>row</i>,
+
                                     <i>message</i>
                                 </td>
                                 <td class="kwdoc">
@@ -1984,7 +1925,7 @@
             </div>
         </div>
         <div class="footer">
-            Generated on Wednesday July 22, 03:53 PM - cumulusci v3.15.0
+            Generated on Friday August 07, 02:38 PM - cumulusci v3.15.0
         </div>
     </body>
 </html>

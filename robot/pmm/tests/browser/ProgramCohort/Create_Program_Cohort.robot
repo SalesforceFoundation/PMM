@@ -67,10 +67,10 @@ Date validation when cohort dates are not within program date range
      ...                                    cohort dialog from related list and verifes that an error message is displayed when cohort date 
      ...                                    range is outside the program date range 
      [tags]                                 W-037572  feature:Program Cohort
-     Go To Page                             Details                                 ${ns}Program__c                   object_id=${program}[Id]
+     Go To Page                             Details                                 Program__c                   object_id=${program}[Id]
      Click Quick Action Button              Edit
      Verify Current Page Title              Edit ${program}[Name]
-     Populate Modal Form                    Start Date=12
+     Populate Modal Form                    Start Date=15
      ...                                    End Date=20
      Click Modal Button                     Save
      Wait Until Modal Is Closed

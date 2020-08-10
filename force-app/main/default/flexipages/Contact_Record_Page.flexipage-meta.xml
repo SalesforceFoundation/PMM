@@ -45,7 +45,7 @@
         <name>sidebar</name>
         <type>Region</type>
     </flexiPageRegions>
-    <masterLabel>Contact Record Page</masterLabel>
+    <masterLabel>Program Management Contact Record</masterLabel>
     <sobjectType>Contact</sobjectType>
     <template>
         <name>flexipage:recordHomeLeftSidebarTemplateDesktop</name>

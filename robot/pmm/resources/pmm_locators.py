@@ -19,8 +19,7 @@ pmm_lex_locators = {
     "page_header": "//div[contains(@class, 'slds-page-header')]/descendant::span[text()='{}}']",
     "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
     "confirm": {
-    #    "details": "//div[contains(@class, 'slds-form-element')][.//span[text()='{}']]//following-sibling::div[.//span[contains(@class, 'test-id__field-value')]]/span",
-         "details":"//div[contains(@class, 'forcePageBlockItem') or contains(@class, 'slds-form-element_stacked')][.//span[text()='{}']]//following-sibling::div[.//span[contains(@class, 'test-id__field-value')]]//*[text()='{}']",
+         "details":"//div[contains(@class, 'forcePageBlockItem') or contains(@class, 'slds-form-element_stacked')][.//span[text()='{}']]//descendant::div[.//span[contains(@class, 'test-id__field-value')]]//*[self::a or self::lightning-formatted-number or self::lightning-formatted-text or self::lightning-formatted-name]",
     },
     "new_record": {
         "label":"//div[./*/*[text()='{}']]",
@@ -45,7 +44,6 @@ pmm_lex_locators = {
     },
     "quick_actions":"//button[@class='slds-button slds-button_neutral' and text()='{}']",
     "listview_link":"//a[contains(@class,'slds-truncate') and text()='{}']",
-    #"toast_msg":"//div[@class='slds-truncate' and contains(text(),'{}')]",
      "toast_msg":"//span[contains(@class,'toastMessage')]/a[@class='forceActionLink']/div[contains(@title,'{}')]",
 
     "bulk_service_delivery_locators": {

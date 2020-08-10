@@ -410,12 +410,12 @@ NOT(ISBLANK({!myVariable_current.%%%NAMESPACE%%%StartDate__c})),  TEXT({!myVaria
         <processMetadataValues>
             <name>originalFormula</name>
             <value>
-                <stringValue>IF([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.%%%NAMESPACE%%%StartDate__c &lt;TODAY() , TODAY(), NULL)</stringValue>
+                <stringValue>IF([%%%NAMESPACE%%%ProgramEngagement__c].%%%NAMESPACE%%%Program__c.%%%NAMESPACE%%%StartDate__c &lt;= TODAY() , TODAY(), NULL)</stringValue>
             </value>
         </processMetadataValues>
         <name>formula_8_myRule_7_A1_6369948895</name>
         <dataType>Date</dataType>
-        <expression>IF({!myVariable_current.%%%NAMESPACE%%%Program__r.%%%NAMESPACE%%%StartDate__c} &lt;TODAY() , TODAY(), NULL)</expression>
+        <expression>IF({!myVariable_current.%%%NAMESPACE%%%Program__r.%%%NAMESPACE%%%StartDate__c} &lt;= TODAY() , TODAY(), NULL)</expression>
     </formulas>
     <formulas>
         <processMetadataValues>

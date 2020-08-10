@@ -13,10 +13,6 @@ from BaseObjects import BasePMMPage
 
 @pageobject("Custom", "Bulk_Service_Deliveries")
 class BulkServiceDeliveryPage(BasePMMPage,BasePage):
-    
-    @property
-    def pmm(self):
-        return self.builtin.get_library_instance('pmm')
 
     def _go_to_page(self, **kwargs):
         """To go to Bulk Service Delivery page"""

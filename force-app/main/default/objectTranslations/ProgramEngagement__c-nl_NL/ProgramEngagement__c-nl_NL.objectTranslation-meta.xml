@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <validationRules>
-        <errorMessage>Geselecteerd account komt niet overeen met account van gerelateerde contactpersoon</errorMessage>
+        <errorMessage>Selecteer een account dat hoort bij de gerelateerde contactpersoon.</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
     </validationRules>
     <validationRules>
@@ -15,6 +15,10 @@
     <validationRules>
         <errorMessage>Selecteer een einddatum die op of na de programma-startdatum ligt en op of vóór de programma-einddatum.</errorMessage>
         <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Selecteer een programmacohort dat hoort bij het programma.</errorMessage>
+        <name>PROGRAM_MATCHES_COHORT_PROGRAM</name>
     </validationRules>
     <validationRules>
         <errorMessage>Begindatum moet zijn vóór einddatum</errorMessage>

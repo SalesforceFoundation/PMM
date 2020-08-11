@@ -12,6 +12,10 @@
         <translation>Solicitud denegada</translation>
     </picklistValues>
     <picklistValues>
+        <masterLabel>Waitlisted</masterLabel>
+        <translation>En lista de espera</translation>
+    </picklistValues>
+    <picklistValues>
         <masterLabel>Enrolled</masterLabel>
         <translation>Inscrito</translation>
     </picklistValues>

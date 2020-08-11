@@ -5,8 +5,20 @@
         <label>サービス提供を追加</label>
     </customLabels>
     <customLabels>
+        <name>Anonymous</name>
+        <label>匿名</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>キャンセル</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>完了</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Entry</name>
+        <label>エントリを追加</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -14,11 +26,11 @@
     </customLabels>
     <customLabels>
         <name>Confirm_Delete</name>
-        <label>削除を確認</label>
+        <label>削除してよろしいですか?</label>
     </customLabels>
     <customLabels>
         <name>Confirm_Delete_Row</name>
-        <label>この行を削除しますか?</label>
+        <label>この行を削除すると、このサービス提供が削除されます。</label>
     </customLabels>
     <customLabels>
         <name>Delete</name>
@@ -29,6 +41,10 @@
         <label>エラー</label>
     </customLabels>
     <customLabels>
+        <name>MissingSObjectType</name>
+        <label>クエリにはオブジェクトを含める必要があります。</label>
+    </customLabels>
+    <customLabels>
         <name>New_Program_Engagement</name>
         <label>新規プログラムエンゲージメント</label>
     </customLabels>
@@ -37,8 +53,12 @@
         <label>サービスが見つかりません。別のプログラムエンゲージメントを選択してください。</label>
     </customLabels>
     <customLabels>
+        <name>Quantity</name>
+        <label>数量</label>
+    </customLabels>
+    <customLabels>
         <name>Record_Deleted</name>
-        <label>レコードは削除されています</label>
+        <label>レコードが削除されました。</label>
     </customLabels>
     <customLabels>
         <name>Required</name>
@@ -50,7 +70,7 @@
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
-        <label>新規プログラムエンゲージメントレコードが作成されました</label>
+        <label>新規プログラムエンゲージメントレコードが作成されました。</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -73,12 +93,20 @@
         <label>サービス提供</label>
     </customLabels>
     <customLabels>
+        <name>Service_Deliveries_Added</name>
+        <label>サービス提供が追加されました。</label>
+    </customLabels>
+    <customLabels>
         <name>Service_Delivery_Contact_Without_Programs</name>
         <label>サービス提供を保存するには、まず有効なサービスを含むプログラムにこのクライアントを登録します。</label>
     </customLabels>
     <customLabels>
         <name>Success</name>
         <label>成功</label>
+    </customLabels>
+    <customLabels>
+        <name>TelemetryException</name>
+        <label>テレメトリ総計値を収集できませんでした。</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -92,6 +120,10 @@
         <name>Warning</name>
         <label>警告</label>
     </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>エラーがあるサービス提供行があります。</label>
+    </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>一括サービス提供</label>
@@ -101,11 +133,15 @@
         <label>プログラム管理</label>
     </customApplications>
     <quickActions>
+        <name>ProgramEngagement__c.Add_to_Program_Cohort</name>
+        <label>プログラムコホートに追加</label>
+    </quickActions>
+    <quickActions>
         <name>Contact.AddContactToProgram</name>
-        <label>個人をプログラムに追加</label>
+        <label>取引先責任者をプログラムに追加</label>
     </quickActions>
     <quickActions>
         <name>Program__c.AddContactToProgram</name>
-        <label>個人をプログラムに追加</label>
+        <label>取引先責任者をプログラムに追加</label>
     </quickActions>
 </Translations>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <validationRules>
-        <errorMessage>La cuenta seleccionada no coincide con la cuenta del contacto relacionado</errorMessage>
+        <errorMessage>Seleccione una cuenta que coincida con el contacto relacionado.</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
     </validationRules>
     <validationRules>
@@ -15,6 +15,10 @@
     <validationRules>
         <errorMessage>Seleccione una fecha de finalización que sea el día o después de la fecha de inicio del programa y el día o antes de la fecha de finalización del programa.</errorMessage>
         <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Seleccione una Cohorte de programa que coincida con el programa.</errorMessage>
+        <name>PROGRAM_MATCHES_COHORT_PROGRAM</name>
     </validationRules>
     <validationRules>
         <errorMessage>La fecha de inicio debe ser anterior a la fecha de finalización.</errorMessage>

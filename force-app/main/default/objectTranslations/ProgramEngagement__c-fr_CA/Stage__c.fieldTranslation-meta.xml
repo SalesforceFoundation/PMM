@@ -12,6 +12,10 @@
         <translation>Candidature refusée</translation>
     </picklistValues>
     <picklistValues>
+        <masterLabel>Waitlisted</masterLabel>
+        <translation>En liste d&apos;attente</translation>
+    </picklistValues>
+    <picklistValues>
         <masterLabel>Enrolled</masterLabel>
         <translation>Inscrit</translation>
     </picklistValues>

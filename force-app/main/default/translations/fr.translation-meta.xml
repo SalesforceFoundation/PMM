@@ -5,8 +5,20 @@
         <label>Ajouter une livraison de services</label>
     </customLabels>
     <customLabels>
+        <name>Anonymous</name>
+        <label>Anonyme</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Annuler</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Terminé</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Entry</name>
+        <label>Ajouter une entrée</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -14,11 +26,11 @@
     </customLabels>
     <customLabels>
         <name>Confirm_Delete</name>
-        <label>Confirmer la suppression</label>
+        <label>Confirmer la suppression ?</label>
     </customLabels>
     <customLabels>
         <name>Confirm_Delete_Row</name>
-        <label>Voulez-vous vraiment supprimer cette ligne ?</label>
+        <label>La suppression de cette ligne supprime la livraison de services.</label>
     </customLabels>
     <customLabels>
         <name>Delete</name>
@@ -29,6 +41,10 @@
         <label>Erreur</label>
     </customLabels>
     <customLabels>
+        <name>MissingSObjectType</name>
+        <label>Votre requête doit inclure un objet.</label>
+    </customLabels>
+    <customLabels>
         <name>New_Program_Engagement</name>
         <label>Nouvel engagement dans un programme</label>
     </customLabels>
@@ -37,8 +53,12 @@
         <label>Aucun service trouvé, choisissez un autre engagement dans un programme.</label>
     </customLabels>
     <customLabels>
+        <name>Quantity</name>
+        <label>Quantité</label>
+    </customLabels>
+    <customLabels>
         <name>Record_Deleted</name>
-        <label>Votre enregistrement a été supprimé</label>
+        <label>Enregistrement supprimé.</label>
     </customLabels>
     <customLabels>
         <name>Required</name>
@@ -50,7 +70,7 @@
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
-        <label>Enregistrement Nouvel engagement dans un programme créé</label>
+        <label>Enregistrement Nouvel engagement dans le programme créé.</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -73,12 +93,20 @@
         <label>Livraisons de services</label>
     </customLabels>
     <customLabels>
+        <name>Service_Deliveries_Added</name>
+        <label>Livraisons de services ajoutées.</label>
+    </customLabels>
+    <customLabels>
         <name>Service_Delivery_Contact_Without_Programs</name>
-        <label>Avant d&#39;enregistrer une livraison de services, inscrivez d&#39;abord ce client à un programme avec des services actifs.</label>
+        <label>Avant d&apos;enregistrer une livraison de services, inscrivez d&apos;abord ce client à un programme avec des services actifs.</label>
     </customLabels>
     <customLabels>
         <name>Success</name>
         <label>Réussi</label>
+    </customLabels>
+    <customLabels>
+        <name>TelemetryException</name>
+        <label>Nous n’avons pas pu collecter de métriques de télémétrie.</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -92,6 +120,10 @@
         <name>Warning</name>
         <label>Avertissement</label>
     </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>Certaines lignes de livraison de services contiennent des erreurs.</label>
+    </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>Livraisons de services en masse</label>
@@ -100,6 +132,10 @@
         <name>Program_Management</name>
         <label>Gestion de programme</label>
     </customApplications>
+    <quickActions>
+        <name>ProgramEngagement__c.Add_to_Program_Cohort</name>
+        <label>Ajouter à une cohorte de programmes</label>
+    </quickActions>
     <quickActions>
         <name>Contact.AddContactToProgram</name>
         <label>Ajouter un contact au programme</label>

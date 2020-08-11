@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Role__c</name>
-    <help>A Contact&#39;s relationship with the Program Engagement. Values are determined by your Admin.</help>
+    <help>A Contact&apos;s relationship with the Program Engagement. Values are determined by your Admin.</help>
     <label>Role</label>
     <picklistValues>
         <masterLabel>Client</masterLabel>

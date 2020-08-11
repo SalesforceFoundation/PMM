@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Stage__c</name>
-    <help>この選択リスト値は、プログラムでの個人のエンゲージメントのフェーズを示すものであり、パスに表示されます。値は管理者が決定します。</help>
+    <help>この選択リスト値は、プログラムでの取引先責任者のエンゲージメントのフェーズを示すものであり、パスに表示されます。値は管理者が決定します。</help>
     <label>フェーズ</label>
     <picklistValues>
         <masterLabel>Applied</masterLabel>
@@ -10,6 +10,10 @@
     <picklistValues>
         <masterLabel>Application Denied</masterLabel>
         <translation>申請却下</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Waitlisted</masterLabel>
+        <translation>待機リストに追加済み</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Enrolled</masterLabel>

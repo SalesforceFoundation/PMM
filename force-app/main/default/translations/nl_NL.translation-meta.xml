@@ -5,8 +5,20 @@
         <label>Servicelevering toevoegen</label>
     </customLabels>
     <customLabels>
+        <name>Anonymous</name>
+        <label>Anoniem</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Annuleren</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Gereed</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Entry</name>
+        <label>Vermelding toevoegen</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -14,11 +26,11 @@
     </customLabels>
     <customLabels>
         <name>Confirm_Delete</name>
-        <label>Verwijderen bevestigen</label>
+        <label>Verwijderen bevestigen?</label>
     </customLabels>
     <customLabels>
         <name>Confirm_Delete_Row</name>
-        <label>Weet u zeker dat u deze rij wilt verwijderen?</label>
+        <label>Als u deze rij verwijdert, wordt de servicelevering ook verwijderd.</label>
     </customLabels>
     <customLabels>
         <name>Delete</name>
@@ -29,6 +41,10 @@
         <label>Fout</label>
     </customLabels>
     <customLabels>
+        <name>MissingSObjectType</name>
+        <label>Uw query moet een object omvatten.</label>
+    </customLabels>
+    <customLabels>
         <name>New_Program_Engagement</name>
         <label>Nieuwe programmabetrokkenheid</label>
     </customLabels>
@@ -37,8 +53,12 @@
         <label>Geen services gevonden; kies een andere programmabetrokkenheid.</label>
     </customLabels>
     <customLabels>
+        <name>Quantity</name>
+        <label>Hoeveelheid</label>
+    </customLabels>
+    <customLabels>
         <name>Record_Deleted</name>
-        <label>Uw record is verwijderd</label>
+        <label>Record verwijderd.</label>
     </customLabels>
     <customLabels>
         <name>Required</name>
@@ -50,7 +70,7 @@
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
-        <label>Nieuw record voor programmabetrokkenheid gemaakt</label>
+        <label>Nieuw record voor programmabetrokkenheid gemaakt.</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>
@@ -73,12 +93,20 @@
         <label>Serviceleveringen</label>
     </customLabels>
     <customLabels>
+        <name>Service_Deliveries_Added</name>
+        <label>Serviceleveringen toegevoegd.</label>
+    </customLabels>
+    <customLabels>
         <name>Service_Delivery_Contact_Without_Programs</name>
-        <label>Voor het opslaan van deze servicelevering registreert u deze cliënt eerst bij een programma met actieve services.</label>
+        <label>Voor het opslaan van een servicelevering registreert u deze cliënt eerst bij een programma met actieve services.</label>
     </customLabels>
     <customLabels>
         <name>Success</name>
         <label>Geslaagd</label>
+    </customLabels>
+    <customLabels>
+        <name>TelemetryException</name>
+        <label>Er zijn geen telemetriegegevens verzameld.</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -92,6 +120,10 @@
         <name>Warning</name>
         <label>Waarschuwing</label>
     </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>Er zijn serviceleveringsrijen met fouten.</label>
+    </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>Serviceleveringen in bulk</label>
@@ -100,6 +132,10 @@
         <name>Program_Management</name>
         <label>Programmabeheer</label>
     </customApplications>
+    <quickActions>
+        <name>ProgramEngagement__c.Add_to_Program_Cohort</name>
+        <label>Toevoegen aan programmacohort</label>
+    </quickActions>
     <quickActions>
         <name>Contact.AddContactToProgram</name>
         <label>Contactpersoon toevoegen aan programma</label>

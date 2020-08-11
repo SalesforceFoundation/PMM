@@ -12,6 +12,10 @@
         <translation>Aanvraag afgewezen</translation>
     </picklistValues>
     <picklistValues>
+        <masterLabel>Waitlisted</masterLabel>
+        <translation>Op de wachtlijst geplaatst</translation>
+    </picklistValues>
+    <picklistValues>
         <masterLabel>Enrolled</masterLabel>
         <translation>Geregistreerd</translation>
     </picklistValues>

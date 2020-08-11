@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <validationRules>
-        <errorMessage>Le compte sélectionné ne correspond pas au compte du contact associé</errorMessage>
+        <errorMessage>Sélectionnez un compte qui correspond au contact associé.</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
     </validationRules>
     <validationRules>
@@ -15,6 +15,10 @@
     <validationRules>
         <errorMessage>Sélectionnez une date de fin identique ou postérieure à la date de début du programme et identique ou antérieure à la date de fin du programme.</errorMessage>
         <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Sélectionnez une cohorte de programmes qui correspond au programme.</errorMessage>
+        <name>PROGRAM_MATCHES_COHORT_PROGRAM</name>
     </validationRules>
     <validationRules>
         <errorMessage>La date de début doit être antérieure à la date de fin</errorMessage>
@@ -35,9 +39,9 @@
             <section>Custom Links</section>
         </sections>
     </layouts>
-    <nameFieldLabel>Nom de l&#39;engagement dans le programme</nameFieldLabel>
+    <nameFieldLabel>Nom de l&apos;engagement dans le programme</nameFieldLabel>
     <standardFields>
         <name>Name</name>
-        <label>Nom de l&#39;engagement dans le programme</label>
+        <label>Nom de l&apos;engagement dans le programme</label>
     </standardFields>
 </CustomObjectTranslation>

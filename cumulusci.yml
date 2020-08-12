@@ -354,3 +354,24 @@ plans:
                 ui_options:
                     reports:
                         name: "Deploy Folder of Unmanaged Reports"
+
+    reports:
+        slug: reports
+        title: Install Program Management Module Reports
+        tier: additional
+        is_listed: True
+        preflight_message: "This will install additional reports for Program Management Module in your org."
+        post_install_message: "Thanks for installing additional reports for Program Management Module. Please visit the [Program Management Module customer forum group](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) on the Power of Us Hub for any questions about Program Management Module."
+        error_message: "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include “PMM” in the subject line and include in your comment the installation link shown here."
+        checks:
+            - when: "not org_config.has_minimum_package_version('pmdm', '1.0')"
+              action: error
+              message: "Please install Program Management Module in your org prior to installing reports."
+        steps:
+            1:
+                task: deploy
+                options:
+                    path: unpackaged/post/reports
+                    unmanaged: False
+                ui_options:
+                    name: "Deploy Folder of Unmanaged Reports"

@@ -2,5 +2,5 @@
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>StartDate__c</name>
     <help>Wenn die Phase der Programmteilnahme &quot;Eingeschrieben&quot; oder &quot;Aktiv&quot; ist, ist der Standardwert für das Anfangsdatum der heutige Tag, wenn im Feld keine Angabe gemacht wird.</help>
-    <label>Anfangsdatum</label>
+    <label>Startdatum</label>
 </CustomFieldTranslation>

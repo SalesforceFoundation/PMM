@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>Stage__c</name>
-    <help>These Picklist values describe a Contact&#39;s stage of engagement in a Program and are displayed in a Path. Values are determined by your Admin.</help>
+    <help>These Picklist values describe a Contact&apos;s stage of engagement in a Program and are displayed in a Path. Values are determined by your Admin.</help>
     <label>Stage</label>
     <picklistValues>
         <masterLabel>Applied</masterLabel>
@@ -10,6 +10,10 @@
     <picklistValues>
         <masterLabel>Application Denied</masterLabel>
         <translation>Application Denied</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Waitlisted</masterLabel>
+        <translation>Waitlisted</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Enrolled</masterLabel>

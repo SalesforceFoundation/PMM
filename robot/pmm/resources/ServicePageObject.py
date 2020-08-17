@@ -7,14 +7,14 @@ from cumulusci.robotframework.pageobjects import BasePage
 from cumulusci.robotframework.pageobjects import ListingPage
 from cumulusci.robotframework.pageobjects import DetailPage
 from cumulusci.robotframework.pageobjects import pageobject
-from pmm_locators import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
 @pageobject("Listing", "Service")
 class ServiceListingPage(BasePMMPage, ListingPage):
     object_name = "Service"
-   
+
+
 @pageobject("NewService", "Service")
 class NewServicePage(BasePMMPage, BasePage):
     def _is_current_page(self):
@@ -32,7 +32,6 @@ class NewServicePage(BasePMMPage, BasePage):
 
 @pageobject("Details", "Service__c")
 class ServiceDetailPage(BasePMMPage, DetailPage):
-
     def _is_current_page(self):
         """ Verify we are on the Service Delivery detail page
             by verifying that the url contains '/view'

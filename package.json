@@ -23,19 +23,10 @@
     "scripts": {
         "test:unit": "lwc-jest",
         "test:unit:watch": "lwc-jest --watch",
-        "test:unit:debug": "lwc-jest --debug",
-        "postinstall": "rm -rf venv && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt"
+        "test:unit:debug": "lwc-jest --debug"
     },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged && source venv/bin/activate && python label_audit.py"
-        }
-    },
-    "lint-staged": {
-        "*": [
-            "eslint",
-            "prettier --check",
-            "git add"
-        ]
+    "dependencies": {
+        "hasha-cli": "^4.1.0",
+        "lockfile-lint": "^4.3.7"
     }
 }

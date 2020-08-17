@@ -2,3 +2,7 @@ beautifulsoup4==4.8.1
 esprima==4.0.1
 soupsieve==1.9.5
 click>=7.0
+black==19.10b0
+flake8==3.8.3
+pytest==5.4.3
+cumulusci==3.16

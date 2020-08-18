@@ -118,13 +118,20 @@
         <fields>HouseholdBenefit__c</fields>
         <relatedList>ServiceDelivery__c.Service__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Total_Capacity__c</fields>
+        <fields>Primary_Service_Provider__c</fields>
+        <relatedList>Service_Schedule__c.Service__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h2D000000j1ux</masterLabel>
+        <masterLabel>00h21000001j3mE</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

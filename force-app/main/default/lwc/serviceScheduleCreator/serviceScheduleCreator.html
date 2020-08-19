@@ -1,0 +1,25 @@
+<template>
+    <c-modal header={labels.newSchedule} ondialogclose={reset} size="large">
+        <template if:true={showStep1}>
+            <c-section title={labels.scheduleInfo}></c-section>
+            <c-section title={labels.scheduleDateTime}></c-section>
+        </template>
+        <template if:true={showStep2}>
+            <c-section title={labels.reviewSessions}></c-section>
+        </template>
+        <template if:true={showStep3}>
+            <c-section title={labels.addParticipants}></c-section>
+        </template>
+        <template if:true={showStep4}>
+            <c-section title={labels.reviewSchedule}></c-section>
+        </template>
+        <div slot="footer">
+            <c-progress-navigator
+                if:true={currentStep}
+                steps={steps}
+                current-step={currentStep}
+                onnavigate={handleNavigation}
+            ></c-progress-navigator>
+        </div>
+    </c-modal>
+</template>

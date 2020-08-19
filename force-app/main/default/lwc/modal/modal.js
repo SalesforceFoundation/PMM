@@ -15,6 +15,8 @@ const CSS_CLASS = "modal-hidden";
 export default class Modal extends LightningElement {
     close = closeLabel;
 
+    @api size = "small";
+
     @api
     set header(value) {
         this.hasHeaderString = value !== "";
@@ -22,6 +24,10 @@ export default class Modal extends LightningElement {
     }
     get header() {
         return this._headerPrivate;
+    }
+
+    get modalCss() {
+        return `slds-modal slds-fade-in-open slds-modal_${this.size}`;
     }
 
     @track hasHeaderString = false;

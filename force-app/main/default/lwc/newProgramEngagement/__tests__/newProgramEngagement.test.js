@@ -20,7 +20,7 @@ import {
 } from "@salesforce/sfdx-lwc-jest";
 
 const mockGetFieldSet = require("./data/getFieldSet.json");
-const mockCurrentPageReference = require("./data/CurrentPageReference.json");
+const mockCurrentPageReference = require("./data/currentPageReference.json");
 
 //Register the  wire adapters
 const getFieldSetAdapter = registerApexTestWireAdapter(getFieldSet);

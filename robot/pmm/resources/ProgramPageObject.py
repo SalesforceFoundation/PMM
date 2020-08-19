@@ -7,7 +7,6 @@ from cumulusci.robotframework.pageobjects import BasePage
 from cumulusci.robotframework.pageobjects import ListingPage
 from cumulusci.robotframework.pageobjects import DetailPage
 from cumulusci.robotframework.pageobjects import pageobject
-from pmm_locators import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
@@ -29,6 +28,7 @@ class NewProgramPage(BasePMMPage, BasePage):
             "/lightning/o/Program__c/",
             message="Section title is not 'New Program' as expected",
         )
+
 
 @pageobject("Details", "Program__c")
 class ProgramDetailPage(BasePMMPage, DetailPage):

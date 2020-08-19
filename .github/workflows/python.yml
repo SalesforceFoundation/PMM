@@ -1,0 +1,28 @@
+name: Python
+on: [push]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+      - name: Determine Python Version
+        id: python-version
+        run: |
+          echo "::set-output name=ver::$(python --version)"
+      - uses: actions/cache@v2
+        with:
+          path: venv
+          key: ${{ runner.os }}-${{ steps.python-version.outputs.ver }}-${{ hashFiles('requirements.txt') }}
+      - name: Install Packages
+        run: |
+          python3 -m venv venv
+          venv/bin/pip install -r requirements.txt
+      - name: Black
+        run: |
+          venv/bin/black --check --diff .
+      - name: Flake8
+        run: |
+          venv/bin/flake8

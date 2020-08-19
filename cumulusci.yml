@@ -1,4 +1,4 @@
-minimum_cumulusci_version: "2.5.9"
+minimum_cumulusci_version: "3.16"
 project:
     name: PMM
     package:
@@ -75,11 +75,6 @@ tasks:
             path: force-app/main/default/quickActions
             revert_path: force-app-bak
 
-    cache_namespaces_in_org_config:
-        description: Caches namespaces information in org_config
-        class_path: tasks.namespaces.CacheNamespaces
-        group: Namespaces
-
     robot:
         options:
             suites: robot/pmm/tests
@@ -114,40 +109,21 @@ tasks:
                 - record_type: Campaign.Default
                   default: true
 
-    run_all_local_tests:
-        group: "Tests"
-        description: "Runs all local Apex Tests including code coverage"
-        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
-        options:
-            command: "force:apex:test:run --codecoverage --testlevel RunLocalTests --resultformat human"
-
     run_tests:
         options:
             retry_failures:
                 - "unable to obtain exclusive access to this record"
                 - "UNABLE_TO_LOCK_ROW"
             retry_always: True
+            required_org_code_coverage_percent: 100
 
-    disable_npsp_triggers:
-        class_path: cumulusci.tasks.salesforce.trigger_handlers.SetTDTMHandlerStatus
-        description: "Disable all NPSP Trigger Handlers"
+    disable_tdtm_trigger_handlers:
         options:
-            active: False
             namespace: npsp
-            restore_file: trigger_status.yml
 
-    restore_npsp_triggers:
-        class_path: cumulusci.tasks.salesforce.trigger_handlers.SetTDTMHandlerStatus
-        description: "Restore all NPSP Trigger Handlers"
+    restore_tdtm_trigger_handlers:
         options:
-            restore: True
             namespace: npsp
-            restore_file: trigger_status.yml
-
-    dx:
-        group: "Salesforce DX"
-        description: "Calls a sfdx task with the cci Org User specificed.  Enter the sfdx task with the command option"
-        class_path: cumulusci.tasks.sfdx.SFDXOrgTask
 
     dx_status:
         group: "Salesforce DX"
@@ -155,35 +131,6 @@ tasks:
         class_path: cumulusci.tasks.sfdx.SFDXOrgTask
         options:
             command: "force:source:status"
-
-    log_bulk_data_mapping:
-        group: "Data: Bulk"
-        description: "Generates a combined mapping configuration for cumulusci.tasks.bulkdata"
-        class_path: tasks.BulkData.LogMapping
-        options:
-            package_mapping_directories:
-                - data/bulk/mapping/npsp
-                - data/bulk/mapping/pmdm
-            pre_mapping_configs:
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
-            log_mapping: table
-
-    insert_bulk_data:
-        group: "Data: Bulk"
-        description: "Inserts bulk data at sql_path into org with auto-generated mapping"
-        class_path: tasks.BulkData.InsertData
-        options:
-            sql_path: data/bulk/data.sql
-            ignore_row_errors: True
-            package_mapping_directories:
-                - data/bulk/mapping/npsp
-                - data/bulk/mapping/pmdm
-            pre_mapping_configs:
-                - path: data/bulk/mapping/Household_Accounts.yml
-                - path: data/bulk/mapping/Organization_Accounts.yml
-                - path: data/bulk/mapping/Contacts.yml
 
     uninstall_packaged_incremental:
         description: Deletes any metadata from the package in the target org not in the local workspace
@@ -228,39 +175,53 @@ tasks:
             namespace_inject: $project_config.project__package__namespace
 
 flows:
-    capture_bulk_data:
-        steps:
-            100:
-                task: capture_bulk_data
-            200:
-                task: update_client_photo_directories
-
-    insert_data:
+    load_data:
         steps:
             1:
-                task: cache_namespaces_in_org_config
-            2:
-                task: disable_npsp_triggers
-                when: "'npsp' in org_config.namespace_info.namespaces"
+                task: disable_tdtm_trigger_handlers
+                when: "org_config.has_minimum_package_version('npsp', '1.0')"
             3:
-                task: insert_bulk_data
+                task: load_dataset
+                options:
+                    drop_missing_schema: True
             4:
-                task: restore_npsp_triggers
-                when: "'npsp' in org_config.namespace_info.namespaces"
+                task: restore_tdtm_trigger_handlers
+                when: "org_config.has_minimum_package_version('npsp', '1.0')"
             5:
                 task: execute_anon
                 options:
                     path: "data/scripts/update_all_records_as_recently_viewed.apex"
 
+    delete_data:
+        steps:
+            1:
+                task: delete_data
+                options:
+                    objects:
+                        - npe4__Relationship__c
+                when: "org_config.has_minimum_package_version('npsp', '1.0')"
+            2:
+                task: delete_data
+                options:
+                    objects:
+                        - Opportunity
+                        - ServiceDelivery__c
+                        - Service__c
+                        - ProgramEngagement__c
+                        - ProgramCohort__c
+                        - Program__c
+                        - Contact
+                        - Account
+
     config_unmanaged:
         steps:
             3:
-                flow: insert_data
+                flow: load_data
 
     config_managed:
         steps:
             3:
-                flow: insert_data
+                flow: load_data
             4:
                 task: deploy_customer_profiles
                 options:
@@ -268,20 +229,20 @@ flows:
 
     config_qa:
         steps:
-            100:
+            3:
                 task: deploy_dev_config
-            200:
+            4:
                 flow: config_unmanaged
-            202:
+            5:
                 task: deploy_customer_profiles
 
     config_dev:
         steps:
-            100:
+            3:
                 task: deploy_dev_config
-            200:
+            4:
                 flow: config_unmanaged
-            202:
+            5:
                 task: deploy_customer_profiles
 
     config_regression:
@@ -293,6 +254,7 @@ flows:
         steps:
             1:
                 flow: npsp:install_prod
+
     deploy_unmanaged:
         steps:
             2.98:
@@ -323,19 +285,8 @@ flows:
                 task: inject_namespaced_org_quick_action
                 options:
                     path: "src/quickActions"
-plans:
-    install:
-        slug: install
-        title: Install Program Management Module
-        tier: primary
-        is_listed: True
-        preflight_message: "This will install Program Management Module in your org."
-        post_install_message: "Thanks for installing Program Management Module. Please visit the [Program Management Module customer forum group](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) on the Power of Us Hub for any questions about Program Management Module."
-        error_message: "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include “PMM” in the subject line and include in your comment the installation link shown here."
-        checks:
-            - when: "'.my.' not in org_config.instance_url"
-              action: error
-              message: "Please enable My Domain in your org prior to installing."
+
+    customer_org:
         steps:
             1:
                 task: update_dependencies
@@ -355,6 +306,22 @@ plans:
                     reports:
                         name: "Deploy Folder of Unmanaged Reports"
 
+plans:
+    install:
+        slug: install
+        title: Install Program Management Module
+        tier: primary
+        is_listed: True
+        preflight_message: "This will install Program Management Module in your org."
+        post_install_message: "Thanks for installing Program Management Module. Please visit the [Program Management Module customer forum group](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) on the Power of Us Hub for any questions about Program Management Module."
+        error_message: "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include “PMM” in the subject line and include in your comment the installation link shown here."
+        checks:
+            - when: "'.my.' not in org_config.instance_url"
+              action: error
+              message: "Please enable My Domain in your org prior to installing."
+        steps:
+            1:
+                flow: customer_org
     reports:
         slug: reports
         title: Install Program Management Module Reports

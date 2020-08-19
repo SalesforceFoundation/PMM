@@ -20,15 +20,15 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Primary_Service_Provider__c</field>
+                <field>PrimaryServiceProvider__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Other_Service_Provider__c</field>
+                <field>OtherServiceProvider__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Total_Capacity__c</field>
+                <field>TotalCapacity__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>
@@ -91,23 +91,23 @@
         </platformActionListItems>
     </platformActionList>
     <relatedLists>
-        <fields>TASK.SUBJECT</fields>
-        <fields>TASK.WHO_NAME</fields>
-        <fields>ACTIVITY.TASK</fields>
-        <fields>TASK.DUE_DATE</fields>
-        <fields>TASK.STATUS</fields>
-        <fields>TASK.PRIORITY</fields>
-        <fields>CORE.USERS.FULL_NAME</fields>
-        <relatedList>RelatedActivityList</relatedList>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <fields>NAME</fields>
+        <fields>SessionDate__c</fields>
+        <fields>Status__c</fields>
+        <relatedList>ServiceSession__c.ServiceSchedule__c</relatedList>
+        <sortField>SessionDate__c</sortField>
+        <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>
-        <fields>TASK.SUBJECT</fields>
-        <fields>TASK.WHO_NAME</fields>
-        <fields>ACTIVITY.TASK</fields>
-        <fields>TASK.DUE_DATE</fields>
-        <fields>CORE.USERS.FULL_NAME</fields>
-        <fields>TASK.LAST_UPDATE</fields>
-        <relatedList>RelatedHistoryList</relatedList>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <fields>NAME</fields>
+        <fields>ContactName__c</fields>
+        <fields>SignedUpOn__c</fields>
+        <fields>Status__c</fields>
+        <relatedList>ServiceParticipant__c.ServiceSchedule__c</relatedList>
+        <sortField>SignedUpOn__c</sortField>
+        <sortOrder>Asc</sortOrder>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

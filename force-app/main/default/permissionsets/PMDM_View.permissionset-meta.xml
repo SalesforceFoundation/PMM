@@ -116,13 +116,13 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceDelivery__c.Service_Provider__c</field>
-        <readable>true</readable>
+        <field>ServiceDelivery__c.ServiceSession__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceDelivery__c.Service_Session__c</field>
-        <readable>false</readable>
+        <field>ServiceDelivery__c.Service_Provider__c</field>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -131,37 +131,72 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Service_Participant__c.Contact__c</field>
+        <field>ServiceParticipant__c.ContactName__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Service_Participant__c.Program_Engagement__c</field>
+        <field>ServiceParticipant__c.ProgramEngagement__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Service_Participant__c.Service__c</field>
+        <field>ServiceParticipant__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Service_Schedule__c.Other_Service_Provider__c</field>
+        <field>ServiceParticipant__c.Service__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Service_Schedule__c.Primary_Service_Provider__c</field>
+        <field>ServiceParticipant__c.SignedUpOn__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Service_Schedule__c.Service__c</field>
+        <field>ServiceParticipant__c.Status__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Service_Schedule__c.Total_Capacity__c</field>
+        <field>ServiceSchedule__c.OtherServiceProvider__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.PrimaryServiceProvider__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.Service__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.TotalCapacity__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSession__c.OtherServiceProvider__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSession__c.PrimaryServiceProvider__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSession__c.SessionDate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSession__c.Status__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -223,7 +258,7 @@
         <allowEdit>false</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
-        <object>Service_Participant__c</object>
+        <object>ServiceParticipant__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -232,7 +267,7 @@
         <allowEdit>false</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
-        <object>Service_Schedule__c</object>
+        <object>ServiceSchedule__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -241,7 +276,7 @@
         <allowEdit>false</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
-        <object>Service_Session__c</object>
+        <object>ServiceSession__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -270,7 +305,7 @@
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>
-        <tab>Service_Schedule__c</tab>
+        <tab>ServiceSchedule__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>

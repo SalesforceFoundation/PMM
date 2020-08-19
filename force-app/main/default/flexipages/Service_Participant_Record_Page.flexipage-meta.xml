@@ -49,8 +49,8 @@
         <name>sidebar</name>
         <type>Region</type>
     </flexiPageRegions>
-    <masterLabel>Service Schedule Record Page</masterLabel>
-    <sobjectType>ServiceSchedule__c</sobjectType>
+    <masterLabel>Service Participant Record Page</masterLabel>
+    <sobjectType>ServiceParticipant__c</sobjectType>
     <template>
         <name>flexipage:recordHomeLeftSidebarTemplateDesktop</name>
     </template>

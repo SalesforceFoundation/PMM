@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Service_Schedule__c</fullName>
+    <fullName>ServiceSchedule__c</fullName>
     <externalId>false</externalId>
     <label>Service Schedule</label>
-    <referenceTo>Service_Schedule__c</referenceTo>
+    <referenceTo>ServiceSchedule__c</referenceTo>
     <relationshipLabel>Service Sessions</relationshipLabel>
     <relationshipName>Service_Sessions</relationshipName>
     <relationshipOrder>0</relationshipOrder>

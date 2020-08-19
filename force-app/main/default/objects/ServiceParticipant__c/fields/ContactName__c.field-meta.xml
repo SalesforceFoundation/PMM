@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Other_Service_Provider__c</fullName>
+    <fullName>ContactName__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
-    <label>Other Service Provider</label>
+    <label>Contact Name</label>
     <referenceTo>Contact</referenceTo>
-    <relationshipLabel>Service Schedules (Other Service Provider)</relationshipLabel>
-    <relationshipName>Service_Schedules1</relationshipName>
+    <relationshipLabel>Service Participants</relationshipLabel>
+    <relationshipName>Service_Participants</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

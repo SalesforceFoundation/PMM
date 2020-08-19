@@ -11,7 +11,6 @@ import json
 import os
 import click
 from pathlib import Path
-import sys
 
 
 def check_js(paths, strings_dict):
@@ -43,11 +42,11 @@ def check_js(paths, strings_dict):
                 item.value = item.value.strip("\u00a0'\"/.;() ")
                 if (
                     item.type == "String"
-                    and not item.value in strings_dict.get("ignorable_js_values")
+                    and item.value not in strings_dict.get("ignorable_js_values")
                     and not item.value.endswith("__r")
                     and not item.value.endswith("__c")
-                    and not last_value
-                    in strings_dict.get(
+                    and last_value
+                    not in strings_dict.get(
                         "ignorable_js_last_values"
                     )  # allows for lwc attributes that expect string values
                     and item.value[

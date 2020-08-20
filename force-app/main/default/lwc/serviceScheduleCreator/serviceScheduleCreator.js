@@ -1,26 +1,28 @@
-import { LightningElement } from "lwc";
+import { LightningElement, wire, track } from "lwc";
+import { getObjectInfo } from "lightning/uiObjectInfoApi";
+import { ProgressSteps } from "c/progressSteps";
+import { NavigationItems } from "c/navigationItems";
+import { format } from "c/util";
+
+import SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
+
 import NEW_RECORD_LABEL from "@salesforce/label/c.New_Record";
 import NEXT_LABEL from "@salesforce/label/c.Next";
 import PREVIOUS_LABEL from "@salesforce/label/c.Previous";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
-import REVIEW_RECORDS_LABEL from "@salesforce/label/c.Review_Records";
-import ADD_RECORDS_LABEL from "@salesforce/label/c.Add_Records";
 import REVIEW_RECORD_LABEL from "@salesforce/label/c.Review_Record";
 import SCHEDULE_INFORMATION_LABEL from "@salesforce/label/c.Service_Schedule_Information";
 import SCHEDULE_DATE_TIME_LABEL from "@salesforce/label/c.Service_Schedule_Date_Time";
-import { ProgressSteps } from "c/progressSteps";
-import { NavigationItems } from "c/navigationItems";
 
 export default class ServiceScheduleCreator extends LightningElement {
+    @track
     labels = {
         newSchedule: NEW_RECORD_LABEL,
         next: NEXT_LABEL,
         previous: PREVIOUS_LABEL,
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
-        reviewSessions: REVIEW_RECORDS_LABEL,
-        addParticipants: ADD_RECORDS_LABEL,
         reviewSchedule: REVIEW_RECORD_LABEL,
         scheduleInfo: SCHEDULE_INFORMATION_LABEL,
         scheduleDateTime: SCHEDULE_DATE_TIME_LABEL,
@@ -47,6 +49,25 @@ export default class ServiceScheduleCreator extends LightningElement {
                 .addFinish(this.labels.save)
         );
     _currentStep;
+
+    @wire(getObjectInfo, { objectApiName: SCHEDULE_OBJECT })
+    wireSchedule(result) {
+        if (!result) {
+            return;
+        }
+        if (result.data) {
+            this.formatLabels(result.data);
+        } else if (result.error) {
+            console.log(JSON.stringify(result.error));
+        }
+    }
+
+    formatLabels(data) {
+        console.log(JSON.stringify(data));
+
+        this.labels.newSchedule = format(this.labels.newSchedule, [data.labelPlural]);
+        this.labels.reviewSchedule = format(this.labels.reviewSchedule, [data.label]);
+    }
 
     get steps() {
         return this._steps.all;

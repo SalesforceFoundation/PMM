@@ -1,14 +1,19 @@
 <template>
+    <lightning-button
+        variant="Brand"
+        onclick={showModal}
+        label={labels.newSchedule}
+    ></lightning-button>
     <c-modal header={labels.newSchedule} ondialogclose={reset} size="large">
         <template if:true={showStep1}>
             <c-section title={labels.scheduleInfo}></c-section>
             <c-section title={labels.scheduleDateTime}></c-section>
         </template>
         <template if:true={showStep2}>
-            <c-section title={labels.reviewSessions}></c-section>
+            <!-- Review Sessions -->
         </template>
         <template if:true={showStep3}>
-            <c-section title={labels.addParticipants}></c-section>
+            <!-- Add Participants -->
         </template>
         <template if:true={showStep4}>
             <c-section title={labels.reviewSchedule}></c-section>

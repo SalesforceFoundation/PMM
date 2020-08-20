@@ -13,7 +13,7 @@
 - [ ] Place holder data is incorporated (Refer to [Case Management Sample Data document](https://quip.com/cbFcAPJF8t0z))
 - [ ] Base axe-core JEST test included for any new LWC (No critical violations)
 - [ ] CRUD/FLS is enforced in Apex
-- [ ] Permission sets are updated to account for CRUD/FLS for new object metadata
+- [ ] Update & Test permission sets to account for new features and CRUD/FLS
 - [ ] All modified classes are unit tested (Apex) at 100% coverage
 - [ ] UX approval or UX not necessary
 - [ ] PR contains draft release notes

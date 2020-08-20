@@ -131,7 +131,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceParticipant__c.ContactName__c</field>
+        <field>ServiceParticipant__c.Contact__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

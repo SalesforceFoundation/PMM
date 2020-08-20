@@ -128,7 +128,7 @@
     <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
-        <fields>ContactName__c</fields>
+        <fields>Contact__c</fields>
         <fields>ProgramEngagement__c</fields>
         <fields>SignedUpOn__c</fields>
         <fields>Status__c</fields>

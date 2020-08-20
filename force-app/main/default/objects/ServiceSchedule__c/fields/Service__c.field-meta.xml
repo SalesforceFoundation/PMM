@@ -6,7 +6,7 @@
     <label>Service</label>
     <referenceTo>Service__c</referenceTo>
     <relationshipLabel>Service Schedules</relationshipLabel>
-    <relationshipName>Service_Schedules</relationshipName>
+    <relationshipName>ServiceSchedules</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

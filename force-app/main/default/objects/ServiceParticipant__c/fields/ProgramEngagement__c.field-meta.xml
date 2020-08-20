@@ -6,7 +6,7 @@
     <label>Program Engagement</label>
     <referenceTo>ProgramEngagement__c</referenceTo>
     <relationshipLabel>Service Participants</relationshipLabel>
-    <relationshipName>Service_Participants</relationshipName>
+    <relationshipName>ServiceParticipants</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

@@ -5,7 +5,7 @@
     <label>Service Schedule</label>
     <referenceTo>ServiceSchedule__c</referenceTo>
     <relationshipLabel>Service Sessions</relationshipLabel>
-    <relationshipName>Service_Sessions</relationshipName>
+    <relationshipName>ServiceSessions</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>
     <trackTrending>false</trackTrending>

@@ -1,0 +1,15 @@
+{
+    "*.{cls,apex,js,html,md,yml,yaml,json}": [
+        "prettier --write"
+    ],
+    "*.js": [
+        "eslint"
+    ],
+    "*.py": [
+        "venv/bin/black --check --diff",
+        "venv/bin/flake8"
+    ],
+    "yarn.lock": [
+        "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --validate-https"
+    ]
+}

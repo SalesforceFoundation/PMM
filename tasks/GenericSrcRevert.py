@@ -29,9 +29,7 @@ class GenericSrcRevert(BaseTask):
     def _init_options(self, kwargs):
         super(GenericSrcRevert, self)._init_options(kwargs)
 
-        self.options["revert"] = process_bool_arg(
-            self.options.get("revert", False)
-        )
+        self.options["revert"] = process_bool_arg(self.options.get("revert", False))
         if not os.path.isdir(self.options["path"]):
             raise TaskOptionsError(
                 "The path {} does not exist or is not a directory".format(

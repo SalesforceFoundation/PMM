@@ -6,7 +6,7 @@
     <label>Other Service Provider</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Service Schedules (Other Service Provider)</relationshipLabel>
-    <relationshipName>Service_Schedules1</relationshipName>
+    <relationshipName>ServiceSchedules1</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

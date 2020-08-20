@@ -101,12 +101,15 @@
     <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
-        <fields>ContactName__c</fields>
+        <fields>Contact__c</fields>
         <fields>SignedUpOn__c</fields>
         <fields>Status__c</fields>
         <relatedList>ServiceParticipant__c.ServiceSchedule__c</relatedList>
         <sortField>SignedUpOn__c</sortField>
         <sortOrder>Asc</sortOrder>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedFileList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

@@ -6,7 +6,7 @@
     <label>Service Session</label>
     <referenceTo>ServiceSession__c</referenceTo>
     <relationshipLabel>Service Deliveries</relationshipLabel>
-    <relationshipName>Service_Deliveries</relationshipName>
+    <relationshipName>ServiceDeliveries</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

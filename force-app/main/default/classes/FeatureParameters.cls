@@ -252,12 +252,12 @@ public without sharing class FeatureParameters {
                         .addCondition(String.valueOf(User.IsActive) + ' = ' + 'true')
                         .addCondition(
                             ' Id IN (' +
-                            buildAssignemntQuery(DELIVER_PERMISSION) +
+                            buildAssignmentQuery(DELIVER_PERMISSION) +
                             ')'
                         )
                         .addCondition(
                             ' Id NOT IN (' +
-                            buildAssignemntQuery(MANAGE_PERMISSION) +
+                            buildAssignmentQuery(MANAGE_PERMISSION) +
                             ')'
                         );
                 }
@@ -295,7 +295,7 @@ public without sharing class FeatureParameters {
             return finder.findCount();
         }
 
-        private String buildAssignemntQuery(String permissionSetName) {
+        private String buildAssignmentQuery(String permissionSetName) {
             return new QueryBuilder()
                 .withSObjectType(PermissionSetAssignment.SObjectType)
                 .withSelectFields(

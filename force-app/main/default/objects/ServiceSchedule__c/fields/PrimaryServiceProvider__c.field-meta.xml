@@ -5,8 +5,8 @@
     <externalId>false</externalId>
     <label>Primary Service Provider</label>
     <referenceTo>Contact</referenceTo>
-    <relationshipLabel>Service Schedules</relationshipLabel>
-    <relationshipName>ServiceSchedules</relationshipName>
+    <relationshipLabel>Service Schedules (Primary Service Provider)</relationshipLabel>
+    <relationshipName>PrimaryServiceProviderSchedules</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

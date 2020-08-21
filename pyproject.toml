@@ -7,5 +7,6 @@ exclude_lines = ["pragma: no cover", "@abstract", ]
 [tool.pytest.ini_options]
 norecursedirs = [
     "node_modules",
-    "venv"
+    "venv",
+    ".cci"
 ]

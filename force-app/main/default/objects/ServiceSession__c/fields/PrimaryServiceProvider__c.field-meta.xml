@@ -5,8 +5,8 @@
     <externalId>false</externalId>
     <label>Primary Service Provider</label>
     <referenceTo>Contact</referenceTo>
-    <relationshipLabel>Service Sessions</relationshipLabel>
-    <relationshipName>ServiceSessions</relationshipName>
+    <relationshipLabel>Service Sessions (Primary Service Provider)</relationshipLabel>
+    <relationshipName>PrimaryServiceProviderSessions</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

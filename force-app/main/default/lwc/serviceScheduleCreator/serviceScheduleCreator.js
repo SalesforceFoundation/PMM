@@ -1,8 +1,8 @@
 import { LightningElement, wire, track } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
-import { ProgressSteps } from "c/progressSteps";
-import { NavigationItems } from "c/navigationItems";
+import { ProgressSteps } from "./progressSteps";
+import { NavigationItems } from "./navigationItems";
 import { format } from "c/util";
 
 import SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
@@ -98,24 +98,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     get showStep4() {
         return this.currentStep.value === 3;
-    }
-
-    handleNavigation(event) {
-        const direction = event.detail;
-
-        switch (direction) {
-            case "next":
-                this.handleNext();
-                break;
-            case "previous":
-                this.handlePrevious();
-                break;
-            case "finish":
-                this.handleFinish();
-                break;
-            default:
-                console.log(`Unsupported navigation: ${direction}`);
-        }
     }
 
     handleNext() {

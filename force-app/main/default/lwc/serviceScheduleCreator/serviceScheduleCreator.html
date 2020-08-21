@@ -1,10 +1,10 @@
 <template>
-    <lightning-button
-        variant="Brand"
-        onclick={showModal}
-        label={labels.newSchedule}
-    ></lightning-button>
-    <c-modal header={labels.newSchedule} ondialogclose={reset} size="large">
+    <c-modal
+        header={labels.newSchedule}
+        ondialogclose={handleFinish}
+        default-visible="true"
+        size="large"
+    >
         <template if:true={showStep1}>
             <c-section title={labels.scheduleInfo}></c-section>
             <c-section title={labels.scheduleDateTime}></c-section>

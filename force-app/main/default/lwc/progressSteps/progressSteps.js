@@ -41,7 +41,7 @@ export class ProgressSteps {
         this._currentValue -= this._currentValue > 0 ? 1 : 0;
     }
 
-    finish() {
+    restart() {
         this._currentValue = 0;
     }
 }

@@ -1,4 +1,5 @@
 import { LightningElement, wire, track } from "lwc";
+import { NavigationMixin } from "lightning/navigation";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ProgressSteps } from "c/progressSteps";
 import { NavigationItems } from "c/navigationItems";
@@ -15,7 +16,7 @@ import REVIEW_RECORD_LABEL from "@salesforce/label/c.Review_Record";
 import SCHEDULE_INFORMATION_LABEL from "@salesforce/label/c.Service_Schedule_Information";
 import SCHEDULE_DATE_TIME_LABEL from "@salesforce/label/c.Service_Schedule_Date_Time";
 
-export default class ServiceScheduleCreator extends LightningElement {
+export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track
     labels = {
         newSchedule: NEW_RECORD_LABEL,
@@ -136,14 +137,14 @@ export default class ServiceScheduleCreator extends LightningElement {
     }
 
     handleFinish() {
-        this.hideModal();
         this.reset();
+        this.hideModal();
+        this.navigateToList();
     }
 
     reset() {
-        this._steps.finish();
-        this._currentStep = this._steps.currentStep;
-        console.log(this.currentStep);
+        this._steps.restart();
+        this._currentStep = undefined;
     }
 
     showModal() {
@@ -154,5 +155,18 @@ export default class ServiceScheduleCreator extends LightningElement {
     hideModal() {
         const modal = this.template.querySelector("c-modal");
         modal.hide();
+    }
+
+    navigateToList() {
+        this[NavigationMixin.Navigate]({
+            type: "standard__objectPage",
+            attributes: {
+                objectApiName: SCHEDULE_OBJECT.objectApiName,
+                actionName: "list",
+            },
+            state: {
+                filterName: "Recent",
+            },
+        });
     }
 }

@@ -1,0 +1,6 @@
+<aura:component
+    implements="flexipage:availableForRecordHome,force:hasRecordId,lightning:actionOverride"
+    access="global"
+>
+    <c:serviceScheduleCreator />
+</aura:component>

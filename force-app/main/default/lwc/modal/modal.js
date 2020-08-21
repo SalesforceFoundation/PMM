@@ -16,6 +16,19 @@ export default class Modal extends LightningElement {
     close = closeLabel;
 
     @api size = "fixed";
+    visibilityClass = CSS_CLASS;
+
+    @api
+    set defaultVisible(value) {
+        if (value) {
+            this.visibilityClass = "";
+        } else {
+            this.visibilityClass = CSS_CLASS;
+        }
+    }
+    get defaultVisible() {
+        return this.visibilityClass === "";
+    }
 
     @api
     set header(value) {

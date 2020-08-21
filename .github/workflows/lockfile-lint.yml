@@ -21,4 +21,4 @@ jobs:
           yarn install
       - name: lockfile-lint
         run: |
-          npx lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --validate-https
+          npx lockfile-lint

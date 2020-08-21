@@ -64,8 +64,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     formatLabels(data) {
-        console.log(JSON.stringify(data));
-
         this.labels.newSchedule = format(this.labels.newSchedule, [data.labelPlural]);
         this.labels.reviewSchedule = format(this.labels.reviewSchedule, [data.label]);
     }

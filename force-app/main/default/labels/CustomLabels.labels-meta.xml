@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>Add_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Records {SObject Plural Label}</shortDescription>
+        <value>Add {0}</value>
+    </labels>
+    <labels>
         <fullName>Add_Service_Delivery</fullName>
         <categories>Service Delivery</categories>
         <language>en_US</language>
@@ -65,6 +72,13 @@
         <value>Delete</value>
     </labels>
     <labels>
+        <fullName>End_Time</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>End Time</shortDescription>
+        <value>End Time</value>
+    </labels>
+    <labels>
         <fullName>Error</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -114,6 +128,13 @@
         <protected>true</protected>
         <shortDescription>Your record has been deleted</shortDescription>
         <value>Record deleted.</value>
+    </labels>
+    <labels>
+        <fullName>Review_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Records {SObject Plural Label}</shortDescription>
+        <value>Review {0}</value>
     </labels>
     <labels>
         <fullName>Required</fullName>
@@ -188,6 +209,13 @@
         <value>To save a Service Delivery, first enroll this client in a Program with active Services.</value>
     </labels>
     <labels>
+        <fullName>Start_Time</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Start Time</shortDescription>
+        <value>Start Time</value>
+    </labels>
+    <labels>
         <fullName>Success</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -201,6 +229,13 @@
         <protected>true</protected>
         <shortDescription>Error capturing metrics.</shortDescription>
         <value>We couldn't collect telemetry metrics.</value>
+    </labels>
+    <labels>
+        <fullName>Total_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Total Records (SObject Plural Label)</shortDescription>
+        <value>Total {0}</value>
     </labels>
     <labels>
         <fullName>Util_Error</fullName>

@@ -27,7 +27,23 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>entityNames</name>
-                    <value>[&quot;ProgramEngagement__c&quot;,&quot;Contact&quot;,&quot;Account&quot;,&quot;Program__c&quot;,&quot;Service__c&quot;]</value>
+                    <valueList>
+                        <valueListItems>
+                            <value>ProgramEngagement__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Contact</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Account</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Program__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Service__c</value>
+                        </valueListItems>
+                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>maxRecords</name>

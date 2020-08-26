@@ -1412,7 +1412,7 @@
     eslint-plugin-jest "^22.0.0"
     eslint-restricted-globals "^0.2.0"
 
-"@salesforce/sfdx-lwc-jest@>=0.7.1":
+"@salesforce/sfdx-lwc-jest@>=0.9.1":
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/@salesforce/sfdx-lwc-jest/-/sfdx-lwc-jest-0.9.2.tgz#8ee15d6d8ee19a0881ec2845cc95a87c74fae72d"
   integrity sha512-s3Ot5MRnVDDOyEryE8srz3ionNFWm4IUWZcOKTGuP45CGM6r6LJUUxVIsyn4sXakQTuGQrRk+x/tYE9dE1DTEg==

@@ -72,6 +72,13 @@
         <value>Delete</value>
     </labels>
     <labels>
+        <fullName>End_Time</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>End Time</shortDescription>
+        <value>End Time</value>
+    </labels>
+    <labels>
         <fullName>Error</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -258,6 +265,13 @@
         <value>Service Schedule Information</value>
     </labels>
     <labels>
+        <fullName>Start_Time</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Start Time</shortDescription>
+        <value>Start Time</value>
+    </labels>
+    <labels>
         <fullName>Success</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -271,6 +285,13 @@
         <protected>true</protected>
         <shortDescription>Error capturing metrics.</shortDescription>
         <value>We couldn't collect telemetry metrics.</value>
+    </labels>
+    <labels>
+        <fullName>Total_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Total Records (SObject Plural Label)</shortDescription>
+        <value>Total {0}</value>
     </labels>
     <labels>
         <fullName>Util_Error</fullName>

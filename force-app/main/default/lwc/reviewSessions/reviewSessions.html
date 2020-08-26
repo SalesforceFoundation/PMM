@@ -1,0 +1,44 @@
+<template>
+    <c-section title={labels.reviewSessions}></c-section>
+    <lightning-layout
+        multiple-rows="true"
+        horizontal-align="center"
+        pull-to-boundary="medium"
+    >
+        <lightning-layout-item size="5" class="slds-m-top_x-small">
+            <div
+                style="font-weight: bold;"
+                class="slds-float_left slds-m-top_large slds-m-right_x-large"
+            >
+                {labels.totalSessions}: {totalSessionCount}
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="5">
+            <div
+                class="slds-float_right slds-m-top_large slds-m-left_x-large slds-m-bottom_xx-small"
+            >
+                <lightning-button
+                    variant="Neutral"
+                    label={labels.addSession}
+                    onclick={handleAddRows}
+                ></lightning-button>
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="10">
+            <div
+                class="slds-box slds-p-around_none slds-m-top_x-small"
+                style="width:fit-content"
+            >
+                <lightning-datatable
+                    key-field="Id"
+                    columns={columns}
+                    data={data}
+                    hide-checkbox-column
+                    show-row-number-column
+                    onrowaction={handleDelete}
+                >
+                </lightning-datatable>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

@@ -1,4 +1,4 @@
-import { LightningElement, wire, track } from "lwc";
+import { LightningElement, wire, track, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ProgressSteps } from "./progressSteps";
@@ -28,6 +28,8 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         scheduleInfo: SCHEDULE_INFORMATION_LABEL,
         scheduleDateTime: SCHEDULE_DATE_TIME_LABEL,
     };
+
+    @api serviceId;
 
     _steps = new ProgressSteps()
         .addStep("", this.labels.newSchedule, new NavigationItems().addNext())

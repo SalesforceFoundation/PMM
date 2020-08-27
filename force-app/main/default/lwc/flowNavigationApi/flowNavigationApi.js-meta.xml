@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>49.0</apiVersion>
+    <description>Allows the flow wrapper to communicate with the flow navigation buttons: BACK, NEXT, FINISH</description>
     <isExposed>true</isExposed>
+    <masterLabel>Flow Navigation API</masterLabel>
     <targets>
         <target>lightning__FlowScreen</target>
     </targets>
-    <masterLabel>Section Title</masterLabel>
-    <targetConfigs>
-        <targetConfig targets="lightning__FlowScreen">
-            <property name="title" label="Title" type="String" required="false" role="inputOnly"/>
-        </targetConfig>
-    </targetConfigs>
 </LightningComponentBundle>

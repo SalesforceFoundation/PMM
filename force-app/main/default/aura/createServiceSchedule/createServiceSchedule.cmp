@@ -1,6 +1,24 @@
 <aura:component
-    implements="flexipage:availableForRecordHome,force:hasRecordId,lightning:actionOverride"
+    implements="flexipage:availableForRecordHome, force:hasRecordId, lightning:actionOverride, lightning:isUrlAddressable"
     access="global"
 >
-    <c:serviceScheduleCreator />
+    <aura:attribute name="serviceId" type="String" />
+    <aura:attribute name="availableActions" type="String[]" />
+    <aura:attribute name="currentStage" type="Object" />
+    <aura:attribute name="stages" type="Object[]" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+
+    <aura:html tag="style">
+        .slds-modal__container { position: absolute; height: fit-content; margin: auto;
+        padding: 0; top: 0; bottom: 0; left: 0; right: 0; }
+    </aura:html>
+
+    <lightning:messageChannel
+        type="Navigation__c"
+        aura:id="navigation"
+        onMessage="{!c.handleNavigationMessage}"
+    />
+    <lightning:overlayLibrary aura:id="modal" />
 </aura:component>

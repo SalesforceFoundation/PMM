@@ -1,0 +1,59 @@
+<template>
+    <lightning-layout horizontal-align="end">
+        <lightning-layout-item
+            padding="around-small"
+            size="3"
+            class="slds-text-align_left"
+        >
+            <lightning-button
+                if:true={showBack}
+                name="back"
+                variant={back.variant}
+                label={back.label}
+                title={back.label}
+                onclick={handleNavigate}
+            ></lightning-button>
+        </lightning-layout-item>
+
+        <lightning-layout-item
+            padding="around-small"
+            size="6"
+            class="slds-text-align_center"
+            if:true={stages}
+        >
+            <lightning-progress-indicator
+                current-step={currentStep}
+                type="base"
+                variant="base"
+            >
+                <template for:each={stages} for:item="step">
+                    <lightning-progress-step
+                        key={step.name}
+                        label={step.label}
+                        value={step.name}
+                    ></lightning-progress-step>
+                </template>
+            </lightning-progress-indicator>
+        </lightning-layout-item>
+
+        <lightning-layout-item padding="around-small" size="3">
+            <lightning-button
+                if:true={showNext}
+                name="next"
+                variant={next.variant}
+                label={next.label}
+                title={next.label}
+                onclick={handleNavigate}
+                class="slds-var-p-right_small"
+            ></lightning-button>
+            <lightning-button
+                if:true={showFinish}
+                name="finish"
+                variant={finish.variant}
+                label={finish.label}
+                title={finish.label}
+                onclick={handleNavigate}
+            ></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

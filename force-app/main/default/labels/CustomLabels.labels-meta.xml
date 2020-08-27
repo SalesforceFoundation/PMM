@@ -37,11 +37,11 @@
         <value>Add Entry</value>
     </labels>
     <labels>
-        <fullName>Add_Records</fullName>
+        <fullName>Add_Service_Participants</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Add Records (SObject Plural Label)</shortDescription>
-        <value>Add {0}</value>
+        <shortDescription>Add Service Participants</shortDescription>
+        <value>Add Service Participants</value>
     </labels>
     <labels>
         <fullName>Close</fullName>
@@ -101,11 +101,11 @@
         <value>New Program Engagement</value>
     </labels>
     <labels>
-        <fullName>New_Record</fullName>
+        <fullName>New_Service_Schedule</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>New Record (SObject Label)</shortDescription>
-        <value>New {0}</value>
+        <shortDescription>New Service Schedule</shortDescription>
+        <value>New Service Schedule</value>
     </labels>
     <labels>
         <fullName>Next</fullName>
@@ -158,11 +158,11 @@
         <value>Required</value>
     </labels>
     <labels>
-        <fullName>Review_Record</fullName>
+        <fullName>Review</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Review Record (SObject Label)</shortDescription>
-        <value>Review {0}</value>
+        <shortDescription>Review</shortDescription>
+        <value>Review</value>
     </labels>
     <labels>
         <fullName>Review_Records</fullName>

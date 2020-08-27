@@ -165,7 +165,6 @@ export default class ReviewSessions extends LightningElement {
     }
 
     handleAddRows() {
-        this.setupDataTableData();
         const dataId = createUUID();
         this.data.push({
             id: dataId,
@@ -174,6 +173,8 @@ export default class ReviewSessions extends LightningElement {
             startTime: "",
             endTime: "",
         });
+
+        this.data = this.data.slice(0);
     }
 
     handleDelete(event) {

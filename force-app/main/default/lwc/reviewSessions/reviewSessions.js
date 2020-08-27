@@ -1,8 +1,8 @@
 import { LightningElement, track, wire, api } from "lwc";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
-import { format } from "c/util";
+import { format, createUUID } from "c/util";
 import TOTAL_RECORDS_LABEL from "@salesforce/label/c.Total_Records";
-import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Records";
+import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Record";
 import START_TIME_LABEL from "@salesforce/label/c.Start_Time";
 import END_TIME_LABEL from "@salesforce/label/c.End_Time";
 import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
@@ -46,16 +46,12 @@ export default class ReviewSessions extends LightningElement {
     }
 
     setLabels(data) {
-        this.labels.totalSessions = format(this.labels.totalSessions, [
-            data.labelPlural.split(" ")[1],
-        ]);
+        this.labels.totalSessions = format(this.labels.totalSessions, [data.labelPlural]);
 
-        this.labels.addSession = format(this.labels.addSession, [
-            data.label.split(" ")[1],
-        ]);
+        this.labels.addSession = format(this.labels.addSession, [data.label]);
 
         this.labels.reviewSessions = format(this.labels.reviewSessions, [
-            data.labelPlural.split(" ")[1],
+            data.labelPlural,
         ]);
 
         // Below lines of code sets the labels so these could be used while
@@ -170,8 +166,9 @@ export default class ReviewSessions extends LightningElement {
 
     handleAddRows() {
         this.setupDataTableData();
+        const dataId = createUUID();
         this.data.push({
-            id: "",
+            id: dataId,
             Name: "",
             SessionDate__c: "",
             startTime: "",

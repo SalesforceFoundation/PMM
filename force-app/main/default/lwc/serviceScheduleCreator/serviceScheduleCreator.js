@@ -8,25 +8,15 @@ import { format } from "c/util";
 import SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
 
 import NEW_RECORD_LABEL from "@salesforce/label/c.New_Record";
-import NEXT_LABEL from "@salesforce/label/c.Next";
-import PREVIOUS_LABEL from "@salesforce/label/c.Previous";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
-import REVIEW_RECORD_LABEL from "@salesforce/label/c.Review_Record";
-import SCHEDULE_INFORMATION_LABEL from "@salesforce/label/c.Service_Schedule_Information";
-import SCHEDULE_DATE_TIME_LABEL from "@salesforce/label/c.Service_Schedule_Date_Time";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track
     labels = {
         newSchedule: NEW_RECORD_LABEL,
-        next: NEXT_LABEL,
-        previous: PREVIOUS_LABEL,
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
-        reviewSchedule: REVIEW_RECORD_LABEL,
-        scheduleInfo: SCHEDULE_INFORMATION_LABEL,
-        scheduleDateTime: SCHEDULE_DATE_TIME_LABEL,
     };
 
     @api serviceId;
@@ -66,8 +56,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     formatLabels(data) {
-        this.labels.newSchedule = format(this.labels.newSchedule, [data.labelPlural]);
-        this.labels.reviewSchedule = format(this.labels.reviewSchedule, [data.label]);
+        this.labels.newSchedule = format(this.labels.newSchedule, [data.label]);
     }
 
     get steps() {

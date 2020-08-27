@@ -1,7 +1,10 @@
 ({
     doInit: function(component, event, helper) {
         helper.extractUrlParams(component, event);
-        helper.showFlow(component, event, helper);
+
+        if (component.get("v.useFlowWizard")) {
+            helper.showFlow(component, event, helper);
+        }
     },
 
     reInit: function(component, event, helper) {

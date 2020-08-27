@@ -93,13 +93,6 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>New</actionName>
-        <content>createServiceSchedule</content>
-        <formFactor>Small</formFactor>
-        <skipRecordTypeSelect>false</skipRecordTypeSelect>
-        <type>LightningComponent</type>
-    </actionOverrides>
-    <actionOverrides>
-        <actionName>New</actionName>
         <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>

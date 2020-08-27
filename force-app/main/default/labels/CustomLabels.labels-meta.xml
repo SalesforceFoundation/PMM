@@ -37,13 +37,6 @@
         <value>Add Entry</value>
     </labels>
     <labels>
-        <fullName>Add_Service_Participants</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Add Service Participants</shortDescription>
-        <value>Add Service Participants</value>
-    </labels>
-    <labels>
         <fullName>Close</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -101,11 +94,11 @@
         <value>New Program Engagement</value>
     </labels>
     <labels>
-        <fullName>New_Service_Schedule</fullName>
+        <fullName>New_Record</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>New Service Schedule</shortDescription>
-        <value>New Service Schedule</value>
+        <shortDescription>New Record (SObject Label)</shortDescription>
+        <value>New {0}</value>
     </labels>
     <labels>
         <fullName>Next</fullName>

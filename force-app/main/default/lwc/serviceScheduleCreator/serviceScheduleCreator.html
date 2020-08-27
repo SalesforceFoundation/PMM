@@ -5,19 +5,14 @@
         default-visible="true"
         size="large"
     >
-        <template if:true={showStep1}>
-            <c-section title={labels.scheduleInfo}></c-section>
-            <c-section title={labels.scheduleDateTime}></c-section>
-        </template>
+        <template if:true={showStep1}> </template>
         <template if:true={showStep2}>
             <!-- Review Sessions -->
         </template>
         <template if:true={showStep3}>
             <!-- Add Participants -->
         </template>
-        <template if:true={showStep4}>
-            <c-section title={labels.reviewSchedule}></c-section>
-        </template>
+        <template if:true={showStep4}> </template>
         <div slot="footer">
             <lightning-layout horizontal-align="end">
                 <lightning-layout-item

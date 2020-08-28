@@ -1,28 +1,19 @@
 ({
     extractUrlParams: function(component, event, helper) {
-        let name = "inContextOfRef";
-        let url = window.location.href;
+        let pageRef = component.get("v.pageReference");
+        let state = pageRef.state;
+        let context = state.inContextOfRef;
 
-        // TODO: Grap this from Page Reference instead
-        let regex = new RegExp("[?&]" + name + "(=1.([^&#]*)|&|#|$)");
-        let results = regex.exec(url);
-
-        if (!results) return null;
-        if (!results[2]) return "";
-        let context = decodeURIComponent(results[2].replace(/\+/g, " "));
-        context = JSON.parse(window.atob(context));
-
-        let namespace = component.getType().split(":")[0];
-        let objectApiName = (namespace === "c" ? "" : namespace) + "Service__c";
-
-        if (
-            !context.attributes ||
-            !context.attributes.objectApiName ||
-            context.attributes.objectApiName !== objectApiName
-        ) {
+        if (!context) {
             return;
         }
 
+        if (context.startsWith("1.")) {
+            context = context.substring(2);
+        }
+
+        // decode and deserialize the parameter
+        context = JSON.parse(window.atob(context));
         component.set("v.serviceId", context.attributes.recordId);
     },
 
@@ -66,6 +57,7 @@
     },
 
     startFlow: function(component) {
+        // TODO: Determine where to store the name of the flow to launch...
         const FLOW_NAME = "ScheduleCreator";
         let flow = component.find("flow");
         flow.startFlow(FLOW_NAME);
@@ -76,7 +68,8 @@
         let modalFooter = modalComponents[1];
 
         component.find("modal").showCustomModal({
-            header: $A.get("$Label.c.New_Service_Schedule"),
+            // TODO: Format New Record with SObject Label
+            header: $A.get("$Label.c.New_Record"),
             body: modalBody,
             footer: modalFooter,
             showCloseButton: true,

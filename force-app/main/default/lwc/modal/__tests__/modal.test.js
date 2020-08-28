@@ -11,7 +11,7 @@ import { createElement } from "lwc";
 import Modal from "c/modal";
 import closeLabel from "@salesforce/label/c.Close";
 
-const CSS_CLASS = "modal-hidden";
+const MODAL_HIDDEN = "modal-hidden";
 
 describe("c-modal", () => {
     let element;
@@ -30,7 +30,7 @@ describe("c-modal", () => {
         return global.flushPromises().then(() => {
             const modalContainer = element.shadowRoot.querySelector("div");
             //verify that the css class on the outer div is modal-hidden by default
-            expect(modalContainer.classList.value).toBe(CSS_CLASS);
+            expect(modalContainer.classList.value).toBe(MODAL_HIDDEN);
         });
     });
 
@@ -103,7 +103,7 @@ describe("c-modal", () => {
 
             element.hide();
             //verify that the CSS class exists
-            expect(modalContainer.classList.value).toBe(CSS_CLASS);
+            expect(modalContainer.classList.value).toBe(MODAL_HIDDEN);
         });
     });
 

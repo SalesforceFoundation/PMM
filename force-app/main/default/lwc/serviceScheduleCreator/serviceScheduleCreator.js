@@ -49,14 +49,12 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             return;
         }
         if (result.data) {
-            this.formatLabels(result.data);
+            this.labels.newSchedule = format(this.labels.newSchedule, [
+                result.data.label,
+            ]);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
-    }
-
-    formatLabels(data) {
-        this.labels.newSchedule = format(this.labels.newSchedule, [data.label]);
     }
 
     get steps() {

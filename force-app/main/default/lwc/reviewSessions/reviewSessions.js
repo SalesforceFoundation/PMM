@@ -14,6 +14,7 @@ import SESSION_DATE_FIELD from "@salesforce/schema/ServiceSession__c.SessionDate
 export default class ReviewSessions extends LightningElement {
     @track columns = [];
     @track data = [];
+    @track objectName;
 
     @api sessionNameLabel;
     @api sessionDateLabel;
@@ -38,16 +39,12 @@ export default class ReviewSessions extends LightningElement {
         }
     }
 
-    get totalSessionCount() {
-        if (this.data) {
-            return this.data.length;
-        }
-        return 0;
+    get totalServiceSessions() {
+        return format(this.labels.totalSessions, [this.objectName, this.data.length]);
     }
 
     setLabels(data) {
-        this.labels.totalSessions = format(this.labels.totalSessions, [data.labelPlural]);
-
+        this.objectName = data.labelPlural;
         this.labels.addSession = format(this.labels.addSession, [data.label]);
 
         this.labels.reviewSessions = format(this.labels.reviewSessions, [

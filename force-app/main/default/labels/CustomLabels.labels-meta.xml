@@ -235,7 +235,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Total Records (SObject Plural Label)</shortDescription>
-        <value>Total {0} : {1}</value>
+        <value>Total {0}: {1}</value>
     </labels>
     <labels>
         <fullName>Util_Error</fullName>

@@ -278,6 +278,17 @@ const debouncify = (anyFunction, wait) => {
     };
 };
 
+//This below function can be used to create unique ids when trying to add new rows to a datatable
+const createUUID = () => {
+    let currentTime = new Date().getTime();
+    let uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(char) {
+        let randomNumber = (currentTime + Math.random() * 16) % 16 | 0;
+        currentTime = Math.floor(currentTime / 16);
+        return (char === "x" ? randomNumber : (randomNumber & 0x3) | 0x8).toString(16);
+    });
+    return uuid;
+};
+
 export {
     isString,
     showToast,
@@ -291,4 +302,5 @@ export {
     debug,
     getChildObjectByName,
     debouncify,
+    createUUID,
 };

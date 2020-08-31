@@ -158,13 +158,6 @@
         <value>Record deleted.</value>
     </labels>
     <labels>
-        <fullName>Review_Records</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Add Records {SObject Plural Label}</shortDescription>
-        <value>Review {0}</value>
-    </labels>
-    <labels>
         <fullName>Required</fullName>
         <language>en_US</language>
         <protected>true</protected>

@@ -1,7 +1,6 @@
 import NEXT_LABEL from "@salesforce/label/c.Next";
 import PREVIOUS_LABEL from "@salesforce/label/c.Previous";
 import FINISH_LABEL from "@salesforce/label/c.Finish";
-import { NavigationItem } from "./navigationItem";
 
 const names = {
     NEXT: "next",
@@ -12,6 +11,8 @@ const names = {
 const BRAND = "brand";
 
 export class NavigationItems {
+    navigationItem;
+
     constructor() {
         this._navigationItems = {};
     }
@@ -29,7 +30,7 @@ export class NavigationItems {
     }
 
     _addNavigationItem(name, label, variant) {
-        this._navigationItems[name] = new NavigationItem(label, variant);
+        this._navigationItems[name] = { label: label, variant: variant };
         return this;
     }
 

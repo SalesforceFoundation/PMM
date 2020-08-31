@@ -30,6 +30,9 @@
         <lightning:overlayLibrary aura:id="modal" />
 
         <aura:set attribute="else">
+            <aura:html tag="style">
+                .slds-theme_shade { background-color: #dddbda; }
+            </aura:html>
             <c:serviceScheduleCreator serviceId="{#v.serviceId}" />
         </aura:set>
     </aura:if>

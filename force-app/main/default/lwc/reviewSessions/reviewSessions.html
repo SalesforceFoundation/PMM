@@ -1,23 +1,21 @@
 <template>
-    <div class="slds-box slds-theme_shade slds-section__title">
-        {labels.reviewSessions}
-    </div>
+    <c-section title={labels.reviewSessions}></c-section>
     <lightning-layout
         multiple-rows="true"
         horizontal-align="center"
         pull-to-boundary="medium"
     >
-        <lightning-layout-item size="5" class="slds-m-top_x-small">
+        <lightning-layout-item size="5" class="slds-var-m-top_x-small">
             <div
                 style="font-weight: bold;"
-                class="slds-float_left slds-m-top_large slds-m-right_x-large"
+                class="slds-float_left slds-var-m-top_large slds-var-m-right_x-large"
             >
                 {totalServiceSessions}
             </div>
         </lightning-layout-item>
         <lightning-layout-item size="5">
             <div
-                class="slds-float_right slds-m-top_large slds-m-left_x-large slds-m-bottom_xx-small"
+                class="slds-float_right slds-var-m-top_large slds-var-m-left_x-large slds-var-m-bottom_xx-small"
             >
                 <lightning-button
                     variant="Neutral"
@@ -28,7 +26,7 @@
         </lightning-layout-item>
         <lightning-layout-item size="10">
             <div
-                class="slds-box slds-p-around_none slds-m-top_x-small"
+                class="slds-box slds-p-around_none slds-var-m-top_x-small"
                 style="width:fit-content"
             >
                 <lightning-datatable

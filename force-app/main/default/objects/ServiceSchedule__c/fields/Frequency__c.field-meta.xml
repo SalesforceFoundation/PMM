@@ -5,7 +5,7 @@
     <label>Frequency</label>
     <required>false</required>
     <trackTrending>false</trackTrending>
-    <type>MultiselectPicklist</type>
+    <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
         <valueSetDefinition>
@@ -32,5 +32,4 @@
             </value>
         </valueSetDefinition>
     </valueSet>
-    <visibleLines>4</visibleLines>
 </CustomField>

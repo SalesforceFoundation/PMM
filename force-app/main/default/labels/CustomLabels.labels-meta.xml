@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>Add_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Record {SObject Label}</shortDescription>
+        <value>Add {0}</value>
+    </labels>
+    <labels>
         <fullName>Add_Service_Delivery</fullName>
         <categories>Service Delivery</categories>
         <language>en_US</language>
@@ -37,13 +44,6 @@
         <value>Add Entry</value>
     </labels>
     <labels>
-        <fullName>Add_Records</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Add Records (SObject Plural Label)</shortDescription>
-        <value>Add {0}</value>
-    </labels>
-    <labels>
         <fullName>Close</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -70,6 +70,13 @@
         <protected>true</protected>
         <shortDescription>Delete</shortDescription>
         <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>End_Time</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>End Time</shortDescription>
+        <value>End Time</value>
     </labels>
     <labels>
         <fullName>Error</fullName>
@@ -158,13 +165,6 @@
         <value>Required</value>
     </labels>
     <labels>
-        <fullName>Review_Record</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Review Record (SObject Label)</shortDescription>
-        <value>Review {0}</value>
-    </labels>
-    <labels>
         <fullName>Review_Records</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -244,18 +244,11 @@
         <value>To save a Service Delivery, first enroll this client in a Program with active Services.</value>
     </labels>
     <labels>
-        <fullName>Service_Schedule_Date_Time</fullName>
+        <fullName>Start_Time</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>New Service Schedule Date and Time Section</shortDescription>
-        <value>Date and Time</value>
-    </labels>
-    <labels>
-        <fullName>Service_Schedule_Information</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>New Service Schedule Information Section</shortDescription>
-        <value>Service Schedule Information</value>
+        <shortDescription>Start Time</shortDescription>
+        <value>Start Time</value>
     </labels>
     <labels>
         <fullName>Success</fullName>
@@ -271,6 +264,13 @@
         <protected>true</protected>
         <shortDescription>Error capturing metrics.</shortDescription>
         <value>We couldn't collect telemetry metrics.</value>
+    </labels>
+    <labels>
+        <fullName>Total_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Total Records (SObject Plural Label)</shortDescription>
+        <value>Total {0}: {1}</value>
     </labels>
     <labels>
         <fullName>Util_Error</fullName>

@@ -1,4 +1,4 @@
-import { LightningElement, wire, track } from "lwc";
+import { LightningElement, wire, track, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ProgressSteps } from "./progressSteps";
@@ -8,26 +8,18 @@ import { format } from "c/util";
 import SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
 
 import NEW_RECORD_LABEL from "@salesforce/label/c.New_Record";
-import NEXT_LABEL from "@salesforce/label/c.Next";
-import PREVIOUS_LABEL from "@salesforce/label/c.Previous";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
-import REVIEW_RECORD_LABEL from "@salesforce/label/c.Review_Record";
-import SCHEDULE_INFORMATION_LABEL from "@salesforce/label/c.Service_Schedule_Information";
-import SCHEDULE_DATE_TIME_LABEL from "@salesforce/label/c.Service_Schedule_Date_Time";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track
     labels = {
         newSchedule: NEW_RECORD_LABEL,
-        next: NEXT_LABEL,
-        previous: PREVIOUS_LABEL,
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
-        reviewSchedule: REVIEW_RECORD_LABEL,
-        scheduleInfo: SCHEDULE_INFORMATION_LABEL,
-        scheduleDateTime: SCHEDULE_DATE_TIME_LABEL,
     };
+
+    @api serviceId;
 
     _steps = new ProgressSteps()
         .addStep("", this.labels.newSchedule, new NavigationItems().addNext())
@@ -57,15 +49,12 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             return;
         }
         if (result.data) {
-            this.formatLabels(result.data);
+            this.labels.newSchedule = format(this.labels.newSchedule, [
+                result.data.label,
+            ]);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
-    }
-
-    formatLabels(data) {
-        this.labels.newSchedule = format(this.labels.newSchedule, [data.labelPlural]);
-        this.labels.reviewSchedule = format(this.labels.reviewSchedule, [data.label]);
     }
 
     get steps() {

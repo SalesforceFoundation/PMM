@@ -10,20 +10,20 @@
 import { LightningElement, api, track } from "lwc";
 import closeLabel from "@salesforce/label/c.Close";
 
-const CSS_CLASS = "modal-hidden";
+const MODAL_HIDDEN = "modal-hidden";
 
 export default class Modal extends LightningElement {
     close = closeLabel;
 
     @api size = "fixed";
-    visibilityClass = CSS_CLASS;
+    visibilityClass = MODAL_HIDDEN;
 
     @api
     set defaultVisible(value) {
         if (value) {
             this.visibilityClass = "";
         } else {
-            this.visibilityClass = CSS_CLASS;
+            this.visibilityClass = MODAL_HIDDEN;
         }
     }
     get defaultVisible() {
@@ -55,12 +55,12 @@ export default class Modal extends LightningElement {
 
     @api show() {
         const outerDivEl = this.template.querySelector("div");
-        outerDivEl.classList.remove(CSS_CLASS);
+        outerDivEl.classList.remove(MODAL_HIDDEN);
     }
 
     @api hide() {
         const outerDivEl = this.template.querySelector("div");
-        outerDivEl.classList.add(CSS_CLASS);
+        outerDivEl.classList.add(MODAL_HIDDEN);
     }
 
     handleDialogClose() {
@@ -70,11 +70,11 @@ export default class Modal extends LightningElement {
 
     handleSlotTaglineChange() {
         const taglineEl = this.template.querySelector("p");
-        taglineEl.classList.remove(CSS_CLASS);
+        taglineEl.classList.remove(MODAL_HIDDEN);
     }
 
     handleSlotFooterChange() {
         const footerEl = this.template.querySelector("footer");
-        footerEl.classList.remove(CSS_CLASS);
+        footerEl.classList.remove(MODAL_HIDDEN);
     }
 }

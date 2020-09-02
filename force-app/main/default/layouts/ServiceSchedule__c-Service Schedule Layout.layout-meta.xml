@@ -28,7 +28,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>TotalCapacity__c</field>
+                <field>ParticipantCapacity__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
@@ -92,10 +92,10 @@
     <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
-        <fields>SessionDate__c</fields>
+        <fields>SessionStart__c</fields>
         <fields>Status__c</fields>
         <relatedList>ServiceSession__c.ServiceSchedule__c</relatedList>
-        <sortField>SessionDate__c</sortField>
+        <sortField>SessionStart__c</sortField>
         <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>

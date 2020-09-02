@@ -121,7 +121,7 @@
     <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
-        <fields>TotalCapacity__c</fields>
+        <fields>ParticipantCapacity__c</fields>
         <fields>PrimaryServiceProvider__c</fields>
         <relatedList>ServiceSchedule__c.Service__c</relatedList>
     </relatedLists>

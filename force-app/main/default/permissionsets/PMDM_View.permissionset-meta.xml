@@ -191,7 +191,12 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceSession__c.SessionDate__c</field>
+        <field>ServiceSession__c.SessionEnd__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSession__c.SessionStart__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

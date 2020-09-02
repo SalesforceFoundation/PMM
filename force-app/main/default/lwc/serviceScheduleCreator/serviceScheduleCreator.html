@@ -5,7 +5,9 @@
         default-visible="true"
         size="large"
     >
-        <template if:true={showStep1}> </template>
+        <template if:true={showStep1}>
+            <c-new-service-schedule service-id={serviceId}></c-new-service-schedule>
+        </template>
         <template if:true={showStep2}>
             <c-review-sessions></c-review-sessions>
         </template>

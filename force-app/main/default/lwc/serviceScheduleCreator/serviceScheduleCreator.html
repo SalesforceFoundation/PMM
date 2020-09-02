@@ -1,0 +1,75 @@
+<template>
+    <c-modal
+        header={labels.newSchedule}
+        ondialogclose={handleFinish}
+        default-visible="true"
+        size="large"
+    >
+        <template if:true={showStep1}> </template>
+        <template if:true={showStep2}>
+            <!-- Review Sessions -->
+        </template>
+        <template if:true={showStep3}>
+            <!-- Add Participants -->
+        </template>
+        <template if:true={showStep4}> </template>
+        <div slot="footer">
+            <lightning-layout horizontal-align="end">
+                <lightning-layout-item
+                    padding="around-small"
+                    size="3"
+                    class="slds-text-align_left"
+                >
+                    <lightning-button
+                        if:true={currentStep.previous}
+                        name="previous"
+                        variant={currentStep.previous.variant}
+                        label={currentStep.previous.label}
+                        title={currentStep.previous.label}
+                        onclick={handlePrevious}
+                    ></lightning-button>
+                </lightning-layout-item>
+
+                <lightning-layout-item
+                    padding="around-small"
+                    size="6"
+                    class="slds-text-align_center"
+                >
+                    <lightning-progress-indicator
+                        current-step={currentStep.value}
+                        type="base"
+                        variant="base"
+                    >
+                        <template for:each={steps} for:item="step">
+                            <lightning-progress-step
+                                key={step.value}
+                                label={step.label}
+                                value={step.value}
+                            ></lightning-progress-step>
+                        </template>
+                    </lightning-progress-indicator>
+                </lightning-layout-item>
+
+                <lightning-layout-item padding="around-small" size="3">
+                    <lightning-button
+                        if:true={currentStep.next}
+                        name="next"
+                        variant={currentStep.next.variant}
+                        label={currentStep.next.label}
+                        title={currentStep.next.label}
+                        onclick={handleNext}
+                        class="slds-var-p-right_small"
+                    ></lightning-button>
+                    <lightning-button
+                        if:true={currentStep.finish}
+                        name="finish"
+                        variant={currentStep.finish.variant}
+                        label={currentStep.finish.label}
+                        title={currentStep.finish.label}
+                        onclick={handleFinish}
+                    ></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </c-modal>
+</template>

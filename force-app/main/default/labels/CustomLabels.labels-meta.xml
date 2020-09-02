@@ -115,13 +115,6 @@
         <value>New Program Engagement</value>
     </labels>
     <labels>
-        <fullName>New_Record</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>New Record (SObject Label)</shortDescription>
-        <value>New {0}</value>
-    </labels>
-    <labels>
         <fullName>New_Service_Schedule</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -277,6 +270,20 @@
         <protected>true</protected>
         <shortDescription>Warning message when a selected contact has no programs related.</shortDescription>
         <value>To save a Service Delivery, first enroll this client in a Program with active Services.</value>
+    </labels>
+    <labels>
+        <fullName>Service_Schedule_Information</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New Service Schedule Information Title</shortDescription>
+        <value>Service Schedule Information</value>
+    </labels>
+    <labels>
+        <fullName>Service_Schedule_Date_Time</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New Service Schedule Date and Time Title</shortDescription>
+        <value>Date and Time</value>
     </labels>
     <labels>
         <fullName>Start_Time</fullName>

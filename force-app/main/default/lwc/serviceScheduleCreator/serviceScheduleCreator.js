@@ -7,14 +7,14 @@ import { format } from "c/util";
 
 import SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
 
-import NEW_RECORD_LABEL from "@salesforce/label/c.New_Record";
+import NEW_SERVICE_SCHEDULE_LABEL from "@salesforce/label/c.New_Service_Schedule";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track
     labels = {
-        newSchedule: NEW_RECORD_LABEL,
+        newSchedule: NEW_SERVICE_SCHEDULE_LABEL,
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
     };

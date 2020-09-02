@@ -151,7 +151,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceParticipant__c.SignedUpOn__c</field>
+        <field>ServiceParticipant__c.SignUpDate__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

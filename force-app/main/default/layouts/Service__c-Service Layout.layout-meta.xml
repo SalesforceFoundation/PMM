@@ -130,10 +130,10 @@
         <fields>NAME</fields>
         <fields>Contact__c</fields>
         <fields>ProgramEngagement__c</fields>
-        <fields>SignedUpOn__c</fields>
+        <fields>SignUpDate__c</fields>
         <fields>Status__c</fields>
         <relatedList>ServiceParticipant__c.Service__c</relatedList>
-        <sortField>SignedUpOn__c</sortField>
+        <sortField>SignUpDate__c</sortField>
         <sortOrder>Asc</sortOrder>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

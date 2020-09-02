@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>TotalCapacity__c</fullName>
+    <fullName>ParticipantCapacity__c</fullName>
     <externalId>false</externalId>
-    <label>Total Capacity</label>
+    <label>Participant Capacity</label>
     <precision>18</precision>
     <required>false</required>
     <scale>0</scale>

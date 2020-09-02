@@ -11,37 +11,37 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>0</fullName>
+                <fullName>1</fullName>
                 <default>false</default>
                 <label>Sun</label>
             </value>
             <value>
-                <fullName>1</fullName>
+                <fullName>2</fullName>
                 <default>false</default>
                 <label>Mon</label>
             </value>
             <value>
-                <fullName>2</fullName>
+                <fullName>3</fullName>
                 <default>false</default>
                 <label>Tue</label>
             </value>
             <value>
-                <fullName>3</fullName>
+                <fullName>4</fullName>
                 <default>false</default>
                 <label>Wed</label>
             </value>
             <value>
-                <fullName>4</fullName>
+                <fullName>5</fullName>
                 <default>false</default>
                 <label>Thu</label>
             </value>
             <value>
-                <fullName>5</fullName>
+                <fullName>6</fullName>
                 <default>false</default>
                 <label>Fri</label>
             </value>
             <value>
-                <fullName>6</fullName>
+                <fullName>7</fullName>
                 <default>false</default>
                 <label>Sat</label>
             </value>

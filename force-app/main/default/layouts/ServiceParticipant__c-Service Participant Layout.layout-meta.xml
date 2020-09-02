@@ -20,7 +20,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>SignedUpOn__c</field>
+                <field>SignUpDate__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

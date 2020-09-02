@@ -16,6 +16,13 @@
         <value>Add Service Delivery</value>
     </labels>
     <labels>
+        <fullName>Add_to_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add to {SObject Label}</shortDescription>
+        <value>Add to {0}</value>
+    </labels>
+    <labels>
         <fullName>Anonymous</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -108,11 +115,11 @@
         <value>New Program Engagement</value>
     </labels>
     <labels>
-        <fullName>New_Record</fullName>
+        <fullName>New_Service_Schedule</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>New Record (SObject Label)</shortDescription>
-        <value>New {0}</value>
+        <shortDescription>New Service Schedule</shortDescription>
+        <value>New Service Schedule</value>
     </labels>
     <labels>
         <fullName>Next</fullName>
@@ -156,6 +163,13 @@
         <protected>true</protected>
         <shortDescription>Your record has been deleted</shortDescription>
         <value>Record deleted.</value>
+    </labels>
+    <labels>
+        <fullName>Remove</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Remove</shortDescription>
+        <value>Remove</value>
     </labels>
     <labels>
         <fullName>Required</fullName>
@@ -207,6 +221,13 @@
         <value>Saving</value>
     </labels>
     <labels>
+        <fullName>Search_this_list</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search this list</shortDescription>
+        <value>Search this list</value>
+    </labels>
+    <labels>
         <fullName>Select_Program_Engagement</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -219,6 +240,13 @@
         <protected>true</protected>
         <shortDescription>Select Service</shortDescription>
         <value>Select Service</value>
+    </labels>
+    <labels>
+        <fullName>Selected_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Selected Records</shortDescription>
+        <value>Selected Records</value>
     </labels>
     <labels>
         <fullName>Service_Deliveries</fullName>
@@ -280,11 +308,11 @@
         <value>We couldn't collect telemetry metrics.</value>
     </labels>
     <labels>
-        <fullName>Total_Records</fullName>
+        <fullName>Total_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Total Records (SObject Plural Label)</shortDescription>
-        <value>Total {0}: {1}</value>
+        <shortDescription>Total Sessions</shortDescription>
+        <value>Total Sessions</value>
     </labels>
     <labels>
         <fullName>Util_Error</fullName>

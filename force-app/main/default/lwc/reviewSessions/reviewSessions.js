@@ -40,6 +40,7 @@ export default class ReviewSessions extends LightningElement {
     }
 
     get totalServiceSessions() {
+        // TODO: Use Beth's form element component when ready
         return this.labels.totalSessions + ": " + this.data.length;
     }
 

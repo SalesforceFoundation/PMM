@@ -1,10 +1,10 @@
 <template>
     <div class="slds-form-element">
-        <label class="slds-form-element__label" if:true={field}>
+        <label class="slds-form-element__label" for="input" if:true={field}>
             {field.label}
         </label>
         <div class="slds-form-element__control">
-            <lightning-button-group>
+            <lightning-button-group id="input">
                 <template for:each={options} for:item="option" if:true={options}>
                     <lightning-button
                         key={option.name}

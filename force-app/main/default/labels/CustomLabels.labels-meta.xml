@@ -86,6 +86,13 @@
         <value>Error</value>
     </labels>
     <labels>
+        <fullName>Finish</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Finish button</shortDescription>
+        <value>Finish</value>
+    </labels>
+    <labels>
         <fullName>MissingSObjectType</fullName>
         <categories>Exception</categories>
         <language>en_US</language>
@@ -99,6 +106,20 @@
         <protected>true</protected>
         <shortDescription>New Program Engagement</shortDescription>
         <value>New Program Engagement</value>
+    </labels>
+    <labels>
+        <fullName>New_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New Record (SObject Label)</shortDescription>
+        <value>New {0}</value>
+    </labels>
+    <labels>
+        <fullName>Next</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Next button</shortDescription>
+        <value>Next</value>
     </labels>
     <labels>
         <fullName>No_Services_For_Program_Engagement</fullName>
@@ -116,6 +137,13 @@
         <value>Owner</value>
     </labels>
     <labels>
+        <fullName>Previous</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Previous button</shortDescription>
+        <value>Previous</value>
+    </labels>
+    <labels>
         <fullName>Quantity</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -130,18 +158,18 @@
         <value>Record deleted.</value>
     </labels>
     <labels>
-        <fullName>Review_Records</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Add Records {SObject Plural Label}</shortDescription>
-        <value>Review {0}</value>
-    </labels>
-    <labels>
         <fullName>Required</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Required</shortDescription>
         <value>Required</value>
+    </labels>
+    <labels>
+        <fullName>Review_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Review Records (SObject Plural Label)</shortDescription>
+        <value>Review {0}</value>
     </labels>
     <labels>
         <fullName>Save</fullName>
@@ -156,6 +184,13 @@
         <protected>true</protected>
         <shortDescription>SaveMessage</shortDescription>
         <value>New Program Engagement record created.</value>
+    </labels>
+    <labels>
+        <fullName>Save_New</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save and New button</shortDescription>
+        <value>Save and New</value>
     </labels>
     <labels>
         <fullName>Saved</fullName>

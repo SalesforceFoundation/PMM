@@ -6,11 +6,10 @@ const SELECTED_VARIANT = "brand";
 export default class Picklist extends LightningElement {
     // Expects an object with a label and the salesforce picklistValue object
     @api picklist;
-    @api type = "button";
+    @api type = "radio";
     @api multiSelect = false;
 
-    @track
-    _options;
+    @track _options;
 
     get options() {
         if (this._options) {
@@ -45,17 +44,12 @@ export default class Picklist extends LightningElement {
     }
 
     handleMultiSelectClick(event) {
-        if (!event || !event.target) {
-            return;
-        }
-
         this._options.forEach(option => {
-            if (option.isSelected && option.value === event.target.name) {
-                option.isSelected = false;
-                option.variant = UNSELECTED_VARIANT;
-            } else if (option.value === event.target.name) {
-                option.isSelected = true;
-                option.variant = SELECTED_VARIANT;
+            if (option.value === event.target.name) {
+                option.isSelected = !option.isSelected;
+                option.variant = option.isSelected
+                    ? SELECTED_VARIANT
+                    : UNSELECTED_VARIANT;
             }
         });
 

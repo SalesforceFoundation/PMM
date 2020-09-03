@@ -38,7 +38,7 @@ export default class NewServiceSchedule extends LightningElement {
     isLoaded = false;
     selectedFrequency;
     selectedDaysOfWeek;
-    seriesEnds;
+    selectedSeriesEnds;
     picklists;
 
     labels = {
@@ -77,7 +77,8 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     setFieldSet(data) {
-        const recurrenceFields = Object.values(this.dateFields);
+        // TODO: Test if this eliminates duplicate fields
+        let recurrenceFields = Object.values(this.dateFields);
         recurrenceFields.push(Object.values(this.picklistFields));
 
         this.fieldSet = data
@@ -97,6 +98,7 @@ export default class NewServiceSchedule extends LightningElement {
         }
 
         if (result.data) {
+            // TODO: Test record types
             this.recordTypeId = this.recordTypeId
                 ? this.recordTypeId
                 : result.data.defaultRecordTypeId;
@@ -134,32 +136,20 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     handleFrequencyChange(event) {
-        if (!event || !event.detail) {
-            return;
-        }
-
         this.selectedFrequency = event.detail.length ? event.detail[0].value : undefined;
         this.isWeekly = this.selectedFrequency === WEEKLY;
         this.isRecurring = this.selectedFrequency !== ONE_TIME;
     }
 
     handleDaysOfWeekChange(event) {
-        if (!event || !event.detail) {
-            return;
-        }
-
         this.selectedDaysOfWeek = event.detail.length
             ? event.detail.map(selection => selection.value)
             : undefined;
     }
 
     handleSeriesEndsChange(event) {
-        if (!event || !event.detail) {
-            return;
-        }
-
-        this.seriesEnds = event.detail.length ? event.detail[0].value : undefined;
-        this.isEndsOn = this.seriesEnds === ON;
-        this.isEndsAfter = this.seriesEnds === AFTER;
+        this.selectedSeriesEnds = event.detail.length ? event.detail[0].value : undefined;
+        this.isEndsOn = this.selectedSeriesEnds === ON;
+        this.isEndsAfter = this.selectedSeriesEnds === AFTER;
     }
 }

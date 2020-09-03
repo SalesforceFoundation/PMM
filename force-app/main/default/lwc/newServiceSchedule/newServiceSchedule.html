@@ -10,6 +10,7 @@
                 <c-section title={labels.scheduleInformation}></c-section>
             </lightning-layout-item>
             <lightning-layout-item size={sizes.small}>
+                <!-- TODO: If serviceId is not present display Service lookup field -->
                 <lightning-layout multiple-rows="true" if:true={fieldSet}>
                     <template for:each={fieldSet} for:item="field">
                         <lightning-layout-item key={field.apiName} size={field.size}>
@@ -51,6 +52,7 @@
                         <c-picklist
                             picklist={picklists.daysOfWeek}
                             multi-select="true"
+                            type="button"
                             onselect={handleDaysOfWeekChange}
                         ></c-picklist>
                     </lightning-layout-item>
@@ -59,7 +61,6 @@
                             <lightning-layout-item size={sizes.small}>
                                 <c-picklist
                                     picklist={picklists.seriesEnds}
-                                    type="radio"
                                     onselect={handleSeriesEndsChange}
                                 ></c-picklist>
                             </lightning-layout-item>

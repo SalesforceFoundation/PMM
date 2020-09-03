@@ -34,7 +34,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Adding More Service Session Warning</shortDescription>
-        <value>You&apos;re adding more than &lt;number&gt; sessions, so this will take some extra time to complete.</value>
+        <value>You&apos;re adding more than {0} sessions, so this will take some extra time to complete.</value>
     </labels>
     <labels>
         <fullName>Anonymous</fullName>

@@ -37,7 +37,7 @@ export class ProgressSteps {
         this._currentValue += this.hasNext ? 1 : 0;
     }
 
-    previous() {
+    back() {
         this._currentValue -= this._currentValue > 0 ? 1 : 0;
     }
 

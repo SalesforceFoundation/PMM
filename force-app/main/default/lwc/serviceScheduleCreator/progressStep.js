@@ -12,9 +12,9 @@ export class ProgressStep {
             : undefined;
     }
 
-    get previous() {
-        return this._navigationItems && this._navigationItems.previous
-            ? this._navigationItems.previous
+    get back() {
+        return this._navigationItems && this._navigationItems.back
+            ? this._navigationItems.back
             : undefined;
     }
 

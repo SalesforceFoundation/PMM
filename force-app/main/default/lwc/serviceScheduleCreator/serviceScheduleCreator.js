@@ -26,19 +26,19 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         .addStep(
             "",
             this.labels.reviewSessions,
-            new NavigationItems().addNext().addPrevious()
+            new NavigationItems().addNext().addBack()
         )
         .addStep(
             "",
             this.labels.addParticipants,
-            new NavigationItems().addNext().addPrevious()
+            new NavigationItems().addNext().addBack()
         )
         .addStep(
             "",
             this.labels.reviewSchedule,
             new NavigationItems()
                 .addNext(this.labels.saveNew, "neutral")
-                .addPrevious()
+                .addBack()
                 .addFinish(this.labels.save)
         );
     _currentStep;
@@ -100,8 +100,8 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.reset();
     }
 
-    handlePrevious() {
-        this._steps.previous();
+    handleBack() {
+        this._steps.back();
         this._currentStep = this._steps.currentStep;
     }
 

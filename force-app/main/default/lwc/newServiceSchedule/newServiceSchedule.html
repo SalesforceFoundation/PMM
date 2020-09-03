@@ -3,7 +3,7 @@
         object-api-name={objectApiName}
         record-id={recordId}
         onsuccess={handleSuccess}
-        if:true={objectApiName}
+        if:true={isLoaded}
     >
         <lightning-layout horizontal-align="center" multiple-rows="true">
             <lightning-layout-item size={sizes.large} class="slds-var-p-bottom_small">
@@ -31,41 +31,50 @@
                 <lightning-layout multiple-rows="true">
                     <lightning-layout-item size={sizes.large}>
                         <lightning-input-field
-                            field-name={fields.start}
+                            field-name={dateFields.start}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
                         <lightning-input-field
-                            field-name={fields.end}
+                            field-name={dateFields.end}
                         ></lightning-input-field
                     ></lightning-layout-item>
-                    <lightning-layout-item
-                        size={sizes.large}
-                        class="slds-var-p-bottom_small slds-var-p-left_xxx-small"
-                    >
+                    <lightning-layout-item size={sizes.large}>
                         <c-picklist
-                            object-api-name={objectApiName}
-                            field-api-name={fields.frequency}
+                            if:true={picklists}
+                            picklist={picklists.frequency}
                             onselect={handleFrequencyChange}
+                            type="button"
                         ></c-picklist>
                     </lightning-layout-item>
-                    <lightning-layout-item
-                        size={sizes.large}
-                        class="slds-var-p-bottom_small slds-var-p-left_xxx-small"
-                        if:true={isWeekly}
-                    >
+                    <lightning-layout-item size={sizes.large} if:true={isWeekly}>
                         <c-picklist
-                            object-api-name={objectApiName}
-                            field-api-name={fields.daysOfWeek}
+                            picklist={picklists.daysOfWeek}
                             multi-select="true"
                             onselect={handleDaysOfWeekChange}
                         ></c-picklist>
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.small}>
-                        <lightning-input-field
-                            field-name={fields.seriesEnd}
-                        ></lightning-input-field
-                    ></lightning-layout-item>
+                        <lightning-layout if:true={isRecurring}>
+                            <lightning-layout-item size={sizes.small}>
+                                <c-picklist
+                                    picklist={picklists.seriesEnds}
+                                    type="radio"
+                                    onselect={handleSeriesEndsChange}
+                                ></c-picklist>
+                            </lightning-layout-item>
+                            <lightning-layout-item size={sizes.small}>
+                                <lightning-input-field
+                                    if:true={isEndsOn}
+                                    field-name={dateFields.seriesEndsOn}
+                                ></lightning-input-field>
+                                <lightning-input-field
+                                    if:true={isEndsAfter}
+                                    field-name={dateFields.numberOfSessions}
+                                ></lightning-input-field
+                            ></lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
                 </lightning-layout>
             </lightning-layout-item>
         </lightning-layout>

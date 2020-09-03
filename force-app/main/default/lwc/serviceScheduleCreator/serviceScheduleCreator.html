@@ -23,12 +23,12 @@
                     class="slds-text-align_left"
                 >
                     <lightning-button
-                        if:true={currentStep.previous}
-                        name="previous"
-                        variant={currentStep.previous.variant}
-                        label={currentStep.previous.label}
-                        title={currentStep.previous.label}
-                        onclick={handlePrevious}
+                        if:true={currentStep.back}
+                        name="back"
+                        variant={currentStep.back.variant}
+                        label={currentStep.back.label}
+                        title={currentStep.back.label}
+                        onclick={handleBack}
                     ></lightning-button>
                 </lightning-layout-item>
 

@@ -30,6 +30,11 @@
                 <default>false</default>
                 <label>Yearly</label>
             </value>
+            <value>
+                <fullName>One Time</fullName>
+                <default>false</default>
+                <label>One Time</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

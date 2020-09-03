@@ -1,7 +1,7 @@
 import { LightningElement, track, wire, api } from "lwc";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { format, createUUID } from "c/util";
-import TOTAL_RECORDS_LABEL from "@salesforce/label/c.Total_Records";
+import TOTAL_RECORDS_LABEL from "@salesforce/label/c.Total_Sessions";
 import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Record";
 import START_TIME_LABEL from "@salesforce/label/c.Start_Time";
 import END_TIME_LABEL from "@salesforce/label/c.End_Time";
@@ -42,7 +42,8 @@ export default class ReviewSessions extends LightningElement {
     }
 
     get totalServiceSessions() {
-        return format(this.labels.totalSessions, [this.objectName, this.data.length]);
+        // TODO: Use Beth's form element component when ready
+        return this.labels.totalSessions + ": " + this.data.length;
     }
 
     setLabels(data) {
@@ -157,7 +158,7 @@ export default class ReviewSessions extends LightningElement {
         this.data.push({
             id: dataId,
             Name: "",
-            SessionDate__c: "",
+            SessionStart__c: "",
             startTime: "",
             endTime: "",
         });

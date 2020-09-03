@@ -69,7 +69,7 @@
 
         component.find("modal").showCustomModal({
             // TODO: Format New Record with SObject Label
-            header: $A.get("$Label.c.New_Record"),
+            header: $A.get("$Label.c.New_Service_Schedule"),
             body: modalBody,
             footer: modalFooter,
             showCloseButton: true,

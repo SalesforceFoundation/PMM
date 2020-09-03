@@ -164,7 +164,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>ServiceParticipant__c.SignedUpOn__c</field>
+        <field>ServiceParticipant__c.SignUpDate__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -189,7 +189,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>ServiceSchedule__c.TotalCapacity__c</field>
+        <field>ServiceSchedule__c.ParticipantCapacity__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

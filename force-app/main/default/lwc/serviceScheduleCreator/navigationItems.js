@@ -1,11 +1,11 @@
 import NEXT_LABEL from "@salesforce/label/c.Next";
-import PREVIOUS_LABEL from "@salesforce/label/c.Previous";
+import BACK_LABEL from "@salesforce/label/c.Back";
 import FINISH_LABEL from "@salesforce/label/c.Finish";
 
 const names = {
     NEXT: "next",
     FINISH: "finish",
-    PREVIOUS: "previous",
+    BACK: "back",
 };
 
 const BRAND = "brand";
@@ -21,8 +21,8 @@ export class NavigationItems {
         return this._addNavigationItem(names.NEXT, label, variant);
     }
 
-    addPrevious(label = PREVIOUS_LABEL, variant) {
-        return this._addNavigationItem(names.PREVIOUS, label, variant);
+    addBack(label = BACK_LABEL, variant) {
+        return this._addNavigationItem(names.BACK, label, variant);
     }
 
     addFinish(label = FINISH_LABEL, variant = BRAND) {
@@ -38,8 +38,8 @@ export class NavigationItems {
         return this._navigationItems.next;
     }
 
-    get previous() {
-        return this._navigationItems.previous;
+    get back() {
+        return this._navigationItems.back;
     }
 
     get finish() {

@@ -1,7 +1,7 @@
 import { LightningElement, track, wire, api } from "lwc";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { format, createUUID } from "c/util";
-import TOTAL_RECORDS_LABEL from "@salesforce/label/c.Total_Records";
+import TOTAL_RECORDS_LABEL from "@salesforce/label/c.Total_Sessions";
 import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Record";
 import START_TIME_LABEL from "@salesforce/label/c.Start_Time";
 import END_TIME_LABEL from "@salesforce/label/c.End_Time";
@@ -9,7 +9,7 @@ import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import SESSION_NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
-import SESSION_DATE_FIELD from "@salesforce/schema/ServiceSession__c.SessionDate__c";
+import SESSION_START_FIELD from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 
 export default class ReviewSessions extends LightningElement {
     @track columns = [];
@@ -40,7 +40,8 @@ export default class ReviewSessions extends LightningElement {
     }
 
     get totalServiceSessions() {
-        return format(this.labels.totalSessions, [this.objectName, this.data.length]);
+        // TODO: Use Beth's form element component when ready
+        return this.labels.totalSessions + ": " + this.data.length;
     }
 
     setLabels(data) {
@@ -57,7 +58,7 @@ export default class ReviewSessions extends LightningElement {
             if (element.apiName === SESSION_NAME_FIELD.fieldApiName) {
                 this.sessionNameLabel = element.label;
             }
-            if (element.apiName === SESSION_DATE_FIELD.fieldApiName) {
+            if (element.apiName === SESSION_START_FIELD.fieldApiName) {
                 this.sessionDateLabel = element.label;
             }
         });
@@ -75,7 +76,7 @@ export default class ReviewSessions extends LightningElement {
             },
             {
                 label: this.sessionDateLabel,
-                fieldName: SESSION_DATE_FIELD.fieldApiName,
+                fieldName: SESSION_START_FIELD.fieldApiName,
                 hideDefaultActions: true,
             },
             {
@@ -118,42 +119,42 @@ export default class ReviewSessions extends LightningElement {
             {
                 id: "1",
                 Name: FIRSTSESSIONNAME,
-                SessionDate__c: "7/6/2020",
+                SessionStart__c: "7/6/2020",
                 startTime: "1:00 PM",
                 endTime: "3:00 PM",
             },
             {
                 id: "2",
                 Name: SECONDSESSIONNAME,
-                SessionDate__c: "7/7/2020",
+                SessionStart__c: "7/7/2020",
                 startTime: "1:00 PM",
                 endTime: "3:00 PM",
             },
             {
                 id: "3",
                 Name: THIRDSESSIONNAME,
-                SessionDate__c: "7/13/2020",
+                SessionStart__c: "7/13/2020",
                 startTime: "1:00 PM",
                 endTime: "3:00 PM",
             },
             {
                 id: "4",
                 Name: FOURTHSESSIONNAME,
-                SessionDate__c: "7/14/2020",
+                SessionStart__c: "7/14/2020",
                 startTime: "1:00 PM",
                 endTime: "3:00 PM",
             },
             {
                 id: "5",
                 Name: FIFTHSESSIONNAME,
-                SessionDate__c: "7/20/2020",
+                SessionStart__c: "7/20/2020",
                 startTime: "1:00 PM",
                 endTime: "3:00 PM",
             },
             {
                 id: "6",
                 Name: SIXTHSESSIONNAME,
-                SessionDate__c: "7/21/2020",
+                SessionStart__c: "7/21/2020",
                 startTime: "1:00 PM",
                 endTime: "3:00 PM",
             },
@@ -166,7 +167,7 @@ export default class ReviewSessions extends LightningElement {
         this.data.push({
             id: dataId,
             Name: "",
-            SessionDate__c: "",
+            SessionStart__c: "",
             startTime: "",
             endTime: "",
         });

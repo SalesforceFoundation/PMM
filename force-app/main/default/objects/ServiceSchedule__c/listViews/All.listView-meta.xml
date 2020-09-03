@@ -5,7 +5,7 @@
     <columns>Service__c</columns>
     <columns>PrimaryServiceProvider__c</columns>
     <columns>OtherServiceProvider__c</columns>
-    <columns>TotalCapacity__c</columns>
+    <columns>ParticipantCapacity__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

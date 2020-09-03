@@ -19,7 +19,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>SessionDate__c</field>
+                <field>SessionStart__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

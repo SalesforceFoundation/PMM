@@ -16,22 +16,24 @@
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
 
+    <lightning:messageChannel
+        type="Navigation__c"
+        aura:id="navigation"
+        onMessage="{!c.handleNavigationMessage}"
+    />
+
     <aura:if isTrue="{!v.useFlowWizard}">
         <aura:html tag="style">
             .slds-modal__container { position: absolute; height: fit-content; margin:
             auto; padding: 0; top: 0; bottom: 0; left: 0; right: 0; }
         </aura:html>
 
-        <lightning:messageChannel
-            type="Navigation__c"
-            aura:id="navigation"
-            onMessage="{!c.handleNavigationMessage}"
-        />
         <lightning:overlayLibrary aura:id="modal" />
 
         <aura:set attribute="else">
             <aura:html tag="style">
-                .slds-theme_shade { background-color: #dddbda; }
+                .slds-theme_shade { background-color: #d8dde6; } lightning-timepicker,
+                lightning-datepicker { width: 50% }
             </aura:html>
             <c:serviceScheduleCreator serviceId="{#v.serviceId}" />
         </aura:set>

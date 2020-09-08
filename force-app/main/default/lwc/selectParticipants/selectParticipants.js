@@ -205,7 +205,15 @@ export default class SelectParticipants extends LightningElement {
         this.handleFilterDataTable(this.searchValue);
     }
 
-    handleFilterDataTable(searchValue) {
+    handleFilterDataTable(filterValue) {
         this.loadDataTable();
+        if (filterValue) {
+            this.contacts = this.contacts.filter(
+                element =>
+                    element.Name.toLowerCase().includes(filterValue.toLowerCase()) ||
+                    element.Email.toLowerCase().includes(filterValue.toLowerCase()) ||
+                    element.Stage__c.toLowerCase().includes(filterValue.toLowerCase())
+            );
+        }
     }
 }

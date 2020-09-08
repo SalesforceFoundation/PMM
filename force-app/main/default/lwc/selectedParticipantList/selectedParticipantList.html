@@ -1,0 +1,20 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item style="width: fit-content;" class="slds-var-m-top_medium">
+            <div
+                class="slds-box slds-p-around_none  slds-var-m-top_medium"
+                style="width: fit-content;"
+            >
+                <div style="width:fit-content">
+                    <lightning-datatable
+                        columns={columns}
+                        key-field="Id"
+                        hide-checkbox-column
+                        class="slds-table_cell-buffer"
+                        onrowaction={handleDelete}
+                    ></lightning-datatable>
+                </div>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

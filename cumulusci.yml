@@ -72,7 +72,7 @@ tasks:
         description: "Preserve the source so it can be modified during deployment"
         class_path: tasks.GenericSrcRevert.GenericSrcRevert
         options:
-            path: force-app/main/default/quickActions
+            path: force-app/main/default
             revert_path: force-app-bak
 
     robot:
@@ -267,6 +267,12 @@ flows:
             2.999:
                 task: clear_namespaced_org_quick_action
                 when: not org_config.namespaced
+            2.9999:
+                task: inject_namespaced_org_flow
+                when: org_config.namespaced
+            2.99999:
+                task: clear_namespaced_org_flow
+                when: not org_config.namespaced
             4.099:
                 task: source_revert
                 options:
@@ -274,10 +280,7 @@ flows:
 
     #deploy_packaging:
     #    steps:
-    #        3.01:
-    #            task: inject_namespaced_org_flow
-    #            options:
-    #                path: "src/flows"
+    #        Moved the steps as 3.02 below
 
     deploy_packaging:
         steps:
@@ -285,6 +288,10 @@ flows:
                 task: inject_namespaced_org_quick_action
                 options:
                     path: "src/quickActions"
+            3.02:
+                task: inject_namespaced_org_flow
+                options:
+                    path: "src/flows"
 
     customer_org:
         steps:

@@ -325,7 +325,7 @@
                 <stringValue>TODAY() </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_11_myRule_10_A1_6433572107</name>
+        <name>formula_11_myRule_10_A1_9228346885</name>
         <dataType>Date</dataType>
         <expression>TODAY()</expression>
     </formulas>
@@ -335,64 +335,64 @@
             <value>
                 <stringValue>IF(NOT(ISBLANK([ProgramEngagement__c].Contact__c)),IF(
 LEN(
-[ProgramEngagement__c].Contact__c.FirstName  + &apos; &apos; + [ProgramEngagement__c].Contact__c.LastName + &apos; &apos; +
+[ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
 IF(
 NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
-&apos;: &apos; + [ProgramEngagement__c].Program__c.Name) &gt; 77,
-LEFT(([ProgramEngagement__c].Contact__c.FirstName  + &apos; &apos; + [ProgramEngagement__c].Contact__c.LastName + &apos; &apos; +
+&#39;: &#39; + [ProgramEngagement__c].Program__c.Name) &gt; 77,
+LEFT(([ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
 IF (NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10)) +
-&apos;: &apos; + [ProgramEngagement__c].Program__c.Name),77)
-+ &apos;...&apos;, [ProgramEngagement__c].Contact__c.FirstName  + &apos; &apos; + [ProgramEngagement__c].Contact__c.LastName + &apos; &apos; +
+&#39;: &#39; + [ProgramEngagement__c].Program__c.Name),77)
++ &#39;...&#39;, [ProgramEngagement__c].Contact__c.FirstName  + &#39; &#39; + [ProgramEngagement__c].Contact__c.LastName + &#39; &#39; +
 IF(
 NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
-&apos;: &apos; + [ProgramEngagement__c].Program__c.Name
+&#39;: &#39; + [ProgramEngagement__c].Program__c.Name
 ), 
 IF(
 LEN(
-$Label.Anonymous+ &apos; &apos; +
+$Label.Anonymous+ &#39; &#39; +
 IF(
 NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
-&apos;: &apos; + [ProgramEngagement__c].Program__c.Name) &gt; 77,
-LEFT(($Label.Anonymous + &apos; &apos; +
+&#39;: &#39; + [ProgramEngagement__c].Program__c.Name) &gt; 77,
+LEFT(($Label.Anonymous + &#39; &#39; +
 IF (NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10)) +
-&apos;: &apos; + [ProgramEngagement__c].Program__c.Name),77)
-+ &apos;...&apos;, $Label.Anonymous + &apos; &apos; +
+&#39;: &#39; + [ProgramEngagement__c].Program__c.Name),77)
++ &#39;...&#39;, $Label.Anonymous + &#39; &#39; +
 IF(
 NOT(ISBLANK([ProgramEngagement__c].StartDate__c)),  TEXT([ProgramEngagement__c].StartDate__c) , LEFT(TEXT([ProgramEngagement__c].CreatedDate),10 ))+
-&apos;: &apos; + [ProgramEngagement__c].Program__c.Name
+&#39;: &#39; + [ProgramEngagement__c].Program__c.Name
 ))
 </stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_2_myRule_1_A1_2224060128</name>
+        <name>formula_2_myRule_1_A1_3915232854</name>
         <dataType>String</dataType>
         <expression>IF(NOT(ISBLANK({!myVariable_current.Contact__c})),IF(
 LEN(
-{!myVariable_current.Contact__r.FirstName}  + &apos; &apos; + {!myVariable_current.Contact__r.LastName} + &apos; &apos; +
+{!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
 IF(
 NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
-&apos;: &apos; + {!myVariable_current.Program__r.Name}) &gt; 77,
-LEFT(({!myVariable_current.Contact__r.FirstName}  + &apos; &apos; + {!myVariable_current.Contact__r.LastName} + &apos; &apos; +
+&#39;: &#39; + {!myVariable_current.Program__r.Name}) &gt; 77,
+LEFT(({!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
 IF (NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
-&apos;: &apos; + {!myVariable_current.Program__r.Name}),77)
-+ &apos;...&apos;, {!myVariable_current.Contact__r.FirstName}  + &apos; &apos; + {!myVariable_current.Contact__r.LastName} + &apos; &apos; +
+&#39;: &#39; + {!myVariable_current.Program__r.Name}),77)
++ &#39;...&#39;, {!myVariable_current.Contact__r.FirstName}  + &#39; &#39; + {!myVariable_current.Contact__r.LastName} + &#39; &#39; +
 IF(
 NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
-&apos;: &apos; + {!myVariable_current.Program__r.Name}
+&#39;: &#39; + {!myVariable_current.Program__r.Name}
 ), 
 IF(
 LEN(
-{!$Label.Anonymous}+ &apos; &apos; +
+{!$Label.Anonymous}+ &#39; &#39; +
 IF(
 NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
-&apos;: &apos; + {!myVariable_current.Program__r.Name}) &gt; 77,
-LEFT(({!$Label.Anonymous} + &apos; &apos; +
+&#39;: &#39; + {!myVariable_current.Program__r.Name}) &gt; 77,
+LEFT(({!$Label.Anonymous} + &#39; &#39; +
 IF (NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10)) +
-&apos;: &apos; + {!myVariable_current.Program__r.Name}),77)
-+ &apos;...&apos;, {!$Label.Anonymous} + &apos; &apos; +
+&#39;: &#39; + {!myVariable_current.Program__r.Name}),77)
++ &#39;...&#39;, {!$Label.Anonymous} + &#39; &#39; +
 IF(
 NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.StartDate__c}) , LEFT(TEXT({!myVariable_current.CreatedDate}),10 ))+
-&apos;: &apos; + {!myVariable_current.Program__r.Name}
+&#39;: &#39; + {!myVariable_current.Program__r.Name}
 ))</expression>
     </formulas>
     <formulas>
@@ -402,7 +402,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                 <stringValue>IF(NOT(ISNULL([ProgramEngagement__c].StartDate__c)), IF ([ProgramEngagement__c].StartDate__c &gt; TODAY(), TODAY(), NULL), TODAY())</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_5_myRule_4_A1_0925925767</name>
+        <name>formula_5_myRule_4_A1_9452998888</name>
         <dataType>Date</dataType>
         <expression>IF(NOT(ISNULL({!myVariable_current.StartDate__c})), IF ({!myVariable_current.StartDate__c} &gt; TODAY(), TODAY(), NULL), TODAY())</expression>
     </formulas>
@@ -413,7 +413,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
                 <stringValue>IF([ProgramEngagement__c].Program__c.StartDate__c &lt;= TODAY() , TODAY(), NULL)</stringValue>
             </value>
         </processMetadataValues>
-        <name>formula_8_myRule_7_A1_2608436668</name>
+        <name>formula_8_myRule_7_A1_6369948895</name>
         <dataType>Date</dataType>
         <expression>IF({!myVariable_current.Program__r.StartDate__c} &lt;= TODAY() , TODAY(), NULL)</expression>
     </formulas>
@@ -531,7 +531,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
             </processMetadataValues>
             <field>EndDate__c</field>
             <value>
-                <elementReference>formula_11_myRule_10_A1_6433572107</elementReference>
+                <elementReference>formula_11_myRule_10_A1_9228346885</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -614,7 +614,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
             </processMetadataValues>
             <field>Name</field>
             <value>
-                <elementReference>formula_2_myRule_1_A1_2224060128</elementReference>
+                <elementReference>formula_2_myRule_1_A1_3915232854</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -694,7 +694,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
             </processMetadataValues>
             <field>ApplicationDate__c</field>
             <value>
-                <elementReference>formula_5_myRule_4_A1_0925925767</elementReference>
+                <elementReference>formula_5_myRule_4_A1_9452998888</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>
@@ -774,7 +774,7 @@ NOT(ISBLANK({!myVariable_current.StartDate__c})),  TEXT({!myVariable_current.Sta
             </processMetadataValues>
             <field>StartDate__c</field>
             <value>
-                <elementReference>formula_8_myRule_7_A1_2608436668</elementReference>
+                <elementReference>formula_8_myRule_7_A1_6369948895</elementReference>
             </value>
         </inputAssignments>
         <object>ProgramEngagement__c</object>

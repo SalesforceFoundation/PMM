@@ -1,14 +1,16 @@
 import { LightningElement, api, track } from "lwc";
 
+const SCHEDULENAME = "Thursday Friday Family Class ()";
+const FIELDNAME = "Name";
 export default class SelectedParticipantList extends LightningElement {
     @api participantCapacity;
-    @api scheduleName = "Thursday Friday Family Class ()";
+    @api scheduleName = SCHEDULENAME;
     @track selectedParticipants = [];
 
     columns = [
         {
             label: this.scheduleName,
-            fieldName: "Name",
+            fieldName: FIELDNAME,
             hideDefaultActions: true,
         },
         {

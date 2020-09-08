@@ -8,7 +8,7 @@
         "@lwc/eslint-plugin-lwc": "^0.8.0",
         "@sa11y/jest": "^0.1.2-alpha",
         "@salesforce/eslint-config-lwc": "^0.4.0",
-        "@salesforce/sfdx-lwc-jest": "^0.7.1",
+        "@salesforce/sfdx-lwc-jest": ">=0.9.1",
         "babel-eslint": "^10.0.3",
         "eslint": "^6.6.0",
         "eslint-config-prettier": "^6.7.0",
@@ -17,7 +17,7 @@
         "husky": "^3.1.0",
         "jest": "^26.0.1",
         "jest-junit": "^9.0.0",
-        "lint-staged": "^9.4.3",
+        "lint-staged": "^10.0.0",
         "lockfile-lint": "^4.3.7",
         "prettier": "^1.19.1",
         "prettier-plugin-apex": "^1.1.0"

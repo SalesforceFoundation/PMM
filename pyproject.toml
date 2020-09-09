@@ -1,5 +1,5 @@
 [tool.black]
-exclude = '^/(\.|dist|pybuild|venv)'
+exclude = '^/(\.|dist|pybuild|venv|\.cci)'
 
 [tool.coverage.report]
 exclude_lines = ["pragma: no cover", "@abstract", ]
@@ -7,5 +7,6 @@ exclude_lines = ["pragma: no cover", "@abstract", ]
 [tool.pytest.ini_options]
 norecursedirs = [
     "node_modules",
-    "venv"
+    "venv",
+    ".cci"
 ]

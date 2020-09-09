@@ -4,7 +4,7 @@ project:
     package:
         name: Program Management Module
         namespace: pmdm
-        api_version: "46.0"
+        api_version: "49.0"
         install_class: InstallScript
     source_format: sfdx
     git:

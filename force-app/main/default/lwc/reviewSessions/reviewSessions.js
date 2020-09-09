@@ -10,6 +10,7 @@ import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import SESSION_NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
 import SESSION_START_FIELD from "@salesforce/schema/ServiceSession__c.SessionStart__c";
+import SESSION_END_FIELD from "@salesforce/schema/ServiceSession__c.SessionEnd__c";
 
 export default class ReviewSessions extends LightningElement {
     @track columns = [];
@@ -17,7 +18,8 @@ export default class ReviewSessions extends LightningElement {
     @track objectName;
 
     @api sessionNameLabel;
-    @api sessionDateLabel;
+    @api sessionStartLabel;
+    @api sessionEndLabel;
 
     labels = {
         totalSessions: TOTAL_RECORDS_LABEL,
@@ -59,15 +61,15 @@ export default class ReviewSessions extends LightningElement {
                 this.sessionNameLabel = element.label;
             }
             if (element.apiName === SESSION_START_FIELD.fieldApiName) {
-                this.sessionDateLabel = element.label;
+                this.sessionStartLabel = element.label;
+            }
+            if (element.apiName === SESSION_END_FIELD.fieldApiName) {
+                this.sessionEndLabel = element.label;
             }
         });
     }
 
     setDataTableColumns() {
-        const STARTTIMEAPINAME = "startTime";
-        const ENDTIMEAPINAME = "endTime";
-
         const COLUMNS = [
             {
                 label: this.sessionNameLabel,
@@ -75,18 +77,13 @@ export default class ReviewSessions extends LightningElement {
                 hideDefaultActions: true,
             },
             {
-                label: this.sessionDateLabel,
+                label: this.sessionStartLabel,
                 fieldName: SESSION_START_FIELD.fieldApiName,
                 hideDefaultActions: true,
             },
             {
-                label: this.labels.startTime,
-                fieldName: STARTTIMEAPINAME,
-                hideDefaultActions: true,
-            },
-            {
-                label: this.labels.endTime,
-                fieldName: ENDTIMEAPINAME,
+                label: this.sessionEndLabel,
+                fieldName: SESSION_END_FIELD.fieldApiName,
                 hideDefaultActions: true,
             },
             {
@@ -119,44 +116,38 @@ export default class ReviewSessions extends LightningElement {
             {
                 id: "1",
                 Name: FIRSTSESSIONNAME,
-                SessionStart__c: "7/6/2020",
-                startTime: "1:00 PM",
-                endTime: "3:00 PM",
+                SessionStart__c: "7/6/2020 1:00 PM",
+                SessionEnd__c: "7/6/2020 3:00 PM",
             },
             {
                 id: "2",
                 Name: SECONDSESSIONNAME,
-                SessionStart__c: "7/7/2020",
-                startTime: "1:00 PM",
-                endTime: "3:00 PM",
+                SessionStart__c: "7/7/2020 1:00 PM",
+                SessionEnd__c: "7/7/2020 3:00 PM",
             },
             {
                 id: "3",
                 Name: THIRDSESSIONNAME,
-                SessionStart__c: "7/13/2020",
-                startTime: "1:00 PM",
-                endTime: "3:00 PM",
+                SessionStart__c: "7/13/2020 1:00 PM",
+                SessionEnd__c: "7/13/2020 3:00 PM",
             },
             {
                 id: "4",
                 Name: FOURTHSESSIONNAME,
-                SessionStart__c: "7/14/2020",
-                startTime: "1:00 PM",
-                endTime: "3:00 PM",
+                SessionStart__c: "7/14/2020 1:00 PM",
+                SessionEnd__c: "7/14/2020 3:00 PM",
             },
             {
                 id: "5",
                 Name: FIFTHSESSIONNAME,
-                SessionStart__c: "7/20/2020",
-                startTime: "1:00 PM",
-                endTime: "3:00 PM",
+                SessionStart__c: "7/20/2020 1:00 PM",
+                SessionEnd__c: "7/20/2020 3:00 PM",
             },
             {
                 id: "6",
                 Name: SIXTHSESSIONNAME,
-                SessionStart__c: "7/21/2020",
-                startTime: "1:00 PM",
-                endTime: "3:00 PM",
+                SessionStart__c: "7/21/2020 1:00 PM",
+                SessionEnd__c: "7/21/2020 3:00 PM",
             },
         ];
         this.data = DATA;

@@ -13,14 +13,7 @@ public with sharing class RecurrenceRule {
     }
 
     public RecurrenceRule withFrequency(String freq) {
-        switch on freq.toLowerCase() {
-            when 'daily' {
-                this.freq = Frequency.DAILY;
-            }
-            when else {
-                // TODO: Throw error!
-            }
-        }
+        this.freq = Frequency.valueOf(freq.toLowerCase());
 
         return this;
     }

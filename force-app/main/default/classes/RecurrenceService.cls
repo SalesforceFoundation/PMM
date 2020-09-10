@@ -1,10 +1,9 @@
 public with sharing class RecurrenceService {
+    private RecurrenceFactoryInterface factory = new RecurrenceFactory();
     private RecurrenceRule recurrenceRule = new RecurrenceRule();
-    private RecurrenceIteratorFactory factory = new RecurrenceIteratorFactory();
 
     public List<DateTime> generate(DateTime startDate, String rRule) {
-        recurrenceRule.reset().withString(rRule);
-        return factory.getIterator(recurrenceRule).iterate(startDate, recurrenceRule);
+        return factory.makeIterator(rRule).iterate(startDate);
     }
 
     public String createRRule(String frequency, List<String> days) {

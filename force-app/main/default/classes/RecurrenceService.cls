@@ -1,40 +1,13 @@
 public with sharing class RecurrenceService {
-    private RecurrenceRule rule = new RecurrenceRule();
-    private RecurrenceIterator recurrenceIterator {
-        get {
-            if (recurrenceIterator == null) {
-                recurrenceIterator = getIterator();
-            }
+    private RecurrenceRule recurrenceRule = new RecurrenceRule();
+    private RecurrenceIteratorFactory factory = new RecurrenceIteratorFactory();
 
-            return recurrenceIterator;
-        }
-        set;
+    public List<DateTime> generate(DateTime startDate, String rRule) {
+        recurrenceRule.reset().withString(rRule);
+        return factory.getIterator(recurrenceRule).iterate(startDate, recurrenceRule);
     }
 
-    public RecurrenceService(String rrString) {
-        rule.withString(rrString);
-    }
-
-    public RecurrenceService(RecurrenceRule rRule) {
-        this.rule = rRule;
-    }
-
-    public List<DateTime> generate(DateTime startDate) {
-        return recurrenceIterator.iterate(startDate, rule);
-    }
-
-    private RecurrenceIterator getIterator() {
-        switch on rule.getFrequency() {
-            when DAILY {
-                return new DailyIterator();
-            }
-            when else {
-                return null;
-            }
-        }
-    }
-
-    public interface RecurrenceIterator {
-        List<DateTime> iterate(DateTime startDate, RecurrenceRule rRule);
+    public String createRRule(String frequency, List<String> days) {
+        return recurrenceRule.reset().withFrequency(frequency).withDays(days).build();
     }
 }

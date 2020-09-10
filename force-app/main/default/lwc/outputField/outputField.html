@@ -1,0 +1,16 @@
+<template>
+    <div class="slds-form__item" role="listitem">
+        <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent"
+        >
+            <span class="slds-form-element__label">
+                {label}
+            </span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">
+                    <slot></slot>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -16,7 +16,9 @@
         <template if:true={isStep3}>
             <!-- Add Participants -->
         </template>
-        <template if:true={isStep4}> </template>
+        <template if:true={isStep4}>
+            <c-service-schedule-review></c-service-schedule-review>
+        </template>
         <div slot="footer">
             <lightning-layout horizontal-align="end">
                 <lightning-layout-item

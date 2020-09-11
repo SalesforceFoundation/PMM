@@ -12,9 +12,15 @@ import string
 from cumulusci.robotframework.utils import selenium_retry
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.keys import Keys
-
-from pmm_locators import pmm_lex_locators
-
+from cumulusci.robotframework import locator_manager
+from locators_50 import pmm_lex_locators as locators_50
+from locators_49 import pmm_lex_locators as locators_49
+locators_by_api_version = {
+    49.0: locators_49,   # summer '20
+    50.0: locators_50,   # winter '21
+}
+# will get populated in _init_locators
+pmm_lex_locators = {}
 
 @selenium_retry
 class pmm(object):
@@ -25,10 +31,37 @@ class pmm(object):
         self.debug = debug
         self.current_page = None
         self._session_records = []
+        self.val=0
+        self.payment_list= []
         # Turn off info logging of all http requests
-        logging.getLogger("requests.packages.urllib3.connectionpool").setLevel(
-            logging.WARN
-        )
+        logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARN)
+        self._init_locators()
+        # patch salesforce locators for winter 21
+        if int(self.latest_api_version) == 50:
+            from cumulusci.robotframework import Salesforce
+            Salesforce.lex_locators["record"]["related"]["card"] = (
+                "//a[contains(@class,'slds-card__header-link')][.//span[@title='{}']]"
+            )
+            Salesforce.lex_locators["record"]["related"]["button"]=("//article[contains(@class, 'slds-card slds-card_boundary')][.//span[@title='{}']]//a[@title='{}']")
+            Salesforce.lex_locators["record"]["related"]["popup_trigger"]=("//article[.//span[@title='{}'][//a[text()='{}']]]//div[contains(@class,'slds-truncate')]//button[./span[text()='Show Actions']]")
+        locator_manager.register_locators("pmm",pmm_lex_locators)
+
+    def _init_locators(self):
+        try:
+            client = self.cumulusci.tooling
+            response = client._call_salesforce(
+                'GET', 'https://{}/services/data'.format(client.sf_instance))
+            self.latest_api_version = float(response.json()[-1]['version'])
+            if not self.latest_api_version in locators_by_api_version:
+                warnings.warn("Could not find locator library for API %d" % self.latest_api_version)
+                self.latest_api_version = max(locators_by_api_version.keys())
+        except RobotNotRunningError:
+            # We aren't part of a running test, likely because we are
+            # generating keyword documentation. If that's the case, assume
+            # the latest supported version
+            self.latest_api_version = max(locators_by_api_version.keys())
+        locators = locators_by_api_version[self.latest_api_version]
+        pmm_lex_locators.update(locators)
 
     @property
     def builtin(self):
@@ -220,13 +253,22 @@ class pmm(object):
 
     def select_value_from_dropdown(self, dropdown, value):
         """Select given value in the dropdown field"""
-        locator = pmm_lex_locators["new_record"]["dropdown_field"].format(dropdown)
+        locator_title=pmm_lex_locators["page_title"]
+        value_title=self.selenium.get_webelement(locator_title).text
+        if value_title == "Add Contact to Program":
+            locator = pmm_lex_locators["new_record"]["quick_dropdown_field"].format(dropdown)
+            popup_loc = pmm_lex_locators["new_record"]["quick_dropdown_popup"]
+            value_loc = pmm_lex_locators["new_record"]["quick_dropdown_value"].format(value)
+        else:
+            locator = pmm_lex_locators["new_record"]["dropdown_field"].format(dropdown)
+            popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
+            value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
         self.selenium.get_webelement(locator).click()
-        popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
+        #popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="Status field dropdown did not open"
         )
-        value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
+       # value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
         self.selenium.click_link(value_loc)
 
     def select_date_from_datepicker(self, title, value):
@@ -274,3 +316,80 @@ class pmm(object):
         self.selenium.wait_until_page_contains_element(
             locator, error="Toast message is not displayed"
         )
+
+    def click_dialog_button(self,label):
+        """ Click on a button to on the new record dialog"""
+        locator = pmm_lex_locators["new_record"]["button"].format(label)
+        self.selenium.wait_until_element_is_enabled(locator, error="Button is not enabled")
+        self.selenium.click_element(locator)
+
+    def populate_lightning_fields(self, **kwargs):
+        """During winter 2020 part of the modal fields appear as lightning elements.
+        This keyword validates , identifies the element and populates value"""
+        for key, value in kwargs.items():
+            if key in ("Start Date", "End Date", "Delivery Date"):
+                locator = pmm_lex_locators["new_record"]["c_lightning_datepicker"].format(key)
+                if self.check_if_element_exists(locator):
+                    self.selenium.scroll_element_into_view(locator)
+                    self.selenium.wait_until_element_is_visible(locator)
+                    self.selenium.set_focus_to_element(locator)
+                    self.open_date_picker(key)
+                    self.pick_date(value)
+                else:
+                    self.builtin.log(f"Element {key} not found")
+
+            elif key in ("Status", "Program Issue Area", "Stage", "Role"):
+                locator = pmm_lex_locators["new_record"]["c_dd_popup"].format(key)
+                selection_value = pmm_lex_locators["new_record"]["c_dd_selection"].format(value)
+                if self.check_if_element_exists(locator):
+                    self.selenium.set_focus_to_element(locator)
+                    self.selenium.wait_until_element_is_visible(locator)
+                    self.selenium.scroll_element_into_view(locator)
+                    self.salesforce._jsclick(locator)
+                    self.selenium.wait_until_element_is_visible(selection_value)
+                    self.selenium.click_element(selection_value)
+
+            elif key in ("Program", "Client", "Program Engagement", "Service", "Household Account"):
+                self.salesforce.populate_lookup_field(key, value)
+
+            elif key in ("Service Name", "Quantity", "Description", "Unit of Measurement", "Target Population", "Program Cohort"):
+                locator = pmm_lex_locators["new_record"]["c_field-input"].format(key)
+                self.salesforce._populate_field(locator, value)
+
+            elif key in ("Auto-Name Override", "Auto-name Override"):
+                locator = pmm_lex_locators["new_record"]["override_checkbox"].format(key)
+                if value == "checked":
+                    self.selenium.get_webelement(locator).click()
+            else:
+                raise Exception("Locator not found")
+
+
+    def open_date_picker(self, title):
+        if self.latest_api_version == 50.0:
+            locator = pmm_lex_locators["new_record"]["c_lightning_datepicker"].format(
+                title
+            )
+        else:
+            locator = pmm_lex_locators["new_record"]["c_open_date_picker"].format(
+                title
+            )
+        self.selenium.scroll_element_into_view(locator)
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).click()
+
+    def choose_date(self, value):
+        """To pick a date from the lightning date picker"""
+        if self.latest_api_version == 50.0:
+            locator = pmm_lex_locators["new_record"]["c_lightning_selectdate"].format(
+                value
+            )
+        else:
+            locator = pmm_lex_locators["new_record"]["c_select_date"].format(value)
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).click()
+
+    def pick_date(self, value):
+        """To pick a date from the date picker"""
+        locator = pmm_lex_locators["new_record"]["c_datepicker"].format(value)
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).click()

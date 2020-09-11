@@ -31,13 +31,12 @@ Create Service from top nav
      Load Page Object                       NewService        ${ns}Service__c
      verify current page title              New Service
      Populate modal Form                    Service Name=${service_name}
-     ...                                    Program=&{program}[Name]
+     Populate Lightning Fields              Program=&{program}[Name]
      ...                                    Description=${Description}
      ...                                    Unit of Measurement=${unit_of_measurement}
      ...                                    Status=Active
-     click modal button                     Save
+     click Dialog button                     Save
      Wait Until Modal Is Closed
-     verify page header                     Service
      verify details                         Program            contains          &{program}[Name]
      verify details                         Service Name       contains          ${service_name}
      verify page contains related list      Service Deliveries

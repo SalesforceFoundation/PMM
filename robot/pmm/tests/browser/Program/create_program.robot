@@ -32,18 +32,17 @@ Create a Program via UI
     Go To PMM App
     Go To Page                             Listing                               ${ns}Program__c
     Click Object Button                    New
-    verify current page title              New Program
+    Wait for Modal                          New                     Program__c
     Populate modal Form                    Program Name=${program_name}
-    ...                                    Status=Active
     ...                                    Short Summary=${short_summary}
-    ...                                    Target Population=${target_population}
-    ...                                    Description=${description}
-    ...                                    Start Date=10
-    ...                                    End Date=25
-    ...                                    Program Issue Area=Education
-    Click modal button                     Save
-    Wait Until Modal Is Closed
-    verify page header                     Program
+    Populate Lightning Fields                Start Date=10
+    ...                                     End Date=25
+    ...                                     Target Population=${target_population}
+    ...                                     Description=${description}
+    ...                                     Status=Active
+    ...                                     Program Issue Area=Education
+    Click Dialog button                            Save
+    Wait Until Modal Is Closed  
     verify details                         Program Name    contains    ${program_name}
     verify page contains related list      Services
     verify page contains related list      Program Engagements
@@ -59,8 +58,9 @@ Date validation on new program dialog
     Click Object Button                    New
     verify current page title              New Program
     Populate modal Form                    Program Name=${program_name}
-    ...                                    Status=Active
+    #...                                    Status=Active
+    Populate Lightning Fields              Status=Active
     ...                                    Start Date=25
     ...                                    End Date=10
-    Click modal button                     Save
+    Click Dialog button                     Save
     verify modal error                     Start Date must be before End Date

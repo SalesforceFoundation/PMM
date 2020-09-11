@@ -8,7 +8,7 @@ from cumulusci.robotframework.pageobjects import ListingPage
 from cumulusci.robotframework.pageobjects import DetailPage
 from cumulusci.robotframework.pageobjects import pageobject
 from BaseObjects import BasePMMPage
-
+from pmm import pmm_lex_locators
 
 @pageobject("Listing", "Program")
 class ProgramListingPage(BasePMMPage, ListingPage):
@@ -43,3 +43,4 @@ class ProgramDetailPage(BasePMMPage, DetailPage):
             "/lightning/r/Program__c/",
             message="Current page is not a Program record detail view",
         )
+        self.selenium.wait_until_page_contains("Program Name")

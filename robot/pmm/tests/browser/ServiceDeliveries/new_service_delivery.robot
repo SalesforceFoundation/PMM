@@ -39,12 +39,12 @@ Create a Service Delivery via UI
     Click Object Button                    New
     Wait For Modal                         New                                     Service Delivery
     Populate Modal Form                    Service Delivery Name=${service_delivery_name}
-    ...                                    Service=${service}[Name]
+    Populate Lightning Fields              Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
     ...                                    Program Engagement=${program_engagement}[Name]
     ...                                    Delivery Date=Today
     ...                                    Quantity=${quantity}
-    Click Modal Button                     Save
+    Click Dialog Button                     Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
     Verify Details                         Service                                 contains             ${service}[Name]
@@ -60,13 +60,13 @@ Create a Service Delivery via UI with Auto Name Override
     Click Object Button                    New
     Wait For Modal                         New                                    Service Delivery
     Populate Modal Form                    Service Delivery Name=${service_delivery_name}
-    ...                                    Service=${service}[Name]
+    Populate Lightning Fields              Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
     ...                                    Program Engagement=${program_engagement}[Name]
     ...                                    Delivery Date=Today
     ...                                    Quantity=${quantity}
     ...                                    Auto-name Override=checked
-    Click Modal Button                     Save
+    Click Dialog Button                     Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
     Verify Details                         Service Delivery Name                   contains             ${service_delivery_name}
@@ -81,7 +81,7 @@ Validate contact and account lookup to the same household
     Click Object Button                    New
     Wait For Modal                         New                                    Service Delivery
     Populate Modal Form                    Service Delivery Name=${service_delivery_name}
-    ...                                    Service=${service}[Name]
+    Populate Lightning Fields              Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
     ...                                    Household Account=${account1}[Name]
     Click Modal Button                     Save

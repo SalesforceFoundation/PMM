@@ -8,7 +8,7 @@ from cumulusci.robotframework.pageobjects import ListingPage
 from cumulusci.robotframework.pageobjects import DetailPage
 from cumulusci.robotframework.pageobjects import pageobject
 from BaseObjects import BasePMMPage
-
+from pmm import pmm_lex_locators
 
 @pageobject("Listing", "Service")
 class ServiceListingPage(BasePMMPage, ListingPage):

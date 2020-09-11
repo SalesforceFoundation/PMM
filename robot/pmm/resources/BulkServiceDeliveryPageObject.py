@@ -7,7 +7,7 @@ import time
 
 from cumulusci.robotframework.pageobjects import BasePage
 from cumulusci.robotframework.pageobjects import pageobject
-from pmm_locators import pmm_lex_locators
+from pmm import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 

@@ -29,15 +29,14 @@ Create Program Cohort
      Go To Page                             Listing                 ${ns}ProgramCohort__c   
      Click Object Button                    New
      Wait For Modal                         New                     Program Cohort
-     Populate Field                         Program Cohort          ${program_cohort}  
-     Select Value From Dropdown             Status                  Planned
-     Populate Lookup Field                  Program                 ${program}[Name]
-     Populate Field                         Description             New Program Cohort via Robot Test
-     Select Date From Datepicker            Start Date              10
-     Select Date From Datepicker            End Date                25
-     Click Modal Button                     Save
+     Populate Lightning Fields               Program Cohort=${program_cohort} 
+     ...                                     Status=Planned
+     ...                                     Program=${program}[Name]
+     ...                                     Description=New Program Cohort via Robot Test
+     ...                                     Start Date=10
+     ...                                     End Date=25
+     Click Dialog Button                     Save
      Wait Until Modal Is Closed
-     Verify Page Header                     Program Cohort
      Verify Details                         Program Cohort          contains        ${program_cohort}
      Verify Details                         Status                  contains        Planned
      Verify Details                         Program                 contains        ${program}[Name]

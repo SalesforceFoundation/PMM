@@ -23,7 +23,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Create Program Engagemnet
+Create Program Engagement
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
      [tags]                                  W-037565   feature:Program Engagement
      Go To PMM App
@@ -31,15 +31,12 @@ Create Program Engagemnet
      Click Object Button                     New
      Wait For Modal                          New                                    Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
-     ...                                     Stage=Applied
+     Populate Lightning Fields               Stage=Applied
      ...                                     Client=&{contact}[FirstName] &{contact}[LastName]
      ...                                     Program=&{program}[Name]
      ...                                     Role=Client
-     ...                                     Start Date=10
-     ...                                     End Date=25
-     Click Modal Button                      Save
+     Click Dialog Button                      Save
      Wait Until Modal Is Closed
-     Verify Page Header                      Program Engagement
      Verify Details                          Program                  contains                  &{program}[Name]
      Verify Details                          Client                   contains                  &{contact}[FirstName] &{contact}[LastName]
      Page Should Not Contain                 ${program_engagement_name}
@@ -55,16 +52,13 @@ Create Program Engagement with Auto Name Override
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
+     Populate Lightning fields              Stage=Applied
      ...                                    Auto-Name Override=checked
-     ...                                    Stage=Applied
      ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
      ...                                    Program=&{program}[Name]
      ...                                    Role=Client
-     ...                                    Start Date=10
-     ...                                    End Date=25
-     Click Modal Button                     Save
+     Click Dialog Button                     Save
      Wait Until Modal Is Closed
-     Verify Page Header                     Program Engagement
      Verify Details                         Program Engagement Name                contains         ${program_engagement_name}
      Verify Page Contains Related List      Service Deliveries
      ${program_engagement_id} =             Save Current Record ID For Deletion    ${ns}ProgramEngagement__c
@@ -77,8 +71,8 @@ Date validation when start date is later than end date
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
+     Populate Lightning fields              Stage=Applied
      ...                                    Auto-Name Override=checked
-     ...                                    Stage=Applied
      ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
      ...                                    Program=&{program}[Name]
      ...                                    Role=Client
@@ -95,7 +89,7 @@ Date validation when program engagement dates are not within program date range
      Go To Page                             Details                                 Program__c                   object_id=${program}[Id]
      Click Quick Action Button              Edit
      Verify Current Page Title              Edit ${program}[Name]
-     Populate Modal Form                    Start Date=12
+     Populate Lightning Fields                    Start Date=12
      ...                                    End Date=20
      Click Modal Button                     Save
      Wait Until Modal Is Closed
@@ -103,7 +97,8 @@ Date validation when program engagement dates are not within program date range
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
-     ...                                    Stage=Applied
+     Populate Lightning fields              Stage=Applied
+     ...                                    Auto-Name Override=checked
      ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
      ...                                    Program=&{program}[Name]
      ...                                    Role=Client

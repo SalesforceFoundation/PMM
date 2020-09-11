@@ -35,7 +35,7 @@ Create Service from top nav
      ...                                    Description=${Description}
      ...                                    Unit of Measurement=${unit_of_measurement}
      ...                                    Status=Active
-     click Dialog button                     Save
+     click Dialog button                    Save
      Wait Until Modal Is Closed
      verify details                         Program            contains          &{program}[Name]
      verify details                         Service Name       contains          ${service_name}

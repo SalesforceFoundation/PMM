@@ -330,7 +330,9 @@ class pmm(object):
             if key in ("Start Date", "End Date", "Delivery Date"):
                 locator = pmm_lex_locators["new_record"]["c_lightning_datepicker"].format(key)
                 if self.check_if_element_exists(locator):
-                    self.selenium.scroll_element_into_view(locator)
+                    element = self.selenium.driver.find_element_by_xpath(locator)
+                    self.selenium.driver.execute_script("arguments[0].scrollIntoView(true)",element)
+                   # self.selenium.scroll_element_into_view(locator)
                     self.selenium.wait_until_element_is_visible(locator)
                     self.selenium.set_focus_to_element(locator)
                     self.open_date_picker(key)
@@ -365,6 +367,7 @@ class pmm(object):
 
 
     def open_date_picker(self, title):
+        """Opens the date picker by clicking on the date picker icon given the title of the field"""
         if self.latest_api_version == 50.0:
             locator = pmm_lex_locators["new_record"]["c_lightning_datepicker"].format(
                 title

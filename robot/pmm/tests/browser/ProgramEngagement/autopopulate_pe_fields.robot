@@ -38,7 +38,7 @@ Autopopulate fields when stage is set to Applied
      Populate Lightning fields               Stage=Applied
      ...                                     Program=&{program}[Name]
      ...                                     Role=Volunteer
-     Click Dialog Button                      Save
+     Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Application Date                 contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
@@ -56,7 +56,7 @@ Autopopulate fields when stage is set to Completed
      Populate Lightning fields               Stage=Completed
      ...                                     Program=&{program}[Name]
      ...                                     Role=Client
-     Click Dialog Button                      Save
+     Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          End Date                         contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
@@ -74,9 +74,8 @@ Autopopulate fields when stage is set to Withdrawn
      Populate Lightning fields               Stage=Withdrawn
      ...                                     Program=&{program}[Name]
      ...                                     Role=Client
-     Click Dialog Button                      Save
+     Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          End Date                         contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
-

@@ -30,12 +30,12 @@ Create a Program via UI
     [Documentation]                        This test creates Program and verifies that the Program record
     ...                                    has all the values from the form
     Go To PMM App
-    Go To Page                             Listing                               ${ns}Program__c
-    Click Object Button                    New
+    Go To Page                              Listing                               ${ns}Program__c
+    Click Object Button                     New
     Wait for Modal                          New                     Program__c
-    Populate modal Form                    Program Name=${program_name}
-    ...                                    Short Summary=${short_summary}
-    Populate Lightning Fields                Start Date=10
+    Populate modal Form                     Program Name=${program_name}
+    ...                                     Short Summary=${short_summary}
+    Populate Lightning Fields               Start Date=10
     ...                                     End Date=25
     ...                                     Target Population=${target_population}
     ...                                     Description=${description}
@@ -58,7 +58,6 @@ Date validation on new program dialog
     Click Object Button                    New
     verify current page title              New Program
     Populate modal Form                    Program Name=${program_name}
-    #...                                    Status=Active
     Populate Lightning Fields              Status=Active
     ...                                    Start Date=25
     ...                                    End Date=10

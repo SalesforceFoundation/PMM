@@ -63,27 +63,27 @@ Validate cohort and PE look up to the same program
      Go To Page                     Details                                  Program__c           object_id=${program}[Id]
      Verify Details                 Program Name                             contains             ${program}[Name]
      Click Quick Action Button      Add Contact to Program
-     Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
-     ...                            Role=Client
+     Populate Lookup Field          Client                                  ${contact}[FirstName] ${contact}[LastName]
+     Populate Modal Form            Role=Client
      ...                            Stage=Applied
      ...                            Program Cohort=${program_cohort1}[Name]
      Click Modal Button             Save
      Verify Modal Error             Select a Program Cohort that matches the Program.
 
 Autopopulate fields when stage is set to Applied and Start Date is today
-     [Documentation]                         Autopopulates PE name with anonymous and verifies that application date is not set to today when  
-     ...                                     the stage is set as applied and start date is set to today on new program engagment dialog
-     [tags]                                  W-037569   feature:Program Engagement
-     Go To Page                     Details                                  Program__c           object_id=${program}[Id]
-     Verify Details                 Program Name                             contains             ${program}[Name]
-     Click Quick Action Button      Add Contact to Program 
-     Populate Modal Form                     Client=${contact1}[FirstName] ${contact1}[LastName]
-     ...                                     Role=Client
+     [Documentation]                Autopopulates PE name with anonymous and verifies that application date is not set to today when  
+     ...                            the stage is set as applied and start date is set to today on new program engagment dialog
+     [tags]                         W-037569   feature:Program Engagement
+     Go To Page                              Details                                  Program__c           object_id=${program}[Id]
+     Verify Details                          Program Name                             contains             ${program}[Name]
+     Click Quick Action Button               Add Contact to Program 
+     Populate Lookup Field                   Client                                  ${contact1}[FirstName] ${contact1}[LastName]
+     Populate Modal Form                     Role=Client
      ...                                     Stage=Applied
      ...                                     Start Date=Today
      Click Modal Button                      Save
      Wait Until Modal Is Closed
-     click new related record link          &{contact1}[FirstName] &{contact1}[LastName] ${result_date}: &{program}[Name]
+     click new related record link           &{contact1}[FirstName] &{contact1}[LastName] ${result_date}: &{program}[Name]
      Verify Details                          Application Date                  does not contain       ${today}  
      Verify Details                          Program Engagement Name           contains              &{contact1}[FirstName] &{contact1}[LastName] ${result_date}: &{program}[Name]     
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c

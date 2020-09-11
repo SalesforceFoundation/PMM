@@ -63,7 +63,7 @@ Create Program Engagement with Auto Name Override
      Verify Page Contains Related List      Service Deliveries
      ${program_engagement_id} =             Save Current Record ID For Deletion    ${ns}ProgramEngagement__c
 
-Date validation when start date is later than end date
+Date validation for PE when start date is later than end date
      [Documentation]                        This test opens the new program engagement dialog and enters a end date earlier than start date
      ...                                    and verifies that an error message is displayed
      [tags]                                 W-042238   feature:Program Engagement
@@ -91,7 +91,7 @@ Date validation when program engagement dates are not within program date range
      Verify Current Page Title              Edit ${program}[Name]
      Populate Lightning Fields                    Start Date=12
      ...                                    End Date=20
-     Click Modal Button                     Save
+     Click Dialog Button                    Save
      Wait Until Modal Is Closed
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
@@ -104,6 +104,6 @@ Date validation when program engagement dates are not within program date range
      ...                                    Role=Client
      ...                                    Start Date=10
      ...                                    End Date=25
-     Click Modal Button                     Save
+     Click Dialog Button                     Save
      Verify Modal Error                     Select an end date that's on or after the program start date and on or before the program end date.
      Verify Modal Error                     Select a start date that's on or after the program start date and on or before the program end date.

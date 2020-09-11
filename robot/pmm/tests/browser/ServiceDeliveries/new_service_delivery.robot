@@ -86,3 +86,4 @@ Validate contact and account lookup to the same household
     ...                                    Household Account=${account1}[Name]
     Click Dialog Button                     Save
     Verify Modal Error                     Select an Account that matches the related Contact.
+    

@@ -108,4 +108,3 @@ Delete service delivery on bsdt
     Page Should Not Contain     ${contact1}[FirstName] ${contact1}[LastName]
     Page Should Not Contain     ${program_engagement1}[Name]
     Page Should Not Contain     ${service1}[Name]
-    

@@ -16,6 +16,7 @@
                         <lightning-layout-item key={field.apiName} size={field.size}>
                             <lightning-input-field
                                 field-name={field.apiName}
+                                value={field.value}
                             ></lightning-input-field>
                         </lightning-layout-item>
                     </template>
@@ -32,25 +33,28 @@
                 <lightning-layout multiple-rows="true">
                     <lightning-layout-item size={sizes.large}>
                         <lightning-input-field
-                            field-name={dateFields.start}
+                            field-name={dateFields.start.fieldApiName}
+                            value={dateFields.start.value}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
                         <lightning-input-field
-                            field-name={dateFields.end}
+                            field-name={dateFields.end.fieldApiName}
+                            value={dateFields.end.value}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
                         <c-picklist
-                            if:true={picklists}
-                            picklist={picklists.frequency}
+                            picklist={picklistFields.frequency.picklist}
+                            value={picklistFields.frequency.value}
                             onselect={handleFrequencyChange}
                             type="button"
                         ></c-picklist>
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.large} if:true={isWeekly}>
                         <c-picklist
-                            picklist={picklists.daysOfWeek}
+                            picklist={picklistFields.daysOfWeek.picklist}
+                            value={picklistFields.daysOfWeek.value}
                             multi-select="true"
                             type="button"
                             onselect={handleDaysOfWeekChange}
@@ -60,18 +64,21 @@
                         <lightning-layout if:true={isRecurring}>
                             <lightning-layout-item size={sizes.small}>
                                 <c-picklist
-                                    picklist={picklists.seriesEnds}
+                                    picklist={picklistFields.seriesEnds.picklist}
+                                    value={picklistFields.seriesEnds.value}
                                     onselect={handleSeriesEndsChange}
                                 ></c-picklist>
                             </lightning-layout-item>
                             <lightning-layout-item size={sizes.small}>
                                 <lightning-input-field
                                     if:true={isEndsOn}
-                                    field-name={dateFields.seriesEndsOn}
+                                    field-name={dateFields.seriesEndsOn.fieldApiName}
+                                    value={dateFields.seriesEndsOn.value}
                                 ></lightning-input-field>
                                 <lightning-input-field
                                     if:true={isEndsAfter}
-                                    field-name={dateFields.numberOfSessions}
+                                    field-name={dateFields.numberOfSessions.fieldApiName}
+                                    value={dateFields.numberOfSessions.value}
                                 ></lightning-input-field
                             ></lightning-layout-item>
                         </lightning-layout>

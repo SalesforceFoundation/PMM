@@ -1,26 +1,22 @@
-import { LightningElement, wire, track, api } from "lwc";
+import { LightningElement, wire, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
-import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ProgressSteps } from "./progressSteps";
 import { NavigationItems } from "./navigationItems";
-import { format } from "c/util";
 
-import SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
-
-import NEW_SERVICE_SCHEDULE_LABEL from "@salesforce/label/c.New_Service_Schedule";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
+import getDataModel from "@salesforce/apex/ServiceScheduleCreatorController.getDataModel";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
-    @track
+    @api serviceId;
+    isLoaded = false;
+    serviceScheduleData;
     labels = {
-        newSchedule: NEW_SERVICE_SCHEDULE_LABEL,
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
     };
 
-    @api serviceId;
-
+    // TODO: fix labels for each step
     _steps = new ProgressSteps()
         .addStep("", this.labels.newSchedule, new NavigationItems().addNext())
         .addStep(
@@ -43,17 +39,37 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         );
     _currentStep;
 
-    @wire(getObjectInfo, { objectApiName: SCHEDULE_OBJECT })
-    wireSchedule(result) {
+    @wire(getDataModel)
+    wireServiceScheduleData(result) {
         if (!result) {
             return;
         }
+
         if (result.data) {
-            this.labels.newSchedule = format(this.labels.newSchedule, [
-                result.data.label,
-            ]);
+            this.serviceScheduleData = { ...result.data };
+            this.serviceScheduleData.serviceId = this.serviceId;
+            this.isLoaded = true;
+            this.extractLabels(this.serviceScheduleData.labels.serviceSchedule);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
+        }
+    }
+
+    extractLabels(labels) {
+        if (!labels) {
+            return;
+        }
+
+        Object.keys(labels).forEach(label => {
+            let value = labels[label];
+            this.labels[label] = value;
+        });
+
+        for (const key in labels) {
+            if ({}.hasOwnProperty.call(labels, key)) {
+                let value = labels[key];
+                this.labels[key] = value;
+            }
         }
     }
 
@@ -73,31 +89,42 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         return this._currentStep;
     }
 
-    get showStep1() {
-        return this.currentStep.value === 0;
+    get isStep1() {
+        return this.isLoaded && this.currentStep.value === 0;
     }
 
-    get showStep2() {
+    get isStep2() {
         return this.currentStep.value === 1;
     }
 
-    get showStep3() {
+    get isStep3() {
         return this.currentStep.value === 2;
     }
 
-    get showStep4() {
+    get isStep4() {
         return this.currentStep.value === 3;
     }
 
     handleNext() {
         if (this._steps.hasNext) {
-            this._steps.next();
-            this._currentStep = this._steps.currentStep;
+            this.processNext();
 
             return;
         }
 
         this.reset();
+    }
+
+    processNext() {
+        if (this.isStep1) {
+            this.serviceScheduleData.serviceSchedule = this.template.querySelector(
+                "c-new-service-schedule"
+            ).serviceSchedule;
+
+            console.log(JSON.stringify(this.serviceScheduleData.serviceSchedule));
+        }
+        this._steps.next();
+        this._currentStep = this._steps.currentStep;
     }
 
     handleBack() {
@@ -130,7 +157,8 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this[NavigationMixin.Navigate]({
             type: "standard__objectPage",
             attributes: {
-                objectApiName: SCHEDULE_OBJECT.objectApiName,
+                objectApiName:
+                    "$serviceScheduleData.labels.serviceSchedule.objectApiName",
                 actionName: "list",
             },
             state: {

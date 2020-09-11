@@ -5,16 +5,18 @@
         default-visible="true"
         size="large"
     >
-        <template if:true={showStep1}>
-            <c-new-service-schedule service-id={serviceId}></c-new-service-schedule>
+        <template if:true={isStep1}>
+            <c-new-service-schedule
+                service-schedule-data={serviceScheduleData}
+            ></c-new-service-schedule>
         </template>
-        <template if:true={showStep2}>
+        <template if:true={isStep2}>
             <c-review-sessions></c-review-sessions>
         </template>
-        <template if:true={showStep3}>
+        <template if:true={isStep3}>
             <!-- Add Participants -->
         </template>
-        <template if:true={showStep4}> </template>
+        <template if:true={isStep4}> </template>
         <div slot="footer">
             <lightning-layout horizontal-align="end">
                 <lightning-layout-item

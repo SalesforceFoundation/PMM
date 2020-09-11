@@ -6,6 +6,7 @@ const SELECTED_VARIANT = "brand";
 export default class Picklist extends LightningElement {
     // Expects an object with a label and the salesforce picklistValue object
     @api picklist;
+    @api value;
     @api type = "radio";
     @api multiSelect = false;
 
@@ -21,7 +22,15 @@ export default class Picklist extends LightningElement {
         }
 
         this._options = this.picklist.values.map(value => {
-            return { value: value.value, label: value.label };
+            // TODO: Set defaultValue if value not provided?
+            let isSelected = this.value && this.value.includes(value.value);
+
+            return {
+                value: value.value,
+                label: value.label,
+                isSelected: isSelected,
+                variant: isSelected ? SELECTED_VARIANT : UNSELECTED_VARIANT,
+            };
         });
 
         return this._options;

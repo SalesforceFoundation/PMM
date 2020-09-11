@@ -349,7 +349,7 @@ class pmm(object):
                     self.selenium.wait_until_element_is_visible(selection_value)
                     self.selenium.click_element(selection_value)
 
-            elif key in ("Program", "Client", "Program Engagement", "Service", "Household Account"):
+            elif key in ("Program", "Client", "Program Engagement", "Service", "Household Account", "Program Cohort"):
                 self.salesforce.populate_lookup_field(key, value)
 
             elif key in ("Service Name", "Quantity", "Description", "Unit of Measurement", "Target Population", "Program Cohort"):

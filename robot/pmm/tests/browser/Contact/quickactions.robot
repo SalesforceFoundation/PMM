@@ -49,7 +49,6 @@ Add contact to program quick action
      ...                              Start Date=Today
      Click Modal button               Save
      Wait Until Modal Is Closed
-     verify page header               Contact
      Load Related List                Program Engagements
      click new related record link    &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
      verify details                   Program Engagement Name                 contains                &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
@@ -68,7 +67,6 @@ Add service delivery on a contact
      ...                              Quantity=${quantity}
      Click Modal button               Save
      Wait Until Modal Is Closed
-     verify page header               Contact
      Load Related List                Service Deliveries
      click new related record link    &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
      verify details                   Service Delivery Name                    contains                &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]

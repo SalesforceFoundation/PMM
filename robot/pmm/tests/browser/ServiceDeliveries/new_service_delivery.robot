@@ -84,5 +84,5 @@ Validate contact and account lookup to the same household
     Populate Lightning Fields              Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
     ...                                    Household Account=${account1}[Name]
-    Click Modal Button                     Save
+    Click Dialog Button                     Save
     Verify Modal Error                     Select an Account that matches the related Contact.

@@ -99,11 +99,75 @@ public with sharing class RecurrenceRule {
 
     public String build() {
         // TODO: build the rule string from the RecurrenceRule object
+        // FREQ (required)
+        String rRule = 'FREQ=' + this.freq + ';';
+
+        // INTERVAL
+        if (this.interval != 1) {
+            rRule += 'INTERVAL=' + this.interval + ';';
+        }
+
+        // UNTIL
+        if (this.endDate != null) {
+            String year = String.valueOf(this.endDate.year());
+            String month = String.valueOf(this.endDate.month());
+            String day = String.valueOf(this.endDate.day());
+            rRule += ';UNTIL=' + year + month + day + 'T000000Z';
+        }
+
+        // COUNT
+        if (this.count != null) {
+            rRule += ';COUNT=' + this.count;
+        }
+
+        // BYDAY
+        if (this.days.size() > 0) {
+            List<String> dayStrings = new List<String>();
+            for (Day day : this.days) {
+                dayStrings.add(day.name());
+            }
+            rRule += ';BYDAY=' + String.join(dayStrings, ',');
+        }
+
+        this.rRule = rRule;
         return this.rRule;
     }
 
     private void parse() {
-        // TODO: parse the rule string into a RecurrenceRule object
+        List<String> ruleParts = this.rRule.split(';');
+
+        for (String part : ruleParts) {
+            List<String> thisPart = part.split('=');
+
+            if (!thisPart.isEmpty()) {
+                String thisKey = thisPart[0].toUpperCase();
+                String thisValue = thisPart[1];
+
+                switch on thisKey {
+                    when 'FREQ' {
+                        setFreqFromString(thisValue);
+                    }
+                    when 'INTERVAL' {
+                        this.interval = Integer.valueOf(thisValue);
+                    }
+                    when 'UNTIL' {
+                        Integer year = Integer.valueOf(thisValue.left(4));
+                        Integer month = Integer.valueOf(thisValue.mid(4, 2));
+                        Integer day = Integer.valueOf(thisValue.mid(6, 2));
+                        this.endDate = Date.newInstance(year, month, day);
+                    }
+                    when 'COUNT' {
+                        this.count = Integer.valueOf(thisValue);
+                    }
+                    when 'BYDAY' {
+                        setDaysFromStrings(thisValue.split(','));
+                    }
+                    when else {
+                        throw new RecurrenceRuleException('Invalid RRule Key');
+                    }
+                }
+            }
+        }
     }
 
     private void setFreqFromString(String freqString) {

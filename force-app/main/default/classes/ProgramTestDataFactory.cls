@@ -35,6 +35,23 @@ public with sharing class ProgramTestDataFactory {
 
         insert programs;
 
+        List<ProgramCohort__c> programCohorts = new List<ProgramCohort__c>();
+        ProgramCohort__c cohort1 = new ProgramCohort__c();
+        cohort1.Name = 'Cohort 1';
+        cohort1.Program__c = program1.Id;
+        cohort1.StartDate__c = System.today();
+        cohort1.Status__c = 'Active';
+        programCohorts.add(cohort1);
+
+        ProgramCohort__c cohort2 = new ProgramCohort__c();
+        cohort2.Name = 'Cohort 2';
+        cohort2.Program__c = program2.Id;
+        cohort2.StartDate__c = System.today();
+        cohort2.Status__c = 'Active';
+        programCohorts.add(cohort2);
+
+        insert programCohorts;
+
         List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>();
 
         ProgramEngagement__c engagement1 = new ProgramEngagement__c();
@@ -43,6 +60,7 @@ public with sharing class ProgramTestDataFactory {
         engagement1.Contact__c = con.Id;
         engagement1.Program__c = program1.Id;
         engagement1.Role__c = 'Client';
+        engagement1.ProgramCohort__c = cohort1.Id;
         engagements.add(engagement1);
 
         ProgramEngagement__c engagement2 = new ProgramEngagement__c();

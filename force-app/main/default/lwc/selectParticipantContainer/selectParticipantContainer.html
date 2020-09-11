@@ -1,7 +1,7 @@
 <template>
     <c-section title={sectionHeader}></c-section>
 
-    <lightning-layout>
+    <lightning-layout class="container-height">
         <lightning-layout-item size="8">
             <c-select-participants
                 onselectedparticipants={handleSelectedParticipants}
@@ -10,7 +10,7 @@
         </lightning-layout-item>
         <lightning-layout-item size="4">
             <c-selected-participant-list
-                contact-data={selectedParticipants}
+                participant-data={selectedParticipants}
                 ondeletedparticipants={handleDeletedParticipants}
             ></c-selected-participant-list>
         </lightning-layout-item>

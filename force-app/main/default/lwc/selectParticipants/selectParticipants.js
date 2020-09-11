@@ -11,8 +11,10 @@ import STAGE_FIELD from "@salesforce/schema/ProgramEngagement__c.Stage__c";
 import SELECTED_LABEL from "@salesforce/label/c.Selected_Records";
 import ADD_TO_RECORD_LABEL from "@salesforce/label/c.Add_to_Record";
 import SEARCH_THIS_LIST_LABEL from "@salesforce/label/c.Search_this_list";
+import NONE_LABEL from "@salesforce/label/c.None";
+import NO_RECORDS_FOUND_LABEL from "@salesforce/label/c.NoRecordsFound";
 
-import getData from "@salesforce/apex/SelectParticipantController.getData";
+import getData from "@salesforce/apex/SelectParticipantController.getInitialDataSetup";
 
 const ENGAGEMENTS = "programEngagements";
 const COHORTS = "programCohorts";
@@ -20,13 +22,16 @@ const LABELS = "labels";
 const DELAY = 350;
 
 export default class SelectParticipants extends LightningElement {
-    @track contacts = [];
+    @track contacts;
+    @track filteredContacts;
     @track selectedRowCount = 0;
-    @track searchValue = "";
+    @track searchValue;
+    @track cohortId;
     @track engagements = [];
     @track cohorts = [];
+    @track noRecordsFound = false;
     @api programEngagements = [];
-    @api serviceId;
+    @api serviceId = "a07J000000O62TVIAZ";
     @api programName;
     @api programLabel;
     @api programCohortLabel;
@@ -46,8 +51,14 @@ export default class SelectParticipants extends LightningElement {
         if (value) {
             this.contacts.push(value);
             this.contacts.sort((a, b) => (a.Name > b.Name ? 1 : -1));
+            //TODO: Need to use the below method to sort the array
+            //sortObjectsByAttribute(this.contacts, "Name", "asc", true);
+
+            //if filters exist apply the filters
+            this.applyFilters(this.contacts);
+
             let dataTable = this.template.querySelector("lightning-datatable");
-            dataTable.data = this.contacts;
+            dataTable.data = this.filteredContacts;
         }
     }
 
@@ -55,6 +66,8 @@ export default class SelectParticipants extends LightningElement {
         selectedRecords: SELECTED_LABEL,
         addToService: ADD_TO_RECORD_LABEL,
         searchThisList: SEARCH_THIS_LIST_LABEL,
+        none: NONE_LABEL,
+        noRecordsFound: NO_RECORDS_FOUND_LABEL,
     };
 
     fields = {
@@ -69,7 +82,7 @@ export default class SelectParticipants extends LightningElement {
         serviceParticipant: SERVICE_PARTICIPANT_OBJECT,
     };
 
-    @wire(getData, { serviceId: "a07J000000NxkA1IAJ" })
+    @wire(getData, { serviceId: "$serviceId" })
     datasetup(result, error) {
         if (!result) {
             return;
@@ -103,6 +116,8 @@ export default class SelectParticipants extends LightningElement {
             this.programName = element.Program__r.Name;
         });
         this.contacts = programEngagements;
+        this.filteredContacts = this.contacts.slice(0);
+        this.noRecordsFound = this.filteredContacts && this.filteredContacts.length === 0;
     }
 
     loadProgramCohorts(cohorts) {
@@ -112,7 +127,7 @@ export default class SelectParticipants extends LightningElement {
             newObj.value = element.Id;
             return newObj;
         });
-        this.searchOptions.unshift({ label: "", value: "" });
+        this.searchOptions.unshift({ label: NONE_LABEL, value: "" });
     }
 
     loadLabels(labels) {
@@ -164,8 +179,10 @@ export default class SelectParticipants extends LightningElement {
         return this.labels.selectedRecords + ": " + this.selectedRowCount;
     }
 
-    handleSearchOptionChange(event) {
-        this.handleGetContactsByCohort(event.detail.value);
+    handleCohortChange(event) {
+        this.cohortId = event.detail.value;
+
+        this.applyFilters(this.contacts);
     }
 
     handleRowSelected(event) {
@@ -182,38 +199,41 @@ export default class SelectParticipants extends LightningElement {
         });
 
         this.contacts = tempContacts;
+        this.applyFilters(this.contacts);
+
         this.dispatchEvent(
             new CustomEvent("selectedparticipants", { detail: this.selectedRows })
         );
     }
 
-    handleGetContactsByCohort(cohortId) {
-        this.loadDataTable();
-        if (cohortId) {
-            this.contacts = this.contacts.filter(
-                element => element.ProgramCohort__c === cohortId
-            );
-        }
-    }
-
     enqueueLoadRecords(searchVal) {
-        debouncify(this.handleFilterDataTable(searchVal).bind(this), DELAY);
+        debouncify(this.applyFilters(searchVal).bind(this), DELAY);
     }
 
-    handleSearchChange(event) {
+    handleInputChange(event) {
         this.searchValue = event.target.value;
-        this.handleFilterDataTable(this.searchValue);
+        this.applyFilters(this.contacts);
     }
 
-    handleFilterDataTable(filterValue) {
-        this.loadDataTable();
-        if (filterValue) {
-            this.contacts = this.contacts.filter(
-                element =>
-                    element.Name.toLowerCase().includes(filterValue.toLowerCase()) ||
-                    element.Email.toLowerCase().includes(filterValue.toLowerCase()) ||
-                    element.Stage__c.toLowerCase().includes(filterValue.toLowerCase())
+    handleGetContactsByCohort(filteredValue) {
+        if (this.cohortId) {
+            this.filteredContacts = filteredValue.filter(
+                element => element.ProgramCohort__c === this.cohortId
             );
         }
+    }
+
+    applyFilters(filteredValue) {
+        let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
+
+        this.filteredContacts = filteredValue.filter(
+            element =>
+                element.Name.toLowerCase().includes(searchText) ||
+                element.Email.toLowerCase().includes(searchText) ||
+                element.Stage__c.toLowerCase().includes(searchText)
+        );
+
+        this.handleGetContactsByCohort(this.filteredContacts);
+        this.noRecordsFound = this.filteredContacts && this.filteredContacts.length === 0;
     }
 }

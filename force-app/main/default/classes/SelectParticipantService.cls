@@ -2,18 +2,6 @@ public with sharing class SelectParticipantService {
     @TestVisible
     private SelectParticipantSelector selectParticipantSelector = new SelectParticipantSelector();
 
-    public List<ProgramEngagement__c> getProgramEngagementsByServiceId(Id serviceId) {
-        return selectParticipantSelector.getProgramEngagements(serviceId);
-    }
-
-    public List<ProgramCohort__c> getProgramCohorts(Id serviceId) {
-        return selectParticipantSelector.getProgramCohorts(serviceId);
-    }
-
-    public List<ProgramEngagement__c> getFilteredProgramEnagagement(String searchValue) {
-        return selectParticipantSelector.getFilteredProgramEnagagement(searchvalue);
-    }
-
     public Map<String, String> getObjectData() {
         Map<String, String> objectFieldLabels = new Map<String, String>{
             Schema.SObjectType.Program__c.getName() => Schema.SObjectType.Program__c.getLabel(),
@@ -27,7 +15,7 @@ public with sharing class SelectParticipantService {
         return objectFieldLabels;
     }
 
-    public InitialDataAndSetup getInitialDataSetupInfo(Id serviceId) {
+    public InitialDataAndSetup getInitialDataSetup(Id serviceId) {
         InitialDataAndSetup dataSetup = new InitialDataAndSetup();
         List<Object> programEngagements = new List<Object>();
         List<Object> programCohorts = new List<Object>();
@@ -37,7 +25,6 @@ public with sharing class SelectParticipantService {
         );
         dataSetup.programCohorts = selectParticipantSelector.getProgramCohorts(serviceId);
         dataSetup.labels = getObjectData();
-
         return dataSetup;
     }
 

@@ -19,46 +19,61 @@
                 label={programCohortLabel}
                 class="slds-align_absolute-center slds-text-align_left slds-var-p-top_small"
                 options={searchOptions}
-                onchange={handleSearchOptionChange}
+                onchange={handleCohortChange}
                 value={selectedCohortId}
+                placeholder={labels.none}
             ></lightning-combobox>
         </lightning-layout-item>
         <lightning-layout-item size="10">
             <div class="slds-box slds-p-around_none slds-m-top_x-small">
-                <div class="slds-theme_shade" style="width:100%">
-                    <!--Instead of what is done below use the component that Beth has built-->
+                <template if:false={noRecordsFound}>
+                    <div class="slds-theme_shade" style="width:100%">
+                        <!--Instead of what is done below use the component that Beth has built-->
+                        <div
+                            style="float: left; width:50%"
+                            class="slds-var-p-top_large slds-var-p-left_medium"
+                        >
+                            {selectedRecordCount}
+                        </div>
+                        <div
+                            style="float: right; width:50%"
+                            class="slds-var-p-right_medium"
+                        >
+                            <lightning-input
+                                name="enter-search"
+                                type="search"
+                                placeholder={labels.searchThisList}
+                                onchange={handleInputChange}
+                                value={searchValue}
+                            ></lightning-input>
+                        </div>
+                    </div>
+                    <lightning-datatable
+                        data={filteredContacts}
+                        key-field="Id"
+                        columns={columns}
+                        show-row-number-column
+                        resize-column-disabled
+                        class="slds-m-around_x-large"
+                        onrowselection={handleRowSelected}
+                    ></lightning-datatable>
+                    <div class="slds-theme_shade slds-align_absolute-center">
+                        <lightning-button
+                            variant="brand"
+                            label={buttonLabel}
+                            class="slds-p-around_medium"
+                            onclick={handleSelectParticipants}
+                        ></lightning-button>
+                    </div>
+                </template>
+
+                <template if:true={noRecordsFound}>
                     <div
-                        style="float: left; width:50%"
-                        class="slds-var-p-top_large slds-var-p-left_medium"
+                        class="slds-align_absolute-center slds-p-around_small slds-text-heading_small"
                     >
-                        {selectedRecordCount}
+                        {labels.noRecordsFound}
                     </div>
-                    <div style="float: right; width:50%" class="slds-var-p-right_medium">
-                        <lightning-input
-                            name="enter-search"
-                            type="search"
-                            placeholder={labels.searchThisList}
-                            onchange={handleSearchChange}
-                            value={searchValue}
-                        ></lightning-input>
-                    </div>
-                </div>
-                <lightning-datatable
-                    data={contacts}
-                    key-field="Id"
-                    columns={columns}
-                    show-row-number-column
-                    class="slds-m-around_x-large"
-                    onrowselection={handleRowSelected}
-                ></lightning-datatable>
-                <div class="slds-theme_shade slds-align_absolute-center">
-                    <lightning-button
-                        variant="brand"
-                        label={buttonLabel}
-                        class="slds-p-around_medium"
-                        onclick={handleSelectParticipants}
-                    ></lightning-button>
-                </div>
+                </template>
             </div>
         </lightning-layout-item>
     </lightning-layout>

@@ -1,15 +1,19 @@
 import { LightningElement, api, track } from "lwc";
 
-const SCHEDULENAME = "Thursday Friday Family Class ()";
+import NO_RECORDS_SELECTED from "@salesforce/label/c.NoRecordsSelected";
+
+const SCHEDULENAME = "Thursday Friday Family Class ";
 const FIELDNAME = "Name";
 export default class SelectedParticipantList extends LightningElement {
-    @api participantCapacity;
+    @api participantCapacity = 10;
     @api scheduleName = SCHEDULENAME;
     @track selectedParticipants = [];
+    @track noRecordsSelected = true;
 
+    labels = { noRecordsSelected: NO_RECORDS_SELECTED };
     columns = [
         {
-            label: this.scheduleName,
+            label: "",
             fieldName: FIELDNAME,
             hideDefaultActions: true,
         },
@@ -28,17 +32,34 @@ export default class SelectedParticipantList extends LightningElement {
 
     //Need to return a schedule name with capacity here
     @api
-    get contactData() {
+    get participantData() {
         return this.selectedParticipants;
     }
 
-    set contactData(value) {
+    set participantData(value) {
         if (value) {
             value.forEach(element => {
-                this.selectedParticipants.push(element);
+                this.selectedParticipants = [...this.selectedParticipants, element];
             });
-            this.setDataTableData(this.selectedParticipants);
+
+            this.noRecordsSelected =
+                this.selectedParticipants && this.selectedParticipants.length === 0;
         }
+    }
+
+    get participantCount() {
+        return this.selectedParticipants.length;
+    }
+
+    get scheduleHeader() {
+        return (
+            this.scheduleName +
+            "(" +
+            this.participantCount +
+            "/" +
+            this.participantCapacity +
+            ")"
+        );
     }
 
     handleDelete(event) {
@@ -52,15 +73,11 @@ export default class SelectedParticipantList extends LightningElement {
         tempselectedParticipants.splice(index, 1);
         this.selectedParticipants = tempselectedParticipants;
 
-        this.setDataTableData(this.selectedParticipants);
+        this.noRecordsSelected =
+            this.selectedParticipants && this.selectedParticipants.length === 0;
 
         this.dispatchEvent(
             new CustomEvent("deletedparticipants", { detail: event.detail.row })
         );
-    }
-
-    setDataTableData(data) {
-        let dataTable = this.template.querySelector("lightning-datatable");
-        dataTable.data = data;
     }
 }

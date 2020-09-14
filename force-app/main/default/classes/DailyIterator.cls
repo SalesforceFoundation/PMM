@@ -5,7 +5,7 @@ public with sharing class DailyIterator implements RecurrenceIteratorInterface {
         this.recurrenceRule = recurrenceRule;
     }
 
-    public List<DateTime> iterate(DateTime startDate) {
+    public List<DateTime> iterate(DateTime dateTimeStart) {
         // Comment
         return new List<DateTime>();
     }

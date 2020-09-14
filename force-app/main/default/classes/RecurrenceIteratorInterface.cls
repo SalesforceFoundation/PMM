@@ -1,3 +1,3 @@
 public interface RecurrenceIteratorInterface {
-    List<DateTime> iterate(DateTime startDate);
+    List<DateTime> iterate(DateTime dateTimeStart);
 }

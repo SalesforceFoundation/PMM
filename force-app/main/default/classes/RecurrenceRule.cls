@@ -66,8 +66,8 @@ public with sharing class RecurrenceRule {
         return this;
     }
 
-    public RecurrenceRule withDays(List<String> days) {
-        setDaysFromStrings(days);
+    public RecurrenceRule withDays(List<Integer> days) {
+        populateDays(days);
         return this;
     }
 
@@ -118,11 +118,16 @@ public with sharing class RecurrenceRule {
         }
     }
 
-    private void setDaysFromStrings(List<String> dayStrings) {
+    private void populateDays(List<Integer> days) {
         this.days = new List<Day>();
-        for (Day day : Day.values()) {
-            if (dayStrings.contains(day.name())) {
-                this.days.add(day);
+        List<Day> dayValues = Day.values();
+
+        for (Integer dayNum : days) {
+            if (dayNum < dayValues.size()) {
+                // Expecting the day num value to start at 1; Su-Sa => 1-7
+                this.days.add(Day.values()[dayNum - 1]);
+            } else {
+                throw new RecurrenceRuleException('Invalid day number.');
             }
         }
     }

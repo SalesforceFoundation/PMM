@@ -6,7 +6,7 @@ public with sharing class RecurrenceService {
         return factory.makeIterator(rRule).iterate(dateTimeStart);
     }
 
-    public String createRRule(String frequency, List<RecurrenceRule.Day> days) {
+    public String createRRule(String frequency, List<Integer> days) {
         return recurrenceRule.reset().withFrequency(frequency).withDays(days).build();
     }
 }

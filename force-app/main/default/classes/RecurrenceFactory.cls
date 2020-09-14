@@ -2,7 +2,7 @@ public with sharing class RecurrenceFactory implements RecurrenceFactoryInterfac
     private RecurrenceRule recurrenceRule = new RecurrenceRule();
 
     public RecurrenceIteratorInterface makeIterator(String rRule) {
-        recurrenceRule.reset().withString(rRule);
+        recurrenceRule.reset().withRuleString(rRule);
 
         switch on recurrenceRule.getFrequency() {
             when DAILY {

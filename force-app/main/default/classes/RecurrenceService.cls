@@ -1,5 +1,7 @@
 public with sharing class RecurrenceService {
+    @TestVisible
     private RecurrenceFactoryInterface factory = new RecurrenceFactory();
+    @TestVisible
     private RecurrenceRule recurrenceRule = new RecurrenceRule();
 
     public List<DateTime> generate(DateTime dateTimeStart, String rRule) {

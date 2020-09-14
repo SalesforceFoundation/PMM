@@ -1,4 +1,5 @@
 public with sharing class RecurrenceFactory implements RecurrenceFactoryInterface {
+    @TestVisible
     private RecurrenceRule recurrenceRule = new RecurrenceRule();
 
     public RecurrenceIteratorInterface makeIterator(String rRule) {

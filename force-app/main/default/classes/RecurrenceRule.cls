@@ -19,6 +19,7 @@ public with sharing class RecurrenceRule {
         SA
     }
 
+    @TestVisible
     private String rRule;
     private Frequency freq;
     private Integer interval = 1;

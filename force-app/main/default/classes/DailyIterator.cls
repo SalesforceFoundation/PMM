@@ -1,4 +1,5 @@
 public with sharing class DailyIterator implements RecurrenceIteratorInterface {
+    @TestVisible
     RecurrenceRule recurrenceRule;
 
     public DailyIterator(RecurrenceRule recurrenceRule) {
@@ -6,7 +7,7 @@ public with sharing class DailyIterator implements RecurrenceIteratorInterface {
     }
 
     public List<DateTime> iterate(DateTime dateTimeStart) {
-        // Comment
-        return new List<DateTime>();
+        // TODO: add actual iteration
+        return new List<DateTime>{ dateTimeStart };
     }
 }

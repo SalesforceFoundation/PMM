@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 public with sharing class DailyIterator implements RecurrenceIteratorFactory.RecurrenceIterator {
     private List<DateTime> result;
     private DateTime runningDateTime;
@@ -32,5 +33,18 @@ public with sharing class DailyIterator implements RecurrenceIteratorFactory.Rec
         DateTime nextDateTime = this.runningDateTime.addDays(this.rRule.getInterval());
         this.result.add(nextDateTime);
         this.runningDateTime = nextDateTime;
+=======
+public with sharing class DailyIterator implements RecurrenceIteratorInterface {
+    @TestVisible
+    RecurrenceRule recurrenceRule;
+
+    public DailyIterator(RecurrenceRule recurrenceRule) {
+        this.recurrenceRule = recurrenceRule;
+    }
+
+    public List<DateTime> iterate(DateTime dateTimeStart) {
+        // TODO: add actual iteration
+        return new List<DateTime>{ dateTimeStart };
+>>>>>>> feature/Winter-21__rr-rules
     }
 }

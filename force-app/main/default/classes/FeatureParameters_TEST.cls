@@ -10,7 +10,7 @@ public with sharing class FeatureParameters_TEST {
     }
 
     @IsTest
-    private static void shouldRetrunAllParameters() {
+    private static void shouldReturnAllParameters() {
         List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
             .getAll();
 

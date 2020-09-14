@@ -25,7 +25,7 @@
             ></lightning-combobox>
         </lightning-layout-item>
         <lightning-layout-item size="10">
-            <div class="slds-box slds-p-around_none slds-m-top_x-small">
+            <div class="slds-box slds-p-around_none slds-var-m-around_x-small">
                 <template if:false={noRecordsFound}>
                     <div class="slds-theme_shade" style="width:100%">
                         <!--Instead of what is done below use the component that Beth has built-->
@@ -33,7 +33,7 @@
                             style="float: left; width:50%"
                             class="slds-var-p-top_large slds-var-p-left_medium"
                         >
-                            {selectedRecordCount}
+                            {selectedRecordCountMessage}
                         </div>
                         <div
                             style="float: right; width:50%"
@@ -54,14 +54,14 @@
                         columns={columns}
                         show-row-number-column
                         resize-column-disabled
-                        class="slds-m-around_x-large"
+                        class="slds-var-m-around_x-large"
                         onrowselection={handleRowSelected}
                     ></lightning-datatable>
                     <div class="slds-theme_shade slds-align_absolute-center">
                         <lightning-button
                             variant="brand"
-                            label={buttonLabel}
-                            class="slds-p-around_medium"
+                            label={addToServiceButtonLabel}
+                            class="slds-var-p-around_medium"
                             onclick={handleSelectParticipants}
                         ></lightning-button>
                     </div>
@@ -69,7 +69,7 @@
 
                 <template if:true={noRecordsFound}>
                     <div
-                        class="slds-align_absolute-center slds-p-around_small slds-text-heading_small"
+                        class="slds-align_absolute-center slds-var-p-around_small slds-text-heading_small"
                     >
                         {labels.noRecordsFound}
                     </div>

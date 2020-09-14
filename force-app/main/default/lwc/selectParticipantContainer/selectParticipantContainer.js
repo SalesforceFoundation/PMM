@@ -7,7 +7,7 @@ import { format } from "c/util";
 
 export default class SelectParticipantContainer extends LightningElement {
     @track sectionHeader;
-    @api selectedParticipants;
+    @api selectedParticipants = [];
     @api addParticipants;
 
     labels = {
@@ -27,11 +27,29 @@ export default class SelectParticipantContainer extends LightningElement {
         }
     }
 
+    @api
     handleSelectedParticipants(event) {
-        this.selectedParticipants = event.detail;
+        if (event.detail) {
+            event.detail.forEach(element => {
+                this.selectedParticipants = [...this.selectedParticipants, element];
+            });
+        }
     }
 
-    handleDeletedParticipants(event) {
-        this.addParticipants = event.detail;
+    handleDeletedParticipant(event) {
+        let tempselectedParticipants = [];
+        tempselectedParticipants = [...this.selectedParticipants];
+
+        let index = tempselectedParticipants.findIndex(
+            element => element.Id === event.detail.Id
+        );
+
+        tempselectedParticipants.splice(index, 1);
+
+        this.selectedParticipants = tempselectedParticipants;
+
+        this.template
+            .querySelector("c-participant-selector")
+            .reAddParticipant(event.detail);
     }
 }

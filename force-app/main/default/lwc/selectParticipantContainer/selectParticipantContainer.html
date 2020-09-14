@@ -3,16 +3,15 @@
 
     <lightning-layout class="container-height">
         <lightning-layout-item size="8">
-            <c-select-participants
-                onselectedparticipants={handleSelectedParticipants}
-                add-participants={addParticipants}
-            ></c-select-participants>
+            <c-participant-selector
+                onselectparticipants={handleSelectedParticipants}
+            ></c-participant-selector>
         </lightning-layout-item>
         <lightning-layout-item size="4">
-            <c-selected-participant-list
-                participant-data={selectedParticipants}
-                ondeletedparticipants={handleDeletedParticipants}
-            ></c-selected-participant-list>
+            <c-selected-participants
+                selected-participants={selectedParticipants}
+                ondeletedparticipant={handleDeletedParticipant}
+            ></c-selected-participants>
         </lightning-layout-item>
     </lightning-layout>
 </template>

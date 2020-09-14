@@ -3,7 +3,7 @@
         <lightning-layout-item size="12" class="slds-var-m-top_medium">
             <div class="slds-box slds-p-around_none  slds-var-m-top_medium">
                 <div
-                    class="slds-align_absolute-center slds-p-around_x-small slds-text-heading_small"
+                    class="slds-align_absolute-center slds-var-p-around_x-small slds-text-heading_small"
                 >
                     {scheduleHeader}
                 </div>
@@ -13,7 +13,7 @@
                             columns={columns}
                             key-field="Id"
                             hide-checkbox-column
-                            onrowaction={handleDelete}
+                            onrowaction={handleRemove}
                             data={selectedParticipants}
                             resize-column-disabled
                         ></lightning-datatable>
@@ -21,7 +21,7 @@
                 </template>
                 <template if:true={noRecordsSelected}>
                     <div
-                        class="width:fit-content slds-align_absolute-center slds-p-around_small slds-text-heading_small slds-border_top"
+                        class="width:fit-content slds-align_absolute-center slds-var-p-around_small slds-text-heading_small slds-border_top"
                     >
                         {labels.noRecordsSelected}
                     </div>

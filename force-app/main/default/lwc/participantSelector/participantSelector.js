@@ -21,44 +21,35 @@ const COHORTS = "programCohorts";
 const LABELS = "labels";
 const DELAY = 350;
 
-export default class SelectParticipants extends LightningElement {
-    @track contacts;
+export default class ParticipantSelector extends LightningElement {
+    @track availableContacts;
     @track filteredContacts;
-    @track selectedRowCount = 0;
-    @track searchValue;
-    @track cohortId;
     @track engagements = [];
     @track cohorts = [];
-    @track noRecordsFound = false;
-    @api programEngagements = [];
-    @api serviceId = "a07J000000O62TVIAZ";
-    @api programName;
-    @api programLabel;
-    @api programCohortLabel;
-    @api selectedRows;
-    @api buttonLabel;
-    @api nameField;
-    @api emailField;
-    @api stageField;
+    @api serviceId = "a073B000003bCLOQA2";
+    selectedRowCount = 0;
+    searchValue;
+    cohortId;
+    noRecordsFound = false;
+    programEngagements = [];
+    programName;
+    programLabel;
+    programCohortLabel;
+    selectedRows;
+    addToServiceButtonLabel;
+    nameField;
+    emailField;
+    stageField;
     columns = [];
 
     @api
-    get addParticipants() {
-        return this.contacts;
-    }
-
-    set addParticipants(value) {
+    reAddParticipant(value) {
         if (value) {
-            this.contacts.push(value);
-            this.contacts.sort((a, b) => (a.Name > b.Name ? 1 : -1));
-            //TODO: Need to use the below method to sort the array
-            //sortObjectsByAttribute(this.contacts, "Name", "asc", true);
+            this.availableContacts = [...this.availableContacts, value];
+            this.availableContacts.sort((a, b) => (a.Name > b.Name ? 1 : -1));
 
             //if filters exist apply the filters
-            this.applyFilters(this.contacts);
-
-            let dataTable = this.template.querySelector("lightning-datatable");
-            dataTable.data = this.filteredContacts;
+            this.applyFilters();
         }
     }
 
@@ -103,9 +94,9 @@ export default class SelectParticipants extends LightningElement {
     }
 
     loadDataTable() {
-        this.contacts = this.engagements;
+        this.availableContacts = this.engagements;
         let programEngagements = [];
-        this.contacts.forEach(element => {
+        this.availableContacts.forEach(element => {
             let programEngagement = {};
             programEngagement.Id = element.Id;
             programEngagement.Name = element.Contact__r.Name;
@@ -115,8 +106,8 @@ export default class SelectParticipants extends LightningElement {
             programEngagements.push(programEngagement);
             this.programName = element.Program__r.Name;
         });
-        this.contacts = programEngagements;
-        this.filteredContacts = this.contacts.slice(0);
+        this.availableContacts = programEngagements;
+        this.filteredContacts = [...this.availableContacts];
         this.noRecordsFound = this.filteredContacts && this.filteredContacts.length === 0;
     }
 
@@ -139,7 +130,7 @@ export default class SelectParticipants extends LightningElement {
                 this.programCohortLabel = value;
             }
             if (key === this.objects.serviceParticipant.objectApiName) {
-                this.buttonLabel = format(this.labels.addToService, [value]);
+                this.addToServiceButtonLabel = format(this.labels.addToService, [value]);
             }
             if (key === this.fields.contactName.fieldApiName) {
                 this.nameField = value;
@@ -175,14 +166,14 @@ export default class SelectParticipants extends LightningElement {
         ];
     }
 
-    get selectedRecordCount() {
+    get selectedRecordCountMessage() {
         return this.labels.selectedRecords + ": " + this.selectedRowCount;
     }
 
     handleCohortChange(event) {
         this.cohortId = event.detail.value;
 
-        this.applyFilters(this.contacts);
+        this.applyFilters();
     }
 
     handleRowSelected(event) {
@@ -191,28 +182,27 @@ export default class SelectParticipants extends LightningElement {
     }
 
     handleSelectParticipants() {
-        let tempContacts = this.contacts.slice(0);
-
+        let tempContacts = [...this.availableContacts];
         this.selectedRows.forEach(row => {
             let index = tempContacts.findIndex(element => element.Id === row.Id);
             tempContacts.splice(index, 1);
         });
 
-        this.contacts = tempContacts;
-        this.applyFilters(this.contacts);
+        this.availableContacts = tempContacts;
+        this.applyFilters();
 
         this.dispatchEvent(
-            new CustomEvent("selectedparticipants", { detail: this.selectedRows })
+            new CustomEvent("selectparticipants", { detail: this.selectedRows })
         );
     }
 
-    enqueueLoadRecords(searchVal) {
-        debouncify(this.applyFilters(searchVal).bind(this), DELAY);
+    enqueueLoadRecords() {
+        debouncify(this.applyFilters().bind(this), DELAY);
     }
 
     handleInputChange(event) {
         this.searchValue = event.target.value;
-        this.applyFilters(this.contacts);
+        this.applyFilters();
     }
 
     handleGetContactsByCohort(filteredValue) {
@@ -223,10 +213,10 @@ export default class SelectParticipants extends LightningElement {
         }
     }
 
-    applyFilters(filteredValue) {
+    applyFilters() {
         let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
 
-        this.filteredContacts = filteredValue.filter(
+        this.filteredContacts = this.availableContacts.filter(
             element =>
                 element.Name.toLowerCase().includes(searchText) ||
                 element.Email.toLowerCase().includes(searchText) ||

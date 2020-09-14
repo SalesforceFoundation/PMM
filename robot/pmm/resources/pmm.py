@@ -31,19 +31,10 @@ class pmm(object):
         self.debug = debug
         self.current_page = None
         self._session_records = []
-        self.val=0
-        self.payment_list= []
         # Turn off info logging of all http requests
         logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARN)
         self._init_locators()
         # patch salesforce locators for winter 21
-        if int(self.latest_api_version) == 50:
-            from cumulusci.robotframework import Salesforce
-            Salesforce.lex_locators["record"]["related"]["card"] = (
-                "//a[contains(@class,'slds-card__header-link')][.//span[@title='{}']]"
-            )
-            Salesforce.lex_locators["record"]["related"]["button"]=("//article[contains(@class, 'slds-card slds-card_boundary')][.//span[@title='{}']]//a[@title='{}']")
-            Salesforce.lex_locators["record"]["related"]["popup_trigger"]=("//article[.//span[@title='{}'][//a[text()='{}']]]//div[contains(@class,'slds-truncate')]//button[./span[text()='Show Actions']]")
         locator_manager.register_locators("pmm",pmm_lex_locators)
 
     def _init_locators(self):
@@ -264,11 +255,9 @@ class pmm(object):
             popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
             value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
         self.selenium.get_webelement(locator).click()
-        #popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="Status field dropdown did not open"
         )
-       # value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
         self.selenium.click_link(value_loc)
 
     def select_date_from_datepicker(self, title, value):
@@ -368,26 +357,14 @@ class pmm(object):
 
     def open_date_picker(self, title):
         """Opens the date picker by clicking on the date picker icon given the title of the field"""
-        if self.latest_api_version == 50.0:
-            locator = pmm_lex_locators["new_record"]["c_lightning_datepicker"].format(
-                title
-            )
-        else:
-            locator = pmm_lex_locators["new_record"]["c_open_date_picker"].format(
-                title
-            )
+        locator = pmm_lex_locators["new_record"]["c_lightning_datepicker"].format(title)
         self.selenium.scroll_element_into_view(locator)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
 
     def choose_date(self, value):
         """To pick a date from the lightning date picker"""
-        if self.latest_api_version == 50.0:
-            locator = pmm_lex_locators["new_record"]["c_lightning_selectdate"].format(
-                value
-            )
-        else:
-            locator = pmm_lex_locators["new_record"]["c_select_date"].format(value)
+        locator = pmm_lex_locators["new_record"]["c_lightning_selectdate"].format(value)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
 

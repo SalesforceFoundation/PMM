@@ -78,7 +78,7 @@ Date validation for PE when start date is later than end date
      ...                                    Role=Client
      ...                                    Start Date=25
      ...                                    End Date=10
-     Click Modal Button                     Save
+     Click Dialog Button                    Save
      Verify Modal Error                     Start Date must be before End Date
 
 Date validation when program engagement dates are not within program date range
@@ -104,6 +104,6 @@ Date validation when program engagement dates are not within program date range
      ...                                    Role=Client
      ...                                    Start Date=10
      ...                                    End Date=25
-     Click Dialog Button                     Save
+     Click Dialog Button                    Save
      Verify Modal Error                     Select an end date that's on or after the program start date and on or before the program end date.
      Verify Modal Error                     Select a start date that's on or after the program start date and on or before the program end date.

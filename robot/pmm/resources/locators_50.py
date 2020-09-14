@@ -41,7 +41,7 @@ pmm_lex_locators = {
         "datepicker_popup": "//table[@class='calGrid' and @role='grid']",
         "select_date": "//div[contains(@class,'uiDatePickerGrid')]/table[@class='calGrid']//*[text()='{}']",
         "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
-        "error_message":"//ul[contains(@class,'errorsList')]/li[contains(text(),'{}')]",
+        "error_message":'//ul[contains(@class,"errorsList")]/li[contains(text(),"{}")]',
         'datepicker':"//div[contains(@class,'uiDatePickerGrid')]/table[@class='calGrid']//*[text()='{}']",
         "c_lightning_datepicker": "//label[text()='{}']/following-sibling::div",
         "c_dd_selection": "//lightning-base-combobox-item[@data-value='{}']",

@@ -6,7 +6,8 @@ public with sharing class RecurrenceRule {
     // FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE;COUNT=12
 
     public enum Frequency {
-        DAILY
+        DAILY,
+        WEEKLY
     }
 
     public enum Day {

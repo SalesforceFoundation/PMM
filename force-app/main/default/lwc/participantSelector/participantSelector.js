@@ -12,7 +12,11 @@ import SELECTED_LABEL from "@salesforce/label/c.Selected_Records";
 import ADD_TO_RECORD_LABEL from "@salesforce/label/c.Add_to_Record";
 import SEARCH_THIS_LIST_LABEL from "@salesforce/label/c.Search_this_list";
 import NONE_LABEL from "@salesforce/label/c.None";
-import NO_RECORDS_FOUND_LABEL from "@salesforce/label/c.NoRecordsFound";
+import NO_RECORDS_FOUND_LABEL from "@salesforce/label/c.No_Records_Found";
+import NO_RECORDS_SELECTED from "@salesforce/label/c.No_Records_Selected";
+
+const SCHEDULENAME = "Thursday Friday Family Class ";
+const FIELDNAME = "Name";
 
 import getSelectParticipantModel from "@salesforce/apex/SelectParticipantController.getSelectParticipantModel";
 
@@ -26,7 +30,7 @@ export default class ParticipantSelector extends LightningElement {
     @track filteredContacts;
     @track engagements = [];
     @track cohorts = [];
-    @api serviceId = "a073D000002rFyKQAU";
+    @api serviceId;
     selectedRowCount = 0;
     searchValue;
     cohortId;
@@ -41,17 +45,9 @@ export default class ParticipantSelector extends LightningElement {
     emailField;
     stageField;
     columns = [];
-
-    @api
-    reAddParticipant(value) {
-        if (value) {
-            this.availableContacts = [...this.availableContacts, value];
-            this.availableContacts.sort((a, b) => (a.Name > b.Name ? 1 : -1));
-
-            //if filters exist apply the filters
-            this.applyFilters();
-        }
-    }
+    @api participantCapacity = 10;
+    @api scheduleName = SCHEDULENAME;
+    @api selectedParticipants = [];
 
     labels = {
         selectedRecords: SELECTED_LABEL,
@@ -59,6 +55,7 @@ export default class ParticipantSelector extends LightningElement {
         searchThisList: SEARCH_THIS_LIST_LABEL,
         none: NONE_LABEL,
         noRecordsFound: NO_RECORDS_FOUND_LABEL,
+        noRecordsSelected: NO_RECORDS_SELECTED,
     };
 
     fields = {
@@ -72,6 +69,65 @@ export default class ParticipantSelector extends LightningElement {
         programCohort: PROGRAM_COHORT_OBJECT,
         serviceParticipant: SERVICE_PARTICIPANT_OBJECT,
     };
+
+    selectedColumns = [
+        {
+            label: "",
+            fieldName: FIELDNAME,
+            hideDefaultActions: true,
+        },
+        {
+            fieldName: "",
+            type: "button-icon",
+            hideDefaultActions: true,
+            typeAttributes: {
+                iconName: "utility:clear",
+                variant: "bare",
+                iconPosition: "left",
+                disabled: false,
+            },
+        },
+    ];
+
+    get noRecordsSelected() {
+        return this.selectedParticipants && this.selectedParticipants.length === 0;
+    }
+
+    get participantCount() {
+        return this.selectedParticipants ? this.selectedParticipants.length : 0;
+    }
+
+    get scheduleHeader() {
+        return (
+            this.scheduleName +
+            "(" +
+            this.participantCount +
+            "/" +
+            this.participantCapacity +
+            ")"
+        );
+    }
+
+    deselectParticipant(event) {
+        if (event) {
+            let tempselectedParticipants = [];
+            tempselectedParticipants = [...this.selectedParticipants];
+
+            let index = tempselectedParticipants.findIndex(
+                element => element.Id === event.detail.row.Id
+            );
+
+            tempselectedParticipants.splice(index, 1);
+
+            this.selectedParticipants = tempselectedParticipants;
+
+            this.availableContacts = [...this.availableContacts, event.detail.row];
+            this.availableContacts.sort((a, b) => (a.Name > b.Name ? 1 : -1));
+
+            //if filters exist apply the filters
+            this.applyFilters();
+        }
+    }
 
     @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
     datasetup(result, error) {
@@ -186,14 +242,13 @@ export default class ParticipantSelector extends LightningElement {
         this.selectedRows.forEach(row => {
             let index = tempContacts.findIndex(element => element.Id === row.Id);
             tempContacts.splice(index, 1);
+
+            this.selectedParticipants.push(row);
         });
 
+        this.selectedParticipants = [...this.selectedParticipants];
         this.availableContacts = tempContacts;
         this.applyFilters();
-
-        this.dispatchEvent(
-            new CustomEvent("selectparticipants", { detail: this.selectedRows })
-        );
     }
 
     enqueueLoadRecords() {

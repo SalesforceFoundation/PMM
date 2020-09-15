@@ -161,7 +161,11 @@ public with sharing class RecurrenceRule {
                         this.count = Integer.valueOf(thisValue);
                     }
                     when 'BYDAY' {
-                        setDaysFromStrings(thisValue.split(','));
+                        List<Integer> dayNums = new List<Integer>();
+                        for (String day : thisValue.split(',')) {
+                            dayNums.add(Integer.valueOf(day));
+                        }
+                        populateDays(dayNums);
                     }
                     when else {
                         throw new RecurrenceRuleException('Invalid RRule Key');

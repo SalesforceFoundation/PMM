@@ -77,7 +77,7 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
-    private static void testGetProgramEngagements() {
+    private static void testGetProgramEngagementsByServiceId() {
         ProgramTestDataFactory.insertTestData(true);
 
         Service__c service1 = [
@@ -111,9 +111,14 @@ public with sharing class ProgramEngagementSelector_TEST {
 
         Test.startTest();
         ProgramEngagementSelector selector = new ProgramEngagementSelector();
-        List<ProgramEngagement__c> actual = selector.getProgramEngagements(service1.Id);
+        List<ProgramEngagement__c> actual = selector.getProgramEngagementsByServiceId(
+            service1.Id
+        );
         Test.stopTest();
-        System.assert(!actual.isEmpty());
+        System.assert(
+            !actual.isEmpty(),
+            'Expected at least one program engagement to be returned.'
+        );
         System.assertEquals(
             expected.size(),
             actual.size(),
@@ -127,7 +132,7 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
-    private static void testGetProgramEngagementsNoAccess() {
+    private static void testGetProgramEngagementsByServiceIdNoAccess() {
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
         Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
         User u = new User(
@@ -176,7 +181,7 @@ public with sharing class ProgramEngagementSelector_TEST {
         Test.startTest();
         System.runAs(u) {
             ProgramEngagementSelector selector = new ProgramEngagementSelector();
-            List<ProgramEngagement__c> actual = selector.getProgramEngagements(
+            List<ProgramEngagement__c> actual = selector.getProgramEngagementsByServiceId(
                 service1.Id
             );
             System.assertEquals(
@@ -190,7 +195,7 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
-    private static void testGetProgramCohorts() {
+    private static void testGetProgramCohortsByServiceId() {
         ProgramTestDataFactory.insertTestData(true);
 
         Service__c service1 = [
@@ -215,7 +220,9 @@ public with sharing class ProgramEngagementSelector_TEST {
 
         Test.startTest();
         ProgramEngagementSelector selector = new ProgramEngagementSelector();
-        List<ProgramCohort__c> actual = selector.getProgramCohorts(service1.Id);
+        List<ProgramCohort__c> actual = selector.getProgramCohortsByServiceId(
+            service1.Id
+        );
         Test.stopTest();
         System.assert(!actual.isEmpty());
         System.assertEquals(
@@ -226,7 +233,7 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
-    private static void testGetProgramCohortsNoAccess() {
+    private static void testGetProgramCohortsByServiceIdNoAccess() {
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
         Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
         User u = new User(
@@ -266,7 +273,9 @@ public with sharing class ProgramEngagementSelector_TEST {
         Test.startTest();
         System.runAs(u) {
             ProgramEngagementSelector selector = new ProgramEngagementSelector();
-            List<ProgramCohort__c> actual = selector.getProgramCohorts(service1.Id);
+            List<ProgramCohort__c> actual = selector.getProgramCohortsByServiceId(
+                service1.Id
+            );
             System.assertEquals(
                 new List<ProgramCohort__c>(),
                 actual,

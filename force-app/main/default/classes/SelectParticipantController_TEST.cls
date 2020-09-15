@@ -5,10 +5,10 @@ public with sharing class SelectParticipantController_TEST {
     @IsTest
     private static void testGetSelectParticipantModel() {
         final Id serviceId = TestUtil.mockId(Service__c.SObjectType);
-        final SelectParticipantService.SelectParticipantModel expected = new SelectParticipantService.SelectParticipantModel();
+        final SelectParticipantService.SelectParticipantModel modelToReturn = new SelectParticipantService.SelectParticipantModel();
         final String methodName = 'getSelectParticipantModel';
 
-        serviceStub.withReturnValue(methodName, Id.class, expected);
+        serviceStub.withReturnValue(methodName, Id.class, modelToReturn);
 
         Test.startTest();
 
@@ -23,8 +23,8 @@ public with sharing class SelectParticipantController_TEST {
         System.assertNotEquals(null, actual, 'Expected that actual is not null');
         System.assertEquals(
             true,
-            expected === actual,
-            'Expected that actual and expected reference the same exact memory location'
+            modelToReturn === actual,
+            'Expected the model returned from the service is what is returned by the controller'
         );
 
         serviceStub.assertCalledWith(methodName, Id.class, serviceId);

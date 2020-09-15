@@ -6,12 +6,13 @@ public with sharing class SelectParticipantService_TEST {
 
     @IsTest
     private static void testGetSelectParticipantModel() {
-        final String methodName = 'getProgramEngagements';
-        final String cohortsMethodName = 'getProgramCohorts';
+        final String programEngagementsMethodName = 'getProgramEngagementsByServiceId';
+        final String cohortsMethodName = 'getProgramCohortsByServiceId';
 
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);
-        List<Object> programCohorts;
-        List<Object> programEngagements;
+        List<ProgramCohort__c> programCohorts = new List<ProgramCohort__c>();
+        List<ProgramEngagement__c> programEngagements = new List<ProgramEngagement__c>();
+
         Map<String, String> labels = new Map<String, String>{
             Schema.SObjectType.Program__c.getName() => Schema.SObjectType.Program__c.getLabel(),
             Schema.SObjectType.ProgramCohort__c.getName() => Schema.SObjectType.ProgramCohort__c.getLabel(),
@@ -27,9 +28,15 @@ public with sharing class SelectParticipantService_TEST {
         expected.programCohorts = programCohorts;
 
         programEngagementSelectorStub.withReturnValue(
-            methodName,
+            programEngagementsMethodName,
             Id.class,
             expected.programEngagements
+        );
+
+        programEngagementSelectorStub.withReturnValue(
+            cohortsMethodName,
+            Id.class,
+            expected.programCohorts
         );
 
         Test.startTest();
@@ -47,24 +54,16 @@ public with sharing class SelectParticipantService_TEST {
         );
 
         System.assertEquals(
-            expected.labels,
-            actual.labels,
-            'The labels map within both expected and actual are the same'
+            String.valueOf(expected),
+            String.valueOf(actual),
+            'The model returned was not as expected'
         );
 
-        System.assertEquals(
-            expected.programCohorts,
-            actual.programCohorts,
-            'The programCohorts within both expected and actual are the same'
+        programEngagementSelectorStub.assertCalledWith(
+            programEngagementsMethodName,
+            Id.class,
+            serviceId
         );
-
-        System.assertEquals(
-            expected.programEngagements,
-            actual.programEngagements,
-            'The programEngagements  within both expected and actual are the same'
-        );
-
-        programEngagementSelectorStub.assertCalledWith(methodName, Id.class, serviceId);
 
         programEngagementSelectorStub.assertCalledWith(
             cohortsMethodName,

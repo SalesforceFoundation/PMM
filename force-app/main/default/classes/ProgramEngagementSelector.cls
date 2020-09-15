@@ -26,7 +26,9 @@ public with sharing class ProgramEngagementSelector {
             .getRecords();
     }
 
-    public List<ProgramEngagement__c> getProgramEngagements(Id serviceId) {
+    public List<ProgramEngagement__c> getProgramEngagementsByServiceId(Id serviceId) {
+        Set<String> engagementStage = new Set<String>{ 'Active', 'Enrolled' };
+
         if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {
             return new List<ProgramEngagement__c>();
         }
@@ -41,8 +43,7 @@ public with sharing class ProgramEngagementSelector {
                 ProgramCohort__c
             FROM ProgramEngagement__c
             WHERE
-                (Stage__c = 'ENROLLED'
-                OR Stage__c = 'ACTIVE')
+                Stage__c IN :engagementStage
                 AND Program__c IN (
                     SELECT Program__c
                     FROM Service__c
@@ -55,7 +56,7 @@ public with sharing class ProgramEngagementSelector {
             .getRecords();
     }
 
-    public List<ProgramCohort__c> getProgramCohorts(Id serviceId) {
+    public List<ProgramCohort__c> getProgramCohortsByServiceId(Id serviceId) {
         if (!Schema.SObjectType.ProgramCohort__c.isAccessible()) {
             return new List<ProgramCohort__c>();
         }

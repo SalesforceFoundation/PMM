@@ -206,14 +206,14 @@
         <value>None</value>
     </labels>
     <labels>
-        <fullName>NoRecordsFound</fullName>
+        <fullName>No_Records_Found</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No records found</shortDescription>
         <value>No records found</value>
     </labels>
     <labels>
-        <fullName>NoRecordsSelected</fullName>
+        <fullName>No_Records_Selected</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No records selected</shortDescription>

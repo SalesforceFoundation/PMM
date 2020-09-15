@@ -1,6 +1,6 @@
 public with sharing class SelectParticipantService {
     @TestVisible
-    private ProgramEngagementSelector ProgramEngagementSelector = new ProgramEngagementSelector();
+    private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
 
     public Map<String, String> getLabels() {
         Map<String, String> labels = new Map<String, String>{
@@ -18,10 +18,10 @@ public with sharing class SelectParticipantService {
     public SelectParticipantModel getSelectParticipantModel(Id serviceId) {
         SelectParticipantModel participantModel = new SelectParticipantModel();
 
-        participantModel.programEngagements = ProgramEngagementSelector.getProgramEngagements(
+        participantModel.programEngagements = programEngagementSelector.getProgramEngagementsByServiceId(
             serviceId
         );
-        participantModel.programCohorts = ProgramEngagementSelector.getProgramCohorts(
+        participantModel.programCohorts = programEngagementSelector.getProgramCohortsByServiceId(
             serviceId
         );
         participantModel.labels = getLabels();
@@ -31,15 +31,15 @@ public with sharing class SelectParticipantService {
 
     public class SelectParticipantModel {
         @AuraEnabled
-        public List<Object> programEngagements;
+        public List<ProgramEngagement__c> programEngagements;
         @AuraEnabled
-        public List<Object> programCohorts;
+        public List<ProgramCohort__c> programCohorts;
         @AuraEnabled
         public Map<String, String> labels;
 
         public SelectParticipantModel() {
-            this.programEngagements = new List<Object>();
-            this.programCohorts = new List<Object>();
+            this.programEngagements = new List<ProgramEngagement__c>();
+            this.programCohorts = new List<ProgramCohort__c>();
             this.labels = new Map<String, String>();
         }
     }

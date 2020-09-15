@@ -1,13 +1,13 @@
 public with sharing class SelectParticipantController {
     @TestVisible
-    private static SelectParticipantService selectParticipantService = new SelectParticipantService();
+    private static SelectParticipantService SelectParticipantService = new SelectParticipantService();
 
     @AuraEnabled(cacheable=true)
-    public static selectParticipantService.InitialDataAndSetup getInitialDataSetup(
+    public static SelectParticipantService.SelectParticipantModel getSelectParticipantModel(
         Id serviceId
     ) {
         try {
-            return selectParticipantService.getInitialDataSetup(serviceId);
+            return SelectParticipantService.getSelectParticipantModel(serviceId);
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }

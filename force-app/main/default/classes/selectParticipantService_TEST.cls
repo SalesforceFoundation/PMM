@@ -1,11 +1,14 @@
 @IsTest
-public with sharing class selectParticipantService_TEST {
-    private static BasicStub selectParticipantSelectorStub = new BasicStub(
-        SelectParticipantSelector.class
+public with sharing class SelectParticipantService_TEST {
+    private static BasicStub programEngagementSelectorStub = new BasicStub(
+        ProgramEngagementSelector.class
     );
 
     @IsTest
-    private static void testGetInitialDataSetup() {
+    private static void testGetSelectParticipantModel() {
+        final String methodName = 'getProgramEngagements';
+        final String cohortsMethodName = 'getProgramCohorts';
+
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);
         List<Object> programCohorts;
         List<Object> programEngagements;
@@ -18,21 +21,21 @@ public with sharing class selectParticipantService_TEST {
             Schema.SObjectType.ProgramEngagement__c.Fields.Stage__c.getName() => Schema.SObjectType.ProgramEngagement__c.Fields.Stage__c.getLabel()
         };
 
-        SelectParticipantService.InitialDataAndSetup expected = new SelectParticipantService.InitialDataAndSetup();
+        SelectParticipantService.SelectParticipantModel expected = new SelectParticipantService.SelectParticipantModel();
         expected.labels = labels;
         expected.programEngagements = programEngagements;
         expected.programCohorts = programCohorts;
 
-        selectParticipantSelectorStub.withReturnValue(
-            'getInitialDataSetup',
+        programEngagementSelectorStub.withReturnValue(
+            methodName,
             Id.class,
-            expected
+            expected.programEngagements
         );
 
         Test.startTest();
         final SelectParticipantService service = new SelectParticipantService();
-        service.selectParticipantSelector = (SelectParticipantSelector) selectParticipantSelectorStub.createMock();
-        final SelectParticipantService.InitialDataAndSetup actual = service.getInitialDataSetup(
+        service.ProgramEngagementSelector = (ProgramEngagementSelector) programEngagementSelectorStub.createMock();
+        final SelectParticipantService.SelectParticipantModel actual = service.getSelectParticipantModel(
             serviceId
         );
         Test.stopTest();
@@ -61,14 +64,10 @@ public with sharing class selectParticipantService_TEST {
             'The programEngagements  within both expected and actual are the same'
         );
 
-        selectParticipantSelectorStub.assertCalledWith(
-            'getProgramEngagements',
-            Id.class,
-            serviceId
-        );
+        programEngagementSelectorStub.assertCalledWith(methodName, Id.class, serviceId);
 
-        selectParticipantSelectorStub.assertCalledWith(
-            'getProgramCohorts',
+        programEngagementSelectorStub.assertCalledWith(
+            cohortsMethodName,
             Id.class,
             serviceId
         );

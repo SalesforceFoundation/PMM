@@ -1,9 +1,9 @@
 public with sharing class SelectParticipantService {
     @TestVisible
-    private SelectParticipantSelector selectParticipantSelector = new SelectParticipantSelector();
+    private ProgramEngagementSelector ProgramEngagementSelector = new ProgramEngagementSelector();
 
-    public Map<String, String> getObjectData() {
-        Map<String, String> objectFieldLabels = new Map<String, String>{
+    public Map<String, String> getLabels() {
+        Map<String, String> labels = new Map<String, String>{
             Schema.SObjectType.Program__c.getName() => Schema.SObjectType.Program__c.getLabel(),
             Schema.SObjectType.ProgramCohort__c.getName() => Schema.SObjectType.ProgramCohort__c.getLabel(),
             Schema.SObjectType.ServiceParticipant__c.getName() => Schema.SObjectType.ServiceParticipant__c.getLabel(),
@@ -12,23 +12,24 @@ public with sharing class SelectParticipantService {
             Schema.SObjectType.ProgramEngagement__c.Fields.Stage__c.getName() => Schema.SObjectType.ProgramEngagement__c.Fields.Stage__c.getLabel()
         };
 
-        return objectFieldLabels;
+        return labels;
     }
 
-    public InitialDataAndSetup getInitialDataSetup(Id serviceId) {
-        InitialDataAndSetup dataSetup = new InitialDataAndSetup();
-        List<Object> programEngagements = new List<Object>();
-        List<Object> programCohorts = new List<Object>();
+    public SelectParticipantModel getSelectParticipantModel(Id serviceId) {
+        SelectParticipantModel participantModel = new SelectParticipantModel();
 
-        dataSetup.programEngagements = selectParticipantSelector.getProgramEngagements(
+        participantModel.programEngagements = ProgramEngagementSelector.getProgramEngagements(
             serviceId
         );
-        dataSetup.programCohorts = selectParticipantSelector.getProgramCohorts(serviceId);
-        dataSetup.labels = getObjectData();
-        return dataSetup;
+        participantModel.programCohorts = ProgramEngagementSelector.getProgramCohorts(
+            serviceId
+        );
+        participantModel.labels = getLabels();
+
+        return participantModel;
     }
 
-    public class InitialDataAndSetup {
+    public class SelectParticipantModel {
         @AuraEnabled
         public List<Object> programEngagements;
         @AuraEnabled
@@ -36,10 +37,10 @@ public with sharing class SelectParticipantService {
         @AuraEnabled
         public Map<String, String> labels;
 
-        public InitialDataAndSetup() {
+        public SelectParticipantModel() {
             this.programEngagements = new List<Object>();
             this.programCohorts = new List<Object>();
-            this.Labels = new Map<String, String>();
+            this.labels = new Map<String, String>();
         }
     }
 }

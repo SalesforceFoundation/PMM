@@ -14,7 +14,7 @@ import SEARCH_THIS_LIST_LABEL from "@salesforce/label/c.Search_this_list";
 import NONE_LABEL from "@salesforce/label/c.None";
 import NO_RECORDS_FOUND_LABEL from "@salesforce/label/c.NoRecordsFound";
 
-import getData from "@salesforce/apex/SelectParticipantController.getInitialDataSetup";
+import getSelectParticipantModel from "@salesforce/apex/SelectParticipantController.getSelectParticipantModel";
 
 const ENGAGEMENTS = "programEngagements";
 const COHORTS = "programCohorts";
@@ -26,7 +26,7 @@ export default class ParticipantSelector extends LightningElement {
     @track filteredContacts;
     @track engagements = [];
     @track cohorts = [];
-    @api serviceId = "a073B000003bCLOQA2";
+    @api serviceId = "a073D000002rFyKQAU";
     selectedRowCount = 0;
     searchValue;
     cohortId;
@@ -73,7 +73,7 @@ export default class ParticipantSelector extends LightningElement {
         serviceParticipant: SERVICE_PARTICIPANT_OBJECT,
     };
 
-    @wire(getData, { serviceId: "$serviceId" })
+    @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
     datasetup(result, error) {
         if (!result) {
             return;

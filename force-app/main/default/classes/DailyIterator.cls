@@ -11,7 +11,6 @@ public with sharing class DailyIterator implements RecurrenceIteratorInterface {
     public List<Datetime> iterate(Datetime datetimeStart) {
         this.result = new List<Datetime>();
         this.runningDatetime = datetimeStart;
-        this.rRule = rRule;
 
         this.result.add(this.runningDatetime);
 

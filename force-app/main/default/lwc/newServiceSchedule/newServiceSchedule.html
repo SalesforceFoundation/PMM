@@ -12,11 +12,28 @@
             <lightning-layout-item size={sizes.small}>
                 <!-- TODO: If serviceId is not present display Service lookup field -->
                 <lightning-layout multiple-rows="true" if:true={fieldSet}>
+                    <lightning-layout-item size={sizes.large}>
+                        <lightning-input-field
+                            field-name={requiredFields.name.fieldApiName}
+                            value={requiredFields.name.value}
+                            required
+                        >
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size={sizes.large}>
+                        <lightning-input-field
+                            field-name={requiredFields.serviceId.fieldApiName}
+                            value={requiredFields.serviceId.value}
+                            required
+                        >
+                        </lightning-input-field>
+                    </lightning-layout-item>
                     <template for:each={fieldSet} for:item="field">
                         <lightning-layout-item key={field.apiName} size={field.size}>
                             <lightning-input-field
                                 field-name={field.apiName}
                                 value={field.value}
+                                required={field.isRequired}
                             ></lightning-input-field>
                         </lightning-layout-item>
                     </template>
@@ -31,13 +48,13 @@
             </lightning-layout-item>
             <lightning-layout-item size={sizes.small}>
                 <lightning-layout multiple-rows="true">
-                    <lightning-layout-item size={sizes.large}>
+                    <lightning-layout-item size={sizes.small}>
                         <lightning-input-field
                             field-name={dateFields.start.fieldApiName}
                             value={dateFields.start.value}
                         ></lightning-input-field
                     ></lightning-layout-item>
-                    <lightning-layout-item size={sizes.large}>
+                    <lightning-layout-item size={sizes.small}>
                         <lightning-input-field
                             field-name={dateFields.end.fieldApiName}
                             value={dateFields.end.value}

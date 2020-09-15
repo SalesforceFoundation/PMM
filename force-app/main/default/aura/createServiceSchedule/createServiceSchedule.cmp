@@ -32,9 +32,9 @@
 
         <aura:set attribute="else">
             <aura:html tag="style">
-                lightning-timepicker, lightning-datepicker { width: 50% }
+                lightning-timepicker, lightning-datepicker { width: 100% }
             </aura:html>
-            <c:serviceScheduleCreator serviceId="{#v.serviceId}" />
+            <c:serviceScheduleCreator serviceId="{!v.serviceId}" />
         </aura:set>
     </aura:if>
 </aura:component>

@@ -2,15 +2,16 @@ import { LightningElement, wire, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { ProgressSteps } from "./progressSteps";
 import { NavigationItems } from "./navigationItems";
+import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
 
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
-import getDataModel from "@salesforce/apex/ServiceScheduleCreatorController.getDataModel";
+import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @api serviceId;
     isLoaded = false;
-    serviceScheduleData;
+    serviceScheduleModel;
     labels = {
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
@@ -39,17 +40,22 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         );
     _currentStep;
 
-    @wire(getDataModel)
-    wireServiceScheduleData(result) {
+    @wire(getServiceScheduleModel)
+    wireServiceScheduleModel(result) {
         if (!result) {
             return;
         }
 
         if (result.data) {
-            this.serviceScheduleData = { ...result.data };
-            this.serviceScheduleData.serviceId = this.serviceId;
+            this.serviceScheduleModel = { ...result.data };
+            this.serviceScheduleModel.serviceSchedule = {
+                ...result.data.serviceSchedule,
+            };
+            this.serviceScheduleModel.serviceSchedule[
+                SERVICE_FIELD.fieldApiName
+            ] = this.serviceId;
             this.isLoaded = true;
-            this.extractLabels(this.serviceScheduleData.labels.serviceSchedule);
+            this.extractLabels(this.serviceScheduleModel.labels.serviceSchedule);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
@@ -106,25 +112,33 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     handleNext() {
-        if (this._steps.hasNext) {
-            this.processNext();
+        if (!this._steps.hasNext) {
+            this.reset();
 
             return;
         }
 
-        this.reset();
-    }
-
-    processNext() {
         if (this.isStep1) {
-            this.serviceScheduleData.serviceSchedule = this.template.querySelector(
-                "c-new-service-schedule"
-            ).serviceSchedule;
-
-            console.log(JSON.stringify(this.serviceScheduleData.serviceSchedule));
+            this.processNewServiceSchedule();
+        } else if (this.isStep4) {
+            this.save();
         }
+
         this._steps.next();
         this._currentStep = this._steps.currentStep;
+    }
+
+    processNewServiceSchedule() {
+        let newServiceSchedule = this.template.querySelector("c-new-service-schedule");
+        if (!(newServiceSchedule && newServiceSchedule.reportValidity())) {
+            return;
+        }
+
+        this.serviceId = this.serviceScheduleModel.serviceSchedule[
+            SERVICE_FIELD.fieldApiName
+        ];
+
+        this.serviceScheduleModel.serviceSchedule = newServiceSchedule.serviceSchedule;
     }
 
     handleBack() {
@@ -157,8 +171,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this[NavigationMixin.Navigate]({
             type: "standard__objectPage",
             attributes: {
-                objectApiName:
-                    "$serviceScheduleData.labels.serviceSchedule.objectApiName",
+                objectApiName: this.labels.objectApiName,
                 actionName: "list",
             },
             state: {

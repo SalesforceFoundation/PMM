@@ -3,6 +3,7 @@ import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import { getObjectInfo, getPicklistValuesByRecordType } from "lightning/uiObjectInfoApi";
 
 import NAME_FIELD from "@salesforce/schema/ServiceSchedule__c.Name";
+import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 import FIRST_SESSION_START_FIELD from "@salesforce/schema/ServiceSchedule__c.FirstSessionStart__c";
 import FIRST_SESSION_END_FIELD from "@salesforce/schema/ServiceSchedule__c.FirstSessionEnd__c";
 import FREQUENCY_FIELD from "@salesforce/schema/ServiceSchedule__c.Frequency__c";
@@ -23,19 +24,19 @@ export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
     objectApiName;
     labels;
-    _serviceScheduleData;
+    _serviceScheduleModel;
 
     fields;
     fieldSet;
     isLoaded = false;
 
     @api
-    get serviceScheduleData() {
-        return this._serviceScheduleData;
+    get serviceScheduleModel() {
+        return this._serviceScheduleModel;
     }
 
-    set serviceScheduleData(value) {
-        this._serviceScheduleData = value;
+    set serviceScheduleModel(value) {
+        this._serviceScheduleModel = value;
 
         this.updateDateFieldValues(value.serviceSchedule);
         this.labels = value.labels.serviceSchedule;
@@ -49,9 +50,19 @@ export default class NewServiceSchedule extends LightningElement {
         });
     }
 
+    @api reportValidity() {
+        return [...this.template.querySelectorAll("lightning-input-field")].reduce(
+            (validSoFar, inputField) => {
+                inputField.reportValidity();
+                return validSoFar && inputField.checkValidity();
+            },
+            true
+        );
+    }
+
     @api
     get serviceSchedule() {
-        let serviceSchedule = { ...this._serviceScheduleData.serviceSchedule };
+        let serviceSchedule = { ...this._serviceScheduleModel.serviceSchedule };
 
         [...this.template.querySelectorAll("lightning-input-field")].forEach(field => {
             serviceSchedule[field.fieldName] = field.value;
@@ -91,6 +102,11 @@ export default class NewServiceSchedule extends LightningElement {
         small: SMALL_SIZE,
     };
 
+    requiredFields = {
+        name: { fieldApiName: NAME_FIELD.fieldApiName, vlaue: null },
+        serviceId: { fieldApiName: SERVICE_FIELD.fieldApiName, value: null },
+    };
+
     dateFields = {
         start: { fieldApiName: FIRST_SESSION_START_FIELD.fieldApiName, value: null },
         end: { fieldApiName: FIRST_SESSION_END_FIELD.fieldApiName, value: null },
@@ -117,24 +133,30 @@ export default class NewServiceSchedule extends LightningElement {
     })
     wiredFieldSet({ error, data }) {
         if (data) {
-            this.setFieldSet(data);
+            this.processFields(data);
         } else if (error) {
             console.log(JSON.stringify(error));
         }
     }
 
-    setFieldSet(data) {
-        // TODO: Test if this eliminates duplicate fields
-        let recurrenceFields = Object.values(this.dateFields);
-        recurrenceFields.push(Object.values(this.picklistFields));
+    processFields(data) {
+        let fieldsToSkip = [];
+        let self = this;
+        let updateValue = function(field) {
+            field.value = self._serviceScheduleModel.serviceSchedule[field.fieldApiName];
+            fieldsToSkip.push(field.fieldApiName);
+        };
+
+        Object.values(this.dateFields).forEach(field => updateValue(field));
+        Object.values(this.picklistFields).forEach(field => updateValue(field));
+        Object.values(this.requiredFields).forEach(field => updateValue(field));
 
         this.fieldSet = data
-            .filter(obj => !recurrenceFields.includes(obj.apiName))
-            .map(obj => {
-                let field = { ...obj };
-                field.size =
-                    obj.apiName === NAME_FIELD.fieldApiName ? LARGE_SIZE : SMALL_SIZE;
-                field.value = this._serviceScheduleData.serviceSchedule[field.apiName];
+            .filter(member => !fieldsToSkip.includes(member.apiName))
+            .map(member => {
+                let field = { ...member };
+                field.size = SMALL_SIZE;
+                field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
     }
@@ -178,7 +200,7 @@ export default class NewServiceSchedule extends LightningElement {
                     this.picklistFields[field].picklist = picklistField;
                     this.picklistFields[
                         field
-                    ].value = this._serviceScheduleData.serviceSchedule[
+                    ].value = this._serviceScheduleModel.serviceSchedule[
                         this.picklistFields[field].fieldApiName
                     ];
                 }

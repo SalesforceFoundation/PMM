@@ -1,6 +1,4 @@
-public with sharing class ServiceScheduleData {
-    @AuraEnabled
-    public Id serviceId = null;
+public with sharing class ServiceScheduleModel {
     @AuraEnabled
     public ServiceSchedule__c serviceSchedule = new ServiceSchedule__c();
     @AuraEnabled
@@ -10,7 +8,7 @@ public with sharing class ServiceScheduleData {
     @AuraEnabled
     public Map<String, Map<String, String>> labels = new Map<String, Map<String, String>>();
 
-    public ServiceScheduleData() {
+    public ServiceScheduleModel() {
         this.labels.put('serviceSchedule', getServiceScheduleLabels());
         this.labels.put('serviceSession', getServiceSessionLabels());
         this.labels.put('serviceParticipant', getServiceParticipantLabels());

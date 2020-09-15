@@ -1,10 +1,19 @@
 public with sharing class ServiceScheduleCreatorController {
-    private static ServiceScheduleData dataModel = new ServiceScheduleData();
+    private static ServiceScheduleService service = new ServiceScheduleService();
 
     @AuraEnabled(cacheable=true)
-    public static ServiceScheduleData getDataModel() {
+    public static ServiceScheduleModel getServiceScheduleModel() {
         try {
-            return dataModel;
+            return service.getServiceScheduleModel();
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
+    @AuraEnabled
+    public static void commitServiceScheduleModel() {
+        try {
+            service.commitServiceScheduleModel();
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

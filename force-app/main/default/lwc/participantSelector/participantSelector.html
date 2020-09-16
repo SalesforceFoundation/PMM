@@ -84,7 +84,7 @@
         </lightning-layout-item>
         <lightning-layout-item size="4">
             <lightning-layout>
-                <lightning-layout-item size="12" class="slds-var-m-top_medium">
+                <lightning-layout-item class="slds-var-m-top_medium">
                     <div class="slds-box slds-p-around_none  slds-var-m-top_medium">
                         <div
                             class="slds-align_absolute-center slds-var-p-around_x-small slds-text-heading_small"
@@ -92,7 +92,7 @@
                             {scheduleHeader}
                         </div>
                         <template if:false={noRecordsSelected}>
-                            <div style="width:fit-content">
+                            <div style="width:100%">
                                 <lightning-datatable
                                     columns={selectedColumns}
                                     key-field="Id"

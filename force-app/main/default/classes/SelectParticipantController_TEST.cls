@@ -20,7 +20,11 @@ public with sharing class SelectParticipantController_TEST {
 
         Test.stopTest();
 
-        System.assertNotEquals(null, actual, 'Expected that actual is not null');
+        System.assertNotEquals(
+            null,
+            actual,
+            'Expected that actual participant model is not null'
+        );
         System.assertEquals(
             true,
             modelToReturn === actual,

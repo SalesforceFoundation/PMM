@@ -3,7 +3,7 @@ from cumulusci.robotframework.pageobjects import pageobject
 from cumulusci.robotframework.pageobjects import ListingPage
 from cumulusci.robotframework.pageobjects import DetailPage
 from BaseObjects import BasePMMPage
-from pmm import pmm_lex_locators
+
 
 @pageobject("Listing", "Contact")
 class ContactListingPage(BasePMMPage, ListingPage):

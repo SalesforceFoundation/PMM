@@ -26,7 +26,11 @@ public with sharing class DailyIterator_TEST {
         List<Datetime> actual = iterator.iterate(datetimeStart);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
     }
 
     @IsTest
@@ -49,7 +53,11 @@ public with sharing class DailyIterator_TEST {
         List<Datetime> actual = iterator.iterate(datetimeStart);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
     }
 
     @IsTest
@@ -68,7 +76,11 @@ public with sharing class DailyIterator_TEST {
         List<Datetime> actual = iterator.iterate(datetimeStart);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
     }
 
     @IsTest
@@ -90,7 +102,11 @@ public with sharing class DailyIterator_TEST {
         List<Datetime> actual = iterator.iterate(datetimeStart);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
     }
 
     @IsTest
@@ -109,6 +125,10 @@ public with sharing class DailyIterator_TEST {
         List<Datetime> actual = iterator.iterate(datetimeStart);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
     }
 }

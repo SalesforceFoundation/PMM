@@ -271,7 +271,7 @@ class pmm(object):
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="Status field dropdown did not open"
         )
-        self.selenium.click_link(value_loc)
+        self.salesforce._jsclick(value_loc)
 
     def select_date_from_datepicker(self, title, value):
         """ opens the date picker given the field name and picks a date from the date picker"""
@@ -330,7 +330,7 @@ class pmm(object):
         """During winter 2020 part of the modal fields appear as lightning elements.
         This keyword validates , identifies the element and populates value"""
         for key, value in kwargs.items():
-            if key in ("Start Date", "End Date", "Delivery Date"):
+            if key == "Start Date" or "End Date" or "Delivery Date":
                 locator = pmm_lex_locators["new_record"][
                     "c_lightning_datepicker"
                 ].format(key)
@@ -339,7 +339,6 @@ class pmm(object):
                     self.selenium.driver.execute_script(
                         "arguments[0].scrollIntoView(true)", element
                     )
-                    # self.selenium.scroll_element_into_view(locator)
                     self.selenium.wait_until_element_is_visible(locator)
                     self.selenium.set_focus_to_element(locator)
                     self.open_date_picker(key)
@@ -358,7 +357,7 @@ class pmm(object):
                     self.selenium.scroll_element_into_view(locator)
                     self.salesforce._jsclick(locator)
                     self.selenium.wait_until_element_is_visible(selection_value)
-                    self.selenium.click_element(selection_value)
+                    self.selenium._jsclick(selection_value)
 
             elif key in (
                 "Program",

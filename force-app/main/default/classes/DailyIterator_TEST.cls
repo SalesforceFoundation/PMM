@@ -10,15 +10,15 @@ public with sharing class DailyIterator_TEST {
     /* FUNCTIONAL TESTS */
 
     @IsTest
-    private static void shouldIterateEveryDay5Times() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 9, 1, 14, 0, 0); // Sept 1 2020, 2PM
+    private static void shouldIterateEveryDay5TimesOverDaylightSavingsEnd() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 10, 31, 14, 0, 0); // Sept 1 2020, 2PM
         RecurrenceRule rRule = new RecurrenceRule().withRuleString('FREQ=DAILY;COUNT=5'); // every day, 5 times
         List<DateTime> expected = new List<DateTime>{
-            DateTime.newInstance(2020, 9, 1, 14, 0, 0),
-            DateTime.newInstance(2020, 9, 2, 14, 0, 0),
-            DateTime.newInstance(2020, 9, 3, 14, 0, 0),
-            DateTime.newInstance(2020, 9, 4, 14, 0, 0),
-            DateTime.newInstance(2020, 9, 5, 14, 0, 0)
+            DateTime.newInstance(2020, 10, 31, 14, 0, 0),
+            DateTime.newInstance(2020, 11, 1, 14, 0, 0), // daylight savings ends Nov 11 2020, we expect local time to stay the same value, 2PM
+            DateTime.newInstance(2020, 11, 2, 14, 0, 0),
+            DateTime.newInstance(2020, 11, 3, 14, 0, 0),
+            DateTime.newInstance(2020, 11, 4, 14, 0, 0)
         };
         DailyIterator iterator = new DailyIterator(rRule);
 

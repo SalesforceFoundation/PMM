@@ -115,7 +115,11 @@ public with sharing class RecurrenceRule_TEST {
         }
         Test.stopTest();
 
-        System.assertEquals(0, rule.getDays().size());
+        System.assertEquals(
+            null,
+            rule.getDays(),
+            'No days should be assigned if any invalid values are passed in.'
+        );
         System.assertNotEquals(null, actualException);
     }
 
@@ -146,14 +150,64 @@ public with sharing class RecurrenceRule_TEST {
     }
 
     @IsTest
-    private static void shouldSetRuleString() {
-        String rrString = 'abc';
+    private static void shouldSetRuleStringAndParse() {
+        String rrString = 'FREQ=DAILY;INTERVAL=3;UNTIL=20200301T000000Z;COUNT=50;BYDAY=SU,MO,TU,WE,TH,FR,SA';
 
         Test.startTest();
         RecurrenceRule rule = new RecurrenceRule().withRuleString(rrString);
         Test.stopTest();
 
         System.assertEquals(rrString, rule.rRule);
-        //TODO: update once parse/build are available
+        System.assertEquals(rule.getFrequency(), RecurrenceRule.Frequency.DAILY);
+        System.assertEquals(rule.getInterval(), 3);
+        System.assertEquals(rule.getEndDate(), Date.newInstance(2020, 3, 1));
+        System.assertEquals(rule.getCount(), 50);
+        System.assertEquals(
+            rule.getDays(),
+            new List<RecurrenceRule.Day>{
+                RecurrenceRule.Day.SU,
+                RecurrenceRule.Day.MO,
+                RecurrenceRule.Day.TU,
+                RecurrenceRule.Day.WE,
+                RecurrenceRule.Day.TH,
+                RecurrenceRule.Day.FR,
+                RecurrenceRule.Day.SA
+            }
+        );
+    }
+
+    @IsTest
+    private static void shouldCatchInvalidRRuleKey() {
+        String rrString = 'FREQ=DAILY;GARBAGE=2';
+        RecurrenceRule rule = new RecurrenceRule();
+        RecurrenceRule.RecurrenceRuleException actualException;
+
+        Test.startTest();
+        try {
+            rule.withRuleString(rrString);
+        } catch (RecurrenceRule.RecurrenceRuleException e) {
+            actualException = e;
+        }
+        Test.stopTest();
+
+        System.assertEquals(null, rule.rRule);
+        System.assertNotEquals(null, actualException);
+    }
+
+    @IsTest
+    private static void shouldBuild() {
+        String expected = 'FREQ=DAILY;INTERVAL=3;UNTIL=20200301T000000Z;COUNT=50;BYDAY=SU,MO,TU,WE,TH,FR,SA';
+        RecurrenceRule rule = new RecurrenceRule()
+            .withFrequency('DAILY')
+            .withEndDate(Date.newInstance(2020, 3, 1))
+            .withCount(50)
+            .withInterval(3)
+            .withDays(new List<Integer>{ 1, 2, 3, 4, 5, 6, 7 });
+
+        Test.startTest();
+        String actual = rule.build();
+        Test.stopTest();
+
+        System.assertEquals(expected, actual);
     }
 }

@@ -28,12 +28,12 @@ public with sharing class RecurrenceRule {
     private List<Day> days;
 
     public RecurrenceRule reset() {
-        this.rRule = null;
-        this.freq = null;
-        this.interval = 1;
-        this.endDate = null;
-        this.count = null;
-        this.days = null;
+        rRule = null;
+        freq = null;
+        interval = 1;
+        endDate = null;
+        count = null;
+        days = null;
         return this;
     }
 
@@ -73,64 +73,141 @@ public with sharing class RecurrenceRule {
     }
 
     public RecurrenceRule withRuleString(String rrString) {
+        parseAndValidate(rrString);
         this.rRule = rrString;
-        parse();
         return this;
     }
 
     public Frequency getFrequency() {
-        return this.freq;
+        return freq;
     }
 
     public Integer getInterval() {
-        return this.interval;
+        return interval;
     }
 
     public Date getEndDate() {
-        return this.endDate;
+        return endDate;
     }
 
     public Integer getCount() {
-        return this.count;
+        return count;
     }
 
     public List<Day> getDays() {
-        return this.days;
+        return days;
     }
 
     public String build() {
-        // TODO: build the rule string from the RecurrenceRule object
-        return this.rRule;
+        List<String> ruleParts = new List<String>();
+
+        // FREQ (required)
+        ruleParts.add('FREQ=' + freq);
+
+        // INTERVAL
+        if (interval != 1) {
+            ruleParts.add('INTERVAL=' + interval);
+        }
+
+        // UNTIL
+        if (endDate != null) {
+            String endDateString = DateTime.newInstanceGMT(
+                    endDate,
+                    Time.newInstance(0, 0, 0, 0)
+                )
+                .formatGmt('yyyyMMdd');
+
+            ruleParts.add('UNTIL=' + endDateString + 'T000000Z');
+        }
+
+        // COUNT
+        if (count != null) {
+            ruleParts.add('COUNT=' + count);
+        }
+
+        // BYDAY
+        if (days != null && days.size() > 0) {
+            List<String> dayStrings = new List<String>();
+            for (Day day : days) {
+                dayStrings.add(day.name());
+            }
+            ruleParts.add('BYDAY=' + String.join(dayStrings, ','));
+        }
+
+        rRule = String.join(ruleParts, ';');
+        return rRule;
     }
 
-    private void parse() {
-        // TODO: parse the rule string into a RecurrenceRule object
+    private void parseAndValidate(String rRuleString) {
+        List<String> ruleParts = rRuleString.split(';');
+
+        for (String part : ruleParts) {
+            List<String> thisPart = part.split('=');
+
+            if (!thisPart.isEmpty()) {
+                String thisKey = thisPart[0].toUpperCase();
+                String thisValue = thisPart[1];
+
+                switch on thisKey {
+                    when 'FREQ' {
+                        setFreqFromString(thisValue);
+                    }
+                    when 'INTERVAL' {
+                        interval = Integer.valueOf(thisValue);
+                    }
+                    when 'UNTIL' {
+                        Integer year = Integer.valueOf(thisValue.left(4));
+                        Integer month = Integer.valueOf(thisValue.mid(4, 2));
+                        Integer day = Integer.valueOf(thisValue.mid(6, 2));
+                        endDate = Date.newInstance(year, month, day);
+                    }
+                    when 'COUNT' {
+                        count = Integer.valueOf(thisValue);
+                    }
+                    when 'BYDAY' {
+                        List<String> dayStrings = thisValue.split(',');
+                        days = new List<Day>();
+                        for (Day day : Day.values()) {
+                            if (dayStrings.contains(day.name())) {
+                                days.add(day);
+                            }
+                        }
+                    }
+                    when else {
+                        reset();
+                        throw new RecurrenceRuleException('Invalid RRule Key');
+                    }
+                }
+            }
+        }
     }
 
     private void setFreqFromString(String freqString) {
-        for (Frequency freq : Frequency.values()) {
-            if (freq.name() == freqString.toUpperCase()) {
-                this.freq = freq;
+        for (Frequency frequency : Frequency.values()) {
+            if (frequency.name() == freqString.toUpperCase()) {
+                freq = frequency;
                 break;
             }
         }
-        if (this.freq == null) {
+        if (freq == null) {
             throw new RecurrenceRuleException('Invalid frequency type.');
         }
     }
 
-    private void populateDays(List<Integer> days) {
-        this.days = new List<Day>();
+    private void populateDays(List<Integer> dayNums) {
+        List<Day> daysToAssign = new List<Day>();
         List<Day> dayValues = Day.values();
 
-        for (Integer dayNum : days) {
-            if (dayNum < dayValues.size()) {
+        for (Integer dayNum : dayNums) {
+            if (dayNum <= dayValues.size()) {
                 // Expecting the day num value to start at 1; Su-Sa => 1-7
-                this.days.add(Day.values()[dayNum - 1]);
+                daysToAssign.add(Day.values()[dayNum - 1]);
             } else {
                 throw new RecurrenceRuleException('Invalid day number.');
             }
         }
+
+        days = daysToAssign;
     }
 
     public class RecurrenceRuleException extends Exception {

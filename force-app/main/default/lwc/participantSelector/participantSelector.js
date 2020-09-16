@@ -4,6 +4,7 @@ import { format, debouncify } from "c/util";
 import PROGRAM_OBJECT from "@salesforce/schema/Program__c";
 import PROGRAM_COHORT_OBJECT from "@salesforce/schema/ProgramCohort__c";
 import SERVICE_PARTICIPANT_OBJECT from "@salesforce/schema/ServiceParticipant__c";
+
 import NAME_FIELD from "@salesforce/schema/contact.Name";
 import EMAIL_FIELD from "@salesforce/schema/contact.Email";
 import STAGE_FIELD from "@salesforce/schema/ProgramEngagement__c.Stage__c";
@@ -13,7 +14,8 @@ import ADD_TO_RECORD_LABEL from "@salesforce/label/c.Add_to_Record";
 import SEARCH_THIS_LIST_LABEL from "@salesforce/label/c.Search_this_list";
 import NONE_LABEL from "@salesforce/label/c.None";
 import NO_RECORDS_FOUND_LABEL from "@salesforce/label/c.No_Records_Found";
-import NO_RECORDS_SELECTED from "@salesforce/label/c.No_Records_Selected";
+import NO_RECORDS_SELECTED_LABEL from "@salesforce/label/c.No_Records_Selected";
+import FILTER_BY_LABEL from "@salesforce/label/c.Filter_By_Record";
 
 const SCHEDULENAME = "Thursday Friday Family Class ";
 const FIELDNAME = "Name";
@@ -55,7 +57,8 @@ export default class ParticipantSelector extends LightningElement {
         searchThisList: SEARCH_THIS_LIST_LABEL,
         none: NONE_LABEL,
         noRecordsFound: NO_RECORDS_FOUND_LABEL,
-        noRecordsSelected: NO_RECORDS_SELECTED,
+        noRecordsSelected: NO_RECORDS_SELECTED_LABEL,
+        filterbyRecord: FILTER_BY_LABEL,
     };
 
     fields = {
@@ -185,7 +188,7 @@ export default class ParticipantSelector extends LightningElement {
                 this.programLabel = value;
             }
             if (key === this.objects.programCohort.objectApiName) {
-                this.programCohortLabel = value;
+                this.programCohortLabel = format(this.labels.filterbyRecord, [value]);
             }
             if (key === this.objects.serviceParticipant.objectApiName) {
                 this.addToServiceButtonLabel = format(this.labels.addToService, [value]);

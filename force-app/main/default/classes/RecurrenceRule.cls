@@ -111,7 +111,7 @@ public with sharing class RecurrenceRule {
 
         // UNTIL
         if (endDate != null) {
-            String endDateString = Datetime.newInstanceGMT(
+            String endDateString = DateTime.newInstanceGMT(
                     endDate,
                     Time.newInstance(0, 0, 0, 0)
                 )

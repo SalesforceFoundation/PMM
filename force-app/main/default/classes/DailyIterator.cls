@@ -1,6 +1,6 @@
 public with sharing class DailyIterator implements RecurrenceIteratorInterface {
-    private List<Datetime> result;
-    private Datetime runningDatetime;
+    private List<DateTime> result;
+    private DateTime runningDateTime;
     @TestVisible
     private RecurrenceRule rRule;
 
@@ -8,34 +8,31 @@ public with sharing class DailyIterator implements RecurrenceIteratorInterface {
         this.rRule = rRule;
     }
 
-    public List<Datetime> iterate(Datetime datetimeStart) {
-        this.result = new List<Datetime>();
-        this.runningDatetime = datetimeStart;
-        this.rRule = rRule;
+    public List<DateTime> iterate(DateTime datetimeStart) {
+        result = new List<DateTime>();
+        runningDateTime = datetimeStart;
 
-        this.result.add(this.runningDatetime);
-
-        while (keepGoing()) {
-            this.result.add(this.runningDatetime);
-        }
+        do {
+            result.add(runningDateTime);
+        } while (hasNext());
 
         return result;
     }
 
-    private Boolean keepGoing() {
-        incrementRunningDatetime();
-        Integer count = this.rRule.getCount();
-        Date endDate = this.rRule.getEndDate();
-        if (count != null && this.result.size() >= count) {
+    private Boolean hasNext() {
+        incrementRunningDateTime();
+        Integer count = rRule.getCount();
+        Date endDate = rRule.getEndDate();
+        if (count != null && result.size() >= count) {
             return false;
-        } else if (endDate != null && this.runningDatetime.date() > endDate) {
+        } else if (endDate != null && runningDateTime.date() > endDate) {
             // everything relative to local user TZ
             return false;
         }
         return true;
     }
 
-    private void incrementRunningDatetime() {
-        this.runningDatetime = this.runningDatetime.addDays(this.rRule.getInterval());
+    private void incrementRunningDateTime() {
+        runningDateTime = runningDateTime.addDays(rRule.getInterval());
     }
 }

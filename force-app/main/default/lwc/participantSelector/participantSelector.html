@@ -28,9 +28,11 @@
                 </lightning-layout-item>
 
                 <lightning-layout-item size="10">
-                    <div class="slds-box slds-p-around_none slds-var-m-around_x-small">
-                        <div class="slds-theme_shade" style="width:100%">
-                            <!--Instead of what is done below use the component that Beth has built-->
+                    <div class="slds-box slds-p-around_none slds-var-m-top_small">
+                        <div
+                            class="slds-theme_shade slds-var-m-bottom_small"
+                            style="width:100%"
+                        >
                             <div
                                 style="float: left; width:50%"
                                 class="slds-var-p-top_large slds-var-p-left_medium"
@@ -38,8 +40,8 @@
                                 {selectedRecordCountMessage}
                             </div>
                             <div
-                                style="float: right; width:50%"
-                                class="slds-var-p-right_medium"
+                                style="float: right; width:50%; margin-bottom: 10px;"
+                                class="slds-var-p-right_medium "
                             >
                                 <lightning-input
                                     name="enter-search"
@@ -69,13 +71,13 @@
                                 ></lightning-button>
                             </div>
                         </div>
-                    </div>
-                </lightning-layout-item>
-                <lightning-layout-item if:true={noRecordsFound} size="10">
-                    <div
-                        class="width:fit-content slds-box slds-theme_default slds-align_absolute-center slds-var-p-around_large"
-                    >
-                        {labels.noRecordsFound}
+                        <div
+                            class="width:fit-content slds-align_absolute-center slds-var-p-around_small slds-text-heading_small slds-border_top"
+                            if:true={noRecordsFound}
+                            style="width:100%"
+                        >
+                            {labels.noRecordsFound}
+                        </div>
                     </div>
                 </lightning-layout-item>
             </lightning-layout>

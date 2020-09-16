@@ -145,7 +145,7 @@ export default class ParticipantSelector extends LightningElement {
             this.loadLabels(labels);
         } else if (error) {
             console.log(error);
-            result = undefined;
+            result.data = undefined;
         }
     }
 

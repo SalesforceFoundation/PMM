@@ -152,7 +152,7 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <externalSharingModel>ReadWrite</externalSharingModel>
     <label>Service Session</label>
     <nameField>
         <label>Service Session Name</label>
@@ -160,6 +160,6 @@
     </nameField>
     <pluralLabel>Service Sessions</pluralLabel>
     <searchLayouts/>
-    <sharingModel>ControlledByParent</sharingModel>
+    <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

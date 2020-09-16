@@ -53,8 +53,7 @@ export default class NewServiceSchedule extends LightningElement {
     @api reportValidity() {
         return [...this.template.querySelectorAll("lightning-input-field")].reduce(
             (validSoFar, inputField) => {
-                inputField.reportValidity();
-                return validSoFar && inputField.checkValidity();
+                return validSoFar && inputField.reportValidity();
             },
             true
         );

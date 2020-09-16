@@ -1,14 +1,18 @@
 public with sharing class ServiceScheduleModel {
     @AuraEnabled
-    public ServiceSchedule__c serviceSchedule = new ServiceSchedule__c();
+    public ServiceSchedule__c serviceSchedule { get; set; }
     @AuraEnabled
-    public List<ServiceSession__c> serviceSessions = new List<ServiceSession__c>();
+    public List<ServiceSession__c> serviceSessions { get; set; }
     @AuraEnabled
-    public List<ServiceParticipant__c> serviceParticipants = new List<ServiceParticipant__c>();
+    public List<ServiceParticipant__c> serviceParticipants { get; set; }
     @AuraEnabled
     public Map<String, Map<String, String>> labels = new Map<String, Map<String, String>>();
 
     public ServiceScheduleModel() {
+        serviceSchedule = new ServiceSchedule__c();
+        serviceSessions = new List<ServiceSession__c>();
+        serviceParticipants = new List<serviceParticipant__c>();
+
         this.labels.put('serviceSchedule', getServiceScheduleLabels());
         this.labels.put('serviceSession', getServiceSessionLabels());
         this.labels.put('serviceParticipant', getServiceParticipantLabels());

@@ -3,6 +3,7 @@ import { NavigationMixin } from "lightning/navigation";
 import { ProgressSteps } from "./progressSteps";
 import { NavigationItems } from "./navigationItems";
 import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
+import persist from "@salesforce/apex/ServiceScheduleCreatorController.persist";
 
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
@@ -12,6 +13,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     @api serviceId;
     isLoaded = false;
     serviceScheduleModel;
+    originalModel;
     labels = {
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
@@ -47,14 +49,8 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         }
 
         if (result.data) {
-            this.serviceScheduleModel = { ...result.data };
-            this.serviceScheduleModel.serviceSchedule = {
-                ...result.data.serviceSchedule,
-            };
-            this.serviceScheduleModel.serviceSchedule[
-                SERVICE_FIELD.fieldApiName
-            ] = this.serviceId;
-            this.isLoaded = true;
+            this.originalModel = result;
+            this.init();
             this.extractLabels(this.serviceScheduleModel.labels.serviceSchedule);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
@@ -112,33 +108,44 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     handleNext() {
-        if (!this._steps.hasNext) {
-            this.reset();
-
-            return;
-        }
-
         if (this.isStep1) {
             this.processNewServiceSchedule();
+        } else if (this.isStep2) {
+            this.setNextStep();
+        } else if (this.isStep3) {
+            this.setNextStep();
         } else if (this.isStep4) {
             this.save();
         }
+    }
 
+    save() {
+        persist({ model: this.serviceScheduleModel })
+            .then(() => {
+                this.init();
+            })
+            .catch(error => {
+                console.log(JSON.stringify(error));
+            });
+    }
+
+    setNextStep() {
         this._steps.next();
         this._currentStep = this._steps.currentStep;
     }
 
     processNewServiceSchedule() {
         let newServiceSchedule = this.template.querySelector("c-new-service-schedule");
+
         if (!(newServiceSchedule && newServiceSchedule.reportValidity())) {
             return;
         }
 
+        this.serviceScheduleModel.serviceSchedule = newServiceSchedule.serviceSchedule;
         this.serviceId = this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ];
-
-        this.serviceScheduleModel.serviceSchedule = newServiceSchedule.serviceSchedule;
+        this.setNextStep();
     }
 
     handleBack() {
@@ -147,14 +154,27 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     handleFinish() {
-        this.reset();
+        this.save();
+        this.handleClose();
+    }
+
+    handleClose() {
         this.hideModal();
         this.navigateToList();
     }
 
-    reset() {
+    init() {
+        this.isLoading = false;
         this._steps.restart();
         this._currentStep = undefined;
+        this.serviceScheduleModel = { ...this.originalModel.data };
+        this.serviceScheduleModel.serviceSchedule = {
+            ...this.originalModel.data.serviceSchedule,
+        };
+        this.serviceScheduleModel.serviceSchedule[
+            SERVICE_FIELD.fieldApiName
+        ] = this.serviceId;
+        this.isLoaded = true;
     }
 
     showModal() {

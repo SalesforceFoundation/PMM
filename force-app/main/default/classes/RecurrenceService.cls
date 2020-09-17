@@ -8,7 +8,19 @@ public with sharing class RecurrenceService {
         return factory.makeIterator(rRule).iterate(dateTimeStart);
     }
 
-    public String createRRule(String frequency, List<Integer> days) {
-        return recurrenceRule.reset().withFrequency(frequency).withDays(days).build();
+    public String createRRule(
+        String frequency,
+        Integer interval,
+        Date endDate,
+        Integer count,
+        List<Integer> days
+    ) {
+        return recurrenceRule.reset()
+            .withFrequency(frequency)
+            .withInterval(interval)
+            .withEndDate(endDate)
+            .withCount(count)
+            .withDays(days)
+            .build();
     }
 }

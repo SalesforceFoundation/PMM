@@ -6,7 +6,8 @@ public with sharing class RecurrenceRule {
     // FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE;COUNT=12
 
     public enum Frequency {
-        DAILY
+        DAILY,
+        WEEKLY
     }
 
     public enum Day {
@@ -96,6 +97,14 @@ public with sharing class RecurrenceRule {
 
     public List<Day> getDays() {
         return days;
+    }
+
+    public List<Integer> getDayNums() {
+        List<Integer> result = new List<Integer>();
+        for (Day day : days) {
+            result.add(day.ordinal());
+        }
+        return result;
     }
 
     public String build() {

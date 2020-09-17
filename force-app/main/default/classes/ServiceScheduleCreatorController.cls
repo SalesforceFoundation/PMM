@@ -1,4 +1,5 @@
 public with sharing class ServiceScheduleCreatorController {
+    @TestVisible
     private static ServiceScheduleService service = new ServiceScheduleService();
 
     @AuraEnabled(cacheable=true)

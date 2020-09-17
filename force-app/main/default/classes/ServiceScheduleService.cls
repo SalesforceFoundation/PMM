@@ -1,8 +1,6 @@
 public with sharing class ServiceScheduleService {
-    private ServiceScheduleModel serviceScheduleModel = new ServiceScheduleModel();
-
     public ServiceScheduleModel getServiceScheduleModel() {
-        return serviceScheduleModel;
+        return new ServiceScheduleModel();
     }
 
     public void persist(ServiceScheduleModel model) {
@@ -25,6 +23,7 @@ public with sharing class ServiceScheduleService {
         }
         for (ServiceParticipant__c participant : model.serviceParticipants) {
             participant.ServiceSchedule__c = model.serviceSchedule.Id;
+            participant.Service__c = model.serviceSchedule.Service__c;
         }
     }
 

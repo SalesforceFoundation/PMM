@@ -93,6 +93,20 @@
         <value>Deleting this row removes this Service Delivery.</value>
     </labels>
     <labels>
+        <fullName>Delete_All_Future_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete All Future Sessions</shortDescription>
+        <value>Delete All Future Sessions</value>
+    </labels>
+    <labels>
+        <fullName>Delete_X_Future_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This will delete {0} future Session records.</shortDescription>
+        <value>This will delete {0} future Session records.</value>
+    </labels>
+    <labels>
         <fullName>Creating_Service_Session_Warning</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -337,6 +351,69 @@
         <protected>true</protected>
         <shortDescription>Select Service Schedule End Date Or Service Session Number Warning</shortDescription>
         <value>Select either a Service Schedule End Date or a Number of Service Sessions.</value>
+    </labels>
+    <labels>
+        <fullName>Every_Week</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every Week</shortDescription>
+        <value>Every Week</value>
+    </labels>
+    <labels>
+        <fullName>Every_Month</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every Month</shortDescription>
+        <value>Every Month</value>
+    </labels>
+    <labels>
+        <fullName>Every_Day</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every Day</shortDescription>
+        <value>Every Day</value>
+    </labels>
+    <labels>
+        <fullName>Every_Year</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every Year</shortDescription>
+        <value>Every Year</value>
+    </labels>
+    <labels>
+        <fullName>Every_Custom</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every...</shortDescription>
+        <value>Every...</value>
+    </labels>
+    <labels>
+        <fullName>Weeks</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Weeks</shortDescription>
+        <value>Weeks</value>
+    </labels>
+    <labels>
+        <fullName>Days</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Days</shortDescription>
+        <value>Days</value>
+    </labels>
+    <labels>
+        <fullName>Months</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Months</shortDescription>
+        <value>Months</value>
+    </labels>
+    <labels>
+        <fullName>Years</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Years</shortDescription>
+        <value>Years</value>
     </labels>
     <labels>
         <fullName>Selected_Records</fullName>

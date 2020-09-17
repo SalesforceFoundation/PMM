@@ -9,8 +9,6 @@ public with sharing class ServiceScheduleService {
             throw new ServiceScheduleServiceException('You can\'t get there from here!');
         }
 
-        System.debug(model);
-
         Savepoint savepoint = Database.setSavepoint();
 
         try {

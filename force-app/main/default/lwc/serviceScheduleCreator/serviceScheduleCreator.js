@@ -125,6 +125,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 this.init();
             })
             .catch(error => {
+                // TODO: throw error
                 console.log(JSON.stringify(error));
             });
     }

@@ -142,6 +142,13 @@
         <value>Error</value>
     </labels>
     <labels>
+        <fullName>Filter_by_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Filter by {SObject Label}</shortDescription>
+        <value>Filter by {0}</value>
+    </labels>
+    <labels>
         <fullName>Finish</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -197,6 +204,27 @@
         <protected>true</protected>
         <shortDescription>Warning message when a selected Program Engagement has no Services related.</shortDescription>
         <value>No services found, choose another program engagement.</value>
+    </labels>
+    <labels>
+        <fullName>None</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>None</shortDescription>
+        <value>None</value>
+    </labels>
+    <labels>
+        <fullName>No_Records_Found</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No records found</shortDescription>
+        <value>No records found</value>
+    </labels>
+    <labels>
+        <fullName>No_Records_Selected</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No records selected</shortDescription>
+        <value>No records selected</value>
     </labels>
     <labels>
         <fullName>Owner_Field</fullName>

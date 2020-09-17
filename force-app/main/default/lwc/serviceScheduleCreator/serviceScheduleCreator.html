@@ -13,8 +13,8 @@
         <template if:true={isStep2}>
             <c-review-sessions></c-review-sessions>
         </template>
-        <template if:true={isStep3}>
-            <!-- Add Participants -->
+        <template if:true={showStep3}>
+            <c-participant-selector service-id={serviceId}></c-participant-selector>
         </template>
         <template if:true={isStep4}>
             <c-service-schedule-review></c-service-schedule-review>

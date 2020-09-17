@@ -35,7 +35,7 @@
                 .slds-theme_shade { background-color: #d8dde6; } lightning-timepicker,
                 lightning-datepicker { width: 50% }
             </aura:html>
-            <c:serviceScheduleCreator serviceId="{#v.serviceId}" />
+            <c:serviceScheduleCreator serviceId="{!v.serviceId}" />
         </aura:set>
     </aura:if>
 </aura:component>

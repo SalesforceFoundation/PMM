@@ -73,18 +73,18 @@ public with sharing class WeeklyIterator_TEST {
 
     @IsTest
     private static void shouldIterateEveryThirdWeekendFor6Instances() {
-        // Start on Oct 12 2020, 6PM
-        DateTime dateTimeStart = DateTime.newInstance(2020, 10, 12, 14, 0, 0);
+        // Start on Oct 12 2020, 8PM
+        DateTime dateTimeStart = DateTime.newInstance(2020, 10, 12, 20, 0, 0);
         // every 3 weeks on Saturday, Sunday for 6 times
         RecurrenceRule rRule = new RecurrenceRule()
             .withRuleString('FREQ=WEEKLY;COUNT=6;INTERVAL=3;BYDAY=SA,SU');
         List<DateTime> expected = new List<DateTime>{
-            DateTime.newInstance(2020, 10, 17, 14, 0, 0),
-            DateTime.newInstance(2020, 10, 18, 14, 0, 0),
-            DateTime.newInstance(2020, 11, 7, 14, 0, 0), // crosses DST
-            DateTime.newInstance(2020, 11, 8, 14, 0, 0),
-            DateTime.newInstance(2020, 11, 28, 14, 0, 0),
-            DateTime.newInstance(2020, 11, 29, 14, 0, 0)
+            DateTime.newInstance(2020, 10, 17, 20, 0, 0),
+            DateTime.newInstance(2020, 10, 18, 20, 0, 0),
+            DateTime.newInstance(2020, 11, 7, 20, 0, 0), // crosses DST
+            DateTime.newInstance(2020, 11, 8, 20, 0, 0),
+            DateTime.newInstance(2020, 11, 28, 20, 0, 0),
+            DateTime.newInstance(2020, 11, 29, 20, 0, 0)
         };
         WeeklyIterator iterator = new WeeklyIterator(rRule);
 

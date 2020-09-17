@@ -54,13 +54,13 @@ private class PermissionValidator_TEST {
     private static void testHasFLSAccessUpsertNonReparentable() {
         Boolean nonUpdateableField = PermissionValidator.getInstance()
             .hasFLSAccessForFields(
-                Schema.SObjectType.Service__c.getName(),
+                Schema.SObjectType.Program__c.getName(),
                 new List<String>{
-                    Schema.SObjectType.Service__c.fields.Program__c.getName()
+                    Schema.SObjectType.Program__c.fields.LastModifiedById.getName()
                 },
                 'upsert'
             );
-        System.assert(!nonUpdateableField, 'Non-reparentable lookup, expect false');
+        System.assert(!nonUpdateableField, 'Non updateable system field, expect false');
     }
 
     @IsTest
@@ -146,44 +146,41 @@ private class PermissionValidator_TEST {
     @IsTest
     private static void testHasObjectAccessWithCustomObjectsAsReadOnlyUser() {
         System.runAs(TestUtil.getTestUser()) {
-            Boolean canCreateCasePlan = PermissionValidator.getInstance()
+            Boolean canCreateProgram = PermissionValidator.getInstance()
                 .hasObjectAccess(
                     Program__c.SObjectType,
                     PermissionValidator.CRUDAccessType.CREATEABLE
                 );
             System.assert(
-                !canCreateCasePlan,
-                'Has no Create perms on Case Plan, expect false'
+                !canCreateProgram,
+                'Has no Create perms on Program, expect false'
             );
 
-            Boolean canReadCasePlan = PermissionValidator.getInstance()
+            Boolean canReadProgram = PermissionValidator.getInstance()
                 .hasObjectAccess(
                     Program__c.SObjectType,
                     PermissionValidator.CRUDAccessType.READABLE
                 );
-            System.assert(
-                !canReadCasePlan,
-                'Has no Read perms on Case Plan, expect false'
-            );
+            System.assert(!canReadProgram, 'Has no Read perms on Program, expect false');
 
-            Boolean canUpdateCasePlan = PermissionValidator.getInstance()
+            Boolean canUpdateProgram = PermissionValidator.getInstance()
                 .hasObjectAccess(
                     Program__c.SObjectType,
                     PermissionValidator.CRUDAccessType.UPDATEABLE
                 );
             System.assert(
-                !canUpdateCasePlan,
-                'Has no Update perms on Case Plan, expect false'
+                !canUpdateProgram,
+                'Has no Update perms on Program, expect false'
             );
 
-            Boolean canDeleteCasePlan = PermissionValidator.getInstance()
+            Boolean canDeleteProgram = PermissionValidator.getInstance()
                 .hasObjectAccess(
                     Program__c.SObjectType,
                     PermissionValidator.CRUDAccessType.DELETEABLE
                 );
             System.assert(
-                !canDeleteCasePlan,
-                'Has no Delete perms on Case Plan, expect false'
+                !canDeleteProgram,
+                'Has no Delete perms on Program, expect false'
             );
         }
     }

@@ -14,7 +14,7 @@
                 <lightning-layout multiple-rows="true" if:true={fieldSet}>
                     <lightning-layout-item size={sizes.large}>
                         <lightning-input-field
-                            field-name={requiredFields.name.fieldApiName}
+                            field-name={requiredFields.name.apiName}
                             value={requiredFields.name.value}
                             required
                         >
@@ -22,7 +22,7 @@
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
                         <lightning-input-field
-                            field-name={requiredFields.serviceId.fieldApiName}
+                            field-name={requiredFields.serviceId.apiName}
                             value={requiredFields.serviceId.value}
                             required
                         >
@@ -50,19 +50,19 @@
                 <lightning-layout multiple-rows="true">
                     <lightning-layout-item size={sizes.small}>
                         <lightning-input-field
-                            field-name={dateFields.start.fieldApiName}
+                            field-name={dateFields.start.apiName}
                             value={dateFields.start.value}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.small}>
                         <lightning-input-field
-                            field-name={dateFields.end.fieldApiName}
+                            field-name={dateFields.end.apiName}
                             value={dateFields.end.value}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
                         <c-picklist
-                            picklist={picklistFields.frequency.picklist}
+                            picklist={picklistFields.frequency}
                             value={picklistFields.frequency.value}
                             onselect={handleFrequencyChange}
                             type="button"
@@ -70,7 +70,7 @@
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.large} if:true={isWeekly}>
                         <c-picklist
-                            picklist={picklistFields.daysOfWeek.picklist}
+                            picklist={picklistFields.daysOfWeek}
                             value={picklistFields.daysOfWeek.value}
                             multi-select="true"
                             type="button"
@@ -81,7 +81,7 @@
                         <lightning-layout if:true={isRecurring}>
                             <lightning-layout-item size={sizes.small}>
                                 <c-picklist
-                                    picklist={picklistFields.seriesEnds.picklist}
+                                    picklist={picklistFields.seriesEnds}
                                     value={picklistFields.seriesEnds.value}
                                     onselect={handleSeriesEndsChange}
                                 ></c-picklist>
@@ -89,12 +89,12 @@
                             <lightning-layout-item size={sizes.small}>
                                 <lightning-input-field
                                     if:true={isEndsOn}
-                                    field-name={dateFields.seriesEndsOn.fieldApiName}
+                                    field-name={dateFields.seriesEndsOn.apiName}
                                     value={dateFields.seriesEndsOn.value}
                                 ></lightning-input-field>
                                 <lightning-input-field
                                     if:true={isEndsAfter}
-                                    field-name={dateFields.numberOfSessions.fieldApiName}
+                                    field-name={dateFields.numberOfSessions.apiName}
                                     value={dateFields.numberOfSessions.value}
                                 ></lightning-input-field
                             ></lightning-layout-item>

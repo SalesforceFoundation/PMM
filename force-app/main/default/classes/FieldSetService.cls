@@ -84,8 +84,7 @@ public with sharing class FieldSetService {
      * @param field FieldSetMember
      * @return      Map<String, Object>
      */
-    @TestVisible
-    private Map<String, Object> getFieldForLWC(DescribeFieldResult field) {
+    public Map<String, Object> getFieldForLWC(DescribeFieldResult field) {
         return new Map<String, Object>{
             'apiName' => field.getName(),
             'label' => getLabel(field),
@@ -94,6 +93,41 @@ public with sharing class FieldSetService {
             'helpText' => field.getInlineHelpText(),
             'isAccessible' => field.isAccessible()
         };
+    }
+
+    /**
+     * @description "Casts" a FieldSetMember into a Map<String, Object> with 'apiName' and 'label', etc. keys. with picklist values
+     * An array of these is used by a Lightning Web Component to leverage an admin-controlled field set.
+     *
+     * @param field FieldSetMember
+     * @return      Map<String, Object>
+     */
+    public Map<String, Object> getPicklistFieldForLWC(DescribeFieldResult field) {
+        Map<String, Object> picklistField = getFieldForLWC(field);
+
+        if (
+            field.getType() != Schema.DisplayType.PICKLIST &&
+            field.getType() != Schema.DisplayType.MULTIPICKLIST
+        ) {
+            return picklistField;
+        }
+
+        List<Map<String, Object>> picklistValues = new List<Map<String, Object>>();
+
+        for (Schema.PicklistEntry entry : field.getPicklistValues()) {
+            picklistValues.add(
+                new Map<String, Object>{
+                    'active' => entry.active,
+                    'defaultValue' => entry.defaultvalue,
+                    'label' => entry.label,
+                    'value' => entry.value
+                }
+            );
+        }
+
+        picklistField.put('picklistValues', picklistValues);
+
+        return picklistField;
     }
 
     /**

@@ -170,7 +170,7 @@
         <value>Finish</value>
     </labels>
     <labels>
-        <fullName>InsertOperationException</fullName>
+        <fullName>Insert_Operation_Exception</fullName>
         <categories></categories>
         <language>en_US</language>
         <protected>true</protected>

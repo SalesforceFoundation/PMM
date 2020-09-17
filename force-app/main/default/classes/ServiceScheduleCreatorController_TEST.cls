@@ -3,7 +3,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     private static BasicStub serviceStub = new BasicStub(ServiceScheduleService.class);
 
     @IsTest
-    private static void shouldSerializedModelFromService() {
+    private static void shouldGetModelFromService() {
         String methodName = 'getServiceScheduleModel';
         ServiceScheduleModel modelToReturn = new ServiceScheduleModel();
 
@@ -11,11 +11,11 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         Test.startTest();
-        String actualModel = ServiceScheduleCreatorController.getServiceScheduleModel();
+        ServiceScheduleModel actualModel = ServiceScheduleCreatorController.getServiceScheduleModel();
         Test.stopTest();
 
         System.assertEquals(
-            JSON.serialize(modelToReturn),
+            modelToReturn,
             actualModel,
             'Expected the controller to return the model from the Service.'
         );

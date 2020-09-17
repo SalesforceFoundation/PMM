@@ -19,4 +19,13 @@ public with sharing class ServiceScheduleCreatorController {
             throw Util.getAuraHandledException(ex);
         }
     }
+
+    @AuraEnabled
+    public static List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
+        try {
+            return service.getSessions(schedule);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
 }

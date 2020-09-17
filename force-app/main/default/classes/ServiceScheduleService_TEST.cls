@@ -1,5 +1,9 @@
 @IsTest
 public with sharing class ServiceScheduleService_TEST {
+    private static BasicStub recurrenceServiceStub = new BasicStub(
+        RecurrenceService.class
+    );
+
     private static ServiceScheduleService service = new ServiceScheduleService();
 
     @TestSetup
@@ -118,6 +122,173 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
+    private static void shouldGetSessions() {
+        String createMethod = 'createRRule';
+        String generateMethod = 'generate';
+        String rRuleString = 'abc';
+        Id primaryServiceProvider = TestUtil.mockId(Contact.SObjectType);
+        Id otherServiceProvider = TestUtil.mockId(Contact.SObjectType);
+        DateTime firstSessionStart = System.now();
+        DateTime firstSessionEnd = System.now().addHours(2);
+        ServiceSchedule__c schedule = new ServiceSchedule__c(
+            Name = 'test',
+            FirstSessionStart__c = firstSessionStart,
+            FirstSessionEnd__c = firstSessionEnd,
+            Interval__c = 1,
+            Frequency__c = 'DAILY',
+            ServiceScheduleEndDate__c = System.today().addDays(10),
+            NumberOfServiceSessions__c = 2,
+            DaysOfWeek__c = '1;2;3;4;5;6;7',
+            PrimaryServiceProvider__c = primaryServiceProvider,
+            OtherServiceProvider__c = otherServiceProvider
+        );
+        List<DateTime> expectedDateTimes = new List<DateTime>{
+            firstSessionStart,
+            firstSessionStart.addDays(1)
+        };
+        recurrenceServiceStub.withReturnValue(
+            createMethod,
+            new List<Type>{
+                String.class,
+                Integer.class,
+                Date.class,
+                Integer.class,
+                List<Integer>.class
+            },
+            rRuleString
+        );
+        recurrenceServiceStub.withReturnValue(
+            generateMethod,
+            new List<Type>{ DateTime.class, String.class },
+            expectedDateTimes
+        );
+        service.recurrenceService = (RecurrenceService) recurrenceServiceStub.createMock();
+
+        List<ServiceSession__c> expected = new List<ServiceSession__c>();
+        for (DateTime sessionDateTime : expectedDateTimes) {
+            expected.add(
+                new ServiceSession__c(
+                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    SessionStart__c = sessionDateTime,
+                    SessionEnd__c = sessionDateTime.addHours(2),
+                    PrimaryServiceProvider__c = primaryServiceProvider,
+                    OtherServiceProvider__c = otherServiceProvider,
+                    Status__c = 'Pending'
+                )
+            );
+        }
+
+        Test.startTest();
+        List<ServiceSession__c> actual = service.getSessions(schedule);
+        Test.stopTest();
+
+        System.assertEquals(expected, actual);
+
+        recurrenceServiceStub.assertCalledWith(
+            createMethod,
+            new List<Type>{
+                String.class,
+                Integer.class,
+                Date.class,
+                Integer.class,
+                List<Integer>.class
+            },
+            new List<Object>{
+                schedule.Frequency__c,
+                Integer.valueOf(schedule.Interval__c),
+                schedule.ServiceScheduleEndDate__c,
+                Integer.valueOf(schedule.NumberOfServiceSessions__c),
+                new List<Integer>{ 1, 2, 3, 4, 5, 6, 7 }
+            }
+        );
+        recurrenceServiceStub.assertCalledWith(
+            generateMethod,
+            new List<Type>{ DateTime.class, String.class },
+            new List<Object>{ schedule.FirstSessionStart__c, rRuleString }
+        );
+    }
+
+    @IsTest
+    private static void shouldGetSessionsWithMinimalInfo() {
+        String createMethod = 'createRRule';
+        String generateMethod = 'generate';
+        String rRuleString = 'abc';
+        DateTime firstSessionStart = System.now();
+        ServiceSchedule__c schedule = new ServiceSchedule__c(
+            Name = 'test',
+            FirstSessionStart__c = firstSessionStart,
+            Frequency__c = 'DAILY',
+            NumberOfServiceSessions__c = 2
+        );
+        List<DateTime> expectedDateTimes = new List<DateTime>{
+            firstSessionStart,
+            firstSessionStart.addDays(1)
+        };
+        recurrenceServiceStub.withReturnValue(
+            createMethod,
+            new List<Type>{
+                String.class,
+                Integer.class,
+                Date.class,
+                Integer.class,
+                List<Integer>.class
+            },
+            rRuleString
+        );
+        recurrenceServiceStub.withReturnValue(
+            generateMethod,
+            new List<Type>{ DateTime.class, String.class },
+            expectedDateTimes
+        );
+        service.recurrenceService = (RecurrenceService) recurrenceServiceStub.createMock();
+
+        List<ServiceSession__c> expected = new List<ServiceSession__c>();
+        for (DateTime sessionDateTime : expectedDateTimes) {
+            expected.add(
+                new ServiceSession__c(
+                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    SessionStart__c = sessionDateTime,
+                    SessionEnd__c = null,
+                    PrimaryServiceProvider__c = null,
+                    OtherServiceProvider__c = null,
+                    Status__c = 'Pending'
+                )
+            );
+        }
+
+        Test.startTest();
+        List<ServiceSession__c> actual = service.getSessions(schedule);
+        Test.stopTest();
+
+        System.debug(JSON.serialize(actual));
+        System.debug(JSON.serialize(expected));
+        System.assertEquals(expected, actual);
+
+        recurrenceServiceStub.assertCalledWith(
+            createMethod,
+            new List<Type>{
+                String.class,
+                Integer.class,
+                Date.class,
+                Integer.class,
+                List<Integer>.class
+            },
+            new List<Object>{
+                schedule.Frequency__c,
+                null,
+                null,
+                Integer.valueOf(schedule.NumberOfServiceSessions__c),
+                null
+            }
+        );
+        recurrenceServiceStub.assertCalledWith(
+            generateMethod,
+            new List<Type>{ DateTime.class, String.class },
+            new List<Object>{ schedule.FirstSessionStart__c, rRuleString }
+        );
+    }
+
+    @IsTest
     private static void throwsExceptionWhenNameTooLong() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();
@@ -137,13 +308,11 @@ public with sharing class ServiceScheduleService_TEST {
         Test.startTest();
         try {
             dmlLimitBefore = System.Limits.getDmlStatements();
-            System.debug(dmlLimitBefore);
             model.serviceSchedule = schedule;
             service.persist(model);
         } catch (Exception ex) {
             actualException = ex;
             dmlLimitAfter = System.Limits.getDmlStatements();
-            System.debug(dmlLimitAfter);
         }
 
         Test.stopTest();

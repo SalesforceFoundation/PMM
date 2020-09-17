@@ -1,4 +1,7 @@
 public with sharing class ServiceScheduleService {
+    @TestVisible
+    RecurrenceService recurrenceService = new RecurrenceService();
+
     public ServiceScheduleModel getServiceScheduleModel() {
         return new ServiceScheduleModel();
     }
@@ -17,6 +20,37 @@ public with sharing class ServiceScheduleService {
         }
     }
 
+    public List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
+        List<ServiceSession__c> sessions = new List<ServiceSession__c>();
+
+        Id primaryServiceProvider = schedule.PrimaryServiceProvider__c != null
+            ? schedule.PrimaryServiceProvider__c
+            : null;
+        Id otherServiceProvider = schedule.OtherServiceProvider__c != null
+            ? schedule.OtherServiceProvider__c
+            : null;
+
+        for (DateTime startDateTime : getDateTimes(schedule)) {
+            DateTime endDateTime = schedule.FirstSessionEnd__c != null
+                ? DateTime.newInstance(
+                      startDateTime.date(),
+                      schedule.FirstSessionEnd__c.time()
+                  )
+                : null;
+            sessions.add(
+                new ServiceSession__c(
+                    Name = schedule.Name + ': ' + startDateTime.date().format(),
+                    SessionStart__c = startDateTime,
+                    SessionEnd__c = endDateTime,
+                    PrimaryServiceProvider__c = primaryServiceProvider,
+                    OtherServiceProvider__c = otherServiceProvider,
+                    Status__c = 'Pending' //should we just let it inherit the default and remove this line? and ship with Pending as default?
+                )
+            );
+        }
+        return sessions;
+    }
+
     private void populateServiceScheduleId(ServiceScheduleModel model) {
         for (ServiceSession__c session : model.serviceSessions) {
             session.ServiceSchedule__c = model.serviceSchedule.Id;
@@ -25,6 +59,31 @@ public with sharing class ServiceScheduleService {
             participant.ServiceSchedule__c = model.serviceSchedule.Id;
             participant.Service__c = model.serviceSchedule.Service__c;
         }
+    }
+
+    private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
+        Integer interval = schedule.Interval__c != null
+            ? Integer.valueOf(schedule.Interval__c)
+            : null;
+        String rRule = recurrenceService.createRRule(
+            schedule.Frequency__c,
+            interval,
+            schedule.ServiceScheduleEndDate__c,
+            Integer.valueOf(schedule.NumberOfServiceSessions__c),
+            getDayNums(schedule.DaysOfWeek__c)
+        );
+        return recurrenceService.generate(schedule.FirstSessionStart__c, rRule);
+    }
+
+    private List<Integer> getDayNums(String daysOfWeek) {
+        if (daysOfWeek == null) {
+            return null;
+        }
+        List<Integer> result = new List<Integer>();
+        for (String day : daysOfWeek.split(';')) {
+            result.add(Integer.valueOf(day));
+        }
+        return result;
     }
 
     public class ServiceScheduleServiceException extends Exception {

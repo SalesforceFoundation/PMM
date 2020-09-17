@@ -31,7 +31,11 @@ public with sharing class WeeklyIterator_TEST {
         List<DateTime> actual = iterator.iterate(dateTimeStart);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
     }
 
     @IsTest
@@ -60,7 +64,11 @@ public with sharing class WeeklyIterator_TEST {
         List<DateTime> actual = iterator.iterate(dateTimeStart);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
     }
 
     @IsTest
@@ -84,6 +92,10 @@ public with sharing class WeeklyIterator_TEST {
         List<DateTime> actual = iterator.iterate(dateTimeStart);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
     }
 }

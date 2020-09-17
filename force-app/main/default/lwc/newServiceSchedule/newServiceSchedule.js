@@ -1,18 +1,5 @@
-import { LightningElement, api, wire, track } from "lwc";
-import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
-import { getObjectInfo, getPicklistValuesByRecordType } from "lightning/uiObjectInfoApi";
+import { LightningElement, api, track } from "lwc";
 
-import NAME_FIELD from "@salesforce/schema/ServiceSchedule__c.Name";
-import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
-import FIRST_SESSION_START_FIELD from "@salesforce/schema/ServiceSchedule__c.FirstSessionStart__c";
-import FIRST_SESSION_END_FIELD from "@salesforce/schema/ServiceSchedule__c.FirstSessionEnd__c";
-import FREQUENCY_FIELD from "@salesforce/schema/ServiceSchedule__c.Frequency__c";
-import DAYS_OF_WEEK_FIELD from "@salesforce/schema/ServiceSchedule__c.DaysOfWeek__c";
-import END_DATE_FIELD from "@salesforce/schema/ServiceSchedule__c.ServiceScheduleEndDate__c";
-import NUMBER_OF_SESSIONS_FIELD from "@salesforce/schema/ServiceSchedule__c.NumberOfServiceSessions__c";
-import SERVICE_SECHEDULE_ENDS_FIELD from "@salesforce/schema/ServiceSchedule__c.ServiceScheduleEnds__c";
-
-const FIELD_SET_NAME = "ServiceScheduleInformation";
 const WEEKLY = "Weekly";
 const ONE_TIME = "One Time";
 const ON = "On";
@@ -24,9 +11,16 @@ export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
     objectApiName;
     labels;
-    _serviceScheduleModel;
+    sizes = {
+        large: LARGE_SIZE,
+        small: SMALL_SIZE,
+    };
 
-    fields;
+    _serviceScheduleModel;
+    @track
+    picklistFields;
+    requiredFields;
+    dateFields;
     fieldSet;
     isLoaded = false;
 
@@ -36,18 +30,19 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     set serviceScheduleModel(value) {
-        this._serviceScheduleModel = value;
+        this.isLoaded = false;
+        // This is a nested object so the inner objects are still read only
+        this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
 
-        this.updateDateFieldValues(value.serviceSchedule);
-        this.labels = value.labels.serviceSchedule;
-        this.objectApiName = value.labels.serviceSchedule.objectApiName;
-    }
+        this.labels = this._serviceScheduleModel.labels.serviceSchedule;
+        this.objectApiName = this._serviceScheduleModel.labels.serviceSchedule.objectApiName;
+        this.requiredFields = this._serviceScheduleModel.scheduleRequiredFields;
+        this.dateFields = this._serviceScheduleModel.scheduleRecurrenceDateFields;
+        this.picklistFields = this._serviceScheduleModel.scheduleRecurrencePicklistFields;
+        this.fieldSet = this._serviceScheduleModel.scheduleInformationFields;
 
-    updateDateFieldValues(serviceSchedule) {
-        Object.keys(this.dateFields).forEach(dateField => {
-            this.dateFields[dateField].value =
-                serviceSchedule[this.dateFields[dateField].fieldApiName];
-        });
+        this.processFields();
+        this.isLoaded = true;
     }
 
     @api reportValidity() {
@@ -61,20 +56,42 @@ export default class NewServiceSchedule extends LightningElement {
 
     @api
     get serviceSchedule() {
-        let serviceSchedule = { ...this._serviceScheduleModel.serviceSchedule };
+        let serviceSchedule = this._serviceScheduleModel.serviceSchedule;
 
         [...this.template.querySelectorAll("lightning-input-field")].forEach(field => {
             serviceSchedule[field.fieldName] = field.value;
         });
 
         Object.keys(this.picklistFields).forEach(field => {
-            const fieldApiName = this.picklistFields[field].fieldApiName;
+            const apiName = this.picklistFields[field].apiName;
             const value = this.picklistFields[field].value;
 
-            serviceSchedule[fieldApiName] = value;
+            serviceSchedule[apiName] = value;
         });
 
         return serviceSchedule;
+    }
+
+    processFields() {
+        let fieldsToSkip = [];
+        let self = this;
+        let updateValue = function(field) {
+            field.value = self._serviceScheduleModel.serviceSchedule[field.apiName];
+            fieldsToSkip.push(field.apiName);
+        };
+
+        Object.values(this.dateFields).forEach(field => updateValue(field));
+        Object.values(this.picklistFields).forEach(field => updateValue(field));
+        Object.values(this.requiredFields).forEach(field => updateValue(field));
+
+        this.fieldSet = this.fieldSet
+            .filter(member => !fieldsToSkip.includes(member.apiName))
+            .map(member => {
+                let field = { ...member };
+                field.size = SMALL_SIZE;
+                field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
+                return field;
+            });
     }
 
     get isWeekly() {
@@ -94,118 +111,6 @@ export default class NewServiceSchedule extends LightningElement {
 
     get isEndsOn() {
         return this.picklistFields.seriesEnds.value === ON;
-    }
-
-    sizes = {
-        large: LARGE_SIZE,
-        small: SMALL_SIZE,
-    };
-
-    requiredFields = {
-        name: { fieldApiName: NAME_FIELD.fieldApiName, vlaue: null },
-        serviceId: { fieldApiName: SERVICE_FIELD.fieldApiName, value: null },
-    };
-
-    dateFields = {
-        start: { fieldApiName: FIRST_SESSION_START_FIELD.fieldApiName, value: null },
-        end: { fieldApiName: FIRST_SESSION_END_FIELD.fieldApiName, value: null },
-        seriesEndsOn: { fieldApiName: END_DATE_FIELD.fieldApiName, value: null },
-        numberOfSessions: {
-            fieldApiName: NUMBER_OF_SESSIONS_FIELD.fieldApiName,
-            value: null,
-        },
-    };
-
-    @track
-    picklistFields = {
-        frequency: { fieldApiName: FREQUENCY_FIELD.fieldApiName, value: null },
-        daysOfWeek: { fieldApiName: DAYS_OF_WEEK_FIELD.fieldApiName, value: null },
-        seriesEnds: {
-            fieldApiName: SERVICE_SECHEDULE_ENDS_FIELD.fieldApiName,
-            value: null,
-        },
-    };
-
-    @wire(getFieldSet, {
-        objectName: "$objectApiName",
-        fieldSetName: FIELD_SET_NAME,
-    })
-    wiredFieldSet({ error, data }) {
-        if (data) {
-            this.processFields(data);
-        } else if (error) {
-            console.log(JSON.stringify(error));
-        }
-    }
-
-    processFields(data) {
-        let fieldsToSkip = [];
-        let self = this;
-        let updateValue = function(field) {
-            field.value = self._serviceScheduleModel.serviceSchedule[field.fieldApiName];
-            fieldsToSkip.push(field.fieldApiName);
-        };
-
-        Object.values(this.dateFields).forEach(field => updateValue(field));
-        Object.values(this.picklistFields).forEach(field => updateValue(field));
-        Object.values(this.requiredFields).forEach(field => updateValue(field));
-
-        this.fieldSet = data
-            .filter(member => !fieldsToSkip.includes(member.apiName))
-            .map(member => {
-                let field = { ...member };
-                field.size = SMALL_SIZE;
-                field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
-                return field;
-            });
-    }
-
-    @wire(getObjectInfo, { objectApiName: "$objectApiName" })
-    wiredObject(result) {
-        if (!result) {
-            return;
-        }
-
-        if (result.data) {
-            // TODO: Test record types
-            this.recordTypeId = this.recordTypeId
-                ? this.recordTypeId
-                : result.data.defaultRecordTypeId;
-            this.fields = result.data.fields;
-            this.isLoaded = this.wiredPicklistValues !== undefined;
-        } else if (result.error) {
-            console.log(JSON.stringify(result.error));
-        }
-    }
-
-    @wire(getPicklistValuesByRecordType, {
-        objectApiName: "$objectApiName",
-        recordTypeId: "$recordTypeId",
-    })
-    wiredPicklists(result) {
-        if (!result) {
-            return;
-        }
-
-        if (result.data) {
-            Object.keys(this.picklistFields).forEach(field => {
-                const fieldApiName = this.picklistFields[field].fieldApiName;
-                const picklistField = {
-                    ...result.data.picklistFieldValues[fieldApiName],
-                };
-
-                if (picklistField && this.fields[fieldApiName]) {
-                    picklistField.label = this.fields[fieldApiName].label;
-                    this.picklistFields[field].picklist = picklistField;
-                    this.picklistFields[
-                        field
-                    ].value = this._serviceScheduleModel.serviceSchedule[
-                        this.picklistFields[field].fieldApiName
-                    ];
-                }
-            });
-            this.isLoaded = this.fields !== undefined;
-        }
     }
 
     handleFrequencyChange(event) {

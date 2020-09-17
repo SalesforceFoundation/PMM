@@ -1,4 +1,8 @@
 public with sharing class ServiceScheduleModel {
+    @TestVisible
+    private FieldSetService fieldSetService = new FieldSetService();
+    private static final String SCHEDULE_FIELD_SET_NAME = 'ServiceScheduleInformation';
+
     @AuraEnabled
     public ServiceSchedule__c serviceSchedule { get; set; }
     @AuraEnabled
@@ -7,15 +11,59 @@ public with sharing class ServiceScheduleModel {
     public List<ServiceParticipant__c> serviceParticipants { get; set; }
     @AuraEnabled
     public Map<String, Map<String, String>> labels = new Map<String, Map<String, String>>();
+    @AuraEnabled
+    public List<Map<String, Object>> scheduleInformationFields = new List<Map<String, Object>>();
+
+    @AuraEnabled
+    public Map<String, Map<String, Object>> scheduleRequiredFields = new Map<String, Map<String, Object>>{
+        'name' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.Name.getDescribe()
+        ),
+        'serviceId' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.Service__c.getDescribe()
+        )
+    };
+    @AuraEnabled
+    public Map<String, Map<String, Object>> scheduleRecurrenceDateFields = new Map<String, Map<String, Object>>{
+        'start' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.FirstSessionStart__c.getDescribe()
+        ),
+        'end' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.FirstSessionEnd__c.getDescribe()
+        ),
+        'seriesEndsOn' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.ServiceScheduleEndDate__c.getDescribe()
+        ),
+        'numberOfSessions' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.NumberOfServiceSessions__c.getDescribe()
+        )
+    };
+    @AuraEnabled
+    public Map<String, Map<String, Object>> scheduleRecurrencePicklistFields = new Map<String, Map<String, Object>>{
+        'frequency' => fieldSetService.getPicklistFieldForLWC(
+            Schema.ServiceSchedule__c.Frequency__c.getDescribe()
+        ),
+        'daysOfWeek' => fieldSetService.getPicklistFieldForLWC(
+            Schema.ServiceSchedule__c.DaysOfWeek__c.getDescribe()
+        ),
+        'seriesEnds' => fieldSetService.getPicklistFieldForLWC(
+            Schema.ServiceSchedule__c.ServiceScheduleEnds__c.getDescribe()
+        )
+    };
 
     public ServiceScheduleModel() {
         serviceSchedule = new ServiceSchedule__c();
         serviceSessions = new List<ServiceSession__c>();
         serviceParticipants = new List<serviceParticipant__c>();
 
-        this.labels.put('serviceSchedule', getServiceScheduleLabels());
-        this.labels.put('serviceSession', getServiceSessionLabels());
-        this.labels.put('serviceParticipant', getServiceParticipantLabels());
+        labels.put('serviceSchedule', getServiceScheduleLabels());
+        labels.put('serviceSession', getServiceSessionLabels());
+        labels.put('serviceParticipant', getServiceParticipantLabels());
+
+        scheduleInformationFields = fieldSetService.getFieldSetForLWC(
+            String.valueOf(ServiceSchedule__c.SObjectType),
+            SCHEDULE_FIELD_SET_NAME
+        );
     }
 
     private static Map<String, String> serviceScheduleLabels = new Map<String, String>{

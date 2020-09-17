@@ -5,6 +5,7 @@ public with sharing class ServiceScheduleService_TEST {
     );
 
     private static ServiceScheduleService service = new ServiceScheduleService();
+    private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
 
     @TestSetup
     private static void setupTestData() {
@@ -330,8 +331,43 @@ public with sharing class ServiceScheduleService_TEST {
 
         System.assertEquals(
             3,
-            dmlLimitAfter,
+            dmlLimitAfter - dmlLimitBefore,
             'Expected a dml statement for the save point; schedule and the rollback.'
+        );
+    }
+
+    @IsTest
+    private static void throwsExceptionWhenPermissionCheckFails() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+
+        Test.startTest();
+        try {
+            service.persist(new ServiceScheduleModel());
+        } catch (Exception ex) {
+            dmlLimitAfter = System.Limits.getDmlStatements();
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof ServiceScheduleService.ServiceScheduleServiceException,
+            'Expected the service to throw the exception.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Expected the exception to be thrown before any dml statements.'
         );
     }
 }

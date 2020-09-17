@@ -99,6 +99,14 @@ public with sharing class RecurrenceRule {
         return days;
     }
 
+    public List<Integer> getDayNums() {
+        List<Integer> result = new List<Integer>();
+        for (Day day : days) {
+            result.add(day.ordinal());
+        }
+        return result;
+    }
+
     public String build() {
         List<String> ruleParts = new List<String>();
 

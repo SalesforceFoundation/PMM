@@ -19,7 +19,9 @@ export default class NewServiceSchedule extends LightningElement {
     _serviceScheduleModel;
     @track
     picklistFields;
+    @track
     requiredFields;
+    @track
     dateFields;
     fieldSet;
     isLoaded = false;
@@ -31,7 +33,7 @@ export default class NewServiceSchedule extends LightningElement {
 
     set serviceScheduleModel(value) {
         this.isLoaded = false;
-        // This is a nested object so the inner objects are still read only
+        // This is a nested object so the inner objects are still read only when using spread alone
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
 
         this.labels = this._serviceScheduleModel.labels.serviceSchedule;

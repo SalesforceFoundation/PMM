@@ -1,6 +1,6 @@
 ({
     doInit: function(component, event, helper) {
-        helper.extractUrlParams(component, event);
+        helper.extractUrlParams(component, event, helper);
 
         if (component.get("v.useFlowWizard")) {
             helper.showFlow(component, event, helper);

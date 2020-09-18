@@ -5,6 +5,7 @@ yarn.lock
 .github
 .sfdx
 .vscode
+venv
 
 # README.md contains prettier-ignore examples
 README.md

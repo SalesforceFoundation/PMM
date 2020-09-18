@@ -10,6 +10,6 @@
         "venv/bin/flake8"
     ],
     "yarn.lock": [
-        "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --validate-https"
+        "lockfile-lint"
     ]
 }

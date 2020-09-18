@@ -20,6 +20,10 @@
     },
 
     handleNavigationMessage: function(component, event, helper) {
+        if (!component.get("v.useFlowWizard")) {
+            return;
+        }
+
         helper.updateNavigation(component, event, helper);
     }
 });

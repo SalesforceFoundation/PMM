@@ -11,7 +11,7 @@ public with sharing class WeeklyIterator_TEST {
 
     @IsTest
     private static void shouldIterateEveryOtherMonday5TimesOverDaylightSavings() {
-        // Start on Sept 1 2020, 2PM
+        // Start on Tuesday Sept 1 2020, 2PM
         DateTime dateTimeStart = DateTime.newInstance(2020, 9, 1, 14, 0, 0);
         // every other Monday, 5 times or Oct 8 2099
         RecurrenceRule rRule = new RecurrenceRule()
@@ -40,7 +40,7 @@ public with sharing class WeeklyIterator_TEST {
 
     @IsTest
     private static void shouldIterateEveryMondayAndTuesdayUntilGivenDate() {
-        // Start on Sept 1 2020, 2PM
+        // Start on Tuesday Sept 1 2020, 2PM
         DateTime dateTimeStart = DateTime.newInstance(2020, 9, 1, 14, 0, 0);
         // every Monday and Tuesday until October 8 or 30 times
         RecurrenceRule rRule = new RecurrenceRule()
@@ -73,7 +73,7 @@ public with sharing class WeeklyIterator_TEST {
 
     @IsTest
     private static void shouldIterateEveryThirdWeekendFor6Instances() {
-        // Start on Oct 12 2020, 8PM
+        // Start on Monday Oct 12 2020, 8PM
         DateTime dateTimeStart = DateTime.newInstance(2020, 10, 12, 20, 0, 0);
         // every 3 weeks on Saturday, Sunday for 6 times
         RecurrenceRule rRule = new RecurrenceRule()
@@ -86,6 +86,55 @@ public with sharing class WeeklyIterator_TEST {
             DateTime.newInstance(2020, 11, 28, 20, 0, 0),
             DateTime.newInstance(2020, 11, 29, 20, 0, 0)
         };
+        WeeklyIterator iterator = new WeeklyIterator(rRule);
+
+        Test.startTest();
+        List<DateTime> actual = iterator.iterate(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
+    }
+
+    @IsTest
+    private static void shouldIterateEveryOtherTuesdaySundayFor4Instances() {
+        // Start on Sunday Oct 11 2020, 8PM
+        DateTime dateTimeStart = DateTime.newInstance(2020, 10, 11, 11, 0, 0);
+        // every 3 weeks on Tuesday, Sunday for 4 times
+        RecurrenceRule rRule = new RecurrenceRule()
+            .withRuleString('FREQ=WEEKLY;COUNT=4;INTERVAL=2;BYDAY=TU,SU');
+        List<DateTime> expected = new List<DateTime>{
+            DateTime.newInstance(2020, 10, 11, 11, 0, 0),
+            DateTime.newInstance(2020, 10, 20, 11, 0, 0),
+            DateTime.newInstance(2020, 10, 25, 11, 0, 0),
+            DateTime.newInstance(2020, 11, 3, 11, 0, 0) // crosses DST
+        };
+        WeeklyIterator iterator = new WeeklyIterator(rRule);
+
+        Test.startTest();
+        List<DateTime> actual = iterator.iterate(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
+    }
+    @IsTest
+    private static void shouldReturnEmptyListWhenNoCountOrEndDateGiven() {
+        // Note: This should never actually happen because the RecurrenceRule
+        // class should validate that one end parameter exists.
+
+        // Start on Sunday Oct 11 2020, 11AM
+        DateTime dateTimeStart = DateTime.newInstance(2020, 10, 11, 11, 0, 0);
+        // every week on Wednesdays, no end specified
+        RecurrenceRule rRule = new RecurrenceRule()
+            .withRuleString('FREQ=WEEKLY;BYDAY=WE');
+        List<DateTime> expected = new List<DateTime>{};
         WeeklyIterator iterator = new WeeklyIterator(rRule);
 
         Test.startTest();

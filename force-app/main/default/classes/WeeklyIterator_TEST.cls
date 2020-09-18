@@ -124,4 +124,27 @@ public with sharing class WeeklyIterator_TEST {
             'List of Dates returned from the iterator was not as expected.'
         );
     }
+    @IsTest
+    private static void shouldReturnEmptyListWhenNoCountOrEndDateGiven() {
+        // Note: This should never actually happen because the RecurrenceRule
+        // class should validate that one end parameter exists.
+
+        // Start on Sunday Oct 11 2020, 11AM
+        DateTime dateTimeStart = DateTime.newInstance(2020, 10, 11, 11, 0, 0);
+        // every week on Wednesdays, no end specified
+        RecurrenceRule rRule = new RecurrenceRule()
+            .withRuleString('FREQ=WEEKLY;BYDAY=WE');
+        List<DateTime> expected = new List<DateTime>{};
+        WeeklyIterator iterator = new WeeklyIterator(rRule);
+
+        Test.startTest();
+        List<DateTime> actual = iterator.iterate(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected.'
+        );
+    }
 }

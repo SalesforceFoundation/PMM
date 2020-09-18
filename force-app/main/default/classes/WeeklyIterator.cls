@@ -68,6 +68,8 @@ public with sharing class WeeklyIterator implements RecurrenceIteratorInterface 
             return false;
         } else if (endDate != null && endDate < runningDate) {
             return false;
+        } else if (count == null && endDate == null) {
+            return false; // functionally a count of 0 when nothing is specified
         }
         return true;
     }

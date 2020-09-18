@@ -33,12 +33,12 @@ Create a Program via UI
     Go To Page                              Listing                               ${ns}Program__c
     Click Object Button                     New
     Wait for Modal                          New                     Program__c
-    Populate modal Form                     Program Name=${program_name}
-    ...                                     Short Summary=${short_summary}
+    Populate Field                          Program Name            ${program_name}
+    Populate Field                          Short Summary           ${short_summary}
+    Populate Field                          Target Population       ${target_population}
+    Populate Field                          Description             ${description}
     Populate Lightning Fields               Start Date=10
     ...                                     End Date=25
-    ...                                     Target Population=${target_population}
-    ...                                     Description=${description}
     ...                                     Status=Active
     ...                                     Program Issue Area=Education
     Click Dialog button                            Save

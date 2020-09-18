@@ -55,7 +55,7 @@ Autopopulate fields when stage is set to Completed
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Populate Lightning fields               Stage=Completed
      ...                                     Program=&{program}[Name]
-     ...                                     Role=Client
+     ...                                     Role=Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          End Date                         contains               ${today}
@@ -73,7 +73,7 @@ Autopopulate fields when stage is set to Withdrawn
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Populate Lightning fields               Stage=Withdrawn
      ...                                     Program=&{program}[Name]
-     ...                                     Role=Client
+     ...                                     Role=Service Provider
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          End Date                         contains               ${today}

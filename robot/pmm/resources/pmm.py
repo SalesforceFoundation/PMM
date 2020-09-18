@@ -368,24 +368,6 @@ class pmm(object):
                 "Program Cohort",
             ):
                 self.salesforce.populate_lookup_field(key, value)
-
-            elif key in (
-                "Service Name",
-                "Quantity",
-                "Description",
-                "Unit of Measurement",
-                "Target Population",
-                "Program Cohort",
-            ):
-                locator = pmm_lex_locators["new_record"]["c_field-input"].format(key)
-                self.salesforce._populate_field(locator, value)
-
-            elif key in ("Auto-Name Override", "Auto-name Override"):
-                locator = pmm_lex_locators["new_record"]["override_checkbox"].format(
-                    key
-                )
-                if value == "checked":
-                    self.selenium.get_webelement(locator).click()
             else:
                 raise Exception("Locator not found")
 
@@ -407,3 +389,22 @@ class pmm(object):
         locator = pmm_lex_locators["new_record"]["c_datepicker"].format(value)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
+
+    def set_checkbox(self, title, status):
+        """If status is 'checked' then checks the box if its not already checked. Prints a warning msg if already checked.
+        If status is 'unchecked' then unchecks the box if its not already checked. Prints a warning msg if already unchecked
+        """
+        cb_found = False
+        locator = pmm_lex_locators["new_record"]["override_checkbox"].format(title)
+        if self.check_if_element_exists(locator):
+            checkbox = self.selenium.get_webelement(locator)
+            if (status == "checked" and checkbox.is_selected() is False) or (
+                status == "unchecked" and checkbox.is_selected() is True
+            ):
+                self.selenium.click_element(checkbox)
+            else:
+                self.builtin.log(
+                    "This checkbox is already in the expected status", "WARN"
+                )
+            cb_found = True
+        assert cb_found, " Checkbox not found "

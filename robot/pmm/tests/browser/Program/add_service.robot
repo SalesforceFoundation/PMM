@@ -32,11 +32,11 @@ Create Service from Program Object
      Page Should Contain                    &{program}[Name]
      Click Wrapper Related List Button      Services                New
      Wait for Modal                         New                     Service__c
-     Populate Lightning Fields              Service Name=${service_name}
-     ...                                    Description=${Description}
-     ...                                    Unit of Measurement=${unit_of_measurement}
-     ...                                    Status=Planned
-     Click Button                           Save
+     Populate Field                         Service Name            ${service_name}
+     Populate Field                         Description             ${Description}
+     Populate Field                         Unit of Measurement     ${unit_of_measurement}
+     Populate Lightning Fields              Status=Planned
+     Click Dialog Button                    Save
      Wait Until Modal Is Closed
      Current Page Should Be                 Details                 Program__c
      Page Should Contain                    ${service_name}

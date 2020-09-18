@@ -29,13 +29,13 @@ Create Program Cohort
      Go To Page                             Listing                 ${ns}ProgramCohort__c   
      Click Object Button                    New
      Wait For Modal                         New                     Program Cohort
-     Populate Field                         Program Cohort       ${program_cohort} 
-     Populate Lightning Fields               Status=Active
-     ...                                     Program=${program}[Name]
-     ...                                     Description=New Program Cohort via Robot Test
-     ...                                     Start Date=10
-     ...                                     End Date=25
-     Click Dialog Button                     Save
+     Populate Field                         Program Cohort          ${program_cohort} 
+     Populate Field                         Description             New Program Cohort via Robot Test
+     Populate Lightning Fields              Status=Active
+     ...                                    Program=${program}[Name]
+     ...                                    Start Date=10
+     ...                                    End Date=25
+     Click Dialog Button                    Save
      Wait Until Modal Is Closed
      Verify Details                         Program Cohort          contains        ${program_cohort}
      Verify Details                         Status                  contains        Active
@@ -52,10 +52,10 @@ Date validation for cohort when Start date is later than end date
      Go To Page                             Listing                 ${ns}ProgramCohort__c   
      Click Object Button                    New
      Wait For Modal                         New                     Program Cohort
-     Populate Field                         Program Cohort          ${program_cohort}  
+     Populate Field                         Program Cohort          ${program_cohort}
+     Populate Field                         Description             New Program Cohort via Robot Test  
      Populate Lightning Fields              Status=Active
      ...                                    Program=${program}[Name]
-     ...                                    Description=New Program Cohort via Robot Test
      ...                                    Start Date=25
      ...                                    End Date=10
      Click Dialog Button                    Save
@@ -75,9 +75,8 @@ Date validation when cohort dates are not within program date range
      Wait Until Modal Is Closed
      Load Related List                      Program Cohorts
      Click Related List Button              Program Cohorts                        New
-     Populate Field                         Program Cohort                         ${program_cohort}  
-     Populate Lightning Fields              Status=Active
-     ...                                    Description=New Program Cohort via Robot Test
+     Populate Field                         Program Cohort                         ${program_cohort}
+     Populate Lightning Fields              Status=Completed
      ...                                    Start Date=10
      ...                                    End Date=25
      Click Dialog Button                    Save

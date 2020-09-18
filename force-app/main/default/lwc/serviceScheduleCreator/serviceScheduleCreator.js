@@ -110,6 +110,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     handleNext() {
         if (this.isStep1) {
             this.processNewServiceSchedule();
+            // Set next will only happen in the processNewServiceSchedule if the record is valid and we can proceed.
         } else if (this.isStep2) {
             this.setNextStep();
         } else if (this.isStep3) {

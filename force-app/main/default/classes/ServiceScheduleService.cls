@@ -8,8 +8,9 @@ public with sharing class ServiceScheduleService {
 
     public void persist(ServiceScheduleModel model) {
         if (!hasPermissions(model)) {
-            // TODO: Add label to label branch
-            throw new ServiceScheduleServiceException('You can\'t get there from here!');
+            throw new ServiceScheduleServiceException(
+                System.Label.Insert_Operation_Exception
+            );
         }
 
         Savepoint savepoint = Database.setSavepoint();
@@ -92,11 +93,9 @@ public with sharing class ServiceScheduleService {
     }
 
     private Boolean hasPermissions(ServiceScheduleModel model) {
-        Boolean hasPermissions = hasServiceSchedulePermissions(model);
-        hasPermissions = hasPermissions && hasServiceSessionsPermissions(model);
-        hasPermissions = hasPermissions && hasServiceParticipantsPermissions(model);
-
-        return hasPermissions;
+        return hasServiceSchedulePermissions(model) &&
+            hasServiceSessionsPermissions(model) &&
+            hasServiceParticipantsPermissions(model);
     }
 
     @TestVisible
@@ -107,22 +106,16 @@ public with sharing class ServiceScheduleService {
                 PermissionValidator.CRUDAccessType.CREATEABLE
             );
 
-        Set<String> populatedFieldNames = new Set<String>();
+        Set<String> populatedFieldNames = model.serviceSchedule.getPopulatedFieldsAsMap()
+            .keySet();
 
-        populatedFieldNames.addAll(
-            model.serviceSchedule.getPopulatedFieldsAsMap().keySet()
-        );
-
-        hasPermissions =
-            hasPermissions &&
+        return hasPermissions &&
             PermissionValidator.getInstance()
                 .hasFLSAccessForFields(
                     Schema.sObjectType.ServiceSchedule__c.getName(),
                     new List<String>(populatedFieldNames),
                     'insert'
                 );
-
-        return hasPermissions;
     }
 
     @TestVisible
@@ -143,16 +136,13 @@ public with sharing class ServiceScheduleService {
             populatedFieldNames.addAll(session.getPopulatedFieldsAsMap().keySet());
         }
 
-        hasPermissions =
-            hasPermissions &&
+        return hasPermissions &&
             PermissionValidator.getInstance()
                 .hasFLSAccessForFields(
                     Schema.sObjectType.ServiceSession__c.getName(),
                     new List<String>(populatedFieldNames),
                     'insert'
                 );
-
-        return hasPermissions;
     }
 
     @TestVisible
@@ -173,16 +163,13 @@ public with sharing class ServiceScheduleService {
             populatedFieldNames.addAll(participant.getPopulatedFieldsAsMap().keySet());
         }
 
-        hasPermissions =
-            hasPermissions &&
+        return hasPermissions &&
             PermissionValidator.getInstance()
                 .hasFLSAccessForFields(
                     Schema.sObjectType.ServiceParticipant__c.getName(),
                     new List<String>(populatedFieldNames),
                     'insert'
                 );
-
-        return hasPermissions;
     }
 
     public class ServiceScheduleServiceException extends Exception {

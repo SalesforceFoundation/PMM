@@ -156,6 +156,14 @@
         <value>Finish</value>
     </labels>
     <labels>
+        <fullName>Insert_Operation_Exception</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Permission Denied for Insert Operation</shortDescription>
+        <value>Permission Denied for Insert Operation.</value>
+    </labels>
+    <labels>
         <fullName>MissingSObjectType</fullName>
         <categories>Exception</categories>
         <language>en_US</language>

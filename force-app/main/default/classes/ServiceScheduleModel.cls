@@ -103,30 +103,24 @@ public with sharing class ServiceScheduleModel {
     };
 
     private static Map<String, String> getServiceScheduleLabels() {
-        serviceScheduleLabels.putAll(getObjectLabels(ServiceSchedule__c.sObjectType));
+        serviceScheduleLabels.putAll(
+            Util.getObjectLabels(ServiceSchedule__c.sObjectType)
+        );
 
         return serviceScheduleLabels;
     }
 
     private static Map<String, String> getServiceSessionLabels() {
-        serviceSessionLabels.putAll(getObjectLabels(ServiceSession__c.sObjectType));
+        serviceSessionLabels.putAll(Util.getObjectLabels(ServiceSession__c.sObjectType));
 
         return serviceSessionLabels;
     }
 
     private static Map<String, String> getServiceParticipantLabels() {
         serviceParticipantLabels.putAll(
-            getObjectLabels(ServiceParticipant__c.sObjectType)
+            Util.getObjectLabels(ServiceParticipant__c.sObjectType)
         );
 
         return serviceParticipantLabels;
-    }
-
-    private static Map<String, String> getObjectLabels(SObjectType sObjectType) {
-        return new Map<String, String>{
-            'objectPluralLabel' => sObjectType.getDescribe().getLabelPlural(),
-            'objectLabel' => sObjectType.getDescribe().getLabel(),
-            'objectApiName' => sObjectType.getDescribe().getName()
-        };
     }
 }

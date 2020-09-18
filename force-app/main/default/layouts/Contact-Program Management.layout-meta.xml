@@ -303,6 +303,13 @@
         <relatedList>ServiceDelivery__c.Contact__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <fields>NAME</fields>
+        <fields>ServiceSchedule__c</fields>
+        <fields>Service__c</fields>
+        <fields>Status__c</fields>
+        <relatedList>ServiceParticipant__c.Contact__c</relatedList>
+    </relatedLists>
+    <relatedLists>
         <relatedList>RelatedFileList</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>

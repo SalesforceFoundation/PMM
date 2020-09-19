@@ -1,6 +1,6 @@
 public with sharing class DailyIterator implements RecurrenceIteratorInterface {
     private List<DateTime> result;
-    private DateTime runningDateTime;
+    private Date runningDate;
     @TestVisible
     private RecurrenceRule rRule;
 
@@ -10,29 +10,29 @@ public with sharing class DailyIterator implements RecurrenceIteratorInterface {
 
     public List<DateTime> iterate(DateTime datetimeStart) {
         result = new List<DateTime>();
-        runningDateTime = datetimeStart;
+        runningDate = datetimeStart.date();
+        // everything relative to local user TZ
 
         do {
-            result.add(runningDateTime);
+            result.add(DateTime.newInstance(runningDate, datetimeStart.time()));
         } while (hasNext());
 
         return result;
     }
 
     private Boolean hasNext() {
-        incrementRunningDateTime();
+        incrementRunningDate();
         Integer count = rRule.getCount();
         Date endDate = rRule.getEndDate();
         if (count != null && result.size() >= count) {
             return false;
-        } else if (endDate != null && runningDateTime.date() > endDate) {
-            // everything relative to local user TZ
+        } else if (endDate != null && runningDate > endDate) {
             return false;
         }
         return true;
     }
 
-    private void incrementRunningDateTime() {
-        runningDateTime = runningDateTime.addDays(rRule.getInterval());
+    private void incrementRunningDate() {
+        runningDate = runningDate.addDays(rRule.getInterval());
     }
 }

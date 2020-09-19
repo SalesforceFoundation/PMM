@@ -9,6 +9,9 @@ public with sharing class RecurrenceFactory implements RecurrenceFactoryInterfac
             when DAILY {
                 return new DailyIterator(recurrenceRule);
             }
+            when WEEKLY {
+                return new WeeklyIterator(recurrenceRule);
+            }
             when else {
                 return null;
             }

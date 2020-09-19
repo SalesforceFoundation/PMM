@@ -6,7 +6,8 @@ public with sharing class RecurrenceRule {
     // FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE;COUNT=12
 
     public enum Frequency {
-        DAILY
+        DAILY,
+        WEEKLY
     }
 
     public enum Day {
@@ -98,6 +99,14 @@ public with sharing class RecurrenceRule {
         return days;
     }
 
+    public List<Integer> getDayNums() {
+        List<Integer> result = new List<Integer>();
+        for (Day day : days) {
+            result.add(day.ordinal());
+        }
+        return result;
+    }
+
     public String build() {
         List<String> ruleParts = new List<String>();
 
@@ -176,6 +185,10 @@ public with sharing class RecurrenceRule {
                     when else {
                         reset();
                         throw new RecurrenceRuleException('Invalid RRule Key');
+                        // TODO: distinguish between valid RRule parameters that we don't support,
+                        // and invalid RRule parameters that don't exist in the spec
+
+                        // TODO: Consider validating that at least one end condition exists: count or endDate
                     }
                 }
             }

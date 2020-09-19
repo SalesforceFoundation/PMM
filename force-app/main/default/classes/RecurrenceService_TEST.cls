@@ -8,7 +8,7 @@ public with sharing class RecurrenceService_TEST {
     );
     private static BasicStub ruleStub = new BasicStub(RecurrenceRule.class);
     private static RecurrenceService service = new RecurrenceService();
-    private static String rRule = 'FREQ=DAILY;INTERVAL=3;UNTIL=20200925T000000Z';
+    private static String rRule = 'FREQ=DAILY;INTERVAL=3;UNTIL=20000101T000000Z;COUNT=5;DAYS=MO,WE';
     private static DateTime dateTimeStart = System.now();
 
     @IsTest
@@ -36,23 +36,32 @@ public with sharing class RecurrenceService_TEST {
     }
 
     @IsTest
-    private static void shouldReturnRuleStringFromFreqAndListOfDayNums() {
-        String resetMethod = 'reset';
-        String freqMethod = 'withFrequency';
-        String daysMethod = 'withDays';
-        String buildMethod = 'build';
+    private static void shouldReturnRuleStringFromFreqStringDayNumsEndDateIntervalCount() {
         String frequency = 'Daily';
+        Integer interval = 2;
+        Date endDate = Date.newInstance(2000, 1, 1);
+        Integer count = 5;
         List<Integer> days = new List<Integer>{ 1, 3 };
+        String freqMethod = 'withFrequency';
+        String intervalMethod = 'withInterval';
+        String endDateMethod = 'withEndDate';
+        String countMethod = 'withCount';
+        String daysMethod = 'withDays';
+        String resetMethod = 'reset';
+        String buildMethod = 'build';
         ruleStub.withReturnValue(buildMethod, rRule);
 
         service.recurrenceRule = (RecurrenceRule) ruleStub.createMock();
 
         Test.startTest();
-        String actual = service.createRRule(frequency, days);
+        String actual = service.createRRule(frequency, interval, endDate, count, days);
         Test.stopTest();
 
         ruleStub.assertCalled(resetMethod);
         ruleStub.assertCalledWith(freqMethod, String.class, frequency);
+        ruleStub.assertCalledWith(intervalMethod, Integer.class, interval);
+        ruleStub.assertCalledWith(endDateMethod, Date.class, endDate);
+        ruleStub.assertCalledWith(countMethod, Integer.class, count);
         ruleStub.assertCalledWith(daysMethod, List<Integer>.class, days);
         ruleStub.assertCalled(buildMethod);
 

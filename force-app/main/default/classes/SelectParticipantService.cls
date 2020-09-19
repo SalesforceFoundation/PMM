@@ -1,30 +1,62 @@
 public with sharing class SelectParticipantService {
     @TestVisible
     private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
+    @TestVisible
+    private FieldSetService fieldSetService = new FieldSetService();
 
-    public Map<String, String> getLabels() {
-        Map<String, String> labels = new Map<String, String>{
-            Schema.SObjectType.Program__c.getName() => Schema.SObjectType.Program__c.getLabel(),
-            Schema.SObjectType.ProgramCohort__c.getName() => Schema.SObjectType.ProgramCohort__c.getLabel(),
-            Schema.SObjectType.ServiceParticipant__c.getName() => Schema.SObjectType.ServiceParticipant__c.getLabel(),
-            Schema.SObjectType.Contact.Fields.Name.getName() => Schema.SObjectType.Contact.Fields.Name.getLabel(),
-            Schema.SObjectType.Contact.Fields.Email.getName() => Schema.SObjectType.Contact.Fields.Email.getLabel(),
-            Schema.SObjectType.ProgramEngagement__c.Fields.Stage__c.getName() => Schema.SObjectType.ProgramEngagement__c.Fields.Stage__c.getLabel()
-        };
+    private Map<String, Map<String, Object>> contactFields = new Map<String, Map<String, Object>>{
+        'contactName' => fieldSetService.getFieldForLWC(
+            Schema.Contact.Name.getDescribe()
+        ),
+        'contactEmail' => fieldSetService.getFieldForLWC(
+            Schema.Contact.Email.getDescribe()
+        )
+    };
 
-        return labels;
-    }
+    private Map<String, Map<String, Object>> engagementFields = new Map<String, Map<String, Object>>{
+        'engagementStage' => fieldSetService.getFieldForLWC(
+            Schema.ProgramEngagement__c.Stage__c.getDescribe()
+        ),
+        'contact' => fieldSetService.getFieldForLWC(
+            Schema.ProgramEngagement__c.Contact__c.getDescribe()
+        )
+    };
+
+    private Map<String, Map<String, Object>> scheduleFields = new Map<String, Map<String, Object>>{
+        'capacity' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.ParticipantCapacity__c.getDescribe()
+        ),
+        'name' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.Name.getDescribe()
+        )
+    };
 
     public SelectParticipantModel getSelectParticipantModel(Id serviceId) {
         SelectParticipantModel participantModel = new SelectParticipantModel();
+        participantModel.objectLabels = new Map<String, Map<String, String>>{
+            'program' => Util.getObjectLabels(Program__c.SObjectType),
+            'programCohort' => Util.getObjectLabels(ProgramCohort__c.sObjectType),
+            'serviceParticipant' => Util.getObjectLabels(
+                ServiceParticipant__c.sObjectType
+            )
+        };
+        participantModel.fields = contactFields;
+        participantModel.fields.putAll(engagementFields);
+        participantModel.fields.putAll(scheduleFields);
 
-        participantModel.programEngagements = programEngagementSelector.getProgramEngagementsByServiceId(
+        participantModel.program = programEngagementSelector.getProgramByServiceId(
             serviceId
         );
-        participantModel.programCohorts = programEngagementSelector.getProgramCohortsByServiceId(
-            serviceId
+        if (participantModel.program == null) {
+            return participantModel;
+        }
+
+        participantModel.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
+            participantModel.program.Id
         );
-        participantModel.labels = getLabels();
+        participantModel.programCohorts = programEngagementSelector.getProgramCohortsByProgramId(
+            participantModel.program.Id
+        );
 
         return participantModel;
     }
@@ -35,12 +67,15 @@ public with sharing class SelectParticipantService {
         @AuraEnabled
         public List<ProgramCohort__c> programCohorts;
         @AuraEnabled
-        public Map<String, String> labels;
+        public Map<String, Map<String, String>> objectLabels;
+        @AuraEnabled
+        public Map<String, Map<String, Object>> fields;
+        @AuraEnabled
+        public Program__c program;
 
         public SelectParticipantModel() {
             this.programEngagements = new List<ProgramEngagement__c>();
             this.programCohorts = new List<ProgramCohort__c>();
-            this.labels = new Map<String, String>();
         }
     }
 }

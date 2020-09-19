@@ -6,24 +6,14 @@ public with sharing class SelectParticipantService_TEST {
 
     @IsTest
     private static void testGetSelectParticipantModel() {
-        final String programEngagementsMethodName = 'getProgramEngagementsByServiceId';
-        final String cohortsMethodName = 'getProgramCohortsByServiceId';
+        final String programEngagementsMethodName = 'getProgramEngagementsByProgramId';
+        final String cohortsMethodName = 'getProgramCohortsByProgramId';
 
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);
         List<ProgramCohort__c> programCohorts = new List<ProgramCohort__c>();
         List<ProgramEngagement__c> programEngagements = new List<ProgramEngagement__c>();
 
-        Map<String, String> labels = new Map<String, String>{
-            Schema.SObjectType.Program__c.getName() => Schema.SObjectType.Program__c.getLabel(),
-            Schema.SObjectType.ProgramCohort__c.getName() => Schema.SObjectType.ProgramCohort__c.getLabel(),
-            Schema.SObjectType.ServiceParticipant__c.getName() => Schema.SObjectType.ServiceParticipant__c.getLabel(),
-            Schema.SObjectType.Contact.Fields.Name.getName() => Schema.SObjectType.Contact.Fields.Name.getLabel(),
-            Schema.SObjectType.Contact.Fields.Email.getName() => Schema.SObjectType.Contact.Fields.Email.getLabel(),
-            Schema.SObjectType.ProgramEngagement__c.Fields.Stage__c.getName() => Schema.SObjectType.ProgramEngagement__c.Fields.Stage__c.getLabel()
-        };
-
         SelectParticipantService.SelectParticipantModel expected = new SelectParticipantService.SelectParticipantModel();
-        expected.labels = labels;
         expected.programEngagements = programEngagements;
         expected.programCohorts = programCohorts;
 

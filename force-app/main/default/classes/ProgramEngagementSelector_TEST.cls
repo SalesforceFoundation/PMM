@@ -77,15 +77,10 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
-    private static void testGetProgramEngagementsByServiceId() {
+    private static void testGetProgramEngagementsByProgramId() {
         ProgramTestDataFactory.insertTestData(true);
 
-        Service__c service1 = [
-            SELECT Id, Name
-            FROM Service__c
-            WHERE Name = 'Service 1'
-            LIMIT 1
-        ][0];
+        Program__c program = [SELECT Id, Name FROM Program__c LIMIT 1];
 
         List<ProgramEngagement__c> expected = new List<ProgramEngagement__c>(
             [
@@ -103,7 +98,7 @@ public with sharing class ProgramEngagementSelector_TEST {
                     AND Program__c IN (
                         SELECT Program__c
                         FROM Service__c
-                        WHERE Id = :service1.Id
+                        WHERE Id = :program.Id
                     )
                 ORDER BY Contact__r.Name ASC
             ]
@@ -111,8 +106,8 @@ public with sharing class ProgramEngagementSelector_TEST {
 
         Test.startTest();
         ProgramEngagementSelector selector = new ProgramEngagementSelector();
-        List<ProgramEngagement__c> actual = selector.getProgramEngagementsByServiceId(
-            service1.Id
+        List<ProgramEngagement__c> actual = selector.getProgramEngagementsByProgramId(
+            program.Id
         );
         Test.stopTest();
         System.assert(
@@ -132,7 +127,7 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
-    private static void testGetProgramEngagementsByServiceIdNoAccess() {
+    private static void testGetProgramEngagementsByProgramIdNoAccess() {
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
         Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
         User u = new User(
@@ -149,12 +144,7 @@ public with sharing class ProgramEngagementSelector_TEST {
 
         ProgramTestDataFactory.insertTestData(true);
 
-        Service__c service1 = [
-            SELECT Id, Name
-            FROM Service__c
-            WHERE Name = 'Service 1'
-            LIMIT 1
-        ][0];
+        Program__c program = [SELECT Id, Name FROM Program__c LIMIT 1];
 
         List<ProgramEngagement__c> expected = new List<ProgramEngagement__c>(
             [
@@ -172,7 +162,7 @@ public with sharing class ProgramEngagementSelector_TEST {
                     AND Program__c IN (
                         SELECT Program__c
                         FROM Service__c
-                        WHERE Id = :service1.Id
+                        WHERE Id = :program.Id
                     )
                 ORDER BY Contact__r.Name ASC
             ]
@@ -181,8 +171,8 @@ public with sharing class ProgramEngagementSelector_TEST {
         Test.startTest();
         System.runAs(u) {
             ProgramEngagementSelector selector = new ProgramEngagementSelector();
-            List<ProgramEngagement__c> actual = selector.getProgramEngagementsByServiceId(
-                service1.Id
+            List<ProgramEngagement__c> actual = selector.getProgramEngagementsByProgramId(
+                program.Id
             );
             System.assertEquals(
                 new List<ProgramEngagement__c>(),
@@ -195,15 +185,10 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
-    private static void testGetProgramCohortsByServiceId() {
+    private static void testGetProgramCohortsByProgramId() {
         ProgramTestDataFactory.insertTestData(true);
 
-        Service__c service1 = [
-            SELECT Id, Name
-            FROM Service__c
-            WHERE Name = 'Service 1'
-            LIMIT 1
-        ][0];
+        Program__c program = [SELECT Id, Name FROM Program__c LIMIT 1];
 
         List<ProgramCohort__c> expected = new List<ProgramCohort__c>(
             [
@@ -213,16 +198,14 @@ public with sharing class ProgramEngagementSelector_TEST {
                     Program__c IN (
                         SELECT Program__c
                         FROM Service__c
-                        WHERE Id = :service1.Id
+                        WHERE Id = :program.Id
                     )
             ]
         );
 
         Test.startTest();
         ProgramEngagementSelector selector = new ProgramEngagementSelector();
-        List<ProgramCohort__c> actual = selector.getProgramCohortsByServiceId(
-            service1.Id
-        );
+        List<ProgramCohort__c> actual = selector.getProgramCohortsByProgramId(program.Id);
         Test.stopTest();
         System.assert(!actual.isEmpty());
         System.assertEquals(
@@ -233,7 +216,7 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
-    private static void testGetProgramCohortsByServiceIdNoAccess() {
+    private static void testGetProgramCohortsByProgramIdNoAccess() {
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
         Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
         User u = new User(
@@ -250,12 +233,7 @@ public with sharing class ProgramEngagementSelector_TEST {
 
         ProgramTestDataFactory.insertTestData(true);
 
-        Service__c service1 = [
-            SELECT Id, Name
-            FROM Service__c
-            WHERE Name = 'Service 1'
-            LIMIT 1
-        ][0];
+        Program__c program = [SELECT Id, Name FROM Program__c LIMIT 1];
 
         List<ProgramCohort__c> expected = new List<ProgramCohort__c>(
             [
@@ -265,7 +243,7 @@ public with sharing class ProgramEngagementSelector_TEST {
                     Program__c IN (
                         SELECT Program__c
                         FROM Service__c
-                        WHERE Id = :service1.Id
+                        WHERE Id = :program.Id
                     )
             ]
         );
@@ -273,8 +251,8 @@ public with sharing class ProgramEngagementSelector_TEST {
         Test.startTest();
         System.runAs(u) {
             ProgramEngagementSelector selector = new ProgramEngagementSelector();
-            List<ProgramCohort__c> actual = selector.getProgramCohortsByServiceId(
-                service1.Id
+            List<ProgramCohort__c> actual = selector.getProgramCohortsByProgramId(
+                program.Id
             );
             System.assertEquals(
                 new List<ProgramCohort__c>(),

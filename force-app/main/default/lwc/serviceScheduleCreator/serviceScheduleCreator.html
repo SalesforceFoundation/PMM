@@ -7,6 +7,7 @@
     >
         <template if:true={isStep1}>
             <c-new-service-schedule
+                service-id={serviceId}
                 service-schedule-model={serviceScheduleModel}
             ></c-new-service-schedule>
         </template>
@@ -14,7 +15,10 @@
             <c-review-sessions></c-review-sessions>
         </template>
         <template if:true={isStep3}>
-            <c-participant-selector service-id={serviceId}></c-participant-selector>
+            <c-participant-selector
+                service-id={serviceId}
+                service-schedule-model={serviceScheduleModel}
+            ></c-participant-selector>
         </template>
         <template if:true={isStep4}>
             <c-service-schedule-review></c-service-schedule-review>

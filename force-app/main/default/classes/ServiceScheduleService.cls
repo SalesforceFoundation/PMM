@@ -14,7 +14,8 @@ public with sharing class ServiceScheduleService {
 
         try {
             insert model.serviceSchedule;
-            populateServiceScheduleId(model);
+            updateSessionRelationships(model);
+            updateParticipantRelationships(model);
             insert model.serviceSessions;
             insert model.serviceParticipants;
         } catch (Exception ex) {
@@ -23,13 +24,22 @@ public with sharing class ServiceScheduleService {
         }
     }
 
-    private void populateServiceScheduleId(ServiceScheduleModel model) {
+    private void updateSessionRelationships(ServiceScheduleModel model) {
         for (ServiceSession__c session : model.serviceSessions) {
             session.ServiceSchedule__c = model.serviceSchedule.Id;
         }
-        for (ServiceParticipant__c participant : model.serviceParticipants) {
-            participant.ServiceSchedule__c = model.serviceSchedule.Id;
-            participant.Service__c = model.serviceSchedule.Service__c;
+    }
+
+    private void updateParticipantRelationships(ServiceScheduleModel model) {
+        for (ProgramEngagement__c engagement : model.selectedParticipants) {
+            ServiceParticipant__c participant = new ServiceParticipant__c(
+                ServiceSchedule__c = model.serviceSchedule.Id,
+                Service__c = model.serviceSchedule.Service__c,
+                ProgramEngagement__c = engagement.Id,
+                Contact__c = engagement.Contact__c
+            );
+
+            model.serviceParticipants.add(participant);
         }
     }
 

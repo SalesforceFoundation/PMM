@@ -1,5 +1,7 @@
 import { LightningElement, wire, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { handleError } from "c/util";
 import { ProgressSteps } from "./progressSteps";
 import { NavigationItems } from "./navigationItems";
 import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
@@ -7,6 +9,7 @@ import persist from "@salesforce/apex/ServiceScheduleCreatorController.persist";
 
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
+import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
@@ -17,6 +20,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     labels = {
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
+        success: SUCCESS_LABEL,
     };
 
     // TODO: fix labels for each step
@@ -110,11 +114,10 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     handleNext() {
         if (this.isStep1) {
             this.processNewServiceSchedule();
-            // Set next will only happen in the processNewServiceSchedule if the record is valid and we can proceed.
         } else if (this.isStep2) {
             this.setNextStep();
         } else if (this.isStep3) {
-            this.setNextStep();
+            this.processServiceParticipants();
         } else if (this.isStep4) {
             this.save();
         }
@@ -123,12 +126,20 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     save() {
         persist({ model: this.serviceScheduleModel })
             .then(() => {
+                this.showSuccessToast();
                 this.init();
             })
             .catch(error => {
-                // TODO: throw error
-                console.log(JSON.stringify(error));
+                handleError(error);
             });
+    }
+
+    showToast() {
+        const event = new ShowToastEvent({
+            title: this.labels.success,
+            variant: "success",
+        });
+        this.dispatchEvent(event);
     }
 
     setNextStep() {
@@ -147,10 +158,29 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.serviceId = this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ];
+
+        this.setNextStep();
+    }
+
+    processServiceParticipants() {
+        let participantSelector = this.template.querySelector("c-participant-selector");
+
+        if (!(participantSelector && participantSelector.selectedParticipants)) {
+            return;
+        }
+
+        this.serviceScheduleModel.selectedParticipants =
+            participantSelector.selectedParticipants;
+
         this.setNextStep();
     }
 
     handleBack() {
+        if (this.isStep3) {
+            // Reset the selected service participants
+            this.serviceScheduleModel.selectedParticipants = this.originalModel.selectedParticipants;
+        }
+
         this._steps.back();
         this._currentStep = this._steps.currentStep;
     }

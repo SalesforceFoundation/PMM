@@ -91,7 +91,8 @@ public with sharing class FieldSetService {
             'type' => field.getType().name(),
             'isRequired' => !field.isNillable(),
             'helpText' => field.getInlineHelpText(),
-            'isAccessible' => field.isAccessible()
+            'isAccessible' => field.isAccessible(),
+            'relationshipName' => field.getRelationshipName()
         };
     }
 

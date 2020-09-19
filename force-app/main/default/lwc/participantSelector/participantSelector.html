@@ -1,6 +1,6 @@
 <template>
     <c-section title="Add Service Participants"></c-section>
-    <lightning-layout class="container-height">
+    <lightning-layout class="container-height" if:true={isLoaded}>
         <lightning-layout-item size="8">
             <lightning-layout multiple-rows="true" horizontal-align="center">
                 <lightning-layout-item
@@ -9,7 +9,7 @@
                 >
                     <lightning-input
                         type="String"
-                        label={programLabel}
+                        label={objectLabels.program.objectLabel}
                         value={programName}
                         disabled
                     ></lightning-input>
@@ -19,7 +19,7 @@
                     size="5"
                 >
                     <lightning-combobox
-                        label={programCohortLabel}
+                        label={objectLabels.programCohort.objectLabel}
                         class="slds-align_absolute-center slds-text-align_left slds-var-p-top_small"
                         options={searchOptions}
                         onchange={handleCohortChange}
@@ -55,7 +55,7 @@
                         </div>
                         <div if:false={noRecordsFound}>
                             <lightning-datatable
-                                data={filteredContacts}
+                                data={filteredEngagements}
                                 key-field="Id"
                                 columns={columns}
                                 show-row-number-column
@@ -98,7 +98,7 @@
                                     columns={selectedColumns}
                                     key-field="Id"
                                     hide-checkbox-column
-                                    onrowaction={deselectParticipant}
+                                    onrowaction={handleDeselectParticipant}
                                     data={selectedParticipants}
                                     resize-column-disabled
                                 ></lightning-datatable>

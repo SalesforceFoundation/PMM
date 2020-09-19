@@ -2,13 +2,14 @@ public with sharing class ServiceScheduleModel {
     @TestVisible
     private FieldSetService fieldSetService = new FieldSetService();
     private static final String SCHEDULE_FIELD_SET_NAME = 'ServiceScheduleInformation';
+    public List<ServiceParticipant__c> serviceParticipants { get; set; }
 
     @AuraEnabled
     public ServiceSchedule__c serviceSchedule { get; set; }
     @AuraEnabled
     public List<ServiceSession__c> serviceSessions { get; set; }
     @AuraEnabled
-    public List<ServiceParticipant__c> serviceParticipants { get; set; }
+    public List<ProgramEngagement__c> selectedParticipants { get; set; }
     @AuraEnabled
     public Map<String, Map<String, String>> labels = new Map<String, Map<String, String>>();
     @AuraEnabled
@@ -54,7 +55,8 @@ public with sharing class ServiceScheduleModel {
     public ServiceScheduleModel() {
         serviceSchedule = new ServiceSchedule__c();
         serviceSessions = new List<ServiceSession__c>();
-        serviceParticipants = new List<serviceParticipant__c>();
+        selectedParticipants = new List<ProgramEngagement__c>();
+        serviceParticipants = new List<ServiceParticipant__c>();
 
         labels.put('serviceSchedule', getServiceScheduleLabels());
         labels.put('serviceSession', getServiceSessionLabels());

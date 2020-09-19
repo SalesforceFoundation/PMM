@@ -185,6 +185,10 @@ public with sharing class RecurrenceRule {
                     when else {
                         reset();
                         throw new RecurrenceRuleException('Invalid RRule Key');
+                        // TODO: distinguish between valid RRule parameters that we don't support,
+                        // and invalid RRule parameters that don't exist in the spec
+
+                        // TODO: Consider validating that at least one end condition exists: count or endDate
                     }
                 }
             }

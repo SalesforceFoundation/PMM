@@ -12,10 +12,28 @@
             <lightning-layout-item size={sizes.small}>
                 <!-- TODO: If serviceId is not present display Service lookup field -->
                 <lightning-layout multiple-rows="true" if:true={fieldSet}>
+                    <lightning-layout-item size={sizes.large}>
+                        <lightning-input-field
+                            field-name={requiredFields.name.apiName}
+                            value={requiredFields.name.value}
+                            required
+                        >
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size={sizes.large}>
+                        <lightning-input-field
+                            field-name={requiredFields.serviceId.apiName}
+                            value={requiredFields.serviceId.value}
+                            required
+                        >
+                        </lightning-input-field>
+                    </lightning-layout-item>
                     <template for:each={fieldSet} for:item="field">
                         <lightning-layout-item key={field.apiName} size={field.size}>
                             <lightning-input-field
                                 field-name={field.apiName}
+                                value={field.value}
+                                required={field.isRequired}
                             ></lightning-input-field>
                         </lightning-layout-item>
                     </template>
@@ -30,27 +48,30 @@
             </lightning-layout-item>
             <lightning-layout-item size={sizes.small}>
                 <lightning-layout multiple-rows="true">
-                    <lightning-layout-item size={sizes.large}>
+                    <lightning-layout-item size={sizes.small}>
                         <lightning-input-field
-                            field-name={dateFields.start}
+                            field-name={dateFields.start.apiName}
+                            value={dateFields.start.value}
                         ></lightning-input-field
                     ></lightning-layout-item>
-                    <lightning-layout-item size={sizes.large}>
+                    <lightning-layout-item size={sizes.small}>
                         <lightning-input-field
-                            field-name={dateFields.end}
+                            field-name={dateFields.end.apiName}
+                            value={dateFields.end.value}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
                         <c-picklist
-                            if:true={picklists}
-                            picklist={picklists.frequency}
+                            picklist={picklistFields.frequency}
+                            value={picklistFields.frequency.value}
                             onselect={handleFrequencyChange}
                             type="button"
                         ></c-picklist>
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.large} if:true={isWeekly}>
                         <c-picklist
-                            picklist={picklists.daysOfWeek}
+                            picklist={picklistFields.daysOfWeek}
+                            value={picklistFields.daysOfWeek.value}
                             multi-select="true"
                             type="button"
                             onselect={handleDaysOfWeekChange}
@@ -60,18 +81,21 @@
                         <lightning-layout if:true={isRecurring}>
                             <lightning-layout-item size={sizes.small}>
                                 <c-picklist
-                                    picklist={picklists.seriesEnds}
+                                    picklist={picklistFields.seriesEnds}
+                                    value={picklistFields.seriesEnds.value}
                                     onselect={handleSeriesEndsChange}
                                 ></c-picklist>
                             </lightning-layout-item>
                             <lightning-layout-item size={sizes.small}>
                                 <lightning-input-field
                                     if:true={isEndsOn}
-                                    field-name={dateFields.seriesEndsOn}
+                                    field-name={dateFields.seriesEndsOn.apiName}
+                                    value={dateFields.seriesEndsOn.value}
                                 ></lightning-input-field>
                                 <lightning-input-field
                                     if:true={isEndsAfter}
-                                    field-name={dateFields.numberOfSessions}
+                                    field-name={dateFields.numberOfSessions.apiName}
+                                    value={dateFields.numberOfSessions.value}
                                 ></lightning-input-field
                             ></lightning-layout-item>
                         </lightning-layout>

@@ -13,8 +13,24 @@
         }
 
         // decode and deserialize the parameter
+        // expected result: {"type":"standard__recordPage",
+        //   "attributes":{"recordId":"a0763000003z79YAAQ","actionName":"view","objectApiName":"Service__c"}
         context = JSON.parse(window.atob(context));
-        component.set("v.serviceId", context.attributes.recordId);
+
+        if (
+            context.attributes.objectApiName &&
+            context.attributes.objectApiName === helper.getObjectName(component)
+        ) {
+            component.set("v.serviceId", context.attributes.recordId);
+        }
+    },
+
+    getObjectName: function(component) {
+        let objectName = "Service__c";
+        let namespace = component.getType().split(":")[0];
+        namespace = namespace === null || namespace === "c" ? "" : namespace + "__";
+        objectName = namespace + objectName;
+        return objectName;
     },
 
     refresh: function(component, event, helper) {

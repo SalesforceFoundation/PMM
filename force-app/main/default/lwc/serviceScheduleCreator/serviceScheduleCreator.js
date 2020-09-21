@@ -158,8 +158,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         }
 
         this.serviceScheduleModel.serviceSessions = reviewSessionsCmp.serviceSessions;
-
-        console.log(JSON.stringify(this.serviceScheduleModel));
         this.setNextStep();
     }
 

@@ -52,9 +52,7 @@ export default class ReviewSessions extends LightningElement {
     getSessions() {
         getSessions({ schedule: this._serviceScheduleModel.serviceSchedule })
             .then(result => {
-                console.log("here");
                 this._serviceScheduleModel.serviceSessions = [...result];
-                console.log(this._serviceScheduleModel.serviceSessions.length);
             })
             .catch(error => {
                 // TODO: throw error

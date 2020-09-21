@@ -39,7 +39,7 @@ public with sharing class RecurrenceService_TEST {
     private static void shouldReturnRuleStringFromFreqStringDayNumsEndDateIntervalCount() {
         String frequency = 'Daily';
         Integer interval = 2;
-        Date endDate = Date.newInstance(2000, 1, 1);
+        Date endDate = Date.newInstance(2021, 1, 1);
         Integer count = 5;
         List<Integer> days = new List<Integer>{ 1, 3 };
         String freqMethod = 'withFrequency';
@@ -54,7 +54,14 @@ public with sharing class RecurrenceService_TEST {
         service.recurrenceRule = (RecurrenceRule) ruleStub.createMock();
 
         Test.startTest();
-        String actual = service.createRRule(frequency, interval, endDate, count, days);
+        String actual = service.createRRule(
+            frequency,
+            interval,
+            endDate,
+            count,
+            days,
+            dateTimeStart
+        );
         Test.stopTest();
 
         ruleStub.assertCalled(resetMethod);

@@ -85,6 +85,50 @@ public with sharing class RecurrenceRule_TEST {
     }
 
     @IsTest
+    private static void shouldSetAndGetBySetPos() {
+        Integer bySetPos = -1;
+
+        Test.startTest();
+        RecurrenceRule rule = new RecurrenceRule();
+        Test.stopTest();
+
+        System.assertEquals(bySetPos, rule.getbySetPos());
+    }
+
+    @IsTest
+    private static void shouldSetAndGetByMonthDayFor29thOfTheMonth() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 1, 29, 13, 0, 0);
+        Set<Integer> monthDays = new Set<Integer>{ 28, 29 };
+        Test.startTest();
+        RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(monthDays, rule.getByMonthDays());
+    }
+
+    @IsTest
+    private static void shouldSetAndGetByMonthDayFor30thOfTheMonth() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 1, 30, 13, 0, 0);
+        Set<Integer> monthDays = new Set<Integer>{ 28, 29, 30 };
+        Test.startTest();
+        RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(monthDays, rule.getByMonthDays());
+    }
+
+    @IsTest
+    private static void shouldSetAndGetByMonthDayFor31stOfTheMonth() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 31, 13, 0, 0);
+        Set<Integer> monthDays = new Set<Integer>{ 28, 29, 30, 31 };
+        Test.startTest();
+        RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(monthDays, rule.getByMonthDays());
+    }
+
+    @IsTest
     private static void shouldCatchInvalidFrequency() {
         String badFreq = 'abc';
         RecurrenceRule rule = new RecurrenceRule();
@@ -101,6 +145,7 @@ public with sharing class RecurrenceRule_TEST {
         System.assertEquals(null, rule.getFrequency());
         System.assertNotEquals(null, actualException);
     }
+
     @IsTest
     private static void shouldCatchInvalidDayNum() {
         List<Integer> dayNums = new List<Integer>{ 7, 8 };
@@ -209,5 +254,35 @@ public with sharing class RecurrenceRule_TEST {
         Test.stopTest();
 
         System.assertEquals(expected, actual);
+    }
+
+    @IsTest
+    private static void shouldBuildMonthlyFrequencyWithbyMonthDay() {
+        String expected = 'FREQ=MONTHLY;UNTIL=20200731T000000Z;BYSETPOS=-1;BYMONTHDAY=28,29,30,31';
+
+        RecurrenceRule rule = new RecurrenceRule()
+            .withFrequency('MONTHLY')
+            .withEndDate(Date.newInstance(2020, 7, 31))
+            .withByMonthDays(DateTime.newInstance(2020, 1, 31, 13, 0, 0));
+
+        Test.startTest();
+        String actual = rule.build();
+        Test.stopTest();
+
+        System.assertEquals(expected, actual);
+    }
+
+    @IsTest
+    private static void shouldSetMonthlyRuleStringAndParse() {
+        String rrString = 'FREQ=MONTHLY;UNTIL=20200731T000000Z;BYSETPOS=-1;BYMONTHDAY=28,29,30,31';
+
+        Test.startTest();
+        RecurrenceRule rule = new RecurrenceRule().withRuleString(rrString);
+        Test.stopTest();
+
+        System.assertEquals(rrString, rule.rRule);
+        System.assertEquals(rule.getFrequency(), RecurrenceRule.Frequency.MONTHLY);
+        System.assertEquals(rule.getEndDate(), Date.newInstance(2020, 7, 31));
+        System.assertEquals(rule.getbySetPos(), -1);
     }
 }

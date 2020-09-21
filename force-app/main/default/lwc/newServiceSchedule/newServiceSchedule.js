@@ -123,7 +123,7 @@ export default class NewServiceSchedule extends LightningElement {
 
     handleDaysOfWeekChange(event) {
         this.picklistFields.daysOfWeek.value = event.detail.length
-            ? event.detail.map(selection => selection.value)
+            ? event.detail.map(selection => selection.value).join(";")
             : undefined;
     }
 

@@ -1,7 +1,7 @@
 import { LightningElement, track, wire, api } from "lwc";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
-import { format, createUUID } from "c/util";
-import TOTAL_RECORDS_LABEL from "@salesforce/label/c.Total_Sessions";
+import getSessions from "@salesforce/apex/ServiceScheduleCreatorController.getSessions";
+import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
 import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Record";
 import START_TIME_LABEL from "@salesforce/label/c.Start_Time";
 import END_TIME_LABEL from "@salesforce/label/c.End_Time";
@@ -14,20 +14,53 @@ import SESSION_END_FIELD from "@salesforce/schema/ServiceSession__c.SessionEnd__
 
 export default class ReviewSessions extends LightningElement {
     @track columns = [];
-    @track data = [];
     @track objectName;
+    _serviceScheduleModel;
 
     @api sessionNameLabel;
     @api sessionStartLabel;
     @api sessionEndLabel;
 
+    @api
+    get serviceScheduleModel() {
+        return this._serviceScheduleModel;
+    }
+    set serviceScheduleModel(value) {
+        // This is a nested object so the inner objects are still read only when using spread alone
+        this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
+        this.labels = Object.assign(
+            {},
+            this.labels,
+            this._serviceScheduleModel.labels.serviceSession
+        );
+        this.getSessions();
+    }
+
+    @api
+    get serviceSessions() {
+        return this._serviceScheduleModel.serviceSessions;
+    }
+
     labels = {
-        totalSessions: TOTAL_RECORDS_LABEL,
+        totalSessions: TOTAL_SESSIONS_LABEL,
         addSession: ADD_RECORD_LABEL,
         reviewSessions: REVIEW_RECORDS,
         startTime: START_TIME_LABEL,
         endTime: END_TIME_LABEL,
     };
+
+    getSessions() {
+        getSessions({ schedule: this._serviceScheduleModel.serviceSchedule })
+            .then(result => {
+                console.log("here");
+                this._serviceScheduleModel.serviceSessions = [...result];
+                console.log(this._serviceScheduleModel.serviceSessions.length);
+            })
+            .catch(error => {
+                // TODO: throw error
+                console.log(JSON.stringify(error));
+            });
+    }
 
     @wire(getObjectInfo, { objectApiName: SERVICE_SESSION_OBJECT })
     wireSession(result) {
@@ -36,23 +69,22 @@ export default class ReviewSessions extends LightningElement {
         }
 
         if (result.data) {
-            this.setLabels(result.data);
             this.setDataTableColumns(result.data);
         }
     }
 
     get totalServiceSessions() {
-        // TODO: Use Beth's form element component when ready
-        return this.labels.totalSessions + ": " + this.data.length;
+        return (
+            this.labels.totalSessions +
+            ": " +
+            this._serviceScheduleModel.serviceSessions.length
+        );
     }
 
     setLabels(data) {
-        this.objectName = data.labelPlural;
-        this.labels.addSession = format(this.labels.addSession, [data.label]);
-
-        this.labels.reviewSessions = format(this.labels.reviewSessions, [
-            data.labelPlural,
-        ]);
+        this.objectName = this.serviceScheduleModel.labels.serviceSession.objectPluralLabel;
+        this.labels.addSession = this._serviceScheduleModel.labels.serviceSession.addSession;
+        this.labels.reviewSessions = this._serviceScheduleModel.labels.serviceSession.reviewSessions;
 
         // Below lines of code sets the labels so these could be used while
         // setting the columns on the datatable
@@ -80,11 +112,29 @@ export default class ReviewSessions extends LightningElement {
                 label: this.sessionStartLabel,
                 fieldName: SESSION_START_FIELD.fieldApiName,
                 hideDefaultActions: true,
+                type: "date",
+                typeAttributes: {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "numeric",
+                    minute: "numeric",
+                    weekday: "long",
+                },
             },
             {
                 label: this.sessionEndLabel,
                 fieldName: SESSION_END_FIELD.fieldApiName,
                 hideDefaultActions: true,
+                type: "date",
+                typeAttributes: {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "numeric",
+                    minute: "numeric",
+                    weekday: "long",
+                },
             },
             {
                 label: "",
@@ -101,72 +151,26 @@ export default class ReviewSessions extends LightningElement {
         ];
 
         this.columns = COLUMNS;
-        this.setupDataTableData();
     }
 
-    setupDataTableData() {
-        const FIRSTSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/6/2020";
-        const SECONDSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/7/2020";
-        const THIRDSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/13/2020";
-        const FOURTHSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/14/2020";
-        const FIFTHSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/20/2020";
-        const SIXTHSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/21/2020";
+    // handleAddRows() {
+    //     const dataId = createUUID();
+    //     this._serviceScheduleModel.serviceSessions.push({
+    //         id: dataId,
+    //         Name: "",
+    //         SessionStart__c: "",
+    //         startTime: "",
+    //         endTime: "",
+    //     });
 
-        const DATA = [
-            {
-                id: "1",
-                Name: FIRSTSESSIONNAME,
-                SessionStart__c: "7/6/2020 1:00 PM",
-                SessionEnd__c: "7/6/2020 3:00 PM",
-            },
-            {
-                id: "2",
-                Name: SECONDSESSIONNAME,
-                SessionStart__c: "7/7/2020 1:00 PM",
-                SessionEnd__c: "7/7/2020 3:00 PM",
-            },
-            {
-                id: "3",
-                Name: THIRDSESSIONNAME,
-                SessionStart__c: "7/13/2020 1:00 PM",
-                SessionEnd__c: "7/13/2020 3:00 PM",
-            },
-            {
-                id: "4",
-                Name: FOURTHSESSIONNAME,
-                SessionStart__c: "7/14/2020 1:00 PM",
-                SessionEnd__c: "7/14/2020 3:00 PM",
-            },
-            {
-                id: "5",
-                Name: FIFTHSESSIONNAME,
-                SessionStart__c: "7/20/2020 1:00 PM",
-                SessionEnd__c: "7/20/2020 3:00 PM",
-            },
-            {
-                id: "6",
-                Name: SIXTHSESSIONNAME,
-                SessionStart__c: "7/21/2020 1:00 PM",
-                SessionEnd__c: "7/21/2020 3:00 PM",
-            },
-        ];
-        this.data = DATA;
-    }
-
-    handleAddRows() {
-        const dataId = createUUID();
-        this.data.push({
-            id: dataId,
-            Name: "",
-            SessionStart__c: "",
-            startTime: "",
-            endTime: "",
-        });
-
-        this.data = this.data.slice(0);
-    }
+    //     this._serviceScheduleModel.serviceSessions = this._serviceScheduleModel.serviceSessions.slice(0);
+    // }
 
     handleDelete(event) {
-        this.data = this.data.filter(element => element.id !== event.detail.row.id);
+        this._serviceScheduleModel.serviceSessions = this._serviceScheduleModel.serviceSessions.filter(
+            element =>
+                element[SESSION_START_FIELD.fieldApiName] !==
+                event.detail.row[SESSION_START_FIELD.fieldApiName]
+        );
     }
 }

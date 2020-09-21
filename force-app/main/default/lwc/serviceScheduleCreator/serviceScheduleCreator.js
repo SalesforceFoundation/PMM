@@ -112,7 +112,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             this.processNewServiceSchedule();
             // Set next will only happen in the processNewServiceSchedule if the record is valid and we can proceed.
         } else if (this.isStep2) {
-            this.setNextStep();
+            this.processSessions();
         } else if (this.isStep3) {
             this.setNextStep();
         } else if (this.isStep4) {
@@ -147,6 +147,19 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.serviceId = this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ];
+        this.setNextStep();
+    }
+
+    processSessions() {
+        let reviewSessionsCmp = this.template.querySelector("c-review-sessions");
+
+        if (!reviewSessionsCmp) {
+            return;
+        }
+
+        this.serviceScheduleModel.serviceSessions = reviewSessionsCmp.serviceSessions;
+
+        console.log(JSON.stringify(this.serviceScheduleModel));
         this.setNextStep();
     }
 

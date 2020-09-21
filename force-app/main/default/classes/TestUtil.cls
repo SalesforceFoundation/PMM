@@ -3,6 +3,8 @@
  * Utility methods for test classes
  */
 public with sharing class TestUtil {
+    public static final String TEST_USER_EMAIL = 'temptestuser@caseplan.example.com';
+
     public static Integer counter {
         get {
             if (counter == null) {
@@ -33,5 +35,22 @@ public with sharing class TestUtil {
         }
 
         return ids;
+    }
+
+    public static User getTestUser() {
+        // create user with no custom object permissions to test CRUD checks
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+        User user = new User(
+            Alias = 'standt',
+            Email = TEST_USER_EMAIL,
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'Testing',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            ProfileId = p.Id,
+            TimeZoneSidKey = 'America/Chicago',
+            UserName = TEST_USER_EMAIL
+        );
+        return user;
     }
 }

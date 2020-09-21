@@ -143,4 +143,27 @@ public with sharing class FieldSetService_TEST {
             );
         }
     }
+
+    @IsTest
+    private static void shouldReturnPicklistValuesWhenAPicklist() {
+        Map<String, Object> actualPicklistField = new FieldSetService()
+            .getPicklistFieldForLWC(Schema.Account.Industry.getDescribe());
+
+        System.assert(
+            actualPicklistField.containsKey('picklistValues'),
+            'Expected picklist values to be returned.'
+        );
+    }
+
+    @IsTest
+    private static void shouldNotReturnPicklistValuesWhenNotAPicklist() {
+        Map<String, Object> actualPicklistField = new FieldSetService()
+            .getPicklistFieldForLWC(Schema.Account.Name.getDescribe());
+
+        System.assert(
+            !actualPicklistField.containsKey('picklistValues'),
+            'Did not expect picklist values to be returned. ' +
+            actualPicklistField.get('picklistValues')
+        );
+    }
 }

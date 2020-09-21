@@ -13,7 +13,6 @@ import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
-    @api serviceId;
     isLoaded = false;
     serviceScheduleModel;
     originalModel;
@@ -23,6 +22,8 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         success: SUCCESS_LABEL,
     };
 
+    _serviceId;
+    _currentStep;
     // TODO: fix labels for each step
     _steps = new ProgressSteps()
         .addStep("", this.labels.newSchedule, new NavigationItems().addNext())
@@ -44,7 +45,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 .addBack()
                 .addFinish(this.labels.save)
         );
-    _currentStep;
 
     @wire(getServiceScheduleModel)
     wireServiceScheduleModel(result) {
@@ -77,6 +77,23 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 this.labels[key] = value;
             }
         }
+    }
+
+    @api
+    get serviceId() {
+        return this._serviceId;
+    }
+
+    set serviceId(value) {
+        this._serviceId = value;
+
+        if (!this.serviceScheduleModel) {
+            return;
+        }
+
+        this.serviceScheduleModel.serviceSchedule[
+            SERVICE_FIELD.fieldApiName
+        ] = this._serviceId;
     }
 
     get steps() {
@@ -119,22 +136,28 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         } else if (this.isStep3) {
             this.processServiceParticipants();
         } else if (this.isStep4) {
-            this.save();
+            this.save(true);
         }
     }
 
-    save() {
+    save(restart) {
         persist({ model: this.serviceScheduleModel })
             .then(() => {
                 this.showSuccessToast();
                 this.init();
+
+                if (restart) {
+                    this.init();
+                } else {
+                    this.handleClose();
+                }
             })
             .catch(error => {
                 handleError(error);
             });
     }
 
-    showToast() {
+    showSuccessToast() {
         const event = new ShowToastEvent({
             title: this.labels.success,
             variant: "success",
@@ -155,7 +178,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         }
 
         this.serviceScheduleModel.serviceSchedule = newServiceSchedule.serviceSchedule;
-        this.serviceId = this.serviceScheduleModel.serviceSchedule[
+        this._serviceId = this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ];
 
@@ -186,8 +209,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     handleFinish() {
-        this.save();
-        this.handleClose();
+        this.save(false);
     }
 
     handleClose() {
@@ -196,7 +218,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     init() {
-        this.isLoading = false;
+        this.isLoaded = false;
         this._steps.restart();
         this._currentStep = undefined;
         this.serviceScheduleModel = { ...this.originalModel.data };

@@ -1,9 +1,10 @@
 <template>
     <c-modal
-        header={labels.newSchedule}
+        header={labels.newServiceSchedule}
         ondialogclose={handleClose}
         default-visible="true"
         size="large"
+        if:true={isLoaded}
     >
         <template if:true={isStep1}>
             <c-new-service-schedule

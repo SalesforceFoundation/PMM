@@ -24,27 +24,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     _serviceId;
     _currentStep;
-    // TODO: fix labels for each step
-    _steps = new ProgressSteps()
-        .addStep("", this.labels.newSchedule, new NavigationItems().addNext())
-        .addStep(
-            "",
-            this.labels.reviewSessions,
-            new NavigationItems().addNext().addBack()
-        )
-        .addStep(
-            "",
-            this.labels.addParticipants,
-            new NavigationItems().addNext().addBack()
-        )
-        .addStep(
-            "",
-            this.labels.reviewSchedule,
-            new NavigationItems()
-                .addNext(this.labels.saveNew, "neutral")
-                .addBack()
-                .addFinish(this.labels.save)
-        );
+    _steps = new ProgressSteps();
 
     @wire(getServiceScheduleModel)
     wireServiceScheduleModel(result) {
@@ -56,6 +36,8 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             this.originalModel = result;
             this.init();
             this.extractLabels(this.serviceScheduleModel.labels.serviceSchedule);
+            this.addSteps();
+            this.isLoaded = true;
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
@@ -77,6 +59,30 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 this.labels[key] = value;
             }
         }
+    }
+
+    addSteps() {
+        this._steps
+            .addStep("", this.labels.newSchedule, new NavigationItems().addNext())
+            .addStep(
+                "",
+                this.serviceScheduleModel.labels.serviceSession.reviewSessions,
+                new NavigationItems().addNext().addBack()
+            )
+            .addStep(
+                "",
+                this.serviceScheduleModel.labels.serviceParticipant
+                    .addServiceParticipants,
+                new NavigationItems().addNext().addBack()
+            )
+            .addStep(
+                "",
+                this.labels.reviewSchedule,
+                new NavigationItems()
+                    .addNext(this.labels.saveNew, "neutral")
+                    .addBack()
+                    .addFinish(this.labels.save)
+            );
     }
 
     @api
@@ -144,10 +150,10 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         persist({ model: this.serviceScheduleModel })
             .then(() => {
                 this.showSuccessToast();
-                this.init();
 
                 if (restart) {
                     this.init();
+                    this.isLoaded = true;
                 } else {
                     this.handleClose();
                 }
@@ -228,7 +234,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ] = this.serviceId;
-        this.isLoaded = true;
     }
 
     showModal() {

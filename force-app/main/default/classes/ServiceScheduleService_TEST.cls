@@ -1,7 +1,7 @@
 @IsTest
 public with sharing class ServiceScheduleService_TEST {
     private static ServiceScheduleService service = new ServiceScheduleService();
-    private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
+    private static BasicStub domainStub = new BasicStub(ServiceScheduleDomain.class);
 
     @TestSetup
     private static void setupTestData() {
@@ -38,122 +38,39 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
-    private static void shouldPersistScheduleAndRelatedRecords() {
+    private static void shouldProvideModelToDomainOnPersist() {
+        String methodName = 'insertModel';
         ServiceScheduleModel model = new ServiceScheduleModel();
-        ServiceSchedule__c schedule = new ServiceSchedule__c();
-        List<ServiceSession__c> sessions = new List<ServiceSession__c>();
-        List<ServiceParticipant__c> participants = new List<ServiceParticipant__c>();
-
-        Service__c serviceRecord = [SELECT Id, Program__c FROM Service__c LIMIT 1];
-        ProgramEngagement__c engagementRecord = [
-            SELECT Id
-            FROM ProgramEngagement__c
-            WHERE Program__c = :serviceRecord.Program__c
-            LIMIT 1
-        ];
-
-        schedule.Service__c = serviceRecord.Id;
-        schedule.Name = 'Homework Office Hours';
-        schedule.FirstSessionStart__c = DateTime.newInstance(2020, 9, 18, 9, 30, 0);
-        schedule.Frequency__c = 'Weekly';
-        schedule.ServiceScheduleEnds__c = 'On';
-        schedule.ServiceScheduleEndDate__c = Date.newInstance(2020, 10, 16);
-
-        for (
-            DateTime sessionDate = schedule.FirstSessionStart__c;
-            sessionDate < schedule.ServiceScheduleEndDate__c;
-            sessionDate = sessionDate.addDays(7)
-        ) {
-            sessions.add(new ServiceSession__c(SessionStart__c = sessionDate));
-        }
-
-        participants.add(
-            new ServiceParticipant__c(ProgramEngagement__c = engagementRecord.Id)
-        );
+        service.domain = (ServiceScheduleDomain) domainStub.createMock();
 
         Test.startTest();
-        model.serviceSchedule = schedule;
-        model.serviceSessions = sessions;
-        model.serviceParticipants = participants;
         service.persist(model);
         Test.stopTest();
 
-        System.assert(
-            sessions.size() > 0,
-            'Sanity check that our test setup created session records.'
-        );
-        System.assertNotEquals(
-            null,
-            schedule.Id,
-            'Expected the schedule record to have been inserted and given an Id.'
-        );
-
-        for (ServiceSession__c session : sessions) {
-            System.assertNotEquals(
-                null,
-                session.Id,
-                'Expected each session record to have been inserted and given an Id.'
-            );
-            System.assertEquals(
-                schedule.Id,
-                session.ServiceSchedule__c,
-                'Expected each session record to have been related to the Schedule.'
-            );
-        }
-
-        System.assertNotEquals(
-            null,
-            participants[0].Id,
-            'Expected the participant record to have been inserted and given an Id.'
-        );
-        System.assertEquals(
-            schedule.Id,
-            participants[0].ServiceSchedule__c,
-            'Expected the participant record to have been related to the Schedule.'
-        );
-        System.assertEquals(
-            schedule.Service__c,
-            participants[0].Service__c,
-            'Expected the participant record to have been related to the Service record related to the Schedule.'
-        );
+        domainStub.assertCalledWith(methodName, ServiceScheduleModel.class, model);
     }
 
     @IsTest
-    private static void throwsExceptionWhenNameTooLong() {
+    private static void shouldRollbackAndRethrowDomainException() {
+        String methodName = 'insertModel';
         ServiceScheduleModel model = new ServiceScheduleModel();
-        ServiceSchedule__c schedule = new ServiceSchedule__c();
         Exception actualException;
         Integer dmlLimitBefore;
         Integer dmlLimitAfter;
-
-        Service__c serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
-
-        schedule.Service__c = serviceRecord.Id;
-        schedule.Name = 'This name is way too long but I am not really sure if an error will get thrown because of it.';
-        schedule.FirstSessionStart__c = DateTime.newInstance(2020, 9, 18, 9, 30, 0);
-        schedule.Frequency__c = 'Weekly';
-        schedule.ServiceScheduleEnds__c = 'On';
-        schedule.ServiceScheduleEndDate__c = Date.newInstance(2020, 10, 16);
+        model.serviceSchedule = new ServiceSchedule__c();
+        domainStub.withThrowException(methodName, ServiceScheduleModel.class);
+        service.domain = (ServiceScheduleDomain) domainStub.createMock();
 
         Test.startTest();
         try {
             dmlLimitBefore = System.Limits.getDmlStatements();
-            System.debug(dmlLimitBefore);
-            model.serviceSchedule = schedule;
             service.persist(model);
         } catch (Exception ex) {
             actualException = ex;
             dmlLimitAfter = System.Limits.getDmlStatements();
-            System.debug(dmlLimitAfter);
         }
 
         Test.stopTest();
-
-        System.assertEquals(
-            null,
-            schedule.Id,
-            'Expected the insert of the schedule record to have caused an exception.'
-        );
 
         System.assert(
             actualException instanceof ServiceScheduleService.ServiceScheduleServiceException,
@@ -161,44 +78,11 @@ public with sharing class ServiceScheduleService_TEST {
         );
 
         System.assertEquals(
-            3,
+            2,
             dmlLimitAfter - dmlLimitBefore,
-            'Expected a dml statement for the save point; schedule and the rollback.'
-        );
-    }
-
-    @IsTest
-    private static void throwsExceptionWhenPermissionCheckFails() {
-        String methodName = 'hasObjectAccess';
-        Integer dmlLimitAfter;
-        Exception actualException;
-
-        validatorStub.withReturnValue(
-            methodName,
-            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
-            false
+            'Expected a dml statement for the save point and the rollback.'
         );
 
-        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
-
-        Test.startTest();
-        try {
-            service.persist(new ServiceScheduleModel());
-        } catch (Exception ex) {
-            dmlLimitAfter = System.Limits.getDmlStatements();
-            actualException = ex;
-        }
-        Test.stopTest();
-
-        System.assert(
-            actualException instanceof ServiceScheduleService.ServiceScheduleServiceException,
-            'Expected the service to throw the exception.'
-        );
-
-        System.assertEquals(
-            0,
-            dmlLimitAfter,
-            'Expected the exception to be thrown before any dml statements.'
-        );
+        domainStub.assertCalledWith(methodName, ServiceScheduleModel.class, model);
     }
 }

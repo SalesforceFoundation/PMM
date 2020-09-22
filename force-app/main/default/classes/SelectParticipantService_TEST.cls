@@ -8,25 +8,30 @@ public with sharing class SelectParticipantService_TEST {
     private static void testGetSelectParticipantModel() {
         final String programEngagementsMethodName = 'getProgramEngagementsByProgramId';
         final String cohortsMethodName = 'getProgramCohortsByProgramId';
+        final String programMethodName = 'getProgramByServiceId';
 
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);
-        List<ProgramCohort__c> programCohorts = new List<ProgramCohort__c>();
-        List<ProgramEngagement__c> programEngagements = new List<ProgramEngagement__c>();
+        Id programId = TestUtil.mockId(Program__c.SObjectType);
+        Program__c programToReturn = new Program__c(Id = programId);
+        List<ProgramCohort__c> programCohortsToReturn = new List<ProgramCohort__c>();
+        List<ProgramEngagement__c> programEngagementsToReturn = new List<ProgramEngagement__c>();
 
-        SelectParticipantService.SelectParticipantModel expected = new SelectParticipantService.SelectParticipantModel();
-        expected.programEngagements = programEngagements;
-        expected.programCohorts = programCohorts;
+        programEngagementSelectorStub.withReturnValue(
+            programMethodName,
+            Id.class,
+            programToReturn
+        );
 
         programEngagementSelectorStub.withReturnValue(
             programEngagementsMethodName,
             Id.class,
-            expected.programEngagements
+            programEngagementsToReturn
         );
 
         programEngagementSelectorStub.withReturnValue(
             cohortsMethodName,
             Id.class,
-            expected.programCohorts
+            programCohortsToReturn
         );
 
         Test.startTest();
@@ -44,21 +49,78 @@ public with sharing class SelectParticipantService_TEST {
         );
 
         System.assertEquals(
-            String.valueOf(expected),
-            String.valueOf(actual),
-            'The model returned was not as expected'
+            programToReturn,
+            actual.program,
+            'Expected the model to return the program returned by the selector.'
+        );
+
+        System.assertEquals(
+            programEngagementsToReturn,
+            actual.programEngagements,
+            'Expected the model to return the program engagements returned by the selector.'
+        );
+
+        System.assertEquals(
+            programCohortsToReturn,
+            actual.programCohorts,
+            'Expected the model to return the program cohorts returned by the selector.'
+        );
+
+        System.assert(
+            actual.objectLabels.containsKey('program'),
+            'Expected the program object labels to be returned.'
+        );
+        System.assert(
+            actual.objectLabels.containsKey('programCohort'),
+            'Expected the program cohort object labels to be returned.'
+        );
+        System.assert(
+            actual.objectLabels.containsKey('serviceParticipant'),
+            'Expected the service participant object labels to be returned.'
+        );
+
+        programEngagementSelectorStub.assertCalledWith(
+            programMethodName,
+            Id.class,
+            serviceId
         );
 
         programEngagementSelectorStub.assertCalledWith(
             programEngagementsMethodName,
             Id.class,
-            serviceId
+            programId
         );
 
         programEngagementSelectorStub.assertCalledWith(
             cohortsMethodName,
             Id.class,
-            serviceId
+            programId
+        );
+    }
+
+    @IsTest
+    private static void shouldReturnNullProgramWhenProgramNotFound() {
+        Test.startTest();
+        SelectParticipantService service = new SelectParticipantService();
+        SelectParticipantService.SelectParticipantModel actualModel = service.getSelectParticipantModel(
+            TestUtil.mockId(Service__c.SObjectType)
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            null,
+            actualModel.program,
+            'Expected a program not to be found'
+        );
+        System.assertEquals(
+            0,
+            actualModel.programEngagements.size(),
+            'Expected an empty list of program engagements when no program found.'
+        );
+        System.assertEquals(
+            0,
+            actualModel.programCohorts.size(),
+            'Expected an empty list of program cohorts when no program found.'
         );
     }
 }

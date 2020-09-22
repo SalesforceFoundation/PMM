@@ -127,7 +127,7 @@ public with sharing class RecurrenceRule {
 
     public Set<Integer> getByMonthDays() {
         //This is to accomodate the Skip backward logic
-        //TODO: allow customer's to opt out
+        //TODO: allow customers to opt out
 
         return byMonthDays;
     }

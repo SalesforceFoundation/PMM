@@ -15,9 +15,7 @@ public with sharing class MonthlyIterator implements RecurrenceIteratorInterface
 
         do {
             if (rRule.getBySetPos() != null && rRule.getByMonthDays() != null) {
-                //This below variable will be used in the calculations when bymonthdays is set
-                //When byMonthDays option is set in rRule.
-
+                //The startDay variable will hold the max value that is returned by rRule.getByMonthDays.
                 startDay = getMaxByMonthDays(rRule.getByMonthDays());
                 result.add(DateTime.newInstance(runningDate, dateTimeStart.time()));
 
@@ -33,7 +31,7 @@ public with sharing class MonthlyIterator implements RecurrenceIteratorInterface
                 runningDate = runningDate.addMonths(rRule.getInterval())
                     .addDays(startDay - runningDate.day());
             } else {
-                //The below value is defaulted to the day of the start date and is used to add days below.
+                //The below value is defaulted to the day of the start date and is used to add days to runningDate below.
 
                 startDay = dateTimeStart.date().day();
 
@@ -59,17 +57,11 @@ public with sharing class MonthlyIterator implements RecurrenceIteratorInterface
     }
 
     public Integer getMaxByMonthDays(Set<Integer> byMonthDays) {
-        List<Integer> days = new List<Integer>();
         Integer maxValue = 0;
-        Integer count = 0;
 
-        //adding the values of the set so we can get the max value from the list
-        days.addAll(byMonthDays);
-
-        for (Integer i = 0; i < days.size(); i++) {
-            maxValue = Math.max(maxValue, days[i]);
+        for (Integer day : byMonthDays) {
+            maxValue = Math.max(maxValue, day);
         }
-
         return maxValue;
     }
 }

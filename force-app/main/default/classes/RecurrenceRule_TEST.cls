@@ -86,13 +86,13 @@ public with sharing class RecurrenceRule_TEST {
 
     @IsTest
     private static void shouldSetAndGetBySetPos() {
-        Integer bySetPos = -1;
+        Integer defaultBySetPos = -1;
 
         Test.startTest();
         RecurrenceRule rule = new RecurrenceRule();
         Test.stopTest();
 
-        System.assertEquals(bySetPos, rule.getbySetPos());
+        System.assertEquals(defaultBySetPos, rule.getbySetPos());
     }
 
     @IsTest

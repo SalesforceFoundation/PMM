@@ -33,7 +33,7 @@ public with sharing class MonthlyIterator_TEST {
     }
 
     @IsTest
-    private static void shouldIterateEvery31stOfTheMonthUntilGivenEndDateOverLeapYear() {
+    private static void shouldIterateEveryLastDayOfTheMonthUntilGivenEndDateOverLeapYear() {
         DateTime dateTimeStart = DateTime.newInstance(2020, 1, 31, 13, 0, 0);
         RecurrenceRule rRule = new RecurrenceRule()
             .withRuleString(
@@ -337,7 +337,7 @@ public with sharing class MonthlyIterator_TEST {
     }
 
     @IsTest
-    private static void shouldIterateEveryMonthForAYearUntilGivenEndDate() {
+    private static void shouldIterateEveryMonthForOverAYearYearUntilGivenEndDate() {
         DateTime dateTimeStart = DateTime.newInstance(2020, 1, 31, 13, 0, 0);
         RecurrenceRule rRule = new RecurrenceRule()
             .withRuleString('FREQ=MONTHLY;UNTIL=20210630T000000Z;INTERVAL=1;');

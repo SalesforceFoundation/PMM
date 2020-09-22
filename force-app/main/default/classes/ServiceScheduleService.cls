@@ -29,12 +29,8 @@ public with sharing class ServiceScheduleService {
     public List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 
-        Id primaryServiceProvider = schedule.PrimaryServiceProvider__c != null
-            ? schedule.PrimaryServiceProvider__c
-            : null;
-        Id otherServiceProvider = schedule.OtherServiceProvider__c != null
-            ? schedule.OtherServiceProvider__c
-            : null;
+        Id primaryServiceProvider = schedule.PrimaryServiceProvider__c;
+        Id otherServiceProvider = schedule.OtherServiceProvider__c;
 
         for (DateTime startDateTime : getDateTimes(schedule)) {
             DateTime endDateTime = schedule.FirstSessionEnd__c != null

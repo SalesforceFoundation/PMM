@@ -183,7 +183,11 @@ public with sharing class ServiceScheduleService_TEST {
         List<ServiceSession__c> actual = service.getSessions(schedule);
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'Sessions not returned from the service as expected.'
+        );
 
         recurrenceServiceStub.assertCalledWith(
             createMethod,
@@ -261,9 +265,11 @@ public with sharing class ServiceScheduleService_TEST {
         List<ServiceSession__c> actual = service.getSessions(schedule);
         Test.stopTest();
 
-        System.debug(JSON.serialize(actual));
-        System.debug(JSON.serialize(expected));
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'Sessions not returned from the service as expected.'
+        );
 
         recurrenceServiceStub.assertCalledWith(
             createMethod,

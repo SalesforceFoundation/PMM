@@ -40,7 +40,7 @@ export default class ParticipantSelector extends LightningElement {
         none: NONE_LABEL,
         noRecordsFound: NO_RECORDS_FOUND_LABEL,
         noRecordsSelected: NO_RECORDS_SELECTED_LABEL,
-        filterbyRecord: FILTER_BY_LABEL,
+        filterByCohort: FILTER_BY_LABEL,
     };
 
     get noRecordsSelected() {
@@ -134,6 +134,9 @@ export default class ParticipantSelector extends LightningElement {
     loadLabels() {
         this.addToServiceButtonLabel = format(this.labels.addToService, [
             this.objectLabels.serviceParticipant.objectLabel,
+        ]);
+        this.labels.filterByCohort = format(this.labels.filterByCohort, [
+            this.objectLabels.programCohort.objectLabel,
         ]);
     }
 

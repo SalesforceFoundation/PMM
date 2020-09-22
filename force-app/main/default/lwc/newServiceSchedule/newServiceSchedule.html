@@ -52,12 +52,14 @@
                         <lightning-input-field
                             field-name={dateFields.start.apiName}
                             value={dateFields.start.value}
+                            onchange={handleStartChange}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.small}>
                         <lightning-input-field
                             field-name={dateFields.end.apiName}
                             value={dateFields.end.value}
+                            onchange={handleEndChange}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>

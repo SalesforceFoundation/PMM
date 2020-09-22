@@ -162,6 +162,9 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     handleBack() {
+        if (this.isStep2) {
+            this.serviceScheduleModel.serviceSessions = this.originalModel.data.serviceSessions;
+        }
         this._steps.back();
         this._currentStep = this._steps.currentStep;
     }

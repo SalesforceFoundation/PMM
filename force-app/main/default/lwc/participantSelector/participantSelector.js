@@ -9,7 +9,7 @@ import NO_RECORDS_FOUND_LABEL from "@salesforce/label/c.No_Records_Found";
 import NO_RECORDS_SELECTED_LABEL from "@salesforce/label/c.No_Records_Selected";
 import FILTER_BY_LABEL from "@salesforce/label/c.Filter_By_Record";
 
-import getSelectParticipantModel from "@salesforce/apex/SelectParticipantController.getSelectParticipantModel";
+import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
 
 export default class ParticipantSelector extends LightningElement {
     @track availableEngagements;

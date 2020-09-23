@@ -8,7 +8,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withFrequency(freq);
         Test.stopTest();
 
-        System.assertEquals(freq, rule.getFrequency());
+        System.assertEquals(
+            freq,
+            rule.getFrequency(),
+            'The actual frequency returned is not the same as expected frequency.'
+        );
     }
 
     @IsTest
@@ -19,7 +23,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withFrequency(freq);
         Test.stopTest();
 
-        System.assertEquals(RecurrenceRule.Frequency.DAILY, rule.getFrequency());
+        System.assertEquals(
+            RecurrenceRule.Frequency.DAILY,
+            rule.getFrequency(),
+            'The actual frequency returned is not the same as expected frequency.'
+        );
     }
 
     @IsTest
@@ -30,7 +38,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withInterval(interval);
         Test.stopTest();
 
-        System.assertEquals(interval, rule.getInterval());
+        System.assertEquals(
+            interval,
+            rule.getInterval(),
+            'The actual interval returned is not the same as expected interval.'
+        );
     }
 
     @IsTest
@@ -41,7 +53,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withEndDate(endDate);
         Test.stopTest();
 
-        System.assertEquals(endDate, rule.getEndDate());
+        System.assertEquals(
+            endDate,
+            rule.getEndDate(),
+            'The actual End Date returned is not the same as expected End Date.'
+        );
     }
 
     @IsTest
@@ -52,7 +68,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withCount(count);
         Test.stopTest();
 
-        System.assertEquals(count, rule.getCount());
+        System.assertEquals(
+            count,
+            rule.getCount(),
+            'The actual count returned is not the same as expected count.'
+        );
     }
 
     @IsTest
@@ -66,7 +86,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withDays(days);
         Test.stopTest();
 
-        System.assertEquals(days, rule.getDays());
+        System.assertEquals(
+            days,
+            rule.getDays(),
+            'The actual days returned is not the same as expected days.'
+        );
     }
 
     @IsTest
@@ -81,18 +105,26 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withDays(dayNums);
         Test.stopTest();
 
-        System.assertEquals(days, rule.getDays());
+        System.assertEquals(
+            days,
+            rule.getDays(),
+            'The actual days returned is not the same as expected days.'
+        );
     }
 
     @IsTest
-    private static void shouldSetAndGetBySetPos() {
+    private static void shouldDefaultAndGetBySetPos() {
         Integer defaultBySetPos = -1;
 
         Test.startTest();
         RecurrenceRule rule = new RecurrenceRule();
         Test.stopTest();
 
-        System.assertEquals(defaultBySetPos, rule.getbySetPos());
+        System.assertEquals(
+            defaultBySetPos,
+            rule.getbySetPos(),
+            'The actual value is not the same as the defaulted value.'
+        );
     }
 
     @IsTest
@@ -103,7 +135,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
         Test.stopTest();
 
-        System.assertEquals(monthDays, rule.getByMonthDays());
+        System.assertEquals(
+            monthDays,
+            rule.getByMonthDays(),
+            'The actual byMonthDays returned is not the same as expected byMonthDays.'
+        );
     }
 
     @IsTest
@@ -114,7 +150,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
         Test.stopTest();
 
-        System.assertEquals(monthDays, rule.getByMonthDays());
+        System.assertEquals(
+            monthDays,
+            rule.getByMonthDays(),
+            'The actual byMonthDays returned is not the same as expected byMonthDays.'
+        );
     }
 
     @IsTest
@@ -125,7 +165,11 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
         Test.stopTest();
 
-        System.assertEquals(monthDays, rule.getByMonthDays());
+        System.assertEquals(
+            monthDays,
+            rule.getByMonthDays(),
+            'The actual byMonthDays returned is not the same as expected byMonthDays.'
+        );
     }
 
     @IsTest
@@ -142,8 +186,12 @@ public with sharing class RecurrenceRule_TEST {
         }
         Test.stopTest();
 
-        System.assertEquals(null, rule.getFrequency());
-        System.assertNotEquals(null, actualException);
+        System.assertEquals(
+            null,
+            rule.getFrequency(),
+            'The frequency returned is not null.'
+        );
+        System.assertNotEquals(null, actualException, 'The actualExcpetion is null.');
     }
 
     @IsTest
@@ -177,21 +225,29 @@ public with sharing class RecurrenceRule_TEST {
             .withCount(3)
             .withDays(new List<Integer>{ 1, 2 });
 
-        System.assertNotEquals(null, rule.getFrequency());
-        System.assertNotEquals(1, rule.getInterval());
-        System.assertNotEquals(null, rule.getEndDate());
-        System.assertNotEquals(null, rule.getCount());
-        System.assertNotEquals(null, rule.getDays());
+        System.assertNotEquals(null, rule.getFrequency(), 'Frequency returned is null');
+        System.assertNotEquals(
+            1,
+            rule.getInterval(),
+            'Interval returned is not the same as expected interval'
+        );
+        System.assertNotEquals(null, rule.getEndDate(), 'EndDate returned is null');
+        System.assertNotEquals(null, rule.getCount(), 'Count returned is null');
+        System.assertNotEquals(null, rule.getDays(), 'Days returned is null');
 
         Test.startTest();
         rule = rule.reset();
         Test.stopTest();
 
-        System.assertEquals(null, rule.getFrequency());
-        System.assertEquals(1, rule.getInterval());
-        System.assertEquals(null, rule.getEndDate());
-        System.assertEquals(null, rule.getCount());
-        System.assertEquals(null, rule.getDays());
+        System.assertEquals(null, rule.getFrequency(), 'Frequency returned is not null');
+        System.assertEquals(
+            1,
+            rule.getInterval(),
+            'Interval returned is not the same as expected interval'
+        );
+        System.assertEquals(null, rule.getEndDate(), 'EndDate returned is not null');
+        System.assertEquals(null, rule.getCount(), 'Count returned is not null');
+        System.assertEquals(null, rule.getDays(), 'Days returned is not null');
     }
 
     @IsTest
@@ -202,11 +258,31 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withRuleString(rrString);
         Test.stopTest();
 
-        System.assertEquals(rrString, rule.rRule);
-        System.assertEquals(rule.getFrequency(), RecurrenceRule.Frequency.DAILY);
-        System.assertEquals(rule.getInterval(), 3);
-        System.assertEquals(rule.getEndDate(), Date.newInstance(2020, 3, 1));
-        System.assertEquals(rule.getCount(), 50);
+        System.assertEquals(
+            rrString,
+            rule.rRule,
+            'Actual rRule returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getFrequency(),
+            RecurrenceRule.Frequency.DAILY,
+            'Actual frequency returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getInterval(),
+            3,
+            'Actual interval returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getEndDate(),
+            Date.newInstance(2020, 3, 1),
+            'Actual EndDate returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getCount(),
+            50,
+            'Actual count returned is not the same as expected'
+        );
         System.assertEquals(
             rule.getDays(),
             new List<RecurrenceRule.Day>{
@@ -217,7 +293,8 @@ public with sharing class RecurrenceRule_TEST {
                 RecurrenceRule.Day.TH,
                 RecurrenceRule.Day.FR,
                 RecurrenceRule.Day.SA
-            }
+            },
+            'Actual days returned is not the same as expected'
         );
     }
 
@@ -235,8 +312,8 @@ public with sharing class RecurrenceRule_TEST {
         }
         Test.stopTest();
 
-        System.assertEquals(null, rule.rRule);
-        System.assertNotEquals(null, actualException);
+        System.assertEquals(null, rule.rRule, 'Actual rRule returned is not null');
+        System.assertNotEquals(null, actualException, 'Actual Exception is null');
     }
 
     @IsTest
@@ -253,7 +330,11 @@ public with sharing class RecurrenceRule_TEST {
         String actual = rule.build();
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'Actual rRule string is not the same as expected'
+        );
     }
 
     @IsTest
@@ -269,7 +350,11 @@ public with sharing class RecurrenceRule_TEST {
         String actual = rule.build();
         Test.stopTest();
 
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'Actual rRule string is not the same as expected'
+        );
     }
 
     @IsTest
@@ -280,9 +365,25 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule().withRuleString(rrString);
         Test.stopTest();
 
-        System.assertEquals(rrString, rule.rRule);
-        System.assertEquals(rule.getFrequency(), RecurrenceRule.Frequency.MONTHLY);
-        System.assertEquals(rule.getEndDate(), Date.newInstance(2020, 7, 31));
-        System.assertEquals(rule.getbySetPos(), -1);
+        System.assertEquals(
+            rrString,
+            rule.rRule,
+            'Actual rRule string is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getFrequency(),
+            RecurrenceRule.Frequency.MONTHLY,
+            'Actual Frequency string is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getEndDate(),
+            Date.newInstance(2020, 7, 31),
+            'Actual EndDate string is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getbySetPos(),
+            -1,
+            'Actual bySetPos string is not the same as expected'
+        );
     }
 }

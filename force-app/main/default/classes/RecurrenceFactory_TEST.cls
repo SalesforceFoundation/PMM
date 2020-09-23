@@ -33,6 +33,21 @@ public with sharing class RecurrenceFactory_TEST {
     }
 
     @IsTest
+    private static void shouldMakeMonthlyIterator() {
+        String testRule = 'abc';
+        String getFrequencyMethod = 'getFrequency';
+        RecurrenceRule.Frequency expectedFrequency = RecurrenceRule.Frequency.MONTHLY;
+
+        ruleStub.withReturnValue(getFrequencyMethod, expectedFrequency);
+        RecurrenceFactory factory = new RecurrenceFactory();
+        factory.recurrenceRule = (RecurrenceRule) ruleStub.createMock();
+        Test.startTest();
+        RecurrenceIteratorInterface result = factory.makeIterator(testRule);
+        Test.stopTest();
+        System.assert(result instanceof MonthlyIterator);
+    }
+
+    @IsTest
     private static void shouldReturnNullWithNullFrequency() {
         String testRule = 'abc';
         String getFrequencyMethod = 'getFrequency';

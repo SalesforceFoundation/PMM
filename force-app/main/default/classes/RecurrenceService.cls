@@ -13,7 +13,8 @@ public with sharing class RecurrenceService {
         Integer interval,
         Date endDate,
         Integer count,
-        List<Integer> days
+        List<Integer> days,
+        DateTime dateTimeStart
     ) {
         return recurrenceRule.reset()
             .withFrequency(frequency)
@@ -21,6 +22,7 @@ public with sharing class RecurrenceService {
             .withEndDate(endDate)
             .withCount(count)
             .withDays(days)
+            .withByMonthDays(dateTimeStart)
             .build();
     }
 }

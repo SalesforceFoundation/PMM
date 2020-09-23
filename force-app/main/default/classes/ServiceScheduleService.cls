@@ -45,8 +45,7 @@ public with sharing class ServiceScheduleService {
                     SessionStart__c = startDateTime,
                     SessionEnd__c = endDateTime,
                     PrimaryServiceProvider__c = primaryServiceProvider,
-                    OtherServiceProvider__c = otherServiceProvider,
-                    Status__c = 'Pending' //should we just let it inherit the default and remove this line? and ship with Pending as default?
+                    OtherServiceProvider__c = otherServiceProvider
                 )
             );
         }

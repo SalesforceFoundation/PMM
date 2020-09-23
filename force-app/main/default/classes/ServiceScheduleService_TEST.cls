@@ -255,8 +255,7 @@ public with sharing class ServiceScheduleService_TEST {
                     SessionStart__c = sessionDateTime,
                     SessionEnd__c = null,
                     PrimaryServiceProvider__c = null,
-                    OtherServiceProvider__c = null,
-                    Status__c = 'Pending'
+                    OtherServiceProvider__c = null
                 )
             );
         }

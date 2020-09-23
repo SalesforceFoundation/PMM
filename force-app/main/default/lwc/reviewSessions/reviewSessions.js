@@ -5,6 +5,7 @@ import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Record";
 import START_TIME_LABEL from "@salesforce/label/c.Start_Time";
 import END_TIME_LABEL from "@salesforce/label/c.End_Time";
 import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
+import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
     @track columns = [];
@@ -90,6 +91,8 @@ export default class ReviewSessions extends LightningElement {
                     hour: "numeric",
                     minute: "numeric",
                     weekday: "long",
+                    timeZoneName: "short",
+                    timeZone: TIME_ZONE,
                 },
             },
             {
@@ -104,6 +107,8 @@ export default class ReviewSessions extends LightningElement {
                     hour: "numeric",
                     minute: "numeric",
                     weekday: "long",
+                    timeZoneName: "short",
+                    timeZone: TIME_ZONE,
                 },
             },
             {
@@ -141,7 +146,8 @@ export default class ReviewSessions extends LightningElement {
             Object.values(this._serviceScheduleModel.sessionFields).reduce(
                 (matchesSoFar, field) =>
                     matchesSoFar &&
-                    session[field.apiName] !== event.detail.row[field.apiName],
+                    ((!session[field.apiName] && !event.detail.row[field.apiName]) ||
+                        session[field.apiName] !== event.detail.row[field.apiName]),
                 true
             )
         );

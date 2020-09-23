@@ -151,4 +151,8 @@ export default class NewServiceSchedule extends LightningElement {
             startTime.getHours() +
             (endTime.getMinutes() - startTime.getMinutes()) / 60;
     }
+
+    get disableSessionEnd() {
+        return !this.dateFields.start.value;
+    }
 }

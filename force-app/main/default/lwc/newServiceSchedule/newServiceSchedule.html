@@ -60,8 +60,9 @@
                             field-name={dateFields.end.apiName}
                             value={dateFields.end.value}
                             onchange={handleEndChange}
-                        ></lightning-input-field
-                    ></lightning-layout-item>
+                            disabled={disableSessionEnd}
+                        ></lightning-input-field>
+                    </lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
                         <c-picklist
                             picklist={picklistFields.frequency}

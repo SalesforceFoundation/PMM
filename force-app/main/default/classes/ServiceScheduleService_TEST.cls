@@ -125,7 +125,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Integer.class,
                 Date.class,
                 Integer.class,
-                List<Integer>.class
+                List<Integer>.class,
+                DateTime.class
             },
             rRuleString
         );
@@ -166,14 +167,16 @@ public with sharing class ServiceScheduleService_TEST {
                 Integer.class,
                 Date.class,
                 Integer.class,
-                List<Integer>.class
+                List<Integer>.class,
+                DateTime.class
             },
             new List<Object>{
                 schedule.Frequency__c,
                 Integer.valueOf(schedule.Interval__c),
                 schedule.ServiceScheduleEndDate__c,
                 Integer.valueOf(schedule.NumberOfServiceSessions__c),
-                new List<Integer>{ 1, 2, 3, 4, 5, 6, 7 }
+                new List<Integer>{ 1, 2, 3, 4, 5, 6, 7 },
+                firstSessionStart
             }
         );
         recurrenceServiceStub.assertCalledWith(
@@ -206,7 +209,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Integer.class,
                 Date.class,
                 Integer.class,
-                List<Integer>.class
+                List<Integer>.class,
+                DateTime.class
             },
             rRuleString
         );
@@ -247,14 +251,16 @@ public with sharing class ServiceScheduleService_TEST {
                 Integer.class,
                 Date.class,
                 Integer.class,
-                List<Integer>.class
+                List<Integer>.class,
+                DateTime.class
             },
             new List<Object>{
                 schedule.Frequency__c,
                 null,
                 null,
                 Integer.valueOf(schedule.NumberOfServiceSessions__c),
-                null
+                null,
+                firstSessionStart
             }
         );
         recurrenceServiceStub.assertCalledWith(

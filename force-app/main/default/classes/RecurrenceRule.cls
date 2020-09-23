@@ -81,19 +81,27 @@ public with sharing class RecurrenceRule {
     }
 
     public RecurrenceRule withByMonthDays(DateTime dateTimeStart) {
-        byMonthDays = new Set<Integer>();
+        if (freq != Frequency.MONTHLY) {
+            return this;
+        }
+
+        Set<Integer> daysToAdd = new Set<Integer>();
 
         switch on dateTimeStart.day() {
             when 29 {
-                byMonthDays.addAll(new Set<Integer>{ 28, 29 });
+                daysToAdd.addAll(new Set<Integer>{ 28, 29 });
             }
             when 30 {
-                byMonthDays.addAll(new Set<Integer>{ 28, 29, 30 });
+                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30 });
             }
             when 31 {
-                byMonthDays.addAll(new Set<Integer>{ 28, 29, 30, 31 });
+                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30, 31 });
             }
         }
+        if (daysToAdd.size() != 0) {
+            byMonthDays = daysToAdd;
+        }
+
         return this;
     }
 

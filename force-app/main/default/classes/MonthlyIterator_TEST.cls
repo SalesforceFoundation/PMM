@@ -413,4 +413,84 @@ public with sharing class MonthlyIterator_TEST {
             'List of Dates returned from the iterator was not as expected'
         );
     }
+
+    @IsTest
+    private static void shouldIterateEvery5thOfTheMonthUntilGivenEndDate() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 6, 5, 13, 0, 0);
+        RecurrenceRule rRule = new RecurrenceRule()
+            .withRuleString('FREQ=MONTHLY;UNTIL=20201030T000000Z;');
+        List<DateTime> expected = new List<DateTime>{
+            DateTime.newInstance(2020, 6, 5, 13, 0, 0),
+            DateTime.newInstance(2020, 7, 5, 13, 0, 0),
+            DateTime.newInstance(2020, 8, 5, 13, 0, 0),
+            DateTime.newInstance(2020, 9, 5, 13, 0, 0),
+            DateTime.newInstance(2020, 10, 5, 13, 0, 0)
+        };
+
+        MonthlyIterator iterator = new MonthlyIterator(rRule);
+
+        Test.startTest();
+        List<DateTime> actual = iterator.iterate(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected'
+        );
+    }
+
+    @IsTest
+    private static void shouldIterateEvery25thOfTheMonthUntilGivenEndDate() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 6, 25, 13, 0, 0);
+        RecurrenceRule rRule = new RecurrenceRule()
+            .withRuleString('FREQ=MONTHLY;UNTIL=20201030T000000Z;');
+        List<DateTime> expected = new List<DateTime>{
+            DateTime.newInstance(2020, 6, 25, 13, 0, 0),
+            DateTime.newInstance(2020, 7, 25, 13, 0, 0),
+            DateTime.newInstance(2020, 8, 25, 13, 0, 0),
+            DateTime.newInstance(2020, 9, 25, 13, 0, 0),
+            DateTime.newInstance(2020, 10, 25, 13, 0, 0)
+        };
+
+        MonthlyIterator iterator = new MonthlyIterator(rRule);
+
+        Test.startTest();
+        List<DateTime> actual = iterator.iterate(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected'
+        );
+    }
+
+    @IsTest
+    private static void shouldIterateEveryOtherMonthOverAGivenYearUntilGivenEndDate() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 31, 13, 0, 0);
+        RecurrenceRule rRule = new RecurrenceRule()
+            .withRuleString(
+                'FREQ=MONTHLY;UNTIL=20210930T000000Z;INTERVAL=2;BYSETPOS=-1;BYMONTHDAY=28,29,30,31'
+            );
+        List<DateTime> expected = new List<DateTime>{
+            DateTime.newInstance(2020, 12, 31, 13, 0, 0),
+            DateTime.newInstance(2021, 2, 28, 13, 0, 0),
+            DateTime.newInstance(2021, 4, 30, 13, 0, 0),
+            DateTime.newInstance(2021, 6, 30, 13, 0, 0),
+            DateTime.newInstance(2021, 8, 31, 13, 0, 0)
+        };
+
+        MonthlyIterator iterator = new MonthlyIterator(rRule);
+
+        Test.startTest();
+        List<DateTime> actual = iterator.iterate(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected'
+        );
+    }
 }

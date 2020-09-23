@@ -28,8 +28,14 @@ public with sharing class MonthlyIterator implements RecurrenceIteratorInterface
                 //In the next iteration it adds 31 - 29 which is 2 days and the new date will be 03/31/2020 and in the next iteration
                 //it adds 0 days and the end date is 04/30/2020 etc...
 
-                runningDate = runningDate.addMonths(rRule.getInterval())
-                    .addDays(startDay - runningDate.day());
+                if (dateTimeStart.day() == 31) {
+                    runningDate = runningDate.addDays(1)
+                        .addMonths(rRule.getInterval())
+                        .addDays(-1);
+                } else {
+                    runningDate = runningDate.addMonths(rRule.getInterval())
+                        .addDays(startDay - runningDate.day());
+                }
             } else {
                 //The below value is defaulted to the day of the start date and is used to add days to runningDate below.
 

@@ -42,6 +42,30 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
+    private static void shouldGetSessions() {
+        String methodName = 'getSessions';
+        ServiceSchedule__c schedule = new ServiceSchedule__c();
+        List<ServiceSession__c> expected = new List<ServiceSession__c>();
+
+        serviceStub.withReturnValue(methodName, ServiceSchedule__c.class, expected);
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        List<ServiceSession__c> actual = ServiceScheduleCreatorController.getSessions(
+            schedule
+        );
+        Test.stopTest();
+
+        serviceStub.assertCalledWith(methodName, ServiceSchedule__c.class, schedule);
+        System.assertEquals(
+            expected,
+            actual,
+            'Sessions not passed back from Service as expected.'
+        );
+    }
+
+    @IsTest
     private static void rethrowsErrorFromGetModelOnService() {
         String methodName = 'getServiceScheduleModel';
         Exception actualException;
@@ -55,6 +79,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         } catch (Exception ex) {
             actualException = ex;
         }
+        Test.stopTest();
 
         System.assert(
             actualException instanceof AuraHandledException,
@@ -81,6 +106,36 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         } catch (Exception ex) {
             actualException = ex;
         }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AuraHandledException,
+            actualException.getTypeName() + ': Expected an aura handled exception.'
+        );
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the stub test exception message to have been thrown.'
+        );
+    }
+
+    @IsTest
+    private static void rethrowsErrorFromGetSessionsOnService() {
+        String methodName = 'getSessions';
+        ServiceSchedule__c schedule = new ServiceSchedule__c();
+        Exception actualException;
+
+        serviceStub.withThrowException(methodName, ServiceSchedule__c.class);
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        try {
+            ServiceScheduleCreatorController.getSessions(schedule);
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
 
         System.assert(
             actualException instanceof AuraHandledException,

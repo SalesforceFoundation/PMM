@@ -49,7 +49,9 @@ public with sharing class RecurrenceRule {
     }
 
     public RecurrenceRule withInterval(Integer interval) {
-        this.interval = interval;
+        if (interval != null) {
+            this.interval = interval;
+        }
         return this;
     }
 
@@ -114,7 +116,7 @@ public with sharing class RecurrenceRule {
         ruleParts.add('FREQ=' + freq);
 
         // INTERVAL
-        if (interval != 1) {
+        if (interval > 1) {
             ruleParts.add('INTERVAL=' + interval);
         }
 
@@ -210,6 +212,10 @@ public with sharing class RecurrenceRule {
     private void populateDays(List<Integer> dayNums) {
         List<Day> daysToAssign = new List<Day>();
         List<Day> dayValues = Day.values();
+
+        if (dayNums == null) {
+            return;
+        }
 
         for (Integer dayNum : dayNums) {
             if (dayNum <= dayValues.size()) {

@@ -13,7 +13,9 @@
             ></c-new-service-schedule>
         </template>
         <template if:true={isStep2}>
-            <c-review-sessions></c-review-sessions>
+            <c-review-sessions
+                service-schedule-model={serviceScheduleModel}
+            ></c-review-sessions>
         </template>
         <template if:true={isStep3}>
             <c-participant-selector

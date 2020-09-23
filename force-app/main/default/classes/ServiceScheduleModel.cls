@@ -16,6 +16,19 @@ public with sharing class ServiceScheduleModel {
     public List<Map<String, Object>> scheduleInformationFields = new List<Map<String, Object>>();
 
     @AuraEnabled
+    public Map<String, Map<String, Object>> sessionFields = new Map<String, Map<String, Object>>{
+        'name' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSession__c.Name.getDescribe()
+        ),
+        'sessionStart' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSession__c.SessionStart__c.getDescribe()
+        ),
+        'sessionEnd' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSession__c.SessionEnd__c.getDescribe()
+        )
+    };
+
+    @AuraEnabled
     public Map<String, Map<String, Object>> scheduleRequiredFields = new Map<String, Map<String, Object>>{
         'name' => fieldSetService.getFieldForLWC(
             Schema.ServiceSchedule__c.Name.getDescribe()
@@ -24,6 +37,7 @@ public with sharing class ServiceScheduleModel {
             Schema.ServiceSchedule__c.Service__c.getDescribe()
         )
     };
+
     @AuraEnabled
     public Map<String, Map<String, Object>> scheduleRecurrenceDateFields = new Map<String, Map<String, Object>>{
         'start' => fieldSetService.getFieldForLWC(
@@ -39,6 +53,7 @@ public with sharing class ServiceScheduleModel {
             Schema.ServiceSchedule__c.NumberOfServiceSessions__c.getDescribe()
         )
     };
+
     @AuraEnabled
     public Map<String, Map<String, Object>> scheduleRecurrencePicklistFields = new Map<String, Map<String, Object>>{
         'frequency' => fieldSetService.getPicklistFieldForLWC(

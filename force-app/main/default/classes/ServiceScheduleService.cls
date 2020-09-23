@@ -3,6 +3,8 @@ public with sharing class ServiceScheduleService {
     private ServiceScheduleDomain domain = new ServiceScheduleDomain();
     @TestVisible
     private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
+    @TestVisible
+    RecurrenceService recurrenceService = new RecurrenceService();
 
     public ServiceScheduleModel getServiceScheduleModel() {
         return new ServiceScheduleModel();
@@ -23,6 +25,57 @@ public with sharing class ServiceScheduleService {
         SelectParticipantModel model = new SelectParticipantModel();
         populateRecords(serviceId, model);
         return model;
+    }
+
+    public List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
+        List<ServiceSession__c> sessions = new List<ServiceSession__c>();
+
+        Id primaryServiceProvider = schedule.PrimaryServiceProvider__c;
+        Id otherServiceProvider = schedule.OtherServiceProvider__c;
+
+        for (DateTime startDateTime : getDateTimes(schedule)) {
+            DateTime endDateTime = schedule.FirstSessionEnd__c != null
+                ? DateTime.newInstance(
+                      startDateTime.date(),
+                      schedule.FirstSessionEnd__c.time()
+                  )
+                : null;
+            sessions.add(
+                new ServiceSession__c(
+                    Name = schedule.Name + ': ' + startDateTime.date().format(),
+                    SessionStart__c = startDateTime,
+                    SessionEnd__c = endDateTime,
+                    PrimaryServiceProvider__c = primaryServiceProvider,
+                    OtherServiceProvider__c = otherServiceProvider
+                )
+            );
+        }
+        return sessions;
+    }
+
+    private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
+        Integer interval = schedule.Interval__c != null
+            ? Integer.valueOf(schedule.Interval__c)
+            : null;
+        String rRule = recurrenceService.createRRule(
+            schedule.Frequency__c,
+            interval,
+            schedule.ServiceScheduleEndDate__c,
+            Integer.valueOf(schedule.NumberOfServiceSessions__c),
+            getDayNums(schedule.DaysOfWeek__c)
+        );
+        return recurrenceService.generate(schedule.FirstSessionStart__c, rRule);
+    }
+
+    private List<Integer> getDayNums(String daysOfWeek) {
+        if (daysOfWeek == null) {
+            return null;
+        }
+        List<Integer> result = new List<Integer>();
+        for (String day : daysOfWeek.split(';')) {
+            result.add(Integer.valueOf(day));
+        }
+        return result;
     }
 
     private void populateRecords(Id serviceId, SelectParticipantModel model) {

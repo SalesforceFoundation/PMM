@@ -138,7 +138,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         if (this.isStep1) {
             this.processNewServiceSchedule();
         } else if (this.isStep2) {
-            this.setNextStep();
+            this.processSessions();
         } else if (this.isStep3) {
             this.processServiceParticipants();
         } else if (this.isStep4) {
@@ -204,8 +204,21 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.setNextStep();
     }
 
+    processSessions() {
+        let reviewSessionsCmp = this.template.querySelector("c-review-sessions");
+
+        if (!reviewSessionsCmp) {
+            return;
+        }
+
+        this.serviceScheduleModel.serviceSessions = reviewSessionsCmp.serviceSessions;
+        this.setNextStep();
+    }
+
     handleBack() {
-        if (this.isStep3) {
+        if (this.isStep2) {
+            this.serviceScheduleModel.serviceSessions = this.originalModel.data.serviceSessions;
+        } else if (this.isStep3) {
             // Reset the selected service participants
             this.serviceScheduleModel.selectedParticipants = this.originalModel.selectedParticipants;
         }

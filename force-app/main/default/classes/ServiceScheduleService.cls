@@ -62,7 +62,8 @@ public with sharing class ServiceScheduleService {
             interval,
             schedule.ServiceScheduleEndDate__c,
             Integer.valueOf(schedule.NumberOfServiceSessions__c),
-            getDayNums(schedule.DaysOfWeek__c)
+            getDayNums(schedule.DaysOfWeek__c),
+            schedule.FirstSessionStart__c
         );
         return recurrenceService.generate(schedule.FirstSessionStart__c, rRule);
     }

@@ -20,6 +20,15 @@ public with sharing class ServiceScheduleCreatorController {
         }
     }
 
+    @AuraEnabled(cacheable=true)
+    public static SelectParticipantModel getSelectParticipantModel(Id serviceId) {
+        try {
+            return service.getSelectParticipantModel(serviceId);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
     @AuraEnabled
     public static List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
         try {

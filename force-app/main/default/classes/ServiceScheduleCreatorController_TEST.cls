@@ -147,4 +147,67 @@ public with sharing class ServiceScheduleCreatorController_TEST {
             'Expected the stub test exception message to have been thrown.'
         );
     }
+
+    @IsTest
+    private static void testGetSelectParticipantModel() {
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
+        SelectParticipantModel modelToReturn = new SelectParticipantModel();
+        String methodName = 'getSelectParticipantModel';
+
+        serviceStub.withReturnValue(methodName, Id.class, modelToReturn);
+
+        Test.startTest();
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        SelectParticipantModel actual = ServiceScheduleCreatorController.getSelectParticipantModel(
+            serviceId
+        );
+
+        Test.stopTest();
+
+        System.assertNotEquals(
+            null,
+            actual,
+            'Expected that actual participant model is not null'
+        );
+        System.assertEquals(
+            true,
+            modelToReturn === actual,
+            'Expected the model returned from the service is what is returned by the controller'
+        );
+
+        serviceStub.assertCalledWith(methodName, Id.class, serviceId);
+    }
+
+    @IsTest
+    private static void testGetSelectParticipantModelException() {
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
+        String methodName = 'getSelectParticipantModel';
+        SelectParticipantModel actual;
+        Exception actualException;
+
+        serviceStub.withThrowException(methodName, Id.class);
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        try {
+            actual = ServiceScheduleCreatorController.getSelectParticipantModel(
+                serviceId
+            );
+        } catch (Exception e) {
+            actualException = e;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to throw the exception from the service.'
+        );
+
+        System.assertEquals(null, actual, 'Expected that the actual value is null');
+
+        serviceStub.assertCalledWith(methodName, Id.class, serviceId);
+    }
 }

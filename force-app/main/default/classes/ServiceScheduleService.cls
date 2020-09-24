@@ -1,5 +1,9 @@
 public with sharing class ServiceScheduleService {
     @TestVisible
+    private ServiceScheduleDomain domain = new ServiceScheduleDomain();
+    @TestVisible
+    private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
+    @TestVisible
     RecurrenceService recurrenceService = new RecurrenceService();
 
     public ServiceScheduleModel getServiceScheduleModel() {
@@ -7,23 +11,20 @@ public with sharing class ServiceScheduleService {
     }
 
     public void persist(ServiceScheduleModel model) {
-        if (!hasPermissions(model)) {
-            throw new ServiceScheduleServiceException(
-                System.Label.Insert_Operation_Exception
-            );
-        }
-
         Savepoint savepoint = Database.setSavepoint();
 
         try {
-            insert model.serviceSchedule;
-            populateServiceScheduleId(model);
-            insert model.serviceSessions;
-            insert model.serviceParticipants;
+            domain.insertModel(model);
         } catch (Exception ex) {
             Database.rollback(savepoint);
             throw new ServiceScheduleServiceException(ex);
         }
+    }
+
+    public SelectParticipantModel getSelectParticipantModel(Id serviceId) {
+        SelectParticipantModel model = new SelectParticipantModel();
+        populateRecords(serviceId, model);
+        return model;
     }
 
     public List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
@@ -52,16 +53,6 @@ public with sharing class ServiceScheduleService {
         return sessions;
     }
 
-    private void populateServiceScheduleId(ServiceScheduleModel model) {
-        for (ServiceSession__c session : model.serviceSessions) {
-            session.ServiceSchedule__c = model.serviceSchedule.Id;
-        }
-        for (ServiceParticipant__c participant : model.serviceParticipants) {
-            participant.ServiceSchedule__c = model.serviceSchedule.Id;
-            participant.Service__c = model.serviceSchedule.Service__c;
-        }
-    }
-
     private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
         Integer interval = schedule.Interval__c != null
             ? Integer.valueOf(schedule.Interval__c)
@@ -71,7 +62,8 @@ public with sharing class ServiceScheduleService {
             interval,
             schedule.ServiceScheduleEndDate__c,
             Integer.valueOf(schedule.NumberOfServiceSessions__c),
-            getDayNums(schedule.DaysOfWeek__c)
+            getDayNums(schedule.DaysOfWeek__c),
+            schedule.FirstSessionStart__c
         );
         return recurrenceService.generate(schedule.FirstSessionStart__c, rRule);
     }
@@ -87,84 +79,18 @@ public with sharing class ServiceScheduleService {
         return result;
     }
 
-    private Boolean hasPermissions(ServiceScheduleModel model) {
-        return hasServiceSchedulePermissions(model) &&
-            hasServiceSessionsPermissions(model) &&
-            hasServiceParticipantsPermissions(model);
-    }
-
-    @TestVisible
-    private Boolean hasServiceSchedulePermissions(ServiceScheduleModel model) {
-        Boolean hasPermissions = PermissionValidator.getInstance()
-            .hasObjectAccess(
-                ServiceSchedule__c.SObjectType,
-                PermissionValidator.CRUDAccessType.CREATEABLE
-            );
-
-        Set<String> populatedFieldNames = model.serviceSchedule.getPopulatedFieldsAsMap()
-            .keySet();
-
-        return hasPermissions &&
-            PermissionValidator.getInstance()
-                .hasFLSAccessForFields(
-                    Schema.sObjectType.ServiceSchedule__c.getName(),
-                    new List<String>(populatedFieldNames),
-                    'insert'
-                );
-    }
-
-    @TestVisible
-    private Boolean hasServiceSessionsPermissions(ServiceScheduleModel model) {
-        if (model.serviceSessions.isEmpty()) {
-            return true;
+    private void populateRecords(Id serviceId, SelectParticipantModel model) {
+        model.program = programEngagementSelector.getProgramByServiceId(serviceId);
+        if (model.program == null) {
+            return;
         }
 
-        Boolean hasPermissions = PermissionValidator.getInstance()
-            .hasObjectAccess(
-                ServiceSession__c.SObjectType,
-                PermissionValidator.CRUDAccessType.CREATEABLE
-            );
-
-        Set<String> populatedFieldNames = new Set<String>();
-
-        for (ServiceSession__c session : model.serviceSessions) {
-            populatedFieldNames.addAll(session.getPopulatedFieldsAsMap().keySet());
-        }
-
-        return hasPermissions &&
-            PermissionValidator.getInstance()
-                .hasFLSAccessForFields(
-                    Schema.sObjectType.ServiceSession__c.getName(),
-                    new List<String>(populatedFieldNames),
-                    'insert'
-                );
-    }
-
-    @TestVisible
-    private Boolean hasServiceParticipantsPermissions(ServiceScheduleModel model) {
-        if (model.serviceParticipants.isEmpty()) {
-            return true;
-        }
-
-        Boolean hasPermissions = PermissionValidator.getInstance()
-            .hasObjectAccess(
-                ServiceParticipant__c.SObjectType,
-                PermissionValidator.CRUDAccessType.CREATEABLE
-            );
-
-        Set<String> populatedFieldNames = new Set<String>();
-
-        for (ServiceParticipant__c participant : model.serviceParticipants) {
-            populatedFieldNames.addAll(participant.getPopulatedFieldsAsMap().keySet());
-        }
-
-        return hasPermissions &&
-            PermissionValidator.getInstance()
-                .hasFLSAccessForFields(
-                    Schema.sObjectType.ServiceParticipant__c.getName(),
-                    new List<String>(populatedFieldNames),
-                    'insert'
-                );
+        model.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
+            model.program.Id
+        );
+        model.programCohorts = programEngagementSelector.getProgramCohortsByProgramId(
+            model.program.Id
+        );
     }
 
     public class ServiceScheduleServiceException extends Exception {

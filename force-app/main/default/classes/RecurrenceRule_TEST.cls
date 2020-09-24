@@ -132,7 +132,9 @@ public with sharing class RecurrenceRule_TEST {
         DateTime dateTimeStart = DateTime.newInstance(2020, 1, 29, 13, 0, 0);
         Set<Integer> monthDays = new Set<Integer>{ 28, 29 };
         Test.startTest();
-        RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
+        RecurrenceRule rule = new RecurrenceRule()
+            .withFrequency('MONTHLY')
+            .withByMonthDays(dateTimeStart);
         Test.stopTest();
 
         System.assertEquals(
@@ -147,7 +149,9 @@ public with sharing class RecurrenceRule_TEST {
         DateTime dateTimeStart = DateTime.newInstance(2020, 1, 30, 13, 0, 0);
         Set<Integer> monthDays = new Set<Integer>{ 28, 29, 30 };
         Test.startTest();
-        RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
+        RecurrenceRule rule = new RecurrenceRule()
+            .withFrequency('MONTHLY')
+            .withByMonthDays(dateTimeStart);
         Test.stopTest();
 
         System.assertEquals(
@@ -162,13 +166,46 @@ public with sharing class RecurrenceRule_TEST {
         DateTime dateTimeStart = DateTime.newInstance(2020, 12, 31, 13, 0, 0);
         Set<Integer> monthDays = new Set<Integer>{ 28, 29, 30, 31 };
         Test.startTest();
-        RecurrenceRule rule = new RecurrenceRule().withByMonthDays(dateTimeStart);
+        RecurrenceRule rule = new RecurrenceRule()
+            .withFrequency('MONTHLY')
+            .withByMonthDays(dateTimeStart);
         Test.stopTest();
 
         System.assertEquals(
             monthDays,
             rule.getByMonthDays(),
             'The actual byMonthDays returned is not the same as expected byMonthDays.'
+        );
+    }
+
+    @IsTest
+    private static void shouldNotSetByMonthDaysWhenNotMonthly() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 31, 13, 0, 0);
+        Test.startTest();
+        RecurrenceRule rule = new RecurrenceRule()
+            .withFrequency('DAILY')
+            .withByMonthDays(dateTimeStart);
+        Test.stopTest();
+
+        System.assertEquals(
+            null,
+            rule.getByMonthDays(),
+            'The actual byMonthDays returned is not the same as expected byMonthDays.'
+        );
+    }
+
+    @IsTest
+    private static void shouldNotSetDaysWhenDaysIsNull() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 31, 13, 0, 0);
+        Test.startTest();
+        List<Integer> days;
+        RecurrenceRule rule = new RecurrenceRule().withDays(days);
+        Test.stopTest();
+
+        System.assertEquals(
+            null,
+            rule.getDays(),
+            'The actual days returned is not the same as expected days.'
         );
     }
 

@@ -5,7 +5,10 @@ public with sharing class ServiceScheduleService_TEST {
     );
 
     private static ServiceScheduleService service = new ServiceScheduleService();
-    private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
+    private static BasicStub domainStub = new BasicStub(ServiceScheduleDomain.class);
+    private static BasicStub programEngagementSelectorStub = new BasicStub(
+        ProgramEngagementSelector.class
+    );
 
     @TestSetup
     private static void setupTestData() {
@@ -42,84 +45,52 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
-    private static void shouldPersistScheduleAndRelatedRecords() {
+    private static void shouldProvideModelToDomainOnPersist() {
+        String methodName = 'insertModel';
         ServiceScheduleModel model = new ServiceScheduleModel();
-        ServiceSchedule__c schedule = new ServiceSchedule__c();
-        List<ServiceSession__c> sessions = new List<ServiceSession__c>();
-        List<ServiceParticipant__c> participants = new List<ServiceParticipant__c>();
-
-        Service__c serviceRecord = [SELECT Id, Program__c FROM Service__c LIMIT 1];
-        ProgramEngagement__c engagementRecord = [
-            SELECT Id
-            FROM ProgramEngagement__c
-            WHERE Program__c = :serviceRecord.Program__c
-            LIMIT 1
-        ];
-
-        schedule.Service__c = serviceRecord.Id;
-        schedule.Name = 'Homework Office Hours';
-        schedule.FirstSessionStart__c = DateTime.newInstance(2020, 9, 18, 9, 30, 0);
-        schedule.Frequency__c = 'Weekly';
-        schedule.ServiceScheduleEnds__c = 'On';
-        schedule.ServiceScheduleEndDate__c = Date.newInstance(2020, 10, 16);
-
-        for (
-            DateTime sessionDate = schedule.FirstSessionStart__c;
-            sessionDate < schedule.ServiceScheduleEndDate__c;
-            sessionDate = sessionDate.addDays(7)
-        ) {
-            sessions.add(new ServiceSession__c(SessionStart__c = sessionDate));
-        }
-
-        participants.add(
-            new ServiceParticipant__c(ProgramEngagement__c = engagementRecord.Id)
-        );
+        service.domain = (ServiceScheduleDomain) domainStub.createMock();
 
         Test.startTest();
-        model.serviceSchedule = schedule;
-        model.serviceSessions = sessions;
-        model.serviceParticipants = participants;
         service.persist(model);
         Test.stopTest();
 
-        System.assert(
-            sessions.size() > 0,
-            'Sanity check that our test setup created session records.'
-        );
-        System.assertNotEquals(
-            null,
-            schedule.Id,
-            'Expected the schedule record to have been inserted and given an Id.'
-        );
+        domainStub.assertCalledWith(methodName, ServiceScheduleModel.class, model);
+    }
 
-        for (ServiceSession__c session : sessions) {
-            System.assertNotEquals(
-                null,
-                session.Id,
-                'Expected each session record to have been inserted and given an Id.'
-            );
-            System.assertEquals(
-                schedule.Id,
-                session.ServiceSchedule__c,
-                'Expected each session record to have been related to the Schedule.'
-            );
+    @IsTest
+    private static void shouldRollbackAndRethrowDomainException() {
+        String methodName = 'insertModel';
+        ServiceScheduleModel model = new ServiceScheduleModel();
+        Exception actualException;
+        Integer dmlLimitBefore;
+        Integer dmlLimitAfter;
+        model.serviceSchedule = new ServiceSchedule__c();
+        domainStub.withThrowException(methodName, ServiceScheduleModel.class);
+        service.domain = (ServiceScheduleDomain) domainStub.createMock();
+
+        Test.startTest();
+        try {
+            dmlLimitBefore = System.Limits.getDmlStatements();
+            service.persist(model);
+        } catch (Exception ex) {
+            actualException = ex;
+            dmlLimitAfter = System.Limits.getDmlStatements();
         }
 
-        System.assertNotEquals(
-            null,
-            participants[0].Id,
-            'Expected the participant record to have been inserted and given an Id.'
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof ServiceScheduleService.ServiceScheduleServiceException,
+            'Expected the service to catch and rethrow the exception.'
         );
+
         System.assertEquals(
-            schedule.Id,
-            participants[0].ServiceSchedule__c,
-            'Expected the participant record to have been related to the Schedule.'
+            2,
+            dmlLimitAfter - dmlLimitBefore,
+            'Expected a dml statement for the save point and the rollback.'
         );
-        System.assertEquals(
-            schedule.Service__c,
-            participants[0].Service__c,
-            'Expected the participant record to have been related to the Service record related to the Schedule.'
-        );
+
+        domainStub.assertCalledWith(methodName, ServiceScheduleModel.class, model);
     }
 
     @IsTest
@@ -154,7 +125,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Integer.class,
                 Date.class,
                 Integer.class,
-                List<Integer>.class
+                List<Integer>.class,
+                DateTime.class
             },
             rRuleString
         );
@@ -173,8 +145,7 @@ public with sharing class ServiceScheduleService_TEST {
                     SessionStart__c = sessionDateTime,
                     SessionEnd__c = sessionDateTime.addHours(2),
                     PrimaryServiceProvider__c = primaryServiceProvider,
-                    OtherServiceProvider__c = otherServiceProvider,
-                    Status__c = 'Pending'
+                    OtherServiceProvider__c = otherServiceProvider
                 )
             );
         }
@@ -196,14 +167,16 @@ public with sharing class ServiceScheduleService_TEST {
                 Integer.class,
                 Date.class,
                 Integer.class,
-                List<Integer>.class
+                List<Integer>.class,
+                DateTime.class
             },
             new List<Object>{
                 schedule.Frequency__c,
                 Integer.valueOf(schedule.Interval__c),
                 schedule.ServiceScheduleEndDate__c,
                 Integer.valueOf(schedule.NumberOfServiceSessions__c),
-                new List<Integer>{ 1, 2, 3, 4, 5, 6, 7 }
+                new List<Integer>{ 1, 2, 3, 4, 5, 6, 7 },
+                firstSessionStart
             }
         );
         recurrenceServiceStub.assertCalledWith(
@@ -236,7 +209,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Integer.class,
                 Date.class,
                 Integer.class,
-                List<Integer>.class
+                List<Integer>.class,
+                DateTime.class
             },
             rRuleString
         );
@@ -277,14 +251,16 @@ public with sharing class ServiceScheduleService_TEST {
                 Integer.class,
                 Date.class,
                 Integer.class,
-                List<Integer>.class
+                List<Integer>.class,
+                DateTime.class
             },
             new List<Object>{
                 schedule.Frequency__c,
                 null,
                 null,
                 Integer.valueOf(schedule.NumberOfServiceSessions__c),
-                null
+                null,
+                firstSessionStart
             }
         );
         recurrenceServiceStub.assertCalledWith(
@@ -295,84 +271,119 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
-    private static void throwsExceptionWhenNameTooLong() {
-        ServiceScheduleModel model = new ServiceScheduleModel();
-        ServiceSchedule__c schedule = new ServiceSchedule__c();
-        Exception actualException;
-        Integer dmlLimitBefore;
-        Integer dmlLimitAfter;
+    private static void testGetSelectParticipantModel() {
+        final String programEngagementsMethodName = 'getProgramEngagementsByProgramId';
+        final String cohortsMethodName = 'getProgramCohortsByProgramId';
+        final String programMethodName = 'getProgramByServiceId';
 
-        Service__c serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
+        Id programId = TestUtil.mockId(Program__c.SObjectType);
+        Program__c programToReturn = new Program__c(Id = programId);
+        List<ProgramCohort__c> programCohortsToReturn = new List<ProgramCohort__c>();
+        List<ProgramEngagement__c> programEngagementsToReturn = new List<ProgramEngagement__c>();
 
-        schedule.Service__c = serviceRecord.Id;
-        schedule.Name = 'This name is way too long but I am not really sure if an error will get thrown because of it.';
-        schedule.FirstSessionStart__c = DateTime.newInstance(2020, 9, 18, 9, 30, 0);
-        schedule.Frequency__c = 'Weekly';
-        schedule.ServiceScheduleEnds__c = 'On';
-        schedule.ServiceScheduleEndDate__c = Date.newInstance(2020, 10, 16);
+        programEngagementSelectorStub.withReturnValue(
+            programMethodName,
+            Id.class,
+            programToReturn
+        );
+
+        programEngagementSelectorStub.withReturnValue(
+            programEngagementsMethodName,
+            Id.class,
+            programEngagementsToReturn
+        );
+
+        programEngagementSelectorStub.withReturnValue(
+            cohortsMethodName,
+            Id.class,
+            programCohortsToReturn
+        );
+
+        service.programEngagementSelector = (ProgramEngagementSelector) programEngagementSelectorStub.createMock();
 
         Test.startTest();
-        try {
-            dmlLimitBefore = System.Limits.getDmlStatements();
-            model.serviceSchedule = schedule;
-            service.persist(model);
-        } catch (Exception ex) {
-            actualException = ex;
-            dmlLimitAfter = System.Limits.getDmlStatements();
-        }
-
+        SelectParticipantModel actual = service.getSelectParticipantModel(serviceId);
         Test.stopTest();
 
-        System.assertEquals(
+        System.assertNotEquals(
             null,
-            schedule.Id,
-            'Expected the insert of the schedule record to have caused an exception.'
+            actual,
+            'Expected that the actual value is not null'
+        );
+
+        System.assertEquals(
+            programToReturn,
+            actual.program,
+            'Expected the model to return the program returned by the selector.'
+        );
+
+        System.assertEquals(
+            programEngagementsToReturn,
+            actual.programEngagements,
+            'Expected the model to return the program engagements returned by the selector.'
+        );
+
+        System.assertEquals(
+            programCohortsToReturn,
+            actual.programCohorts,
+            'Expected the model to return the program cohorts returned by the selector.'
         );
 
         System.assert(
-            actualException instanceof ServiceScheduleService.ServiceScheduleServiceException,
-            'Expected the service to catch and rethrow the exception.'
+            actual.objectLabels.containsKey('program'),
+            'Expected the program object labels to be returned.'
+        );
+        System.assert(
+            actual.objectLabels.containsKey('programCohort'),
+            'Expected the program cohort object labels to be returned.'
+        );
+        System.assert(
+            actual.objectLabels.containsKey('serviceParticipant'),
+            'Expected the service participant object labels to be returned.'
         );
 
-        System.assertEquals(
-            3,
-            dmlLimitAfter - dmlLimitBefore,
-            'Expected a dml statement for the save point; schedule and the rollback.'
+        programEngagementSelectorStub.assertCalledWith(
+            programMethodName,
+            Id.class,
+            serviceId
+        );
+
+        programEngagementSelectorStub.assertCalledWith(
+            programEngagementsMethodName,
+            Id.class,
+            programId
+        );
+
+        programEngagementSelectorStub.assertCalledWith(
+            cohortsMethodName,
+            Id.class,
+            programId
         );
     }
 
     @IsTest
-    private static void throwsExceptionWhenPermissionCheckFails() {
-        String methodName = 'hasObjectAccess';
-        Integer dmlLimitAfter;
-        Exception actualException;
-
-        validatorStub.withReturnValue(
-            methodName,
-            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
-            false
-        );
-
-        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
-
+    private static void shouldReturnNullProgramWhenProgramNotFound() {
         Test.startTest();
-        try {
-            service.persist(new ServiceScheduleModel());
-        } catch (Exception ex) {
-            dmlLimitAfter = System.Limits.getDmlStatements();
-            actualException = ex;
-        }
+        SelectParticipantModel actualModel = service.getSelectParticipantModel(
+            TestUtil.mockId(Service__c.SObjectType)
+        );
         Test.stopTest();
 
-        System.assert(
-            actualException instanceof ServiceScheduleService.ServiceScheduleServiceException,
-            'Expected the service to throw the exception.'
+        System.assertEquals(
+            null,
+            actualModel.program,
+            'Expected a program not to be found'
         );
-
         System.assertEquals(
             0,
-            dmlLimitAfter,
-            'Expected the exception to be thrown before any dml statements.'
+            actualModel.programEngagements.size(),
+            'Expected an empty list of program engagements when no program found.'
+        );
+        System.assertEquals(
+            0,
+            actualModel.programCohorts.size(),
+            'Expected an empty list of program cohorts when no program found.'
         );
     }
 }

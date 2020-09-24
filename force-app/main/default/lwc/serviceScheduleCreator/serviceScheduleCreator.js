@@ -33,7 +33,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         }
 
         if (result.data) {
-            this.originalModel = result;
+            this.originalModel = result.data;
             this.init();
             this.extractLabels(this.serviceScheduleModel.labels.serviceSchedule);
             this.addSteps();
@@ -146,12 +146,12 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         }
     }
 
-    save(restart) {
+    save(isSaveAndNew) {
         persist({ model: this.serviceScheduleModel })
             .then(() => {
                 this.showSuccessToast();
 
-                if (restart) {
+                if (isSaveAndNew) {
                     this.init();
                     this.isLoaded = true;
                 } else {
@@ -218,7 +218,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     handleBack() {
         if (this.isStep2) {
-            this.serviceScheduleModel.serviceSessions = this.originalModel.data.serviceSessions;
+            this.serviceScheduleModel.serviceSessions = this.originalModel.serviceSessions;
         } else if (this.isStep3) {
             // Reset the selected service participants
             this.serviceScheduleModel.selectedParticipants = this.originalModel.selectedParticipants;
@@ -241,10 +241,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.isLoaded = false;
         this._steps.restart();
         this._currentStep = undefined;
-        this.serviceScheduleModel = { ...this.originalModel.data };
-        this.serviceScheduleModel.serviceSchedule = {
-            ...this.originalModel.data.serviceSchedule,
-        };
+        this.serviceScheduleModel = JSON.parse(JSON.stringify(this.originalModel));
         this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ] = this.serviceId;

@@ -46,10 +46,7 @@ public with sharing class ServiceScheduleDomain {
 
         SObjectType sObjectType = sObjects[0].getSObjectType();
         hasObjectPermissions = PermissionValidator.getInstance()
-            .hasObjectAccess(
-                ServiceSchedule__c.SObjectType,
-                PermissionValidator.CRUDAccessType.CREATEABLE
-            );
+            .hasObjectAccess(sObjectType, PermissionValidator.CRUDAccessType.CREATEABLE);
 
         Set<String> populatedFieldNames = new Set<String>();
         for (SObject sObj : sObjects) {

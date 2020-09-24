@@ -67,5 +67,5 @@
         <isFieldManaged>false</isFieldManaged>
         <isRequired>true</isRequired>
     </displayedFields>
-    <label>CreateProgramEngagement</label>
+    <label>SessionParticipantView</label>
 </FieldSet>

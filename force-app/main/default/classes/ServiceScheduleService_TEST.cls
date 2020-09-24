@@ -95,7 +95,7 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
-    private static void shouldUpdateModel() {
+    private static void shouldProcessSchedule() {
         String createMethod = 'createRRule';
         String generateMethod = 'generate';
         String getServiceProviderMethod = 'getContactsByIds';
@@ -177,7 +177,7 @@ public with sharing class ServiceScheduleService_TEST {
         expected.serviceSessions = expectedSessions;
 
         Test.startTest();
-        ServiceScheduleModel actual = service.updateModel(model);
+        ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
             expected.serviceSessions,
@@ -222,7 +222,7 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
-    private static void shouldUpdateModelWithPrimaryServiceProvider() {
+    private static void shouldProcessScheduleWithPrimaryServiceProvider() {
         String createMethod = 'createRRule';
         String generateMethod = 'generate';
         String getServiceProviderMethod = 'getContactsByIds';
@@ -300,7 +300,7 @@ public with sharing class ServiceScheduleService_TEST {
         expected.serviceSessions = expectedSessions;
 
         Test.startTest();
-        ServiceScheduleModel actual = service.updateModel(model);
+        ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
             expected.serviceSessions,
@@ -345,7 +345,7 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
-    private static void shouldUpdateModelWithoutServiceProviders() {
+    private static void shouldProcessScheduleWithoutServiceProviders() {
         String createMethod = 'createRRule';
         String generateMethod = 'generate';
         String getServiceProviderMethod = 'getContactsByIds';
@@ -413,7 +413,7 @@ public with sharing class ServiceScheduleService_TEST {
         expected.serviceSessions = expectedSessions;
 
         Test.startTest();
-        ServiceScheduleModel actual = service.updateModel(model);
+        ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
             expected.serviceSessions,
@@ -681,7 +681,7 @@ public with sharing class ServiceScheduleService_TEST {
         model.serviceSchedule = schedule;
 
         // Step 2
-        service.updateModel(model);
+        service.processSchedule(model);
         System.assertEquals(
             model.serviceSchedule.PrimaryServiceProvider__r,
             serviceProviders[0],

@@ -1,5 +1,5 @@
 import { LightningElement, track, api } from "lwc";
-import updateModel from "@salesforce/apex/ServiceScheduleCreatorController.updateModel";
+import processSchedule from "@salesforce/apex/ServiceScheduleCreatorController.processSchedule";
 import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
 import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Record";
 import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
@@ -40,7 +40,6 @@ export default class ReviewSessions extends LightningElement {
 
     @api
     get serviceSchedule() {
-        // now contains full contact records for Service Provider lookups
         return this._serviceScheduleModel.serviceSchedule;
     }
 
@@ -51,7 +50,7 @@ export default class ReviewSessions extends LightningElement {
     };
 
     getSessions() {
-        updateModel({ model: this._serviceScheduleModel })
+        processSchedule({ model: this._serviceScheduleModel })
             .then(result => {
                 this._serviceScheduleModel = JSON.parse(JSON.stringify(result));
                 this._serviceSessions = this._serviceScheduleModel.serviceSessions;

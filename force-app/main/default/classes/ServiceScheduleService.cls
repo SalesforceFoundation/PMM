@@ -29,7 +29,7 @@ public with sharing class ServiceScheduleService {
         return model;
     }
 
-    public ServiceScheduleModel updateModel(ServiceScheduleModel model) {
+    public ServiceScheduleModel processSchedule(ServiceScheduleModel model) {
         model.serviceSessions = getSessions(model.serviceSchedule);
         setServiceProviders(model.serviceSchedule);
         return model;
@@ -38,9 +38,13 @@ public with sharing class ServiceScheduleService {
     private void setServiceProviders(ServiceSchedule__c schedule) {
         Map<Id, Contact> providerById = new Map<Id, Contact>();
 
-        providerById.put(schedule.PrimaryServiceProvider__c, null);
-        providerById.put(schedule.OtherServiceProvider__c, null);
-        providerById.remove(null);
+        if (schedule.PrimaryServiceProvider__c != null) {
+            providerById.put(schedule.PrimaryServiceProvider__c, null);
+        }
+
+        if (schedule.OtherServiceProvider__c != null) {
+            providerById.put(schedule.OtherServiceProvider__c, null);
+        }
 
         if (providerById.isEmpty()) {
             return;

@@ -42,8 +42,8 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
-    private static void shouldUpdateModel() {
-        String methodName = 'updateModel';
+    private static void shouldProcessSchedule() {
+        String methodName = 'processSchedule';
         ServiceScheduleModel expected = new ServiceScheduleModel();
         ServiceScheduleModel model = new ServiceScheduleModel();
 
@@ -52,7 +52,9 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         Test.startTest();
-        ServiceScheduleModel actual = ServiceScheduleCreatorController.updateModel(model);
+        ServiceScheduleModel actual = ServiceScheduleCreatorController.processSchedule(
+            model
+        );
         Test.stopTest();
 
         serviceStub.assertCalledWith(methodName, ServiceScheduleModel.class, model);
@@ -118,8 +120,8 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
-    private static void rethrowsErrorFromUpdateModelOnService() {
-        String methodName = 'updateModel';
+    private static void rethrowsErrorFromProcessScheduleOnService() {
+        String methodName = 'processSchedule';
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceScheduleModel expected = new ServiceScheduleModel();
         Exception actualException;
@@ -131,7 +133,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         ServiceScheduleModel actual;
         Test.startTest();
         try {
-            actual = ServiceScheduleCreatorController.updateModel(model);
+            actual = ServiceScheduleCreatorController.processSchedule(model);
         } catch (Exception ex) {
             actualException = ex;
         }

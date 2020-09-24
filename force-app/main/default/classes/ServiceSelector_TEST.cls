@@ -179,7 +179,11 @@ public with sharing class ServiceSelector_TEST {
             .getContactsByIds(new Set<Id>{ con.Id });
         Test.stopTest();
 
-        System.assertEquals('Test LastTest', actual[0].Name);
+        System.assertEquals(
+            'Test LastTest',
+            actual[0].Name,
+            'Expected the contact inserted in the test to be returned here.'
+        );
         System.assertEquals(con.Id, actual[0].Id);
     }
 }

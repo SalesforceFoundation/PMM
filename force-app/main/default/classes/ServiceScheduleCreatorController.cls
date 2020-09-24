@@ -30,9 +30,9 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled
-    public static ServiceScheduleModel updateModel(ServiceScheduleModel model) {
+    public static ServiceScheduleModel processSchedule(ServiceScheduleModel model) {
         try {
-            return service.updateModel(model);
+            return service.processSchedule(model);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

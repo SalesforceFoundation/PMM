@@ -36,14 +36,27 @@ public with sharing class ServiceScheduleService {
     }
 
     private void setServiceProviders(ServiceSchedule__c schedule) {
+        Map<Id, Contact> providerById = new Map<Id, Contact>();
+
+        providerById.put(schedule.PrimaryServiceProvider__c, null);
+        providerById.put(schedule.OtherServiceProvider__c, null);
+        providerById.remove(null);
+
+        if (providerById.isEmpty()) {
+            return;
+        }
+
+        providerById.putAll(
+            new Map<Id, Contact>(serviceSelector.getContactsByIds(providerById.keySet()))
+        );
         if (schedule.PrimaryServiceProvider__c != null) {
-            schedule.PrimaryServiceProvider__r = serviceSelector.getServiceProviderById(
+            schedule.PrimaryServiceProvider__r = providerById.get(
                 schedule.PrimaryServiceProvider__c
             );
         }
 
         if (schedule.OtherServiceProvider__c != null) {
-            schedule.OtherServiceProvider__r = serviceSelector.getServiceProviderById(
+            schedule.OtherServiceProvider__r = providerById.get(
                 schedule.OtherServiceProvider__c
             );
         }

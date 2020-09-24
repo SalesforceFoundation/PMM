@@ -98,11 +98,14 @@ public with sharing class ServiceScheduleService_TEST {
     private static void shouldUpdateModel() {
         String createMethod = 'createRRule';
         String generateMethod = 'generate';
-        String getServiceProviderMethod = 'getServiceProviderById';
+        String getServiceProviderMethod = 'getContactsByIds';
         String rRuleString = 'abc';
-        Contact serviceProvider = new Contact();
-        Id primaryServiceProvider = TestUtil.mockId(Contact.SObjectType);
-        Id otherServiceProvider = TestUtil.mockId(Contact.SObjectType);
+        Contact primaryServiceProvider = new Contact(
+            Id = TestUtil.mockId(Contact.SObjectType)
+        );
+        Contact otherServiceProvider = new Contact(
+            Id = TestUtil.mockId(Contact.SObjectType)
+        );
         DateTime firstSessionStart = System.now();
         DateTime firstSessionEnd = System.now().addHours(2);
         ServiceSchedule__c schedule = new ServiceSchedule__c(
@@ -114,8 +117,8 @@ public with sharing class ServiceScheduleService_TEST {
             ServiceScheduleEndDate__c = System.today().addDays(10),
             NumberOfServiceSessions__c = 2,
             DaysOfWeek__c = '1;2;3;4;5;6;7',
-            PrimaryServiceProvider__c = primaryServiceProvider,
-            OtherServiceProvider__c = otherServiceProvider
+            PrimaryServiceProvider__c = primaryServiceProvider.Id,
+            OtherServiceProvider__c = otherServiceProvider.Id
         );
         ServiceScheduleModel model = new ServiceScheduleModel();
         model.serviceSchedule = schedule;
@@ -146,8 +149,8 @@ public with sharing class ServiceScheduleService_TEST {
 
         serviceSelectorStub.withReturnValue(
             getServiceProviderMethod,
-            Id.class,
-            serviceProvider
+            Set<Id>.class,
+            new List<Contact>{ primaryServiceProvider, otherServiceProvider }
         );
         service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
 
@@ -161,15 +164,15 @@ public with sharing class ServiceScheduleService_TEST {
                         sessionDateTime.date(),
                         firstSessionEnd.time()
                     ),
-                    PrimaryServiceProvider__c = primaryServiceProvider,
-                    OtherServiceProvider__c = otherServiceProvider
+                    PrimaryServiceProvider__c = primaryServiceProvider.Id,
+                    OtherServiceProvider__c = otherServiceProvider.Id
                 )
             );
         }
 
         ServiceScheduleModel expected = new ServiceScheduleModel();
-        schedule.PrimaryServiceProvider__r = serviceProvider;
-        schedule.OtherServiceProvider__r = serviceProvider;
+        schedule.PrimaryServiceProvider__r = primaryServiceProvider;
+        schedule.OtherServiceProvider__r = otherServiceProvider;
         expected.serviceSchedule = schedule;
         expected.serviceSessions = expectedSessions;
 
@@ -213,13 +216,8 @@ public with sharing class ServiceScheduleService_TEST {
         );
         serviceSelectorStub.assertCalledWith(
             getServiceProviderMethod,
-            Id.class,
-            primaryServiceProvider
-        );
-        serviceSelectorStub.assertCalledWith(
-            getServiceProviderMethod,
-            Id.class,
-            otherServiceProvider
+            Set<Id>.class,
+            new Set<Id>{ primaryServiceProvider.Id, otherServiceProvider.Id }
         );
     }
 

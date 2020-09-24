@@ -18,6 +18,18 @@ private class PermissionValidator_TEST {
     }
 
     @IsTest
+    private static void testHasFLSAccessInsertBadFieldNameStrictModeDisabled() {
+        Boolean badFieldName = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(
+                'Contact',
+                new List<String>{ 'BadFieldName__123' },
+                'insert',
+                false
+            );
+        System.assert(badFieldName, 'Returns true when a field does not exist.');
+    }
+
+    @IsTest
     private static void testHasFLSAccessInsertBadFieldName() {
         Boolean badFieldName = PermissionValidator.getInstance()
             .hasFLSAccessForFields(

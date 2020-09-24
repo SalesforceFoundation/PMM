@@ -175,10 +175,11 @@ public with sharing class ServiceSelector_TEST {
         insert con;
 
         Test.startTest();
-        Contact actual = new ServiceSelector().getServiceProviderById(con.Id);
+        List<Contact> actual = new ServiceSelector()
+            .getContactsByIds(new Set<Id>{ con.Id });
         Test.stopTest();
 
-        System.assertEquals('Test LastTest', actual.Name);
-        System.assertEquals(con.Id, actual.Id);
+        System.assertEquals('Test LastTest', actual[0].Name);
+        System.assertEquals(con.Id, actual[0].Id);
     }
 }

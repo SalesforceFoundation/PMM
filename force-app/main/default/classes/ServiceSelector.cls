@@ -44,8 +44,8 @@ public with sharing class ServiceSelector {
         return Security.stripInaccessible(AccessType.READABLE, services).getRecords();
     }
 
-    public Contact getServiceProviderById(Id contactId) {
-        return [SELECT Name FROM Contact WHERE Id = :contactId];
+    public List<Contact> getContactsByIds(Set<Id> contactIds) {
+        return [SELECT Name FROM Contact WHERE Id IN :contactIds];
         // Name includes a required field that must have FLS
         // so no stripInacessible needed if that's the only field being returned
     }

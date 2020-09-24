@@ -492,7 +492,7 @@
         <fullName>Session_Scheduled_Outside_Start_And_End_Date</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Session Scheduled Outside Start And End Date</shortDescription>
+        <shortDescription>Session Scheduled Outside of Start And End Date</shortDescription>
         <value>This session would be scheduled outside of the Service Schedule start and end dates ({0} to {1}).</value>
     </labels>
     <labels>

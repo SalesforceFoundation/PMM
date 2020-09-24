@@ -40,16 +40,15 @@ export default class ServiceScheduleReview extends LightningElement {
     }
 
     processScheduleInfoFieldSet() {
-        console.log(JSON.stringify(this._serviceScheduleModel.serviceSchedule));
         this._serviceScheduleModel.scheduleInformationFields.forEach(field => {
             field.icon = this.getIcon(field.referenceTo);
-            field.value =
-                field.type === "REFERENCE" &&
-                this._serviceScheduleModel.serviceSchedule[field.relationshipName]
-                    ? this._serviceScheduleModel.serviceSchedule[field.relationshipName][
-                          field.referenceNameField
-                      ]
-                    : this._serviceScheduleModel.serviceSchedule[field.apiName];
+            field.value = this._serviceScheduleModel.serviceSchedule[
+                field.relationshipName
+            ]
+                ? this._serviceScheduleModel.serviceSchedule[field.relationshipName][
+                      field.referenceNameField
+                  ]
+                : this._serviceScheduleModel.serviceSchedule[field.apiName];
         });
     }
 
@@ -115,6 +114,24 @@ export default class ServiceScheduleReview extends LightningElement {
             });
         });
         return columns;
+    }
+
+    get servicePartcipantsLabel() {
+        return `${
+            this.serviceScheduleModel.labels.serviceParticipant.objectPluralLabel
+        } (${
+            this._serviceScheduleModel.selectedParticipants
+                ? this._serviceScheduleModel.selectedParticipants.length
+                : 0
+        })`;
+    }
+
+    get serviceSessionsLabel() {
+        return `${this.serviceScheduleModel.labels.serviceSession.objectPluralLabel} (${
+            this._serviceScheduleModel.serviceSessions
+                ? this._serviceScheduleModel.serviceSessions.length
+                : 0
+        })`;
     }
 
     get lastSessionEndDateTime() {

@@ -31,11 +31,11 @@ public with sharing class ServiceScheduleService {
 
     public ServiceScheduleModel updateModel(ServiceScheduleModel model) {
         model.serviceSessions = getSessions(model.serviceSchedule);
-        model.serviceSchedule = getServiceProviders(model.serviceSchedule);
+        setServiceProviders(model.serviceSchedule);
         return model;
     }
 
-    private ServiceSchedule__c getServiceProviders(ServiceSchedule__c schedule) {
+    private void setServiceProviders(ServiceSchedule__c schedule) {
         if (schedule.PrimaryServiceProvider__c != null) {
             schedule.PrimaryServiceProvider__r = serviceSelector.getServiceProviderById(
                 schedule.PrimaryServiceProvider__c
@@ -47,8 +47,6 @@ public with sharing class ServiceScheduleService {
                 schedule.OtherServiceProvider__c
             );
         }
-
-        return schedule;
     }
 
     @TestVisible

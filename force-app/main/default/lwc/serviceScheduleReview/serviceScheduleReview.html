@@ -85,10 +85,7 @@
         allow-multiple-sections-open
     >
         <!--{labels.participants}-->
-        <lightning-accordion-section
-            name="participants"
-            label={serviceScheduleModel.labels.serviceParticipant.objectPluralLabel}
-        >
+        <lightning-accordion-section name="participants" label={servicePartcipantsLabel}>
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"
@@ -101,10 +98,7 @@
             </div>
         </lightning-accordion-section>
         <!--{labels.sessions}-->
-        <lightning-accordion-section
-            name="sessions"
-            label={serviceScheduleModel.labels.serviceSession.objectPluralLabel}
-        >
+        <lightning-accordion-section name="sessions" label={serviceSessionsLabel}>
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"

@@ -30,7 +30,10 @@ public with sharing class PermissionValidator {
 
             if (operation == 'insert') {
                 for (String fieldName : fields) {
-                    if (!fieldsMap.get(fieldName).getDescribe().isCreateable()) {
+                    if (
+                        fieldsMap.containsKey(fieldName) &&
+                        !fieldsMap.get(fieldName).getDescribe().isCreateable()
+                    ) {
                         return false;
                     }
                 }
@@ -38,8 +41,9 @@ public with sharing class PermissionValidator {
             if (operation == 'upsert') {
                 for (String fieldName : fields) {
                     if (
-                        !fieldsMap.get(fieldName).getDescribe().isCreateable() ||
-                        !fieldsMap.get(fieldName).getDescribe().isUpdateable()
+                        fieldsMap.containsKey(fieldName) &&
+                        (!fieldsMap.get(fieldName).getDescribe().isCreateable() ||
+                        !fieldsMap.get(fieldName).getDescribe().isUpdateable())
                     ) {
                         return false;
                     }
@@ -47,7 +51,10 @@ public with sharing class PermissionValidator {
             }
             if (operation == 'read') {
                 for (String fieldName : fields) {
-                    if (!hasFieldReadAccess(fieldsMap.get(fieldName).getDescribe())) {
+                    if (
+                        fieldsMap.containsKey(fieldName) &&
+                        !hasFieldReadAccess(fieldsMap.get(fieldName).getDescribe())
+                    ) {
                         return false;
                     }
                 }

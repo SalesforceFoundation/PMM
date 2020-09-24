@@ -42,22 +42,22 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
-    private static void shouldGetSessions() {
-        String methodName = 'getSessions';
-        ServiceSchedule__c schedule = new ServiceSchedule__c();
-        List<ServiceSession__c> expected = new List<ServiceSession__c>();
+    private static void shouldProcessSchedule() {
+        String methodName = 'processSchedule';
+        ServiceScheduleModel expected = new ServiceScheduleModel();
+        ServiceScheduleModel model = new ServiceScheduleModel();
 
-        serviceStub.withReturnValue(methodName, ServiceSchedule__c.class, expected);
+        serviceStub.withReturnValue(methodName, ServiceScheduleModel.class, expected);
 
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         Test.startTest();
-        List<ServiceSession__c> actual = ServiceScheduleCreatorController.getSessions(
-            schedule
+        ServiceScheduleModel actual = ServiceScheduleCreatorController.processSchedule(
+            model
         );
         Test.stopTest();
 
-        serviceStub.assertCalledWith(methodName, ServiceSchedule__c.class, schedule);
+        serviceStub.assertCalledWith(methodName, ServiceScheduleModel.class, model);
         System.assertEquals(
             expected,
             actual,
@@ -120,18 +120,20 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
-    private static void rethrowsErrorFromGetSessionsOnService() {
-        String methodName = 'getSessions';
-        ServiceSchedule__c schedule = new ServiceSchedule__c();
+    private static void rethrowsErrorFromProcessScheduleOnService() {
+        String methodName = 'processSchedule';
+        ServiceScheduleModel model = new ServiceScheduleModel();
+        ServiceScheduleModel expected = new ServiceScheduleModel();
         Exception actualException;
 
-        serviceStub.withThrowException(methodName, ServiceSchedule__c.class);
+        serviceStub.withThrowException(methodName, ServiceScheduleModel.class);
 
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
+        ServiceScheduleModel actual;
         Test.startTest();
         try {
-            ServiceScheduleCreatorController.getSessions(schedule);
+            actual = ServiceScheduleCreatorController.processSchedule(model);
         } catch (Exception ex) {
             actualException = ex;
         }
@@ -146,6 +148,8 @@ public with sharing class ServiceScheduleCreatorController_TEST {
             actualException.getMessage(),
             'Expected the stub test exception message to have been thrown.'
         );
+        serviceStub.assertCalledWith(methodName, ServiceScheduleModel.class, model);
+        System.assertEquals(null, actual);
     }
 
     @IsTest

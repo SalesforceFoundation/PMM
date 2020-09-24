@@ -4,6 +4,8 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
     @TestVisible
+    private ServiceSelector serviceSelector = new ServiceSelector();
+    @TestVisible
     RecurrenceService recurrenceService = new RecurrenceService();
 
     public ServiceScheduleModel getServiceScheduleModel() {
@@ -27,7 +29,45 @@ public with sharing class ServiceScheduleService {
         return model;
     }
 
-    public List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
+    public ServiceScheduleModel processSchedule(ServiceScheduleModel model) {
+        model.serviceSessions = getSessions(model.serviceSchedule);
+        setServiceProviders(model.serviceSchedule);
+        return model;
+    }
+
+    private void setServiceProviders(ServiceSchedule__c schedule) {
+        Map<Id, Contact> providerById = new Map<Id, Contact>();
+
+        if (schedule.PrimaryServiceProvider__c != null) {
+            providerById.put(schedule.PrimaryServiceProvider__c, null);
+        }
+
+        if (schedule.OtherServiceProvider__c != null) {
+            providerById.put(schedule.OtherServiceProvider__c, null);
+        }
+
+        if (providerById.isEmpty()) {
+            return;
+        }
+
+        providerById.putAll(
+            new Map<Id, Contact>(serviceSelector.getContactsByIds(providerById.keySet()))
+        );
+        if (schedule.PrimaryServiceProvider__c != null) {
+            schedule.PrimaryServiceProvider__r = providerById.get(
+                schedule.PrimaryServiceProvider__c
+            );
+        }
+
+        if (schedule.OtherServiceProvider__c != null) {
+            schedule.OtherServiceProvider__r = providerById.get(
+                schedule.OtherServiceProvider__c
+            );
+        }
+    }
+
+    @TestVisible
+    private List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 
         Id primaryServiceProvider = schedule.PrimaryServiceProvider__c;

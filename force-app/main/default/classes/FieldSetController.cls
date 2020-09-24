@@ -23,7 +23,7 @@ public with sharing class FieldSetController {
         String fieldSetName
     ) {
         try {
-            return fieldSetService.getFieldSetForLWC(objectName, fieldSetName);
+            return fieldSetService.getFieldSetForLWC(objectName, fieldSetName, false);
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }

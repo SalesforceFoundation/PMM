@@ -2,6 +2,7 @@ public with sharing class ServiceScheduleModel {
     @TestVisible
     private FieldSetService fieldSetService = new FieldSetService();
     private static final String SCHEDULE_FIELD_SET_NAME = 'ServiceScheduleInformation';
+    private static final String PROGRAM_ENGAGEMENT_FIELD_SET_NAME = 'SessionParticipantView';
     public List<ServiceParticipant__c> serviceParticipants { get; set; }
 
     @AuraEnabled
@@ -14,19 +15,6 @@ public with sharing class ServiceScheduleModel {
     public Map<String, Map<String, String>> labels = new Map<String, Map<String, String>>();
     @AuraEnabled
     public List<Map<String, Object>> scheduleInformationFields = new List<Map<String, Object>>();
-
-    @AuraEnabled
-    public Map<String, Map<String, Object>> sessionFields = new Map<String, Map<String, Object>>{
-        'name' => fieldSetService.getFieldForLWC(
-            Schema.ServiceSession__c.Name.getDescribe()
-        ),
-        'sessionStart' => fieldSetService.getFieldForLWC(
-            Schema.ServiceSession__c.SessionStart__c.getDescribe()
-        ),
-        'sessionEnd' => fieldSetService.getFieldForLWC(
-            Schema.ServiceSession__c.SessionEnd__c.getDescribe()
-        )
-    };
 
     @AuraEnabled
     public Map<String, Map<String, Object>> scheduleRequiredFields = new Map<String, Map<String, Object>>{
@@ -67,6 +55,32 @@ public with sharing class ServiceScheduleModel {
         )
     };
 
+    @AuraEnabled
+    public Map<String, Map<String, Object>> sessionFields = new Map<String, Map<String, Object>>{
+        'name' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSession__c.Name.getDescribe()
+        ),
+        'sessionStart' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSession__c.SessionStart__c.getDescribe()
+        ),
+        'sessionEnd' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSession__c.SessionEnd__c.getDescribe()
+        )
+    };
+
+    @AuraEnabled
+    public Map<String, Map<String, Object>> contactFields = new Map<String, Map<String, Object>>{
+        'contactName' => fieldSetService.getFieldForLWC(
+            Schema.Contact.Name.getDescribe()
+        ),
+        'contactEmail' => fieldSetService.getFieldForLWC(
+            Schema.Contact.Email.getDescribe()
+        )
+    };
+
+    @AuraEnabled
+    public List<Map<String, Object>> engagementFields = new List<Map<String, Object>>();
+
     public ServiceScheduleModel() {
         serviceSchedule = new ServiceSchedule__c();
         serviceSessions = new List<ServiceSession__c>();
@@ -79,7 +93,14 @@ public with sharing class ServiceScheduleModel {
 
         scheduleInformationFields = fieldSetService.getFieldSetForLWC(
             String.valueOf(ServiceSchedule__c.SObjectType),
-            SCHEDULE_FIELD_SET_NAME
+            SCHEDULE_FIELD_SET_NAME,
+            false
+        );
+
+        engagementFields = fieldSetService.getFieldSetForLWC(
+            String.valueOf(ProgramEngagement__c.SObjectType),
+            PROGRAM_ENGAGEMENT_FIELD_SET_NAME,
+            true
         );
     }
 

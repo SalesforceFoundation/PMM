@@ -22,7 +22,8 @@ public with sharing class FieldSetService {
      */
     public List<Map<String, Object>> getFieldSetForLWC(
         String objectName,
-        String fieldSetName
+        String fieldSetName,
+        Boolean allowRelationshipFields
     ) {
         Map<String, Map<String, Object>> fieldByApiName = new Map<String, Map<String, Object>>();
         Schema.FieldSet fieldSet;
@@ -41,7 +42,7 @@ public with sharing class FieldSetService {
         for (Schema.FieldSetMember field : fieldSet.fields) {
             if (
                 unsupportedFieldTypes.contains(field.getType().name()) ||
-                field.getFieldPath().contains('.')
+                (!allowRelationshipFields && field.getFieldPath().contains('.'))
             ) {
                 // Skipping unsupported field types and fields from related objects.
                 // NOTE: If we ever determine we want to allow reference fields
@@ -85,6 +86,7 @@ public with sharing class FieldSetService {
      * @return      Map<String, Object>
      */
     public Map<String, Object> getFieldForLWC(DescribeFieldResult field) {
+        String referenceObjectName = getReferenceTo(field);
         return new Map<String, Object>{
             'apiName' => field.getName(),
             'label' => getLabel(field),
@@ -92,7 +94,9 @@ public with sharing class FieldSetService {
             'isRequired' => !field.isNillable(),
             'helpText' => field.getInlineHelpText(),
             'isAccessible' => field.isAccessible(),
-            'relationshipName' => field.getRelationshipName()
+            'relationshipName' => field.getRelationshipName(),
+            'referenceTo' => referenceObjectName,
+            'referenceNameField' => getNameFieldForObject(referenceObjectName)
         };
     }
 
@@ -152,5 +156,36 @@ public with sharing class FieldSetService {
         }
 
         return label;
+    }
+
+    @TestVisible
+    private String getReferenceTo(DescribeFieldResult field) {
+        String reference;
+
+        if (field.getReferenceTo().isEmpty()) {
+            return null;
+        } else {
+            return field.getReferenceTo()[0].getDescribe().getName();
+        }
+    }
+
+    /**
+     * Platform limits the number of reference fields on an object so using this query
+     * within a loop of fields with a field set.
+     */
+    private String getNameFieldForObject(String sObjectApiName) {
+        if (sObjectApiName == null) {
+            return null;
+        }
+
+        List<FieldDefinition> fieldDefinitions = [
+            SELECT QualifiedApiName
+            FROM FieldDefinition
+            WHERE
+                EntityDefinition.QualifiedApiName = :sObjectApiName
+                AND IsNameField = TRUE
+        ];
+
+        return fieldDefinitions.isEmpty() ? null : fieldDefinitions[0].QualifiedApiName;
     }
 }

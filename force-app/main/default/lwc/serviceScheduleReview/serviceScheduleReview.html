@@ -2,98 +2,81 @@
     <c-section title={reviewLabel}></c-section>
 
     <lightning-layout multiple-rows="true" class="slds-var-p-around_small">
-        <lightning-layout-item
-            size="12"
-            class="slds-text-heading_small 
-            slds-border_bottom 
-            slds-var-p-bottom_x-small"
-        >
-            {schedule.record.Name}
-        </lightning-layout-item>
-
-        <!-- Column 1 -->
         <lightning-layout-item size="6">
-            <!-- date range -->
-            <c-output-field label="Dates">
-                <lightning-icon
-                    icon-name="utility:event"
-                    alternative-text=""
-                    size="x-small"
-                    class="slds-p-right_x-small"
-                >
-                </lightning-icon>
-                <lightning-formatted-date-time
-                    value={firstSessionStartDateTime}
-                ></lightning-formatted-date-time>
-                <!-- spacing and en-dash between dates -->
-                &nbsp;&ndash;&nbsp;
-                <lightning-formatted-date-time
-                    value={lastSessionEndDateTime}
-                ></lightning-formatted-date-time>
+            <!-- Column 1 -->
+            <c-output-field
+                label={serviceScheduleModel.scheduleRequiredFields.name.label}
+            >
+                {serviceScheduleModel.serviceSchedule.Name}
             </c-output-field>
-
-            <!-- times -->
-            <c-output-field label="Time">
-                <lightning-icon
-                    icon-name="utility:clock"
-                    alternative-text=""
-                    size="x-small"
-                    class="slds-p-right_x-small"
-                >
-                </lightning-icon>
-                <lightning-formatted-date-time
-                    value={firstSessionStartDateTime}
-                    hour="2-digit"
-                    minute="2-digit"
-                    time-zone-name="short"
-                    hour12="true"
-                ></lightning-formatted-date-time>
-                <!-- spacing and en-dash between times -->
-                &nbsp;&ndash;&nbsp;
-                <lightning-formatted-date-time
-                    value={lastSessionEndDateTime}
-                    hour="2-digit"
-                    minute="2-digit"
-                    time-zone-name="short"
-                    hour12="true"
-                ></lightning-formatted-date-time>
+            <c-output-field label={labels.dateAndTime}>
+                <!-- date range -->
+                <div>
+                    <lightning-icon
+                        icon-name="utility:event"
+                        alternative-text=""
+                        size="x-small"
+                        class="slds-var-p-right_x-small"
+                    >
+                    </lightning-icon>
+                    <lightning-formatted-date-time
+                        value={firstSessionStartDateTime}
+                    ></lightning-formatted-date-time>
+                    <!-- spacing and en-dash between dates -->
+                    &nbsp;&ndash;&nbsp;
+                    <lightning-formatted-date-time
+                        value={lastSessionEndDateTime}
+                    ></lightning-formatted-date-time>
+                </div>
+                <!-- times -->
+                <div>
+                    <lightning-icon
+                        icon-name="utility:clock"
+                        alternative-text=""
+                        size="x-small"
+                        class="slds-var-p-right_x-small"
+                    >
+                    </lightning-icon>
+                    <lightning-formatted-date-time
+                        value={firstSessionStartDateTime}
+                        hour="2-digit"
+                        minute="2-digit"
+                        hour12="true"
+                        time-zone={timeZone}
+                        time-zone-name="short"
+                    ></lightning-formatted-date-time>
+                    <!-- spacing and en-dash between times -->
+                    &nbsp;&ndash;&nbsp;
+                    <lightning-formatted-date-time
+                        value={lastSessionEndDateTime}
+                        hour="2-digit"
+                        minute="2-digit"
+                        hour12="true"
+                        time-zone={timeZone}
+                        time-zone-name="short"
+                    ></lightning-formatted-date-time>
+                </div>
             </c-output-field>
         </lightning-layout-item>
 
         <!-- Column 2 -->
         <lightning-layout-item size="6">
-            <c-output-field
-                label={schedule.fields.PrimaryServiceProvider__c.label}
-                if:true={schedule.record.PrimaryServiceProvider__c}
+            <template
+                for:each={serviceScheduleModel.scheduleInformationFields}
+                for:item="field"
             >
-                <lightning-icon
-                    icon-name="utility:user"
-                    alternative-text=""
-                    size="x-small"
-                    class="slds-p-right_x-small"
-                >
-                </lightning-icon>
-                {schedule.record.PrimaryServiceProvider__c.Name}
-            </c-output-field>
-            <c-output-field
-                label={schedule.fields.OtherServiceProvider__c.label}
-                if:true={schedule.record.OtherServiceProvider__c}
-            >
-                <lightning-icon
-                    icon-name="utility:user"
-                    alternative-text=""
-                    size="x-small"
-                    class="slds-p-right_x-small"
-                >
-                </lightning-icon>
-                {schedule.record.OtherServiceProvider__c.Name}
-            </c-output-field>
-            <c-output-field
-                label={schedule.fields.ParticipantCapacity__c.label}
-                if:true={schedule.record.ParticipantCapacity__c}
-            >
-                {schedule.record.ParticipantCapacity__c}
-            </c-output-field>
+                <c-output-field key={field.apiName} label={field.label}>
+                    <lightning-icon
+                        if:true={field.icon}
+                        icon-name={field.icon}
+                        alternative-text=""
+                        size="x-small"
+                        class="slds-var-p-right_x-small"
+                    >
+                    </lightning-icon>
+                    {field.value}
+                </c-output-field>
+            </template>
         </lightning-layout-item>
     </lightning-layout>
 
@@ -102,12 +85,12 @@
         allow-multiple-sections-open
     >
         <!--{labels.participants}-->
-        <lightning-accordion-section name="participants" label="Service Participants">
+        <lightning-accordion-section name="participants" label={servicePartcipantsLabel}>
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"
                     columns={participantDataTableColumns}
-                    data={participants.records}
+                    data={serviceScheduleModel.selectedParticipants}
                     hide-checkbox-column
                     show-row-number-column
                 >
@@ -115,12 +98,12 @@
             </div>
         </lightning-accordion-section>
         <!--{labels.sessions}-->
-        <lightning-accordion-section name="sessions" label="Service Sessions">
+        <lightning-accordion-section name="sessions" label={serviceSessionsLabel}>
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"
                     columns={sessionDataTableColumns}
-                    data={sessions.records}
+                    data={serviceScheduleModel.serviceSessions}
                     hide-checkbox-column
                     show-row-number-column
                 >

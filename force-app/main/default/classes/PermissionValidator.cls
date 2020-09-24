@@ -22,34 +22,42 @@ public with sharing class PermissionValidator {
         List<String> fields,
         String operation
     ) {
+        return hasFLSAccessForFields(objectName, fields, operation, true);
+    }
+
+    public Boolean hasFLSAccessForFields(
+        String objectName,
+        List<String> fields,
+        String operation,
+        Boolean strictMode
+    ) {
         try {
             Schema.DescribeSobjectResult[] results = Schema.describeSObjects(
                 new List<String>{ objectName }
             );
             Map<String, Schema.SObjectField> fieldsMap = results[0].fields.getMap();
 
-            if (operation == 'insert') {
-                for (String fieldName : fields) {
-                    if (!fieldsMap.get(fieldName).getDescribe().isCreateable()) {
-                        return false;
-                    }
-                }
-            }
-            if (operation == 'upsert') {
-                for (String fieldName : fields) {
-                    if (
-                        !fieldsMap.get(fieldName).getDescribe().isCreateable() ||
-                        !fieldsMap.get(fieldName).getDescribe().isUpdateable()
-                    ) {
-                        return false;
-                    }
-                }
-            }
-            if (operation == 'read') {
-                for (String fieldName : fields) {
-                    if (!hasFieldReadAccess(fieldsMap.get(fieldName).getDescribe())) {
-                        return false;
-                    }
+            for (String fieldName : fields) {
+                if (strictMode && !fieldsMap.containsKey(fieldName)) {
+                    return false;
+                } else if (!strictMode && !fieldsMap.containsKey(fieldName)) {
+                    return true;
+                } else if (
+                    operation == 'insert' &&
+                    !fieldsMap.get(fieldName).getDescribe().isCreateable()
+                ) {
+                    return false;
+                } else if (
+                    operation == 'upsert' &&
+                    (!fieldsMap.get(fieldName).getDescribe().isCreateable() ||
+                    !fieldsMap.get(fieldName).getDescribe().isUpdateable())
+                ) {
+                    return false;
+                } else if (
+                    operation == 'read' &&
+                    !hasFieldReadAccess(fieldsMap.get(fieldName).getDescribe())
+                ) {
+                    return false;
                 }
             }
             return true;

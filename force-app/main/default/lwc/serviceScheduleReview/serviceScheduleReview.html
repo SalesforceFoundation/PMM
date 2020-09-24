@@ -4,7 +4,9 @@
     <lightning-layout multiple-rows="true" class="slds-var-p-around_small">
         <lightning-layout-item size="6">
             <!-- Column 1 -->
-            <c-output-field label="Name">
+            <c-output-field
+                label={serviceScheduleModel.scheduleRequiredFields.name.label}
+            >
                 {serviceScheduleModel.serviceSchedule.Name}
             </c-output-field>
             <c-output-field label={labels.dateAndTime}>
@@ -14,7 +16,7 @@
                         icon-name="utility:event"
                         alternative-text=""
                         size="x-small"
-                        class="slds-p-right_x-small"
+                        class="slds-var-p-right_x-small"
                     >
                     </lightning-icon>
                     <lightning-formatted-date-time
@@ -32,15 +34,16 @@
                         icon-name="utility:clock"
                         alternative-text=""
                         size="x-small"
-                        class="slds-p-right_x-small"
+                        class="slds-var-p-right_x-small"
                     >
                     </lightning-icon>
                     <lightning-formatted-date-time
                         value={firstSessionStartDateTime}
                         hour="2-digit"
                         minute="2-digit"
-                        time-zone-name="short"
                         hour12="true"
+                        time-zone={timeZone}
+                        time-zone-name="short"
                     ></lightning-formatted-date-time>
                     <!-- spacing and en-dash between times -->
                     &nbsp;&ndash;&nbsp;
@@ -48,8 +51,9 @@
                         value={lastSessionEndDateTime}
                         hour="2-digit"
                         minute="2-digit"
-                        time-zone-name="short"
                         hour12="true"
+                        time-zone={timeZone}
+                        time-zone-name="short"
                     ></lightning-formatted-date-time>
                 </div>
             </c-output-field>
@@ -67,7 +71,7 @@
                         icon-name={field.icon}
                         alternative-text=""
                         size="x-small"
-                        class="slds-p-right_x-small"
+                        class="slds-var-p-right_x-small"
                     >
                     </lightning-icon>
                     {field.value}
@@ -81,7 +85,10 @@
         allow-multiple-sections-open
     >
         <!--{labels.participants}-->
-        <lightning-accordion-section name="participants" label="Service Participants">
+        <lightning-accordion-section
+            name="participants"
+            label={serviceScheduleModel.labels.serviceParticipant.objectPluralLabel}
+        >
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"
@@ -94,7 +101,10 @@
             </div>
         </lightning-accordion-section>
         <!--{labels.sessions}-->
-        <lightning-accordion-section name="sessions" label="Service Sessions">
+        <lightning-accordion-section
+            name="sessions"
+            label={serviceScheduleModel.labels.serviceSession.objectPluralLabel}
+        >
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"

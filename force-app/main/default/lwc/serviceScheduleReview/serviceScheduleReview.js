@@ -8,6 +8,7 @@ import CONTACT_OBJECT from "@salesforce/schema/Contact";
 
 export default class ServiceScheduleReview extends LightningElement {
     _serviceScheduleModel;
+    timeZone = TIME_ZONE;
 
     @api
     get serviceScheduleModel() {
@@ -43,7 +44,8 @@ export default class ServiceScheduleReview extends LightningElement {
         this._serviceScheduleModel.scheduleInformationFields.forEach(field => {
             field.icon = this.getIcon(field.referenceTo);
             field.value =
-                field.type === "REFERENCE"
+                field.type === "REFERENCE" &&
+                this._serviceScheduleModel.serviceSchedule[field.relationshipName]
                     ? this._serviceScheduleModel.serviceSchedule[field.relationshipName][
                           field.referenceNameField
                       ]
@@ -116,13 +118,11 @@ export default class ServiceScheduleReview extends LightningElement {
     }
 
     get lastSessionEndDateTime() {
-        return new Date(
-            [...this._serviceScheduleModel.serviceSessions].pop().SessionEnd__c
-        );
+        return [...this._serviceScheduleModel.serviceSessions].pop().SessionEnd__c;
     }
 
     get firstSessionStartDateTime() {
-        return new Date(this._serviceScheduleModel.serviceSessions[0].SessionStart__c);
+        return this._serviceScheduleModel.serviceSessions[0].SessionStart__c;
     }
 
     get activeSections() {

@@ -1,5 +1,8 @@
 <template>
-    <c-section title="Add Service Participants"></c-section>
+    <c-section
+        title={serviceScheduleModel.labels.serviceParticipant.addServiceParticipants}
+        if:true={isLoaded}
+    ></c-section>
     <lightning-layout class="container-height" if:true={isLoaded}>
         <lightning-layout-item size="8">
             <lightning-layout multiple-rows="true" horizontal-align="center">

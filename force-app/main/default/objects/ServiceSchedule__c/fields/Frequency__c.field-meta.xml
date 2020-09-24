@@ -25,16 +25,6 @@
                 <default>false</default>
                 <label>Monthly</label>
             </value>
-            <value>
-                <fullName>Yearly</fullName>
-                <default>false</default>
-                <label>Yearly</label>
-            </value>
-            <value>
-                <fullName>One Time</fullName>
-                <default>false</default>
-                <label>One Time</label>
-            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

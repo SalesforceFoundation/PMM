@@ -135,11 +135,15 @@ export default class ServiceScheduleReview extends LightningElement {
     }
 
     get lastSessionEndDateTime() {
-        return [...this._serviceScheduleModel.serviceSessions].pop().SessionEnd__c;
+        return this._serviceScheduleModel.serviceSessions.length
+            ? [...this._serviceScheduleModel.serviceSessions].pop().SessionEnd__c
+            : undefined;
     }
 
     get firstSessionStartDateTime() {
-        return this._serviceScheduleModel.serviceSessions[0].SessionStart__c;
+        return this._serviceScheduleModel.serviceSessions.length
+            ? this._serviceScheduleModel.serviceSessions[0].SessionStart__c
+            : undefined;
     }
 
     get activeSections() {

@@ -191,6 +191,18 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.setNextStep();
     }
 
+    processSessions() {
+        let reviewSessionsCmp = this.template.querySelector("c-review-sessions");
+
+        if (!reviewSessionsCmp) {
+            return;
+        }
+
+        this.serviceScheduleModel.serviceSessions = reviewSessionsCmp.serviceSessions;
+        this.serviceScheduleModel.serviceSchedule = reviewSessionsCmp.serviceSchedule;
+        this.setNextStep();
+    }
+
     processServiceParticipants() {
         let participantSelector = this.template.querySelector("c-participant-selector");
 
@@ -201,17 +213,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.serviceScheduleModel.selectedParticipants =
             participantSelector.selectedParticipants;
 
-        this.setNextStep();
-    }
-
-    processSessions() {
-        let reviewSessionsCmp = this.template.querySelector("c-review-sessions");
-
-        if (!reviewSessionsCmp) {
-            return;
-        }
-
-        this.serviceScheduleModel.serviceSessions = reviewSessionsCmp.serviceSessions;
         this.setNextStep();
     }
 

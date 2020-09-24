@@ -24,7 +24,9 @@
             ></c-participant-selector>
         </template>
         <template if:true={isStep4}>
-            <c-service-schedule-review></c-service-schedule-review>
+            <c-service-schedule-review
+                service-schedule-model={serviceScheduleModel}
+            ></c-service-schedule-review>
         </template>
         <div slot="footer">
             <lightning-layout horizontal-align="end">

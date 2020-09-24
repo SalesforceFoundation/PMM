@@ -49,6 +49,7 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     @api reportValidity() {
+        // TODO: add validity checks for enddatetime > startdatetime, frequency != null, dow != null when freq = weekly, etc.
         return [...this.template.querySelectorAll("lightning-input-field")].reduce(
             (validSoFar, inputField) => {
                 return validSoFar && inputField.reportValidity();

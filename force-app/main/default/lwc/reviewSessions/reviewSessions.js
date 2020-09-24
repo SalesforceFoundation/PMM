@@ -1,9 +1,7 @@
 import { LightningElement, track, api } from "lwc";
-import getSessions from "@salesforce/apex/ServiceScheduleCreatorController.getSessions";
+import updateModel from "@salesforce/apex/ServiceScheduleCreatorController.updateModel";
 import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
 import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Record";
-import START_TIME_LABEL from "@salesforce/label/c.Start_Time";
-import END_TIME_LABEL from "@salesforce/label/c.End_Time";
 import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
@@ -40,18 +38,23 @@ export default class ReviewSessions extends LightningElement {
         return this._serviceSessions;
     }
 
+    @api
+    get serviceSchedule() {
+        // now contains full contact records for Service Provider lookups
+        return this._serviceScheduleModel.serviceSchedule;
+    }
+
     labels = {
         totalSessions: TOTAL_SESSIONS_LABEL,
         addSession: ADD_RECORD_LABEL,
         reviewSessions: REVIEW_RECORDS,
-        startTime: START_TIME_LABEL,
-        endTime: END_TIME_LABEL,
     };
 
     getSessions() {
-        getSessions({ schedule: this._serviceScheduleModel.serviceSchedule })
+        updateModel({ model: this._serviceScheduleModel })
             .then(result => {
-                this._serviceSessions = [...result];
+                this._serviceScheduleModel = JSON.parse(JSON.stringify(result));
+                this._serviceSessions = this._serviceScheduleModel.serviceSessions;
             })
             .catch(error => {
                 // TODO: throw error

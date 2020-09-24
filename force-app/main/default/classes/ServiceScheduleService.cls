@@ -27,7 +27,37 @@ public with sharing class ServiceScheduleService {
         return model;
     }
 
-    public List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
+    public ServiceScheduleModel updateModel(ServiceScheduleModel model) {
+        model.serviceSessions = getSessions(model.serviceSchedule);
+        model.serviceSchedule = getServiceProviders(model.serviceSchedule);
+        return model;
+    }
+
+    private ServiceSchedule__c getServiceProviders(ServiceSchedule__c schedule) {
+        if (schedule.PrimaryServiceProvider__c != null) {
+            Contact primaryServiceProvider = [
+                SELECT Name
+                FROM Contact
+                WHERE Id = :schedule.PrimaryServiceProvider__c
+                LIMIT 1
+            ];
+            schedule.PrimaryServiceProvider__r = primaryServiceProvider;
+        }
+
+        if (schedule.OtherServiceProvider__c != null) {
+            Contact otherServiceProvider = [
+                SELECT Name
+                FROM Contact
+                WHERE Id = :schedule.OtherServiceProvider__c
+                LIMIT 1
+            ];
+            schedule.OtherServiceProvider__r = otherServiceProvider;
+        }
+
+        return schedule;
+    }
+
+    private List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 
         Id primaryServiceProvider = schedule.PrimaryServiceProvider__c;

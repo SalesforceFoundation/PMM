@@ -3,11 +3,6 @@
     <fullName>ServiceScheduleInformation</fullName>
     <description>Used on custom UI when creating a new Service Schedule record.</description>
     <displayedFields>
-        <field>Name</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </displayedFields>
-    <displayedFields>
         <field>PrimaryServiceProvider__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>

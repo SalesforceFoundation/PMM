@@ -142,13 +142,6 @@
         <value>Enabled</value>
     </labels>
     <labels>
-        <fullName>End_Time</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>End Time</shortDescription>
-        <value>End Time</value>
-    </labels>
-    <labels>
         <fullName>Error</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -501,13 +494,6 @@
         <protected>true</protected>
         <shortDescription>Session Scheduled Outside Start And End Date</shortDescription>
         <value>This session would be scheduled outside of the Service Schedule start and end dates ({0} to {1}).</value>
-    </labels>
-    <labels>
-        <fullName>Start_Time</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Start Time</shortDescription>
-        <value>Start Time</value>
     </labels>
     <labels>
         <fullName>Submit</fullName>

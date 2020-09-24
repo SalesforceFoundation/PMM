@@ -57,7 +57,8 @@ public with sharing class ServiceScheduleDomain {
             .hasFLSAccessForFields(
                 sObjectType.getDescribe().getName(),
                 new List<String>(populatedFieldNames),
-                'insert'
+                'insert',
+                false
             );
 
         if (!(hasObjectPermissions && hasFieldPermissions)) {

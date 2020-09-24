@@ -9,6 +9,7 @@ public with sharing class ServiceScheduleService_TEST {
     private static BasicStub programEngagementSelectorStub = new BasicStub(
         ProgramEngagementSelector.class
     );
+    private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
 
     @TestSetup
     private static void setupTestData() {
@@ -94,10 +95,12 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
-    private static void shouldGetSessions() {
+    private static void shouldUpdateModel() {
         String createMethod = 'createRRule';
         String generateMethod = 'generate';
+        String getServiceProviderMethod = 'getServiceProviderById';
         String rRuleString = 'abc';
+        Contact serviceProvider = new Contact();
         Id primaryServiceProvider = TestUtil.mockId(Contact.SObjectType);
         Id otherServiceProvider = TestUtil.mockId(Contact.SObjectType);
         DateTime firstSessionStart = System.now();
@@ -114,10 +117,14 @@ public with sharing class ServiceScheduleService_TEST {
             PrimaryServiceProvider__c = primaryServiceProvider,
             OtherServiceProvider__c = otherServiceProvider
         );
+        ServiceScheduleModel model = new ServiceScheduleModel();
+        model.serviceSchedule = schedule;
+
         List<DateTime> expectedDateTimes = new List<DateTime>{
             firstSessionStart,
             firstSessionStart.addDays(1)
         };
+
         recurrenceServiceStub.withReturnValue(
             createMethod,
             new List<Type>{
@@ -137,27 +144,47 @@ public with sharing class ServiceScheduleService_TEST {
         );
         service.recurrenceService = (RecurrenceService) recurrenceServiceStub.createMock();
 
-        List<ServiceSession__c> expected = new List<ServiceSession__c>();
+        serviceSelectorStub.withReturnValue(
+            getServiceProviderMethod,
+            Id.class,
+            serviceProvider
+        );
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+
+        List<ServiceSession__c> expectedSessions = new List<ServiceSession__c>();
         for (DateTime sessionDateTime : expectedDateTimes) {
-            expected.add(
+            expectedSessions.add(
                 new ServiceSession__c(
                     Name = schedule.Name + ': ' + sessionDateTime.date().format(),
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = sessionDateTime.addHours(2),
+                    SessionEnd__c = DateTime.newInstance(
+                        sessionDateTime.date(),
+                        firstSessionEnd.time()
+                    ),
                     PrimaryServiceProvider__c = primaryServiceProvider,
                     OtherServiceProvider__c = otherServiceProvider
                 )
             );
         }
 
-        Test.startTest();
-        List<ServiceSession__c> actual = service.getSessions(schedule);
-        Test.stopTest();
+        ServiceScheduleModel expected = new ServiceScheduleModel();
+        schedule.PrimaryServiceProvider__r = serviceProvider;
+        schedule.OtherServiceProvider__r = serviceProvider;
+        expected.serviceSchedule = schedule;
+        expected.serviceSessions = expectedSessions;
 
+        Test.startTest();
+        ServiceScheduleModel actual = service.updateModel(model);
+        Test.stopTest();
         System.assertEquals(
-            expected,
-            actual,
+            expected.serviceSessions,
+            actual.serviceSessions,
             'Sessions not returned from the service as expected.'
+        );
+        System.assertEquals(
+            expected.serviceSchedule,
+            actual.serviceSchedule,
+            'Schedule not returned from the service as expected.'
         );
 
         recurrenceServiceStub.assertCalledWith(
@@ -183,6 +210,16 @@ public with sharing class ServiceScheduleService_TEST {
             generateMethod,
             new List<Type>{ DateTime.class, String.class },
             new List<Object>{ schedule.FirstSessionStart__c, rRuleString }
+        );
+        serviceSelectorStub.assertCalledWith(
+            getServiceProviderMethod,
+            Id.class,
+            primaryServiceProvider
+        );
+        serviceSelectorStub.assertCalledWith(
+            getServiceProviderMethod,
+            Id.class,
+            otherServiceProvider
         );
     }
 

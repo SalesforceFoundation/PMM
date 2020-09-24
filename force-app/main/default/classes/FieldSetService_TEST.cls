@@ -18,7 +18,8 @@ public with sharing class FieldSetService_TEST {
 
         List<Map<String, Object>> fieldsResult = fieldSetService.getFieldSetForLWC(
             String.valueOf(ProgramEngagement__c.SObjectType),
-            fieldSet.getName()
+            fieldSet.getName(),
+            false
         );
 
         Test.stopTest();
@@ -77,7 +78,8 @@ public with sharing class FieldSetService_TEST {
 
         List<Map<String, Object>> fieldsResult = fieldSetService.getFieldSetForLWC(
             String.valueOf(ProgramEngagement__c.SObjectType),
-            fieldSet.getName()
+            fieldSet.getName(),
+            false
         );
 
         Test.stopTest();

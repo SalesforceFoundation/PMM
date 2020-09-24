@@ -4,6 +4,8 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
     @TestVisible
+    private ServiceSelector serviceSelector = new ServiceSelector();
+    @TestVisible
     RecurrenceService recurrenceService = new RecurrenceService();
 
     public ServiceScheduleModel getServiceScheduleModel() {
@@ -35,28 +37,21 @@ public with sharing class ServiceScheduleService {
 
     private ServiceSchedule__c getServiceProviders(ServiceSchedule__c schedule) {
         if (schedule.PrimaryServiceProvider__c != null) {
-            Contact primaryServiceProvider = [
-                SELECT Name
-                FROM Contact
-                WHERE Id = :schedule.PrimaryServiceProvider__c
-                LIMIT 1
-            ];
-            schedule.PrimaryServiceProvider__r = primaryServiceProvider;
+            schedule.PrimaryServiceProvider__r = serviceSelector.getServiceProviderById(
+                schedule.PrimaryServiceProvider__c
+            );
         }
 
         if (schedule.OtherServiceProvider__c != null) {
-            Contact otherServiceProvider = [
-                SELECT Name
-                FROM Contact
-                WHERE Id = :schedule.OtherServiceProvider__c
-                LIMIT 1
-            ];
-            schedule.OtherServiceProvider__r = otherServiceProvider;
+            schedule.OtherServiceProvider__r = serviceSelector.getServiceProviderById(
+                schedule.OtherServiceProvider__c
+            );
         }
 
         return schedule;
     }
 
+    @TestVisible
     private List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 

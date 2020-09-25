@@ -9,7 +9,7 @@ import CONTACT_OBJECT from "@salesforce/schema/Contact";
 export default class ServiceScheduleReview extends LightningElement {
     _serviceScheduleModel;
     timeZone = TIME_ZONE;
-    @track dateFields;
+    @track sessionFields;
 
     @api
     get serviceScheduleModel() {
@@ -18,7 +18,7 @@ export default class ServiceScheduleReview extends LightningElement {
     set serviceScheduleModel(value) {
         // This is a nested object so the inner objects are still read only when using spread alone
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
-        this.dateFields = this._serviceScheduleModel.scheduleRecurrenceDateFields;
+        this.sessionFields = this._serviceScheduleModel.sessionFields;
         this.setLabels();
         this.processScheduleInfoFieldSet();
     }
@@ -139,14 +139,16 @@ export default class ServiceScheduleReview extends LightningElement {
     get lastSessionEndDateTime() {
         return this._serviceScheduleModel.serviceSessions.length
             ? [...this._serviceScheduleModel.serviceSessions].pop()[
-                  this.dateFields.end.apiName
+                  this.sessionFields.sessionEnd.apiName
               ]
             : undefined;
     }
 
     get firstSessionStartDateTime() {
         return this._serviceScheduleModel.serviceSessions.length
-            ? this._serviceScheduleModel.serviceSessions[0][this.dateFields.start.apiName]
+            ? this._serviceScheduleModel.serviceSessions[0][
+                  this.sessionFields.sessionStart.apiName
+              ]
             : undefined;
     }
 

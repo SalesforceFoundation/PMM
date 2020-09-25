@@ -9,6 +9,8 @@ const SMALL_SIZE = 6;
 
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
+    errorMessage;
+    hasError = false;
     objectApiName;
     labels;
     sizes = {
@@ -50,18 +52,35 @@ export default class NewServiceSchedule extends LightningElement {
 
     @api reportValidity() {
         // TODO: add validity checks for enddatetime > startdatetime, frequency != null, dow != null when freq = weekly, etc.
-        return (
-            [...this.template.querySelectorAll("lightning-input-field")].reduce(
-                (validSoFar, inputField) => {
-                    return validSoFar && inputField.reportValidity();
-                },
-                true
-            ) &&
-            (this.dateFields.end.value
-                ? this.dateFields.start.value < this.dateFields.end.value
-                : true) &&
-            this.dateFields.start.value
-        );
+        let errMessages = [];
+        console.log("inside reportValidity");
+        let isFormValid = [
+            ...this.template.querySelectorAll("lightning-input-field"),
+        ].reduce((validSoFar, inputField) => {
+            return validSoFar && inputField.reportValidity();
+        }, true);
+
+        let datesValid = this.dateFields.end.value
+            ? this.dateFields.start.value < this.dateFields.end.value
+            : true;
+
+        let startDateValid = this.dateFields.start.value;
+
+        if (isFormValid) {
+            errMessages.push("error1");
+        }
+        if (datesValid) {
+            errMessages.push("error2");
+        }
+        if (startDateValid) {
+            errMessages.push("error3");
+        }
+
+        this.errorMessage = errMessages.join(",");
+
+        this.hasError = errMessages.length ? true : false;
+
+        return this.hasError;
     }
 
     @api

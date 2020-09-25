@@ -50,11 +50,17 @@ export default class NewServiceSchedule extends LightningElement {
 
     @api reportValidity() {
         // TODO: add validity checks for enddatetime > startdatetime, frequency != null, dow != null when freq = weekly, etc.
-        return [...this.template.querySelectorAll("lightning-input-field")].reduce(
-            (validSoFar, inputField) => {
-                return validSoFar && inputField.reportValidity();
-            },
-            true
+        return (
+            [...this.template.querySelectorAll("lightning-input-field")].reduce(
+                (validSoFar, inputField) => {
+                    return validSoFar && inputField.reportValidity();
+                },
+                true
+            ) &&
+            (this.dateFields.end.value
+                ? this.dateFields.start.value < this.dateFields.end.value
+                : true) &&
+            this.dateFields.start.value
         );
     }
 
@@ -136,6 +142,10 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     handleStartChange(event) {
+        if (!event.detail.value) {
+            this.dateFields.end.value = null;
+            return;
+        }
         this.dateFields.start.value = event.detail.value;
         let startTime = new Date(event.detail.value);
         let endTime = new Date(event.detail.value);

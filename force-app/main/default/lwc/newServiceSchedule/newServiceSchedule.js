@@ -7,10 +7,14 @@ const AFTER = "After";
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
 
+import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
+import START_BEFORE_END_LABEL from "@salesforce/label/c.First_Session_End_After_Start";
+import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
+
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
     errorMessage;
-    hasError = false;
+    isValid = true;
     objectApiName;
     labels;
     sizes = {
@@ -51,36 +55,49 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     @api reportValidity() {
-        // TODO: add validity checks for enddatetime > startdatetime, frequency != null, dow != null when freq = weekly, etc.
         let errMessages = [];
-        console.log("inside reportValidity");
+
         let isFormValid = [
             ...this.template.querySelectorAll("lightning-input-field"),
         ].reduce((validSoFar, inputField) => {
             return validSoFar && inputField.reportValidity();
         }, true);
 
-        let datesValid = this.dateFields.end.value
-            ? this.dateFields.start.value < this.dateFields.end.value
-            : true;
+        console.log(this.dateFields.start.value);
+        console.log(this.dateFields.end.value);
+        let datesValid = this.dateFields.start.value < this.dateFields.end.value;
+        console.log(datesValid);
+        // todo: figure out how to clean this up. falsy wasn't working as expected.
+        let hasEndCondition =
+            (this.dateFields.numberOfSessions !== undefined &&
+                this.dateFields.numberOfSessions.value !== undefined) ||
+            (this.dateFields.seriesEndsOn !== undefined &&
+                this.dateFields.seriesEndsOn.value !== undefined);
+        console.log(hasEndCondition);
+        console.log(JSON.stringify(this.picklistFields.daysOfWeek));
+        let hasDayOfWeek =
+            this.picklistFields.frequency.value === WEEKLY
+                ? this.picklistFields.daysOfWeek.value
+                : true;
+        console.log(hasDayOfWeek);
 
-        let startDateValid = this.dateFields.start.value;
-
-        if (isFormValid) {
-            errMessages.push("error1");
+        // input-fields handle their own error display, so no additional error message needed for !isFormValid
+        if (!datesValid) {
+            errMessages.push(START_BEFORE_END_LABEL);
         }
-        if (datesValid) {
-            errMessages.push("error2");
+        if (!hasEndCondition) {
+            errMessages.push(NO_END_LABEL);
         }
-        if (startDateValid) {
-            errMessages.push("error3");
+        if (!hasDayOfWeek) {
+            errMessages.push(DAY_REQUIRED_LABEL);
         }
 
-        this.errorMessage = errMessages.join(",");
+        this.errorMessage = errMessages.join("\n"); // this should inject a line break but it doesn't seem to be working.
+        console.log(this.errorMessage);
 
-        this.hasError = errMessages.length ? true : false;
+        this.isValid = isFormValid && datesValid && hasEndCondition && hasDayOfWeek;
 
-        return this.hasError;
+        return this.isValid;
     }
 
     @api
@@ -174,6 +191,7 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     handleEndChange(event) {
+        this.dateFields.end.value = event.detail.value;
         let startTime = new Date(this.dateFields.start.value);
         let endTime = new Date(event.detail.value);
         this.duration =

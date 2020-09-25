@@ -6,7 +6,7 @@
         if:true={isLoaded}
     >
         <lightning-layout horizontal-align="center" multiple-rows="true">
-            <template if:true={hasError}>
+            <template if:true={errorMessage} class="slds-var-p-around_small">
                 <c-scoped-notification
                     theme="error"
                     title={errorMessage}
@@ -59,6 +59,7 @@
                             field-name={dateFields.start.apiName}
                             value={dateFields.start.value}
                             onchange={handleStartChange}
+                            required
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.small}>
@@ -67,6 +68,7 @@
                             value={dateFields.end.value}
                             onchange={handleEndChange}
                             disabled={disableSessionEnd}
+                            required
                         ></lightning-input-field>
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>

@@ -56,7 +56,7 @@ export default class ServiceScheduleReview extends LightningElement {
 
     getIcon(referenceTo) {
         switch (referenceTo) {
-            case CONTACT_OBJECT.objectName:
+            case CONTACT_OBJECT.objectApiName:
                 return "utility:user";
             default:
                 return null;

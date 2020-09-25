@@ -12,13 +12,13 @@ describe("c-service-schedule-creator", () => {
         });
     });
 
-    it("modal is displayed and is accessible", () => {
+    it("modal is not displayed and element is accessible", () => {
         document.body.appendChild(element);
 
         return global.flushPromises().then(async () => {
-            //verify that the header is displayed
             const modal = element.shadowRoot.querySelector("c-modal");
-            expect(modal.header).not.toBe(null);
+            // Modal will only display after data is loaded
+            expect(modal).toBe(null);
 
             await expect(element).toBeAccessible();
         });

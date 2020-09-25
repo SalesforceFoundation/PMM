@@ -52,14 +52,17 @@
                         <lightning-input-field
                             field-name={dateFields.start.apiName}
                             value={dateFields.start.value}
+                            onchange={handleStartChange}
                         ></lightning-input-field
                     ></lightning-layout-item>
                     <lightning-layout-item size={sizes.small}>
                         <lightning-input-field
                             field-name={dateFields.end.apiName}
                             value={dateFields.end.value}
-                        ></lightning-input-field
-                    ></lightning-layout-item>
+                            onchange={handleEndChange}
+                            disabled={disableSessionEnd}
+                        ></lightning-input-field>
+                    </lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
                         <c-picklist
                             picklist={picklistFields.frequency}

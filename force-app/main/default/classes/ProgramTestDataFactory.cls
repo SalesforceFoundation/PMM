@@ -13,10 +13,15 @@ public with sharing class ProgramTestDataFactory {
         acc.Name = 'Test Account';
         insert acc;
 
-        Contact con = new Contact();
-        con.LastName = 'Test Contact';
-        con.AccountId = acc.Id;
-        insert con;
+        Contact con1 = new Contact();
+        con1.LastName = 'Test Contact';
+        con1.AccountId = acc.Id;
+        insert con1;
+
+        Contact con2 = new Contact();
+        con2.LastName = 'Test Contact';
+        con2.AccountId = acc.Id;
+        insert con2;
 
         List<Program__c> programs = new List<Program__c>();
         Program__c program1 = new Program__c();
@@ -57,7 +62,7 @@ public with sharing class ProgramTestDataFactory {
         ProgramEngagement__c engagement1 = new ProgramEngagement__c();
         engagement1.Name = 'Engagement 1';
         engagement1.Stage__c = 'Enrolled';
-        engagement1.Contact__c = con.Id;
+        engagement1.Contact__c = con1.Id;
         engagement1.Program__c = program1.Id;
         engagement1.Role__c = 'Client';
         engagement1.ProgramCohort__c = cohort1.Id;
@@ -66,7 +71,7 @@ public with sharing class ProgramTestDataFactory {
         ProgramEngagement__c engagement2 = new ProgramEngagement__c();
         engagement2.Name = 'Engagement 2';
         engagement2.Stage__c = 'Enrolled';
-        engagement2.Contact__c = con.Id;
+        engagement2.Contact__c = con1.Id;
         engagement2.Program__c = program2.Id;
         engagement2.Role__c = 'Client';
         engagements.add(engagement2);
@@ -96,7 +101,7 @@ public with sharing class ProgramTestDataFactory {
 
             ServiceDelivery__c serviceDelivery1 = new ServiceDelivery__c();
             serviceDelivery1.ProgramEngagement__c = engagement1.Id;
-            serviceDelivery1.Contact__c = con.Id;
+            serviceDelivery1.Contact__c = con1.Id;
             serviceDelivery1.DeliveryDate__c = System.today();
             serviceDelivery1.Quantity__c = 10;
             serviceDelivery1.Service__c = service1.Id;

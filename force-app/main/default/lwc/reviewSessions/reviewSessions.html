@@ -14,6 +14,7 @@
             </div>
         </lightning-layout-item>
         <lightning-layout-item size="5">
+            <!--
             <div
                 class="slds-float_right slds-var-m-top_large slds-var-m-left_x-large slds-var-m-bottom_xx-small"
             >
@@ -23,6 +24,7 @@
                     onclick={handleAddRows}
                 ></lightning-button>
             </div>
+            -->
         </lightning-layout-item>
         <lightning-layout-item size="10">
             <div
@@ -32,7 +34,7 @@
                 <lightning-datatable
                     key-field="Id"
                     columns={columns}
-                    data={data}
+                    data={serviceSessions}
                     hide-checkbox-column
                     show-row-number-column
                     onrowaction={handleDelete}

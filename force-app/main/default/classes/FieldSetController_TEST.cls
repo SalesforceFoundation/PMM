@@ -19,7 +19,7 @@ public with sharing class FieldSetController_TEST {
 
         fieldSetServiceStub.withReturnValue(
             'getFieldSetForLWC',
-            new List<Type>{ String.class, String.class },
+            new List<Type>{ String.class, String.class, Boolean.class },
             expected
         );
 
@@ -41,8 +41,8 @@ public with sharing class FieldSetController_TEST {
 
         fieldSetServiceStub.assertCalledWith(
             'getFieldSetForLWC',
-            new List<Type>{ String.class, String.class },
-            new List<Object>{ objectName, fieldSetName }
+            new List<Type>{ String.class, String.class, Boolean.class },
+            new List<Object>{ objectName, fieldSetName, false }
         );
     }
 
@@ -53,7 +53,7 @@ public with sharing class FieldSetController_TEST {
 
         fieldSetServiceStub.withThrowException(
             'getFieldSetForLWC',
-            new List<Type>{ String.class, String.class }
+            new List<Type>{ String.class, String.class, Boolean.class }
         );
 
         final List<Object> expected = null;
@@ -86,8 +86,8 @@ public with sharing class FieldSetController_TEST {
 
         fieldSetServiceStub.assertCalledWith(
             'getFieldSetForLWC',
-            new List<Type>{ String.class, String.class },
-            new List<Object>{ objectName, fieldSetName }
+            new List<Type>{ String.class, String.class, Boolean.class },
+            new List<Object>{ objectName, fieldSetName, false }
         );
     }
 }

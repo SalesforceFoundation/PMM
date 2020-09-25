@@ -25,6 +25,7 @@ export default class NewServiceSchedule extends LightningElement {
     dateFields;
     fieldSet;
     isLoaded = false;
+    duration = 1;
 
     @api
     get serviceScheduleModel() {
@@ -48,6 +49,7 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     @api reportValidity() {
+        // TODO: add validity checks for enddatetime > startdatetime, frequency != null, dow != null when freq = weekly, etc.
         return [...this.template.querySelectorAll("lightning-input-field")].reduce(
             (validSoFar, inputField) => {
                 return validSoFar && inputField.reportValidity();
@@ -123,7 +125,7 @@ export default class NewServiceSchedule extends LightningElement {
 
     handleDaysOfWeekChange(event) {
         this.picklistFields.daysOfWeek.value = event.detail.length
-            ? event.detail.map(selection => selection.value)
+            ? event.detail.map(selection => selection.value).join(";")
             : undefined;
     }
 
@@ -131,5 +133,27 @@ export default class NewServiceSchedule extends LightningElement {
         this.picklistFields.seriesEnds.value = event.detail.length
             ? event.detail[0].value
             : undefined;
+    }
+
+    handleStartChange(event) {
+        this.dateFields.start.value = event.detail.value;
+        let startTime = new Date(event.detail.value);
+        let endTime = new Date(event.detail.value);
+        endTime.setHours(startTime.getHours() + this.duration);
+        endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
+        this.dateFields.end.value = new Date(endTime).toISOString();
+    }
+
+    handleEndChange(event) {
+        let startTime = new Date(this.dateFields.start.value);
+        let endTime = new Date(event.detail.value);
+        this.duration =
+            endTime.getHours() -
+            startTime.getHours() +
+            (endTime.getMinutes() - startTime.getMinutes()) / 60;
+    }
+
+    get disableSessionEnd() {
+        return !this.dateFields.start.value;
     }
 }

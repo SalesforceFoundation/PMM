@@ -54,7 +54,9 @@ public with sharing class RecurrenceRule {
     }
 
     public RecurrenceRule withInterval(Integer interval) {
-        this.interval = interval;
+        if (interval != null) {
+            this.interval = interval;
+        }
         return this;
     }
 
@@ -79,19 +81,27 @@ public with sharing class RecurrenceRule {
     }
 
     public RecurrenceRule withByMonthDays(DateTime dateTimeStart) {
-        byMonthDays = new Set<Integer>();
+        if (freq != Frequency.MONTHLY) {
+            return this;
+        }
+
+        Set<Integer> daysToAdd = new Set<Integer>();
 
         switch on dateTimeStart.day() {
             when 29 {
-                byMonthDays.addAll(new Set<Integer>{ 28, 29 });
+                daysToAdd.addAll(new Set<Integer>{ 28, 29 });
             }
             when 30 {
-                byMonthDays.addAll(new Set<Integer>{ 28, 29, 30 });
+                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30 });
             }
             when 31 {
-                byMonthDays.addAll(new Set<Integer>{ 28, 29, 30, 31 });
+                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30, 31 });
             }
         }
+        if (daysToAdd.size() != 0) {
+            byMonthDays = daysToAdd;
+        }
+
         return this;
     }
 
@@ -147,7 +157,7 @@ public with sharing class RecurrenceRule {
         ruleParts.add('FREQ=' + freq);
 
         // INTERVAL
-        if (interval != 1) {
+        if (interval > 1) {
             ruleParts.add('INTERVAL=' + interval);
         }
 
@@ -268,6 +278,10 @@ public with sharing class RecurrenceRule {
     private void populateDays(List<Integer> dayNums) {
         List<Day> daysToAssign = new List<Day>();
         List<Day> dayValues = Day.values();
+
+        if (dayNums == null) {
+            return;
+        }
 
         for (Integer dayNum : dayNums) {
             if (dayNum <= dayValues.size()) {

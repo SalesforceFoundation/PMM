@@ -1,194 +1,155 @@
-import { LightningElement, api } from "lwc";
+import { LightningElement, api, track } from "lwc";
 import { format } from "c/util";
 import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
-
-const FIRSTSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/6/2020";
-const SECONDSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/7/2020";
-const THIRDSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/13/2020";
-const FOURTHSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/14/2020";
-const FIFTHSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/20/2020";
-const SIXTHSESSIONNAME = "Family Class (Thu-Fri) Thursday: 7/21/2020";
-
-const SESSION_DATA = [
-    {
-        id: "1",
-        Name: FIRSTSESSIONNAME,
-        SessionStart__c: "7/6/2020 1:00 PM",
-        SessionEnd__c: "7/6/2020 3:00 PM",
-    },
-    {
-        id: "2",
-        Name: SECONDSESSIONNAME,
-        SessionStart__c: "7/7/2020 1:00 PM",
-        SessionEnd__c: "7/7/2020 3:00 PM",
-    },
-    {
-        id: "3",
-        Name: THIRDSESSIONNAME,
-        SessionStart__c: "7/13/2020 1:00 PM",
-        SessionEnd__c: "7/13/2020 3:00 PM",
-    },
-    {
-        id: "4",
-        Name: FOURTHSESSIONNAME,
-        SessionStart__c: "7/14/2020 1:00 PM",
-        SessionEnd__c: "7/14/2020 3:00 PM",
-    },
-    {
-        id: "5",
-        Name: FIFTHSESSIONNAME,
-        SessionStart__c: "7/20/2020 1:00 PM",
-        SessionEnd__c: "7/20/2020 3:00 PM",
-    },
-    {
-        id: "6",
-        Name: SIXTHSESSIONNAME,
-        SessionStart__c: "7/21/2020 1:00 PM",
-        SessionEnd__c: "7/21/2020 3:00 PM",
-    },
-];
-
-const PARTICIPANT_DATA = [
-    {
-        id: "1",
-        Contact__c: "Arlene Baker",
-        Email: "arlene@test.com",
-        Stage__c: "Active",
-    },
-    {
-        id: "2",
-        Contact__c: "Tom Higgins",
-        Email: "thig@test.com",
-        Stage__c: "Active",
-    },
-    {
-        id: "3",
-        Contact__c: "Robin Brooks",
-        Email: "robinbrooks@test.com",
-        Stage__c: "Active",
-    },
-    {
-        id: "4",
-        Contact__c: "Barbara Johnson",
-        Email: "bjohnson@test.com",
-        Stage__c: "Active",
-    },
-    {
-        id: "5",
-        Contact__c: "Zack Morris",
-        Email: "zack@test.com",
-        Stage__c: "Active",
-    },
-];
+import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
+import DATE_AND_TIME from "@salesforce/label/c.Service_Schedule_Date_Time";
+import TIME_ZONE from "@salesforce/i18n/timeZone";
+import CONTACT_OBJECT from "@salesforce/schema/Contact";
 
 export default class ServiceScheduleReview extends LightningElement {
-    // TODO: ADAPT THESE TO RECEIVE ACTUAL DATA
-    // Note: hard-coding for now, will be delivered by a previous screen,
-    // which will be responsible for the getObjectInfo wire call
-    @api participants = {
-        records: PARTICIPANT_DATA,
-        label: "Service Participant",
-        pluralLabel: "Service Participants",
-        fields: {
-            Name: { apiName: "Name", label: "Service Participant Name" },
-            Contact__c: { apiName: "Contact__c", label: "Contact" },
-            Email: { apiName: "Email", label: "Email" }, // this one will need extra love because it's a reference field
-            Stage__c: { apiName: "Stage__c", label: "Stage" },
-        },
-    };
-    @api sessions = {
-        records: SESSION_DATA,
-        label: "Service Session",
-        pluralLabel: "Service Sessions",
-        fields: {
-            Name: { apiName: "Name", label: "Service Session Name" },
-            SessionStart__c: { apiName: "SessionStart__c", label: "Session Start" },
-            SessionEnd__c: { apiName: "SessionEnd__c", label: "Session End" },
-        },
-    };
-    @api schedule = {
-        record: {
-            Name: "Family Class (Thu-Fri)",
-            PrimaryServiceProvider__c: { Id: "000", Name: "Veronica Mars" },
-            OtherServiceProvider__c: { Id: "001", Name: "Kristen Bell" },
-            ParticipantCapacity__c: 12,
-        },
-        label: "Service Schedule",
-        pluralLabel: "Service Schedules",
-        fields: {
-            FirstSessionStart__c: {
-                apiName: "FirstSessionStart__c",
-                label: "First Session Start",
-            },
-            FirstSessionEnd__c: {
-                apiName: "FirstSessionEnd__c",
-                label: "First Session End",
-            },
-            PrimaryServiceProvider__c: {
-                apiName: "PrimaryServiceProvider__c",
-                label: "Primary Service Provider",
-            },
-            OtherServiceProvider__c: {
-                apiName: "OtherServiceProvider__c",
-                label: "Other Service Provider",
-            },
-            ParticipantCapacity__c: {
-                apiName: "ParticipantCapacity__c",
-                label: "Participant Capacity",
-            },
-        },
+    _serviceScheduleModel;
+    timeZone = TIME_ZONE;
+    @track sessionFields;
+
+    @api
+    get serviceScheduleModel() {
+        return this._serviceScheduleModel;
+    }
+    set serviceScheduleModel(value) {
+        // This is a nested object so the inner objects are still read only when using spread alone
+        this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
+        this.sessionFields = this._serviceScheduleModel.sessionFields;
+        this.setLabels();
+        this.processScheduleInfoFieldSet();
+    }
+
+    labels = {
+        totalSessions: TOTAL_SESSIONS_LABEL,
+        dateAndTime: DATE_AND_TIME,
     };
 
     get reviewLabel() {
-        return format(REVIEW_RECORDS, [this.schedule.label]);
+        return format(REVIEW_RECORDS, [
+            this._serviceScheduleModel.labels.serviceSchedule.objectLabel,
+        ]);
+    }
+
+    setLabels() {
+        this.objectName = this._serviceScheduleModel.labels.serviceSession.objectPluralLabel;
+        this.sessionNameLabel = this._serviceScheduleModel.sessionFields.name.label;
+        this.sessionStartLabel = this._serviceScheduleModel.sessionFields.sessionStart.label;
+        this.sessionEndLabel = this._serviceScheduleModel.sessionFields.sessionEnd.label;
+    }
+
+    processScheduleInfoFieldSet() {
+        this._serviceScheduleModel.scheduleInformationFields.forEach(field => {
+            field.icon = this.getIcon(field.referenceTo);
+            field.value = this._serviceScheduleModel.serviceSchedule[
+                field.relationshipName
+            ]
+                ? this._serviceScheduleModel.serviceSchedule[field.relationshipName][
+                      field.referenceNameField
+                  ]
+                : this._serviceScheduleModel.serviceSchedule[field.apiName];
+        });
+    }
+
+    getIcon(referenceTo) {
+        switch (referenceTo) {
+            case CONTACT_OBJECT.objectApiName:
+                return "utility:user";
+            default:
+                return null;
+        }
     }
 
     get sessionDataTableColumns() {
         return [
             {
-                label: this.sessions.fields.Name.label,
-                fieldName: this.sessions.fields.Name.apiName,
+                label: this.sessionNameLabel,
+                fieldName: this._serviceScheduleModel.sessionFields.name.apiName,
                 hideDefaultActions: true,
             },
             {
-                label: this.sessions.fields.SessionStart__c.label,
-                fieldName: this.sessions.fields.SessionStart__c.apiName,
+                label: this.sessionStartLabel,
+                fieldName: this._serviceScheduleModel.sessionFields.sessionStart.apiName,
                 hideDefaultActions: true,
+                type: "date",
+                typeAttributes: {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "numeric",
+                    minute: "numeric",
+                    weekday: "long",
+                    timeZoneName: "short",
+                    timeZone: TIME_ZONE,
+                },
             },
             {
-                label: this.sessions.fields.SessionEnd__c.label,
-                fieldName: this.sessions.fields.SessionEnd__c.apiName,
+                label: this.sessionEndLabel,
+                fieldName: this._serviceScheduleModel.sessionFields.sessionEnd.apiName,
                 hideDefaultActions: true,
+                type: "date",
+                typeAttributes: {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "numeric",
+                    minute: "numeric",
+                    weekday: "long",
+                    timeZoneName: "short",
+                    timeZone: TIME_ZONE,
+                },
             },
         ];
     }
 
     get participantDataTableColumns() {
-        return [
-            {
-                label: this.participants.fields.Contact__c.label,
-                fieldName: this.participants.fields.Contact__c.apiName,
+        let columns = [];
+        this._serviceScheduleModel.engagementFields.forEach(field => {
+            columns.push({
+                label: field.label,
+                fieldName: field.apiName,
+                type: field.type,
                 hideDefaultActions: true,
-            },
-            {
-                label: this.participants.fields.Email.label,
-                fieldName: this.participants.fields.Email.apiName,
-                hideDefaultActions: true,
-            },
-            {
-                label: this.participants.fields.Stage__c.label,
-                fieldName: this.participants.fields.Stage__c.apiName,
-                hideDefaultActions: true,
-            },
-        ];
+            });
+        });
+        return columns;
+    }
+
+    get servicePartcipantsLabel() {
+        return `${
+            this.serviceScheduleModel.labels.serviceParticipant.objectPluralLabel
+        } (${
+            this._serviceScheduleModel.selectedParticipants
+                ? this._serviceScheduleModel.selectedParticipants.length
+                : 0
+        })`;
+    }
+
+    get serviceSessionsLabel() {
+        return `${this.serviceScheduleModel.labels.serviceSession.objectPluralLabel} (${
+            this._serviceScheduleModel.serviceSessions
+                ? this._serviceScheduleModel.serviceSessions.length
+                : 0
+        })`;
     }
 
     get lastSessionEndDateTime() {
-        return new Date([...this.sessions.records].pop().SessionEnd__c);
+        return this._serviceScheduleModel.serviceSessions.length
+            ? [...this._serviceScheduleModel.serviceSessions].pop()[
+                  this.sessionFields.sessionEnd.apiName
+              ]
+            : undefined;
     }
 
     get firstSessionStartDateTime() {
-        return new Date(this.sessions.records[0].SessionStart__c);
+        return this._serviceScheduleModel.serviceSessions.length
+            ? this._serviceScheduleModel.serviceSessions[0][
+                  this.sessionFields.sessionStart.apiName
+              ]
+            : undefined;
     }
 
     get activeSections() {

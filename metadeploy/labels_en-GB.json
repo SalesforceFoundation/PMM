@@ -47,12 +47,38 @@
         "Deploy Program Management Profile": {
             "message": "Deploy Program Management Profile",
             "description": "title of installation step"
+        },
+        "Deploy Folder of Unmanaged Reports": {
+            "message": "Deploy Folder of Unmanaged Reports",
+            "description": "title of installation step"
         }
     },
     "checks": {
         "Please enable My Domain in your org prior to installing.": {
             "message": "Please enable My Domain in your org prior to installing.",
             "description": "shown if validation fails"
+        },
+        "Please install Program Management Module in your org prior to installing reports.": {
+            "message": "Please install Program Management Module in your org prior to installing reports.",
+            "description": "shown if validation fails"
+        }
+    },
+    "plan:reports": {
+        "title": {
+            "message": "Install Program Management Module Reports",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "This will install additional reports for Program Management Module in your org.",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Thanks for installing additional reports for Program Management Module. Please visit the [Program Management Module customer forum group](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) on the Power of Us Hub for any questions about Program Management Module.",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include “PMM” in the subject line and include in your comment the installation link shown here.",
+            "description": "shown after failed installation (markdown)"
         }
     }
 }

@@ -50,23 +50,23 @@ tasks:
             replace: ""
             file_pattern: "*"
 
-    inject_namespaced_org_flow:
-        description: "Selectively inject namespace references into Flow metadata"
-        class_path: cumulusci.tasks.util.FindReplace
-        options:
-            path: force-app/main/default/flows
-            find: "%%%NAMESPACE%%%"
-            replace: "pmdm__"
-            file_pattern: "*"
+    # inject_namespaced_org_flow:
+    #     description: "Selectively inject namespace references into Flow metadata"
+    #     class_path: cumulusci.tasks.util.FindReplace
+    #     options:
+    #         path: force-app/main/default/flows
+    #         find: "%%%NAMESPACE%%%"
+    #         replace: "pmdm__"
+    #         file_pattern: "*"
 
-    clear_namespaced_org_flow:
-        description: "Selectively inject namespace references into Flow metadata"
-        class_path: cumulusci.tasks.util.FindReplace
-        options:
-            path: force-app/main/default/flows
-            find: "%%%NAMESPACE%%%"
-            replace: ""
-            file_pattern: "*"
+    # clear_namespaced_org_flow:
+    #     description: "Selectively inject namespace references into Flow metadata"
+    #     class_path: cumulusci.tasks.util.FindReplace
+    #     options:
+    #         path: force-app/main/default/flows
+    #         find: "%%%NAMESPACE%%%"
+    #         replace: ""
+    #         file_pattern: "*"
 
     source_revert:
         description: "Preserve the source so it can be modified during deployment"
@@ -267,12 +267,12 @@ flows:
             2.999:
                 task: clear_namespaced_org_quick_action
                 when: not org_config.namespaced
-            2.9999:
-                task: inject_namespaced_org_flow
-                when: org_config.namespaced
-            2.99999:
-                task: clear_namespaced_org_flow
-                when: not org_config.namespaced
+            # 2.9999:
+            #     task: inject_namespaced_org_flow
+            #     when: org_config.namespaced
+            # 2.99999:
+            #     task: clear_namespaced_org_flow
+            #     when: not org_config.namespaced
             4.099:
                 task: source_revert
                 options:
@@ -288,10 +288,10 @@ flows:
                 task: inject_namespaced_org_quick_action
                 options:
                     path: "src/quickActions"
-            3.02:
-                task: inject_namespaced_org_flow
-                options:
-                    path: "src/flows"
+            # 3.02:
+            #     task: inject_namespaced_org_flow
+            #     options:
+            #         path: "src/flows"
 
     customer_org:
         steps:

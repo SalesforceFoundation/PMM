@@ -1,4 +1,4 @@
-import { LightningElement, api } from "lwc";
+import { LightningElement, api, track } from "lwc";
 import { format } from "c/util";
 import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
 import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
@@ -9,6 +9,7 @@ import CONTACT_OBJECT from "@salesforce/schema/Contact";
 export default class ServiceScheduleReview extends LightningElement {
     _serviceScheduleModel;
     timeZone = TIME_ZONE;
+    @track sessionFields;
 
     @api
     get serviceScheduleModel() {
@@ -17,6 +18,7 @@ export default class ServiceScheduleReview extends LightningElement {
     set serviceScheduleModel(value) {
         // This is a nested object so the inner objects are still read only when using spread alone
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
+        this.sessionFields = this._serviceScheduleModel.sessionFields;
         this.setLabels();
         this.processScheduleInfoFieldSet();
     }
@@ -54,7 +56,7 @@ export default class ServiceScheduleReview extends LightningElement {
 
     getIcon(referenceTo) {
         switch (referenceTo) {
-            case CONTACT_OBJECT.objectName:
+            case CONTACT_OBJECT.objectApiName:
                 return "utility:user";
             default:
                 return null;
@@ -136,13 +138,17 @@ export default class ServiceScheduleReview extends LightningElement {
 
     get lastSessionEndDateTime() {
         return this._serviceScheduleModel.serviceSessions.length
-            ? [...this._serviceScheduleModel.serviceSessions].pop().SessionEnd__c
+            ? [...this._serviceScheduleModel.serviceSessions].pop()[
+                  this.sessionFields.sessionEnd.apiName
+              ]
             : undefined;
     }
 
     get firstSessionStartDateTime() {
         return this._serviceScheduleModel.serviceSessions.length
-            ? this._serviceScheduleModel.serviceSessions[0].SessionStart__c
+            ? this._serviceScheduleModel.serviceSessions[0][
+                  this.sessionFields.sessionStart.apiName
+              ]
             : undefined;
     }
 

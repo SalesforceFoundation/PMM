@@ -423,18 +423,4 @@ public with sharing class RecurrenceRule_TEST {
             'Actual bySetPos string is not the same as expected'
         );
     }
-
-    @IsTest
-    private static void shouldSetOneTimeRuleString() {
-        Test.startTest();
-        RecurrenceRule rule = new RecurrenceRule().withFrequency('ONETIME');
-        Test.stopTest();
-        System.debug(' rule.getEndDate() : ' + rule.getEndDate());
-        System.assertEquals(
-            rule.getFrequency(),
-            RecurrenceRule.Frequency.ONETIME,
-            'Actual Frequency string is not the same as expected'
-        );
-        System.assertNotEquals(null, rule.getEndDate(), 'EndDate returned was not null');
-    }
 }

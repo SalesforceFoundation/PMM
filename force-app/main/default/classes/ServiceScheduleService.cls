@@ -94,9 +94,14 @@ public with sharing class ServiceScheduleService {
     }
 
     private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
+        if (schedule.Frequency__c == 'OneTime') {
+            return new List<DateTime>{ schedule.FirstSessionStart__c };
+        }
+
         Integer interval = schedule.Interval__c != null
             ? Integer.valueOf(schedule.Interval__c)
             : 1;
+
         String rRule = recurrenceService.createRRule(
             schedule.Frequency__c,
             interval,

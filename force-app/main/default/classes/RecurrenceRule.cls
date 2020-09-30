@@ -8,8 +8,7 @@ public with sharing class RecurrenceRule {
     public enum Frequency {
         DAILY,
         WEEKLY,
-        MONTHLY,
-        ONETIME
+        MONTHLY
     }
 
     public enum Day {
@@ -62,11 +61,7 @@ public with sharing class RecurrenceRule {
     }
 
     public RecurrenceRule withEndDate(Date endDate) {
-        if (freq != Frequency.ONETIME) {
-            this.endDate = endDate;
-        } else {
-            this.endDate = System.Today();
-        }
+        this.endDate = endDate;
 
         return this;
     }

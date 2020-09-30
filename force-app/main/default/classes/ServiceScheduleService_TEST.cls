@@ -741,4 +741,38 @@ public with sharing class ServiceScheduleService_TEST {
             'Expected the participants to have been inserted.'
         );
     }
+
+    @IsTest
+    private static void shouldGetSessionsForOneTimeFrequency() {
+        DateTime firstSessionStart = System.now();
+        ServiceSchedule__c schedule = new ServiceSchedule__c(
+            Name = 'test',
+            FirstSessionStart__c = firstSessionStart,
+            Frequency__c = 'ONETIME'
+        );
+        List<DateTime> expectedDateTimes = new List<DateTime>{ firstSessionStart };
+
+        List<ServiceSession__c> expected = new List<ServiceSession__c>();
+        for (DateTime sessionDateTime : expectedDateTimes) {
+            expected.add(
+                new ServiceSession__c(
+                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    SessionStart__c = sessionDateTime,
+                    SessionEnd__c = null,
+                    PrimaryServiceProvider__c = null,
+                    OtherServiceProvider__c = null
+                )
+            );
+        }
+
+        Test.startTest();
+        List<ServiceSession__c> actual = service.getSessions(schedule);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Sessions not returned from the service as expected.'
+        );
+    }
 }

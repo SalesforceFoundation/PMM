@@ -15,6 +15,9 @@ public with sharing class RecurrenceFactory implements RecurrenceFactoryInterfac
             when MONTHLY {
                 return new MonthlyIterator(recurrenceRule);
             }
+            when ONETIME {
+                return new DailyIterator(recurrenceRule);
+            }
             when else {
                 return null;
             }

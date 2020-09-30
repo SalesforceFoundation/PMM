@@ -23,8 +23,9 @@ export default class Picklist extends LightningElement {
 
         this._options = this.picklist.picklistValues.map(picklistValue => {
             // TODO: Set defaultValue if value not provided?
-            let isSelected = this.value && this.value.includes(picklistValue.value);
-
+            // let isSelected = this.value && this.value.includes(picklistValue.value);
+            // This is to set the defaultValue based on the default selected by the user
+            let isSelected = picklistValue.defaultValue;
             return {
                 value: picklistValue.value,
                 label: picklistValue.label,
@@ -32,7 +33,7 @@ export default class Picklist extends LightningElement {
                 variant: isSelected ? SELECTED_VARIANT : UNSELECTED_VARIANT,
             };
         });
-
+        console.log("this._options", JSON.stringify(this._options));
         return this._options;
     }
 

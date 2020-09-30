@@ -1,7 +1,7 @@
 import { LightningElement, api, track } from "lwc";
 
 const WEEKLY = "Weekly";
-const ONE_TIME = "One Time";
+const ONE_TIME = "OneTime";
 const ON = "On";
 const AFTER = "After";
 const LARGE_SIZE = 12;
@@ -63,41 +63,61 @@ export default class NewServiceSchedule extends LightningElement {
             return validSoFar && inputField.reportValidity();
         }, true);
 
-        console.log(this.dateFields.start.value);
-        console.log(this.dateFields.end.value);
         let datesValid = this.dateFields.start.value < this.dateFields.end.value;
-        console.log(datesValid);
         // todo: figure out how to clean this up. falsy wasn't working as expected.
-        let hasEndCondition =
-            (this.dateFields.numberOfSessions !== undefined &&
-                this.dateFields.numberOfSessions.value !== undefined) ||
-            (this.dateFields.seriesEndsOn !== undefined &&
-                this.dateFields.seriesEndsOn.value !== undefined);
-        console.log(hasEndCondition);
-        console.log(JSON.stringify(this.picklistFields.daysOfWeek));
+        let hasEndCondition = this.validateServiceScheduleOnOrAfter();
+
         let hasDayOfWeek =
             this.picklistFields.frequency.value === WEEKLY
                 ? this.picklistFields.daysOfWeek.value
                 : true;
-        console.log(hasDayOfWeek);
 
         // input-fields handle their own error display, so no additional error message needed for !isFormValid
         if (!datesValid) {
             errMessages.push(START_BEFORE_END_LABEL);
         }
+
         if (!hasEndCondition) {
             errMessages.push(NO_END_LABEL);
         }
+
         if (!hasDayOfWeek) {
             errMessages.push(DAY_REQUIRED_LABEL);
         }
 
         this.errorMessage = errMessages.join("\n"); // this should inject a line break but it doesn't seem to be working.
-        console.log(this.errorMessage);
 
         this.isValid = isFormValid && datesValid && hasEndCondition && hasDayOfWeek;
 
         return this.isValid;
+    }
+
+    validateServiceScheduleOnOrAfter() {
+        let noError = true;
+
+        this.template.querySelectorAll("lightning-input-field").forEach(field => {
+            if (this.picklistFields.frequency.value !== ONE_TIME) {
+                if (
+                    field.fieldName === this.dateFields.seriesEndsOn.apiName ||
+                    field.fieldName === this.dateFields.numberOfSessions.apiName
+                ) {
+                    if (field.value === undefined || field.value === null) {
+                        noError = false;
+                    }
+                }
+            }
+        });
+
+        this.template.querySelectorAll(" c-picklist").forEach(field => {
+            if (this.picklistFields.frequency.value !== ONE_TIME) {
+                if (field.fieldName === this.dateFields.seriesEnds) {
+                    if (field.value === undefined) {
+                        noError = false;
+                    }
+                }
+            }
+        });
+        return noError;
     }
 
     @api
@@ -114,7 +134,6 @@ export default class NewServiceSchedule extends LightningElement {
 
             serviceSchedule[apiName] = value;
         });
-
         return serviceSchedule;
     }
 
@@ -138,6 +157,8 @@ export default class NewServiceSchedule extends LightningElement {
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
+
+        this.setDefaults();
     }
 
     get isWeekly() {
@@ -183,11 +204,7 @@ export default class NewServiceSchedule extends LightningElement {
             return;
         }
         this.dateFields.start.value = event.detail.value;
-        let startTime = new Date(event.detail.value);
-        let endTime = new Date(event.detail.value);
-        endTime.setHours(startTime.getHours() + this.duration);
-        endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
-        this.dateFields.end.value = new Date(endTime).toISOString();
+        this.setStartTimeAndEndTime(this.dateFields.start.value);
     }
 
     handleEndChange(event) {
@@ -198,6 +215,36 @@ export default class NewServiceSchedule extends LightningElement {
             endTime.getHours() -
             startTime.getHours() +
             (endTime.getMinutes() - startTime.getMinutes()) / 60;
+    }
+
+    setStartTimeAndEndTime(startDate) {
+        let startTime = new Date(startDate);
+        let endTime = new Date(startDate);
+
+        //Below we are setting the startTime to the top of the hour
+        startTime.setMinutes(startTime.getMinutes() + (60 - startTime.getMinutes()));
+        this.dateFields.start.value = new Date(startTime).toISOString();
+
+        endTime.setHours(startTime.getHours() + this.duration);
+        endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
+        this.dateFields.end.value = new Date(endTime).toISOString();
+    }
+
+    setDefaults() {
+        if (!this.dateFields.start.defaultValueFormula) {
+            return;
+        }
+
+        if (this.dateFields.start.defaultValueFormula === "NOW()") {
+            this.dateFields.start.value = new Date(Date.now()).toISOString();
+        } else {
+            this.dateFields.start.value = new Date(
+                this.dateFields.start.defaultValueFormula.toISOString()
+            );
+        }
+        this.setStartTimeAndEndTime(this.dateFields.start.value);
+
+        //default frequency
     }
 
     get disableSessionEnd() {

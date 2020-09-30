@@ -96,7 +96,7 @@ public with sharing class ServiceScheduleService {
     private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
         Integer interval = schedule.Interval__c != null
             ? Integer.valueOf(schedule.Interval__c)
-            : null;
+            : 1;
         String rRule = recurrenceService.createRRule(
             schedule.Frequency__c,
             interval,

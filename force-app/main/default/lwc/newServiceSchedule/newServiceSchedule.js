@@ -64,7 +64,7 @@ export default class NewServiceSchedule extends LightningElement {
         }, true);
 
         let datesValid = this.dateFields.start.value < this.dateFields.end.value;
-        // todo: figure out how to clean this up. falsy wasn't working as expected.
+
         let hasEndCondition = this.validateServiceScheduleOnOrAfter();
 
         let hasDayOfWeek =
@@ -111,7 +111,7 @@ export default class NewServiceSchedule extends LightningElement {
         this.template.querySelectorAll(" c-picklist").forEach(field => {
             if (this.picklistFields.frequency.value !== ONE_TIME) {
                 if (field.fieldName === this.dateFields.seriesEnds) {
-                    if (field.value === undefined) {
+                    if (field.value === undefined || field.value === null) {
                         noError = false;
                     }
                 }

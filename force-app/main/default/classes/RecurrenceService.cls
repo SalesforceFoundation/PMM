@@ -1,11 +1,18 @@
 public with sharing class RecurrenceService {
     @TestVisible
-    private RecurrenceFactoryInterface factory = new RecurrenceFactory();
-    @TestVisible
     private RecurrenceRule recurrenceRule = new RecurrenceRule();
 
     public List<DateTime> generate(DateTime dateTimeStart, String rRule) {
-        return factory.makeIterator(rRule).iterate(dateTimeStart);
+        recurrenceRule.reset().withRuleString(rRule);
+
+        List<DateTime> results = new List<DateTime>();
+        Iterator<Date> iterable = makeIterator(dateTimeStart);
+
+        while (iterable.hasNext()) {
+            results.add(DateTime.newInstance(iterable.next(), dateTimeStart.time()));
+        }
+
+        return results;
     }
 
     public String createRRule(
@@ -24,5 +31,20 @@ public with sharing class RecurrenceService {
             .withDays(days)
             .withByMonthDays(dateTimeStart)
             .build();
+    }
+
+    @TestVisible
+    private Iterator<Date> makeIterator(DateTime dateTimeStart) {
+        switch on recurrenceRule.getFrequency() {
+            when DAILY {
+                return new DailyIterable(dateTimeStart.date(), recurrenceRule);
+            }
+            when WEEKLY {
+                return new WeeklyIterable(dateTimeStart.date(), recurrenceRule);
+            }
+            when else {
+                return new MonthlyIterable(dateTimeStart.date(), recurrenceRule);
+            }
+        }
     }
 }

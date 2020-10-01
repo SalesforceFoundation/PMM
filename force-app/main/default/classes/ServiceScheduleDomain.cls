@@ -26,6 +26,10 @@ public with sharing class ServiceScheduleDomain {
     private void generateParticipants(ServiceScheduleModel model) {
         for (ProgramEngagement__c engagement : model.selectedParticipants) {
             ServiceParticipant__c participant = new ServiceParticipant__c(
+                Name = (engagement.Contact__r.Name +
+                    ' - ' +
+                    model.serviceSchedule.Name)
+                    .abbreviate(80),
                 ServiceSchedule__c = model.serviceSchedule.Id,
                 Service__c = model.serviceSchedule.Service__c,
                 ProgramEngagement__c = engagement.Id,

@@ -96,8 +96,7 @@ public with sharing class FieldSetService {
             'isAccessible' => field.isAccessible(),
             'relationshipName' => field.getRelationshipName(),
             'referenceTo' => referenceObjectName,
-            'referenceNameField' => getNameFieldForObject(referenceObjectName),
-            'defaultValueFormula' => field.getDefaultValueFormula()
+            'referenceNameField' => getNameFieldForObject(referenceObjectName)
         };
     }
 

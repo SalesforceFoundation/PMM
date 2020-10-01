@@ -4,6 +4,7 @@
         record-id={recordId}
         onsuccess={handleSuccess}
         if:true={isLoaded}
+        onload={handleLoad}
     >
         <lightning-layout horizontal-align="center" multiple-rows="true">
             <template if:true={errorMessage} class="slds-var-p-around_small">

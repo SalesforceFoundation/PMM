@@ -157,8 +157,14 @@ export default class NewServiceSchedule extends LightningElement {
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
+    }
 
-        this.setDefaults();
+    handleLoad() {
+        this.template.querySelectorAll("lightning-input-field").forEach(field => {
+            if (field.fieldName === this.dateFields.start.apiName) {
+                this.setStartTimeAndEndTime(field.value);
+            }
+        });
     }
 
     get isWeekly() {
@@ -184,7 +190,6 @@ export default class NewServiceSchedule extends LightningElement {
         this.picklistFields.frequency.value = event.detail.length
             ? event.detail[0].value
             : undefined;
-        this.setDayofTheWeekDefault();
     }
 
     handleDaysOfWeekChange(event) {
@@ -219,50 +224,20 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     setStartTimeAndEndTime(startDate) {
+        if (!startDate) {
+            return;
+        }
+
         let startTime = new Date(startDate);
         let endTime = new Date(startDate);
 
-        //Below we are setting the startTime to the top of the hour
-        startTime.setMinutes(startTime.getMinutes() + (60 - startTime.getMinutes()));
         this.dateFields.start.value = new Date(startTime).toISOString();
-
         endTime.setHours(startTime.getHours() + this.duration);
         endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
         this.dateFields.end.value = new Date(endTime).toISOString();
     }
 
-    setDefaults() {
-        if (!this.dateFields.start.defaultValueFormula) {
-            return;
-        }
-
-        if (this.dateFields.start.defaultValueFormula === "NOW()") {
-            this.dateFields.start.value = new Date(Date.now()).toISOString();
-        } else {
-            this.dateFields.start.value = new Date(
-                this.dateFields.start.defaultValueFormula.toISOString()
-            );
-        }
-        this.setStartTimeAndEndTime(this.dateFields.start.value);
-    }
-
     get disableSessionEnd() {
         return !this.dateFields.start.value;
-    }
-
-    setDayofTheWeekDefault() {
-        if (!this.picklistFields.frequency === WEEKLY) {
-            return;
-        }
-
-        let startDateDayValue = new Date(this.dateFields.start.value).getUTCDay();
-
-        this.picklistFields.daysOfWeek.picklistValues.forEach(field => {
-            if (Number(field.value) === startDateDayValue) {
-                field.defaultValue = true;
-            } else {
-                field.defaultValue = false;
-            }
-        });
     }
 }

@@ -100,7 +100,7 @@ public with sharing class ServiceScheduleService {
 
         Integer interval = schedule.Interval__c != null
             ? Integer.valueOf(schedule.Interval__c)
-            : 1;
+            : null;
 
         String rRule = recurrenceService.createRRule(
             schedule.Frequency__c,

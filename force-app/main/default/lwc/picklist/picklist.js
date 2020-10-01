@@ -33,7 +33,7 @@ export default class Picklist extends LightningElement {
                 variant: isSelected ? SELECTED_VARIANT : UNSELECTED_VARIANT,
             };
         });
-        console.log("this._options", JSON.stringify(this._options));
+
         return this._options;
     }
 

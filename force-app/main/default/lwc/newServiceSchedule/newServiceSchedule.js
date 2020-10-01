@@ -184,6 +184,7 @@ export default class NewServiceSchedule extends LightningElement {
         this.picklistFields.frequency.value = event.detail.length
             ? event.detail[0].value
             : undefined;
+        this.setDayofTheWeekDefault();
     }
 
     handleDaysOfWeekChange(event) {
@@ -243,11 +244,22 @@ export default class NewServiceSchedule extends LightningElement {
             );
         }
         this.setStartTimeAndEndTime(this.dateFields.start.value);
-
-        //default frequency
     }
 
     get disableSessionEnd() {
         return !this.dateFields.start.value;
+    }
+
+    setDayofTheWeekDefault() {
+        if (!this.picklistFields.frequency === WEEKLY) {
+            return;
+        }
+        let startDateDayValue = new Date(this.dateFields.start.value).getDay() + 1;
+
+        this.picklistFields.daysOfWeek.picklistValues.forEach(field => {
+            if (Number(field.value) === startDateDayValue) {
+                field.defaultValue = true;
+            }
+        });
     }
 }

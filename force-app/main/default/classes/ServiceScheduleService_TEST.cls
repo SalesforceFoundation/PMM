@@ -163,9 +163,7 @@ public with sharing class ServiceScheduleService_TEST {
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = primaryServiceProvider.Id,
-                    OtherServiceProvider__c = otherServiceProvider.Id
+                    )
                 )
             );
         }
@@ -287,9 +285,7 @@ public with sharing class ServiceScheduleService_TEST {
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = primaryServiceProvider.Id,
-                    OtherServiceProvider__c = null
+                    )
                 )
             );
         }
@@ -401,9 +397,7 @@ public with sharing class ServiceScheduleService_TEST {
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = null,
-                    OtherServiceProvider__c = null
+                    )
                 )
             );
         }
@@ -494,9 +488,7 @@ public with sharing class ServiceScheduleService_TEST {
                 new ServiceSession__c(
                     Name = schedule.Name + ': ' + sessionDateTime.date().format(),
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = null,
-                    PrimaryServiceProvider__c = null,
-                    OtherServiceProvider__c = null
+                    SessionEnd__c = null
                 )
             );
         }

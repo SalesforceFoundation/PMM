@@ -32,7 +32,6 @@ export default class NewServiceSchedule extends LightningElement {
     fieldSet;
     isLoaded = false;
     duration = 1;
-    @api variant;
 
     @api
     get serviceScheduleModel() {

@@ -32,6 +32,7 @@ export default class NewServiceSchedule extends LightningElement {
     fieldSet;
     isLoaded = false;
     duration = 1;
+    @api variant;
 
     @api
     get serviceScheduleModel() {
@@ -254,11 +255,14 @@ export default class NewServiceSchedule extends LightningElement {
         if (!this.picklistFields.frequency === WEEKLY) {
             return;
         }
-        let startDateDayValue = new Date(this.dateFields.start.value).getDay() + 1;
+
+        let startDateDayValue = new Date(this.dateFields.start.value).getUTCDay();
 
         this.picklistFields.daysOfWeek.picklistValues.forEach(field => {
             if (Number(field.value) === startDateDayValue) {
                 field.defaultValue = true;
+            } else {
+                field.defaultValue = false;
             }
         });
     }

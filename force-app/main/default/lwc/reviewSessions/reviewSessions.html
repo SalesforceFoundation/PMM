@@ -14,17 +14,53 @@
             </div>
         </lightning-layout-item>
         <lightning-layout-item size="5">
-            <!--
             <div
                 class="slds-float_right slds-var-m-top_large slds-var-m-left_x-large slds-var-m-bottom_xx-small"
             >
                 <lightning-button
                     variant="Neutral"
                     label={labels.addSession}
-                    onclick={handleAddRows}
+                    onclick={handleAddSession}
                 ></lightning-button>
             </div>
-            -->
+            <c-modal header={labels.addSession} is-nested="true">
+                <div style="height: 400px;">
+                    <lightning-record-edit-form object-api-name={objectName}>
+                        <lightning-input-field
+                            field-name={sessionStartFieldName}
+                            required
+                        ></lightning-input-field>
+                        <lightning-input-field
+                            field-name={sessionEndFieldName}
+                        ></lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+
+                <div slot="footer">
+                    <lightning-layout>
+                        <lightning-layout-item>
+                            <lightning-button
+                                label={labels.cancel}
+                                variant="neutral"
+                                onclick={handleCancelAddSession}
+                            ></lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item alignment-bump="left">
+                            <lightning-button
+                                label={labels.saveNew}
+                                variant="neutral"
+                                onclick={handleSaveNewSession}
+                            ></lightning-button>
+                            <lightning-button
+                                label={labels.save}
+                                variant="brand"
+                                onclick={handleSaveSession}
+                                class="slds-var-p-left_medium"
+                            ></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </c-modal>
         </lightning-layout-item>
         <lightning-layout-item size="10">
             <div

@@ -162,7 +162,7 @@ export default class NewServiceSchedule extends LightningElement {
     handleLoad() {
         this.template.querySelectorAll("lightning-input-field").forEach(field => {
             if (field.fieldName === this.dateFields.start.apiName) {
-                this.setStartTimeAndEndTime(field.value);
+                this.setFirstSessionStartTimeAndEndTime(field.value);
             }
         });
         this.picklistFields.frequency.value = !this.picklistFields.frequency.value
@@ -213,7 +213,7 @@ export default class NewServiceSchedule extends LightningElement {
             return;
         }
         this.dateFields.start.value = event.detail.value;
-        this.setStartTimeAndEndTime(this.dateFields.start.value);
+        this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
     }
 
     handleEndChange(event) {
@@ -226,7 +226,7 @@ export default class NewServiceSchedule extends LightningElement {
             (endTime.getMinutes() - startTime.getMinutes()) / 60;
     }
 
-    setStartTimeAndEndTime(startDate) {
+    setFirstSessionStartTimeAndEndTime(startDate) {
         if (!startDate) {
             return;
         }

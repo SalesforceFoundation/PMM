@@ -42,6 +42,10 @@ export default class ReviewSessions extends LightningElement {
     }
 
     get serviceSessions() {
+        this._serviceSessions.sort((a, b) => {
+            return a[this.sessionStartFieldName] > b[this.sessionStartFieldName] ? 1 : -1;
+        });
+
         return this._serviceSessions.map((session, index) => ({
             ...session,
             index: index,
@@ -159,25 +163,15 @@ export default class ReviewSessions extends LightningElement {
     }
 
     save(isSaveAndNew) {
-        this.addSessionError = undefined;
         let inputFields = this.template.querySelectorAll("lightning-input-field");
         let startDateTime = inputFields[0];
         let endDateTime = inputFields[1];
-
-        if (endDateTime.value < startDateTime.value) {
-            this.addSessionError = format(START_BEFORE_END_LABEL, [
-                this.sessionStartLabel,
-                this.sessionEndLabel,
-            ]);
-
-            return;
-        }
 
         let allValid = [...inputFields].reduce((validSoFar, inputField) => {
             return validSoFar && inputField.reportValidity();
         }, true);
 
-        if (!allValid) {
+        if (!allValid || !this.isSessionValid(startDateTime.value, endDateTime.value)) {
             return;
         }
 
@@ -199,6 +193,24 @@ export default class ReviewSessions extends LightningElement {
             .catch(error => {
                 this.addSessionError = reduceErrors(error);
             });
+    }
+
+    isSessionValid(startDateTime, endDateTime) {
+        this.addSessionError = undefined;
+        this.addSessionErrorTheme = undefined;
+
+        if (endDateTime < startDateTime) {
+            this.addSessionError = format(START_BEFORE_END_LABEL, [
+                this.sessionStartLabel,
+                this.sessionEndLabel,
+            ]);
+
+            this.addSessionErrorTheme = "error";
+
+            return false;
+        }
+
+        return true;
     }
 
     closeModal() {

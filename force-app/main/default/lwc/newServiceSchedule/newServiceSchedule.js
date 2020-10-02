@@ -85,7 +85,7 @@ export default class NewServiceSchedule extends LightningElement {
             errMessages.push(DAY_REQUIRED_LABEL);
         }
 
-        this.errorMessage = errMessages.join("\n"); // this should inject a line break but it doesn't seem to be working.
+        this.errorMessage = errMessages.join("\n");
 
         this.isValid = isFormValid && datesValid && hasEndCondition && hasDayOfWeek;
 
@@ -165,6 +165,9 @@ export default class NewServiceSchedule extends LightningElement {
                 this.setStartTimeAndEndTime(field.value);
             }
         });
+        this.picklistFields.frequency.value = !this.picklistFields.frequency.value
+            ? ONE_TIME
+            : this.picklistFields.frequency.value;
     }
 
     get isWeekly() {

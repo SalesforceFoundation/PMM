@@ -43,7 +43,7 @@ public with sharing class ServiceScheduleService {
         // NOTE: Passing the entire schedule to allow for changes in our default name
         // or potentially setting additional defaults at this level
         return new ServiceSession__c(
-            Name = startDateTime.date().format() + ': ' + schedule.Name,
+            Name = (startDateTime.date().format() + ': ' + schedule.Name).abbreviate(80),
             SessionStart__c = startDateTime,
             SessionEnd__c = endDateTime
         );

@@ -1,4 +1,5 @@
 import { LightningElement, track, api } from "lwc";
+import { format, reduceErrors } from "c/util";
 import processSchedule from "@salesforce/apex/ServiceScheduleCreatorController.processSchedule";
 import createSession from "@salesforce/apex/ServiceScheduleCreatorController.createSession";
 import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
@@ -7,6 +8,7 @@ import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
 import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
+import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
@@ -17,6 +19,7 @@ export default class ReviewSessions extends LightningElement {
     sessionNameLabel;
     sessionStartLabel;
     sessionEndLabel;
+    addSessionError;
 
     @track _serviceSessions = [];
 
@@ -156,7 +159,20 @@ export default class ReviewSessions extends LightningElement {
     }
 
     save(isSaveAndNew) {
+        this.addSessionError = undefined;
         let inputFields = this.template.querySelectorAll("lightning-input-field");
+        let startDateTime = inputFields[0];
+        let endDateTime = inputFields[1];
+
+        if (endDateTime.value < startDateTime.value) {
+            this.addSessionError = format(START_BEFORE_END_LABEL, [
+                this.sessionStartLabel,
+                this.sessionEndLabel,
+            ]);
+
+            return;
+        }
+
         let allValid = [...inputFields].reduce((validSoFar, inputField) => {
             return validSoFar && inputField.reportValidity();
         }, true);
@@ -167,8 +183,8 @@ export default class ReviewSessions extends LightningElement {
 
         createSession({
             schedule: this._serviceScheduleModel.serviceSchedule,
-            startDateTime: inputFields[0].value,
-            endDateTime: inputFields[1].value,
+            startDateTime: startDateTime.value,
+            endDateTime: endDateTime.value,
         })
             .then(result => {
                 this._serviceSessions = [...this._serviceSessions, result];
@@ -181,8 +197,7 @@ export default class ReviewSessions extends LightningElement {
                 this.closeModal();
             })
             .catch(error => {
-                // TODO: throw error
-                console.log(JSON.stringify(error));
+                this.addSessionError = reduceErrors(error);
             });
     }
 

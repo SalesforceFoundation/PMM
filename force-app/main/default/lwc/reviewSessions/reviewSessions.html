@@ -25,6 +25,12 @@
             </div>
             <c-modal header={labels.addSession} is-nested="true">
                 <div style="height: 400px;">
+                    <template if:true={addSessionError}>
+                        <c-scoped-notification
+                            theme="error"
+                            title={addSessionError}
+                        ></c-scoped-notification>
+                    </template>
                     <lightning-record-edit-form object-api-name={objectName}>
                         <lightning-input-field
                             field-name={sessionStartFieldName}
@@ -32,6 +38,7 @@
                         ></lightning-input-field>
                         <lightning-input-field
                             field-name={sessionEndFieldName}
+                            required
                         ></lightning-input-field>
                     </lightning-record-edit-form>
                 </div>
@@ -42,7 +49,7 @@
                             <lightning-button
                                 label={labels.cancel}
                                 variant="neutral"
-                                onclick={handleCancelAddSession}
+                                onclick={closeModal}
                             ></lightning-button>
                         </lightning-layout-item>
                         <lightning-layout-item alignment-bump="left">

@@ -392,8 +392,8 @@
         <fullName>Day_Required_When_Weekly_Selected</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>At least one day of the week must be selected when Weekly is selected.</shortDescription>
-        <value>At least one day of the week must be selected when Weekly is selected.</value>
+        <shortDescription>Select at least one day of the week.</shortDescription>
+        <value>Select at least one day of the week.</value>
     </labels>
     <labels>
         <fullName>Every_Week</fullName>

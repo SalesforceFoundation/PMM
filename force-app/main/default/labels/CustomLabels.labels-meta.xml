@@ -389,13 +389,6 @@
         <value>Select either a Service Schedule End Date or a Number of Service Sessions.</value>
     </labels>
     <labels>
-        <fullName>First_Session_End_After_Start</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>First Session Start must be before First Session End</shortDescription>
-        <value>First Session Start must be before First Session End.</value>
-    </labels>
-    <labels>
         <fullName>Day_Required_When_Weekly_Selected</fullName>
         <language>en_US</language>
         <protected>true</protected>

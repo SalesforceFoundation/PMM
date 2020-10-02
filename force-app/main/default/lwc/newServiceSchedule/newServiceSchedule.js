@@ -1,4 +1,5 @@
 import { LightningElement, api, track } from "lwc";
+import { format } from "c/util";
 
 const WEEKLY = "Weekly";
 const ONE_TIME = "OneTime";
@@ -8,7 +9,7 @@ const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
 
 import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
-import START_BEFORE_END_LABEL from "@salesforce/label/c.First_Session_End_After_Start";
+import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
 import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
 
 export default class NewServiceSchedule extends LightningElement {
@@ -74,7 +75,12 @@ export default class NewServiceSchedule extends LightningElement {
 
         // input-fields handle their own error display, so no additional error message needed for !isFormValid
         if (!datesValid) {
-            errMessages.push(START_BEFORE_END_LABEL);
+            errMessages.push(
+                format(START_BEFORE_END_LABEL, [
+                    this.dateFields.start.label,
+                    this.dateFields.end.label,
+                ])
+            );
         }
 
         if (!hasEndCondition) {
@@ -213,6 +219,7 @@ export default class NewServiceSchedule extends LightningElement {
             return;
         }
         this.dateFields.start.value = event.detail.value;
+
         this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
     }
 

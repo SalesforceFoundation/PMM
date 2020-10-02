@@ -145,7 +145,7 @@
         <fullName>End_Date_After_Start_Date</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>{Start Date ApiName} must be before {End Date ApiName}</shortDescription>
+        <shortDescription>{Start Date Label} must be before {End Date Label}</shortDescription>
         <value>{0} must be before {1}</value>
     </labels>
     <labels>

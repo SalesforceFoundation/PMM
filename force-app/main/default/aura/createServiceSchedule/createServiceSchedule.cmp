@@ -3,38 +3,9 @@
     access="global"
 >
     <aura:attribute name="serviceId" type="String" access="private" />
-    <aura:attribute name="availableActions" type="String[]" access="private" />
-    <aura:attribute name="currentStage" type="Object" access="private" />
-    <aura:attribute name="stages" type="Object[]" access="private" />
-    <aura:attribute
-        name="useFlowWizard"
-        type="Boolean"
-        default="false"
-        access="private"
-    />
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
 
-    <lightning:messageChannel
-        type="Navigation__c"
-        aura:id="navigation"
-        onMessage="{!c.handleNavigationMessage}"
-    />
-
-    <aura:if isTrue="{!v.useFlowWizard}">
-        <aura:html tag="style">
-            .slds-modal__container { position: absolute; height: fit-content; margin:
-            auto; padding: 0; top: 0; bottom: 0; left: 0; right: 0; }
-        </aura:html>
-
-        <lightning:overlayLibrary aura:id="modal" />
-
-        <aura:set attribute="else">
-            <aura:html tag="style">
-                lightning-timepicker, lightning-datepicker { width: 100% }
-            </aura:html>
-            <c:serviceScheduleCreator serviceId="{!v.serviceId}" />
-        </aura:set>
-    </aura:if>
+    <c:serviceScheduleCreator serviceId="{!v.serviceId}" />
 </aura:component>

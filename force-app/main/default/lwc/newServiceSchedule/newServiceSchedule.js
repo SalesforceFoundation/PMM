@@ -2,7 +2,7 @@ import { LightningElement, api, track } from "lwc";
 import { format } from "c/util";
 
 const WEEKLY = "Weekly";
-const ONE_TIME = "OneTime";
+const ONE_TIME = "One Time";
 const ON = "On";
 const AFTER = "After";
 const LARGE_SIZE = 12;
@@ -66,7 +66,7 @@ export default class NewServiceSchedule extends LightningElement {
 
         let datesValid = this.dateFields.start.value < this.dateFields.end.value;
 
-        let hasEndCondition = this.validateServiceScheduleOnOrAfter();
+        let hasEndCondition = this.dateFields.seriesEndsOn.value ? true : false;
 
         let hasDayOfWeek =
             this.picklistFields.frequency.value === WEEKLY
@@ -96,34 +96,6 @@ export default class NewServiceSchedule extends LightningElement {
         this.isValid = isFormValid && datesValid && hasEndCondition && hasDayOfWeek;
 
         return this.isValid;
-    }
-
-    validateServiceScheduleOnOrAfter() {
-        let noError = true;
-
-        this.template.querySelectorAll("lightning-input-field").forEach(field => {
-            if (this.picklistFields.frequency.value !== ONE_TIME) {
-                if (
-                    field.fieldName === this.dateFields.seriesEndsOn.apiName ||
-                    field.fieldName === this.dateFields.numberOfSessions.apiName
-                ) {
-                    if (field.value === undefined || field.value === null) {
-                        noError = false;
-                    }
-                }
-            }
-        });
-
-        this.template.querySelectorAll(" c-picklist").forEach(field => {
-            if (this.picklistFields.frequency.value !== ONE_TIME) {
-                if (field.fieldName === this.dateFields.seriesEnds) {
-                    if (field.value === undefined || field.value === null) {
-                        noError = false;
-                    }
-                }
-            }
-        });
-        return noError;
     }
 
     @api

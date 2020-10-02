@@ -24,10 +24,7 @@ export default class Picklist extends LightningElement {
         this._options = this.picklist.picklistValues.map(picklistValue => {
             let isSelected = this.value && this.value.includes(picklistValue.value);
 
-            if (
-                (picklistValue.defaultValue && !this.value) ||
-                (isSelected && this.value === picklistValue.value)
-            ) {
+            if (isSelected && this.value === picklistValue.value) {
                 this.value = picklistValue.value;
             }
 

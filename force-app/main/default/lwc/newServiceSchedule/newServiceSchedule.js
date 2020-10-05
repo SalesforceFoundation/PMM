@@ -66,7 +66,7 @@ export default class NewServiceSchedule extends LightningElement {
 
         let datesValid = this.dateFields.start.value < this.dateFields.end.value;
 
-        let hasEndCondition = this.dateFields.seriesEndsOn.value ? true : false;
+        let hasEndCondition = this.validateServiceScheduleOnOrAfter();
 
         let hasDayOfWeek =
             this.picklistFields.frequency.value === WEEKLY
@@ -143,6 +143,7 @@ export default class NewServiceSchedule extends LightningElement {
                 this.setFirstSessionStartTimeAndEndTime(field.value);
             }
         });
+
         this.picklistFields.frequency.value = !this.picklistFields.frequency.value
             ? ONE_TIME
             : this.picklistFields.frequency.value;
@@ -221,5 +222,23 @@ export default class NewServiceSchedule extends LightningElement {
 
     get disableSessionEnd() {
         return !this.dateFields.start.value;
+    }
+
+    validateServiceScheduleOnOrAfter() {
+        let noError = true;
+
+        if (this.picklistFields.frequency.value === ONE_TIME) {
+            return noError;
+        }
+
+        noError =
+            (this.template.querySelector('[data-element="seriesEndsOn"]') === null ||
+                !this.template.querySelector('[data-element="seriesEndsOn"]').value) &&
+            (this.template.querySelector('[data-element="numberOfSessions"]') === null ||
+                !this.template.querySelector('[data-element="numberOfSessions"]').value)
+                ? false
+                : true;
+
+        return noError;
     }
 }

@@ -104,13 +104,10 @@
                         </lightning-layout>
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>
-                        <lightning-input
-                            type="toggle"
-                            label={requiredFields.autoGenerateSessions.label}
-                            checked={requiredFields.autoGenerateSessions.value}
-                            data-element="autoGenerateSessions"
-                            class="slds-float_right"
-                        ></lightning-input>
+                        <lightning-input-field
+                            field-name={requiredFields.autoGenerateSessions.apiName}
+                            value={requiredFields.autoGenerateSessions.value}
+                        ></lightning-input-field>
                     </lightning-layout-item>
                 </lightning-layout>
             </lightning-layout-item>

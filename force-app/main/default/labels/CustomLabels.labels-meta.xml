@@ -365,7 +365,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Select Create Service Session Warning</shortDescription>
-        <value>Create Service Session records isn&apos;t selected, so no records will be created. Click Add Service Session to add Service Session records</value>
+        <value>Create Service Session records isn&apos;t selected, so no records will be created. Click Add Service Session to add Service Session records.</value>
     </labels>
     <labels>
         <fullName>Select_Program_Engagement</fullName>

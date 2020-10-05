@@ -66,12 +66,6 @@ export default class NewServiceSchedule extends LightningElement {
             serviceSchedule[field.fieldName] = field.value;
         });
 
-        let autoGenerateSessions = this.template.querySelector(
-            '[data-element="autoGenerateSessions"]'
-        );
-        serviceSchedule[this.requiredFields.autoGenerateSessions.apiName] =
-            autoGenerateSessions.checked;
-
         Object.keys(this.picklistFields).forEach(field => {
             const apiName = this.picklistFields[field].apiName;
             const value = this.picklistFields[field].value;
@@ -102,13 +96,6 @@ export default class NewServiceSchedule extends LightningElement {
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
-
-        // Lightning record edit form will set defaults for input fields,
-        // we need to manuallys set the default on input toggles
-        this.requiredFields.autoGenerateSessions.value =
-            this.requiredFields.autoGenerateSessions.value === undefined
-                ? this.requiredFields.autoGenerateSessions.defaultValue
-                : this.requiredFields.autoGenerateSessions.value;
     }
 
     get isWeekly() {

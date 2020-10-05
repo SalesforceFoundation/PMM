@@ -35,6 +35,16 @@ public with sharing class ServiceScheduleService {
         return model;
     }
 
+    public Integer deleteSessionsAfter(Id scheduleId, Date startDate) {
+        List<ServiceSession__c> sessionsToDelete = serviceSelector.getSessionsAfter(
+            scheduleId,
+            startDate
+        );
+        Integer numSessions = sessionsToDelete.size();
+        domain.deleteSessions(sessionsToDelete);
+        return numSessions;
+    }
+
     private void setServiceProviders(ServiceSchedule__c schedule) {
         Map<Id, Contact> providerById = new Map<Id, Contact>();
 

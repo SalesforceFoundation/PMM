@@ -12,6 +12,20 @@ public with sharing class ServiceScheduleDomain {
         insert schedule;
     }
 
+    public void deleteSessions(List<ServiceSession__c> sessionsToDelete) {
+        if (
+            !PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceSession__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.DELETEABLE
+                )
+        ) {
+            throw new ServiceScheduleDomainException(Label.Delete_Operation_Exception);
+        }
+
+        delete sessionsToDelete;
+    }
+
     private void insertRelatedRecords(List<SObject> sObjects) {
         validateCreateAccess(sObjects);
         insert sObjects;

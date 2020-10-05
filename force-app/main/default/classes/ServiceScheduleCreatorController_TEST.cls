@@ -66,6 +66,40 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
+    private static void shouldDeleteSessionsAfter() {
+        String methodName = 'deleteSessionsAfter';
+        Integer expected = 3;
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        Date startDate = System.today();
+
+        serviceStub.withReturnValue(
+            methodName,
+            new List<Type>{ Id.class, Date.class },
+            expected
+        );
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        Integer actual = ServiceScheduleCreatorController.deleteSessionsAfter(
+            scheduleId,
+            startDate
+        );
+        Test.stopTest();
+
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ Id.class, Date.class },
+            new List<Object>{ scheduleId, startDate }
+        );
+        System.assertEquals(
+            expected,
+            actual,
+            'Count of deleted sessions not passed back from Service as expected.'
+        );
+    }
+
+    @IsTest
     private static void rethrowsErrorFromGetModelOnService() {
         String methodName = 'getServiceScheduleModel';
         Exception actualException;
@@ -149,6 +183,50 @@ public with sharing class ServiceScheduleCreatorController_TEST {
             'Expected the stub test exception message to have been thrown.'
         );
         serviceStub.assertCalledWith(methodName, ServiceScheduleModel.class, model);
+        System.assertEquals(null, actual);
+    }
+
+    @IsTest
+    private static void rethrowsErrorFromDeleteSessionsAfterOnService() {
+        String methodName = 'deleteSessionsAfter';
+        Integer expected = 3;
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        Date startDate = System.today();
+        Exception actualException;
+
+        serviceStub.withThrowException(
+            methodName,
+            new List<Type>{ Id.class, Date.class }
+        );
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Integer actual;
+        Test.startTest();
+        try {
+            actual = ServiceScheduleCreatorController.deleteSessionsAfter(
+                scheduleId,
+                startDate
+            );
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AuraHandledException,
+            actualException.getTypeName() + ': Expected an aura handled exception.'
+        );
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the stub test exception message to have been thrown.'
+        );
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ Id.class, Date.class },
+            new List<Object>{ scheduleId, startDate }
+        );
         System.assertEquals(null, actual);
     }
 

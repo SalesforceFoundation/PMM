@@ -118,7 +118,8 @@ public with sharing class ServiceScheduleService_TEST {
             NumberOfServiceSessions__c = 2,
             DaysOfWeek__c = '1;2;3;4;5;6;7',
             PrimaryServiceProvider__c = primaryServiceProvider.Id,
-            OtherServiceProvider__c = otherServiceProvider.Id
+            OtherServiceProvider__c = otherServiceProvider.Id,
+            CreateServiceSessionRecords__c = true
         );
         ServiceScheduleModel model = new ServiceScheduleModel();
         model.serviceSchedule = schedule;
@@ -266,7 +267,8 @@ public with sharing class ServiceScheduleService_TEST {
             NumberOfServiceSessions__c = 2,
             DaysOfWeek__c = '1;2;3;4;5;6;7',
             PrimaryServiceProvider__c = primaryServiceProvider.Id,
-            OtherServiceProvider__c = null
+            OtherServiceProvider__c = null,
+            CreateServiceSessionRecords__c = true
         );
         ServiceScheduleModel model = new ServiceScheduleModel();
         model.serviceSchedule = schedule;
@@ -384,7 +386,8 @@ public with sharing class ServiceScheduleService_TEST {
             NumberOfServiceSessions__c = 2,
             DaysOfWeek__c = '1;2;3;4;5;6;7',
             PrimaryServiceProvider__c = null,
-            OtherServiceProvider__c = null
+            OtherServiceProvider__c = null,
+            CreateServiceSessionRecords__c = true
         );
         ServiceScheduleModel model = new ServiceScheduleModel();
         model.serviceSchedule = schedule;
@@ -474,6 +477,31 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
+    private static void shouldProcessScheduleWithoutCreatingSessions() {
+        ServiceSchedule__c schedule = new ServiceSchedule__c(
+            Name = 'test',
+            CreateServiceSessionRecords__c = false
+        );
+        ServiceScheduleModel model = new ServiceScheduleModel();
+        model.serviceSchedule = schedule;
+
+        List<ServiceSession__c> expectedSessions = new List<ServiceSession__c>();
+
+        ServiceScheduleModel expected = new ServiceScheduleModel();
+        expected.serviceSchedule = schedule;
+        expected.serviceSessions = expectedSessions;
+
+        Test.startTest();
+        ServiceScheduleModel actual = service.processSchedule(model);
+        Test.stopTest();
+        System.assertEquals(
+            expected.serviceSessions,
+            actual.serviceSessions,
+            'Expected an empty list of sessions to be returned.'
+        );
+    }
+
+    @IsTest
     private static void shouldGetSessionsWithMinimalInfo() {
         String createMethod = 'createRRule';
         String generateMethod = 'generate';
@@ -483,7 +511,8 @@ public with sharing class ServiceScheduleService_TEST {
             Name = 'test',
             FirstSessionStart__c = firstSessionStart,
             Frequency__c = 'DAILY',
-            NumberOfServiceSessions__c = 2
+            NumberOfServiceSessions__c = 2,
+            CreateServiceSessionRecords__c = true
         );
         List<DateTime> expectedDateTimes = new List<DateTime>{
             firstSessionStart,
@@ -694,7 +723,8 @@ public with sharing class ServiceScheduleService_TEST {
             Frequency__c = 'DAILY',
             NumberOfServiceSessions__c = 2,
             PrimaryServiceProvider__c = serviceProviders[0].Id,
-            OtherServiceProvider__c = serviceProviders[1].Id
+            OtherServiceProvider__c = serviceProviders[1].Id,
+            CreateServiceSessionRecords__c = true
         );
         model.serviceSchedule = schedule;
 

@@ -11,6 +11,13 @@
             onchange={handleStartDateChange}
             label={labels.message}
         ></lightning-input>
+        <template if:true={errorMessage}>
+            <c-scoped-notification
+                theme="error"
+                title={errorMessage}
+                class="slds-var-p-around_small"
+            ></c-scoped-notification
+        ></template>
     </div>
     <footer class="slds-modal__footer">
         <lightning-button
@@ -21,9 +28,10 @@
         <lightning-button
             label={labels.delete}
             title={labels.delete}
-            variant="destructive-text"
+            variant="brand"
             onclick={handleDelete}
             class="slds-m-left_x-small"
+            disabled={isDisabled}
         >
         </lightning-button>
     </footer>

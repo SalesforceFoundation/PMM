@@ -96,22 +96,22 @@
         <fullName>Delete_Future_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Delete Future Sessions</shortDescription>
-        <value>Delete Future Sessions</value>
+        <shortDescription>Delete Future Service Sessions</shortDescription>
+        <value>Delete Future Service Sessions</value>
     </labels>
     <labels>
         <fullName>Delete_Sessions_Success</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Successfully deleted {0} Sessions.</shortDescription>
-        <value>Successfully deleted {0} Sessions.</value>
+        <shortDescription>Successfully deleted {0} Service Sessions.</shortDescription>
+        <value>Successfully deleted {0} Service Sessions.</value>
     </labels>
     <labels>
         <fullName>Delete_X_Future_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>This will delete {0} future Session records.</shortDescription>
-        <value>This will delete {0} future Session records.</value>
+        <shortDescription>This will delete {0} future Service Session records.</shortDescription>
+        <value>This will delete {0} future Service Session records.</value>
     </labels>
     <labels>
         <fullName>Delete_Sessions_After</fullName>
@@ -119,6 +119,13 @@
         <protected>true</protected>
         <shortDescription>Delete all Service Sessions after this date:</shortDescription>
         <value>Delete all Service Sessions after this date:</value>
+    </labels>
+    <labels>
+        <fullName>Delete_Sessions_Invalid_Date</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Date must be on or after today.</shortDescription>
+        <value>Date must be on or after today.</value>
     </labels>
     <labels>
         <fullName>Creating_Service_Session_Warning</fullName>

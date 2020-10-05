@@ -9,10 +9,13 @@ import DELETE from "@salesforce/label/c.Delete";
 import CANCEL from "@salesforce/label/c.Cancel";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import DELETE_SUCCESS from "@salesforce/label/c.Delete_Sessions_Success";
+import INVALID_DATE from "@salesforce/label/c.Delete_Sessions_Invalid_Date";
 
 export default class FutureSessionDeleter extends LightningElement {
     @api recordId;
     startDate = new Date().toISOString();
+    errorMessage;
+    isValid = true;
 
     labels = {
         header: HEADER_LABEL,
@@ -21,17 +24,31 @@ export default class FutureSessionDeleter extends LightningElement {
         delete: DELETE,
         cancel: CANCEL,
         successMessage: DELETE_SUCCESS,
+        invalidDate: INVALID_DATE,
     };
 
     handleDelete() {
-        deleteSessionsAfter({ scheduleId: this.recordId, startDate: this.startDate })
-            .then(result => {
-                this.showSuccessToast(result);
-                this.dispatchEvent(new CustomEvent("close"));
-            })
-            .catch(error => {
-                handleError(error);
-            });
+        if (this.isValid) {
+            deleteSessionsAfter({ scheduleId: this.recordId, startDate: this.startDate })
+                .then(result => {
+                    this.showSuccessToast(result);
+                    this.dispatchEvent(new CustomEvent("close"));
+                })
+                .catch(error => {
+                    handleError(error);
+                });
+        }
+    }
+
+    checkValidity() {
+        let startDate = new Date(this.startDate);
+        let today = new Date(new Date().toISOString().substr(0, 10));
+        this.isValid = startDate >= today;
+        if (this.isValid) {
+            this.errorMessage = undefined;
+        } else {
+            this.errorMessage = this.labels.invalidDate;
+        }
     }
 
     handleCancel() {
@@ -40,6 +57,7 @@ export default class FutureSessionDeleter extends LightningElement {
 
     handleStartDateChange(event) {
         this.startDate = event.detail.value;
+        this.checkValidity();
     }
 
     showSuccessToast(numDeleted) {
@@ -49,5 +67,9 @@ export default class FutureSessionDeleter extends LightningElement {
             message: format(this.labels.successMessage, [numDeleted]),
         });
         this.dispatchEvent(event);
+    }
+
+    get isDisabled() {
+        return !this.isValid;
     }
 }

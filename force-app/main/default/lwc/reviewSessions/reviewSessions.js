@@ -33,11 +33,7 @@ export default class ReviewSessions extends LightningElement {
     }
     set serviceScheduleModel(value) {
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
-        this.message = this._serviceScheduleModel.serviceSchedule[
-            this._serviceScheduleModel.scheduleRequiredFields.autoGenerateSessions.apiName
-        ]
-            ? undefined
-            : CREATE_SESSIONS_WARNING_LABEL;
+        this.setMessage();
         this.setLabels();
         this.setDataTableColumns();
 
@@ -103,6 +99,14 @@ export default class ReviewSessions extends LightningElement {
         this.sessionNameLabel = this._serviceScheduleModel.sessionFields.name.label;
         this.sessionStartLabel = this._serviceScheduleModel.sessionFields.sessionStart.label;
         this.sessionEndLabel = this._serviceScheduleModel.sessionFields.sessionEnd.label;
+    }
+
+    setMessage() {
+        this.message = this._serviceScheduleModel.serviceSchedule[
+            this._serviceScheduleModel.scheduleRequiredFields.autoGenerateSessions.apiName
+        ]
+            ? undefined
+            : CREATE_SESSIONS_WARNING_LABEL;
     }
 
     setDataTableColumns() {
@@ -233,5 +237,8 @@ export default class ReviewSessions extends LightningElement {
 
     handleDelete(event) {
         this._serviceSessions.splice(event.detail.row.index, 1);
+        if (!this.serviceSessions.length) {
+            this.setMessage();
+        }
     }
 }

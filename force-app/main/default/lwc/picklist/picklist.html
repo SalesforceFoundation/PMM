@@ -1,0 +1,33 @@
+<template>
+    <div class="slds-var-p-bottom_small slds-var-p-left_xxx-small" if:true={options}>
+        <div class="slds-form-element" if:true={multiSelect}>
+            <label
+                class="slds-form-element__legend slds-form-element__label"
+                for="buttons"
+            >
+                {label}
+            </label>
+            <div class="slds-form-element__control">
+                <lightning-button-group id="buttons">
+                    <template for:each={options} for:item="option" if:true={options}>
+                        <lightning-button
+                            key={option.value}
+                            name={option.value}
+                            label={option.label}
+                            variant={option.variant}
+                            onclick={handleMultiSelectClick}
+                        ></lightning-button>
+                    </template>
+                </lightning-button-group>
+            </div>
+        </div>
+        <lightning-radio-group
+            if:false={multiSelect}
+            label={label}
+            options={options}
+            onchange={handleChange}
+            type={type}
+            value={value}
+        ></lightning-radio-group>
+    </div>
+</template>

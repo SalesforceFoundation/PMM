@@ -10,10 +10,25 @@
 import { LightningElement, api, track } from "lwc";
 import closeLabel from "@salesforce/label/c.Close";
 
-const CSS_CLASS = "modal-hidden";
+const MODAL_HIDDEN = "modal-hidden";
 
 export default class Modal extends LightningElement {
     close = closeLabel;
+
+    @api size = "fixed";
+    visibilityClass = MODAL_HIDDEN;
+
+    @api
+    set defaultVisible(value) {
+        if (value) {
+            this.visibilityClass = "";
+        } else {
+            this.visibilityClass = MODAL_HIDDEN;
+        }
+    }
+    get defaultVisible() {
+        return this.visibilityClass === "";
+    }
 
     @api
     set header(value) {
@@ -24,17 +39,28 @@ export default class Modal extends LightningElement {
         return this._headerPrivate;
     }
 
+    get modalCss() {
+        return (
+            "slds-modal slds-fade-in-open" +
+            (this.size === "fixed" ? "" : ` slds-modal_${this.size}`)
+        );
+    }
+
+    get modalContainerCss() {
+        return "slds-modal__container" + (this.size === "fixed" ? " fixed-width" : "");
+    }
+
     @track hasHeaderString = false;
     _headerPrivate;
 
     @api show() {
         const outerDivEl = this.template.querySelector("div");
-        outerDivEl.classList.remove(CSS_CLASS);
+        outerDivEl.classList.remove(MODAL_HIDDEN);
     }
 
     @api hide() {
         const outerDivEl = this.template.querySelector("div");
-        outerDivEl.classList.add(CSS_CLASS);
+        outerDivEl.classList.add(MODAL_HIDDEN);
     }
 
     handleDialogClose() {
@@ -44,11 +70,11 @@ export default class Modal extends LightningElement {
 
     handleSlotTaglineChange() {
         const taglineEl = this.template.querySelector("p");
-        taglineEl.classList.remove(CSS_CLASS);
+        taglineEl.classList.remove(MODAL_HIDDEN);
     }
 
     handleSlotFooterChange() {
         const footerEl = this.template.querySelector("footer");
-        footerEl.classList.remove(CSS_CLASS);
+        footerEl.classList.remove(MODAL_HIDDEN);
     }
 }

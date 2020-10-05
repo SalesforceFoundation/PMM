@@ -1,0 +1,90 @@
+<template>
+    <c-modal
+        header={labels.newServiceSchedule}
+        ondialogclose={handleClose}
+        default-visible="true"
+        size="large"
+        if:true={isLoaded}
+    >
+        <template if:true={isStep1}>
+            <c-new-service-schedule
+                service-id={serviceId}
+                service-schedule-model={serviceScheduleModel}
+            ></c-new-service-schedule>
+        </template>
+        <template if:true={isStep2}>
+            <c-review-sessions
+                service-schedule-model={serviceScheduleModel}
+            ></c-review-sessions>
+        </template>
+        <template if:true={isStep3}>
+            <c-participant-selector
+                service-id={serviceId}
+                service-schedule-model={serviceScheduleModel}
+            ></c-participant-selector>
+        </template>
+        <template if:true={isStep4}>
+            <c-service-schedule-review
+                service-schedule-model={serviceScheduleModel}
+            ></c-service-schedule-review>
+        </template>
+        <div slot="footer">
+            <lightning-layout horizontal-align="end">
+                <lightning-layout-item
+                    padding="around-small"
+                    size="3"
+                    class="slds-text-align_left"
+                >
+                    <lightning-button
+                        if:true={currentStep.back}
+                        name="back"
+                        variant={currentStep.back.variant}
+                        label={currentStep.back.label}
+                        title={currentStep.back.label}
+                        onclick={handleBack}
+                    ></lightning-button>
+                </lightning-layout-item>
+
+                <lightning-layout-item
+                    padding="around-small"
+                    size="6"
+                    class="slds-text-align_center"
+                >
+                    <lightning-progress-indicator
+                        current-step={currentStep.value}
+                        type="base"
+                        variant="base"
+                    >
+                        <template for:each={steps} for:item="step">
+                            <lightning-progress-step
+                                key={step.value}
+                                label={step.label}
+                                value={step.value}
+                            ></lightning-progress-step>
+                        </template>
+                    </lightning-progress-indicator>
+                </lightning-layout-item>
+
+                <lightning-layout-item padding="around-small" size="3">
+                    <lightning-button
+                        if:true={currentStep.next}
+                        name="next"
+                        variant={currentStep.next.variant}
+                        label={currentStep.next.label}
+                        title={currentStep.next.label}
+                        onclick={handleNext}
+                        class="slds-var-p-right_small"
+                    ></lightning-button>
+                    <lightning-button
+                        if:true={currentStep.finish}
+                        name="finish"
+                        variant={currentStep.finish.variant}
+                        label={currentStep.finish.label}
+                        title={currentStep.finish.label}
+                        onclick={handleFinish}
+                    ></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </c-modal>
+</template>

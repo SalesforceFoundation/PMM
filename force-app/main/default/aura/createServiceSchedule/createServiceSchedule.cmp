@@ -1,0 +1,11 @@
+<aura:component
+    implements="flexipage:availableForRecordHome, force:hasRecordId, lightning:actionOverride, lightning:isUrlAddressable"
+    access="global"
+>
+    <aura:attribute name="serviceId" type="String" access="private" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+
+    <c:serviceScheduleCreator serviceId="{!v.serviceId}" />
+</aura:component>

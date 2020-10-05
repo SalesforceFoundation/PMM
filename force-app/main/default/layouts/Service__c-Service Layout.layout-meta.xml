@@ -118,13 +118,31 @@
         <fields>HouseholdBenefit__c</fields>
         <relatedList>ServiceDelivery__c.Service__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <fields>NAME</fields>
+        <fields>ParticipantCapacity__c</fields>
+        <fields>PrimaryServiceProvider__c</fields>
+        <relatedList>ServiceSchedule__c.Service__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Contact__c</fields>
+        <fields>ProgramEngagement__c</fields>
+        <fields>SignUpDate__c</fields>
+        <fields>Status__c</fields>
+        <relatedList>ServiceParticipant__c.Service__c</relatedList>
+        <sortField>SignUpDate__c</sortField>
+        <sortOrder>Asc</sortOrder>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h2D000000j1ux</masterLabel>
+        <masterLabel>00h21000001j3mE</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

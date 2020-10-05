@@ -168,4 +168,22 @@ public with sharing class ServiceSelector_TEST {
         }
         Test.stopTest();
     }
+
+    @IsTest
+    private static void shouldReturnContactFromId() {
+        Contact con = new Contact(FirstName = 'Test', LastName = 'LastTest');
+        insert con;
+
+        Test.startTest();
+        List<Contact> actual = new ServiceSelector()
+            .getContactsByIds(new Set<Id>{ con.Id });
+        Test.stopTest();
+
+        System.assertEquals(
+            'Test LastTest',
+            actual[0].Name,
+            'Expected the contact inserted in the test to be returned here.'
+        );
+        System.assertEquals(con.Id, actual[0].Id);
+    }
 }

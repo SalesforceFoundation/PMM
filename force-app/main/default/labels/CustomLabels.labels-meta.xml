@@ -1,12 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>Add_Entry</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Entry</shortDescription>
+        <value>Add Entry</value>
+    </labels>
+    <labels>
+        <fullName>Add_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Record {SObject Label}</shortDescription>
+        <value>Add {0}</value>
+    </labels>
+    <labels>
         <fullName>Add_Service_Delivery</fullName>
         <categories>Service Delivery</categories>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Add Service Delivery</shortDescription>
         <value>Add Service Delivery</value>
+    </labels>
+    <labels>
+        <fullName>Add_to_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add to {SObject Label}</shortDescription>
+        <value>Add to {0}</value>
+    </labels>
+    <labels>
+        <fullName>Adding_More_Service_Session_Warning</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Adding More Service Session Warning</shortDescription>
+        <value>You&apos;re adding more than {0} sessions, so this will take some extra time to complete.</value>
     </labels>
     <labels>
         <fullName>Anonymous</fullName>
@@ -16,6 +44,13 @@
         <value>Anonymous</value>
     </labels>
     <labels>
+        <fullName>Back</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Back</shortDescription>
+        <value>Back</value>
+    </labels>
+    <labels>
         <fullName>Cancel</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -23,18 +58,18 @@
         <value>Cancel</value>
     </labels>
     <labels>
-        <fullName>Done</fullName>
+        <fullName>Clicking_Back_Button_In_Modal_Warning</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Done</shortDescription>
-        <value>Done</value>
+        <shortDescription>Clicking Back Button In Modal Warning</shortDescription>
+        <value>Go back? Changes you made on this page won&apos;t be saved.</value>
     </labels>
     <labels>
-        <fullName>Add_Entry</fullName>
+        <fullName>Clone_Service_Participant</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Add Entry</shortDescription>
-        <value>Add Entry</value>
+        <shortDescription>Clone Service Participant</shortDescription>
+        <value>Clone with Service Participants</value>
     </labels>
     <labels>
         <fullName>Close</fullName>
@@ -58,6 +93,27 @@
         <value>Deleting this row removes this Service Delivery.</value>
     </labels>
     <labels>
+        <fullName>Delete_All_Future_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete All Future Sessions</shortDescription>
+        <value>Delete All Future Sessions</value>
+    </labels>
+    <labels>
+        <fullName>Delete_X_Future_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This will delete {0} future Session records.</shortDescription>
+        <value>This will delete {0} future Session records.</value>
+    </labels>
+    <labels>
+        <fullName>Creating_Service_Session_Warning</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Creating Service Session Warning</shortDescription>
+        <value>We can only create {0} sessions for a Service Schedule. Only the sessions listed here will be created.</value>
+    </labels>
+    <labels>
         <fullName>Delete</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -65,11 +121,54 @@
         <value>Delete</value>
     </labels>
     <labels>
+        <fullName>Disabled</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Disabled</shortDescription>
+        <value>Disabled</value>
+    </labels>
+    <labels>
+        <fullName>Done</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Done</shortDescription>
+        <value>Done</value>
+    </labels>
+    <labels>
+        <fullName>Enabled</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enabled</shortDescription>
+        <value>Enabled</value>
+    </labels>
+    <labels>
         <fullName>Error</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Error</shortDescription>
         <value>Error</value>
+    </labels>
+    <labels>
+        <fullName>Filter_by_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Filter by {SObject Label}</shortDescription>
+        <value>Filter by {0}</value>
+    </labels>
+    <labels>
+        <fullName>Finish</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Finish button</shortDescription>
+        <value>Finish</value>
+    </labels>
+    <labels>
+        <fullName>Insert_Operation_Exception</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Permission Denied for Insert Operation</shortDescription>
+        <value>Permission Denied for Insert Operation.</value>
     </labels>
     <labels>
         <fullName>MissingSObjectType</fullName>
@@ -87,6 +186,34 @@
         <value>New Program Engagement</value>
     </labels>
     <labels>
+        <fullName>New_Service_Schedule</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New Service Schedule</shortDescription>
+        <value>New Service Schedule</value>
+    </labels>
+    <labels>
+        <fullName>Next</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Next button</shortDescription>
+        <value>Next</value>
+    </labels>
+    <labels>
+        <fullName>No_Service_On_BSDT</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No Service On BSDT</shortDescription>
+        <value>The Service field must be included in the Bulk Service Deliveries field set to save records. Ask your admin for help.</value>
+    </labels>
+    <labels>
+        <fullName>No_Service_Participants_Created_Warning</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No Service Participants Created Warning</shortDescription>
+        <value>No Contacts are selected, so no Service Participants will be created.</value>
+    </labels>
+    <labels>
         <fullName>No_Services_For_Program_Engagement</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -94,12 +221,46 @@
         <value>No services found, choose another program engagement.</value>
     </labels>
     <labels>
+        <fullName>None</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>None</shortDescription>
+        <value>None</value>
+    </labels>
+    <labels>
+        <fullName>No_Records_Found</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No records found</shortDescription>
+        <value>No records found</value>
+    </labels>
+    <labels>
+        <fullName>No_Records_Selected</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No records selected</shortDescription>
+        <value>No records selected</value>
+    </labels>
+    <labels>
         <fullName>Owner_Field</fullName>
-        <categories></categories>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Owner</shortDescription>
         <value>Owner</value>
+    </labels>
+    <labels>
+        <fullName>Participant_Capacity_Warning</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Participant Capacity Warning</shortDescription>
+        <value>Just a heads up, there are more participants than the Participant Capacity you selected.</value>
+    </labels>
+    <labels>
+        <fullName>Previous</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Previous button</shortDescription>
+        <value>Previous</value>
     </labels>
     <labels>
         <fullName>Quantity</fullName>
@@ -116,11 +277,32 @@
         <value>Record deleted.</value>
     </labels>
     <labels>
+        <fullName>Remove</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Remove</shortDescription>
+        <value>Remove</value>
+    </labels>
+    <labels>
         <fullName>Required</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Required</shortDescription>
         <value>Required</value>
+    </labels>
+    <labels>
+        <fullName>Review_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Review Records (SObject Plural Label)</shortDescription>
+        <value>Review {0}</value>
+    </labels>
+    <labels>
+        <fullName>Rows_With_Errors</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You have rows with errors</shortDescription>
+        <value>There are Service Delivery rows with errors.</value>
     </labels>
     <labels>
         <fullName>Save</fullName>
@@ -137,6 +319,20 @@
         <value>New Program Engagement record created.</value>
     </labels>
     <labels>
+        <fullName>Save_New</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save and New button</shortDescription>
+        <value>Save and New</value>
+    </labels>
+    <labels>
+        <fullName>Save_for_Later</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save for Later</shortDescription>
+        <value>Save for Later</value>
+    </labels>
+    <labels>
         <fullName>Saved</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -151,6 +347,20 @@
         <value>Saving</value>
     </labels>
     <labels>
+        <fullName>Search_this_list</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search this list</shortDescription>
+        <value>Search this list</value>
+    </labels>
+    <labels>
+        <fullName>Select_Create_Service_Session_Warning</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Create Service Session Warning</shortDescription>
+        <value>Create Service Session records isn&apos;t selected, so no records will be created. Click Add Service Session to add Service Session records</value>
+    </labels>
+    <labels>
         <fullName>Select_Program_Engagement</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -163,6 +373,83 @@
         <protected>true</protected>
         <shortDescription>Select Service</shortDescription>
         <value>Select Service</value>
+    </labels>
+    <labels>
+        <fullName>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Service Schedule End Date Or Service Session Number Warning</shortDescription>
+        <value>Select either a Service Schedule End Date or a Number of Service Sessions.</value>
+    </labels>
+    <labels>
+        <fullName>Every_Week</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every Week</shortDescription>
+        <value>Every Week</value>
+    </labels>
+    <labels>
+        <fullName>Every_Month</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every Month</shortDescription>
+        <value>Every Month</value>
+    </labels>
+    <labels>
+        <fullName>Every_Day</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every Day</shortDescription>
+        <value>Every Day</value>
+    </labels>
+    <labels>
+        <fullName>Every_Year</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every Year</shortDescription>
+        <value>Every Year</value>
+    </labels>
+    <labels>
+        <fullName>Every_Custom</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Every...</shortDescription>
+        <value>Every...</value>
+    </labels>
+    <labels>
+        <fullName>Weeks</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Weeks</shortDescription>
+        <value>Weeks</value>
+    </labels>
+    <labels>
+        <fullName>Days</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Days</shortDescription>
+        <value>Days</value>
+    </labels>
+    <labels>
+        <fullName>Months</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Months</shortDescription>
+        <value>Months</value>
+    </labels>
+    <labels>
+        <fullName>Years</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Years</shortDescription>
+        <value>Years</value>
+    </labels>
+    <labels>
+        <fullName>Selected_Records</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Selected Records</shortDescription>
+        <value>Selected Records</value>
     </labels>
     <labels>
         <fullName>Service_Deliveries</fullName>
@@ -188,6 +475,34 @@
         <value>To save a Service Delivery, first enroll this client in a Program with active Services.</value>
     </labels>
     <labels>
+        <fullName>Service_Schedule_Date_Time</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New Service Schedule Date and Time Title</shortDescription>
+        <value>Date and Time</value>
+    </labels>
+    <labels>
+        <fullName>Service_Schedule_Information</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New Service Schedule Information Title</shortDescription>
+        <value>Service Schedule Information</value>
+    </labels>
+    <labels>
+        <fullName>Session_Scheduled_Outside_Start_And_End_Date</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Session Scheduled Outside of Start And End Date</shortDescription>
+        <value>This session would be scheduled outside of the Service Schedule start and end dates ({0} to {1}).</value>
+    </labels>
+    <labels>
+        <fullName>Submit</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Submit</shortDescription>
+        <value>Submit</value>
+    </labels>
+    <labels>
         <fullName>Success</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -201,6 +516,13 @@
         <protected>true</protected>
         <shortDescription>Error capturing metrics.</shortDescription>
         <value>We couldn't collect telemetry metrics.</value>
+    </labels>
+    <labels>
+        <fullName>Total_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Total Sessions</shortDescription>
+        <value>Total Sessions</value>
     </labels>
     <labels>
         <fullName>Util_Error</fullName>
@@ -232,12 +554,5 @@
         <protected>true</protected>
         <shortDescription>Warning</shortDescription>
         <value>Warning</value>
-    </labels>
-    <labels>
-        <fullName>Rows_With_Errors</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>You have rows with errors</shortDescription>
-        <value>There are Service Delivery rows with errors.</value>
     </labels>
 </CustomLabels>

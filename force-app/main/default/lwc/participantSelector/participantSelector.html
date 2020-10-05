@@ -1,0 +1,122 @@
+<template>
+    <c-section
+        title={serviceScheduleModel.labels.serviceParticipant.addServiceParticipants}
+        if:true={isLoaded}
+    ></c-section>
+    <lightning-layout class="container-height" if:true={isLoaded}>
+        <lightning-layout-item size="8">
+            <lightning-layout multiple-rows="true" horizontal-align="center">
+                <lightning-layout-item
+                    class="slds-var-m-left_x-large slds-var-p-top_small"
+                    size="5"
+                >
+                    <lightning-input
+                        type="String"
+                        label={objectLabels.program.objectLabel}
+                        value={programName}
+                        disabled
+                    ></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item
+                    class="slds-var-m-right_x-large slds-var-p-left_small"
+                    size="5"
+                >
+                    <lightning-combobox
+                        label={labels.filterByCohort}
+                        class="slds-align_absolute-center slds-text-align_left slds-var-p-top_small"
+                        options={searchOptions}
+                        onchange={handleCohortChange}
+                        value={selectedCohortId}
+                        placeholder={labels.none}
+                    ></lightning-combobox>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="10">
+                    <div class="slds-box slds-p-around_none slds-var-m-top_small">
+                        <div
+                            class="slds-theme_shade slds-var-m-bottom_small"
+                            style="width:100%"
+                        >
+                            <div
+                                style="float: left; width:50%"
+                                class="slds-var-p-top_large slds-var-p-left_medium"
+                            >
+                                {selectedRecordCountMessage}
+                            </div>
+                            <div
+                                style="float: right; width:50%; margin-bottom: 10px;"
+                                class="slds-var-p-right_medium "
+                            >
+                                <lightning-input
+                                    name="enter-search"
+                                    type="search"
+                                    placeholder={labels.searchThisList}
+                                    onchange={handleInputChange}
+                                    value={searchValue}
+                                ></lightning-input>
+                            </div>
+                        </div>
+                        <div if:false={noRecordsFound}>
+                            <lightning-datatable
+                                data={filteredEngagements}
+                                key-field="Id"
+                                columns={columns}
+                                show-row-number-column
+                                resize-column-disabled
+                                class="slds-var-m-around_x-large"
+                                onrowselection={handleRowSelected}
+                            ></lightning-datatable>
+                            <div class="slds-theme_shade slds-align_absolute-center">
+                                <lightning-button
+                                    variant="brand"
+                                    label={addToServiceButtonLabel}
+                                    class="slds-var-p-around_medium"
+                                    onclick={handleSelectParticipants}
+                                ></lightning-button>
+                            </div>
+                        </div>
+                        <div
+                            class="width:fit-content slds-align_absolute-center slds-var-p-around_small slds-text-heading_small slds-border_top"
+                            if:true={noRecordsFound}
+                            style="width:100%"
+                        >
+                            {labels.noRecordsFound}
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+        <lightning-layout-item size="4">
+            <lightning-layout>
+                <lightning-layout-item class="slds-var-m-top_medium">
+                    <div class="slds-box slds-p-around_none  slds-var-m-top_medium">
+                        <div
+                            class="slds-text-align_left slds-var-p-around_x-small slds-text-heading_small"
+                        >
+                            {scheduleHeader}
+                        </div>
+                        <template if:false={noRecordsSelected}>
+                            <div style="width:100%">
+                                <lightning-datatable
+                                    columns={selectedColumns}
+                                    key-field="Id"
+                                    hide-checkbox-column
+                                    onrowaction={handleDeselectParticipant}
+                                    data={selectedParticipants}
+                                    resize-column-disabled
+                                ></lightning-datatable>
+                            </div>
+                        </template>
+                        <template if:true={noRecordsSelected}>
+                            <div
+                                class="width:fit-content slds-align_absolute-center slds-var-p-around_small slds-text-heading_small slds-border_top"
+                            >
+                                {labels.noRecordsSelected}
+                            </div>
+                        </template>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

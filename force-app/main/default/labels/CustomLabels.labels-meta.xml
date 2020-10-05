@@ -117,8 +117,8 @@
         <fullName>Delete_Sessions_After</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Delete all Sessions after this date:</shortDescription>
-        <value>Delete all Sessions after this date:</value>
+        <shortDescription>Delete all Service Sessions after this date:</shortDescription>
+        <value>Delete all Service Sessions after this date:</value>
     </labels>
     <labels>
         <fullName>Creating_Service_Session_Warning</fullName>

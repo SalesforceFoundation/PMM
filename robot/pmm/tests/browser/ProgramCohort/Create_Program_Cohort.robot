@@ -16,8 +16,10 @@ Setup Test Data
     Set suite variable          ${ns}
     ${program_cohort} =         Generate Random String
     Set suite variable          ${program_cohort}      
-    &{program} =                API Create Program  
-    Set suite variable          &{program}
+    ${program} =                API Create Program  
+    Set suite variable          ${program}
+    ${program1} =                API Create Program  
+    Set suite variable          ${program1}
 
 
 *** Test Cases ***
@@ -60,15 +62,16 @@ Date validation for cohort when Start date is later than end date
      ...                                    End Date=10
      Click Dialog Button                    Save
      Verify Modal Error                     Start Date must be before End Date
+     Click Dialog Button                    Cancel
 
 Date validation when cohort dates are not within program date range
      [Documentation]                        This test opens the program record, edits the start and end dates and opens new program
      ...                                    cohort dialog from related list and verifes that an error message is displayed when cohort date 
      ...                                    range is outside the program date range 
      [tags]                                 W-037572  feature:Program Cohort
-     Go To Page                             Details                                 Program__c                   object_id=${program}[Id]
+     Go To Page                             Details                                 Program__c                   object_id=${program1}[Id]
      Click Quick Action Button              Edit
-     Verify Current Page Title              Edit ${program}[Name]
+     Verify Current Page Title              Edit ${program1}[Name]
      Populate Lightning Fields              Start Date=15
      ...                                    End Date=20
      Click Dialog Button                    Save
@@ -77,8 +80,8 @@ Date validation when cohort dates are not within program date range
      Click Related List Button              Program Cohorts                        New
      Populate Field                         Program Cohort                         ${program_cohort}
      Populate Lightning Fields              Status=Completed
-     ...                                    Start Date=10
-     ...                                    End Date=25
+     Select From Date Picker                Start Date                               10
+     Select From Date Picker                End Date                                 25
      Click Dialog Button                    Save
      Verify Modal Error                     End Date must be within the Program Start and End Dates
      Verify Modal Error                     Start Date must be within the range of the related Program Start and End Dates.

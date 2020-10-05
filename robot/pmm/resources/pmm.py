@@ -13,7 +13,6 @@ from robot.libraries.BuiltIn import RobotNotRunningError
 from cumulusci.robotframework.utils import selenium_retry
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.keys import Keys
-from cumulusci.robotframework import locator_manager
 from locators_50 import pmm_lex_locators as locators_50
 from locators_49 import pmm_lex_locators as locators_49
 
@@ -39,8 +38,6 @@ class pmm(object):
             logging.WARN
         )
         self._init_locators()
-        # patch salesforce locators for winter 21
-        locator_manager.register_locators("pmm", pmm_lex_locators)
 
     def _init_locators(self):
         try:
@@ -341,8 +338,7 @@ class pmm(object):
                     )
                     self.selenium.wait_until_element_is_visible(locator)
                     self.selenium.set_focus_to_element(locator)
-                    self.open_date_picker(key)
-                    self.pick_date(value)
+                    self.select_from_date_picker(key, value)
                 else:
                     self.builtin.log(f"Element {key} not found")
 
@@ -371,24 +367,15 @@ class pmm(object):
             else:
                 raise Exception("Locator not found")
 
-    def open_date_picker(self, title):
-        """Opens the date picker by clicking on the date picker icon given the title of the field"""
+    def select_from_date_picker(self, title, value):
+        """Opens the date picker by clicking on the date picker icon given the title of the field and select a date"""
         locator = pmm_lex_locators["new_record"]["c_lightning_datepicker"].format(title)
         self.selenium.scroll_element_into_view(locator)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
-
-    def choose_date(self, value):
-        """To pick a date from the lightning date picker"""
-        locator = pmm_lex_locators["new_record"]["c_lightning_selectdate"].format(value)
-        self.selenium.set_focus_to_element(locator)
-        self.selenium.get_webelement(locator).click()
-
-    def pick_date(self, value):
-        """To pick a date from the date picker"""
-        locator = pmm_lex_locators["new_record"]["c_datepicker"].format(value)
-        self.selenium.set_focus_to_element(locator)
-        self.selenium.get_webelement(locator).click()
+        locator_date = pmm_lex_locators["new_record"]["c_datepicker"].format(value)
+        self.selenium.set_focus_to_element(locator_date)
+        self.selenium.get_webelement(locator_date).click()
 
     def set_checkbox(self, title, status):
         """If status is 'checked' then checks the box if its not already checked. Prints a warning msg if already checked.

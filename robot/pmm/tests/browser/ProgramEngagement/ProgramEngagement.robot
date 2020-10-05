@@ -16,10 +16,10 @@ Setup Test Data
     Set suite variable             ${ns}
     ${program_engagement_name} =   Generate Random String
     Set suite variable             ${program_engagement_name}
-    &{contact} =                   API Create Contact
-    Set suite variable             &{contact}
-    &{program} =                   API Create Program
-    Set suite variable             &{program}
+    ${contact} =                   API Create Contact
+    Set suite variable             ${contact}
+    ${program} =                   API Create Program
+    Set suite variable             ${program}
 
 
 *** Test Cases ***
@@ -79,6 +79,7 @@ Date validation for PE when start date is later than end date
      ...                                    End Date=10
      Click Dialog Button                    Save
      Verify Modal Error                     Start Date must be before End Date
+     Click Dialog Button                    Cancel
 
 Date validation when program engagement dates are not within program date range
      [Documentation]                        This test opens the program record, edits the start and end dates and goes to the PE listing
@@ -100,9 +101,8 @@ Date validation when program engagement dates are not within program date range
      ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
      ...                                    Program=&{program}[Name]
      ...                                    Role=Volunteer
-     ...                                    Start Date=10
-     ...                                    End Date=25
+     Select From Date Picker                Start Date                               10
+     Select From Date Picker                End Date                                 25
      Click Dialog Button                    Save
      Verify Modal Error                     Select an end date that's on or after the program start date and on or before the program end date.
      Verify Modal Error                     Select a start date that's on or after the program start date and on or before the program end date.
-     

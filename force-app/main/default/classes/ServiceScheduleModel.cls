@@ -23,6 +23,9 @@ public with sharing class ServiceScheduleModel {
         ),
         'serviceId' => fieldSetService.getFieldForLWC(
             Schema.ServiceSchedule__c.Service__c.getDescribe()
+        ),
+        'autoGenerateSessions' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.CreateServiceSessionRecords__c.getDescribe()
         )
     };
 

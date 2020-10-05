@@ -70,9 +70,14 @@
             </c-modal>
         </lightning-layout-item>
         <lightning-layout-item size="10">
+            <c-scoped-notification
+                title={message}
+                if:true={message}
+            ></c-scoped-notification>
             <div
                 class="slds-box slds-p-around_none slds-var-m-top_x-small"
                 style="width:fit-content"
+                if:false={message}
             >
                 <lightning-datatable
                     key-field="Id"

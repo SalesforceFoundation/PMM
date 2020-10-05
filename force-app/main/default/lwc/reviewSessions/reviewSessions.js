@@ -9,6 +9,7 @@ import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
+import CREATE_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Select_Create_Service_Session_Warning";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
@@ -16,6 +17,7 @@ export default class ReviewSessions extends LightningElement {
     @track objectName;
     _serviceScheduleModel;
 
+    message;
     sessionNameLabel;
     sessionStartLabel;
     sessionEndLabel;
@@ -31,6 +33,11 @@ export default class ReviewSessions extends LightningElement {
     }
     set serviceScheduleModel(value) {
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
+        this.message = this._serviceScheduleModel.serviceSchedule[
+            this._serviceScheduleModel.scheduleRequiredFields.autoGenerateSessions.apiName
+        ]
+            ? undefined
+            : CREATE_SESSIONS_WARNING_LABEL;
         this.setLabels();
         this.setDataTableColumns();
 
@@ -182,6 +189,7 @@ export default class ReviewSessions extends LightningElement {
         })
             .then(result => {
                 this._serviceSessions = [...this._serviceSessions, result];
+                this.message = undefined;
                 inputFields.forEach(field => field.reset());
 
                 if (isSaveAndNew) {

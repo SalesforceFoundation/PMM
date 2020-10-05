@@ -30,8 +30,13 @@ public with sharing class ServiceScheduleService {
     }
 
     public ServiceScheduleModel processSchedule(ServiceScheduleModel model) {
-        model.serviceSessions = getSessions(model.serviceSchedule);
         setServiceProviders(model.serviceSchedule);
+
+        if (!model.serviceSchedule.CreateServiceSessionRecords__c) {
+            return model;
+        }
+
+        model.serviceSessions = getSessions(model.serviceSchedule);
         return model;
     }
 

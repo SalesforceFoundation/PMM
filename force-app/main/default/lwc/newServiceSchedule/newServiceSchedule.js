@@ -100,7 +100,7 @@ export default class NewServiceSchedule extends LightningElement {
 
     @api
     get serviceSchedule() {
-        let serviceSchedule = this._serviceScheduleModel.serviceSchedule;
+        let serviceSchedule = {};
 
         [...this.template.querySelectorAll("lightning-input-field")].forEach(field => {
             serviceSchedule[field.fieldName] = field.value;
@@ -143,10 +143,6 @@ export default class NewServiceSchedule extends LightningElement {
                 this.setFirstSessionStartTimeAndEndTime(field.value);
             }
         });
-
-        this.picklistFields.frequency.value = !this.picklistFields.frequency.value
-            ? ONE_TIME
-            : this.picklistFields.frequency.value;
     }
 
     get isWeekly() {
@@ -226,16 +222,21 @@ export default class NewServiceSchedule extends LightningElement {
 
     validateServiceScheduleOnOrAfter() {
         let noError = true;
+        let seriesEndsOnElement = this.template.querySelector(
+            '[data-element="seriesEndsOn"]'
+        );
+
+        let numberOfSessionsElement = this.template.querySelector(
+            '[data-element="numberOfSessions"]'
+        );
 
         if (this.picklistFields.frequency.value === ONE_TIME) {
             return noError;
         }
 
         noError =
-            (this.template.querySelector('[data-element="seriesEndsOn"]') === null ||
-                !this.template.querySelector('[data-element="seriesEndsOn"]').value) &&
-            (this.template.querySelector('[data-element="numberOfSessions"]') === null ||
-                !this.template.querySelector('[data-element="numberOfSessions"]').value)
+            (seriesEndsOnElement === null || !seriesEndsOnElement.value) &&
+            (numberOfSessionsElement === null || !numberOfSessionsElement.value)
                 ? false
                 : true;
 

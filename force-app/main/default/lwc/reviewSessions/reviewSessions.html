@@ -1,16 +1,20 @@
 <template>
     <c-section title={labels.reviewSessions}></c-section>
-    <c-scoped-notification
-        title={limitMessage}
-        theme="warning"
-        if:true={limitReached}
-    ></c-scoped-notification>
-
     <lightning-layout
         multiple-rows="true"
         horizontal-align="center"
         pull-to-boundary="medium"
     >
+        <lightning-layout-item
+            size="10"
+            class="slds-var-p-top_medium"
+            if:true={limitReached}
+        >
+            <c-scoped-notification
+                title={limitMessage}
+                theme="warning"
+            ></c-scoped-notification>
+        </lightning-layout-item>
         <lightning-layout-item size="10">
             <lightning-layout horizontal-align="spread">
                 <lightning-layout-item>

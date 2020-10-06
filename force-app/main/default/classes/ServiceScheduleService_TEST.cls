@@ -143,7 +143,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
         recurrenceServiceStub.withReturnValue(
             generateMethod,
-            new List<Type>{ DateTime.class, String.class },
+            new List<Type>{ DateTime.class, String.class, Integer.class },
             expectedDateTimes
         );
         service.recurrenceService = (RecurrenceService) recurrenceServiceStub.createMock();
@@ -210,8 +210,12 @@ public with sharing class ServiceScheduleService_TEST {
         );
         recurrenceServiceStub.assertCalledWith(
             generateMethod,
-            new List<Type>{ DateTime.class, String.class },
-            new List<Object>{ schedule.FirstSessionStart__c, rRuleString }
+            new List<Type>{ DateTime.class, String.class, Integer.class },
+            new List<Object>{
+                schedule.FirstSessionStart__c,
+                rRuleString,
+                model.maxSessions
+            }
         );
         serviceSelectorStub.assertCalledWith(
             getServiceProviderMethod,
@@ -292,7 +296,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
         recurrenceServiceStub.withReturnValue(
             generateMethod,
-            new List<Type>{ DateTime.class, String.class },
+            new List<Type>{ DateTime.class, String.class, Integer.class },
             expectedDateTimes
         );
         service.recurrenceService = (RecurrenceService) recurrenceServiceStub.createMock();
@@ -358,8 +362,12 @@ public with sharing class ServiceScheduleService_TEST {
         );
         recurrenceServiceStub.assertCalledWith(
             generateMethod,
-            new List<Type>{ DateTime.class, String.class },
-            new List<Object>{ schedule.FirstSessionStart__c, rRuleString }
+            new List<Type>{ DateTime.class, String.class, Integer.class },
+            new List<Object>{
+                schedule.FirstSessionStart__c,
+                rRuleString,
+                model.maxSessions
+            }
         );
         serviceSelectorStub.assertCalledWith(
             getServiceProviderMethod,
@@ -411,7 +419,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
         recurrenceServiceStub.withReturnValue(
             generateMethod,
-            new List<Type>{ DateTime.class, String.class },
+            new List<Type>{ DateTime.class, String.class, Integer.class },
             expectedDateTimes
         );
         service.recurrenceService = (RecurrenceService) recurrenceServiceStub.createMock();
@@ -470,8 +478,12 @@ public with sharing class ServiceScheduleService_TEST {
         );
         recurrenceServiceStub.assertCalledWith(
             generateMethod,
-            new List<Type>{ DateTime.class, String.class },
-            new List<Object>{ schedule.FirstSessionStart__c, rRuleString }
+            new List<Type>{ DateTime.class, String.class, Integer.class },
+            new List<Object>{
+                schedule.FirstSessionStart__c,
+                rRuleString,
+                model.maxSessions
+            }
         );
         serviceSelectorStub.assertNotCalled(getServiceProviderMethod, Set<Id>.class);
     }
@@ -532,7 +544,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
         recurrenceServiceStub.withReturnValue(
             generateMethod,
-            new List<Type>{ DateTime.class, String.class },
+            new List<Type>{ DateTime.class, String.class, Integer.class },
             expectedDateTimes
         );
         service.recurrenceService = (RecurrenceService) recurrenceServiceStub.createMock();
@@ -549,7 +561,7 @@ public with sharing class ServiceScheduleService_TEST {
         }
 
         Test.startTest();
-        List<ServiceSession__c> actual = service.getSessions(schedule);
+        List<ServiceSession__c> actual = service.getSessions(schedule, null);
         Test.stopTest();
 
         System.assertEquals(
@@ -579,8 +591,8 @@ public with sharing class ServiceScheduleService_TEST {
         );
         recurrenceServiceStub.assertCalledWith(
             generateMethod,
-            new List<Type>{ DateTime.class, String.class },
-            new List<Object>{ schedule.FirstSessionStart__c, rRuleString }
+            new List<Type>{ DateTime.class, String.class, Integer.class },
+            new List<Object>{ schedule.FirstSessionStart__c, rRuleString, null }
         );
     }
 

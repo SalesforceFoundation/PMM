@@ -1,5 +1,11 @@
 <template>
     <c-section title={labels.reviewSessions}></c-section>
+    <c-scoped-notification
+        title={limitMessage}
+        theme="warning"
+        if:true={limitReached}
+    ></c-scoped-notification>
+
     <lightning-layout
         multiple-rows="true"
         horizontal-align="center"
@@ -21,6 +27,7 @@
                     variant="Neutral"
                     label={labels.addSession}
                     onclick={handleAddSession}
+                    disabled={limitReached}
                 ></lightning-button>
             </div>
             <c-modal header={labels.addSession} is-nested="true">
@@ -57,6 +64,7 @@
                                 label={labels.saveNew}
                                 variant="neutral"
                                 onclick={handleSaveNewSession}
+                                disabled={saveNewLimitReached}
                             ></lightning-button>
                             <lightning-button
                                 label={labels.save}
@@ -71,13 +79,13 @@
         </lightning-layout-item>
         <lightning-layout-item size="10" class="slds-var-p-top_x-small">
             <c-scoped-notification
-                title={message}
-                if:true={message}
+                title={emptyMessage}
+                if:true={emptyMessage}
             ></c-scoped-notification>
             <div
                 class="slds-box slds-p-around_none slds-var-m-top_x-small"
                 style="width:fit-content"
-                if:false={message}
+                if:false={emptyMessage}
             >
                 <lightning-datatable
                     key-field="Id"

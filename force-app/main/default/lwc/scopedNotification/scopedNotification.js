@@ -4,7 +4,9 @@ import SUCCESS_LABEL from "@salesforce/label/c.Success";
 
 const INFO = "info";
 const SUCCESS = "success";
-const THEMES = [SUCCESS, INFO, "warning", "error"];
+const ERROR = "error";
+const THEMES = [SUCCESS, INFO, "warning", ERROR];
+const INVERSE_ICON_THEMES = [SUCCESS, INFO, ERROR];
 
 export default class ScopedNotification extends LightningElement {
     @api theme = "light";
@@ -34,11 +36,11 @@ export default class ScopedNotification extends LightningElement {
     }
 
     get iconVariant() {
-        if (this.theme !== INFO && this.theme !== SUCCESS) {
-            return undefined;
+        if (INVERSE_ICON_THEMES.includes(this.theme)) {
+            return "inverse";
         }
 
-        return "inverse";
+        return undefined;
     }
 
     get icon() {

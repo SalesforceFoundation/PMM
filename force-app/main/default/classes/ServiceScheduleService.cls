@@ -6,7 +6,7 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
-    RecurrenceService recurrenceService = new RecurrenceService();
+    private RecurrenceService recurrenceService = new RecurrenceService();
 
     public ServiceScheduleModel getServiceScheduleModel() {
         return new ServiceScheduleModel();
@@ -36,7 +36,7 @@ public with sharing class ServiceScheduleService {
             return model;
         }
 
-        model.serviceSessions = getSessions(model.serviceSchedule);
+        model.serviceSessions = getSessions(model.serviceSchedule, model.maxSessions);
         return model;
     }
 
@@ -86,10 +86,13 @@ public with sharing class ServiceScheduleService {
     }
 
     @TestVisible
-    private List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
+    private List<ServiceSession__c> getSessions(
+        ServiceSchedule__c schedule,
+        Integer maxSessions
+    ) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 
-        for (DateTime startDateTime : getDateTimes(schedule)) {
+        for (DateTime startDateTime : getDateTimes(schedule, maxSessions)) {
             DateTime endDateTime = schedule.FirstSessionEnd__c != null
                 ? DateTime.newInstance(
                       startDateTime.date(),
@@ -101,7 +104,10 @@ public with sharing class ServiceScheduleService {
         return sessions;
     }
 
-    private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
+    private List<DateTime> getDateTimes(
+        ServiceSchedule__c schedule,
+        Integer maxSessions
+    ) {
         Integer interval = schedule.Interval__c != null
             ? Integer.valueOf(schedule.Interval__c)
             : null;
@@ -113,7 +119,11 @@ public with sharing class ServiceScheduleService {
             getDayNums(schedule.DaysOfWeek__c),
             schedule.FirstSessionStart__c
         );
-        return recurrenceService.generate(schedule.FirstSessionStart__c, rRule);
+        return recurrenceService.generate(
+            schedule.FirstSessionStart__c,
+            rRule,
+            maxSessions
+        );
     }
 
     private List<Integer> getDayNums(String daysOfWeek) {

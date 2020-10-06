@@ -64,7 +64,9 @@ export default class NewServiceSchedule extends LightningElement {
             return validSoFar && inputField.reportValidity();
         }, true);
 
-        let datesValid = this.dateFields.start.value < this.dateFields.end.value;
+        let datesValid =
+            this.dateFields.end.value &&
+            this.dateFields.start.value < this.dateFields.end.value;
 
         let hasEndCondition = this.validateServiceScheduleOnOrAfter();
 
@@ -112,6 +114,7 @@ export default class NewServiceSchedule extends LightningElement {
 
             serviceSchedule[apiName] = value;
         });
+
         return serviceSchedule;
     }
 
@@ -138,9 +141,15 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     handleLoad() {
+        if (this.dateFields.end.value) {
+            return;
+        }
+
         this.template.querySelectorAll("lightning-input-field").forEach(field => {
             if (field.fieldName === this.dateFields.start.apiName) {
-                this.setFirstSessionStartTimeAndEndTime(field.value);
+                if (!this.dateFields.end.value) {
+                    this.setFirstSessionStartTimeAndEndTime(field.value);
+                }
             }
         });
     }

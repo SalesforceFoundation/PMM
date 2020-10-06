@@ -42,6 +42,46 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
+    private static void shouldGetNewSessionFromService() {
+        DateTime startDateTime = System.now();
+        DateTime endDateTime = startDateTime.addHours(1);
+
+        String methodName = 'createSession';
+        ServiceSession__c sessionToReturn = new ServiceSession__c(
+            Name = 'Default Name: ' + startDateTime.date().format(),
+            SessionStart__c = startDateTime,
+            SessionEnd__c = endDateTime
+        );
+
+        serviceStub.withReturnValue(
+            methodName,
+            new List<Type>{ ServiceSchedule__c.class, DateTime.class, DateTime.class },
+            sessionToReturn
+        );
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        ServiceSession__c actualSession = ServiceScheduleCreatorController.createSession(
+            new ServiceSchedule__c(),
+            startDateTime,
+            endDateTime
+        );
+        Test.stopTest();
+
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ ServiceSchedule__c.class, DateTime.class, DateTime.class },
+            new List<Object>{ new ServiceSchedule__c(), startDateTime, endDateTime }
+        );
+
+        System.assertEquals(
+            sessionToReturn,
+            actualSession,
+            'Expected the controller to return the session returned by the service.'
+        );
+    }
+
+    @IsTest
     private static void shouldProcessSchedule() {
         String methodName = 'processSchedule';
         ServiceScheduleModel expected = new ServiceScheduleModel();
@@ -116,6 +156,47 @@ public with sharing class ServiceScheduleCreatorController_TEST {
             serviceStub.testExceptionMessage,
             actualException.getMessage(),
             'Expected the stub test exception message to have been thrown.'
+        );
+    }
+
+    @IsTest
+    private static void rethrowsErrorFromCreateSessionOnService() {
+        String methodName = 'createSession';
+        Exception actualException;
+
+        serviceStub.withThrowException(
+            methodName,
+            new List<Type>{ ServiceSchedule__c.class, DateTime.class, DateTime.class }
+        );
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        ServiceScheduleModel actual;
+        Test.startTest();
+        try {
+            ServiceSession__c session = ServiceScheduleCreatorController.createSession(
+                null,
+                null,
+                null
+            );
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AuraHandledException,
+            actualException.getTypeName() + ': Expected an aura handled exception.'
+        );
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the stub test exception message to have been thrown.'
+        );
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ ServiceSchedule__c.class, DateTime.class, DateTime.class },
+            new List<Object>{ null, null, null }
         );
     }
 

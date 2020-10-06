@@ -7,5 +7,8 @@
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
 
+    <aura:html tag="style">
+        lightning-timepicker, lightning-datepicker { width: 100% }
+    </aura:html>
     <c:serviceScheduleCreator serviceId="{!v.serviceId}" />
 </aura:component>

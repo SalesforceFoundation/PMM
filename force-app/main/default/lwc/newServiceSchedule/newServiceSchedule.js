@@ -57,6 +57,7 @@ export default class NewServiceSchedule extends LightningElement {
 
     @api reportValidity() {
         let errMessages = [];
+        let datesValid = true;
 
         let isFormValid = [
             ...this.template.querySelectorAll("lightning-input-field"),
@@ -64,7 +65,9 @@ export default class NewServiceSchedule extends LightningElement {
             return validSoFar && inputField.reportValidity();
         }, true);
 
-        let datesValid = this.dateFields.start.value < this.dateFields.end.value;
+        if (this.dateFields.start.value) {
+            datesValid = this.dateFields.start.value < this.dateFields.end.value;
+        }
 
         let hasEndCondition = this.validateServiceScheduleOnOrAfter();
 

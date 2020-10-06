@@ -18,7 +18,12 @@ public with sharing class ServiceScheduleService_TEST {
 
     @IsTest
     private static void shouldReturnModel() {
+        ServiceSchedule__c schedule = (ServiceSchedule__c) ServiceSchedule__c.SObjectType.newSObject(
+            null,
+            true
+        );
         ServiceScheduleModel expectedModel = new ServiceScheduleModel();
+        expectedModel.serviceSchedule = schedule;
 
         Test.startTest();
         ServiceScheduleModel actualModel = service.getServiceScheduleModel();
@@ -31,7 +36,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
 
         System.assertEquals(
-            String.valueOf(new ServiceSchedule__c()),
+            String.valueOf(expectedModel.serviceSchedule),
             String.valueOf(actualModel.serviceSchedule),
             'Expected the model to have a new service schedule record.'
         );
@@ -766,7 +771,7 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceSchedule__c schedule = new ServiceSchedule__c(
             Name = 'test',
             FirstSessionStart__c = firstSessionStart,
-            Frequency__c = 'ONETIME'
+            Frequency__c = 'ONE TIME'
         );
         List<DateTime> expectedDateTimes = new List<DateTime>{ firstSessionStart };
 
@@ -774,11 +779,9 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expected.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = null,
-                    PrimaryServiceProvider__c = null,
-                    OtherServiceProvider__c = null
+                    SessionEnd__c = null
                 )
             );
         }

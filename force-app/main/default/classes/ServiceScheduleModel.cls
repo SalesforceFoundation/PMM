@@ -83,6 +83,10 @@ public with sharing class ServiceScheduleModel {
 
     public ServiceScheduleModel() {
         serviceSchedule = new ServiceSchedule__c();
+        serviceSchedule = (ServiceSchedule__c) ServiceSchedule__c.SObjectType.newSObject(
+            null,
+            true
+        );
         serviceSessions = new List<ServiceSession__c>();
         selectedParticipants = new List<ProgramEngagement__c>();
         serviceParticipants = new List<ServiceParticipant__c>();

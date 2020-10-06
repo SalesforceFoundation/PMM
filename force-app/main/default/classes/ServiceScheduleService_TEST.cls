@@ -158,14 +158,12 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expectedSessions.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = primaryServiceProvider.Id,
-                    OtherServiceProvider__c = otherServiceProvider.Id
+                    )
                 )
             );
         }
@@ -218,6 +216,32 @@ public with sharing class ServiceScheduleService_TEST {
             getServiceProviderMethod,
             Set<Id>.class,
             new Set<Id>{ primaryServiceProvider.Id, otherServiceProvider.Id }
+        );
+    }
+
+    @IsTest
+    private static void shouldCreateSession() {
+        DateTime startDateTime = System.now();
+        DateTime endDateTime = startDateTime.addHours(1);
+
+        ServiceSession__c expectedSession = new ServiceSession__c(
+            Name = startDateTime.date().format() + ': Default Name',
+            SessionStart__c = startDateTime,
+            SessionEnd__c = endDateTime
+        );
+
+        Test.startTest();
+        ServiceSession__c actualSession = service.createSession(
+            new ServiceSchedule__c(Name = 'Default Name'),
+            startDateTime,
+            endDateTime
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedSession,
+            actualSession,
+            'Expected the session returned by the service to match.'
         );
     }
 
@@ -282,14 +306,12 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expectedSessions.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = primaryServiceProvider.Id,
-                    OtherServiceProvider__c = null
+                    )
                 )
             );
         }
@@ -396,14 +418,12 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expectedSessions.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = null,
-                    OtherServiceProvider__c = null
+                    )
                 )
             );
         }
@@ -492,11 +512,9 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expected.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = null,
-                    PrimaryServiceProvider__c = null,
-                    OtherServiceProvider__c = null
+                    SessionEnd__c = null
                 )
             );
         }

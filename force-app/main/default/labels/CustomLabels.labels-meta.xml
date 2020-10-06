@@ -142,6 +142,13 @@
         <value>Enabled</value>
     </labels>
     <labels>
+        <fullName>End_Date_After_Start_Date</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>{Start Date Label} must be before {End Date Label}</shortDescription>
+        <value>{0} must be before {1}</value>
+    </labels>
+    <labels>
         <fullName>Error</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -380,6 +387,13 @@
         <protected>true</protected>
         <shortDescription>Select Service Schedule End Date Or Service Session Number Warning</shortDescription>
         <value>Select either a Service Schedule End Date or a Number of Service Sessions.</value>
+    </labels>
+    <labels>
+        <fullName>Day_Required_When_Weekly_Selected</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select at least one day of the week.</shortDescription>
+        <value>Select at least one day of the week.</value>
     </labels>
     <labels>
         <fullName>Every_Week</fullName>

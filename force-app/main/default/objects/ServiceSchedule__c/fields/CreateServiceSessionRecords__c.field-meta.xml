@@ -3,7 +3,7 @@
     <fullName>CreateServiceSessionRecords__c</fullName>
     <defaultValue>true</defaultValue>
     <externalId>false</externalId>
-    <inlineHelpText>When selected, records are created for each Service Session.</inlineHelpText>
+    <inlineHelpText>When selected, a record is created for each Service Session.</inlineHelpText>
     <label>Create Service Session records</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

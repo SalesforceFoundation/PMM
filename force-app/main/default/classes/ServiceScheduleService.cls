@@ -7,6 +7,7 @@ public with sharing class ServiceScheduleService {
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
     RecurrenceService recurrenceService = new RecurrenceService();
+    private static final String ONE_TIME = 'One Time';
 
     public ServiceScheduleModel getServiceScheduleModel() {
         return new ServiceScheduleModel();
@@ -97,9 +98,14 @@ public with sharing class ServiceScheduleService {
     }
 
     private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
+        if (schedule.Frequency__c == ONE_TIME) {
+            return new List<DateTime>{ schedule.FirstSessionStart__c };
+        }
+
         Integer interval = schedule.Interval__c != null
             ? Integer.valueOf(schedule.Interval__c)
             : null;
+
         String rRule = recurrenceService.createRRule(
             schedule.Frequency__c,
             interval,

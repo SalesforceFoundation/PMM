@@ -64,9 +64,7 @@ export default class NewServiceSchedule extends LightningElement {
             return validSoFar && inputField.reportValidity();
         }, true);
 
-        let datesValid =
-            this.dateFields.end.value &&
-            this.dateFields.start.value < this.dateFields.end.value;
+        let datesValid = this.dateFields.start.value < this.dateFields.end.value;
 
         let hasEndCondition = this.validateServiceScheduleOnOrAfter();
 

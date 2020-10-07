@@ -46,6 +46,8 @@ public with sharing class ServiceScheduleCreatorController {
             throw Util.getAuraHandledException(ex);
         }
     }
+
+    @AuraEnabled
     public static ServiceSession__c createSession(
         ServiceSchedule__c schedule,
         DateTime startDateTime,

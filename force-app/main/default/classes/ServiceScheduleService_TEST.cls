@@ -829,7 +829,7 @@ public with sharing class ServiceScheduleService_TEST {
         }
 
         Test.startTest();
-        List<ServiceSession__c> actual = service.getSessions(schedule);
+        List<ServiceSession__c> actual = service.getSessions(schedule, null);
         Test.stopTest();
 
         System.assertEquals(

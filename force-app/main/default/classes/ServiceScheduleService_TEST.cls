@@ -18,7 +18,12 @@ public with sharing class ServiceScheduleService_TEST {
 
     @IsTest
     private static void shouldReturnModel() {
+        ServiceSchedule__c schedule = (ServiceSchedule__c) ServiceSchedule__c.SObjectType.newSObject(
+            null,
+            true
+        );
         ServiceScheduleModel expectedModel = new ServiceScheduleModel();
+        expectedModel.serviceSchedule = schedule;
 
         Test.startTest();
         ServiceScheduleModel actualModel = service.getServiceScheduleModel();
@@ -31,7 +36,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
 
         System.assertEquals(
-            String.valueOf(new ServiceSchedule__c()),
+            String.valueOf(expectedModel.serviceSchedule),
             String.valueOf(actualModel.serviceSchedule),
             'Expected the model to have a new service schedule record.'
         );
@@ -158,14 +163,12 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expectedSessions.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = primaryServiceProvider.Id,
-                    OtherServiceProvider__c = otherServiceProvider.Id
+                    )
                 )
             );
         }
@@ -218,6 +221,32 @@ public with sharing class ServiceScheduleService_TEST {
             getServiceProviderMethod,
             Set<Id>.class,
             new Set<Id>{ primaryServiceProvider.Id, otherServiceProvider.Id }
+        );
+    }
+
+    @IsTest
+    private static void shouldCreateSession() {
+        DateTime startDateTime = System.now();
+        DateTime endDateTime = startDateTime.addHours(1);
+
+        ServiceSession__c expectedSession = new ServiceSession__c(
+            Name = startDateTime.date().format() + ': Default Name',
+            SessionStart__c = startDateTime,
+            SessionEnd__c = endDateTime
+        );
+
+        Test.startTest();
+        ServiceSession__c actualSession = service.createSession(
+            new ServiceSchedule__c(Name = 'Default Name'),
+            startDateTime,
+            endDateTime
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedSession,
+            actualSession,
+            'Expected the session returned by the service to match.'
         );
     }
 
@@ -282,14 +311,12 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expectedSessions.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = primaryServiceProvider.Id,
-                    OtherServiceProvider__c = null
+                    )
                 )
             );
         }
@@ -396,14 +423,12 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expectedSessions.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
                     SessionEnd__c = DateTime.newInstance(
                         sessionDateTime.date(),
                         firstSessionEnd.time()
-                    ),
-                    PrimaryServiceProvider__c = null,
-                    OtherServiceProvider__c = null
+                    )
                 )
             );
         }
@@ -492,11 +517,9 @@ public with sharing class ServiceScheduleService_TEST {
         for (DateTime sessionDateTime : expectedDateTimes) {
             expected.add(
                 new ServiceSession__c(
-                    Name = schedule.Name + ': ' + sessionDateTime.date().format(),
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = null,
-                    PrimaryServiceProvider__c = null,
-                    OtherServiceProvider__c = null
+                    SessionEnd__c = null
                 )
             );
         }
@@ -778,6 +801,38 @@ public with sharing class ServiceScheduleService_TEST {
             model.serviceParticipants.size(),
             actualParticipants.size(),
             'Expected the participants to have been inserted.'
+        );
+    }
+
+    @IsTest
+    private static void shouldGetSessionsForOneTimeFrequency() {
+        DateTime firstSessionStart = System.now();
+        ServiceSchedule__c schedule = new ServiceSchedule__c(
+            Name = 'test',
+            FirstSessionStart__c = firstSessionStart,
+            Frequency__c = 'ONE TIME'
+        );
+        List<DateTime> expectedDateTimes = new List<DateTime>{ firstSessionStart };
+
+        List<ServiceSession__c> expected = new List<ServiceSession__c>();
+        for (DateTime sessionDateTime : expectedDateTimes) {
+            expected.add(
+                new ServiceSession__c(
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
+                    SessionStart__c = sessionDateTime,
+                    SessionEnd__c = null
+                )
+            );
+        }
+
+        Test.startTest();
+        List<ServiceSession__c> actual = service.getSessions(schedule);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Sessions not returned from the service as expected.'
         );
     }
 }

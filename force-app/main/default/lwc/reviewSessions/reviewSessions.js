@@ -1,8 +1,14 @@
 import { LightningElement, track, api } from "lwc";
+import { format, reduceErrors } from "c/util";
 import processSchedule from "@salesforce/apex/ServiceScheduleCreatorController.processSchedule";
+import createSession from "@salesforce/apex/ServiceScheduleCreatorController.createSession";
 import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
 import ADD_RECORD_LABEL from "@salesforce/label/c.Add_Record";
 import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
+import CANCEL_LABEL from "@salesforce/label/c.Cancel";
+import SAVE_LABEL from "@salesforce/label/c.Save";
+import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
+import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
@@ -10,18 +16,20 @@ export default class ReviewSessions extends LightningElement {
     @track objectName;
     _serviceScheduleModel;
 
-    @api sessionNameLabel;
-    @api sessionStartLabel;
-    @api sessionEndLabel;
+    sessionNameLabel;
+    sessionStartLabel;
+    sessionEndLabel;
+    addSessionError;
 
     @track _serviceSessions = [];
 
     @api
     get serviceScheduleModel() {
+        this._serviceScheduleModel.serviceSessions = [...this._serviceSessions];
+
         return this._serviceScheduleModel;
     }
     set serviceScheduleModel(value) {
-        // This is a nested object so the inner objects are still read only when using spread alone
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
         this.setLabels();
         this.setDataTableColumns();
@@ -33,12 +41,17 @@ export default class ReviewSessions extends LightningElement {
         }
     }
 
-    @api
     get serviceSessions() {
-        return this._serviceSessions;
+        this._serviceSessions.sort((a, b) => {
+            return a[this.sessionStartFieldName] > b[this.sessionStartFieldName] ? 1 : -1;
+        });
+
+        return this._serviceSessions.map((session, index) => ({
+            ...session,
+            index: index,
+        }));
     }
 
-    @api
     get serviceSchedule() {
         return this._serviceScheduleModel.serviceSchedule;
     }
@@ -47,13 +60,16 @@ export default class ReviewSessions extends LightningElement {
         totalSessions: TOTAL_SESSIONS_LABEL,
         addSession: ADD_RECORD_LABEL,
         reviewSessions: REVIEW_RECORDS,
+        cancel: CANCEL_LABEL,
+        save: SAVE_LABEL,
+        saveNew: SAVE_NEW_LABEL,
     };
 
     getSessions() {
         processSchedule({ model: this._serviceScheduleModel })
             .then(result => {
-                this._serviceScheduleModel = JSON.parse(JSON.stringify(result));
-                this._serviceSessions = this._serviceScheduleModel.serviceSessions;
+                this._serviceScheduleModel.serviceSchedule = result.serviceSchedule;
+                this._serviceSessions = [...result.serviceSessions];
             })
             .catch(error => {
                 // TODO: throw error
@@ -65,8 +81,16 @@ export default class ReviewSessions extends LightningElement {
         return this.labels.totalSessions + ": " + this._serviceSessions.length;
     }
 
+    get sessionStartFieldName() {
+        return this._serviceScheduleModel.sessionFields.sessionStart.apiName;
+    }
+
+    get sessionEndFieldName() {
+        return this._serviceScheduleModel.sessionFields.sessionEnd.apiName;
+    }
+
     setLabels() {
-        this.objectName = this._serviceScheduleModel.labels.serviceSession.objectPluralLabel;
+        this.objectName = this._serviceScheduleModel.labels.serviceSession.objectApiName;
         this.labels.addSession = this._serviceScheduleModel.labels.serviceSession.addSession;
         this.labels.reviewSessions = this._serviceScheduleModel.labels.serviceSession.reviewSessions;
         this.sessionNameLabel = this._serviceScheduleModel.sessionFields.name.label;
@@ -83,7 +107,7 @@ export default class ReviewSessions extends LightningElement {
             },
             {
                 label: this.sessionStartLabel,
-                fieldName: this._serviceScheduleModel.sessionFields.sessionStart.apiName,
+                fieldName: this.sessionStartFieldName,
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {
@@ -99,7 +123,7 @@ export default class ReviewSessions extends LightningElement {
             },
             {
                 label: this.sessionEndLabel,
-                fieldName: this._serviceScheduleModel.sessionFields.sessionEnd.apiName,
+                fieldName: this.sessionEndFieldName,
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {
@@ -130,28 +154,76 @@ export default class ReviewSessions extends LightningElement {
         this.columns = COLUMNS;
     }
 
-    // handleAddRows() {
-    //     const dataId = createUUID();
-    //     this._serviceScheduleModel.serviceSessions.push({
-    //         id: dataId,
-    //         Name: "",
-    //         SessionStart__c: "",
-    //         startTime: "",
-    //         endTime: "",
-    //     });
+    handleSaveNewSession() {
+        this.save(true);
+    }
 
-    //     this._serviceScheduleModel.serviceSessions = this._serviceScheduleModel.serviceSessions.slice(0);
-    // }
+    handleSaveSession() {
+        this.save(false);
+    }
+
+    save(isSaveAndNew) {
+        let inputFields = this.template.querySelectorAll("lightning-input-field");
+        let startDateTime = inputFields[0];
+        let endDateTime = inputFields[1];
+
+        let allValid = [...inputFields].reduce((validSoFar, inputField) => {
+            return validSoFar && inputField.reportValidity();
+        }, true);
+
+        if (!allValid || !this.isSessionValid(startDateTime.value, endDateTime.value)) {
+            return;
+        }
+
+        createSession({
+            schedule: this._serviceScheduleModel.serviceSchedule,
+            startDateTime: startDateTime.value,
+            endDateTime: endDateTime.value,
+        })
+            .then(result => {
+                this._serviceSessions = [...this._serviceSessions, result];
+                inputFields.forEach(field => field.reset());
+
+                if (isSaveAndNew) {
+                    return;
+                }
+
+                this.closeModal();
+            })
+            .catch(error => {
+                this.addSessionError = reduceErrors(error);
+            });
+    }
+
+    isSessionValid(startDateTime, endDateTime) {
+        this.addSessionError = undefined;
+        this.addSessionErrorTheme = undefined;
+
+        if (endDateTime < startDateTime) {
+            this.addSessionError = format(START_BEFORE_END_LABEL, [
+                this.sessionStartLabel,
+                this.sessionEndLabel,
+            ]);
+
+            this.addSessionErrorTheme = "error";
+
+            return false;
+        }
+
+        return true;
+    }
+
+    closeModal() {
+        const modal = this.template.querySelector("c-modal");
+        modal.hide();
+    }
+
+    handleAddSession() {
+        const modal = this.template.querySelector("c-modal");
+        modal.show();
+    }
 
     handleDelete(event) {
-        this._serviceSessions = this.serviceSessions.filter(session =>
-            Object.values(this._serviceScheduleModel.sessionFields).reduce(
-                (matchesSoFar, field) =>
-                    matchesSoFar &&
-                    ((!session[field.apiName] && !event.detail.row[field.apiName]) ||
-                        session[field.apiName] !== event.detail.row[field.apiName]),
-                true
-            )
-        );
+        this._serviceSessions.splice(event.detail.row.index, 1);
     }
 }

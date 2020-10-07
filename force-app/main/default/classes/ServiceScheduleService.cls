@@ -7,6 +7,7 @@ public with sharing class ServiceScheduleService {
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
     RecurrenceService recurrenceService = new RecurrenceService();
+    private static final String ONE_TIME = 'One Time';
 
     public ServiceScheduleModel getServiceScheduleModel() {
         return new ServiceScheduleModel();
@@ -45,6 +46,20 @@ public with sharing class ServiceScheduleService {
         return numSessions;
     }
 
+    public ServiceSession__c createSession(
+        ServiceSchedule__c schedule,
+        DateTime startDateTime,
+        DateTime endDateTime
+    ) {
+        // NOTE: Passing the entire schedule to allow for changes in our default name
+        // or potentially setting additional defaults at this level
+        return new ServiceSession__c(
+            Name = (startDateTime.date().format() + ': ' + schedule.Name).abbreviate(80),
+            SessionStart__c = startDateTime,
+            SessionEnd__c = endDateTime
+        );
+    }
+
     private void setServiceProviders(ServiceSchedule__c schedule) {
         Map<Id, Contact> providerById = new Map<Id, Contact>();
 
@@ -80,9 +95,6 @@ public with sharing class ServiceScheduleService {
     private List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 
-        Id primaryServiceProvider = schedule.PrimaryServiceProvider__c;
-        Id otherServiceProvider = schedule.OtherServiceProvider__c;
-
         for (DateTime startDateTime : getDateTimes(schedule)) {
             DateTime endDateTime = schedule.FirstSessionEnd__c != null
                 ? DateTime.newInstance(
@@ -90,23 +102,20 @@ public with sharing class ServiceScheduleService {
                       schedule.FirstSessionEnd__c.time()
                   )
                 : null;
-            sessions.add(
-                new ServiceSession__c(
-                    Name = schedule.Name + ': ' + startDateTime.date().format(),
-                    SessionStart__c = startDateTime,
-                    SessionEnd__c = endDateTime,
-                    PrimaryServiceProvider__c = primaryServiceProvider,
-                    OtherServiceProvider__c = otherServiceProvider
-                )
-            );
+            sessions.add(createSession(schedule, startDateTime, endDateTime));
         }
         return sessions;
     }
 
     private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
+        if (schedule.Frequency__c == ONE_TIME) {
+            return new List<DateTime>{ schedule.FirstSessionStart__c };
+        }
+
         Integer interval = schedule.Interval__c != null
             ? Integer.valueOf(schedule.Interval__c)
             : null;
+
         String rRule = recurrenceService.createRRule(
             schedule.Frequency__c,
             interval,

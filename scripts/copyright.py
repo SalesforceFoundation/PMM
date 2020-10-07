@@ -7,6 +7,29 @@ import glob
 from pathlib import Path
 
 
+STAR_COPYRIGHT = """/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
+"""
+
+POINTY_COPYRIGHT = """<!--
+  - /*
+  -  * Copyright (c) 2020, salesforce.com, inc.
+  -  * All rights reserved.
+  -  * SPDX-License-Identifier: BSD-3-Clause
+  -  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  -  */
+  -->
+
+"""
+
+
 def get_all_paths(path):
     return glob.glob(path, recursive=True)
 
@@ -35,29 +58,8 @@ def main():
     cmp_paths = get_all_paths("force-app/**/*.cmp")
     pointy_paths = html_paths + cmp_paths
 
-    star_copyright = """/*
- *
- *  * Copyright (c) 2020, salesforce.com, inc.
- *  * All rights reserved.
- *  * SPDX-License-Identifier: BSD-3-Clause
- *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
- *
- */
-
-"""
-    pointy_copyright = """<!--
-  - /*
-  -  * Copyright (c) 2020, salesforce.com, inc.
-  -  * All rights reserved.
-  -  * SPDX-License-Identifier: BSD-3-Clause
-  -  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
-  -  */
-  -->
-
-"""
-
-    total = apply_copyright(pointy_paths, pointy_copyright) + apply_copyright(
-        star_paths, star_copyright
+    total = apply_copyright(pointy_paths, POINTY_COPYRIGHT) + apply_copyright(
+        star_paths, STAR_COPYRIGHT
     )
 
     if total == 0:

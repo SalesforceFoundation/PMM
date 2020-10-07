@@ -62,6 +62,7 @@ public with sharing class RecurrenceRule {
 
     public RecurrenceRule withEndDate(Date endDate) {
         this.endDate = endDate;
+
         return this;
     }
 
@@ -202,6 +203,7 @@ public with sharing class RecurrenceRule {
         }
 
         rRule = String.join(ruleParts, ';');
+
         return rRule;
     }
 

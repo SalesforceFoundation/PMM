@@ -15,6 +15,7 @@ import INVALID_DATE from "@salesforce/label/c.Delete_Sessions_Invalid_Date";
 export default class FutureSessionDeleter extends LightningElement {
     @api recordId;
     startDate;
+    today;
     errorMessage;
     isValid = true;
 
@@ -32,6 +33,7 @@ export default class FutureSessionDeleter extends LightningElement {
         getToday()
             .then(result => {
                 this.startDate = result;
+                this.today = result;
             })
             .catch(error => {
                 handleError(error);
@@ -53,7 +55,7 @@ export default class FutureSessionDeleter extends LightningElement {
 
     checkValidity() {
         let startDate = new Date(this.startDate);
-        let today = new Date(new Date().toISOString().substr(0, 10));
+        let today = new Date(this.today);
         this.isValid = startDate >= today;
         if (this.isValid) {
             this.errorMessage = undefined;

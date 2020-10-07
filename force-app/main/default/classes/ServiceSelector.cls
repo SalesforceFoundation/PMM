@@ -59,7 +59,7 @@ public with sharing class ServiceSelector {
             FROM ServiceSession__c
             WHERE
                 ServiceSchedule__c = :scheduleId
-                AND DAY_ONLY(SessionStart__c) > :startDate
+                AND DAY_ONLY(convertTimezone(SessionStart__c)) > :startDate
         ];
     }
 }

@@ -292,4 +292,9 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         serviceStub.assertCalledWith(methodName, Id.class, serviceId);
     }
+
+    @IsTest
+    private static void shouldReturnToday() {
+        System.assertEquals(System.today(), ServiceScheduleCreatorController.getToday());
+    }
 }

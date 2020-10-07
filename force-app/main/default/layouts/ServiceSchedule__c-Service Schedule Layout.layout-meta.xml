@@ -103,7 +103,7 @@
     <platformActionList>
         <actionListContext>Record</actionListContext>
         <platformActionListItems>
-            <actionName>ServiceSchedule__c.Delete_All_Future_Sessions</actionName>
+            <actionName>ServiceSchedule__c.Delete_Future_Sessions</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>1</sortOrder>
         </platformActionListItems>

@@ -46,4 +46,9 @@ public with sharing class ServiceScheduleCreatorController {
             throw Util.getAuraHandledException(ex);
         }
     }
+
+    @AuraEnabled
+    public static Date getToday() {
+        return Util.getToday();
+    }
 }

@@ -2,6 +2,7 @@ import { LightningElement, api } from "lwc";
 import { format, handleError } from "c/util";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import deleteSessionsAfter from "@salesforce/apex/ServiceScheduleCreatorController.deleteSessionsAfter";
+import getToday from "@salesforce/apex/ServiceScheduleCreatorController.getToday";
 
 import HEADER_LABEL from "@salesforce/label/c.Delete_Future_Sessions";
 import MESSAGE_LABEL from "@salesforce/label/c.Delete_Sessions_After";
@@ -13,7 +14,7 @@ import INVALID_DATE from "@salesforce/label/c.Delete_Sessions_Invalid_Date";
 
 export default class FutureSessionDeleter extends LightningElement {
     @api recordId;
-    startDate = new Date().toISOString();
+    startDate;
     errorMessage;
     isValid = true;
 
@@ -26,6 +27,16 @@ export default class FutureSessionDeleter extends LightningElement {
         successMessage: DELETE_SUCCESS,
         invalidDate: INVALID_DATE,
     };
+
+    connectedCallback() {
+        getToday()
+            .then(result => {
+                this.startDate = result;
+            })
+            .catch(error => {
+                handleError(error);
+            });
+    }
 
     handleDelete() {
         if (this.isValid) {

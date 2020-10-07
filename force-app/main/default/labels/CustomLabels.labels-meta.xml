@@ -178,6 +178,14 @@
         <value>Permission Denied for Insert Operation.</value>
     </labels>
     <labels>
+        <fullName>Loading</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Loading</shortDescription>
+        <value>Loading</value>
+    </labels>
+    <labels>
         <fullName>MissingSObjectType</fullName>
         <categories>Exception</categories>
         <language>en_US</language>

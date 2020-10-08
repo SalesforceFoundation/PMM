@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>CreateServiceSessionRecords__c</name>
+    <help>Als deze optie wordt geselecteerd, worden er records gemaakt voor elke servicesessie.</help>
+    <label>Servicesessierecords maken</label>
+</CustomFieldTranslation>

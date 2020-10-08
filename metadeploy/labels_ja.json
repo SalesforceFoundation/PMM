@@ -47,12 +47,38 @@
         "Deploy Program Management Profile": {
             "message": "プログラムマネジメントプロファイルのリリース",
             "description": "title of installation step"
+        },
+        "Deploy Folder of Unmanaged Reports": {
+            "message": "未管理レポートのフォルダのリリース",
+            "description": "title of installation step"
         }
     },
     "checks": {
         "Please enable My Domain in your org prior to installing.": {
             "message": "インストールの前に組織で [私のドメイン] を有効にしてください。",
             "description": "shown if validation fails"
+        },
+        "Please install Program Management Module in your org prior to installing reports.": {
+            "message": "レポートをインストールする前に組織に Program Management Module をインストールしてください。",
+            "description": "shown if validation fails"
+        }
+    },
+    "plan:reports": {
+        "title": {
+            "message": "Program Management Module レポートのインストール",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "これにより、組織に Program Management Module レポートがインストールされます。",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Program Management Module にレポートを追加していただきありがとうございます。Program Management Module に関するあらゆる質問については、Power of Us Hub の Program Management Module のカスタマーフォーラムグループ (https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) にアクセスしてください。",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "このエラーについて支援を受けるには、[help.salesforce.com](https://help.salesforce.com/) にアクセスし、[サポートとサービス] 領域を見つけて、Salesforce でテクニカルサポートのチケットを登録してください。件名行に「PMM」を含め、コメントにはここに表示されているインストールリンクを含めてください。",
+            "description": "shown after failed installation (markdown)"
         }
     }
 }

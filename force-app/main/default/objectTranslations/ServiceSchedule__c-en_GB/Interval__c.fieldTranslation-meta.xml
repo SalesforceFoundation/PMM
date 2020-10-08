@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Interval__c</name>
+    <help>The interval between sessions. For a weekly schedule, an interval of 2 means once every 2 weeks.</help>
+    <label>Interval</label>
+</CustomFieldTranslation>

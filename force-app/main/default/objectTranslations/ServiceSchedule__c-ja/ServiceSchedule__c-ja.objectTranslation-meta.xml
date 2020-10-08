@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Service Schedule Layout</layout>
+        <sections>
+            <label>カスタムリンク</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>サービススケジュール名</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>サービススケジュール名</label>
+    </standardFields>
     <caseValues>
         <plural>false</plural>
-        <value><!-- Service Schedule --></value>
+        <value>サービススケジュール</value>
     </caseValues>
-    <nameFieldLabel><!-- Service Schedule Name --></nameFieldLabel>
 </CustomObjectTranslation>

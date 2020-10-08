@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
+        <name>Add_Entry</name>
+        <label>Ajouter une entrée</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Record</name>
+        <label>Ajouter {0}</label>
+    </customLabels>
+    <customLabels>
         <name>Add_Service_Delivery</name>
         <label>Ajouter une livraison de services</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_to_Record</name>
+        <label>Ajouter à {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Adding_More_Service_Session_Warning</name>
+        <label>Vous ajoutez plus de {0} sessions. Cela prendra donc un peu plus de temps.</label>
     </customLabels>
     <customLabels>
         <name>Anonymous</name>
         <label>Anonyme</label>
     </customLabels>
     <customLabels>
+        <name>Back</name>
+        <label>Retour</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Annuler</label>
     </customLabels>
     <customLabels>
-        <name>Done</name>
-        <label>Terminé</label>
+        <name>Clicking_Back_Button_In_Modal_Warning</name>
+        <label>Revenir en arrière ? Les modifications que vous avez apportées sur cette page ne seront pas enregistrées.</label>
     </customLabels>
     <customLabels>
-        <name>Add_Entry</name>
-        <label>Ajouter une entrée</label>
+        <name>Clone_Service_Participant</name>
+        <label>Cloner avec les participants au service</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -33,12 +53,48 @@
         <label>La suppression de cette ligne supprime la livraison de services.</label>
     </customLabels>
     <customLabels>
+        <name>Delete_Future_Sessions</name>
+        <label>Supprimer toutes les sessions futures</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_X_Future_Sessions</name>
+        <label>Cette action supprimera {0} futurs enregistrements de session.</label>
+    </customLabels>
+    <customLabels>
+        <name>Creating_Service_Session_Warning</name>
+        <label>Nous pouvons créer uniquement {0} sessions pour un calendrier de service. Seules les sessions répertoriées ici seront créées.</label>
+    </customLabels>
+    <customLabels>
         <name>Delete</name>
         <label>Supprimer</label>
     </customLabels>
     <customLabels>
+        <name>Disabled</name>
+        <label>Désactivé</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Terminé</label>
+    </customLabels>
+    <customLabels>
+        <name>Enabled</name>
+        <label>Activé</label>
+    </customLabels>
+    <customLabels>
         <name>Error</name>
         <label>Erreur</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Record</name>
+        <label>Filtrer par {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Finish</name>
+        <label>Terminer</label>
+    </customLabels>
+    <customLabels>
+        <name>Insert_Operation_Exception</name>
+        <label>Autorisation refusée pour l&apos;opération d&apos;insertion.</label>
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
@@ -49,8 +105,48 @@
         <label>Nouvel engagement dans un programme</label>
     </customLabels>
     <customLabels>
+        <name>New_Service_Schedule</name>
+        <label>Nouveau calendrier de service</label>
+    </customLabels>
+    <customLabels>
+        <name>Next</name>
+        <label>Suivant</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_On_BSDT</name>
+        <label>Le champ Service doit être inclus dans l’ensemble de champs Livraisons de services en masse pour enregistrer les enregistrements. Demandez de l’aide à votre administrateur.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Participants_Created_Warning</name>
+        <label>Aucun contact n’est sélectionné, donc aucun participant au service ne sera créé.</label>
+    </customLabels>
+    <customLabels>
         <name>No_Services_For_Program_Engagement</name>
         <label>Aucun service trouvé, choisissez un autre engagement dans un programme.</label>
+    </customLabels>
+    <customLabels>
+        <name>None</name>
+        <label>Aucun</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Found</name>
+        <label>Aucun enregistrement trouvé</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Selected</name>
+        <label>Aucun enregistrement sélectionné</label>
+    </customLabels>
+    <customLabels>
+        <name>Owner_Field</name>
+        <label>Propriétaire</label>
+    </customLabels>
+    <customLabels>
+        <name>Participant_Capacity_Warning</name>
+        <label>Pour information, le nombre de participants dépasse le nombre maximum de participants que vous avez sélectionné.</label>
+    </customLabels>
+    <customLabels>
+        <name>Previous</name>
+        <label>Précédent</label>
     </customLabels>
     <customLabels>
         <name>Quantity</name>
@@ -61,8 +157,20 @@
         <label>Enregistrement supprimé.</label>
     </customLabels>
     <customLabels>
+        <name>Remove</name>
+        <label>Supprimer</label>
+    </customLabels>
+    <customLabels>
         <name>Required</name>
         <label>Obligatoire</label>
+    </customLabels>
+    <customLabels>
+        <name>Review_Records</name>
+        <label>Vérifier {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>Certaines lignes de livraison de services contiennent des erreurs.</label>
     </customLabels>
     <customLabels>
         <name>Save</name>
@@ -73,6 +181,14 @@
         <label>Enregistrement Nouvel engagement dans le programme créé.</label>
     </customLabels>
     <customLabels>
+        <name>Save_New</name>
+        <label>Enregistrer et nouveau</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_for_Later</name>
+        <label>Enregistrer pour plus tard</label>
+    </customLabels>
+    <customLabels>
         <name>Saved</name>
         <label>Enregistré</label>
     </customLabels>
@@ -81,12 +197,64 @@
         <label>Enregistrement en cours</label>
     </customLabels>
     <customLabels>
+        <name>Search_this_list</name>
+        <label>Rechercher dans cette liste</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Create_Service_Session_Warning</name>
+        <label>L&apos;option Créer enregistrements Session de service n’est pas sélectionnée, donc aucun enregistrement ne sera créé. Cliquez sur Ajouter une session de service pour ajouter des enregistrements Session de service.</label>
+    </customLabels>
+    <customLabels>
         <name>Select_Program_Engagement</name>
         <label>Sélectionnez un engagement dans un programme</label>
     </customLabels>
     <customLabels>
         <name>Select_Service</name>
         <label>Sélectionnez un service</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
+        <label>Sélectionnez une date de fin du calendrier de service ou un nombre de sessions de service.</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Week</name>
+        <label>Chaque semaine</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Month</name>
+        <label>Chaque mois</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Day</name>
+        <label>Chaque jour</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Year</name>
+        <label>Chaque année</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Custom</name>
+        <label>Tous les...</label>
+    </customLabels>
+    <customLabels>
+        <name>Weeks</name>
+        <label>Semaines</label>
+    </customLabels>
+    <customLabels>
+        <name>Days</name>
+        <label>Jours</label>
+    </customLabels>
+    <customLabels>
+        <name>Months</name>
+        <label>Mois</label>
+    </customLabels>
+    <customLabels>
+        <name>Years</name>
+        <label>Années</label>
+    </customLabels>
+    <customLabels>
+        <name>Selected_Records</name>
+        <label>Enregistrements sélectionnés</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
@@ -101,12 +269,32 @@
         <label>Avant d&apos;enregistrer une livraison de services, inscrivez d&apos;abord ce client à un programme avec des services actifs.</label>
     </customLabels>
     <customLabels>
+        <name>Service_Schedule_Date_Time</name>
+        <label>Date et heure</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Information</name>
+        <label>Informations sur le calendrier de service</label>
+    </customLabels>
+    <customLabels>
+        <name>Session_Scheduled_Outside_Start_And_End_Date</name>
+        <label>Cette session serait planifiée en dehors des dates de début et de fin des calendriers de service ({0} à {1}).</label>
+    </customLabels>
+    <customLabels>
+        <name>Submit</name>
+        <label>Envoyer</label>
+    </customLabels>
+    <customLabels>
         <name>Success</name>
         <label>Réussi</label>
     </customLabels>
     <customLabels>
         <name>TelemetryException</name>
         <label>Nous n’avons pas pu collecter de métriques de télémétrie.</label>
+    </customLabels>
+    <customLabels>
+        <name>Total_Sessions</name>
+        <label>Nombre total de sessions</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -117,12 +305,12 @@
         <label>Erreur inconnue</label>
     </customLabels>
     <customLabels>
-        <name>Warning</name>
-        <label>Avertissement</label>
+        <name>Util_UnsupportedField</name>
+        <label>Vous ne pouvez pas accéder à ce champ. Demandez de l’aide à votre administrateur Salesforce.</label>
     </customLabels>
     <customLabels>
-        <name>Rows_With_Errors</name>
-        <label>Certaines lignes de livraison de services contiennent des erreurs.</label>
+        <name>Warning</name>
+        <label>Avertissement</label>
     </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>

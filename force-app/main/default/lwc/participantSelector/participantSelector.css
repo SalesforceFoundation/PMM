@@ -6,7 +6,11 @@
  *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  *
  */
-
-.container-height {
-    height: 650px;
+.container {
+    border-color: var(--lwc-colorBorder, rgb(221, 219, 218));
+    border-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    border-width: var(--lwc-borderWidthThin, 1px);
+    border-style: solid;
+    height: 100%;
+    min-height: 400px;
 }

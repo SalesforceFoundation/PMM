@@ -157,6 +157,16 @@ public with sharing class ServiceScheduleModel {
             new List<String>{
                 ServiceParticipant__c.SObjectType.getDescribe().getLabelPlural()
             }
+        ),
+        'capacityWarning' => System.Label.Participant_Capacity_Warning,
+        'selectedRecords' => System.Label.Selected_Records,
+        'searchThisList' => System.Label.Search_this_list,
+        'none' => System.Label.None,
+        'noRecordsFound' => System.Label.No_Records_Found,
+        'noRecordsSelected' => System.Label.No_Records_Selected,
+        'filterByCohort' => String.format(
+            System.Label.Filter_By_Record,
+            new List<String>{ ProgramCohort__c.SObjectType.getDescribe().getLabel() }
         )
     };
 

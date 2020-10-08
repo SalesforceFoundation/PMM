@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
+        <name>Add_Entry</name>
+        <label>Add Entry</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Record</name>
+        <label>Add {0}</label>
+    </customLabels>
+    <customLabels>
         <name>Add_Service_Delivery</name>
         <label>Add Service Delivery</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_to_Record</name>
+        <label>Add to {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Adding_More_Service_Session_Warning</name>
+        <label>You&apos;re adding more than {0} sessions, so this will take some extra time to complete.</label>
     </customLabels>
     <customLabels>
         <name>Anonymous</name>
         <label>Anonymous</label>
     </customLabels>
     <customLabels>
+        <name>Back</name>
+        <label>Back</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Cancel</label>
     </customLabels>
     <customLabels>
-        <name>Done</name>
-        <label>Done</label>
+        <name>Clicking_Back_Button_In_Modal_Warning</name>
+        <label>Go back? Changes you made on this page won&apos;t be saved.</label>
     </customLabels>
     <customLabels>
-        <name>Add_Entry</name>
-        <label>Add Entry</label>
+        <name>Clone_Service_Participant</name>
+        <label>Clone with Service Participants</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -33,12 +53,48 @@
         <label>Deleting this row removes this Service Delivery.</label>
     </customLabels>
     <customLabels>
+        <name>Delete_Future_Sessions</name>
+        <label>Delete All Future Sessions</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_X_Future_Sessions</name>
+        <label>This will delete {0} future Session records.</label>
+    </customLabels>
+    <customLabels>
+        <name>Creating_Service_Session_Warning</name>
+        <label>We can only create {0} sessions for a Service Schedule. Only the sessions listed here will be created.</label>
+    </customLabels>
+    <customLabels>
         <name>Delete</name>
         <label>Delete</label>
     </customLabels>
     <customLabels>
+        <name>Disabled</name>
+        <label>Disabled</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Done</label>
+    </customLabels>
+    <customLabels>
+        <name>Enabled</name>
+        <label>Enabled</label>
+    </customLabels>
+    <customLabels>
         <name>Error</name>
         <label>Error</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Record</name>
+        <label>Filter by {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Finish</name>
+        <label>Finish</label>
+    </customLabels>
+    <customLabels>
+        <name>Insert_Operation_Exception</name>
+        <label>Permission Denied for Insert Operation.</label>
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
@@ -49,8 +105,48 @@
         <label>New Program Engagement</label>
     </customLabels>
     <customLabels>
+        <name>New_Service_Schedule</name>
+        <label>New Service Schedule</label>
+    </customLabels>
+    <customLabels>
+        <name>Next</name>
+        <label>Next</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_On_BSDT</name>
+        <label>The Service field must be included in the Bulk Service Deliveries field set to save records. Ask your admin for help.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Participants_Created_Warning</name>
+        <label>No Contacts are selected, so no Service Participants will be created.</label>
+    </customLabels>
+    <customLabels>
         <name>No_Services_For_Program_Engagement</name>
         <label>No services found, choose another program engagement.</label>
+    </customLabels>
+    <customLabels>
+        <name>None</name>
+        <label>None</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Found</name>
+        <label>No records found</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Selected</name>
+        <label>No records selected</label>
+    </customLabels>
+    <customLabels>
+        <name>Owner_Field</name>
+        <label>Owner</label>
+    </customLabels>
+    <customLabels>
+        <name>Participant_Capacity_Warning</name>
+        <label>Just a heads up, there are more participants than the Participant Capacity you selected.</label>
+    </customLabels>
+    <customLabels>
+        <name>Previous</name>
+        <label>Previous</label>
     </customLabels>
     <customLabels>
         <name>Quantity</name>
@@ -61,8 +157,20 @@
         <label>Record deleted.</label>
     </customLabels>
     <customLabels>
+        <name>Remove</name>
+        <label>Remove</label>
+    </customLabels>
+    <customLabels>
         <name>Required</name>
         <label>Required</label>
+    </customLabels>
+    <customLabels>
+        <name>Review_Records</name>
+        <label>Review {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>There are Service Delivery rows with errors.</label>
     </customLabels>
     <customLabels>
         <name>Save</name>
@@ -73,6 +181,14 @@
         <label>New Program Engagement record created.</label>
     </customLabels>
     <customLabels>
+        <name>Save_New</name>
+        <label>Save and New</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_for_Later</name>
+        <label>Save for Later</label>
+    </customLabels>
+    <customLabels>
         <name>Saved</name>
         <label>Saved</label>
     </customLabels>
@@ -81,12 +197,64 @@
         <label>Saving</label>
     </customLabels>
     <customLabels>
+        <name>Search_this_list</name>
+        <label>Search this list</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Create_Service_Session_Warning</name>
+        <label>Create Service Session records isn&apos;t selected, so no records will be created. Click Add Service Session to add Service Session records</label>
+    </customLabels>
+    <customLabels>
         <name>Select_Program_Engagement</name>
         <label>Select Program Engagement</label>
     </customLabels>
     <customLabels>
         <name>Select_Service</name>
         <label>Select Service</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
+        <label>Select either a Service Schedule End Date or a Number of Service Sessions.</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Week</name>
+        <label>Every Week</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Month</name>
+        <label>Every Month</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Day</name>
+        <label>Every Day</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Year</name>
+        <label>Every Year</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Custom</name>
+        <label>Every...</label>
+    </customLabels>
+    <customLabels>
+        <name>Weeks</name>
+        <label>Weeks</label>
+    </customLabels>
+    <customLabels>
+        <name>Days</name>
+        <label>Days</label>
+    </customLabels>
+    <customLabels>
+        <name>Months</name>
+        <label>Months</label>
+    </customLabels>
+    <customLabels>
+        <name>Years</name>
+        <label>Years</label>
+    </customLabels>
+    <customLabels>
+        <name>Selected_Records</name>
+        <label>Selected Records</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
@@ -101,12 +269,32 @@
         <label>To save a Service Delivery, first enrol this client in a Program with active Services.</label>
     </customLabels>
     <customLabels>
+        <name>Service_Schedule_Date_Time</name>
+        <label>Date and Time</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Information</name>
+        <label>Service Schedule Information</label>
+    </customLabels>
+    <customLabels>
+        <name>Session_Scheduled_Outside_Start_And_End_Date</name>
+        <label>This session would be scheduled outside of the Service Schedule start and end dates ({0} to {1}).</label>
+    </customLabels>
+    <customLabels>
+        <name>Submit</name>
+        <label>Submit</label>
+    </customLabels>
+    <customLabels>
         <name>Success</name>
         <label>Success</label>
     </customLabels>
     <customLabels>
         <name>TelemetryException</name>
         <label>We couldn&apos;t collect telemetry metrics.</label>
+    </customLabels>
+    <customLabels>
+        <name>Total_Sessions</name>
+        <label>Total Sessions</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -117,12 +305,12 @@
         <label>Unknown Error</label>
     </customLabels>
     <customLabels>
-        <name>Warning</name>
-        <label>Warning</label>
+        <name>Util_UnsupportedField</name>
+        <label>You can&apos;t access this field. Your Salesforce admin can help with that.</label>
     </customLabels>
     <customLabels>
-        <name>Rows_With_Errors</name>
-        <label>There are Service Delivery rows with errors.</label>
+        <name>Warning</name>
+        <label>Warning</label>
     </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>

@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
+        <name>Add_Entry</name>
+        <label>Vermelding toevoegen</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Record</name>
+        <label>{0} toevoegen</label>
+    </customLabels>
+    <customLabels>
         <name>Add_Service_Delivery</name>
         <label>Servicelevering toevoegen</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_to_Record</name>
+        <label>Toevoegen aan {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Adding_More_Service_Session_Warning</name>
+        <label>U voegt meer dan {0} sessies toe. Het voltooien kan dus iets langer duren.</label>
     </customLabels>
     <customLabels>
         <name>Anonymous</name>
         <label>Anoniem</label>
     </customLabels>
     <customLabels>
+        <name>Back</name>
+        <label>Terug</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Annuleren</label>
     </customLabels>
     <customLabels>
-        <name>Done</name>
-        <label>Gereed</label>
+        <name>Clicking_Back_Button_In_Modal_Warning</name>
+        <label>Wilt u terug gaan? De wijzigingen die u op deze pagina hebt aangebracht, worden niet opgeslagen.</label>
     </customLabels>
     <customLabels>
-        <name>Add_Entry</name>
-        <label>Vermelding toevoegen</label>
+        <name>Clone_Service_Participant</name>
+        <label>Klonen met servicedeelnemers</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -33,12 +53,48 @@
         <label>Als u deze rij verwijdert, wordt de servicelevering ook verwijderd.</label>
     </customLabels>
     <customLabels>
+        <name>Delete_Future_Sessions</name>
+        <label>Alle toekomstige sessies verwijderen</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_X_Future_Sessions</name>
+        <label>Hiermee worden {0} records voor toekomstige sessies verwijderd.</label>
+    </customLabels>
+    <customLabels>
+        <name>Creating_Service_Session_Warning</name>
+        <label>Er kunnen maar {0} sessies worden gemaakt voor een serviceplanning. Alleen de hier vermelde sessies worden gemaakt.</label>
+    </customLabels>
+    <customLabels>
         <name>Delete</name>
         <label>Verwijderen</label>
     </customLabels>
     <customLabels>
+        <name>Disabled</name>
+        <label>Uitgeschakeld</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Gereed</label>
+    </customLabels>
+    <customLabels>
+        <name>Enabled</name>
+        <label>Ingeschakeld</label>
+    </customLabels>
+    <customLabels>
         <name>Error</name>
         <label>Fout</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Record</name>
+        <label>Filteren op {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Finish</name>
+        <label>Voltooien</label>
+    </customLabels>
+    <customLabels>
+        <name>Insert_Operation_Exception</name>
+        <label>Machtiging voor bewerking Invoegen geweigerd.</label>
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
@@ -49,8 +105,48 @@
         <label>Nieuwe programmabetrokkenheid</label>
     </customLabels>
     <customLabels>
+        <name>New_Service_Schedule</name>
+        <label>Nieuwe serviceplanning</label>
+    </customLabels>
+    <customLabels>
+        <name>Next</name>
+        <label>Volgende</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_On_BSDT</name>
+        <label>Het veld Services moet worden opgenomen in het veld &apos;Serviceleveringen in bulk&apos; om records te kunnen opslaan. Vraag uw beheerder om hulp.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Participants_Created_Warning</name>
+        <label>Als er geen contactpersonen worden geselecteerd, worden er ook geen servicedeelnemers gemaakt.</label>
+    </customLabels>
+    <customLabels>
         <name>No_Services_For_Program_Engagement</name>
         <label>Geen services gevonden; kies een andere programmabetrokkenheid.</label>
+    </customLabels>
+    <customLabels>
+        <name>None</name>
+        <label>Geen</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Found</name>
+        <label>Geen records gevonden</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Selected</name>
+        <label>Geen records geselecteerd</label>
+    </customLabels>
+    <customLabels>
+        <name>Owner_Field</name>
+        <label>Eigenaar</label>
+    </customLabels>
+    <customLabels>
+        <name>Participant_Capacity_Warning</name>
+        <label>Er zijn meer deelnemers dan de deelnemerscapaciteit die u hebt geselecteerd.</label>
+    </customLabels>
+    <customLabels>
+        <name>Previous</name>
+        <label>Vorige</label>
     </customLabels>
     <customLabels>
         <name>Quantity</name>
@@ -61,8 +157,20 @@
         <label>Record verwijderd.</label>
     </customLabels>
     <customLabels>
+        <name>Remove</name>
+        <label>Verwijderen</label>
+    </customLabels>
+    <customLabels>
         <name>Required</name>
         <label>Verplicht</label>
+    </customLabels>
+    <customLabels>
+        <name>Review_Records</name>
+        <label>{0} beoordelen</label>
+    </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>Er zijn serviceleveringsrijen met fouten.</label>
     </customLabels>
     <customLabels>
         <name>Save</name>
@@ -73,6 +181,14 @@
         <label>Nieuw record voor programmabetrokkenheid gemaakt.</label>
     </customLabels>
     <customLabels>
+        <name>Save_New</name>
+        <label>Opslaan en nieuw</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_for_Later</name>
+        <label>Opslaan voor later</label>
+    </customLabels>
+    <customLabels>
         <name>Saved</name>
         <label>Opgeslagen</label>
     </customLabels>
@@ -81,12 +197,64 @@
         <label>Bezig met opslaan</label>
     </customLabels>
     <customLabels>
+        <name>Search_this_list</name>
+        <label>Deze lijst doorzoeken</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Create_Service_Session_Warning</name>
+        <label>&apos;Servicesessierecords maken&apos; is niet geselecteerd, dus er worden geen records gemaakt. Klik op &apos;Servicesessie toevoegen&apos; om servicesessierecords toe te voegen</label>
+    </customLabels>
+    <customLabels>
         <name>Select_Program_Engagement</name>
         <label>Programmabetrokkenheid selecteren</label>
     </customLabels>
     <customLabels>
         <name>Select_Service</name>
         <label>Service selecteren</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
+        <label>Selecteer een einddatum voor de serviceplanning of een aantal servicesessies.</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Week</name>
+        <label>Elke week</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Month</name>
+        <label>Elke maand</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Day</name>
+        <label>Elke dag</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Year</name>
+        <label>Elk jaar</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Custom</name>
+        <label>Elke...</label>
+    </customLabels>
+    <customLabels>
+        <name>Weeks</name>
+        <label>Weken</label>
+    </customLabels>
+    <customLabels>
+        <name>Days</name>
+        <label>Dagen</label>
+    </customLabels>
+    <customLabels>
+        <name>Months</name>
+        <label>Maanden</label>
+    </customLabels>
+    <customLabels>
+        <name>Years</name>
+        <label>Jaar</label>
+    </customLabels>
+    <customLabels>
+        <name>Selected_Records</name>
+        <label>Geselecteerde records</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
@@ -101,12 +269,32 @@
         <label>Voor het opslaan van een servicelevering registreert u deze cliënt eerst bij een programma met actieve services.</label>
     </customLabels>
     <customLabels>
+        <name>Service_Schedule_Date_Time</name>
+        <label>Datum en tijd</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Information</name>
+        <label>Serviceplanningsinformatie</label>
+    </customLabels>
+    <customLabels>
+        <name>Session_Scheduled_Outside_Start_And_End_Date</name>
+        <label>Deze sessie wordt buiten de begin- en einddata van de serviceplanning ingepland ({0} tot {1}).</label>
+    </customLabels>
+    <customLabels>
+        <name>Submit</name>
+        <label>Indienen</label>
+    </customLabels>
+    <customLabels>
         <name>Success</name>
         <label>Geslaagd</label>
     </customLabels>
     <customLabels>
         <name>TelemetryException</name>
         <label>Er zijn geen telemetriegegevens verzameld.</label>
+    </customLabels>
+    <customLabels>
+        <name>Total_Sessions</name>
+        <label>Totale aantal sessies</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -117,12 +305,12 @@
         <label>Onbekende fout</label>
     </customLabels>
     <customLabels>
-        <name>Warning</name>
-        <label>Waarschuwing</label>
+        <name>Util_UnsupportedField</name>
+        <label>U hebt geen toegang tot dit veld. Uw Salesforce-beheerder kan hierbij helpen.</label>
     </customLabels>
     <customLabels>
-        <name>Rows_With_Errors</name>
-        <label>Er zijn serviceleveringsrijen met fouten.</label>
+        <name>Warning</name>
+        <label>Waarschuwing</label>
     </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>

@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Service Session Layout</layout>
+        <sections>
+            <label>カスタムリンク</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>サービスセッション名</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>サービスセッション名</label>
+    </standardFields>
     <caseValues>
         <plural>false</plural>
-        <value><!-- Service Session --></value>
+        <value>サービスセッション</value>
     </caseValues>
-    <nameFieldLabel><!-- Service Session Name --></nameFieldLabel>
 </CustomObjectTranslation>

@@ -14,8 +14,4 @@
         <masterLabel>Completed</masterLabel>
         <translation>Terminé</translation>
     </picklistValues>
-    <picklistValues>
-        <masterLabel>Canceled</masterLabel>
-        <translation>Annulé</translation>
-    </picklistValues>
 </CustomFieldTranslation>

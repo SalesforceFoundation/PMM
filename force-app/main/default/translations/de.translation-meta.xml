@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
+        <name>Add_Entry</name>
+        <label>Eintrag hinzufügen</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Record</name>
+        <label>{0} hinzufügen</label>
+    </customLabels>
+    <customLabels>
         <name>Add_Service_Delivery</name>
         <label>Leistungserbringung hinzufügen</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_to_Record</name>
+        <label>Zu {0} hinzufügen</label>
+    </customLabels>
+    <customLabels>
+        <name>Adding_More_Service_Session_Warning</name>
+        <label>Sie fügen mehr als {0} Sitzungen hinzu, die Bearbeitung wird daher zusätzliche Zeit in Anspruch nehmen.</label>
     </customLabels>
     <customLabels>
         <name>Anonymous</name>
         <label>Anonym</label>
     </customLabels>
     <customLabels>
+        <name>Back</name>
+        <label>Zurück</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>Abbrechen</label>
     </customLabels>
     <customLabels>
-        <name>Done</name>
-        <label>Fertig</label>
+        <name>Clicking_Back_Button_In_Modal_Warning</name>
+        <label>Zurück wechseln? Die Änderungen, die Sie auf dieser Seite vorgenommen haben, werden nicht gespeichert.</label>
     </customLabels>
     <customLabels>
-        <name>Add_Entry</name>
-        <label>Eintrag hinzufügen</label>
+        <name>Clone_Service_Participant</name>
+        <label>Mit Leistungsteilnehmern klonen</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -33,12 +53,48 @@
         <label>Durch das Löschen dieser Zeile wird diese Leistungserbringung entfernt.</label>
     </customLabels>
     <customLabels>
+        <name>Delete_Future_Sessions</name>
+        <label>Alle zukünftigen Sitzungen löschen</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_X_Future_Sessions</name>
+        <label>Hierdurch werden {0} zukünftige Sitzungsdatensätze gelöscht.</label>
+    </customLabels>
+    <customLabels>
+        <name>Creating_Service_Session_Warning</name>
+        <label>Wir können nur {0} Sitzungen für einen Leistungszeitplan erstellen. Nur die hier aufgelisteten Sitzungen werden erstellt.</label>
+    </customLabels>
+    <customLabels>
         <name>Delete</name>
         <label>Löschen</label>
     </customLabels>
     <customLabels>
+        <name>Disabled</name>
+        <label>Deaktiviert</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Fertig</label>
+    </customLabels>
+    <customLabels>
+        <name>Enabled</name>
+        <label>Aktiviert</label>
+    </customLabels>
+    <customLabels>
         <name>Error</name>
         <label>Fehler</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Record</name>
+        <label>Nach {0} filtern</label>
+    </customLabels>
+    <customLabels>
+        <name>Finish</name>
+        <label>Fertig stellen</label>
+    </customLabels>
+    <customLabels>
+        <name>Insert_Operation_Exception</name>
+        <label>Die Berechtigung für den Einfügevorgang wurde verweigert.</label>
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
@@ -49,8 +105,48 @@
         <label>Neue Programmteilnahme</label>
     </customLabels>
     <customLabels>
+        <name>New_Service_Schedule</name>
+        <label>Neuer Leistungszeitplan</label>
+    </customLabels>
+    <customLabels>
+        <name>Next</name>
+        <label>Weiter</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_On_BSDT</name>
+        <label>Das Feld &quot;Leistung&quot; muss im festgelegten Feld &quot;Massenerbringung von Leistungen&quot; enthalten sind, um Datensätze zu speichern. Bitten Sie Ihren Administrator um Hilfe.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Participants_Created_Warning</name>
+        <label>Es sind keine Kontakte ausgewählt, daher werden keine Leistungsteilnehmer erstellt.</label>
+    </customLabels>
+    <customLabels>
         <name>No_Services_For_Program_Engagement</name>
         <label>Keine Leistungen gefunden, wählen Sie eine andere Programmteilnahme aus.</label>
+    </customLabels>
+    <customLabels>
+        <name>None</name>
+        <label>Ohne</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Found</name>
+        <label>Keine Datensätze gefunden</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Selected</name>
+        <label>Keine Datensätze ausgewählt</label>
+    </customLabels>
+    <customLabels>
+        <name>Owner_Field</name>
+        <label>Besitzer</label>
+    </customLabels>
+    <customLabels>
+        <name>Participant_Capacity_Warning</name>
+        <label>Nur eine Vorwarnung: Es sind mehr Teilnehmer als die von Ihnen ausgewählte Teilnehmerkapazität vorhanden.</label>
+    </customLabels>
+    <customLabels>
+        <name>Previous</name>
+        <label>Zurück</label>
     </customLabels>
     <customLabels>
         <name>Quantity</name>
@@ -61,8 +157,20 @@
         <label>Datensatz gelöscht.</label>
     </customLabels>
     <customLabels>
+        <name>Remove</name>
+        <label>Entfernen</label>
+    </customLabels>
+    <customLabels>
         <name>Required</name>
         <label>Erforderlich</label>
+    </customLabels>
+    <customLabels>
+        <name>Review_Records</name>
+        <label>{0} überprüfen</label>
+    </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>Einige Zeilen mit Leistungserbringungen enthalten Fehler.</label>
     </customLabels>
     <customLabels>
         <name>Save</name>
@@ -73,6 +181,14 @@
         <label>Neuer Programmteilnahme-Datensatz erstellt.</label>
     </customLabels>
     <customLabels>
+        <name>Save_New</name>
+        <label>Speichern und neu</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_for_Later</name>
+        <label>Für später speichern</label>
+    </customLabels>
+    <customLabels>
         <name>Saved</name>
         <label>Gespeichert</label>
     </customLabels>
@@ -81,12 +197,64 @@
         <label>Speichern</label>
     </customLabels>
     <customLabels>
+        <name>Search_this_list</name>
+        <label>Diese Liste durchsuchen</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Create_Service_Session_Warning</name>
+        <label>Das Erstellen von Datensätzen für Leistungssitzungen ist nicht ausgewählt, daher werden keine Datensätze erstellt. Klicken Sie auf &quot;Leistungssitzung hinzufügen&quot;, um Datensätze für Leistungssitzungen hinzuzufügen</label>
+    </customLabels>
+    <customLabels>
         <name>Select_Program_Engagement</name>
         <label>Programmteilnahme auswählen</label>
     </customLabels>
     <customLabels>
         <name>Select_Service</name>
         <label>Leistung auswählen</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
+        <label>Wählen Sie entweder ein Enddatum für den Leistungszeitplan oder eine Anzahl von Leistungssitzungen aus.</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Week</name>
+        <label>Jede Woche</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Month</name>
+        <label>Jeden Monat</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Day</name>
+        <label>Jeden Tag</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Year</name>
+        <label>Jedes Jahr</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Custom</name>
+        <label>Alle...</label>
+    </customLabels>
+    <customLabels>
+        <name>Weeks</name>
+        <label>Wochen</label>
+    </customLabels>
+    <customLabels>
+        <name>Days</name>
+        <label>Tage</label>
+    </customLabels>
+    <customLabels>
+        <name>Months</name>
+        <label>Monate</label>
+    </customLabels>
+    <customLabels>
+        <name>Years</name>
+        <label>Jahre</label>
+    </customLabels>
+    <customLabels>
+        <name>Selected_Records</name>
+        <label>Ausgewählte Datensätze</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
@@ -101,12 +269,32 @@
         <label>Um eine erbrachte Leistung zu speichern, schreiben Sie diesen Kunden zuerst in ein Programm mit aktiven Leistungen ein.</label>
     </customLabels>
     <customLabels>
+        <name>Service_Schedule_Date_Time</name>
+        <label>Datum und Uhrzeit</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Information</name>
+        <label>Informationen zum Leistungszeitplan</label>
+    </customLabels>
+    <customLabels>
+        <name>Session_Scheduled_Outside_Start_And_End_Date</name>
+        <label>Diese Sitzung würde außerhalb von Anfangs- und Enddatum des Leistungszeitplans von ({0} bis {1}) geplant.</label>
+    </customLabels>
+    <customLabels>
+        <name>Submit</name>
+        <label>Senden</label>
+    </customLabels>
+    <customLabels>
         <name>Success</name>
         <label>Erfolg</label>
     </customLabels>
     <customLabels>
         <name>TelemetryException</name>
         <label>Wir konnten keine Telemetrie-Metriken erfassen.</label>
+    </customLabels>
+    <customLabels>
+        <name>Total_Sessions</name>
+        <label>Sitzungen gesamt</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -117,12 +305,12 @@
         <label>Unbekannter Fehler</label>
     </customLabels>
     <customLabels>
-        <name>Warning</name>
-        <label>Warnung</label>
+        <name>Util_UnsupportedField</name>
+        <label>Sie besitzen keinen Zugriff auf dieses Feld. Ihr Salesforce-Administrator kann Ihnen in der Sache weiterhelfen.</label>
     </customLabels>
     <customLabels>
-        <name>Rows_With_Errors</name>
-        <label>Einige Zeilen mit Leistungserbringungen enthalten Fehler.</label>
+        <name>Warning</name>
+        <label>Warnung</label>
     </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>

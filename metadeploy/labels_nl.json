@@ -47,12 +47,38 @@
         "Deploy Program Management Profile": {
             "message": "Programmabeheer-profiel implementeren",
             "description": "title of installation step"
+        },
+        "Deploy Folder of Unmanaged Reports": {
+            "message": "Map met onbeheerde rapporten implementeren",
+            "description": "title of installation step"
         }
     },
     "checks": {
         "Please enable My Domain in your org prior to installing.": {
             "message": "Schakel vóór de installatie Mijn domein in uw organisatie in.",
             "description": "shown if validation fails"
+        },
+        "Please install Program Management Module in your org prior to installing reports.": {
+            "message": "Installeer de Program Management Module in uw organisatie voordat u rapporten installeert.",
+            "description": "shown if validation fails"
+        }
+    },
+    "plan:reports": {
+        "title": {
+            "message": "Program Management Module-rapporten installeren",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Hiermee installeert u aanvullende rapporten voor Program Management Module in uw organisatie.",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Bedankt voor het installeren van de aanvullende rapporten voor Program Management Module. Ga naar het [klantenforum van de Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) in de Power of Us Hub als u vragen over de Program Management Module hebt.",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "Ga voor assistentie bij deze fout naar [help.salesforce.com](https://help.salesforce.com/), zoek het gebied Ondersteuning en services, en leg een ticket voor technische ondersteuning vast bij Salesforce. Vermeld \"PMM\" in de onderwerpregel en neem in uw opmerking de hier getoonde installatiekoppeling op.",
+            "description": "shown after failed installation (markdown)"
         }
     }
 }

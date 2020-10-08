@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 public without sharing class InstallScript implements InstallHandler {
     private static final String EMAIL_REPLY_TO = 'donotreply@salesforce.org';
     private static final String EMAIL_SUBJECT = 'PMM Install Errors';

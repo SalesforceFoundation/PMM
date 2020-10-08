@@ -6,7 +6,9 @@ public with sharing class RecurrenceRule {
     // FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE;COUNT=12
 
     public enum Frequency {
-        DAILY
+        DAILY,
+        WEEKLY,
+        MONTHLY
     }
 
     public enum Day {
@@ -26,6 +28,8 @@ public with sharing class RecurrenceRule {
     private Date endDate;
     private Integer count;
     private List<Day> days;
+    private Integer bySetPos = -1;
+    private Set<Integer> byMonthDays;
 
     public RecurrenceRule reset() {
         rRule = null;
@@ -34,6 +38,8 @@ public with sharing class RecurrenceRule {
         endDate = null;
         count = null;
         days = null;
+        bySetPos = -1;
+        byMonthDays = null;
         return this;
     }
 
@@ -48,12 +54,15 @@ public with sharing class RecurrenceRule {
     }
 
     public RecurrenceRule withInterval(Integer interval) {
-        this.interval = interval;
+        if (interval != null) {
+            this.interval = interval;
+        }
         return this;
     }
 
     public RecurrenceRule withEndDate(Date endDate) {
         this.endDate = endDate;
+
         return this;
     }
 
@@ -69,6 +78,31 @@ public with sharing class RecurrenceRule {
 
     public RecurrenceRule withDays(List<Integer> days) {
         populateDays(days);
+        return this;
+    }
+
+    public RecurrenceRule withByMonthDays(DateTime dateTimeStart) {
+        if (freq != Frequency.MONTHLY) {
+            return this;
+        }
+
+        Set<Integer> daysToAdd = new Set<Integer>();
+
+        switch on dateTimeStart.day() {
+            when 29 {
+                daysToAdd.addAll(new Set<Integer>{ 28, 29 });
+            }
+            when 30 {
+                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30 });
+            }
+            when 31 {
+                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30, 31 });
+            }
+        }
+        if (daysToAdd.size() != 0) {
+            byMonthDays = daysToAdd;
+        }
+
         return this;
     }
 
@@ -98,6 +132,25 @@ public with sharing class RecurrenceRule {
         return days;
     }
 
+    public Integer getBySetPos() {
+        return -1;
+    }
+
+    public Set<Integer> getByMonthDays() {
+        //This is to accomodate the Skip backward logic
+        //TODO: allow customers to opt out
+
+        return byMonthDays;
+    }
+
+    public List<Integer> getDayNums() {
+        List<Integer> result = new List<Integer>();
+        for (Day day : days) {
+            result.add(day.ordinal());
+        }
+        return result;
+    }
+
     public String build() {
         List<String> ruleParts = new List<String>();
 
@@ -105,7 +158,7 @@ public with sharing class RecurrenceRule {
         ruleParts.add('FREQ=' + freq);
 
         // INTERVAL
-        if (interval != 1) {
+        if (interval > 1) {
             ruleParts.add('INTERVAL=' + interval);
         }
 
@@ -134,7 +187,23 @@ public with sharing class RecurrenceRule {
             ruleParts.add('BYDAY=' + String.join(dayStrings, ','));
         }
 
+        //BYSETPOS
+        if (bySetPos != null && freq == Frequency.MONTHLY) {
+            ruleParts.add('BYSETPOS=' + bySetPos);
+        }
+
+        //BYMONTHDAY
+        if (byMonthDays != null) {
+            List<String> monthDays = new List<String>();
+            for (Integer monthday : byMonthDays) {
+                monthDays.add(String.valueOf(monthday));
+            }
+
+            ruleParts.add('BYMONTHDAY=' + String.join(monthDays, ','));
+        }
+
         rRule = String.join(ruleParts, ';');
+
         return rRule;
     }
 
@@ -173,9 +242,23 @@ public with sharing class RecurrenceRule {
                             }
                         }
                     }
+                    when 'BYSETPOS' {
+                        bySetPos = Integer.valueOf(thisValue);
+                    }
+                    when 'BYMONTHDAY' {
+                        List<String> monthDaysString = thisValue.split(',');
+                        byMonthDays = new Set<Integer>();
+                        for (String monthday : monthDaysString) {
+                            byMonthDays.add(Integer.valueOf(monthday));
+                        }
+                    }
                     when else {
                         reset();
                         throw new RecurrenceRuleException('Invalid RRule Key');
+                        // TODO: distinguish between valid RRule parameters that we don't support,
+                        // and invalid RRule parameters that don't exist in the spec
+
+                        // TODO: Consider validating that at least one end condition exists: count or endDate
                     }
                 }
             }
@@ -197,6 +280,10 @@ public with sharing class RecurrenceRule {
     private void populateDays(List<Integer> dayNums) {
         List<Day> daysToAssign = new List<Day>();
         List<Day> dayValues = Day.values();
+
+        if (dayNums == null) {
+            return;
+        }
 
         for (Integer dayNum : dayNums) {
             if (dayNum <= dayValues.size()) {

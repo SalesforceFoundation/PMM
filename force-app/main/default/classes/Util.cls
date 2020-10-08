@@ -7,4 +7,12 @@ public with sharing class Util {
 
         return auraEx;
     }
+
+    public static Map<String, String> getObjectLabels(SObjectType sObjectType) {
+        return new Map<String, String>{
+            'objectPluralLabel' => sObjectType.getDescribe().getLabelPlural(),
+            'objectLabel' => sObjectType.getDescribe().getLabel(),
+            'objectApiName' => sObjectType.getDescribe().getName()
+        };
+    }
 }

@@ -1,22 +1,6 @@
-import { LightningElement, api, wire } from "lwc";
-import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
-import { getObjectInfo, getPicklistValuesByRecordType } from "lightning/uiObjectInfoApi";
+import { LightningElement, api, track } from "lwc";
+import { format } from "c/util";
 
-import SERVICE_SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
-
-import NAME_FIELD from "@salesforce/schema/ServiceSchedule__c.Name";
-import FIRST_SESSION_START_FIELD from "@salesforce/schema/ServiceSchedule__c.FirstSessionStart__c";
-import FIRST_SESSION_END_FIELD from "@salesforce/schema/ServiceSchedule__c.FirstSessionEnd__c";
-import FREQUENCY_FIELD from "@salesforce/schema/ServiceSchedule__c.Frequency__c";
-import DAYS_OF_WEEK_FIELD from "@salesforce/schema/ServiceSchedule__c.DaysOfWeek__c";
-import END_DATE_FIELD from "@salesforce/schema/ServiceSchedule__c.ServiceScheduleEndDate__c";
-import NUMBER_OF_SESSIONS_FIELD from "@salesforce/schema/ServiceSchedule__c.NumberOfServiceSessions__c";
-import SERVICE_SECHEDULE_ENDS_FIELD from "@salesforce/schema/ServiceSchedule__c.ServiceScheduleEnds__c";
-
-import SERVICE_SCHEDULE_INFORMATION_LABEL from "@salesforce/label/c.Service_Schedule_Information";
-import DATE_TIME_LABEL from "@salesforce/label/c.Service_Schedule_Date_Time";
-
-const FIELD_SET_NAME = "ServiceScheduleInformation";
 const WEEKLY = "Weekly";
 const ONE_TIME = "One Time";
 const ON = "On";
@@ -24,132 +8,248 @@ const AFTER = "After";
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
 
+import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
+import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
+import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
+
 export default class NewServiceSchedule extends LightningElement {
-    @api serviceId;
     @api recordTypeId;
-
-    fields;
-    fieldSet;
-    objectApiName = SERVICE_SCHEDULE_OBJECT.objectApiName;
-    isWeekly = false;
-    isRecurring = false;
-    isEndsOn = false;
-    isEndsAfter = false;
-    isLoaded = false;
-    selectedFrequency;
-    selectedDaysOfWeek;
-    selectedSeriesEnds;
-    picklists;
-
-    labels = {
-        scheduleInformation: SERVICE_SCHEDULE_INFORMATION_LABEL,
-        dateTime: DATE_TIME_LABEL,
-    };
-
+    errorMessage;
+    isValid = true;
+    objectApiName;
+    labels;
     sizes = {
         large: LARGE_SIZE,
         small: SMALL_SIZE,
     };
 
-    dateFields = {
-        start: FIRST_SESSION_START_FIELD.fieldApiName,
-        end: FIRST_SESSION_END_FIELD.fieldApiName,
-        seriesEndsOn: END_DATE_FIELD.fieldApiName,
-        numberOfSessions: NUMBER_OF_SESSIONS_FIELD.fieldApiName,
-    };
+    _serviceScheduleModel;
+    @track
+    picklistFields;
+    @track
+    requiredFields;
+    @track
+    dateFields;
+    fieldSet;
+    isLoaded = false;
+    duration = 1;
 
-    picklistFields = {
-        frequency: FREQUENCY_FIELD.fieldApiName,
-        daysOfWeek: DAYS_OF_WEEK_FIELD.fieldApiName,
-        seriesEnds: SERVICE_SECHEDULE_ENDS_FIELD.fieldApiName,
-    };
-
-    @wire(getFieldSet, {
-        objectName: SERVICE_SCHEDULE_OBJECT.objectApiName,
-        fieldSetName: FIELD_SET_NAME,
-    })
-    wiredFieldSet({ error, data }) {
-        if (data) {
-            this.setFieldSet(data);
-        } else if (error) {
-            console.log(JSON.stringify(error));
-        }
+    @api
+    get serviceScheduleModel() {
+        return this._serviceScheduleModel;
     }
 
-    setFieldSet(data) {
-        // TODO: Test if this eliminates duplicate fields
-        let recurrenceFields = Object.values(this.dateFields);
-        recurrenceFields.push(Object.values(this.picklistFields));
+    set serviceScheduleModel(value) {
+        this.isLoaded = false;
+        // This is a nested object so the inner objects are still read only when using spread alone
+        this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
 
-        this.fieldSet = data
-            .filter(obj => !recurrenceFields.includes(obj.apiName))
-            .map(obj => {
-                let field = { ...obj };
-                field.size =
-                    obj.apiName === NAME_FIELD.fieldApiName ? LARGE_SIZE : SMALL_SIZE;
+        this.labels = this._serviceScheduleModel.labels.serviceSchedule;
+        this.objectApiName = this._serviceScheduleModel.labels.serviceSchedule.objectApiName;
+        this.requiredFields = this._serviceScheduleModel.scheduleRequiredFields;
+        this.dateFields = this._serviceScheduleModel.scheduleRecurrenceDateFields;
+        this.picklistFields = this._serviceScheduleModel.scheduleRecurrencePicklistFields;
+        this.fieldSet = this._serviceScheduleModel.scheduleInformationFields;
+
+        this.processFields();
+        this.isLoaded = true;
+    }
+
+    @api reportValidity() {
+        let errMessages = [];
+        let datesValid = true;
+
+        let isFormValid = [
+            ...this.template.querySelectorAll("lightning-input-field"),
+        ].reduce((validSoFar, inputField) => {
+            return validSoFar && inputField.reportValidity();
+        }, true);
+
+        if (this.dateFields.start.value) {
+            datesValid = this.dateFields.start.value < this.dateFields.end.value;
+        }
+
+        let hasEndCondition = this.validateServiceScheduleOnOrAfter();
+
+        let hasDayOfWeek =
+            this.picklistFields.frequency.value === WEEKLY
+                ? this.picklistFields.daysOfWeek.value
+                : true;
+
+        // input-fields handle their own error display, so no additional error message needed for !isFormValid
+        if (!datesValid) {
+            errMessages.push(
+                format(START_BEFORE_END_LABEL, [
+                    this.dateFields.start.label,
+                    this.dateFields.end.label,
+                ])
+            );
+        }
+
+        if (!hasEndCondition) {
+            errMessages.push(NO_END_LABEL);
+        }
+
+        if (!hasDayOfWeek) {
+            errMessages.push(DAY_REQUIRED_LABEL);
+        }
+
+        this.errorMessage = errMessages.join("\n");
+
+        this.isValid = isFormValid && datesValid && hasEndCondition && hasDayOfWeek;
+
+        return this.isValid;
+    }
+
+    @api
+    get serviceSchedule() {
+        let serviceSchedule = {};
+
+        [...this.template.querySelectorAll("lightning-input-field")].forEach(field => {
+            serviceSchedule[field.fieldName] = field.value;
+        });
+
+        Object.keys(this.picklistFields).forEach(field => {
+            const apiName = this.picklistFields[field].apiName;
+            const value = this.picklistFields[field].value;
+
+            serviceSchedule[apiName] = value;
+        });
+
+        return serviceSchedule;
+    }
+
+    processFields() {
+        let fieldsToSkip = [];
+        let self = this;
+        let updateValue = function(field) {
+            field.value = self._serviceScheduleModel.serviceSchedule[field.apiName];
+            fieldsToSkip.push(field.apiName);
+        };
+
+        Object.values(this.dateFields).forEach(field => updateValue(field));
+        Object.values(this.picklistFields).forEach(field => updateValue(field));
+        Object.values(this.requiredFields).forEach(field => updateValue(field));
+
+        this.fieldSet = this.fieldSet
+            .filter(member => !fieldsToSkip.includes(member.apiName))
+            .map(member => {
+                let field = { ...member };
+                field.size = SMALL_SIZE;
+                field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
     }
 
-    @wire(getObjectInfo, { objectApiName: SERVICE_SCHEDULE_OBJECT })
-    wiredObject(result) {
-        if (!result) {
+    handleLoad() {
+        if (this.dateFields.end.value) {
             return;
         }
 
-        if (result.data) {
-            // TODO: Test record types
-            this.recordTypeId = this.recordTypeId
-                ? this.recordTypeId
-                : result.data.defaultRecordTypeId;
-            this.fields = result.data.fields;
-            this.isLoaded = this.wiredPicklistValues !== undefined;
-        } else if (result.error) {
-            console.log(JSON.stringify(result.error));
-        }
+        this.template.querySelectorAll("lightning-input-field").forEach(field => {
+            if (field.fieldName === this.dateFields.start.apiName) {
+                if (!this.dateFields.end.value) {
+                    this.setFirstSessionStartTimeAndEndTime(field.value);
+                }
+            }
+        });
     }
 
-    @wire(getPicklistValuesByRecordType, {
-        objectApiName: SERVICE_SCHEDULE_OBJECT,
-        recordTypeId: "$recordTypeId",
-    })
-    wiredPicklists(result) {
-        if (!result) {
-            return;
-        }
-        this.picklists = {};
+    get isWeekly() {
+        return this.picklistFields.frequency.value === WEEKLY;
+    }
 
-        if (result.data) {
-            Object.keys(this.picklistFields).forEach(field => {
-                const fieldApiName = this.picklistFields[field];
-                const picklistField = {
-                    ...result.data.picklistFieldValues[fieldApiName],
-                };
+    get isRecurring() {
+        return (
+            this.picklistFields.frequency.value &&
+            this.picklistFields.frequency.value !== ONE_TIME
+        );
+    }
 
-                if (picklistField && this.fields[fieldApiName]) {
-                    picklistField.label = this.fields[fieldApiName].label;
-                    this.picklists[field] = picklistField;
-                }
-            });
-            this.isLoaded = this.fields !== undefined;
-        }
+    get isEndsAfter() {
+        return this.picklistFields.seriesEnds.value === AFTER;
+    }
+
+    get isEndsOn() {
+        return this.picklistFields.seriesEnds.value === ON;
     }
 
     handleFrequencyChange(event) {
-        this.selectedFrequency = event.detail.length ? event.detail[0].value : undefined;
-        this.isWeekly = this.selectedFrequency === WEEKLY;
-        this.isRecurring = this.selectedFrequency !== ONE_TIME;
+        this.picklistFields.frequency.value = event.detail.length
+            ? event.detail[0].value
+            : undefined;
     }
 
     handleDaysOfWeekChange(event) {
-        this.selectedDaysOfWeek = event.detail.length
-            ? event.detail.map(selection => selection.value)
+        this.picklistFields.daysOfWeek.value = event.detail.length
+            ? event.detail.map(selection => selection.value).join(";")
             : undefined;
     }
 
     handleSeriesEndsChange(event) {
-        this.selectedSeriesEnds = event.detail.length ? event.detail[0].value : undefined;
-        this.isEndsOn = this.selectedSeriesEnds === ON;
-        this.isEndsAfter = this.selectedSeriesEnds === AFTER;
+        this.picklistFields.seriesEnds.value = event.detail.length
+            ? event.detail[0].value
+            : undefined;
+    }
+
+    handleStartChange(event) {
+        if (!event.detail.value) {
+            this.dateFields.end.value = null;
+            return;
+        }
+        this.dateFields.start.value = event.detail.value;
+
+        this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
+    }
+
+    handleEndChange(event) {
+        this.dateFields.end.value = event.detail.value;
+        let startTime = new Date(this.dateFields.start.value);
+        let endTime = new Date(event.detail.value);
+        this.duration =
+            endTime.getHours() -
+            startTime.getHours() +
+            (endTime.getMinutes() - startTime.getMinutes()) / 60;
+    }
+
+    setFirstSessionStartTimeAndEndTime(startDate) {
+        if (!startDate) {
+            return;
+        }
+
+        let startTime = new Date(startDate);
+        let endTime = new Date(startDate);
+
+        this.dateFields.start.value = new Date(startTime).toISOString();
+        endTime.setHours(startTime.getHours() + this.duration);
+        endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
+        this.dateFields.end.value = new Date(endTime).toISOString();
+    }
+
+    get disableSessionEnd() {
+        return !this.dateFields.start.value;
+    }
+
+    validateServiceScheduleOnOrAfter() {
+        let noError = true;
+        let seriesEndsOnElement = this.template.querySelector(
+            '[data-element="seriesEndsOn"]'
+        );
+
+        let numberOfSessionsElement = this.template.querySelector(
+            '[data-element="numberOfSessions"]'
+        );
+
+        if (this.picklistFields.frequency.value === ONE_TIME) {
+            return noError;
+        }
+
+        noError =
+            (seriesEndsOnElement === null || !seriesEndsOnElement.value) &&
+            (numberOfSessionsElement === null || !numberOfSessionsElement.value)
+                ? false
+                : true;
+
+        return noError;
     }
 }

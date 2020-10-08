@@ -142,11 +142,11 @@
         <value>Enabled</value>
     </labels>
     <labels>
-        <fullName>End_Time</fullName>
+        <fullName>End_Date_After_Start_Date</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>End Time</shortDescription>
-        <value>End Time</value>
+        <shortDescription>{Start Date Label} must be before {End Date Label}</shortDescription>
+        <value>{0} must be before {1}</value>
     </labels>
     <labels>
         <fullName>Error</fullName>
@@ -389,6 +389,13 @@
         <value>Select either a Service Schedule End Date or a Number of Service Sessions.</value>
     </labels>
     <labels>
+        <fullName>Day_Required_When_Weekly_Selected</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select at least one day of the week.</shortDescription>
+        <value>Select at least one day of the week.</value>
+    </labels>
+    <labels>
         <fullName>Every_Week</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -499,15 +506,8 @@
         <fullName>Session_Scheduled_Outside_Start_And_End_Date</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Session Scheduled Outside Start And End Date</shortDescription>
+        <shortDescription>Session Scheduled Outside of Start And End Date</shortDescription>
         <value>This session would be scheduled outside of the Service Schedule start and end dates ({0} to {1}).</value>
-    </labels>
-    <labels>
-        <fullName>Start_Time</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Start Time</shortDescription>
-        <value>Start Time</value>
     </labels>
     <labels>
         <fullName>Submit</fullName>

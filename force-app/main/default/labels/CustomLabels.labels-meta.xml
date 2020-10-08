@@ -124,8 +124,8 @@
         <fullName>Delete_Sessions_Invalid_Date</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Date must be on or after today.</shortDescription>
-        <value>Date must be on or after today.</value>
+        <shortDescription>Date must be today or after.</shortDescription>
+        <value>Date must be today or after.</value>
     </labels>
     <labels>
         <fullName>Creating_Service_Session_Warning</fullName>
@@ -196,7 +196,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Permission Denied for Insert Operation</shortDescription>
-        <value>You don't have access to insert this record. Your Salesforce admin can help with that.</value>
+        <value>You can't add this record. Ask your admin for help.</value>
     </labels>
     <labels>
         <fullName>Delete_Operation_Exception</fullName>
@@ -204,7 +204,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Permission Denied for Delete Operation</shortDescription>
-        <value>You don't have access to delete this record. Your Salesforce admin can help with that.</value>
+        <value>You can't delete this record. Ask your admin for help.</value>
     </labels>
     <labels>
         <fullName>MissingSObjectType</fullName>

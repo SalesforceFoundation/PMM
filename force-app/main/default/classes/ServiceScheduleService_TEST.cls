@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 @IsTest
 public with sharing class ServiceScheduleService_TEST {
     private static BasicStub recurrenceServiceStub = new BasicStub(
@@ -598,6 +607,45 @@ public with sharing class ServiceScheduleService_TEST {
             generateMethod,
             new List<Type>{ DateTime.class, String.class, Integer.class },
             new List<Object>{ schedule.FirstSessionStart__c, rRuleString, null }
+        );
+    }
+
+    @IsTest
+    private static void shouldDeleteSessionsAfter() {
+        String selectorMethod = 'getSessionsAfter';
+        String deleteMethod = 'deleteSessions';
+        List<ServiceSession__c> expectedSessions = new List<ServiceSession__c>{
+            new ServiceSession__c(Name = 'test')
+        };
+        Date startDate = System.today();
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        serviceSelectorStub.withReturnValue(
+            selectorMethod,
+            new List<Type>{ Id.class, Date.class },
+            expectedSessions
+        );
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+        service.domain = (ServiceScheduleDomain) domainStub.createMock();
+
+        Test.startTest();
+        Integer actual = service.deleteSessionsAfter(scheduleId, startDate);
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedSessions.size(),
+            actual,
+            'Number of deleted sessions not returned from the service as expected.'
+        );
+
+        serviceSelectorStub.assertCalledWith(
+            selectorMethod,
+            new List<Type>{ Id.class, Date.class },
+            new List<Object>{ scheduleId, startDate }
+        );
+        domainStub.assertCalledWith(
+            deleteMethod,
+            List<ServiceSession__c>.class,
+            expectedSessions
         );
     }
 

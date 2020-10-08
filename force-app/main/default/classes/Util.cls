@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 public with sharing class Util {
     public static AuraHandledException getAuraHandledException(Exception ex) {
         String message = ex.getMessage();
@@ -14,5 +23,9 @@ public with sharing class Util {
             'objectLabel' => sObjectType.getDescribe().getLabel(),
             'objectApiName' => sObjectType.getDescribe().getName()
         };
+    }
+
+    public static Date getToday() {
+        return System.today();
     }
 }

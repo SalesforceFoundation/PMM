@@ -81,10 +81,6 @@
         <label>Enabled</label>
     </customLabels>
     <customLabels>
-        <name>End_Time</name>
-        <label>End Time</label>
-    </customLabels>
-    <customLabels>
         <name>Error</name>
         <label>Error</label>
     </customLabels>
@@ -285,10 +281,6 @@
         <label>This session would be scheduled outside of the Service Schedule start and end dates ({0} to {1}).</label>
     </customLabels>
     <customLabels>
-        <name>Start_Time</name>
-        <label>Start Time</label>
-    </customLabels>
-    <customLabels>
         <name>Submit</name>
         <label>Submit</label>
     </customLabels>
@@ -328,14 +320,6 @@
         <name>Program_Management</name>
         <label>Program Management</label>
     </customApplications>
-    <flowDefinitions>
-        <flows>
-            <fullName>ScheduleCreator</fullName>
-            <label>Schedule Creator</label>
-        </flows>
-        <fullName>ScheduleCreator</fullName>
-        <label>Schedule Creator</label>
-    </flowDefinitions>
     <quickActions>
         <name>ProgramEngagement__c.Add_to_Program_Cohort</name>
         <label>Add to Program Cohort</label>

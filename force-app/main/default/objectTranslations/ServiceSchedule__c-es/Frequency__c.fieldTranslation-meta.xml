@@ -15,10 +15,6 @@
         <translation>Mensual</translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Yearly</masterLabel>
-        <translation>Anual</translation>
-    </picklistValues>
-    <picklistValues>
         <masterLabel>One Time</masterLabel>
         <translation>Una vez</translation>
     </picklistValues>

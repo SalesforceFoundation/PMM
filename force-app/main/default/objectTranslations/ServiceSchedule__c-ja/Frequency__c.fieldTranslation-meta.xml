@@ -15,10 +15,6 @@
         <translation>毎月</translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Yearly</masterLabel>
-        <translation>毎年</translation>
-    </picklistValues>
-    <picklistValues>
         <masterLabel>One Time</masterLabel>
         <translation>ワンタイム</translation>
     </picklistValues>

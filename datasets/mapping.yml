@@ -1,6 +1,8 @@
+# Accounts
 Account:
     sf_object: Account
     fields:
+        # Standard Fields
         - RecordTypeId
         - Name
         - Description
@@ -21,9 +23,13 @@ Account:
         - AccountNumber
         - Site
         - Type
+
+        # NPSP: System Fields
         - npe01__SYSTEM_AccountType__c
-        - npe01__SYSTEMIsIndividual__c
         - npo02__SYSTEM_CUSTOM_NAMING__c
+        - npe01__SYSTEMIsIndividual__c
+
+        # NPSP: Donation Information
         - npo02__FirstCloseDate__c
         - npo02__LastCloseDate__c
         - npo02__AverageAmount__c
@@ -32,6 +38,8 @@ Account:
         - npo02__SmallestAmount__c
         - npo02__Best_Gift_Year__c
         - npo02__Best_Gift_Year_Total__c
+
+        # NPSP: Donation Totals
         - npo02__TotalOppAmount__c
         - npo02__OppAmountLastNDays__c
         - npo02__OppAmountThisYear__c
@@ -42,6 +50,8 @@ Account:
         - npo02__OppsClosedThisYear__c
         - npo02__OppsClosedLastYear__c
         - npo02__OppsClosed2YearsAgo__c
+
+        # NPSP: Membership Information
         - npo02__TotalMembershipOppAmount__c
         - npo02__MembershipEndDate__c
         - npo02__LastMembershipLevel__c
@@ -51,9 +61,11 @@ Account:
         - npo02__LastMembershipOrigin__c
         - npo02__NumberOfMembershipOpps__c
 
+# Contacts
 Contact:
     sf_object: Contact
     fields:
+        # Standard Fields
         - Salutation
         - FirstName
         - LastName
@@ -69,6 +81,8 @@ Contact:
         - MailingState
         - MailingPostalCode
         - MailingCountry
+
+        # NPSP: npe01
         - npe01__SystemAccountProcessor__c
         - npe01__AlternateEmail__c
         - npe01__HomeEmail__c
@@ -79,25 +93,8 @@ Contact:
         - npe01__Secondary_Address_Type__c
         - npe01__WorkEmail__c
         - npe01__WorkPhone__c
-        - npsp__Deceased__c
-        - npsp__Do_Not_Contact__c
-        - npsp__Exclude_from_Household_Formal_Greeting__c
-        - npsp__Exclude_from_Household_Informal_Greeting__c
-        - npsp__Exclude_from_Household_Name__c
-        - npsp__First_Soft_Credit_Amount__c
-        - npsp__First_Soft_Credit_Date__c
-        - npsp__is_Address_Override__c
-        - npsp__Largest_Soft_Credit_Amount__c
-        - npsp__Largest_Soft_Credit_Date__c
-        - npsp__Last_Soft_Credit_Amount__c
-        - npsp__Last_Soft_Credit_Date__c
-        - npsp__Number_of_Soft_Credits__c
-        - npsp__Number_of_Soft_Credits_Last_N_Days__c
-        - npsp__Number_of_Soft_Credits_Last_Year__c
-        - npsp__Number_of_Soft_Credits_This_Year__c
-        - npsp__Number_of_Soft_Credits_Two_Years_Ago__c
-        - npsp__Soft_Credit_Last_N_Days__c
-        - npo02__SystemHouseholdProcessor__c
+
+        # NPSP: npo02
         - npo02__AverageAmount__c
         - npo02__Best_Gift_Year__c
         - npo02__Best_Gift_Year_Total__c
@@ -129,12 +126,140 @@ Contact:
         - npo02__Soft_Credit_This_Year__c
         - npo02__Soft_Credit_Total__c
         - npo02__Soft_Credit_Two_Years_Ago__c
+        - npo02__SystemHouseholdProcessor__c
         - npo02__TotalMembershipOppAmount__c
         - npo02__TotalOppAmount__c
+
+        # NPSP: npsp
+        - npsp__Deceased__c
+        - npsp__Do_Not_Contact__c
+        - npsp__Exclude_from_Household_Formal_Greeting__c
+        - npsp__Exclude_from_Household_Informal_Greeting__c
+        - npsp__Exclude_from_Household_Name__c
+        - npsp__First_Soft_Credit_Amount__c
+        - npsp__First_Soft_Credit_Date__c
+        - npsp__is_Address_Override__c
+        - npsp__Largest_Soft_Credit_Amount__c
+        - npsp__Largest_Soft_Credit_Date__c
+        - npsp__Last_Soft_Credit_Amount__c
+        - npsp__Last_Soft_Credit_Date__c
+        - npsp__Number_of_Soft_Credits__c
+        - npsp__Number_of_Soft_Credits_Last_N_Days__c
+        - npsp__Number_of_Soft_Credits_Last_Year__c
+        - npsp__Number_of_Soft_Credits_This_Year__c
+        - npsp__Number_of_Soft_Credits_Two_Years_Ago__c
+        - npsp__Soft_Credit_Last_N_Days__c
+
     lookups:
         AccountId:
             table: Account
 
+# NPSP Relationships
+npe4__Relationship__c:
+    sf_object: npe4__Relationship__c
+    fields:
+        # Standard Fields
+
+        # NPSP: npe4
+        - npe4__SYSTEM_SystemCreated__c
+        - npe4__Description__c
+        - npsp__Related_Opportunity_Contact_Role__c
+        - npe4__Status__c
+        - npe4__Type__c
+
+    lookups:
+        npe4__Contact__c:
+            table: Contact
+        npe4__RelatedContact__c:
+            table: Contact
+        npe4__ReciprocalRelationship__c:
+            table: npe4__Relationship__c
+            after: npe4__Relationship__c
+
+# NPSP Donations
+Opportunity:
+    sf_object: Opportunity
+    fields:
+        # Standard Fields
+        - Name
+        - NextStep
+        - Type
+        - StageName
+        - LeadSource
+        - ForecastCategoryName
+        - Probability
+        - TotalOpportunityQuantity
+        - Description
+        - CloseDate
+        - Amount
+        - IsPrivate
+
+        # NPSP: System
+        - npo02__systemHouseholdContactRoleProcessor__c
+
+        # NPSP: npe01
+        - npe01__Contact_Id_for_Role__c
+        - npe01__Membership_Origin__c
+        - npe01__Member_Level__c
+        - npe01__Membership_Start_Date__c
+        - npe01__Membership_End_Date__c
+        - npe01__Do_Not_Automatically_Create_Payment__c
+
+        # NPSP: npsp
+        - npsp__Grant_Requirements_Website__c
+        - npsp__Primary_Contact_Campaign_Member_Status__c
+        - npsp__Notification_Recipient_Name__c
+        - npsp__Honoree_Name__c
+        - npsp__Matching_Gift_Employer__c
+        - npsp__Grant_Contract_Number__c
+        - npsp__Notification_Recipient_Information__c
+        - npsp__Grant_Program_Area_s__c
+        - npsp__In_Kind_Description__c
+        - npsp__Tribute_Type__c
+        - npsp__Notification_Preference__c
+        - npsp__Matching_Gift_Status__c
+        - npsp__In_Kind_Type__c
+        - npsp__Acknowledgment_Status__c
+        - npsp__Gift_Strategy__c
+        - npsp__Recurring_Donation_Installment_Number__c
+        - npsp__Notification_Message__c
+        - npsp__Closed_Lost_Reason__c
+        - npsp__Grant_Period_Start_Date__c
+        - npsp__Grant_Period_End_Date__c
+        - npsp__Grant_Contract_Date__c
+        - npsp__Acknowledgment_Date__c
+        - npsp__Qualified_Date__c
+        - npsp__Ask_Date__c
+        - npsp__Fair_Market_Value__c
+        - npsp__Requested_Amount__c
+        - npsp__DisableContactRoleAutomation__c
+        - npsp__In_Kind_Donor_Declared_Value__c
+        - npsp__Is_Grant_Renewal__c
+
+    lookups:
+        AccountId:
+            table: Account
+        npsp__Primary_Contact__c:
+            table: Contact
+        npsp__Honoree_Contact__c:
+            table: Contact
+        npsp__Notification_Recipient_Contact__c:
+            table: Contact
+
+OpportunityContactRole:
+    sf_object: OpportunityContactRole
+    fields:
+        # Standard Fields
+        - Role
+        - IsPrimary
+
+    lookups:
+        ContactId:
+            table: Contact
+        OpportunityId:
+            table: Opportunity
+
+# Programs
 Program__c:
     sf_object: Program__c
     fields:
@@ -152,7 +277,6 @@ Program__c:
 
 ProgramCohort__c:
     sf_object: ProgramCohort__c
-    table: ProgramCohort__c
     fields:
         # Standard Fields
         - Name
@@ -193,7 +317,6 @@ ProgramEngagement__c:
 
 Service__c:
     sf_object: Service__c
-    table: Service__c
     fields:
         # Standard Fields
         - Name
@@ -206,6 +329,72 @@ Service__c:
     lookups:
         Program__c:
             table: Program__c
+
+ServiceSchedule__c:
+    sf_object: ServiceSchedule__c
+    fields:
+        # Standard Fields
+        - Name
+
+        # Custom Fields
+        - AllDay__c
+        - CreateServiceSessionRecords__c
+        - DaysOfWeek__c
+        - FirstSessionEnd__c
+        - FirstSessionStart__c
+        - Frequency__c
+        - Interval__c
+        - NumberOfServiceSessions__c
+        - ParticipantCapacity__c
+        - ServiceScheduleEndDate__c
+        - ServiceScheduleEnds__c
+
+    lookups:
+        PrimaryServiceProvider__c:
+            table: Contact
+        OtherServiceProvider__c:
+            table: Contact
+        Service__c:
+            table: Service__c
+
+ServiceSession__c:
+    sf_object: ServiceSession__c
+    fields:
+        # Standard Fields
+        - Name
+
+        # Custom Fields
+        - SessionEnd__c
+        - SessionStart__c
+        - Status__c
+
+    lookups:
+        PrimaryServiceProvider__c:
+            table: Contact
+        OtherServiceProvider__c:
+            table: Contact
+        ServiceSchedule__c:
+            table: ServiceSchedule__c
+
+ServiceParticipant__c:
+    sf_object: ServiceParticipant__c
+    fields:
+        # Standard Fields
+        - Name
+
+        # Custom Fields
+        - SignUpDate__c
+        - Status__c
+
+    lookups:
+        Contact__c:
+            table: Contact
+        ProgramEngagement__c:
+            table: ProgramEngagement__c
+        Service__c:
+            table: Service__c
+        ServiceSchedule__c:
+            table: ServiceSchedule__c
 
 ServiceDelivery__c:
     sf_object: ServiceDelivery__c
@@ -227,93 +416,7 @@ ServiceDelivery__c:
             table: Contact
         ProgramEngagement__c:
             table: ProgramEngagement__c
-
-Opportunity:
-    sf_object: Opportunity
-    fields:
-        - npe01__Contact_Id_for_Role__c
-        - npe01__Membership_Origin__c
-        - npe01__Member_Level__c
-        - npe01__Membership_Start_Date__c
-        - npe01__Membership_End_Date__c
-        - npe01__Do_Not_Automatically_Create_Payment__c
-        - Name
-        - NextStep
-        - Type
-        - StageName
-        - LeadSource
-        - ForecastCategoryName
-        - Probability
-        - TotalOpportunityQuantity
-        - Description
-        - CloseDate
-        - Amount
-        - IsPrivate
-        - npsp__Grant_Requirements_Website__c
-        - npsp__Primary_Contact_Campaign_Member_Status__c
-        - npsp__Notification_Recipient_Name__c
-        - npsp__Honoree_Name__c
-        - npsp__Matching_Gift_Employer__c
-        - npsp__Grant_Contract_Number__c
-        - npsp__Notification_Recipient_Information__c
-        - npsp__Grant_Program_Area_s__c
-        - npsp__In_Kind_Description__c
-        - npsp__Tribute_Type__c
-        - npsp__Notification_Preference__c
-        - npsp__Matching_Gift_Status__c
-        - npsp__In_Kind_Type__c
-        - npsp__Acknowledgment_Status__c
-        - npsp__Gift_Strategy__c
-        - npsp__Recurring_Donation_Installment_Number__c
-        - npsp__Notification_Message__c
-        - npsp__Closed_Lost_Reason__c
-        - npsp__Grant_Period_Start_Date__c
-        - npsp__Grant_Period_End_Date__c
-        - npsp__Grant_Contract_Date__c
-        - npsp__Acknowledgment_Date__c
-        - npsp__Qualified_Date__c
-        - npsp__Ask_Date__c
-        - npsp__Fair_Market_Value__c
-        - npsp__Requested_Amount__c
-        - npsp__DisableContactRoleAutomation__c
-        - npsp__In_Kind_Donor_Declared_Value__c
-        - npsp__Is_Grant_Renewal__c
-        - npo02__systemHouseholdContactRoleProcessor__c
-    lookups:
-        AccountId:
-            table: Account
-        npsp__Primary_Contact__c:
+        Service_Provider__c:
             table: Contact
-        npsp__Honoree_Contact__c:
-            table: Contact
-        npsp__Notification_Recipient_Contact__c:
-            table: Contact
-
-npe4__Relationship__c:
-    sf_object: npe4__Relationship__c
-    fields:
-        - npe4__SYSTEM_SystemCreated__c
-        - npe4__Description__c
-        - npe4__Status__c
-        - npe4__Type__c
-        - npsp__Related_Opportunity_Contact_Role__c
-    lookups:
-        npe4__Contact__c:
-            table: Contact
-        npe4__RelatedContact__c:
-            table: Contact
-        npe4__ReciprocalRelationship__c:
-            table: npe4__Relationship__c
-            after: npe4__Relationship__c
-
-OpportunityContactRole:
-    sf_object: OpportunityContactRole
-    table: OpportunityContactRole
-    fields:
-        - Role
-        - IsPrimary
-    lookups:
-        ContactId:
-            table: Contact
-        OpportunityId:
-            table: Opportunity
+        ServiceSession__c:
+            table: ServiceSession__c

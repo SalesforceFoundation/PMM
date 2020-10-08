@@ -206,9 +206,12 @@ flows:
                     objects:
                         - Opportunity
                         - ServiceDelivery__c
-                        - Service__c
                         - ProgramEngagement__c
                         - ProgramCohort__c
+                        - ServiceParticipant__c
+                        - ServiceSession__c
+                        - ServiceSchedule__c
+                        - Service__c
                         - Program__c
                         - Contact
                         - Account

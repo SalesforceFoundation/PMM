@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>DaysOfWeek__c</name>
+    <label>Jours de la semaine</label>
+    <picklistValues>
+        <masterLabel>Sun</masterLabel>
+        <translation>Dim.</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Mon</masterLabel>
+        <translation>Lun.</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Tue</masterLabel>
+        <translation>Mar.</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Wed</masterLabel>
+        <translation>Mer.</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Thu</masterLabel>
+        <translation>Jeu.</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Fri</masterLabel>
+        <translation>Ven.</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Sat</masterLabel>
+        <translation>Sam.</translation>
+    </picklistValues>
+</CustomFieldTranslation>

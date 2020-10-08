@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Interval__c</name>
+    <help>セッションの間隔。週次スケジュールの場合、間隔が「2」は 2 週間ごとに 1 回を意味します。</help>
+    <label>期間</label>
+</CustomFieldTranslation>

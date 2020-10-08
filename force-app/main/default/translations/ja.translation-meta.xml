@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
+        <name>Add_Entry</name>
+        <label>エントリを追加</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Record</name>
+        <label>{0}を追加</label>
+    </customLabels>
+    <customLabels>
         <name>Add_Service_Delivery</name>
         <label>サービス提供を追加</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_to_Record</name>
+        <label>{0}に追加</label>
+    </customLabels>
+    <customLabels>
+        <name>Adding_More_Service_Session_Warning</name>
+        <label>{0} 個以上のセッションを追加するため、完了するまでに時間がかかります。</label>
     </customLabels>
     <customLabels>
         <name>Anonymous</name>
         <label>匿名</label>
     </customLabels>
     <customLabels>
+        <name>Back</name>
+        <label>戻る</label>
+    </customLabels>
+    <customLabels>
         <name>Cancel</name>
         <label>キャンセル</label>
     </customLabels>
     <customLabels>
-        <name>Done</name>
-        <label>完了</label>
+        <name>Clicking_Back_Button_In_Modal_Warning</name>
+        <label>ここで戻ると、このページで行った変更は保存されません。</label>
     </customLabels>
     <customLabels>
-        <name>Add_Entry</name>
-        <label>エントリを追加</label>
+        <name>Clone_Service_Participant</name>
+        <label>サービス参加者を複製</label>
     </customLabels>
     <customLabels>
         <name>Close</name>
@@ -33,12 +53,48 @@
         <label>この行を削除すると、このサービス提供が削除されます。</label>
     </customLabels>
     <customLabels>
+        <name>Delete_Future_Sessions</name>
+        <label>今後のセッションをすべて削除</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_X_Future_Sessions</name>
+        <label>{0} 件の今後のセッションレコードが削除されます。</label>
+    </customLabels>
+    <customLabels>
+        <name>Creating_Service_Session_Warning</name>
+        <label>サービススケジュールにはセッションは {0} 件しか作成できません。作成されるのはここにリストされたセッションのみです。</label>
+    </customLabels>
+    <customLabels>
         <name>Delete</name>
         <label>削除</label>
     </customLabels>
     <customLabels>
+        <name>Disabled</name>
+        <label>無効</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>完了</label>
+    </customLabels>
+    <customLabels>
+        <name>Enabled</name>
+        <label>有効</label>
+    </customLabels>
+    <customLabels>
         <name>Error</name>
         <label>エラー</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Record</name>
+        <label>{0} で絞り込み</label>
+    </customLabels>
+    <customLabels>
+        <name>Finish</name>
+        <label>完了</label>
+    </customLabels>
+    <customLabels>
+        <name>Insert_Operation_Exception</name>
+        <label>挿入操作の権限が拒否されました。</label>
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
@@ -49,8 +105,48 @@
         <label>新規プログラムエンゲージメント</label>
     </customLabels>
     <customLabels>
+        <name>New_Service_Schedule</name>
+        <label>新しいサービススケジュール</label>
+    </customLabels>
+    <customLabels>
+        <name>Next</name>
+        <label>次へ</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_On_BSDT</name>
+        <label>レポートを保存するには、[一括サービス提供] 項目セットに [サービス] 項目が含まれている必要があります。詳細は、システム管理者にお問い合わせください。</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Participants_Created_Warning</name>
+        <label>取引先責任者が選択されていないため、サービス参加者は作成されません。</label>
+    </customLabels>
+    <customLabels>
         <name>No_Services_For_Program_Engagement</name>
         <label>サービスが見つかりません。別のプログラムエンゲージメントを選択してください。</label>
+    </customLabels>
+    <customLabels>
+        <name>None</name>
+        <label>なし</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Found</name>
+        <label>レコードが見つかりません</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Selected</name>
+        <label>レコードが選択されていません</label>
+    </customLabels>
+    <customLabels>
+        <name>Owner_Field</name>
+        <label>所有者</label>
+    </customLabels>
+    <customLabels>
+        <name>Participant_Capacity_Warning</name>
+        <label>選択した [参加者の最大数] よりも参加者が多くなっています。</label>
+    </customLabels>
+    <customLabels>
+        <name>Previous</name>
+        <label>前へ</label>
     </customLabels>
     <customLabels>
         <name>Quantity</name>
@@ -61,8 +157,20 @@
         <label>レコードが削除されました。</label>
     </customLabels>
     <customLabels>
+        <name>Remove</name>
+        <label>削除</label>
+    </customLabels>
+    <customLabels>
         <name>Required</name>
         <label>必須</label>
+    </customLabels>
+    <customLabels>
+        <name>Review_Records</name>
+        <label>{0}をレビュー</label>
+    </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>エラーがあるサービス提供行があります。</label>
     </customLabels>
     <customLabels>
         <name>Save</name>
@@ -73,6 +181,14 @@
         <label>新規プログラムエンゲージメントレコードが作成されました。</label>
     </customLabels>
     <customLabels>
+        <name>Save_New</name>
+        <label>保存 &amp; 新規</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_for_Later</name>
+        <label>後で使用するために保存</label>
+    </customLabels>
+    <customLabels>
         <name>Saved</name>
         <label>保存済み</label>
     </customLabels>
@@ -81,12 +197,64 @@
         <label>保存中</label>
     </customLabels>
     <customLabels>
+        <name>Search_this_list</name>
+        <label>このリストを検索</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Create_Service_Session_Warning</name>
+        <label>サービスセッションの作成レコードが選択されていないため、レコードは作成されません。[サービスセッションを追加] をクリックしてサービスセッションレコードを追加してください。</label>
+    </customLabels>
+    <customLabels>
         <name>Select_Program_Engagement</name>
         <label>プログラムエンゲージメントを選択</label>
     </customLabels>
     <customLabels>
         <name>Select_Service</name>
         <label>サービスを選択</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
+        <label>[サービススケジュールの終了日] または [サービスセッションの数] のいずれかを選択してください。 </label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Week</name>
+        <label>毎週</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Month</name>
+        <label>毎月</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Day</name>
+        <label>毎日</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Year</name>
+        <label>毎年</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Custom</name>
+        <label>毎...</label>
+    </customLabels>
+    <customLabels>
+        <name>Weeks</name>
+        <label>週</label>
+    </customLabels>
+    <customLabels>
+        <name>Days</name>
+        <label>日</label>
+    </customLabels>
+    <customLabels>
+        <name>Months</name>
+        <label>月</label>
+    </customLabels>
+    <customLabels>
+        <name>Years</name>
+        <label>年</label>
+    </customLabels>
+    <customLabels>
+        <name>Selected_Records</name>
+        <label>選択されたレコード</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
@@ -101,12 +269,32 @@
         <label>サービス提供を保存するには、まず有効なサービスを含むプログラムにこのクライアントを登録します。</label>
     </customLabels>
     <customLabels>
+        <name>Service_Schedule_Date_Time</name>
+        <label>日時</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Information</name>
+        <label>サービススケジュール情報</label>
+    </customLabels>
+    <customLabels>
+        <name>Session_Scheduled_Outside_Start_And_End_Date</name>
+        <label>このセッションは、サービススケジュールの開始日から終了日 ({0}～{1}) の範囲外にスケジュールされます。</label>
+    </customLabels>
+    <customLabels>
+        <name>Submit</name>
+        <label>送信</label>
+    </customLabels>
+    <customLabels>
         <name>Success</name>
         <label>成功</label>
     </customLabels>
     <customLabels>
         <name>TelemetryException</name>
         <label>テレメトリ総計値を収集できませんでした。</label>
+    </customLabels>
+    <customLabels>
+        <name>Total_Sessions</name>
+        <label>セッション合計</label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -117,12 +305,12 @@
         <label>不明のエラー</label>
     </customLabels>
     <customLabels>
-        <name>Warning</name>
-        <label>警告</label>
+        <name>Util_UnsupportedField</name>
+        <label>この項目にアクセスできません。Salesforce システム管理者にお問い合わせください。</label>
     </customLabels>
     <customLabels>
-        <name>Rows_With_Errors</name>
-        <label>エラーがあるサービス提供行があります。</label>
+        <name>Warning</name>
+        <label>警告</label>
     </customLabels>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>

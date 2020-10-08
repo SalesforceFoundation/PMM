@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Interval__c</name>
+    <help>De interval tussen sessies. Bij een wekelijkse planning betekent een interval van 2 eens per 2 weken.</help>
+    <label>Interval</label>
+</CustomFieldTranslation>

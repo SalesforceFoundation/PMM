@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Interval__c</name>
+    <help>Das Intervall zwischen Sitzungen. Bei einem wöchentlichen Zeitplan bedeutet das Intervall 2 alle zwei Wochen.</help>
+    <label>Intervall</label>
+</CustomFieldTranslation>

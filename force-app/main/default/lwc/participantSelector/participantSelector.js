@@ -230,7 +230,9 @@ export default class ParticipantSelector extends LightningElement {
                 (element.Name.toLowerCase().includes(searchText) ||
                     element.Email.toLowerCase().includes(searchText) ||
                     element.Stage__c.toLowerCase().includes(searchText)) &&
-                (this.cohortId ? element.ProgramCohort__c === this.cohortId : true)
+                (this.cohortId
+                    ? element[this.fields.programCohort.apiName] === this.cohortId
+                    : true)
         );
 
         this.noRecordsFound =

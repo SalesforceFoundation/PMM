@@ -229,7 +229,9 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     handleBack() {
         if (this.isStep2 || this.isStep3) {
             this.showBackWarning();
+            return;
         }
+        this.setBackStep();
     }
 
     handleContinueBack() {
@@ -240,6 +242,10 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             this.serviceScheduleModel.selectedParticipants = this.originalModel.selectedParticipants;
         }
 
+        this.setBackStep();
+    }
+
+    setBackStep() {
         this._steps.back();
         this._currentStep = this._steps.currentStep;
     }

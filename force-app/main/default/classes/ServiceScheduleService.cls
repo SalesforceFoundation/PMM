@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 public with sharing class ServiceScheduleService {
     @TestVisible
     private ServiceScheduleDomain domain = new ServiceScheduleDomain();
@@ -39,6 +48,16 @@ public with sharing class ServiceScheduleService {
 
         model.serviceSessions = getSessions(model.serviceSchedule, model.maxSessions);
         return model;
+    }
+
+    public Integer deleteSessionsAfter(Id scheduleId, Date startDate) {
+        List<ServiceSession__c> sessionsToDelete = serviceSelector.getSessionsAfter(
+            scheduleId,
+            startDate
+        );
+        Integer numSessions = sessionsToDelete.size();
+        domain.deleteSessions(sessionsToDelete);
+        return numSessions;
     }
 
     public ServiceSession__c createSession(

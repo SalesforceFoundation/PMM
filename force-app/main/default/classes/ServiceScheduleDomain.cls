@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 public with sharing class ServiceScheduleDomain {
     public void insertModel(ServiceScheduleModel model) {
         insertSchedule(model.serviceSchedule);
@@ -10,6 +19,20 @@ public with sharing class ServiceScheduleDomain {
     public void insertSchedule(ServiceSchedule__c schedule) {
         validateCreateAccess(new List<SObject>{ schedule });
         insert schedule;
+    }
+
+    public void deleteSessions(List<ServiceSession__c> sessionsToDelete) {
+        if (
+            !PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceSession__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.DELETEABLE
+                )
+        ) {
+            throw new ServiceScheduleDomainException(Label.Delete_Operation_Exception);
+        }
+
+        delete sessionsToDelete;
     }
 
     private void insertRelatedRecords(List<SObject> sObjects) {

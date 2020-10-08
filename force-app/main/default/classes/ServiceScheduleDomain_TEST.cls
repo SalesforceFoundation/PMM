@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 @IsTest
 private with sharing class ServiceScheduleDomain_TEST {
     private static ServiceScheduleDomain domain = new ServiceScheduleDomain();
@@ -128,6 +137,32 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
+    private static void shouldDeleteSessions() {
+        List<ServiceSession__c> sessions = new List<ServiceSession__c>();
+        for (Integer i = 1; i < 5; i++) {
+            sessions.add(new ServiceSession__c(Name = 'test ' + i));
+        }
+
+        insert sessions;
+
+        System.assertEquals(
+            sessions.size(),
+            [SELECT Id FROM ServiceSession__c].size(),
+            'Expect all the sessions to be inserted.'
+        );
+
+        Test.startTest();
+        domain.deleteSessions(sessions);
+        Test.stopTest();
+
+        System.assertEquals(
+            0,
+            [SELECT Id FROM ServiceSession__c].size(),
+            'Expect all the sessions to be deleted.'
+        );
+    }
+
+    @IsTest
     private static void throwsExceptionWhenNameTooLong() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();
@@ -176,6 +211,41 @@ private with sharing class ServiceScheduleDomain_TEST {
         Test.startTest();
         try {
             domain.insertModel(new ServiceScheduleModel());
+        } catch (Exception ex) {
+            dmlLimitAfter = System.Limits.getDmlStatements();
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof ServiceScheduleDomain.ServiceScheduleDomainException,
+            'Expected the domain to throw the exception.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Expected the exception to be thrown before any dml statements.'
+        );
+    }
+
+    @IsTest
+    private static void throwsDeleteExceptionWhenPermissionCheckFails() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+
+        Test.startTest();
+        try {
+            domain.deleteSessions(new List<ServiceSession__c>());
         } catch (Exception ex) {
             dmlLimitAfter = System.Limits.getDmlStatements();
             actualException = ex;

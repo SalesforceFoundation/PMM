@@ -6,7 +6,7 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
-    RecurrenceService recurrenceService = new RecurrenceService();
+    private RecurrenceService recurrenceService = new RecurrenceService();
     private static final String ONE_TIME = 'One Time';
 
     public ServiceScheduleModel getServiceScheduleModel() {
@@ -31,8 +31,13 @@ public with sharing class ServiceScheduleService {
     }
 
     public ServiceScheduleModel processSchedule(ServiceScheduleModel model) {
-        model.serviceSessions = getSessions(model.serviceSchedule);
         setServiceProviders(model.serviceSchedule);
+
+        if (!model.serviceSchedule.CreateServiceSessionRecords__c) {
+            return model;
+        }
+
+        model.serviceSessions = getSessions(model.serviceSchedule, model.maxSessions);
         return model;
     }
 
@@ -82,10 +87,13 @@ public with sharing class ServiceScheduleService {
     }
 
     @TestVisible
-    private List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
+    private List<ServiceSession__c> getSessions(
+        ServiceSchedule__c schedule,
+        Integer maxSessions
+    ) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 
-        for (DateTime startDateTime : getDateTimes(schedule)) {
+        for (DateTime startDateTime : getDateTimes(schedule, maxSessions)) {
             DateTime endDateTime = schedule.FirstSessionEnd__c != null
                 ? DateTime.newInstance(
                       startDateTime.date(),
@@ -97,7 +105,10 @@ public with sharing class ServiceScheduleService {
         return sessions;
     }
 
-    private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
+    private List<DateTime> getDateTimes(
+        ServiceSchedule__c schedule,
+        Integer maxSessions
+    ) {
         if (schedule.Frequency__c == ONE_TIME) {
             return new List<DateTime>{ schedule.FirstSessionStart__c };
         }
@@ -114,7 +125,11 @@ public with sharing class ServiceScheduleService {
             getDayNums(schedule.DaysOfWeek__c),
             schedule.FirstSessionStart__c
         );
-        return recurrenceService.generate(schedule.FirstSessionStart__c, rRule);
+        return recurrenceService.generate(
+            schedule.FirstSessionStart__c,
+            rRule,
+            maxSessions
+        );
     }
 
     private List<Integer> getDayNums(String daysOfWeek) {

@@ -3,6 +3,7 @@ public with sharing class ServiceScheduleModel {
     private FieldSetService fieldSetService = new FieldSetService();
     private static final String SCHEDULE_FIELD_SET_NAME = 'ServiceScheduleInformation';
     private static final String PROGRAM_ENGAGEMENT_FIELD_SET_NAME = 'SessionParticipantView';
+    private static final Integer DEFAULT_MAX_SESSIONS = 500;
     public List<ServiceParticipant__c> serviceParticipants { get; set; }
 
     @AuraEnabled
@@ -15,6 +16,8 @@ public with sharing class ServiceScheduleModel {
     public Map<String, Map<String, String>> labels = new Map<String, Map<String, String>>();
     @AuraEnabled
     public List<Map<String, Object>> scheduleInformationFields = new List<Map<String, Object>>();
+    @AuraEnabled
+    public Integer maxSessions { get; set; }
 
     @AuraEnabled
     public Map<String, Map<String, Object>> scheduleRequiredFields = new Map<String, Map<String, Object>>{
@@ -23,6 +26,9 @@ public with sharing class ServiceScheduleModel {
         ),
         'serviceId' => fieldSetService.getFieldForLWC(
             Schema.ServiceSchedule__c.Service__c.getDescribe()
+        ),
+        'autoGenerateSessions' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.CreateServiceSessionRecords__c.getDescribe()
         )
     };
 
@@ -90,6 +96,7 @@ public with sharing class ServiceScheduleModel {
         serviceSessions = new List<ServiceSession__c>();
         selectedParticipants = new List<ProgramEngagement__c>();
         serviceParticipants = new List<ServiceParticipant__c>();
+        maxSessions = DEFAULT_MAX_SESSIONS;
 
         labels.put('serviceSchedule', getServiceScheduleLabels());
         labels.put('serviceSession', getServiceSessionLabels());

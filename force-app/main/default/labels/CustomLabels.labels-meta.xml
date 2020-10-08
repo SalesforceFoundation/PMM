@@ -93,18 +93,39 @@
         <value>Deleting this row removes this Service Delivery.</value>
     </labels>
     <labels>
-        <fullName>Delete_All_Future_Sessions</fullName>
+        <fullName>Delete_Future_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Delete All Future Sessions</shortDescription>
-        <value>Delete All Future Sessions</value>
+        <shortDescription>Delete Future Service Sessions</shortDescription>
+        <value>Delete Future Service Sessions</value>
+    </labels>
+    <labels>
+        <fullName>Delete_Sessions_Success</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Successfully deleted {0} Service Sessions.</shortDescription>
+        <value>Successfully deleted {0} Service Sessions.</value>
     </labels>
     <labels>
         <fullName>Delete_X_Future_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>This will delete {0} future Session records.</shortDescription>
-        <value>This will delete {0} future Session records.</value>
+        <shortDescription>This will delete {0} future Service Session records.</shortDescription>
+        <value>This will delete {0} future Service Session records.</value>
+    </labels>
+    <labels>
+        <fullName>Delete_Sessions_After</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete all Service Sessions after this date:</shortDescription>
+        <value>Delete all Service Sessions after this date:</value>
+    </labels>
+    <labels>
+        <fullName>Delete_Sessions_Invalid_Date</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Date must be today or after.</shortDescription>
+        <value>Date must be today or after.</value>
     </labels>
     <labels>
         <fullName>Creating_Service_Session_Warning</fullName>
@@ -182,7 +203,15 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Permission Denied for Insert Operation</shortDescription>
-        <value>Permission Denied for Insert Operation.</value>
+        <value>You can't add this record. Ask your admin for help.</value>
+    </labels>
+    <labels>
+        <fullName>Delete_Operation_Exception</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Permission Denied for Delete Operation</shortDescription>
+        <value>You can't delete this record. Ask your admin for help.</value>
     </labels>
     <labels>
         <fullName>MissingSObjectType</fullName>

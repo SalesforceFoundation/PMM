@@ -24,4 +24,8 @@ public with sharing class Util {
             'objectApiName' => sObjectType.getDescribe().getName()
         };
     }
+
+    public static Date getToday() {
+        return System.today();
+    }
 }

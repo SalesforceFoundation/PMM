@@ -48,6 +48,15 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled
+    public static Integer deleteSessionsAfter(Id scheduleId, Date startDate) {
+        try {
+            return service.deleteSessionsAfter(scheduleId, startDate);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
+    @AuraEnabled
     public static ServiceSession__c createSession(
         ServiceSchedule__c schedule,
         DateTime startDateTime,
@@ -58,5 +67,10 @@ public with sharing class ServiceScheduleCreatorController {
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }
+    }
+
+    @AuraEnabled
+    public static Date getToday() {
+        return Util.getToday();
     }
 }

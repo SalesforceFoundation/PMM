@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Service Participant Layout</layout>
+        <sections>
+            <label>カスタムリンク</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>サービス参加者名</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>サービス参加者名</label>
+    </standardFields>
     <caseValues>
         <plural>false</plural>
-        <value><!-- Service Participant --></value>
+        <value>サービス参加者</value>
     </caseValues>
-    <nameFieldLabel><!-- Service Participant Name --></nameFieldLabel>
 </CustomObjectTranslation>

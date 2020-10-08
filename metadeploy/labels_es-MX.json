@@ -47,12 +47,38 @@
         "Deploy Program Management Profile": {
             "message": "Implementar el perfil de gestión de programas",
             "description": "title of installation step"
+        },
+        "Deploy Folder of Unmanaged Reports": {
+            "message": "Implementar carpeta de reportes sin gestionar",
+            "description": "title of installation step"
         }
     },
     "checks": {
         "Please enable My Domain in your org prior to installing.": {
             "message": "Active Mi dominio en su organización antes de realizar la instalación.",
             "description": "shown if validation fails"
+        },
+        "Please install Program Management Module in your org prior to installing reports.": {
+            "message": "Instale Program Management Module en su organización antes de instalar reportes.",
+            "description": "shown if validation fails"
+        }
+    },
+    "plan:reports": {
+        "title": {
+            "message": "Instalar reportes de Program Management Module",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Esta acción instalará reportes adicionales para Program Management Module en su organización.",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Gracias por instalar reportes adicionales para Program Management Module. Visite el [grupo del foro de clientes de Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) en el Power of Us Hub para formular cualquier pregunta sobre Program Management Module.",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "Para obtener ayuda sobre este error, diríjase a [help.salesforce.com](https://help.salesforce.com/), encuentre el área Asistencia y Servicios y registre un ticket de asistencia técnica con Salesforce. Incluya “PMM” en la línea de asunto y también en sus comentarios el vínculo de instalación que se muestra aquí.",
+            "description": "shown after failed installation (markdown)"
         }
     }
 }

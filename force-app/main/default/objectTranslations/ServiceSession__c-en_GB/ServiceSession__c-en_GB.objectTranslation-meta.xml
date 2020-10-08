@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Service Session Layout</layout>
+        <sections>
+            <label>Custom Links</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Service Session Name</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Service Session Name</label>
+    </standardFields>
+    <startsWith>Consonant</startsWith>
     <caseValues>
         <plural>false</plural>
-        <value><!-- Service Session --></value>
+        <value>Service Session</value>
     </caseValues>
     <caseValues>
         <plural>true</plural>
-        <value><!-- Service Session --></value>
+        <value>Service Sessions</value>
     </caseValues>
-    <nameFieldLabel><!-- Service Session Name --></nameFieldLabel>
-    <startsWith><!-- Consonant --></startsWith>
 </CustomObjectTranslation>

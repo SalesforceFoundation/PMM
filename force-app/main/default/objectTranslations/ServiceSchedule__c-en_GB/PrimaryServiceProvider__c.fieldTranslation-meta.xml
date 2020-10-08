@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>PrimaryServiceProvider__c</name>
+    <relationshipLabel>Service Schedules (Primary Service Provider)</relationshipLabel>
+    <label>Primary Service Provider</label>
+</CustomFieldTranslation>

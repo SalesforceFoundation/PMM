@@ -45,7 +45,7 @@
                                 >
                                     <lightning-layout-item
                                         size="3"
-                                        class="slds-var-p-left_small slds-var-p-bottom_small"
+                                        class="slds-var-p-left_small slds-var-p-bottom_medium"
                                     >
                                         {selectedRecordCountMessage}
                                     </lightning-layout-item>
@@ -65,7 +65,10 @@
                                         size="12"
                                         if:false={noRecordsFound}
                                     >
-                                        <div style="height:270px" class="slds-border_top">
+                                        <div
+                                            style="height:270px"
+                                            class="slds-border_top slds-var-m-top_xx-small"
+                                        >
                                             <lightning-datatable
                                                 data={filteredEngagements}
                                                 key-field="Id"

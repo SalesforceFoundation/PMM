@@ -1,7 +1,7 @@
 .container {
-    border-color: rgb(221, 219, 218);
-    border-radius: 0.25 rem;
-    border-width: 1px;
+    border-color: var(--lwc-colorBorder, rgb(221, 219, 218));
+    border-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    border-width: var(--lwc-borderWidthThin, 1px);
     border-style: solid;
     height: 100%;
     min-height: 400px;

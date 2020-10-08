@@ -65,7 +65,7 @@
                                         size="12"
                                         if:false={noRecordsFound}
                                     >
-                                        <div style="height:271px">
+                                        <div style="height:270px" class="slds-border_top">
                                             <lightning-datatable
                                                 data={filteredEngagements}
                                                 key-field="Id"
@@ -75,7 +75,7 @@
                                                 onrowselection={handleRowSelected}
                                             ></lightning-datatable>
                                             <div
-                                                class="slds-theme_shade slds-align_absolute-center"
+                                                class="slds-theme_shade slds-align_absolute-center slds-border_top"
                                             >
                                                 <lightning-button
                                                     variant="brand"
@@ -108,7 +108,11 @@
                         >
                             {scheduleHeader}
                         </div>
-                        <div if:false={noRecordsSelected} style="height:425px">
+                        <div
+                            if:false={noRecordsSelected}
+                            style="height:425px"
+                            class="slds-border_top"
+                        >
                             <lightning-datatable
                                 columns={selectedColumns}
                                 key-field="Id"

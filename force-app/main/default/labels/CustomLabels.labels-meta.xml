@@ -196,7 +196,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Permission Denied for Insert Operation</shortDescription>
-        <value>Permission Denied for Insert Operation.</value>
+        <value>You don't have access to insert this record. Your Salesforce admin can help with that.</value>
     </labels>
     <labels>
         <fullName>Delete_Operation_Exception</fullName>

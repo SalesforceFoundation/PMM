@@ -41,6 +41,16 @@ public with sharing class ServiceScheduleService {
         return model;
     }
 
+    public Integer deleteSessionsAfter(Id scheduleId, Date startDate) {
+        List<ServiceSession__c> sessionsToDelete = serviceSelector.getSessionsAfter(
+            scheduleId,
+            startDate
+        );
+        Integer numSessions = sessionsToDelete.size();
+        domain.deleteSessions(sessionsToDelete);
+        return numSessions;
+    }
+
     public ServiceSession__c createSession(
         ServiceSchedule__c schedule,
         DateTime startDateTime,

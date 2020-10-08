@@ -49,4 +49,17 @@ public with sharing class ServiceSelector {
         // Name includes a required field that must have FLS
         // so no stripInacessible needed if that's the only field being returned
     }
+
+    public List<ServiceSession__c> getSessionsAfter(Id scheduleId, Date startDate) {
+        if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {
+            return new List<ServiceSession__c>();
+        }
+        return [
+            SELECT Id, SessionStart__c
+            FROM ServiceSession__c
+            WHERE
+                ServiceSchedule__c = :scheduleId
+                AND DAY_ONLY(convertTimezone(SessionStart__c)) > :startDate
+        ];
+    }
 }

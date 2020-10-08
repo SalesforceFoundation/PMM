@@ -10,6 +10,10 @@ import persist from "@salesforce/apex/ServiceScheduleCreatorController.persist";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
+import BACK_WARNING_LABEL from "@salesforce/label/c.Clicking_Back_Button_In_Modal_Warning";
+import GO_BACK_LABEL from "@salesforce/label/c.Go_Back";
+import BACK_LABEL from "@salesforce/label/c.Back";
+import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
@@ -20,6 +24,10 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
         success: SUCCESS_LABEL,
+        backWarning: BACK_WARNING_LABEL,
+        goBack: GO_BACK_LABEL,
+        back: BACK_LABEL,
+        cancel: CANCEL_LABEL,
     };
 
     _serviceId;
@@ -219,15 +227,37 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     handleBack() {
+        if (this.isStep2 || this.isStep3) {
+            this.showBackWarning();
+            return;
+        }
+        this.setBackStep();
+    }
+
+    handleContinueBack() {
+        this.closeBackWarningModal();
         if (this.isStep2) {
             this.serviceScheduleModel.serviceSessions = this.originalModel.serviceSessions;
         } else if (this.isStep3) {
-            // Reset the selected service participants
             this.serviceScheduleModel.selectedParticipants = this.originalModel.selectedParticipants;
         }
 
+        this.setBackStep();
+    }
+
+    setBackStep() {
         this._steps.back();
         this._currentStep = this._steps.currentStep;
+    }
+
+    showBackWarning() {
+        const modal = this.template.querySelector("c-modal c-modal");
+        modal.show();
+    }
+
+    closeBackWarningModal() {
+        const modal = this.template.querySelector("c-modal c-modal");
+        modal.hide();
     }
 
     handleFinish() {

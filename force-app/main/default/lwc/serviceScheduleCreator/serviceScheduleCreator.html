@@ -28,6 +28,27 @@
                 service-schedule-model={serviceScheduleModel}
             ></c-service-schedule-review>
         </template>
+        <c-modal header={labels.goBack} is-nested="true">
+            {labels.backWarning}
+
+            <div slot="footer">
+                <lightning-layout>
+                    <lightning-layout-item alignment-bump="left">
+                        <lightning-button
+                            label={labels.cancel}
+                            variant="neutral"
+                            onclick={closeBackWarningModal}
+                        ></lightning-button>
+                        <lightning-button
+                            label={labels.back}
+                            variant="brand"
+                            onclick={handleContinueBack}
+                            class="slds-var-p-left_medium"
+                        ></lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+        </c-modal>
         <div slot="footer">
             <lightning-layout horizontal-align="end">
                 <lightning-layout-item

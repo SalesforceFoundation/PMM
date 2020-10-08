@@ -5,6 +5,16 @@
         horizontal-align="center"
         pull-to-boundary="medium"
     >
+        <lightning-layout-item
+            size="10"
+            class="slds-var-m-top_large"
+            if:true={limitReached}
+        >
+            <c-scoped-notification
+                title={limitMessage}
+                theme="warning"
+            ></c-scoped-notification>
+        </lightning-layout-item>
         <lightning-layout-item size="10">
             <lightning-layout horizontal-align="spread">
                 <lightning-layout-item>
@@ -23,6 +33,7 @@
                             variant="neutral"
                             label={labels.addSession}
                             onclick={handleAddSession}
+                            disabled={limitReached}
                         ></lightning-button>
                     </div>
                     <c-modal header={labels.addSession} is-nested="true">
@@ -59,6 +70,7 @@
                                         label={labels.saveNew}
                                         variant="neutral"
                                         onclick={handleSaveNewSession}
+                                        disabled={saveNewLimitReached}
                                     ></lightning-button>
                                     <lightning-button
                                         label={labels.save}
@@ -72,6 +84,9 @@
                     </c-modal>
                 </lightning-layout-item>
             </lightning-layout>
+            <lightning-layout-item if:true={emptyMessage}>
+                <c-scoped-notification title={emptyMessage}></c-scoped-notification>
+            </lightning-layout-item>
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"
@@ -80,6 +95,7 @@
                     hide-checkbox-column
                     show-row-number-column
                     onrowaction={handleDelete}
+                    if:false={emptyMessage}
                 >
                 </lightning-datatable>
             </div>

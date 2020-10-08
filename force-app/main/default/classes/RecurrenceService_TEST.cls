@@ -28,6 +28,27 @@ public with sharing class RecurrenceService_TEST {
     }
 
     @IsTest
+    private static void shouldGenerateLimitedDailySchedule() {
+        rRule = 'FREQ=DAILY;INTERVAL=3;COUNT=5';
+        List<DateTime> expectedDateTimes = new List<DateTime>{
+            dateTimeStart,
+            dateTimeStart.addDays(3),
+            dateTimeStart.addDays(6),
+            dateTimeStart.addDays(9)
+        };
+
+        Test.startTest();
+        List<DateTime> actualDateTimes = service.generate(dateTimeStart, rRule, 4);
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedDateTimes,
+            actualDateTimes,
+            'Expected every 3rd day starting with today and limited to max number of sessions provided.'
+        );
+    }
+
+    @IsTest
     private static void shouldGenerateWeeklySchedule() {
         DateTime sunday = DateTime.newInstance(2012, 1, 1);
         rRule = 'FREQ=Weekly;INTERVAL=3;COUNT=5;BYDAY=SU';

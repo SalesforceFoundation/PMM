@@ -2,17 +2,27 @@ public with sharing class RecurrenceService {
     @TestVisible
     private RecurrenceRule recurrenceRule = new RecurrenceRule();
 
-    public List<DateTime> generate(DateTime dateTimeStart, String rRule) {
+    public List<DateTime> generate(
+        DateTime dateTimeStart,
+        String rRule,
+        Integer maxSessions
+    ) {
         recurrenceRule.reset().withRuleString(rRule);
 
         List<DateTime> results = new List<DateTime>();
         Iterator<Date> iterable = makeIterator(dateTimeStart);
+        Boolean limitReached = false;
 
-        while (iterable.hasNext()) {
+        while (!limitReached && iterable.hasNext()) {
             results.add(DateTime.newInstance(iterable.next(), dateTimeStart.time()));
+            limitReached = maxSessions != null && results.size() >= maxSessions;
         }
 
         return results;
+    }
+
+    public List<DateTime> generate(DateTime dateTimeStart, String rRule) {
+        return generate(dateTimeStart, rRule, null);
     }
 
     public String createRRule(

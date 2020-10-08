@@ -53,7 +53,7 @@
         <label>この行を削除すると、このサービス提供が削除されます。</label>
     </customLabels>
     <customLabels>
-        <name>Delete_All_Future_Sessions</name>
+        <name>Delete_Future_Sessions</name>
         <label>今後のセッションをすべて削除</label>
     </customLabels>
     <customLabels>

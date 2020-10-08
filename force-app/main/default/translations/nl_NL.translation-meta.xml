@@ -53,7 +53,7 @@
         <label>Als u deze rij verwijdert, wordt de servicelevering ook verwijderd.</label>
     </customLabels>
     <customLabels>
-        <name>Delete_All_Future_Sessions</name>
+        <name>Delete_Future_Sessions</name>
         <label>Alle toekomstige sessies verwijderen</label>
     </customLabels>
     <customLabels>

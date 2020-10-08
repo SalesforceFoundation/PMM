@@ -53,7 +53,7 @@
         <label>La eliminación de esta fila retira esta entrega de servicio.</label>
     </customLabels>
     <customLabels>
-        <name>Delete_All_Future_Sessions</name>
+        <name>Delete_Future_Sessions</name>
         <label>Eliminar todas las sesiones futuras</label>
     </customLabels>
     <customLabels>

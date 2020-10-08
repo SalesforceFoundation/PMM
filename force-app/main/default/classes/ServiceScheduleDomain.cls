@@ -1,7 +1,7 @@
 public with sharing class ServiceScheduleDomain {
     public void insertModel(ServiceScheduleModel model) {
         insertSchedule(model.serviceSchedule);
-        updateSessionRelationships(model);
+        setSessionDefaults(model);
         insertRelatedRecords(model.serviceSessions);
         generateParticipants(model);
         insertRelatedRecords(model.serviceParticipants);
@@ -17,15 +17,21 @@ public with sharing class ServiceScheduleDomain {
         insert sObjects;
     }
 
-    private void updateSessionRelationships(ServiceScheduleModel model) {
+    private void setSessionDefaults(ServiceScheduleModel model) {
         for (ServiceSession__c session : model.serviceSessions) {
             session.ServiceSchedule__c = model.serviceSchedule.Id;
+            session.PrimaryServiceProvider__c = model.serviceSchedule.PrimaryServiceProvider__c;
+            session.OtherServiceProvider__c = model.serviceSchedule.OtherServiceProvider__c;
         }
     }
 
     private void generateParticipants(ServiceScheduleModel model) {
         for (ProgramEngagement__c engagement : model.selectedParticipants) {
             ServiceParticipant__c participant = new ServiceParticipant__c(
+                Name = (engagement.Contact__r.Name +
+                    ' - ' +
+                    model.serviceSchedule.Name)
+                    .abbreviate(80),
                 ServiceSchedule__c = model.serviceSchedule.Id,
                 Service__c = model.serviceSchedule.Service__c,
                 ProgramEngagement__c = engagement.Id,

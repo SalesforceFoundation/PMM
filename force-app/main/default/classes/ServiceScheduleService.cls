@@ -6,7 +6,8 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
-    RecurrenceService recurrenceService = new RecurrenceService();
+    private RecurrenceService recurrenceService = new RecurrenceService();
+    private static final String ONE_TIME = 'One Time';
 
     public ServiceScheduleModel getServiceScheduleModel() {
         return new ServiceScheduleModel();
@@ -30,9 +31,28 @@ public with sharing class ServiceScheduleService {
     }
 
     public ServiceScheduleModel processSchedule(ServiceScheduleModel model) {
-        model.serviceSessions = getSessions(model.serviceSchedule);
         setServiceProviders(model.serviceSchedule);
+
+        if (!model.serviceSchedule.CreateServiceSessionRecords__c) {
+            return model;
+        }
+
+        model.serviceSessions = getSessions(model.serviceSchedule, model.maxSessions);
         return model;
+    }
+
+    public ServiceSession__c createSession(
+        ServiceSchedule__c schedule,
+        DateTime startDateTime,
+        DateTime endDateTime
+    ) {
+        // NOTE: Passing the entire schedule to allow for changes in our default name
+        // or potentially setting additional defaults at this level
+        return new ServiceSession__c(
+            Name = (startDateTime.date().format() + ': ' + schedule.Name).abbreviate(80),
+            SessionStart__c = startDateTime,
+            SessionEnd__c = endDateTime
+        );
     }
 
     private void setServiceProviders(ServiceSchedule__c schedule) {
@@ -67,36 +87,36 @@ public with sharing class ServiceScheduleService {
     }
 
     @TestVisible
-    private List<ServiceSession__c> getSessions(ServiceSchedule__c schedule) {
+    private List<ServiceSession__c> getSessions(
+        ServiceSchedule__c schedule,
+        Integer maxSessions
+    ) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 
-        Id primaryServiceProvider = schedule.PrimaryServiceProvider__c;
-        Id otherServiceProvider = schedule.OtherServiceProvider__c;
-
-        for (DateTime startDateTime : getDateTimes(schedule)) {
+        for (DateTime startDateTime : getDateTimes(schedule, maxSessions)) {
             DateTime endDateTime = schedule.FirstSessionEnd__c != null
                 ? DateTime.newInstance(
                       startDateTime.date(),
                       schedule.FirstSessionEnd__c.time()
                   )
                 : null;
-            sessions.add(
-                new ServiceSession__c(
-                    Name = schedule.Name + ': ' + startDateTime.date().format(),
-                    SessionStart__c = startDateTime,
-                    SessionEnd__c = endDateTime,
-                    PrimaryServiceProvider__c = primaryServiceProvider,
-                    OtherServiceProvider__c = otherServiceProvider
-                )
-            );
+            sessions.add(createSession(schedule, startDateTime, endDateTime));
         }
         return sessions;
     }
 
-    private List<DateTime> getDateTimes(ServiceSchedule__c schedule) {
+    private List<DateTime> getDateTimes(
+        ServiceSchedule__c schedule,
+        Integer maxSessions
+    ) {
+        if (schedule.Frequency__c == ONE_TIME) {
+            return new List<DateTime>{ schedule.FirstSessionStart__c };
+        }
+
         Integer interval = schedule.Interval__c != null
             ? Integer.valueOf(schedule.Interval__c)
             : null;
+
         String rRule = recurrenceService.createRRule(
             schedule.Frequency__c,
             interval,
@@ -105,7 +125,11 @@ public with sharing class ServiceScheduleService {
             getDayNums(schedule.DaysOfWeek__c),
             schedule.FirstSessionStart__c
         );
-        return recurrenceService.generate(schedule.FirstSessionStart__c, rRule);
+        return recurrenceService.generate(
+            schedule.FirstSessionStart__c,
+            rRule,
+            maxSessions
+        );
     }
 
     private List<Integer> getDayNums(String daysOfWeek) {

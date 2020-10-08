@@ -42,7 +42,7 @@ private with sharing class ServiceScheduleDomain_TEST {
 
         Service__c service = [SELECT Id, Program__c FROM Service__c LIMIT 1];
         List<ProgramEngagement__c> selectedEngagements = [
-            SELECT Id, Contact__c
+            SELECT Id, Contact__c, Contact__r.Name
             FROM ProgramEngagement__c
             WHERE Program__c = :service.Program__c
             LIMIT 1
@@ -117,6 +117,13 @@ private with sharing class ServiceScheduleDomain_TEST {
             selectedEngagements[0].Contact__c,
             model.serviceParticipants[0].Contact__c,
             'Expected the participant record to have been related to the Selected Engagement\'s Contact Record.'
+        );
+        System.assertEquals(
+            selectedEngagements[0].Contact__r.Name +
+            ' - ' +
+            schedule.Name,
+            model.serviceParticipants[0].Name,
+            'Expected the participant record to be autonamed with the Contact name and Schedule name.'
         );
     }
 

@@ -16,6 +16,8 @@ export default class Modal extends LightningElement {
     close = closeLabel;
 
     @api size = "fixed";
+    @api isNested = false;
+
     visibilityClass = MODAL_HIDDEN;
 
     @api
@@ -41,8 +43,9 @@ export default class Modal extends LightningElement {
 
     get modalCss() {
         return (
-            "slds-modal slds-fade-in-open" +
-            (this.size === "fixed" ? "" : ` slds-modal_${this.size}`)
+            "slds-modal slds-fade-in-open slds-align_absolute-center" +
+            (this.size === "fixed" ? "" : ` slds-modal_${this.size}`) +
+            (this.isNested ? " nested-modal" : "")
         );
     }
 

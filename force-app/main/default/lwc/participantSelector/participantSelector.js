@@ -8,15 +8,6 @@
  */
 
 import { LightningElement, track, api, wire } from "lwc";
-import { format } from "c/util";
-
-import SELECTED_LABEL from "@salesforce/label/c.Selected_Records";
-import ADD_TO_RECORD_LABEL from "@salesforce/label/c.Add_to_Record";
-import SEARCH_THIS_LIST_LABEL from "@salesforce/label/c.Search_this_list";
-import NONE_LABEL from "@salesforce/label/c.None";
-import NO_RECORDS_FOUND_LABEL from "@salesforce/label/c.No_Records_Found";
-import NO_RECORDS_SELECTED_LABEL from "@salesforce/label/c.No_Records_Selected";
-import FILTER_BY_LABEL from "@salesforce/label/c.Filter_By_Record";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
 
@@ -42,15 +33,19 @@ export default class ParticipantSelector extends LightningElement {
     objectLabels;
     isLoaded = false;
 
-    labels = {
-        selectedRecords: SELECTED_LABEL,
-        addToService: ADD_TO_RECORD_LABEL,
-        searchThisList: SEARCH_THIS_LIST_LABEL,
-        none: NONE_LABEL,
-        noRecordsFound: NO_RECORDS_FOUND_LABEL,
-        noRecordsSelected: NO_RECORDS_SELECTED_LABEL,
-        filterByCohort: FILTER_BY_LABEL,
-    };
+    get labels() {
+        return this.serviceScheduleModel.labels.serviceParticipant
+            ? this.serviceScheduleModel.labels.serviceParticipant
+            : {};
+    }
+
+    get showCapacityWarning() {
+        return (
+            this.capacity !== undefined &&
+            this.participantCount &&
+            this.capacity < this.participantCount
+        );
+    }
 
     get noRecordsSelected() {
         return this.selectedParticipants && this.selectedParticipants.length === 0;
@@ -64,6 +59,10 @@ export default class ParticipantSelector extends LightningElement {
         return this.selectedParticipants ? this.selectedParticipants.length : 0;
     }
 
+    get capacity() {
+        return this.serviceScheduleModel.serviceSchedule[this.fields.capacity.apiName];
+    }
+
     get scheduleHeader() {
         let capacity = this.serviceScheduleModel.serviceSchedule[
             this.fields.capacity.apiName
@@ -71,9 +70,11 @@ export default class ParticipantSelector extends LightningElement {
 
         let name = this.serviceScheduleModel.serviceSchedule[this.fields.name.apiName];
 
-        return (
-            name + " (" + this.participantCount + "/" + (capacity ? capacity : "-") + ")"
-        );
+        if (capacity === undefined) {
+            return name;
+        }
+
+        return `${name} (${this.participantCount}/${this.capacity})`;
     }
 
     @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
@@ -92,7 +93,6 @@ export default class ParticipantSelector extends LightningElement {
             this.loadDataTable();
             this.loadPreviousSelections();
             this.loadProgramCohorts(this.cohorts);
-            this.loadLabels();
             this.setDataTableColumns();
             this.setSelectedColumns();
             this.isLoaded = true;
@@ -137,16 +137,7 @@ export default class ParticipantSelector extends LightningElement {
             newObj.value = element.Id;
             return newObj;
         });
-        this.searchOptions.unshift({ label: NONE_LABEL, value: "" });
-    }
-
-    loadLabels() {
-        this.addToServiceButtonLabel = format(this.labels.addToService, [
-            this.objectLabels.serviceParticipant.objectLabel,
-        ]);
-        this.labels.filterByCohort = format(this.labels.filterByCohort, [
-            this.objectLabels.programCohort.objectLabel,
-        ]);
+        this.searchOptions.unshift({ label: this.labels.none, value: "" });
     }
 
     setDataTableColumns() {
@@ -172,7 +163,7 @@ export default class ParticipantSelector extends LightningElement {
     setSelectedColumns() {
         this.selectedColumns = [
             {
-                label: "",
+                label: this.fields.contactName.label,
                 fieldName: this.fields.contactName.apiName,
                 hideDefaultActions: true,
             },
@@ -247,8 +238,12 @@ export default class ParticipantSelector extends LightningElement {
             element =>
                 (element.Name.toLowerCase().includes(searchText) ||
                     element.Email.toLowerCase().includes(searchText) ||
-                    element.Stage__c.toLowerCase().includes(searchText)) &&
-                (this.cohortId ? element.ProgramCohort__c === this.cohortId : true)
+                    element[this.fields.engagementStage.apiName]
+                        .toLowerCase()
+                        .includes(searchText)) &&
+                (this.cohortId
+                    ? element[this.fields.programCohort.apiName] === this.cohortId
+                    : true)
         );
 
         this.noRecordsFound =

@@ -9,6 +9,8 @@ import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
+import CREATE_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Select_Create_Service_Session_Warning";
+import MAX_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Creating_Service_Session_Warning";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
@@ -16,6 +18,8 @@ export default class ReviewSessions extends LightningElement {
     @track objectName;
     _serviceScheduleModel;
 
+    emptyMessage;
+    limitMessage;
     sessionNameLabel;
     sessionStartLabel;
     sessionEndLabel;
@@ -31,6 +35,7 @@ export default class ReviewSessions extends LightningElement {
     }
     set serviceScheduleModel(value) {
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
+        this.setEmptyMessage();
         this.setLabels();
         this.setDataTableColumns();
 
@@ -54,6 +59,14 @@ export default class ReviewSessions extends LightningElement {
 
     get serviceSchedule() {
         return this._serviceScheduleModel.serviceSchedule;
+    }
+
+    get limitReached() {
+        return this._serviceSessions.length >= this._serviceScheduleModel.maxSessions;
+    }
+
+    get saveNewLimitReached() {
+        return this._serviceSessions.length >= this._serviceScheduleModel.maxSessions - 1;
     }
 
     labels = {
@@ -96,6 +109,22 @@ export default class ReviewSessions extends LightningElement {
         this.sessionNameLabel = this._serviceScheduleModel.sessionFields.name.label;
         this.sessionStartLabel = this._serviceScheduleModel.sessionFields.sessionStart.label;
         this.sessionEndLabel = this._serviceScheduleModel.sessionFields.sessionEnd.label;
+        this.limitMessage = format(MAX_SESSIONS_WARNING_LABEL, [
+            this._serviceScheduleModel.maxSessions,
+        ]);
+    }
+
+    setEmptyMessage() {
+        if (this.serviceSessions.length) {
+            this.emptyMessage = undefined;
+            return;
+        }
+
+        this.emptyMessage = this._serviceScheduleModel.serviceSchedule[
+            this._serviceScheduleModel.scheduleRequiredFields.autoGenerateSessions.apiName
+        ]
+            ? undefined
+            : CREATE_SESSIONS_WARNING_LABEL;
     }
 
     setDataTableColumns() {
@@ -182,6 +211,7 @@ export default class ReviewSessions extends LightningElement {
         })
             .then(result => {
                 this._serviceSessions = [...this._serviceSessions, result];
+                this.setEmptyMessage();
                 inputFields.forEach(field => field.reset());
 
                 if (isSaveAndNew) {
@@ -225,5 +255,7 @@ export default class ReviewSessions extends LightningElement {
 
     handleDelete(event) {
         this._serviceSessions.splice(event.detail.row.index, 1);
+
+        this.setEmptyMessage();
     }
 }

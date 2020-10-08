@@ -1,0 +1,38 @@
+<template>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+            {labels.header}
+        </h2>
+    </header>
+    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+        <lightning-input
+            type="date"
+            value={startDate}
+            onchange={handleStartDateChange}
+            label={labels.message}
+        ></lightning-input>
+        <template if:true={errorMessage}>
+            <c-scoped-notification
+                theme="error"
+                title={errorMessage}
+                class="slds-var-p-around_small"
+            ></c-scoped-notification
+        ></template>
+    </div>
+    <footer class="slds-modal__footer">
+        <lightning-button
+            onclick={handleCancel}
+            label={labels.cancel}
+            title={labels.cancel}
+        ></lightning-button>
+        <lightning-button
+            label={labels.delete}
+            title={labels.delete}
+            variant="brand"
+            onclick={handleDelete}
+            class="slds-m-left_x-small"
+            disabled={isDisabled}
+        >
+        </lightning-button>
+    </footer>
+</template>

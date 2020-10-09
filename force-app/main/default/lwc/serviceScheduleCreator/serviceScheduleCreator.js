@@ -164,7 +164,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             this.processSessions();
         } else if (this.isStep3) {
             this.isChildLoaded = false;
-            console.log("this.isChildLoaded", this.isChildLoaded);
             this.processServiceParticipants();
         } else if (this.isStep4) {
             this.save(true);

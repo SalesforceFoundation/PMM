@@ -21,13 +21,22 @@ describe("c-service-schedule-creator", () => {
         });
     });
 
-    it("modal is not displayed and element is accessible", () => {
+    it("modal is displayed and element is accessible", () => {
+        const HEADER_STRING = "New Service Schedule";
         document.body.appendChild(element);
 
         return global.flushPromises().then(async () => {
             const modal = element.shadowRoot.querySelector("c-modal");
-            // Modal will only display after data is loaded
-            expect(modal).toBe(null);
+
+            const h2Container = modal.shadowRoot.querySelector("h2");
+            let slot = document.createElement("span");
+            slot.textContent = HEADER_STRING;
+
+            h2Container.attachShadow({ mode: "open" }).appendChild(slot.cloneNode(true));
+
+            // Modal will only display with a spinner loaded
+            expect(modal).not.toBeNull();
+            expect(slot.textContent).toBe(HEADER_STRING);
 
             await expect(element).toBeAccessible();
         });

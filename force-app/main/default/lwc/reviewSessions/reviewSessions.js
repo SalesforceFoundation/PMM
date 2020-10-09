@@ -56,7 +56,13 @@ export default class ReviewSessions extends LightningElement {
             this.getSessions();
         } else {
             // This is fired when the back button is clicked
-            this.handleDispatchLoadedEvent();
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(
+                function() {
+                    this.handleDispatchLoadedEvent();
+                }.bind(this),
+                2000
+            );
         }
     }
 

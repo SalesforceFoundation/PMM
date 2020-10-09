@@ -23,6 +23,7 @@ import MAX_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Creating_Service_Ses
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
+    @track isLoaded = false;
     @track columns = [];
     @track objectName;
     _serviceScheduleModel;
@@ -42,6 +43,7 @@ export default class ReviewSessions extends LightningElement {
 
         return this._serviceScheduleModel;
     }
+
     set serviceScheduleModel(value) {
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
         this.setEmptyMessage();
@@ -52,6 +54,9 @@ export default class ReviewSessions extends LightningElement {
 
         if (!this._serviceSessions.length) {
             this.getSessions();
+        } else {
+            // This is fired when the back button is clicked
+            this.handleDispatchLoadedEvent();
         }
     }
 
@@ -92,10 +97,12 @@ export default class ReviewSessions extends LightningElement {
             .then(result => {
                 this._serviceScheduleModel.serviceSchedule = result.serviceSchedule;
                 this._serviceSessions = [...result.serviceSessions];
+                this.handleDispatchLoadedEvent();
             })
             .catch(error => {
                 // TODO: throw error
                 console.log(JSON.stringify(error));
+                this.handleDispatchLoadedEvent();
             });
     }
 
@@ -266,5 +273,10 @@ export default class ReviewSessions extends LightningElement {
         this._serviceSessions.splice(event.detail.row.index, 1);
 
         this.setEmptyMessage();
+    }
+
+    handleDispatchLoadedEvent() {
+        this.isLoaded = true;
+        this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
     }
 }

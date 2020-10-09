@@ -18,6 +18,7 @@
 
     <aura:html tag="style">
         lightning-timepicker, lightning-datepicker { width: 100% }
+        .slds-accordion__list-item { border-top: none }
     </aura:html>
     <c:serviceScheduleCreator serviceId="{!v.serviceId}" />
 </aura:component>

@@ -32,6 +32,7 @@ export default class ParticipantSelector extends LightningElement {
     fields;
     objectLabels;
     isLoaded = false;
+    rendered = false;
 
     get labels() {
         return this.serviceScheduleModel.labels.serviceParticipant
@@ -96,11 +97,13 @@ export default class ParticipantSelector extends LightningElement {
             this.setDataTableColumns();
             this.setSelectedColumns();
             this.isLoaded = true;
+            this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
         } else if (error) {
             console.log(error);
             this.engagements = undefined;
             this.cohorts = undefined;
             this.isLoaded = true;
+            this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
         }
     }
 

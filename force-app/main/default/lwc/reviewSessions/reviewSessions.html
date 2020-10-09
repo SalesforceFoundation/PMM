@@ -8,11 +8,12 @@
   -->
 
 <template>
-    <c-section title={labels.reviewSessions}></c-section>
+    <c-section title={labels.reviewSessions} if:true={isLoaded}></c-section>
     <lightning-layout
         multiple-rows="true"
         horizontal-align="center"
         pull-to-boundary="medium"
+        if:true={isLoaded}
     >
         <lightning-layout-item
             size="10"

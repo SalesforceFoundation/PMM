@@ -110,6 +110,13 @@
         </quickActionListItems>
     </quickActionList>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <fields>NAME</fields>
+        <fields>ParticipantCapacity__c</fields>
+        <fields>PrimaryServiceProvider__c</fields>
+        <relatedList>ServiceSchedule__c.Service__c</relatedList>
+    </relatedLists>
+    <relatedLists>
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>DeliveryDate__c</fields>
@@ -118,13 +125,7 @@
         <fields>HouseholdBenefit__c</fields>
         <relatedList>ServiceDelivery__c.Service__c</relatedList>
     </relatedLists>
-    <relatedLists>
-        <excludeButtons>MassChangeOwner</excludeButtons>
-        <fields>NAME</fields>
-        <fields>ParticipantCapacity__c</fields>
-        <fields>PrimaryServiceProvider__c</fields>
-        <relatedList>ServiceSchedule__c.Service__c</relatedList>
-    </relatedLists>
+    
     <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>

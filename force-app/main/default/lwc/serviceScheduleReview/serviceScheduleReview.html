@@ -14,8 +14,9 @@
         multiple-rows="true"
         class="slds-var-p-around_small"
         if:true={isLoaded}
+        horizontal-align="center"
     >
-        <lightning-layout-item size="6">
+        <lightning-layout-item size="5">
             <!-- Column 1 -->
             <c-output-field
                 label={serviceScheduleModel.scheduleRequiredFields.name.label}
@@ -73,7 +74,7 @@
         </lightning-layout-item>
 
         <!-- Column 2 -->
-        <lightning-layout-item size="6" if:true={isLoaded}>
+        <lightning-layout-item size="5" if:true={isLoaded}>
             <template
                 for:each={serviceScheduleModel.scheduleInformationFields}
                 for:item="field"
@@ -91,42 +92,55 @@
                 </c-output-field>
             </template>
         </lightning-layout-item>
-    </lightning-layout>
 
-    <lightning-accordion
-        active-section-name={activeSections}
-        allow-multiple-sections-open
-        if:true={isLoaded}
-    >
-        <!--{labels.participants}-->
-        <lightning-accordion-section name="participants" label={serviceParticipantsLabel}>
-            <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
-                <lightning-datatable
-                    key-field="Id"
-                    columns={participantDataTableColumns}
-                    data={serviceScheduleModel.selectedParticipants}
-                    hide-checkbox-column
-                    show-row-number-column
-                >
-                </lightning-datatable>
-            </div>
-        </lightning-accordion-section>
-        <!--{labels.sessions}-->
-        <lightning-accordion-section
-            name="sessions"
-            label={serviceSessionsLabel}
-            if:true={isLoaded}
-        >
-            <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
-                <lightning-datatable
-                    key-field="Id"
-                    columns={sessionDataTableColumns}
-                    data={serviceScheduleModel.serviceSessions}
-                    hide-checkbox-column
-                    show-row-number-column
-                >
-                </lightning-datatable>
-            </div>
-        </lightning-accordion-section>
-    </lightning-accordion>
+        <lightning-layout-item size="10">
+            <lightning-accordion
+                active-section-name={activeSections}
+                allow-multiple-sections-open
+                if:true={isLoaded}
+            >
+                <!--{labels.participants}-->
+                <div class="slds-box slds-var-m-around_small">
+                    <lightning-accordion-section
+                        name="participants"
+                        label={serviceParticipantsLabel}
+                    >
+                        <div class="slds-box slds-p-around_none">
+                            <lightning-datatable
+                                key-field="Id"
+                                columns={participantDataTableColumns}
+                                data={serviceScheduleModel.selectedParticipants}
+                                column-widths-mode="auto"
+                                resize-column-disabled
+                                hide-checkbox-column
+                                show-row-number-column
+                            >
+                            </lightning-datatable>
+                        </div>
+                    </lightning-accordion-section>
+                </div>
+                <div class="slds-box slds-var-m-left_small slds-var-m-right_small">
+                    <!--{labels.sessions}-->
+                    <lightning-accordion-section
+                        name="sessions"
+                        label={serviceSessionsLabel}
+                        if:true={isLoaded}
+                    >
+                        <div class="slds-box slds-p-around_none">
+                            <lightning-datatable
+                                key-field="Id"
+                                columns={sessionDataTableColumns}
+                                data={serviceScheduleModel.serviceSessions}
+                                column-widths-mode="auto"
+                                resize-column-disabled
+                                hide-checkbox-column
+                                show-row-number-column
+                            >
+                            </lightning-datatable>
+                        </div>
+                    </lightning-accordion-section>
+                </div>
+            </lightning-accordion>
+        </lightning-layout-item>
+    </lightning-layout>
 </template>

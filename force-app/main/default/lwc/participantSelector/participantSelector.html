@@ -75,13 +75,14 @@
                                         if:false={noRecordsFound}
                                     >
                                         <div
-                                            style="height:270px"
+                                            style="height: 266px"
                                             class="slds-border_top slds-var-m-top_xx-small"
                                         >
                                             <lightning-datatable
                                                 data={filteredEngagements}
                                                 key-field="Id"
                                                 columns={columns}
+                                                column-widths-mode="auto"
                                                 show-row-number-column
                                                 resize-column-disabled
                                                 onrowselection={handleRowSelected}
@@ -122,7 +123,7 @@
                         </div>
                         <div
                             if:false={noRecordsSelected}
-                            style="height:425px"
+                            style="height: 425px"
                             class="slds-border_top"
                         >
                             <lightning-datatable
@@ -131,6 +132,7 @@
                                 hide-checkbox-column
                                 onrowaction={handleDeselectParticipant}
                                 data={selectedParticipants}
+                                column-widths-mode="auto"
                                 resize-column-disabled
                             ></lightning-datatable>
                         </div>

@@ -55,14 +55,7 @@ export default class ReviewSessions extends LightningElement {
         if (!this._serviceSessions.length) {
             this.getSessions();
         } else {
-            // This is fired when the back button is clicked
-            // eslint-disable-next-line @lwc/lwc/no-async-operation
-            setTimeout(
-                function() {
-                    this.handleDispatchLoadedEvent();
-                }.bind(this),
-                2000
-            );
+            this.handleDispatchLoadedEvent();
         }
     }
 
@@ -103,11 +96,12 @@ export default class ReviewSessions extends LightningElement {
             .then(result => {
                 this._serviceScheduleModel.serviceSchedule = result.serviceSchedule;
                 this._serviceSessions = [...result.serviceSessions];
-                this.handleDispatchLoadedEvent();
             })
             .catch(error => {
                 // TODO: throw error
                 console.log(JSON.stringify(error));
+            })
+            .finally(() => {
                 this.handleDispatchLoadedEvent();
             });
     }

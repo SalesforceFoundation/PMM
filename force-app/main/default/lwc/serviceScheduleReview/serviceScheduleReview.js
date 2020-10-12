@@ -27,18 +27,12 @@ export default class ServiceScheduleReview extends LightningElement {
     }
 
     set serviceScheduleModel(value) {
-        // eslint-disable-next-line @lwc/lwc/no-async-operation
-        setTimeout(
-            function() {
-                this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
-                this.sessionFields = this._serviceScheduleModel.sessionFields;
-                this.setLabels();
-                this.processScheduleInfoFieldSet();
-                this.isLoaded = true;
-                this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
-            }.bind(this),
-            2000
-        );
+        this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
+        this.sessionFields = this._serviceScheduleModel.sessionFields;
+        this.setLabels();
+        this.processScheduleInfoFieldSet();
+        this.isLoaded = true;
+        this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
     }
 
     labels = {

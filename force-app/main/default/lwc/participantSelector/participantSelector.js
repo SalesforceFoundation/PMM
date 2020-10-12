@@ -79,8 +79,8 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
-    dataSetup(result, error) {
-        if (!result) {
+    dataSetup(result) {
+        if (!(result.data || result.error)) {
             return;
         }
 
@@ -96,15 +96,14 @@ export default class ParticipantSelector extends LightningElement {
             this.loadProgramCohorts(this.cohorts);
             this.setDataTableColumns();
             this.setSelectedColumns();
-            this.isLoaded = true;
-            this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
-        } else if (error) {
-            console.log(error);
+        } else if (result.error) {
+            console.log(result.error);
             this.engagements = undefined;
             this.cohorts = undefined;
-            this.isLoaded = true;
-            this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
         }
+
+        this.isLoaded = true;
+        this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
     }
 
     loadDataTable() {

@@ -106,6 +106,10 @@
                         label={serviceParticipantsLabel}
                     >
                         <div class="slds-box slds-p-around_none">
+                            <c-scoped-notification
+                                if:false={hasServiceParticipants}
+                                title={serviceScheduleModel.labels.serviceParticipant.noContactsSelected}
+                            ></c-scoped-notification>
                             <lightning-datatable
                                 key-field="Id"
                                 columns={participantDataTableColumns}
@@ -114,6 +118,7 @@
                                 resize-column-disabled
                                 hide-checkbox-column
                                 show-row-number-column
+                                if:true={hasServiceParticipants}
                             >
                             </lightning-datatable>
                         </div>
@@ -124,9 +129,12 @@
                     <lightning-accordion-section
                         name="sessions"
                         label={serviceSessionsLabel}
-                        if:true={isLoaded}
                     >
                         <div class="slds-box slds-p-around_none">
+                            <c-scoped-notification
+                                if:false={hasServiceSessions}
+                                title={serviceScheduleModel.labels.serviceSession.noSessionsAdded}
+                            ></c-scoped-notification>
                             <lightning-datatable
                                 key-field="Id"
                                 columns={sessionDataTableColumns}
@@ -135,6 +143,7 @@
                                 resize-column-disabled
                                 hide-checkbox-column
                                 show-row-number-column
+                                if:true={hasServiceSessions}
                             >
                             </lightning-datatable>
                         </div>

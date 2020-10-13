@@ -214,6 +214,14 @@
         <value>You can't delete this record. Ask your admin for help.</value>
     </labels>
     <labels>
+        <fullName>Loading</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Loading</shortDescription>
+        <value>Loading</value>
+    </labels>
+    <labels>
         <fullName>MissingSObjectType</fullName>
         <categories>Exception</categories>
         <language>en_US</language>

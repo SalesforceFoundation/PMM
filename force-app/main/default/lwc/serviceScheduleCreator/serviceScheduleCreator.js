@@ -7,7 +7,7 @@
  *
  */
 
-import { LightningElement, wire, api } from "lwc";
+import { LightningElement, wire, api, track } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { handleError } from "c/util";
@@ -23,9 +23,11 @@ import BACK_WARNING_LABEL from "@salesforce/label/c.Clicking_Back_Button_In_Moda
 import GO_BACK_LABEL from "@salesforce/label/c.Go_Back";
 import BACK_LABEL from "@salesforce/label/c.Back";
 import CANCEL_LABEL from "@salesforce/label/c.Cancel";
+import LOADING_LABEL from "@salesforce/label/c.Loading";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
+    @track isChildLoaded = false;
     isLoaded = false;
     serviceScheduleModel;
     originalModel;
@@ -37,6 +39,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         goBack: GO_BACK_LABEL,
         back: BACK_LABEL,
         cancel: CANCEL_LABEL,
+        loading: LOADING_LABEL,
     };
 
     _serviceId;
@@ -55,6 +58,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             this.extractLabels(this.serviceScheduleModel.labels.serviceSchedule);
             this.addSteps();
             this.isLoaded = true;
+            this.isChildLoaded = true;
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
@@ -153,13 +157,17 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     handleNext() {
         if (this.isStep1) {
+            this.isChildLoaded = false;
             this.processNewServiceSchedule();
         } else if (this.isStep2) {
+            this.isChildLoaded = false;
             this.processSessions();
         } else if (this.isStep3) {
+            this.isChildLoaded = false;
             this.processServiceParticipants();
         } else if (this.isStep4) {
             this.save(true);
+            this.isChildLoaded = false;
         }
     }
 
@@ -171,6 +179,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 if (isSaveAndNew) {
                     this.init();
                     this.isLoaded = true;
+                    this.isChildLoaded = true;
                 } else {
                     this.handleClose();
                 }
@@ -248,6 +257,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         if (this.isStep2) {
             this.serviceScheduleModel.serviceSessions = this.originalModel.serviceSessions;
         } else if (this.isStep3) {
+            this.isChildLoaded = false;
             this.serviceScheduleModel.selectedParticipants = this.originalModel.selectedParticipants;
         }
 
@@ -271,6 +281,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     handleFinish() {
         this.save(false);
+        this.isChildLoaded = false;
     }
 
     handleClose() {
@@ -280,6 +291,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     init() {
         this.isLoaded = false;
+        this.isChildLoaded = false;
         this._steps.restart();
         this._currentStep = undefined;
         this.serviceScheduleModel = JSON.parse(JSON.stringify(this.originalModel));
@@ -309,5 +321,9 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 filterName: "Recent",
             },
         });
+    }
+
+    handleLoaded(event) {
+        this.isChildLoaded = event.detail;
     }
 }

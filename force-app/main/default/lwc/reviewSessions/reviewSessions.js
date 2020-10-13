@@ -23,7 +23,7 @@ import MAX_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Creating_Service_Ses
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
-    @track isLoaded = false;
+    isLoaded = false;
     @track columns = [];
     @track objectName;
     _serviceScheduleModel;
@@ -45,6 +45,18 @@ export default class ReviewSessions extends LightningElement {
     }
 
     set serviceScheduleModel(value) {
+        // Adding a brief timeout to allow the screen to render with spinner
+        // before attempting to load the data
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(
+            function() {
+                this.processModel(value);
+            }.bind(this),
+            0
+        );
+    }
+
+    processModel(value) {
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
         this.setEmptyMessage();
         this.setLabels();

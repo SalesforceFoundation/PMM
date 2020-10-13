@@ -14,8 +14,10 @@
         default-visible="true"
         size="large"
     >
-        <template if:false={isChildLoaded}>
-            <div class="slds-p-around_medium slds-align_absolute-center slds-is-relative">
+        <template if:false={hideSpinner}>
+            <div
+                class="slds-var-p-around_medium slds-align_absolute-center slds-is-relative"
+            >
                 <lightning-spinner
                     alternative-text={labels.loading}
                     size="medium"

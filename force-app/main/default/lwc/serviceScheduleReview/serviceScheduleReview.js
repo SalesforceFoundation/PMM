@@ -18,8 +18,8 @@ import CONTACT_OBJECT from "@salesforce/schema/Contact";
 export default class ServiceScheduleReview extends LightningElement {
     _serviceScheduleModel;
     timeZone = TIME_ZONE;
+    isLoaded = false;
     @track sessionFields;
-    @track isLoaded = false;
 
     @api
     get serviceScheduleModel() {
@@ -27,6 +27,18 @@ export default class ServiceScheduleReview extends LightningElement {
     }
 
     set serviceScheduleModel(value) {
+        // Adding a brief timeout to allow the screen to render with spinner
+        // before attempting to load the data
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(
+            function() {
+                this.processModel(value);
+            }.bind(this),
+            0
+        );
+    }
+
+    processModel(value) {
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
         this.sessionFields = this._serviceScheduleModel.sessionFields;
         this.setLabels();

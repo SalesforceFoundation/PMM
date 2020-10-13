@@ -128,6 +128,7 @@ public with sharing class ServiceScheduleModel {
         'newServiceSchedule' => System.Label.New_Service_Schedule,
         'scheduleInformation' => System.Label.Service_Schedule_Information,
         'dateTime' => System.Label.Service_Schedule_Date_Time,
+        'loading' => System.Label.Loading,
         'addToServiceSchedule' => String.format(
             System.Label.Add_To_Record,
             new List<String>{ ServiceSchedule__c.SObjectType.getDescribe().getLabel() }
@@ -152,6 +153,7 @@ public with sharing class ServiceScheduleModel {
     };
 
     private static Map<String, String> serviceParticipantLabels = new Map<String, String>{
+        'loading' => System.Label.Loading,
         'addServiceParticipants' => String.format(
             System.Label.Add_Record,
             new List<String>{

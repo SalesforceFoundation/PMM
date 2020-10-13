@@ -16,12 +16,16 @@
         onload={handleLoad}
     >
         <lightning-layout horizontal-align="center" multiple-rows="true">
-            <template if:true={errorMessage} class="slds-var-p-around_small">
+            <lightning-layout-item
+                size={sizes.small}
+                class="slds-var-p-bottom_small"
+                if:true={errorMessage}
+            >
                 <c-scoped-notification
                     theme="error"
                     title={errorMessage}
                 ></c-scoped-notification>
-            </template>
+            </lightning-layout-item>
             <lightning-layout-item size={sizes.large} class="slds-var-p-bottom_small">
                 <c-section title={labels.scheduleInformation}></c-section>
             </lightning-layout-item>

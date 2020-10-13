@@ -8,9 +8,13 @@
   -->
 
 <template>
-    <c-section title={reviewLabel}></c-section>
+    <c-section title={reviewLabel} if:true={isLoaded}></c-section>
 
-    <lightning-layout multiple-rows="true" class="slds-var-p-around_small">
+    <lightning-layout
+        multiple-rows="true"
+        class="slds-var-p-around_small"
+        if:true={isLoaded}
+    >
         <lightning-layout-item size="6">
             <!-- Column 1 -->
             <c-output-field
@@ -69,7 +73,7 @@
         </lightning-layout-item>
 
         <!-- Column 2 -->
-        <lightning-layout-item size="6">
+        <lightning-layout-item size="6" if:true={isLoaded}>
             <template
                 for:each={serviceScheduleModel.scheduleInformationFields}
                 for:item="field"
@@ -92,9 +96,10 @@
     <lightning-accordion
         active-section-name={activeSections}
         allow-multiple-sections-open
+        if:true={isLoaded}
     >
         <!--{labels.participants}-->
-        <lightning-accordion-section name="participants" label={servicePartcipantsLabel}>
+        <lightning-accordion-section name="participants" label={serviceParticipantsLabel}>
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"
@@ -107,7 +112,11 @@
             </div>
         </lightning-accordion-section>
         <!--{labels.sessions}-->
-        <lightning-accordion-section name="sessions" label={serviceSessionsLabel}>
+        <lightning-accordion-section
+            name="sessions"
+            label={serviceSessionsLabel}
+            if:true={isLoaded}
+        >
             <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
                 <lightning-datatable
                     key-field="Id"

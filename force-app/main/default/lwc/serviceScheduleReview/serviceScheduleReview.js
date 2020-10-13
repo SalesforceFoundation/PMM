@@ -19,17 +19,20 @@ export default class ServiceScheduleReview extends LightningElement {
     _serviceScheduleModel;
     timeZone = TIME_ZONE;
     @track sessionFields;
+    @track isLoaded = false;
 
     @api
     get serviceScheduleModel() {
         return this._serviceScheduleModel;
     }
+
     set serviceScheduleModel(value) {
-        // This is a nested object so the inner objects are still read only when using spread alone
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
         this.sessionFields = this._serviceScheduleModel.sessionFields;
         this.setLabels();
         this.processScheduleInfoFieldSet();
+        this.isLoaded = true;
+        this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
     }
 
     labels = {
@@ -127,7 +130,7 @@ export default class ServiceScheduleReview extends LightningElement {
         return columns;
     }
 
-    get servicePartcipantsLabel() {
+    get serviceParticipantsLabel() {
         return `${
             this.serviceScheduleModel.labels.serviceParticipant.objectPluralLabel
         } (${

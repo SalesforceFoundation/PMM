@@ -49,7 +49,6 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     set serviceScheduleModel(value) {
-        this.isLoaded = false;
         // This is a nested object so the inner objects are still read only when using spread alone
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
 
@@ -61,6 +60,7 @@ export default class NewServiceSchedule extends LightningElement {
         this.fieldSet = this._serviceScheduleModel.scheduleInformationFields;
 
         this.processFields();
+
         this.isLoaded = true;
     }
 
@@ -199,6 +199,9 @@ export default class NewServiceSchedule extends LightningElement {
         this.picklistFields.seriesEnds.value = event.detail.length
             ? event.detail[0].value
             : undefined;
+        this.handleSeriesEndsOnNumberOfSessionsChange(
+            this.picklistFields.seriesEnds.value
+        );
     }
 
     handleStartChange(event) {
@@ -260,5 +263,25 @@ export default class NewServiceSchedule extends LightningElement {
                 : true;
 
         return noError;
+    }
+
+    handleSeriesEndsOnNumberOfSessionsChange(seriesEndsOn) {
+        if (
+            !this._serviceScheduleModel.scheduleRecurrenceDateFields.numberOfSessions
+                .value &&
+            !this._serviceScheduleModel.scheduleRecurrenceDateFields.seriesEndsOn.value
+        ) {
+            return;
+        }
+
+        if (seriesEndsOn === ON) {
+            this._serviceScheduleModel.scheduleRecurrenceDateFields.numberOfSessions.value =
+                "";
+        }
+
+        if (seriesEndsOn === AFTER) {
+            this._serviceScheduleModel.scheduleRecurrenceDateFields.seriesEndsOn.value =
+                "";
+        }
     }
 }

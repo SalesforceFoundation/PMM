@@ -45,6 +45,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     _serviceId;
     _currentStep;
     _steps = new ProgressSteps();
+    _serviceSchedules = [];
 
     @wire(getServiceScheduleModel)
     wireServiceScheduleModel(result) {
@@ -173,7 +174,8 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     save(isSaveAndNew) {
         persist({ model: this.serviceScheduleModel })
-            .then(() => {
+            .then(result => {
+                this._serviceSchedules.push(result.serviceSchedule);
                 this.showSuccessToast();
 
                 if (isSaveAndNew) {
@@ -286,7 +288,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     handleClose() {
         this.hideModal();
-        this.navigateToList();
+        this.navigate();
     }
 
     init() {
@@ -308,6 +310,30 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     hideModal() {
         const modal = this.template.querySelector("c-modal");
         modal.hide();
+    }
+
+    navigate() {
+        if (this._serviceSchedules.length) {
+            this.navigateToRecord(
+                this._serviceSchedules[this._serviceSchedules.length - 1].Id,
+                this.labels.objectApiName
+            );
+        } else if (this._serviceId) {
+            this.navigateToRecord(this._serviceId, this.labels.serviceObjectApiName);
+        } else {
+            this.navigateToList();
+        }
+    }
+
+    navigateToRecord(recordId, objectApiName) {
+        this[NavigationMixin.Navigate]({
+            type: "standard__recordPage",
+            attributes: {
+                recordId: recordId,
+                objectApiName: objectApiName,
+                actionName: "view",
+            },
+        });
     }
 
     navigateToList() {

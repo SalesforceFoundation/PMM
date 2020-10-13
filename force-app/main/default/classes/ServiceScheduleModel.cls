@@ -136,7 +136,8 @@ public with sharing class ServiceScheduleModel {
         'reviewSchedule' => String.format(
             System.Label.Review_Records,
             new List<String>{ ServiceSession__c.SObjectType.getDescribe().getLabel() }
-        )
+        ),
+        'serviceObjectApiName' => Service__c.SObjectType.getDescribe().getName()
     };
 
     private static Map<String, String> serviceSessionLabels = new Map<String, String>{

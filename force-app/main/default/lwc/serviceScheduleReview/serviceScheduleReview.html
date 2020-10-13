@@ -16,8 +16,13 @@
         if:true={isLoaded}
         horizontal-align="center"
     >
-        <lightning-layout-item size="5">
-            <!-- Column 1 -->
+        <!-- Column 1 -->
+        <lightning-layout-item
+            size="5"
+            small-device-size="12"
+            medium-device-size="5"
+            large-device-size="5"
+        >
             <c-output-field
                 label={serviceScheduleModel.scheduleRequiredFields.name.label}
             >
@@ -74,7 +79,13 @@
         </lightning-layout-item>
 
         <!-- Column 2 -->
-        <lightning-layout-item size="5" if:true={isLoaded}>
+        <lightning-layout-item
+            size="5"
+            small-device-size="12"
+            medium-device-size="5"
+            large-device-size="5"
+            if:true={isLoaded}
+        >
             <template
                 for:each={serviceScheduleModel.scheduleInformationFields}
                 for:item="field"

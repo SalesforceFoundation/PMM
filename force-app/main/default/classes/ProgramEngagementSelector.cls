@@ -59,7 +59,7 @@ public with sharing class ProgramEngagementSelector {
                 Contact__c,
                 Contact__r.Name,
                 Contact__r.Email,
-                Stage__c,
+                toLabel(Stage__c),
                 Program__r.Name,
                 ProgramCohort__c
             FROM ProgramEngagement__c

@@ -97,18 +97,23 @@
             <lightning-layout-item if:true={emptyMessage}>
                 <c-scoped-notification title={emptyMessage}></c-scoped-notification>
             </lightning-layout-item>
-            <div class="slds-box slds-p-around_none slds-var-m-top_x-small">
-                <lightning-datatable
-                    key-field="Id"
-                    columns={columns}
-                    data={serviceSessions}
-                    hide-checkbox-column
-                    show-row-number-column
-                    onrowaction={handleDelete}
-                    if:false={emptyMessage}
-                >
-                </lightning-datatable>
-            </div>
+        </lightning-layout-item>
+        <lightning-layout-item
+            size="10"
+            class="slds-box slds-p-around_none slds-var-m-top_x-small"
+            if:false={emptyMessage}
+        >
+            <lightning-datatable
+                key-field="Id"
+                columns={columns}
+                data={serviceSessions}
+                column-widths-mode="auto"
+                resize-column-disabled
+                hide-checkbox-column
+                show-row-number-column
+                onrowaction={handleDelete}
+            >
+            </lightning-datatable>
         </lightning-layout-item>
     </lightning-layout>
 </template>

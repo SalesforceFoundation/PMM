@@ -21,9 +21,9 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled
-    public static void persist(ServiceScheduleModel model) {
+    public static ServiceScheduleModel persist(ServiceScheduleModel model) {
         try {
-            service.persist(model);
+            return service.persist(model);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

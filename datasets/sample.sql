@@ -739,7 +739,7 @@ CREATE TABLE "ServiceDelivery__c" (
 	"Account__c" VARCHAR(255), 
 	"Contact__c" VARCHAR(255), 
 	"ProgramEngagement__c" VARCHAR(255), 
-	"Service_Provider__c" VARCHAR(255), 
+	"ServiceProvider__c" VARCHAR(255), 
 	"ServiceSession__c" VARCHAR(255), 
 	PRIMARY KEY (id)
 );

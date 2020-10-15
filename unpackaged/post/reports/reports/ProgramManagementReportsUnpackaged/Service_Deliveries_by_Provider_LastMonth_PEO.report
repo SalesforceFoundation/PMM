@@ -12,7 +12,7 @@
         <chartType>HorizontalBarStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service_Provider__c</groupingColumn>
+        <groupingColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%ServiceProvider__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
         <secondaryGroupingColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service__c</secondaryGroupingColumn>
@@ -44,7 +44,7 @@
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service_Provider__c</field>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%ServiceProvider__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <groupingsDown>

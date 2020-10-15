@@ -24,7 +24,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Service_Provider__c</field>
+                <field>ServiceProvider__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

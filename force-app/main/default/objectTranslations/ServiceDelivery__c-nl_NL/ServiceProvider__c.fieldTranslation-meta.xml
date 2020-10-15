@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <name>Service_Provider__c</name>
+    <name>ServiceProvider__c</name>
     <help>Een interne serviceaanbieder of de serviceaanbieder van een partnerorganisatie die is toegevoegd als contact in uw database.</help>
     <relationshipLabel>Serviceleveringen (serviceaanbieder)</relationshipLabel>
     <label>Serviceaanbieder</label>

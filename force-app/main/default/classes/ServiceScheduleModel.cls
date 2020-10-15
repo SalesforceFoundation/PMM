@@ -136,7 +136,8 @@ public with sharing class ServiceScheduleModel {
         'reviewSchedule' => String.format(
             System.Label.Review_Records,
             new List<String>{ ServiceSession__c.SObjectType.getDescribe().getLabel() }
-        )
+        ),
+        'serviceObjectApiName' => Service__c.SObjectType.getDescribe().getName()
     };
 
     private static Map<String, String> serviceSessionLabels = new Map<String, String>{
@@ -149,7 +150,8 @@ public with sharing class ServiceScheduleModel {
             new List<String>{
                 ServiceSession__c.SObjectType.getDescribe().getLabelPlural()
             }
-        )
+        ),
+        'noSessionsAdded' => System.Label.No_Service_Sessions_Created_Warning
     };
 
     private static Map<String, String> serviceParticipantLabels = new Map<String, String>{
@@ -169,7 +171,8 @@ public with sharing class ServiceScheduleModel {
         'filterByCohort' => String.format(
             System.Label.Filter_By_Record,
             new List<String>{ ProgramCohort__c.SObjectType.getDescribe().getLabel() }
-        )
+        ),
+        'noContactsSelected' => System.Label.No_Service_Participants_Created_Warning
     };
 
     private static Map<String, String> getServiceScheduleLabels() {

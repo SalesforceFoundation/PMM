@@ -22,11 +22,12 @@ public with sharing class ServiceScheduleService {
         return new ServiceScheduleModel();
     }
 
-    public void persist(ServiceScheduleModel model) {
+    public ServiceScheduleModel persist(ServiceScheduleModel model) {
         Savepoint savepoint = Database.setSavepoint();
 
         try {
             domain.insertModel(model);
+            return model;
         } catch (Exception ex) {
             Database.rollback(savepoint);
             throw new ServiceScheduleServiceException(ex);

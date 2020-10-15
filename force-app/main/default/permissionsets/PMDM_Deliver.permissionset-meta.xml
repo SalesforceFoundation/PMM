@@ -146,7 +146,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>ServiceDelivery__c.ServiceProvider__c</field>
+        <field>ServiceDelivery__c.Service_Provider__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

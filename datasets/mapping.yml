@@ -416,7 +416,7 @@ ServiceDelivery__c:
             table: Contact
         ProgramEngagement__c:
             table: ProgramEngagement__c
-        ServiceProvider__c:
+        Service_Provider__c:
             table: Contact
         ServiceSession__c:
             table: ServiceSession__c

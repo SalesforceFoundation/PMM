@@ -265,6 +265,13 @@
         <value>No Contacts are selected, so no Service Participants will be created.</value>
     </labels>
     <labels>
+        <fullName>No_Service_Sessions_Created_Warning</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No Service Sessions Created Warning</shortDescription>
+        <value>No sessions were added, so no Service Sessions will be created.</value>
+    </labels>
+    <labels>
         <fullName>No_Services_For_Program_Engagement</fullName>
         <language>en_US</language>
         <protected>true</protected>

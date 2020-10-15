@@ -269,7 +269,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No Service Sessions Created Warning</shortDescription>
-        <value>No Sessions were added, so no Service Sessions will be created.</value>
+        <value>No sessions were added, so no Service Sessions will be created.</value>
     </labels>
     <labels>
         <fullName>No_Services_For_Program_Engagement</fullName>

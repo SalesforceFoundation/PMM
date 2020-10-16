@@ -199,7 +199,7 @@ export default class ServiceScheduleReview extends LightningElement {
         return !(
             startDate.getFullYear() === endDate.getFullYear() &&
             startDate.getMonth() === endDate.getMonth() &&
-            startDate.getDay() === endDate.getDay()
+            startDate.getDate() === endDate.getDate()
         );
     }
 

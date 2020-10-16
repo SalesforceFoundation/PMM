@@ -42,10 +42,12 @@
                         value={firstSessionStartDateTime}
                     ></lightning-formatted-date-time>
                     <!-- spacing and en-dash between dates -->
-                    &nbsp;&ndash;&nbsp;
-                    <lightning-formatted-date-time
-                        value={lastSessionEndDateTime}
-                    ></lightning-formatted-date-time>
+                    <template if:true={showEndDate}
+                        >&nbsp;&ndash;&nbsp;
+                        <lightning-formatted-date-time
+                            value={lastSessionEndDateTime}
+                        ></lightning-formatted-date-time>
+                    </template>
                 </div>
                 <!-- times -->
                 <div>

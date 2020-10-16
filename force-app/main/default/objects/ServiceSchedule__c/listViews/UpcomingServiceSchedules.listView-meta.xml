@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UpcomingServiceSchedules</fullName>
+    <columns>NAME</columns>
+    <columns>Service__c</columns>
+    <columns>FirstSessionStart__c</columns>
+    <columns>ParticipantCapacity__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>FirstSessionStart__c</field>
+        <operation>greaterOrEqual</operation>
+        <value>TODAY</value>
+    </filters>
+    <label>Upcoming Service Schedules</label>
+</ListView>

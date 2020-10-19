@@ -264,6 +264,8 @@ flows:
                     managed: True
             4:
                 task: deploy_customer_profiles
+                options:
+                    unmanaged: False
 
     install_regression:
         steps:

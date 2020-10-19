@@ -20,12 +20,10 @@
             class="slds-var-m-top_large"
             if:true={limitReached}
         >
-            <c-scoped-notification
-                title={limitMessage}
-                theme="warning"
-            ></c-scoped-notification>
+            <c-scoped-notification title={limitMessage} theme="warning">
+            </c-scoped-notification>
         </lightning-layout-item>
-        <lightning-layout-item size="10">
+        <lightning-layout-item size="10" class="slds-var-m-bottom_small">
             <lightning-layout horizontal-align="spread">
                 <lightning-layout-item>
                     <div
@@ -36,9 +34,7 @@
                     </div>
                 </lightning-layout-item>
                 <lightning-layout-item>
-                    <div
-                        class="slds-var-m-top_large slds-var-m-left_x-large slds-var-m-bottom_xx-small"
-                    >
+                    <div class="slds-var-m-top_medium slds-var-m-left_x-large">
                         <lightning-button
                             variant="neutral"
                             label={labels.addSession}
@@ -94,13 +90,13 @@
                     </c-modal>
                 </lightning-layout-item>
             </lightning-layout>
-            <lightning-layout-item if:true={emptyMessage}>
-                <c-scoped-notification title={emptyMessage}></c-scoped-notification>
-            </lightning-layout-item>
+        </lightning-layout-item>
+        <lightning-layout-item if:true={emptyMessage} size="10">
+            <c-scoped-notification title={emptyMessage}></c-scoped-notification>
         </lightning-layout-item>
         <lightning-layout-item
             size="10"
-            class="slds-box slds-p-around_none slds-var-m-top_x-small"
+            class="slds-box slds-p-around_none"
             if:false={emptyMessage}
         >
             <lightning-datatable

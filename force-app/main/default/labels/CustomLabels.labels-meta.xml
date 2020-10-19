@@ -62,7 +62,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Clicking Back Button In Modal Warning</shortDescription>
-        <value>Go back? Changes you made on this page won&apos;t be saved.</value>
+        <value>Changes you made on this page won&apos;t be saved.</value>
     </labels>
     <labels>
         <fullName>Clone_Service_Participant</fullName>
@@ -262,7 +262,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No Service Participants Created Warning</shortDescription>
-        <value>No Contacts are selected, so no Service Participants will be created.</value>
+        <value>No participants are selected, so no Service Participants will be created.</value>
     </labels>
     <labels>
         <fullName>No_Service_Sessions_Created_Warning</fullName>
@@ -416,7 +416,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Select Create Service Session Warning</shortDescription>
-        <value>Create Service Session records isn&apos;t selected, so no records will be created. Click Add Service Session to add Service Session records.</value>
+        <value>Create Service Sessions isn&apos;t selected, so no records will be automatically created. Click Add Service Session to manually add Service Session records.</value>
     </labels>
     <labels>
         <fullName>Select_Program_Engagement</fullName>

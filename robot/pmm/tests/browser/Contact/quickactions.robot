@@ -39,17 +39,16 @@ Add contact to program quick action
      [tags]                           W-037575  feature:Program Engagement
      Go To PMM App
      Go To Page                       Details                                 Contact              object_id=&{contact}[Id]
-     page should contain              &{contact}[Name]
-     click object button              Add Contact to Program
+     page should contain              ${contact}[Name]
+     Click Quick Action Button        Add Contact to Program
      verify current page title        Add Contact to Program
-     Populate Modal form              Program=&{program}[Name]
-     ...                              Role=Client
+     Populate Lookup Field            Program          &{program}[Name]    
+     Populate Modal form              Role=Client
      ...                              Stage=Active
      ...                              Program Cohort=&{program_cohort}[Name]
      ...                              Start Date=Today
      Click Modal button               Save
      Wait Until Modal Is Closed
-     verify page header               Contact
      Load Related List                Program Engagements
      click new related record link    &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
      verify details                   Program Engagement Name                 contains                &{contact}[FirstName] &{contact}[LastName] ${result_date}: &{program}[Name]
@@ -61,14 +60,13 @@ Add service delivery on a contact
      [tags]                           W-037575  feature:Service Delivery
      Go To Page                       Details                                 Contact                  object_id=&{contact}[Id]
      page should contain              &{contact}[Name]
-     click object button              Create New Service Delivery
+     Click Quick Action Button              Create New Service Delivery
      verify current page title        Create New Service Delivery
      populate modal form              Program Engagement=&{program_engagement}[Name]
      ...                              Service=&{service}[Name]
      ...                              Quantity=${quantity}
      Click Modal button               Save
      Wait Until Modal Is Closed
-     verify page header               Contact
      Load Related List                Service Deliveries
      click new related record link    &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]
      verify details                   Service Delivery Name                    contains                &{contact}[FirstName] &{contact}[LastName] ${today}: &{service}[Name]

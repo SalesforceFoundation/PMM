@@ -18,8 +18,8 @@ class ProgramListingPage(BasePMMPage, ListingPage):
 @pageobject("NewProgram", "Program__c")
 class NewProgramPage(BasePMMPage, BasePage):
     def _is_current_page(self):
-        """ Verify we are on the New Program modal page
-            by verifying that the section title is 'New Program'
+        """Verify we are on the New Program modal page
+        by verifying that the section title is 'New Program'
         """
         self.selenium.wait_until_location_contains(
             "/new", timeout=60, message="Record view did not open in 1 min"
@@ -33,8 +33,8 @@ class NewProgramPage(BasePMMPage, BasePage):
 @pageobject("Details", "Program__c")
 class ProgramDetailPage(BasePMMPage, DetailPage):
     def _is_current_page(self):
-        """ Verify we are on the Program detail page
-            by verifying that the url contains '/view'
+        """Verify we are on the Program detail page
+        by verifying that the url contains '/view'
         """
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"
@@ -43,3 +43,4 @@ class ProgramDetailPage(BasePMMPage, DetailPage):
             "/lightning/r/Program__c/",
             message="Current page is not a Program record detail view",
         )
+        self.selenium.wait_until_page_contains("Program Name")

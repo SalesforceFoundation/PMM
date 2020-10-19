@@ -35,12 +35,11 @@ Autopopulate fields when stage is set to Applied
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
-     ...                                     Stage=Applied
+     Populate Lightning fields               Stage=Applied
      ...                                     Program=&{program}[Name]
      ...                                     Role=Volunteer
-     Click Modal Button                      Save
+     Click Dialog Button                     Save
      Wait Until Modal Is Closed
-     Verify Page Header                      Program Engagement
      Verify Details                          Application Date                 contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
@@ -54,12 +53,11 @@ Autopopulate fields when stage is set to Completed
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
-     ...                                     Stage=Completed
+     Populate Lightning fields               Stage=Completed
      ...                                     Program=&{program}[Name]
-     ...                                     Role=Client
-     Click Modal Button                      Save
+     ...                                     Role=Volunteer
+     Click Dialog Button                     Save
      Wait Until Modal Is Closed
-     Verify Page Header                      Program Engagement
      Verify Details                          End Date                         contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
@@ -73,33 +71,11 @@ Autopopulate fields when stage is set to Withdrawn
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
-     ...                                     Stage=Withdrawn
+     Populate Lightning fields               Stage=Withdrawn
      ...                                     Program=&{program}[Name]
-     ...                                     Role=Client
-     Click Modal Button                      Save
+     ...                                     Role=Service Provider
+     Click Dialog Button                     Save
      Wait Until Modal Is Closed
-     Verify Page Header                      Program Engagement
      Verify Details                          End Date                         contains               ${today}
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
-     Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
-
-Autopopulate fields when stage is set to Applied and Start Date is today
-     [Documentation]                         Autopopulates PE name with anonymous and verifies that application date is not set to today when  
-     ...                                     the stage is set as applied and start date is set to today on new program engagment dialog
-     [tags]                                  W-037569   feature:Program Engagement
-     Go To PMM App
-     Go To Page                              Listing                         ${ns}ProgramEngagement__c
-     Click Object Button                     New
-     Wait For Modal                          New                             Program Engagement
-     Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
-     ...                                     Stage=Applied
-     ...                                     Program=&{program}[Name]
-     ...                                     Start Date=Today
-     ...                                     Role=Client
-     Click Modal Button                      Save
-     Wait Until Modal Is Closed
-     Verify Page Header                      Program Engagement
-     Verify Details                          Start Date                        contains               ${today}
-     Verify Details                          Application Date                  does not contain       ${today}  
-     Verify Details                          Program Engagement Name           contains               Anonymous ${created_date}: ${program}[Name]     
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c

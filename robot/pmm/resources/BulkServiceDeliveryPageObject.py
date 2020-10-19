@@ -7,7 +7,7 @@ import time
 
 from cumulusci.robotframework.pageobjects import BasePage
 from cumulusci.robotframework.pageobjects import pageobject
-from pmm_locators import pmm_lex_locators
+from pmm import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
@@ -68,7 +68,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
             "new_prog_engagement"
         ]["title"].format(label)
         self.selenium.wait_until_page_contains_element(
-            locator, error="The header for this page is not  as expected",
+            locator, error="The header for this page is not as expected",
         )
 
     def click_dialog_button(self, title):

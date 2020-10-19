@@ -28,16 +28,16 @@ Setup Test Data
 
 Create Service from Program Object
      Go To PMM App
-     Go To Page                             Details              Program__c            object_id=&{program}[Id]
-     page should contain                    &{program}[Name]
-     Click Wrapper Related List Button      Services             New
-     verify current page title              New Service
-     Populate modal Form                    Service Name=${service_name}
-     ...                                    Description=${Description}
-     ...                                    Unit of Measurement=${unit_of_measurement}
-     ...                                    Status=Active
-     Click modal button                     Save
+     Go To Page                             Details                 Program__c            object_id=&{program}[Id]
+     Page Should Contain                    &{program}[Name]
+     Click Wrapper Related List Button      Services                New
+     Wait for Modal                         New                     Service__c
+     Populate Field                         Service Name            ${service_name}
+     Populate Field                         Description             ${Description}
+     Populate Field                         Unit of Measurement     ${unit_of_measurement}
+     Populate Lightning Fields              Status=Planned
+     Click Dialog Button                    Save
      Wait Until Modal Is Closed
-     verify page header                     Program
+     Current Page Should Be                 Details                 Program__c
      Page Should Contain                    ${service_name}
-     ${service_id} =                        Save Current Record ID For Deletion         ${ns}Service__c
+     Save Current Record ID For Deletion    ${ns}Service__c

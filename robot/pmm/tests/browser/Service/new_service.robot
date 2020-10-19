@@ -26,18 +26,17 @@ Setup Test Data
 *** Test Cases ***
 Create Service from top nav
      Go To PMM App
-     Go To Page                             Listing           ${ns}Service__c
+     Go To Page                             Listing                     ${ns}Service__c
      Click Object Button                    New
-     Load Page Object                       NewService        ${ns}Service__c
+     Load Page Object                       NewService                  ${ns}Service__c
      verify current page title              New Service
-     Populate modal Form                    Service Name=${service_name}
-     ...                                    Program=&{program}[Name]
-     ...                                    Description=${Description}
-     ...                                    Unit of Measurement=${unit_of_measurement}
+     Populate Field                         Service Name                ${service_name}
+     Populate Field                         Description                 ${Description}
+     Populate Field                         Unit of Measurement         ${unit_of_measurement}
+     Populate Lightning Fields              Program=&{program}[Name]
      ...                                    Status=Active
-     click modal button                     Save
+     click Dialog button                    Save
      Wait Until Modal Is Closed
-     verify page header                     Service
      verify details                         Program            contains          &{program}[Name]
      verify details                         Service Name       contains          ${service_name}
      verify page contains related list      Service Deliveries

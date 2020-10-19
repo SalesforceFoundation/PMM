@@ -42,10 +42,12 @@
                         value={firstSessionStartDateTime}
                     ></lightning-formatted-date-time>
                     <!-- spacing and en-dash between dates -->
-                    &nbsp;&ndash;&nbsp;
-                    <lightning-formatted-date-time
-                        value={lastSessionEndDateTime}
-                    ></lightning-formatted-date-time>
+                    <template if:true={showEndDate}
+                        >&nbsp;&ndash;&nbsp;
+                        <lightning-formatted-date-time
+                            value={lastSessionEndDateTime}
+                        ></lightning-formatted-date-time>
+                    </template>
                 </div>
                 <!-- times -->
                 <div>
@@ -91,15 +93,17 @@
                 for:item="field"
             >
                 <c-output-field key={field.apiName} label={field.label}>
-                    <lightning-icon
-                        if:true={field.icon}
-                        icon-name={field.icon}
-                        alternative-text=""
-                        size="x-small"
-                        class="slds-var-p-right_x-small"
-                    >
-                    </lightning-icon>
-                    {field.value}
+                    <template if:true={field.value}>
+                        <lightning-icon
+                            if:true={field.icon}
+                            icon-name={field.icon}
+                            alternative-text=""
+                            size="x-small"
+                            class="slds-var-p-right_x-small"
+                        >
+                        </lightning-icon>
+                        {field.value}
+                    </template>
                 </c-output-field>
             </template>
         </lightning-layout-item>
@@ -116,11 +120,15 @@
                         name="participants"
                         label={serviceParticipantsLabel}
                     >
-                        <div class="slds-box slds-p-around_none">
-                            <c-scoped-notification
-                                if:false={hasServiceParticipants}
-                                title={serviceScheduleModel.labels.serviceParticipant.noContactsSelected}
-                            ></c-scoped-notification>
+                        <c-scoped-notification
+                            if:false={hasServiceParticipants}
+                            title={serviceScheduleModel.labels.serviceParticipant.noContactsSelected}
+                        >
+                        </c-scoped-notification>
+                        <div
+                            class="slds-box slds-p-around_none"
+                            if:true={hasServiceParticipants}
+                        >
                             <lightning-datatable
                                 key-field="Id"
                                 columns={participantDataTableColumns}
@@ -129,7 +137,6 @@
                                 resize-column-disabled
                                 hide-checkbox-column
                                 show-row-number-column
-                                if:true={hasServiceParticipants}
                             >
                             </lightning-datatable>
                         </div>
@@ -141,11 +148,15 @@
                         name="sessions"
                         label={serviceSessionsLabel}
                     >
-                        <div class="slds-box slds-p-around_none">
-                            <c-scoped-notification
-                                if:false={hasServiceSessions}
-                                title={serviceScheduleModel.labels.serviceSession.noSessionsAdded}
-                            ></c-scoped-notification>
+                        <c-scoped-notification
+                            if:false={hasServiceSessions}
+                            title={serviceScheduleModel.labels.serviceSession.noSessionsAdded}
+                        >
+                        </c-scoped-notification>
+                        <div
+                            class="slds-box slds-p-around_none"
+                            if:true={hasServiceSessions}
+                        >
                             <lightning-datatable
                                 key-field="Id"
                                 columns={sessionDataTableColumns}
@@ -154,7 +165,6 @@
                                 resize-column-disabled
                                 hide-checkbox-column
                                 show-row-number-column
-                                if:true={hasServiceSessions}
                             >
                             </lightning-datatable>
                         </div>

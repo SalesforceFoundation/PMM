@@ -168,20 +168,39 @@ export default class ServiceScheduleReview extends LightningElement {
         return this._serviceScheduleModel.serviceSessions.length > 0;
     }
 
-    get lastSessionEndDateTime() {
-        return this._serviceScheduleModel.serviceSessions.length
-            ? [...this._serviceScheduleModel.serviceSessions].pop()[
-                  this.sessionFields.sessionEnd.apiName
-              ]
-            : undefined;
-    }
-
     get firstSessionStartDateTime() {
         return this._serviceScheduleModel.serviceSessions.length
             ? this._serviceScheduleModel.serviceSessions[0][
                   this.sessionFields.sessionStart.apiName
               ]
-            : undefined;
+            : this._serviceScheduleModel.serviceSchedule[
+                  this._serviceScheduleModel.scheduleRecurrenceDateFields.start.apiName
+              ];
+    }
+
+    get lastSessionEndDateTime() {
+        return this._serviceScheduleModel.serviceSessions.length
+            ? [...this._serviceScheduleModel.serviceSessions].pop()[
+                  this.sessionFields.sessionEnd.apiName
+              ]
+            : this._serviceScheduleModel.serviceSchedule[
+                  this._serviceScheduleModel.scheduleRecurrenceDateFields.end.apiName
+              ];
+    }
+
+    get showEndDate() {
+        // NOTE: Using browser locale. Results may vary if the browser locale is not the same
+        // as running user salesforce locale. There is no better work around without going
+        // back to Apex to get the date portions of the date times. Worst case scenario is that
+        // UI will render the date twice eg: Oct 16 - Oct 16.
+        let startDate = new Date(this.firstSessionStartDateTime);
+        let endDate = new Date(this.lastSessionEndDateTime);
+
+        return !(
+            startDate.getFullYear() === endDate.getFullYear() &&
+            startDate.getMonth() === endDate.getMonth() &&
+            startDate.getDate() === endDate.getDate()
+        );
     }
 
     get activeSections() {

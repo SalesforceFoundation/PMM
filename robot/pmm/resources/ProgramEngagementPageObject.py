@@ -7,7 +7,7 @@ from cumulusci.robotframework.pageobjects import BasePage
 from cumulusci.robotframework.pageobjects import ListingPage
 from cumulusci.robotframework.pageobjects import DetailPage
 from cumulusci.robotframework.pageobjects import pageobject
-from pmm_locators import pmm_lex_locators
+from pmm import pmm_lex_locators
 from BaseObjects import BasePMMPage
 
 
@@ -19,8 +19,8 @@ class ProgramEngagementListingPage(BasePMMPage, ListingPage):
 @pageobject("NewProgramEngagement", "ProgramEngagement__c")
 class NewProgramEngagementPage(BasePMMPage, BasePage):
     def _is_current_page(self):
-        """ Verify we are on the New Program Engagement modal page
-            by verifying that the section title is 'New Program Engagement'
+        """Verify we are on the New Program Engagement modal page
+        by verifying that the section title is 'New Program Engagement'
         """
         self.selenium.wait_until_location_contains(
             "/new", timeout=60, message="Record view did not open in 1 min"
@@ -98,8 +98,8 @@ class NewProgramEngagementPage(BasePMMPage, BasePage):
 @pageobject("Details", "ProgramEngagement__c")
 class ProgramEngagementDetailPage(BasePMMPage, DetailPage):
     def _is_current_page(self):
-        """ Verify we are on the Program detail page
-            by verifying that the url contains '/view'
+        """Verify we are on the Program detail page
+        by verifying that the url contains '/view'
         """
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"

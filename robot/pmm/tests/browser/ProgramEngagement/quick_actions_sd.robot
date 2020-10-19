@@ -36,15 +36,14 @@ Create a new service delivery using quick action
      [tags]                         W-037572  feature:Service Delivery
      Go To PMM App
      Go To Page                     Details                        ProgramEngagement__c      object_id=${program_engagement}[Id]
-     Verify Details                 Program Engagement Name        contains                       ${contact}[FirstName] ${contact}[LastName] ${today}: ${program}[Name]
+     Verify Details                 Program Engagement Name        contains                   ${contact}[FirstName] ${contact}[LastName] ${today}: ${program}[Name]
      Click Quick Action Button      Create New Service Delivery
      Populate Modal Form            Service=${service}[Name]
      ...                            Quantity=${quantity}
      Click Modal Button             Save
      Wait Until Modal Is Closed
-     Current Page Should Be         Details                      ProgramEngagement__c
+     Current Page Should Be         Details                         ProgramEngagement__c
      Load Related List              Service Deliveries
      Click New Related Record Link  ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
-     Verify Details                 Service Delivery Name       contains    ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
+     Verify Details                 Service Delivery Name           contains    ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
      Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
-

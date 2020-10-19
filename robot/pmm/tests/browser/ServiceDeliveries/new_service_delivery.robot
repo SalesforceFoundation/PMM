@@ -38,20 +38,20 @@ Create a Service Delivery via UI
     Go To Page                             Listing                                 ${ns}ServiceDelivery__c
     Click Object Button                    New
     Wait For Modal                         New                                     Service Delivery
-    Populate Modal Form                    Service Delivery Name=${service_delivery_name}
-    ...                                    Service=${service}[Name]
+    Populate Field                         Service Delivery Name                   ${service_delivery_name}
+    Populate Field                         Quantity                                ${quantity}
+    Populate Lightning Fields              Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
     ...                                    Program Engagement=${program_engagement}[Name]
-    ...                                    Delivery Date=Today
-    ...                                    Quantity=${quantity}
-    Click Modal Button                     Save
+    ...                                    Delivery Date=Today                                
+    Click Dialog Button                    Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
     Verify Details                         Service                                 contains             ${service}[Name]
     Verify Details                         Program Engagement                      contains             ${program_engagement}[Name]
     Page Should Not Contain                ${service_delivery_name}
     Verify Page Contains Related List      Files
-    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
+    Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
 
 Create a Service Delivery via UI with Auto Name Override
     [Documentation]                        This test creates Service Delivery record with auto name override selected and verifies
@@ -59,14 +59,14 @@ Create a Service Delivery via UI with Auto Name Override
     Go To Page                             Listing                                ${ns}ServiceDelivery__c
     Click Object Button                    New
     Wait For Modal                         New                                    Service Delivery
-    Populate Modal Form                    Service Delivery Name=${service_delivery_name}
-    ...                                    Service=${service}[Name]
+    Populate Field                         Service Delivery Name                   ${service_delivery_name}
+    Populate Field                         Quantity                                ${quantity}
+    Populate Lightning Fields              Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
     ...                                    Program Engagement=${program_engagement}[Name]
     ...                                    Delivery Date=Today
-    ...                                    Quantity=${quantity}
-    ...                                    Auto-name Override=checked
-    Click Modal Button                     Save
+    Set Checkbox                           Auto-name Override                      checked
+    Click Dialog Button                    Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
     Verify Details                         Service Delivery Name                   contains             ${service_delivery_name}
@@ -80,9 +80,10 @@ Validate contact and account lookup to the same household
     Go To Page                             Listing                                ${ns}ServiceDelivery__c
     Click Object Button                    New
     Wait For Modal                         New                                    Service Delivery
-    Populate Modal Form                    Service Delivery Name=${service_delivery_name}
-    ...                                    Service=${service}[Name]
+    Populate Field                         Service Delivery Name                  ${service_delivery_name}
+    Populate Lightning Fields              Service=${service}[Name]
     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
     ...                                    Household Account=${account1}[Name]
-    Click Modal Button                     Save
+    Click Dialog Button                    Save
     Verify Modal Error                     Select an Account that matches the related Contact.
+    

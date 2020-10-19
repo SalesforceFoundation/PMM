@@ -18,8 +18,8 @@ class ServiceDeliveryListingPage(BasePMMPage, ListingPage):
 @pageobject("NewServiceDelivery", "ServiceDelivery__c")
 class NewServiceDeliveryPage(BasePMMPage, BasePage):
     def _is_current_page(self):
-        """ Verify we are on the New Service Delivery modal page
-            by verifying that the section title is 'New Service Delivery'
+        """Verify we are on the New Service Delivery modal page
+        by verifying that the section title is 'New Service Delivery'
         """
         self.selenium.wait_until_location_contains(
             "/new", timeout=60, message="Record view did not open in 1 min"
@@ -33,8 +33,8 @@ class NewServiceDeliveryPage(BasePMMPage, BasePage):
 @pageobject("Details", "ServiceDelivery__c")
 class ServiceDeliveryDetailPage(BasePMMPage, DetailPage):
     def _is_current_page(self):
-        """ Verify we are on the Service Delivery detail page
-            by verifying that the url contains '/view'
+        """Verify we are on the Service Delivery detail page
+        by verifying that the url contains '/view'
         """
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"

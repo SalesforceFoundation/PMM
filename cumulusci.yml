@@ -252,6 +252,18 @@ flows:
         steps:
             0.5:
                 flow: install_npsp
+            1:
+                flow: None
+            2:
+                task: deploy_post
+                options:
+                    unmanaged: False
+            3:
+                task: update_admin_profile
+                options:
+                    managed: True
+            4:
+                task: deploy_customer_profiles
 
     install_regression:
         steps:
@@ -274,6 +286,13 @@ flows:
                 options:
                     security_type: PUSH
             6:
+                task: dx
+                options:
+                    command: "force:user:permset:assign --permsetname PMDM_Manage"
+                ignore_failure: True
+            7:
+                flow: load_data
+            8:
                 task: snapshot_changes
 
     install_npsp:

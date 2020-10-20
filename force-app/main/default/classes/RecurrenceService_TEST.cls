@@ -18,11 +18,11 @@ public with sharing class RecurrenceService_TEST {
     private static void shouldGenerateDailySchedule() {
         rRule = 'FREQ=DAILY;INTERVAL=3;COUNT=5';
         List<DateTime> expectedDateTimes = new List<DateTime>{
-            dateTimeStart,
-            dateTimeStart.addDays(3),
-            dateTimeStart.addDays(6),
-            dateTimeStart.addDays(9),
-            dateTimeStart.addDays(12)
+            DateTime.newInstance(dateTimeStart.date(), dateTimeStart.time()),
+            DateTime.newInstance(dateTimeStart.date().addDays(3), dateTimeStart.time()),
+            DateTime.newInstance(dateTimeStart.date().addDays(6), dateTimeStart.time()),
+            DateTime.newInstance(dateTimeStart.date().addDays(9), dateTimeStart.time()),
+            DateTime.newInstance(dateTimeStart.date().addDays(12), dateTimeStart.time())
         };
 
         Test.startTest();
@@ -40,10 +40,10 @@ public with sharing class RecurrenceService_TEST {
     private static void shouldGenerateLimitedDailySchedule() {
         rRule = 'FREQ=DAILY;INTERVAL=3;COUNT=5';
         List<DateTime> expectedDateTimes = new List<DateTime>{
-            dateTimeStart,
-            dateTimeStart.addDays(3),
-            dateTimeStart.addDays(6),
-            dateTimeStart.addDays(9)
+            DateTime.newInstance(dateTimeStart.date(), dateTimeStart.time()),
+            DateTime.newInstance(dateTimeStart.date().addDays(3), dateTimeStart.time()),
+            DateTime.newInstance(dateTimeStart.date().addDays(6), dateTimeStart.time()),
+            DateTime.newInstance(dateTimeStart.date().addDays(9), dateTimeStart.time())
         };
 
         Test.startTest();

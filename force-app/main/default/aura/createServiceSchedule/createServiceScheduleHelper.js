@@ -12,6 +12,13 @@
         let pageRef = component.get("v.pageReference");
         let state = pageRef.state;
         let context = state.inContextOfRef;
+        let recordTypeId = state.recordTypeId;
+
+        if (recordTypeId) {
+            component.set("v.recordTypeId", recordTypeId);
+        } else {
+            component.set("v.recordTypeId", null);
+        }
 
         if (!context) {
             return;

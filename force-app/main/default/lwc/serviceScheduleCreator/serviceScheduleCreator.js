@@ -28,6 +28,7 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track hideSpinner = false;
+    @api recordTypeId;
     isLoaded = false;
     serviceScheduleModel;
     originalModel;
@@ -47,7 +48,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     _steps = new ProgressSteps();
     _serviceSchedules = [];
 
-    @wire(getServiceScheduleModel)
+    @wire(getServiceScheduleModel, { recordTypeId: "$recordTypeId" })
     wireServiceScheduleModel(result) {
         if (!result) {
             return;
@@ -209,6 +210,10 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
         this.hideSpinner = false;
         this.serviceScheduleModel.serviceSchedule = newServiceSchedule.serviceSchedule;
+        if (this.recordTypeId) {
+            // Ok to hardcode standard field, cannot import schema since we do not package record types
+            this.serviceScheduleModel.serviceSchedule.RecordTypeId = this.recordTypeId;
+        }
         this._serviceId = this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ];

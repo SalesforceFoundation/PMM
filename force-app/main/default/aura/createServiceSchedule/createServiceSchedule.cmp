@@ -15,7 +15,7 @@
     <aura:attribute name="recordTypeId" type="String" access="private" />
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.refresh}" />
 
     <aura:html tag="style">
         lightning-timepicker, lightning-datepicker { width: 100% }
@@ -25,5 +25,6 @@
     <c:serviceScheduleCreator
         serviceId="{!v.serviceId}"
         recordTypeId="{!v.recordTypeId}"
+        onclose="{!c.refresh}"
     />
 </aura:component>

@@ -12,7 +12,7 @@
         helper.extractUrlParams(component, event, helper);
     },
 
-    reInit: function(component, event, helper) {
+    refresh: function(component, event, helper) {
         helper.refresh();
     }
 });

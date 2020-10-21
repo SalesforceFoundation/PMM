@@ -35,7 +35,7 @@ public with sharing class ServiceScheduleService_TEST {
         expectedModel.serviceSchedule = schedule;
 
         Test.startTest();
-        ServiceScheduleModel actualModel = service.getServiceScheduleModel();
+        ServiceScheduleModel actualModel = service.getServiceScheduleModel(null);
         Test.stopTest();
 
         System.assertEquals(
@@ -777,7 +777,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
 
         // Step 1
-        ServiceScheduleModel model = service.getServiceScheduleModel();
+        ServiceScheduleModel model = service.getServiceScheduleModel(null);
         DateTime firstSessionStart = System.now();
         DateTime firstSessionEnd = System.now().addHours(2);
         ServiceSchedule__c schedule = new ServiceSchedule__c(

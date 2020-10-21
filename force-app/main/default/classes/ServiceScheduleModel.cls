@@ -97,9 +97,12 @@ public with sharing class ServiceScheduleModel {
     public List<Map<String, Object>> engagementFields = new List<Map<String, Object>>();
 
     public ServiceScheduleModel() {
-        serviceSchedule = new ServiceSchedule__c();
+        this(null);
+    }
+
+    public ServiceScheduleModel(Id recordTypeId) {
         serviceSchedule = (ServiceSchedule__c) ServiceSchedule__c.SObjectType.newSObject(
-            null,
+            recordTypeId,
             true
         );
         serviceSessions = new List<ServiceSession__c>();

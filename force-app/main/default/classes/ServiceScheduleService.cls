@@ -18,8 +18,8 @@ public with sharing class ServiceScheduleService {
     private RecurrenceService recurrenceService = new RecurrenceService();
     private static final String ONE_TIME = 'One Time';
 
-    public ServiceScheduleModel getServiceScheduleModel() {
-        return new ServiceScheduleModel();
+    public ServiceScheduleModel getServiceScheduleModel(Id recordTypeId) {
+        return new ServiceScheduleModel(recordTypeId);
     }
 
     public ServiceScheduleModel persist(ServiceScheduleModel model) {

@@ -16,11 +16,13 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         String methodName = 'getServiceScheduleModel';
         ServiceScheduleModel modelToReturn = new ServiceScheduleModel();
 
-        serviceStub.withReturnValue(methodName, modelToReturn);
+        serviceStub.withReturnValue(methodName, Id.class, modelToReturn);
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         Test.startTest();
-        ServiceScheduleModel actualModel = ServiceScheduleCreatorController.getServiceScheduleModel();
+        ServiceScheduleModel actualModel = ServiceScheduleCreatorController.getServiceScheduleModel(
+            null
+        );
         Test.stopTest();
 
         System.assertEquals(
@@ -29,7 +31,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
             'Expected the controller to return the model from the Service.'
         );
 
-        serviceStub.assertCalled(methodName);
+        serviceStub.assertCalled(methodName, Id.class);
     }
 
     @IsTest
@@ -153,12 +155,12 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         String methodName = 'getServiceScheduleModel';
         Exception actualException;
 
-        serviceStub.withThrowException(methodName);
+        serviceStub.withThrowException(methodName, Id.class);
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         Test.startTest();
         try {
-            ServiceScheduleCreatorController.getServiceScheduleModel();
+            ServiceScheduleCreatorController.getServiceScheduleModel(null);
         } catch (Exception ex) {
             actualException = ex;
         }

@@ -8,18 +8,23 @@
   -->
 
 <aura:component
-    implements="flexipage:availableForRecordHome, force:hasRecordId, lightning:actionOverride, lightning:isUrlAddressable"
+    implements="flexipage:availableForRecordHome, force:hasRecordId, lightning:actionOverride, lightning:hasPageReference"
     access="global"
 >
     <aura:attribute name="serviceId" type="String" access="private" />
+    <aura:attribute name="recordTypeId" type="String" access="private" />
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.refresh}" />
 
     <aura:html tag="style">
         lightning-timepicker, lightning-datepicker { width: 100% }
         .slds-accordion__list-item { border-top: none; }
         .slds-table_header-fixed_container { overflow-x: hidden; }
     </aura:html>
-    <c:serviceScheduleCreator serviceId="{!v.serviceId}" />
+    <c:serviceScheduleCreator
+        serviceId="{!v.serviceId}"
+        recordTypeId="{!v.recordTypeId}"
+        onclose="{!c.refresh}"
+    />
 </aura:component>

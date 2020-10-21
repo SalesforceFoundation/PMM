@@ -50,6 +50,8 @@
     },
 
     refresh: function(component, event, helper) {
+        // We refresh whenever the modal is closed or the page reference has changed
+        // to force init to run on subsequent launches
         $A.get("e.force:refreshView").fire();
     }
 });

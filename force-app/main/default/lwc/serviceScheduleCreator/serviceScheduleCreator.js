@@ -292,6 +292,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     handleClose() {
         this.hideModal();
         this.navigate();
+        this.dispatchEvent(new CustomEvent("close"));
     }
 
     init() {
@@ -350,11 +351,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 filterName: "Recent",
             },
         });
-        // Refresh is triggered by a page reference change in the aura component
-        // if starting from the recent list; closing and clicking new does not
-        // trigger a change in the page reference. Notify component of close
-        // only needed when navigating back to the list view
-        this.dispatchEvent(new CustomEvent("close"));
     }
 
     handleLoaded(event) {

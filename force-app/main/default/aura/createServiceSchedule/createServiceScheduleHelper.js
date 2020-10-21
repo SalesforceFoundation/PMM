@@ -12,6 +12,13 @@
         let pageRef = component.get("v.pageReference");
         let state = pageRef.state;
         let context = state.inContextOfRef;
+        let recordTypeId = state.recordTypeId;
+
+        if (recordTypeId) {
+            component.set("v.recordTypeId", recordTypeId);
+        } else {
+            component.set("v.recordTypeId", null);
+        }
 
         if (!context) {
             return;
@@ -43,6 +50,8 @@
     },
 
     refresh: function(component, event, helper) {
+        // We refresh whenever the modal is closed or the page reference has changed
+        // to force init to run on subsequent launches
         $A.get("e.force:refreshView").fire();
     }
 });

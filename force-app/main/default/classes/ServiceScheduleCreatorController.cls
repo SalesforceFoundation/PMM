@@ -12,9 +12,9 @@ public with sharing class ServiceScheduleCreatorController {
     private static ServiceScheduleService service = new ServiceScheduleService();
 
     @AuraEnabled(cacheable=true)
-    public static ServiceScheduleModel getServiceScheduleModel() {
+    public static ServiceScheduleModel getServiceScheduleModel(Id recordTypeId) {
         try {
-            return service.getServiceScheduleModel();
+            return service.getServiceScheduleModel(recordTypeId);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

@@ -34,7 +34,7 @@ export default class ServiceScheduleReview extends LightningElement {
             function() {
                 this.processModel(value);
             }.bind(this),
-            0
+            50
         );
     }
 

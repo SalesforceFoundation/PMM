@@ -52,7 +52,7 @@ export default class ReviewSessions extends LightningElement {
             function() {
                 this.processModel(value);
             }.bind(this),
-            0
+            50
         );
     }
 

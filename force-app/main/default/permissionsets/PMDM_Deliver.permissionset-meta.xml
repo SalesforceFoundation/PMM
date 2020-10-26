@@ -111,6 +111,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>ServiceDelivery__c.AttendanceStatus__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>ServiceDelivery__c.AutonameOverride__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -162,11 +167,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>ServiceParticipant__c.ProgramEngagement__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>ServiceParticipant__c.Service__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -246,17 +246,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceSchedule__c.Service__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>ServiceSchedule__c.ServiceScheduleEndDate__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>ServiceSchedule__c.ServiceScheduleEnds__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.Service__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

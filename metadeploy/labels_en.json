@@ -61,6 +61,10 @@
         "Please install Program Management Module in your org prior to installing reports.": {
             "message": "Please install Program Management Module in your org prior to installing reports.",
             "description": "shown if validation fails"
+        },
+        "Program Management Module requires Chatter. Please enable Chatter in your org and try again.": {
+            "message": "Program Management Module requires Chatter. Please enable Chatter in your org and try again.",
+            "description": "shown if validation fails"
         }
     },
     "plan:reports": {

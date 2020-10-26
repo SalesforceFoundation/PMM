@@ -373,6 +373,9 @@ plans:
             - when: "'.my.' not in org_config.instance_url"
               action: error
               message: "Please enable My Domain in your org prior to installing."
+            - when: "not tasks.check_chatter_enabled()"
+              action: error
+              message: "Program Management Module requires Chatter. Please enable Chatter in your org and try again."
         steps:
             1:
                 flow: customer_org

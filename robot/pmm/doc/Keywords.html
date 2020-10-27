@@ -206,6 +206,18 @@
                                 <td class="kwdoc"></td>
                             </tr>
 
+                            <tr class="kwrow" id="pmm.py.Choose Date">
+                                <td class="kwname">
+                                    Choose Date
+                                </td>
+                                <td class="kwargs">
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>To pick a date from the lightning date picker</p>
+                                </td>
+                            </tr>
+
                             <tr class="kwrow" id="pmm.py.Click App Link">
                                 <td class="kwname">
                                     Click App Link
@@ -213,6 +225,18 @@
                                 <td class="kwargs"></td>
                                 <td class="kwdoc">
                                     <p>clicks on the app link on the app launcher</p>
+                                </td>
+                            </tr>
+
+                            <tr class="kwrow" id="pmm.py.Click Dialog Button">
+                                <td class="kwname">
+                                    Click Dialog Button
+                                </td>
+                                <td class="kwargs">
+                                    <i>label</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>Click on a button to on the new record dialog</p>
                                 </td>
                             </tr>
 
@@ -337,6 +361,21 @@
                                 <td class="kwdoc"></td>
                             </tr>
 
+                            <tr class="kwrow" id="pmm.py.Open Date Picker">
+                                <td class="kwname">
+                                    Open Date Picker
+                                </td>
+                                <td class="kwargs">
+                                    <i>title</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Opens the date picker by clicking on the date
+                                        picker icon given the title of the field
+                                    </p>
+                                </td>
+                            </tr>
+
                             <tr class="kwrow" id="pmm.py.Page Should Contain Text">
                                 <td class="kwname">
                                     Page Should Contain Text
@@ -346,6 +385,34 @@
                                 </td>
                                 <td class="kwdoc">
                                     <p>Verifies if the page contains the given text</p>
+                                </td>
+                            </tr>
+
+                            <tr class="kwrow" id="pmm.py.Pick Date">
+                                <td class="kwname">
+                                    Pick Date
+                                </td>
+                                <td class="kwargs">
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>To pick a date from the date picker</p>
+                                </td>
+                            </tr>
+
+                            <tr class="kwrow" id="pmm.py.Populate Lightning Fields">
+                                <td class="kwname">
+                                    Populate Lightning Fields
+                                </td>
+                                <td class="kwargs">
+                                    <i>**kwargs</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        During winter 2020 part of the modal fields appear
+                                        as lightning elements. This keyword validates ,
+                                        identifies the element and populates value
+                                    </p>
                                 </td>
                             </tr>
 
@@ -448,6 +515,26 @@
                                     <p>
                                         The retry happens for certain errors that are
                                         likely to be resolved by retrying.
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr class="kwrow" id="pmm.py.Set Checkbox">
+                                <td class="kwname">
+                                    Set Checkbox
+                                </td>
+                                <td class="kwargs">
+                                    <i>title</i>,
+
+                                    <i>status</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        If status is 'checked' then checks the box if its
+                                        not already checked. Prints a warning msg if
+                                        already checked 'unchecked' then unchecks the box
+                                        if its not already checked. Prints a warning msg
+                                        if already unchecked
                                     </p>
                                 </td>
                             </tr>
@@ -1925,7 +2012,7 @@
             </div>
         </div>
         <div class="footer">
-            Generated on Friday August 07, 02:38 PM - cumulusci v3.15.0
+            Generated on Friday September 18, 12:36 PM - cumulusci v3.19.0
         </div>
     </body>
 </html>

@@ -107,6 +107,11 @@ export default class NewServiceSchedule extends LightningElement {
 
         this.isValid = isFormValid && datesValid && hasEndCondition && hasDayOfWeek;
 
+        if (!this.isValid) {
+            let layout = this.template.querySelector("lightning-layout");
+            layout.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
         return this.isValid;
     }
 

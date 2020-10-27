@@ -18,8 +18,8 @@ import CONTACT_OBJECT from "@salesforce/schema/Contact";
 export default class ServiceScheduleReview extends LightningElement {
     _serviceScheduleModel;
     timeZone = TIME_ZONE;
+    isLoaded = false;
     @track sessionFields;
-    @track isLoaded = false;
 
     @api
     get serviceScheduleModel() {
@@ -27,6 +27,18 @@ export default class ServiceScheduleReview extends LightningElement {
     }
 
     set serviceScheduleModel(value) {
+        // Adding a brief timeout to allow the screen to render with spinner
+        // before attempting to load the data
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(
+            function() {
+                this.processModel(value);
+            }.bind(this),
+            50
+        );
+    }
+
+    processModel(value) {
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
         this.sessionFields = this._serviceScheduleModel.sessionFields;
         this.setLabels();
@@ -134,7 +146,7 @@ export default class ServiceScheduleReview extends LightningElement {
         return `${
             this.serviceScheduleModel.labels.serviceParticipant.objectPluralLabel
         } (${
-            this._serviceScheduleModel.selectedParticipants
+            this.hasServiceParticipants
                 ? this._serviceScheduleModel.selectedParticipants.length
                 : 0
         })`;
@@ -142,18 +154,18 @@ export default class ServiceScheduleReview extends LightningElement {
 
     get serviceSessionsLabel() {
         return `${this.serviceScheduleModel.labels.serviceSession.objectPluralLabel} (${
-            this._serviceScheduleModel.serviceSessions
+            this.hasServiceSessions
                 ? this._serviceScheduleModel.serviceSessions.length
                 : 0
         })`;
     }
 
-    get lastSessionEndDateTime() {
-        return this._serviceScheduleModel.serviceSessions.length
-            ? [...this._serviceScheduleModel.serviceSessions].pop()[
-                  this.sessionFields.sessionEnd.apiName
-              ]
-            : undefined;
+    get hasServiceParticipants() {
+        return this._serviceScheduleModel.selectedParticipants.length > 0;
+    }
+
+    get hasServiceSessions() {
+        return this._serviceScheduleModel.serviceSessions.length > 0;
     }
 
     get firstSessionStartDateTime() {
@@ -161,7 +173,34 @@ export default class ServiceScheduleReview extends LightningElement {
             ? this._serviceScheduleModel.serviceSessions[0][
                   this.sessionFields.sessionStart.apiName
               ]
-            : undefined;
+            : this._serviceScheduleModel.serviceSchedule[
+                  this._serviceScheduleModel.scheduleRecurrenceDateFields.start.apiName
+              ];
+    }
+
+    get lastSessionEndDateTime() {
+        return this._serviceScheduleModel.serviceSessions.length
+            ? [...this._serviceScheduleModel.serviceSessions].pop()[
+                  this.sessionFields.sessionEnd.apiName
+              ]
+            : this._serviceScheduleModel.serviceSchedule[
+                  this._serviceScheduleModel.scheduleRecurrenceDateFields.end.apiName
+              ];
+    }
+
+    get showEndDate() {
+        // NOTE: Using browser locale. Results may vary if the browser locale is not the same
+        // as running user salesforce locale. There is no better work around without going
+        // back to Apex to get the date portions of the date times. Worst case scenario is that
+        // UI will render the date twice eg: Oct 16 - Oct 16.
+        let startDate = new Date(this.firstSessionStartDateTime);
+        let endDate = new Date(this.lastSessionEndDateTime);
+
+        return !(
+            startDate.getFullYear() === endDate.getFullYear() &&
+            startDate.getMonth() === endDate.getMonth() &&
+            startDate.getDate() === endDate.getDate()
+        );
     }
 
     get activeSections() {

@@ -18,15 +18,16 @@ public with sharing class ServiceScheduleService {
     private RecurrenceService recurrenceService = new RecurrenceService();
     private static final String ONE_TIME = 'One Time';
 
-    public ServiceScheduleModel getServiceScheduleModel() {
-        return new ServiceScheduleModel();
+    public ServiceScheduleModel getServiceScheduleModel(Id recordTypeId) {
+        return new ServiceScheduleModel(recordTypeId);
     }
 
-    public void persist(ServiceScheduleModel model) {
+    public ServiceScheduleModel persist(ServiceScheduleModel model) {
         Savepoint savepoint = Database.setSavepoint();
 
         try {
             domain.insertModel(model);
+            return model;
         } catch (Exception ex) {
             Database.rollback(savepoint);
             throw new ServiceScheduleServiceException(ex);

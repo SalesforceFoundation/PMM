@@ -27,7 +27,8 @@ import LOADING_LABEL from "@salesforce/label/c.Loading";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
-    @track isChildLoaded = false;
+    @track hideSpinner = false;
+    @api recordTypeId;
     isLoaded = false;
     serviceScheduleModel;
     originalModel;
@@ -45,8 +46,9 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     _serviceId;
     _currentStep;
     _steps = new ProgressSteps();
+    _serviceSchedules = [];
 
-    @wire(getServiceScheduleModel)
+    @wire(getServiceScheduleModel, { recordTypeId: "$recordTypeId" })
     wireServiceScheduleModel(result) {
         if (!result) {
             return;
@@ -58,7 +60,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             this.extractLabels(this.serviceScheduleModel.labels.serviceSchedule);
             this.addSteps();
             this.isLoaded = true;
-            this.isChildLoaded = true;
+            this.hideSpinner = true;
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
@@ -157,29 +159,26 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     handleNext() {
         if (this.isStep1) {
-            this.isChildLoaded = false;
             this.processNewServiceSchedule();
         } else if (this.isStep2) {
-            this.isChildLoaded = false;
             this.processSessions();
         } else if (this.isStep3) {
-            this.isChildLoaded = false;
             this.processServiceParticipants();
         } else if (this.isStep4) {
             this.save(true);
-            this.isChildLoaded = false;
         }
     }
 
     save(isSaveAndNew) {
         persist({ model: this.serviceScheduleModel })
-            .then(() => {
+            .then(result => {
+                this._serviceSchedules.push(result.serviceSchedule);
                 this.showSuccessToast();
 
                 if (isSaveAndNew) {
                     this.init();
                     this.isLoaded = true;
-                    this.isChildLoaded = true;
+                    this.hideSpinner = true;
                 } else {
                     this.handleClose();
                 }
@@ -209,7 +208,12 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             return;
         }
 
+        this.hideSpinner = false;
         this.serviceScheduleModel.serviceSchedule = newServiceSchedule.serviceSchedule;
+        if (this.recordTypeId) {
+            // Ok to hardcode standard field, cannot import schema since we do not package record types
+            this.serviceScheduleModel.serviceSchedule.RecordTypeId = this.recordTypeId;
+        }
         this._serviceId = this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ];
@@ -224,6 +228,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             return;
         }
 
+        this.hideSpinner = false;
         this.serviceScheduleModel.serviceSessions =
             reviewSessionsCmp.serviceScheduleModel.serviceSessions;
         this.serviceScheduleModel.serviceSchedule =
@@ -238,6 +243,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             return;
         }
 
+        this.hideSpinner = false;
         this.serviceScheduleModel.selectedParticipants =
             participantSelector.selectedParticipants;
 
@@ -257,7 +263,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         if (this.isStep2) {
             this.serviceScheduleModel.serviceSessions = this.originalModel.serviceSessions;
         } else if (this.isStep3) {
-            this.isChildLoaded = false;
+            this.hideSpinner = false;
             this.serviceScheduleModel.selectedParticipants = this.originalModel.selectedParticipants;
         }
 
@@ -281,17 +287,17 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     handleFinish() {
         this.save(false);
-        this.isChildLoaded = false;
     }
 
     handleClose() {
         this.hideModal();
-        this.navigateToList();
+        this.navigate();
+        this.dispatchEvent(new CustomEvent("close"));
     }
 
     init() {
         this.isLoaded = false;
-        this.isChildLoaded = false;
+        this.hideSpinner = false;
         this._steps.restart();
         this._currentStep = undefined;
         this.serviceScheduleModel = JSON.parse(JSON.stringify(this.originalModel));
@@ -310,6 +316,30 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         modal.hide();
     }
 
+    navigate() {
+        if (this._serviceSchedules.length) {
+            this.navigateToRecord(
+                this._serviceSchedules[this._serviceSchedules.length - 1].Id,
+                this.labels.objectApiName
+            );
+        } else if (this._serviceId) {
+            this.navigateToRecord(this._serviceId, this.labels.serviceObjectApiName);
+        } else {
+            this.navigateToList();
+        }
+    }
+
+    navigateToRecord(recordId, objectApiName) {
+        this[NavigationMixin.Navigate]({
+            type: "standard__recordPage",
+            attributes: {
+                recordId: recordId,
+                objectApiName: objectApiName,
+                actionName: "view",
+            },
+        });
+    }
+
     navigateToList() {
         this[NavigationMixin.Navigate]({
             type: "standard__objectPage",
@@ -324,6 +354,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     handleLoaded(event) {
-        this.isChildLoaded = event.detail;
+        this.hideSpinner = event.detail;
     }
 }

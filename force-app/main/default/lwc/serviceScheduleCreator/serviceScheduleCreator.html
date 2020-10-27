@@ -14,8 +14,10 @@
         default-visible="true"
         size="large"
     >
-        <template if:false={isChildLoaded}>
-            <div class="slds-p-around_medium slds-align_absolute-center slds-is-relative">
+        <template if:false={hideSpinner}>
+            <div
+                class="slds-var-p-around_medium slds-align_absolute-center slds-is-relative"
+            >
                 <lightning-spinner
                     alternative-text={labels.loading}
                     size="medium"
@@ -72,10 +74,9 @@
             </c-modal>
 
             <div slot="footer">
-                <lightning-layout horizontal-align="end">
+                <lightning-layout horizontal-align="spread">
                     <lightning-layout-item
                         padding="around-small"
-                        size="3"
                         class="slds-text-align_left"
                     >
                         <lightning-button
@@ -90,8 +91,8 @@
 
                     <lightning-layout-item
                         padding="around-small"
-                        size="6"
                         class="slds-text-align_center"
+                        size="4"
                     >
                         <lightning-progress-indicator
                             current-step={currentStep.value}
@@ -108,24 +109,34 @@
                         </lightning-progress-indicator>
                     </lightning-layout-item>
 
-                    <lightning-layout-item padding="around-small" size="3">
-                        <lightning-button
-                            if:true={currentStep.next}
-                            name="next"
-                            variant={currentStep.next.variant}
-                            label={currentStep.next.label}
-                            title={currentStep.next.label}
-                            onclick={handleNext}
-                            class="slds-var-p-right_small"
-                        ></lightning-button>
-                        <lightning-button
-                            if:true={currentStep.finish}
-                            name="finish"
-                            variant={currentStep.finish.variant}
-                            label={currentStep.finish.label}
-                            title={currentStep.finish.label}
-                            onclick={handleFinish}
-                        ></lightning-button>
+                    <lightning-layout-item padding="around-small">
+                        <lightning-layout>
+                            <lightning-layout-item
+                                flexibility="no-flex"
+                                alignment-bump="left"
+                                if:true={currentStep.next}
+                            >
+                                <lightning-button
+                                    name="next"
+                                    variant={currentStep.next.variant}
+                                    label={currentStep.next.label}
+                                    title={currentStep.next.label}
+                                    onclick={handleNext}
+                                    class="slds-var-p-right_small"
+                                    if:true={currentStep.next}
+                                ></lightning-button>
+                            </lightning-layout-item>
+                            <lightning-layout-item if:true={currentStep.finish}>
+                                <lightning-button
+                                    name="finish"
+                                    variant={currentStep.finish.variant}
+                                    label={currentStep.finish.label}
+                                    title={currentStep.finish.label}
+                                    onclick={handleFinish}
+                                    class="slds-var-p-right_small"
+                                ></lightning-button>
+                            </lightning-layout-item>
+                        </lightning-layout>
                     </lightning-layout-item>
                 </lightning-layout>
             </div>

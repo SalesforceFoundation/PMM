@@ -30,20 +30,19 @@ Create a Program via UI
     [Documentation]                        This test creates Program and verifies that the Program record
     ...                                    has all the values from the form
     Go To PMM App
-    Go To Page                             Listing                               ${ns}Program__c
-    Click Object Button                    New
-    verify current page title              New Program
-    Populate modal Form                    Program Name=${program_name}
-    ...                                    Status=Active
-    ...                                    Short Summary=${short_summary}
-    ...                                    Target Population=${target_population}
-    ...                                    Description=${description}
-    ...                                    Start Date=10
-    ...                                    End Date=25
-    ...                                    Program Issue Area=Education
-    Click modal button                     Save
-    Wait Until Modal Is Closed
-    verify page header                     Program
+    Go To Page                              Listing                               ${ns}Program__c
+    Click Object Button                     New
+    Wait for Modal                          New                     Program__c
+    Populate Field                          Program Name            ${program_name}
+    Populate Field                          Short Summary           ${short_summary}
+    Populate Field                          Target Population       ${target_population}
+    Populate Field                          Description             ${description}
+    Populate Lightning Fields               Start Date=10
+    ...                                     End Date=25
+    ...                                     Status=Active
+    ...                                     Program Issue Area=Education
+    Click Dialog button                            Save
+    Wait Until Modal Is Closed  
     verify details                         Program Name    contains    ${program_name}
     verify page contains related list      Services
     verify page contains related list      Program Engagements
@@ -59,8 +58,8 @@ Date validation on new program dialog
     Click Object Button                    New
     verify current page title              New Program
     Populate modal Form                    Program Name=${program_name}
-    ...                                    Status=Active
+    Populate Lightning Fields              Status=Active
     ...                                    Start Date=25
     ...                                    End Date=10
-    Click modal button                     Save
+    Click Dialog button                     Save
     verify modal error                     Start Date must be before End Date

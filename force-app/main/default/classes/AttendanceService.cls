@@ -2,14 +2,14 @@ public with sharing class AttendanceService {
     @TestVisible
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
 
-    public List<ServiceDelivery__c> generateRoster(Id serviceId) {
-        return createRows(serviceId);
+    public List<ServiceDelivery__c> generateRoster(Id sessionId) {
+        return createRows(sessionId);
     }
 
-    private List<ServiceDelivery__c> createRows(Id serviceId) {
+    private List<ServiceDelivery__c> createRows(Id sessionId) {
         Set<Id> existingClients = new Set<Id>();
-        List<ServiceDelivery__c> deliveries = attendanceSelector.getServiceDeliveriesByServiceId(
-            serviceId
+        List<ServiceDelivery__c> deliveries = attendanceSelector.getServiceDeliveriesBySessionId(
+            sessionId
         );
 
         for (ServiceDelivery__c delivery : deliveries) {
@@ -17,8 +17,8 @@ public with sharing class AttendanceService {
         }
 
         for (
-            ServiceParticipant__c participant : attendanceSelector.getServiceParticipantsByServiceId(
-                serviceId,
+            ServiceParticipant__c participant : attendanceSelector.getServiceParticipantsBySessionId(
+                sessionId,
                 existingClients
             )
         ) {

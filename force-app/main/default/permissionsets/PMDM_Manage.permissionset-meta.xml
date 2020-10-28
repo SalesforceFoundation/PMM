@@ -111,6 +111,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>ServiceDelivery__c.AttendanceStatus__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>ServiceDelivery__c.AutonameOverride__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -162,11 +167,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>ServiceParticipant__c.ProgramEngagement__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>ServiceParticipant__c.Service__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -246,11 +246,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>ServiceSchedule__c.Service__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>ServiceSchedule__c.ServiceScheduleEndDate__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -261,12 +256,22 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>ServiceSchedule__c.Service__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>ServiceSession__c.OtherServiceProvider__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>ServiceSession__c.PrimaryServiceProvider__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>ServiceSession__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -282,11 +287,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>ServiceSession__c.Status__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>ServiceSession__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

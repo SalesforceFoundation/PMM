@@ -2,6 +2,12 @@ public with sharing class AttendanceService {
     @TestVisible
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
 
+    private static final Map<SObjectField, SObjectField> SERVICE_FIELD_BY_PARTICIPANT_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceParticipant__c.Contact__c => ServiceDelivery__c.Contact__c,
+        ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c,
+        ServiceParticipant__c.Service__c => ServiceDelivery__c.Service__c
+    };
+
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
         return createRows(sessionId);
     }
@@ -22,13 +28,27 @@ public with sharing class AttendanceService {
                 existingClients
             )
         ) {
-            deliveries.add(createServiceDelivery(participant));
+            deliveries.add(createServiceDelivery(sessionId, participant));
         }
 
         return deliveries;
     }
 
-    private ServiceDelivery__c createServiceDelivery(ServiceParticipant__c participant) {
-        return new ServiceDelivery__c();
+    @TestVisible
+    private ServiceDelivery__c createServiceDelivery(
+        Id sessionId,
+        ServiceParticipant__c participant
+    ) {
+        SObject particpantRecord = participant;
+        SObject deliveryRecord = new ServiceDelivery__c(ServiceSession__c = sessionId);
+
+        for (SObjectField sourceField : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {
+            SObjectField targetField = SERVICE_FIELD_BY_PARTICIPANT_FIELD.get(
+                sourceField
+            );
+            deliveryRecord.put(targetField, particpantRecord.get(sourceField));
+        }
+
+        return (ServiceDelivery__c) deliveryRecord;
     }
 }

@@ -47,7 +47,7 @@ public with sharing class AttendanceSelector {
             LIMIT 1
         ];
 
-        // Used by Apex code only for querying realted records
+        // Used by Apex code only for querying related records
         // does not require strip inaccessible
         return session;
     }

@@ -1,6 +1,7 @@
 @IsTest
 public with sharing class AttendanceSelector_TEST {
     private static AttendanceSelector selector = new AttendanceSelector();
+    private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
 
     @TestSetup
     private static void setupServiceSessionData() {
@@ -101,5 +102,53 @@ public with sharing class AttendanceSelector_TEST {
             actualParticipants.size(),
             'Expected one participant record to be excluded.'
         );
+    }
+
+    @IsTest
+    private static void returnsEmptyDeliveryListWithoutReadAccess() {
+        User standardUser = TestUtil.getTestUser();
+        Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+        List<ServiceDelivery__c> actualDeliveries;
+
+        System.runAs(standardUser) {
+            Test.startTest();
+            actualDeliveries = selector.getServiceDeliveriesBySessionId(sessionId);
+            Test.stopTest();
+        }
+
+        System.assert(
+            actualDeliveries.isEmpty(),
+            'Expected an empty list to be returned.'
+        );
+    }
+
+    @IsTest
+    private static void returnsEmptyParticipantListWithoutReadAccess() {
+        User standardUser = TestUtil.getTestUser();
+        Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+        List<ServiceParticipant__c> actualParticipants;
+        ServiceSession__c session = [
+            SELECT Id, ServiceSchedule__c
+            FROM ServiceSession__c
+            LIMIT 1
+        ];
+
+        System.runAs(standardUser) {
+            Test.startTest();
+            actualParticipants = selector.getServiceParticipantsByScheduleId(
+                session.ServiceSchedule__c,
+                new Set<Id>()
+            );
+            Test.stopTest();
+        }
+
+        System.assert(
+            actualParticipants.isEmpty(),
+            'Expected an empty list to be returned.'
+        );
+    }
+
+    @IsTest
+    private static void returnsEmptyDeliveriesListWithoutReadAccess() {
     }
 }

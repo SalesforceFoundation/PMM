@@ -19,4 +19,29 @@ public with sharing class AttendanceController_TEST {
 
         serviceStub.assertCalledWith(generateRoster, Id.class, sessionId);
     }
+
+    @IsTest
+    private static void shouldRethrowExceptionFromService() {
+        String generateRoster = 'generateRoster';
+        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
+        serviceStub.withThrowException(generateRoster, Id.class);
+        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+        Exception actualException;
+
+        Test.startTest();
+        try {
+            AttendanceController.generateRoster(sessionId);
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+
+        serviceStub.assertCalledWith(generateRoster, Id.class, sessionId);
+    }
 }

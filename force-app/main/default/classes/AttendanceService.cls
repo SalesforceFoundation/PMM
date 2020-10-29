@@ -14,17 +14,19 @@ public with sharing class AttendanceService {
 
     private List<ServiceDelivery__c> createRows(Id sessionId) {
         Set<Id> existingClients = new Set<Id>();
-        List<ServiceDelivery__c> deliveries = attendanceSelector.getServiceDeliveriesBySessionId(
-            sessionId
+        List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
+            attendanceSelector.getServiceDeliveriesBySessionId(sessionId)
         );
 
         for (ServiceDelivery__c delivery : deliveries) {
             existingClients.add(delivery.Contact__c);
         }
 
+        Id scheduleId = attendanceSelector.getSession(sessionId).ServiceSchedule__c;
+
         for (
-            ServiceParticipant__c participant : attendanceSelector.getServiceParticipantsBySessionId(
-                sessionId,
+            ServiceParticipant__c participant : attendanceSelector.getServiceParticipantsByScheduleId(
+                scheduleId,
                 existingClients
             )
         ) {

@@ -1,12 +1,54 @@
 public with sharing class AttendanceSelector {
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
-        return new List<ServiceDelivery__c>();
+        if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
+            return new List<ServiceDelivery__c>();
+        }
+
+        List<ServiceDelivery__c> serviceDeliveries = [
+            SELECT
+                Id,
+                Contact__c,
+                Service__c,
+                Quantity__c,
+                CreatedDate,
+                AttendanceStatus__c
+            FROM ServiceDelivery__c
+            WHERE Contact__c != NULL
+        ];
+
+        return Security.stripInaccessible(AccessType.READABLE, serviceDeliveries)
+            .getRecords();
     }
 
-    public List<ServiceParticipant__c> getServiceParticipantsBySessionId(
-        Id sessionId,
+    public List<ServiceParticipant__c> getServiceParticipantsByScheduleId(
+        Id scheduleId,
         Set<Id> contactsToExclude
     ) {
-        return new List<ServiceParticipant__c>();
+        if (!Schema.SObjectType.ServiceParticipant__c.isAccessible()) {
+            return new List<ServiceParticipant__c>();
+        }
+
+        List<ServiceParticipant__c> serviceParticipants = [
+            SELECT Id, Contact__c, Service__c, ProgramEngagement__c
+            FROM ServiceParticipant__c
+            WHERE
+                ServiceSchedule__c = :scheduleId
+                AND Contact__c NOT IN :contactsToExclude
+        ];
+
+        return Security.stripInaccessible(AccessType.READABLE, serviceParticipants)
+            .getRecords();
+    }
+
+    public ServiceSession__c getSession(Id sessionId) {
+        ServiceSession__c session = [
+            SELECT Id, ServiceSchedule__c
+            FROM ServiceSession__c
+            LIMIT 1
+        ];
+
+        // Used by Apex code only for querying realted records
+        // does not require strip inaccessible
+        return session;
     }
 }

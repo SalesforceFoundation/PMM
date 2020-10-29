@@ -112,6 +112,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         locator = pmm_lex_locators["bulk_service_delivery_locators"][
             "new_lookup"
         ].format(row, title)
+        self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
         popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_popup"]
         self.selenium.wait_until_page_contains_element(

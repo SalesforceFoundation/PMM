@@ -8,8 +8,8 @@
  */
 
 public with sharing class ProgramEngagementSelector {
-    public ProgramEngagementSelector() {
-    }
+    private FieldSetService fieldSetService = new FieldSetService();
+    private static final string PARTICIPANT_SELECTOR_FIELD_SET_NAME = 'ServiceParticipantSelector';
 
     public List<ProgramEngagement__c> getProgramEngagementsByContactId(Id contactId) {
         if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {

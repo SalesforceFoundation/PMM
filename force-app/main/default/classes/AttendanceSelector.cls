@@ -13,7 +13,7 @@ public with sharing class AttendanceSelector {
                 CreatedDate,
                 AttendanceStatus__c
             FROM ServiceDelivery__c
-            WHERE Contact__c != NULL
+            WHERE ServiceSession__c = :sessionId AND Contact__c != NULL
         ];
 
         return Security.stripInaccessible(AccessType.READABLE, serviceDeliveries)
@@ -44,6 +44,7 @@ public with sharing class AttendanceSelector {
         ServiceSession__c session = [
             SELECT Id, ServiceSchedule__c
             FROM ServiceSession__c
+            WHERE Id = :sessionId
             LIMIT 1
         ];
 

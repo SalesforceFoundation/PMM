@@ -2,7 +2,7 @@
 
 Resource       robot/pmm/resources/pmm.robot
 Library        cumulusci.robotframework.PageObjects
-...            robot/pmm/resources/ServiceDeliveryPageObject.py
+...            robot/pmm/resources/ServiceParticipantPageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
@@ -42,3 +42,4 @@ Create a new service participant
      Wait Until Modal Is Closed
      Verify Details                          Service Participant Name        contains       ${service_participant_name}
      Verify Details                          Sign Up Date                    contains       ${today}
+     Verify Page Contains Related List       Files

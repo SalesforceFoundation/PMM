@@ -41,6 +41,11 @@ public with sharing class SelectParticipantModel {
     };
 
     @AuraEnabled
+    public Map<String, Map<String, Object>> fieldByFieldPath = fieldSetService.getFieldByFieldPath(
+        String.valueOf(ProgramEngagement__c.SObjectType),
+        'ServiceScheduleParticipantSelector'
+    );
+    @AuraEnabled
     public List<ProgramEngagement__c> programEngagements;
     @AuraEnabled
     public List<ProgramCohort__c> programCohorts;
@@ -73,5 +78,16 @@ public with sharing class SelectParticipantModel {
         fields = contactFields;
         fields.putAll(engagementFields);
         fields.putAll(scheduleFields);
+
+        fieldByFieldPath.put(
+            String.valueOf(ProgramEngagement__c.ProgramCohort__c),
+            fieldSetService.getFieldForLwc(
+                ProgramEngagement__c.ProgramCohort__c.getDescribe()
+            )
+        );
+        fieldByFieldPath.put(
+            String.valueOf('Contact__r.Name'),
+            fieldSetService.getFieldForLwc(Contact.Name.getDescribe())
+        );
     }
 }

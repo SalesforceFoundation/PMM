@@ -29,6 +29,9 @@ Setup Test Data
 
 *** Test Cases ***
 Create a new service participant
+    [Documentation]                         Navigates to service participant listing page, clicks 'New' on the listing page and
+    ...                                     creates a new record, validates the details on the service participant record
+    [tags]                                  W-8289333        feature:Service Participant
      Go To PMM App
      Go To Page                              Listing                                ${ns}ServiceParticipant__c
      Click Object Button                     New

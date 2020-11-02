@@ -28,10 +28,13 @@ Setup Test Data
 
 *** Test Cases ***
 Create a new service session
+    [Documentation]                        Navigates to service session listing page, clicks 'New' on the listing page and
+    ...                                    creates a new record, validates the details on the service session record
+    [tags]                                 W-8294332        feature:Service Session
      Go To PMM App
      Go To Page                              Listing                                ${ns}ServiceSession__c
      Click Object Button                     New
-     Load Page Object                         New                                   ${ns}ServiceSession__c
+     Load Page Object                        New                                    ${ns}ServiceSession__c
      Populate Field                          Service Session Name                   ${service_session_name}
      Populate Lightning Fields               Service Schedule=${service_schedule}[Name]
      ...                                     Status=Complete
@@ -44,5 +47,3 @@ Create a new service session
      Verify Details                          Primary Service Provider    contains       ${contact}[Name]
      Verify Details                          Status                      contains       Complete
      Verify Page Contains Related List       Service Deliveries
-
-    

@@ -23,7 +23,7 @@ Setup Test Data
     Set suite variable              ${service}
     ${program_engagement} =         API Create Program Engagement   ${Program}[Id]     ${contact}[Id]
     Set suite variable              ${program_engagement}
-    ${today} =                      Get Current Date   result_format=%m/%d/%Y 
+    ${today} =                      Get Current Date   result_format=%-m/%-d/%Y 
     Set suite variable              ${today}
 
 

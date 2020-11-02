@@ -31,6 +31,9 @@ class NewServiceSessionPage(BasePMMPage, BasePage):
         )
 
     def select_session_date(self, date, value):
+        """Opens the date picker on service session dialog by clicking on the date picker
+        icon given the title of the field and select a date
+        """
         locator = pmm_lex_locators["service_session"]["date"].format(date)
         self.selenium.set_focus_to_element(locator)
         element = self.selenium.driver.find_element_by_xpath(locator)

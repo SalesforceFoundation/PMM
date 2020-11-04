@@ -62,7 +62,7 @@ public with sharing class SelectParticipantModel {
 
         populateObjectLabels();
         populateFields();
-        populateHiddenFields();
+        populateRequiredFields();
     }
 
     private void populateObjectLabels() {
@@ -82,7 +82,7 @@ public with sharing class SelectParticipantModel {
     }
 
     // Ensure fields that are required for naming and filtering data are included
-    private void populateHiddenFields() {
+    private void populateRequiredFields() {
         String programFieldPath = String.valueOf(ProgramEngagement__c.ProgramCohort__c);
         Boolean hidden = !fieldByFieldPath.containsKey(programFieldPath);
 

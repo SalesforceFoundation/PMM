@@ -61,7 +61,6 @@ public with sharing class ProgramEngagementSelector {
             )
             .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages');
 
-        System.debug(queryBuilder.buildSoqlQuery());
         List<ProgramEngagement__c> programEngagements = Database.query(
             queryBuilder.buildSoqlQuery()
         );

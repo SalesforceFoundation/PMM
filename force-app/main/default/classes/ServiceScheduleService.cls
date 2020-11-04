@@ -41,7 +41,7 @@ public with sharing class ServiceScheduleService {
 
     public SelectParticipantModel getSelectParticipantModel(Id serviceId) {
         SelectParticipantModel model = new SelectParticipantModel();
-        populate(serviceId, model);
+        populateRecords(serviceId, model);
         return model;
     }
 
@@ -168,7 +168,7 @@ public with sharing class ServiceScheduleService {
         return result;
     }
 
-    private void populate(Id serviceId, SelectParticipantModel model) {
+    private void populateRecords(Id serviceId, SelectParticipantModel model) {
         model.program = programEngagementSelector.getProgramByServiceId(serviceId);
         if (model.program == null) {
             return;

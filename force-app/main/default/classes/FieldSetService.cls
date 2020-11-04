@@ -35,21 +35,6 @@ public with sharing class FieldSetService {
         return fieldByFieldPath;
     }
 
-    private FieldSet getFieldSet(
-        DescribeSObjectResult objectDescribe,
-        String fieldSetName
-    ) {
-        Map<String, FieldSet> fieldSetMap = objectDescribe.fieldSets.getMap();
-        for (String key : fieldSetMap.keySet()) {
-            if (key.containsIgnoreCase(fieldSetName)) {
-                // temporary workaround for namespacing until design parameter definition is implemented
-                return fieldSetMap.get(key);
-            }
-        }
-
-        return null;
-    }
-
     /**
      * @description "Casts" a FieldSet into a List<Map<String, Object>> with 'apiName', 'label', etc keys.
      * This is used by a Lightning Web Component to leverage an admin-controlled field set.
@@ -86,6 +71,27 @@ public with sharing class FieldSetService {
         }
 
         return fieldByApiName.values();
+    }
+
+    /**
+     * @description Retrieve the field set from the object describe with or without a namespace
+     * @param DescribeSObjectResult objectDescribe
+     * @param String fieldSetName
+     * @return      FieldSet
+     */
+    private FieldSet getFieldSet(
+        DescribeSObjectResult objectDescribe,
+        String fieldSetName
+    ) {
+        Map<String, FieldSet> fieldSetMap = objectDescribe.fieldSets.getMap();
+        for (String key : fieldSetMap.keySet()) {
+            if (key.containsIgnoreCase(fieldSetName)) {
+                // temporary workaround for namespacing until design parameter definition is implemented
+                return fieldSetMap.get(key);
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Program Management Module</fullName>
+    <types>
+        <members>ProgramManagementReports/pmdm__Clients_Enrolled_This_Month_6ez</members>
+        <name>Report</name>
+    </types>
+    <version>48.0</version>
+</Package>

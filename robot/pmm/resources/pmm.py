@@ -363,6 +363,9 @@ class pmm(object):
                 "Household Account",
                 "Program Cohort",
                 "Contact",
+                "Service Schedule",
+                "Primary Service Provider",
+                "Other Service Provider",
             ):
                 self.salesforce.populate_lookup_field(key, value)
             else:

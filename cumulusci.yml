@@ -399,3 +399,21 @@ plans:
                     unmanaged: False
                 ui_options:
                     name: "Deploy Folder of Unmanaged Reports"
+    recover-deleted-report:
+        slug: recover-deleted-report
+        title: Recover Deleted Program Management Module Report
+        tier: additional
+        is_listed: False
+        preflight_message: "This installer is designed to correct upgrade issues caused by a Program Management Module report (Clients Enrolled This Month) being deleted. Please do not run this installer unless instructed by Salesforce Support."
+        checks:
+            - when: "not org_config.has_minimum_package_version('pmdm', '1.0')"
+              action: error
+              message: "Please install Program Management Module in your org prior to installing reports."
+        steps:
+            1:
+                task: deploy
+                options:
+                    path: unpackaged/config/fix_deleted_reports
+                    unmanaged: False
+                ui_options:
+                    name: "Recover Deleted Report"

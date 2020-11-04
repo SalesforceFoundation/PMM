@@ -69,6 +69,42 @@ public with sharing class FieldSetService_TEST {
     }
 
     @IsTest
+    private static void shouldReturnFieldPropertiesByFieldPath() {
+        FieldSetService fieldSetService = new FieldSetService();
+        Schema.FieldSet fieldSet = Schema.SObjectType.ProgramEngagement__c.FieldSets.SessionParticipantView;
+
+        Map<String, Map<String, Object>> actualFieldByFieldPath = fieldSetService.getFieldByFieldPath(
+            String.valueOf(ProgramEngagement__c.SObjectType),
+            fieldSet.getName()
+        );
+        String expectedRelationshipName = ProgramEngagement__c.Contact__c.getDescribe()
+            .getRelationshipName();
+
+        System.assert(
+            actualFieldByFieldPath.containsKey(
+                expectedRelationshipName +
+                '.' +
+                String.valueOf(Contact.Name)
+            ),
+            'Expected the client name field to be returned by it\'s full path.'
+        );
+    }
+
+    @IsTest
+    private static void shouldReturnEmptyFieldPropertiesByFieldPathForInvalidFieldSet() {
+        FieldSetService fieldSetService = new FieldSetService();
+        Map<String, Map<String, Object>> actualFieldByFieldPath = fieldSetService.getFieldByFieldPath(
+            String.valueOf(ProgramEngagement__c.SObjectType),
+            'invalidName'
+        );
+
+        System.assert(
+            actualFieldByFieldPath.isEmpty(),
+            'Expected an empty map to be returned.'
+        );
+    }
+
+    @IsTest
     private static void shouldSkipUnsupportedFieldTypes() {
         Test.startTest();
 

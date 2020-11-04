@@ -17,6 +17,7 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private RecurrenceService recurrenceService = new RecurrenceService();
     private static final String ONE_TIME = 'One Time';
+    @TestVisible
     private static final Set<String> ACTIVE_ENGAGEMENT_STAGES = new Set<String>{
         'Active',
         'Enrolled'

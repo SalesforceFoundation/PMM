@@ -84,15 +84,12 @@ public with sharing class SelectParticipantModel {
     // Ensure fields that are required for naming and filtering data are included
     private void populateHiddenFields() {
         String programFieldPath = String.valueOf(ProgramEngagement__c.ProgramCohort__c);
-
-        if (fieldByFieldPath.containsKey(programFieldPath)) {
-            return;
-        }
+        Boolean hidden = !fieldByFieldPath.containsKey(programFieldPath);
 
         Map<String, Object> programField = fieldSetService.getFieldForLwc(
             ProgramEngagement__c.ProgramCohort__c.getDescribe()
         );
-        programField.put('hidden', true);
+        programField.put('hidden', hidden);
         fieldByFieldPath.put(programFieldPath, programField);
 
         String nameFieldPath =
@@ -100,14 +97,12 @@ public with sharing class SelectParticipantModel {
             '.' +
             String.valueOf(Contact.Name);
 
-        if (fieldByFieldPath.containsKey(nameFieldPath)) {
-            return;
-        }
+        hidden = !fieldByFieldPath.containsKey(nameFieldPath);
 
         Map<String, Object> nameField = fieldSetService.getFieldForLwc(
             ProgramEngagement__c.Name.getDescribe()
         );
-        nameField.put('hidden', true);
+        nameField.put('hidden', hidden);
         fieldByFieldPath.put(nameFieldPath, nameField);
     }
 }

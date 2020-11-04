@@ -62,6 +62,7 @@ public with sharing class SelectParticipantModel {
 
         populateObjectLabels();
         populateFields();
+        populateHiddenFields();
     }
 
     private void populateObjectLabels() {
@@ -78,7 +79,10 @@ public with sharing class SelectParticipantModel {
         fields = contactFields;
         fields.putAll(engagementFields);
         fields.putAll(scheduleFields);
+    }
 
+    // Ensure fields that are required for naming and filtering data are included
+    private void populateHiddenFields() {
         String programFieldPath = String.valueOf(ProgramEngagement__c.ProgramCohort__c);
 
         if (fieldByFieldPath.containsKey(programFieldPath)) {
@@ -91,7 +95,10 @@ public with sharing class SelectParticipantModel {
         programField.put('hidden', true);
         fieldByFieldPath.put(programFieldPath, programField);
 
-        String nameFieldPath = String.valueOf(ProgramEngagement__c.ProgramCohort__c);
+        String nameFieldPath =
+            ProgramEngagement__c.Contact__c.getDescribe().getRelationshipName() +
+            '.' +
+            String.valueOf(Contact.Name);
 
         if (fieldByFieldPath.containsKey(nameFieldPath)) {
             return;

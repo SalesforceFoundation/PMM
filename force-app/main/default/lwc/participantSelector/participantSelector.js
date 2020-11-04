@@ -19,6 +19,7 @@ export default class ParticipantSelector extends LightningElement {
     @api serviceId;
     @api serviceScheduleModel;
     @api selectedParticipants = [];
+    @api columns;
 
     selectedRowCount = 0;
     searchValue;
@@ -27,7 +28,6 @@ export default class ParticipantSelector extends LightningElement {
     programName;
     selectedRows;
     addToServiceButtonLabel;
-    columns;
     selectedColumns;
     fields;
     fieldByFieldPath;

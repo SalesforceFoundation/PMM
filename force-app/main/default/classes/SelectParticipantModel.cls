@@ -43,7 +43,7 @@ public with sharing class SelectParticipantModel {
     @AuraEnabled
     public Map<String, Map<String, Object>> fieldByFieldPath = fieldSetService.getFieldByFieldPath(
         String.valueOf(ProgramEngagement__c.SObjectType),
-        'ServiceScheduleParticipantSelector'
+        'SessionParticipantView'
     );
     @AuraEnabled
     public List<ProgramEngagement__c> programEngagements;

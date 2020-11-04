@@ -2,7 +2,7 @@
 
 Resource       robot/pmm/resources/pmm.robot
 Library        cumulusci.robotframework.PageObjects
-...            robot/pmm/resources/ServiceDeliveryPageObject.py
+...            robot/pmm/resources/ServiceParticipantPageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
@@ -23,12 +23,15 @@ Setup Test Data
     Set suite variable              ${service}
     ${program_engagement} =         API Create Program Engagement   ${Program}[Id]     ${contact}[Id]
     Set suite variable              ${program_engagement}
-    ${today} =                      Get Current Date   result_format=%m/%d/%Y 
+    ${today} =                      Get Current Date   result_format=%-m/%-d/%Y 
     Set suite variable              ${today}
 
 
 *** Test Cases ***
 Create a new service participant
+    [Documentation]                         Navigates to service participant listing page, clicks 'New' on the listing page and
+    ...                                     creates a new record, validates the details on the service participant record
+    [tags]                                  W-8289333        feature:Service Participant
      Go To PMM App
      Go To Page                              Listing                                ${ns}ServiceParticipant__c
      Click Object Button                     New
@@ -42,3 +45,4 @@ Create a new service participant
      Wait Until Modal Is Closed
      Verify Details                          Service Participant Name        contains       ${service_participant_name}
      Verify Details                          Sign Up Date                    contains       ${today}
+     Verify Page Contains Related List       Files

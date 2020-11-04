@@ -1,0 +1,80 @@
+<template>
+    <div
+        class="slds-box small-box slds-var-m-around_x-small slds-var-p-horizontal_medium"
+    >
+        <lightning-record-edit-form
+            record-id={recordId}
+            object-api-name={serviceDeliveryObject}
+        >
+            <!-- onload={handleLoad}
+                onsuccess={handleSuccess}
+                onsubmit={handleSubmit}
+                onerror={handleSaveError} -->
+            <lightning-layout multiple-rows="true" horizontal-align="left">
+                <template for:each={fieldSet} for:item="field">
+                    <lightning-layout-item
+                        size="12"
+                        small-device-size="6"
+                        medium-device-size="4"
+                        large-device-size={field.size}
+                        key={field.apiName}
+                        class="slds-var-p-around_xx-small"
+                    >
+                        <template if:true={field.isContactField}>
+                            <div class="slds-form-element slds-form-element_stacked">
+                                <label
+                                    for={field.apiName}
+                                    class="slds-form-element__label"
+                                >
+                                    {field.label}
+                                </label>
+                                <div class="slds-form-element__static">
+                                    {name}
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={field.isQuantityField}>
+                            <div class="slds-form-element slds-form-element_stacked">
+                                <lightning-input
+                                    label={unitOfMeasurement}
+                                    onchange={handleQuantityChange}
+                                    type="number"
+                                    min="0"
+                                    value={quantity}
+                                ></lightning-input>
+                            </div>
+                        </template>
+                        <template if:true={field.isNormalInputField}>
+                            <lightning-input-field
+                                id={field.apiName}
+                                field-name={field.apiName}
+                                onchange={handleInputChange}
+                                disabled={field.disabled}
+                                value={field.value}
+                                variant={field.variant}
+                            >
+                            </lightning-input-field>
+                        </template>
+                        <template if:true={field.isOutputField}>
+                            <template if:true={field.value}>
+                                <div class="slds-form-element slds-form-element_stacked">
+                                    <label
+                                        for={field.apiName}
+                                        class="slds-form-element__label"
+                                    >
+                                        {field.label}
+                                    </label>
+                                    <lightning-output-field
+                                        id={field.name}
+                                        variant="label-hidden"
+                                        field-name={field.apiName}
+                                    ></lightning-output-field>
+                                </div>
+                            </template>
+                        </template>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </lightning-record-edit-form>
+    </div>
+</template>

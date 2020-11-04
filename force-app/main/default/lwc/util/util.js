@@ -255,7 +255,7 @@ const getChildObjectByName = (object, property) => {
         if (Object.prototype.hasOwnProperty.call(object, property)) {
             return object[property];
         }
-        let namespacedProperty = "caseman__" + property;
+        let namespacedProperty = "pmdm__" + property;
         if (Object.prototype.hasOwnProperty.call(object, namespacedProperty)) {
             return object[namespacedProperty];
         }

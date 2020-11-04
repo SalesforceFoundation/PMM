@@ -42,7 +42,10 @@ public with sharing class AttendanceService {
         ServiceParticipant__c participant
     ) {
         SObject particpantRecord = participant;
-        SObject deliveryRecord = new ServiceDelivery__c(ServiceSession__c = sessionId);
+        SObject deliveryRecord = new ServiceDelivery__c(
+            ServiceSession__c = sessionId,
+            AttendanceStatus__c = 'Present'
+        );
 
         for (SObjectField sourceField : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {
             SObjectField targetField = SERVICE_FIELD_BY_PARTICIPANT_FIELD.get(

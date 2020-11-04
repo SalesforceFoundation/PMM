@@ -11,7 +11,9 @@ public with sharing class AttendanceSelector {
                 Service__c,
                 Quantity__c,
                 CreatedDate,
-                AttendanceStatus__c
+                CreatedById,
+                AttendanceStatus__c,
+                UnitOfMeasurement__c
             FROM ServiceDelivery__c
             WHERE ServiceSession__c = :sessionId AND Contact__c != NULL
         ];
@@ -29,7 +31,12 @@ public with sharing class AttendanceSelector {
         }
 
         List<ServiceParticipant__c> serviceParticipants = [
-            SELECT Id, Contact__c, Service__c, ProgramEngagement__c
+            SELECT
+                Id,
+                Contact__c,
+                Service__c,
+                ProgramEngagement__c,
+                Service__r.UnitOfMeasurement__c
             FROM ServiceParticipant__c
             WHERE
                 ServiceSchedule__c = :scheduleId

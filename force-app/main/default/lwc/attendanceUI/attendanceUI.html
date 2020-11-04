@@ -1,0 +1,34 @@
+<template>
+    <lightning-card>
+        <div slot="title">
+            <lightning-icon icon-name="custom:custom15" size="small"></lightning-icon>
+            <span class="slds-p-left_x-small">
+                {header}
+            </span>
+        </div>
+
+        <div class="slds-border_top">
+            <div class="slds-scrollable" style="max-height: 500px;">
+                <template if:true={serviceDeliveries}>
+                    <template for:each={serviceDeliveries} for:item="delivery">
+                        <c-attendance-row
+                            record={delivery}
+                            field-set={fieldSet}
+                            unit-of-measurement={unitOfMeasurement}
+                            key={delivery.index}
+                        ></c-attendance-row>
+                    </template>
+                </template>
+            </div>
+        </div>
+
+        <div slot="footer" class="slds-text-align_right">
+            <lightning-button
+                onclick={handleSubmit}
+                variant="brand"
+                label={labels.submit}
+                title={labels.submit}
+            ></lightning-button>
+        </div>
+    </lightning-card>
+</template>

@@ -18,6 +18,10 @@
                 <field>ServiceSchedule__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>ServiceLink__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>SessionStart__c</field>
             </layoutItems>

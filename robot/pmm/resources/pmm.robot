@@ -92,6 +92,23 @@ API Create Account
     &{account} =        Salesforce Get  Account  ${account_id}
     [Return]            &{account}
 
+API Create Service Schedule
+    [Documentation]     Creates a new Service Schedule. Service Schedule details are passed as key value pairs.
+    ${service_schedule_name} =   Generate Random String
+    ${ns} =                      Get PMM Namespace Prefix
+    [Arguments]                     ${service_id}    &{fields}
+    ${session_start} =         Get Current Date     result_format=%Y-%m-%dT%H:%M:%S.%f
+    ${service_schedule_name} =   Generate Random String
+    ${service_schedule_id} =     Salesforce Insert  ${ns}ServiceSchedule__c
+    ...                             Name=${service_schedule_name}
+    ...                             ${ns}Service__c=${service_id}
+    ...                             ${ns}FirstSessionStart__c=${session_start}
+    ...                             &{fields}
+    &{service_schedule} =       Salesforce Get  ${ns}ServiceSchedule__c  ${service_schedule_id}
+    Store Session Record      ${ns}ServiceSchedule__c  ${service_schedule_id}
+    [Return]            &{service_schedule}
+
+
 Capture Screenshot and Delete Records and Close Browser
     [Documentation]         This keyword will capture a screenshot before closing the browser and deleting records when test fails
     Run Keyword If Any Tests Failed      Capture Page Screenshot

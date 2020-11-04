@@ -82,4 +82,7 @@ pmm_lex_locators = {
             "lookup_field": "//lightning-grouped-combobox[contains(@class,'slds-form-element')][.//label[@class='slds-form-element__label' and text()='{}']]/descendant::lightning-base-combobox//div[contains(@class,'slds-combobox')]/input[contains(@class,'slds-input')]",
         },
     },
+    "service_session": {
+        "date": "//fieldset[contains(@class,'slds-form-element')][./legend[text()='{}']]/descendant::button[@type='button']",
+    },
 }

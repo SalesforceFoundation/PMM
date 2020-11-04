@@ -79,15 +79,28 @@ public with sharing class SelectParticipantModel {
         fields.putAll(engagementFields);
         fields.putAll(scheduleFields);
 
-        fieldByFieldPath.put(
-            String.valueOf(ProgramEngagement__c.ProgramCohort__c),
-            fieldSetService.getFieldForLwc(
-                ProgramEngagement__c.ProgramCohort__c.getDescribe()
-            )
+        String programFieldPath = String.valueOf(ProgramEngagement__c.ProgramCohort__c);
+
+        if (fieldByFieldPath.containsKey(programFieldPath)) {
+            return;
+        }
+
+        Map<String, Object> programField = fieldSetService.getFieldForLwc(
+            ProgramEngagement__c.ProgramCohort__c.getDescribe()
         );
-        fieldByFieldPath.put(
-            String.valueOf('Contact__r.Name'),
-            fieldSetService.getFieldForLwc(Contact.Name.getDescribe())
+        programField.put('hidden', true);
+        fieldByFieldPath.put(programFieldPath, programField);
+
+        String nameFieldPath = String.valueOf(ProgramEngagement__c.ProgramCohort__c);
+
+        if (fieldByFieldPath.containsKey(nameFieldPath)) {
+            return;
+        }
+
+        Map<String, Object> nameField = fieldSetService.getFieldForLwc(
+            ProgramEngagement__c.Name.getDescribe()
         );
+        nameField.put('hidden', true);
+        fieldByFieldPath.put(nameFieldPath, nameField);
     }
 }

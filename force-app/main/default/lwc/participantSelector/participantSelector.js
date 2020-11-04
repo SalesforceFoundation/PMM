@@ -30,6 +30,7 @@ export default class ParticipantSelector extends LightningElement {
     columns;
     selectedColumns;
     fields;
+    fieldByFieldPath;
     objectLabels;
     isLoaded = false;
     rendered = false;
@@ -86,16 +87,17 @@ export default class ParticipantSelector extends LightningElement {
 
         if (result.data) {
             this.fields = result.data.fields;
+            this.fieldByFieldPath = result.data.fieldByFieldPath;
             this.objectLabels = result.data.objectLabels;
             this.engagements = result.data.programEngagements.slice(0);
             this.cohorts = result.data.programCohorts.slice(0);
             this.programName = result.data.program ? result.data.program.Name : "";
 
+            this.setDataTableColumns();
+            this.setSelectedColumns();
             this.loadDataTable();
             this.loadPreviousSelections();
             this.loadProgramCohorts(this.cohorts);
-            this.setDataTableColumns();
-            this.setSelectedColumns();
         } else if (result.error) {
             console.log(result.error);
             this.engagements = undefined;
@@ -109,18 +111,33 @@ export default class ParticipantSelector extends LightningElement {
     loadDataTable() {
         this.availableEngagements = this.engagements.map(engagement => {
             // Flatten relationship fields
-            let contact = {
-                Name: engagement[this.fields.contact.relationshipName].Name,
-                Email: engagement[this.fields.contact.relationshipName].Email,
-            };
             let programEngagement = { ...engagement };
+            for (const [field, value] of Object.entries(programEngagement)) {
+                if (typeof value === "object") {
+                    for (const [parentField, parentValue] of Object.entries(value)) {
+                        programEngagement[field + parentField] = parentValue;
+                    }
+                }
+            }
 
-            return Object.assign(contact, programEngagement);
+            return programEngagement;
         });
 
+        this.sortData(this.availableEngagements);
         this.filteredEngagements = [...this.availableEngagements];
         this.noRecordsFound =
             this.filteredEngagements && this.filteredEngagements.length === 0;
+    }
+
+    sortData(engagements) {
+        if (!(this.columns && this.columns.length && engagements && engagements.length)) {
+            return;
+        }
+
+        let firstColumn = this.columns[0].fieldName;
+        engagements.sort((a, b) => {
+            return a[firstColumn] > b[firstColumn] ? 1 : -1;
+        });
     }
 
     loadPreviousSelections() {
@@ -143,44 +160,37 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     setDataTableColumns() {
-        this.columns = [
-            {
-                label: this.fields.contactName.label,
-                fieldName: this.fields.contactName.apiName,
+        this.columns = [];
+
+        for (const [key, value] of Object.entries(this.fieldByFieldPath)) {
+            if (value.hidden) {
+                continue;
+            }
+
+            let column = {
+                label: value.label,
+                fieldName: key.replace(".", ""),
                 hideDefaultActions: true,
-            },
-            {
-                label: this.fields.contactEmail.label,
-                fieldName: this.fields.contactEmail.apiName,
-                hideDefaultActions: true,
-            },
-            {
-                label: this.fields.engagementStage.label,
-                fieldName: this.fields.engagementStage.apiName,
-                hideDefaultActions: true,
-            },
-        ];
+            };
+            this.columns.push(column);
+        }
     }
 
     setSelectedColumns() {
-        this.selectedColumns = [
-            {
-                label: this.fields.contactName.label,
-                fieldName: this.fields.contactName.apiName,
-                hideDefaultActions: true,
+        let min = Math.min(this.columns.length, 2);
+
+        this.selectedColumns = this.columns.slice(0, min);
+        this.selectedColumns.push({
+            fieldName: "",
+            type: "button-icon",
+            hideDefaultActions: true,
+            typeAttributes: {
+                iconName: "utility:clear",
+                variant: "bare",
+                iconPosition: "left",
+                disabled: false,
             },
-            {
-                fieldName: "",
-                type: "button-icon",
-                hideDefaultActions: true,
-                typeAttributes: {
-                    iconName: "utility:clear",
-                    variant: "bare",
-                    iconPosition: "left",
-                    disabled: false,
-                },
-            },
-        ];
+        });
     }
 
     handleCohortChange(event) {
@@ -206,6 +216,7 @@ export default class ParticipantSelector extends LightningElement {
         this.selectedParticipants = [...this.selectedParticipants];
         this.availableEngagements = tempContacts;
         this.applyFilters();
+        this.sortData(this.selectedParticipants);
     }
 
     handleDeselectParticipant(event) {
@@ -221,7 +232,7 @@ export default class ParticipantSelector extends LightningElement {
             this.selectedParticipants = tempSelectedParticipants;
 
             this.availableEngagements = [...this.availableEngagements, event.detail.row];
-            this.availableEngagements.sort((a, b) => (a.Name > b.Name ? 1 : -1));
+            this.sortData(this.availableEngagements);
 
             //if filters exist apply the filters
             this.applyFilters();
@@ -237,15 +248,12 @@ export default class ParticipantSelector extends LightningElement {
         let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
 
         this.filteredEngagements = this.availableEngagements.filter(
-            element =>
-                (element.Name.toLowerCase().includes(searchText) ||
-                    (element.Email && element.Email.toLowerCase().includes(searchText)) ||
-                    (element[this.fields.engagementStage.apiName] &&
-                        element[this.fields.engagementStage.apiName]
-                            .toLowerCase()
-                            .includes(searchText))) &&
+            row =>
+                JSON.stringify(row)
+                    .toLowerCase()
+                    .includes(searchText) &&
                 (this.cohortId
-                    ? element[this.fields.programCohort.apiName] === this.cohortId
+                    ? row[this.fields.programCohort.apiName] === this.cohortId
                     : true)
         );
 

@@ -246,6 +246,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>ServiceSession__c.ServiceLink__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>ServiceSession__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>

@@ -77,16 +77,20 @@ public with sharing class FieldSetService_TEST {
             String.valueOf(ProgramEngagement__c.SObjectType),
             fieldSet.getName()
         );
-        String expectedRelationshipName = ProgramEngagement__c.Contact__c.getDescribe()
-            .getRelationshipName();
+        String expectedPath =
+            ProgramEngagement__c.Contact__c.getDescribe().getRelationshipName() +
+            '.' +
+            String.valueOf(Contact.Name);
 
         System.assert(
-            actualFieldByFieldPath.containsKey(
-                expectedRelationshipName +
-                '.' +
-                String.valueOf(Contact.Name)
-            ),
+            actualFieldByFieldPath.containsKey(expectedPath),
             'Expected the client name field to be returned by it\'s full path.'
+        );
+
+        System.assertEquals(
+            'Full Name',
+            (String) actualFieldByFieldPath.get(expectedPath).get('label'),
+            'Expected the label for Contact Name to be returned.'
         );
     }
 

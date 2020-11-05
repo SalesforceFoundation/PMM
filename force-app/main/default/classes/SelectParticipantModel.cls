@@ -100,7 +100,7 @@ public with sharing class SelectParticipantModel {
         hidden = !fieldByFieldPath.containsKey(nameFieldPath);
 
         Map<String, Object> nameField = fieldSetService.getFieldForLwc(
-            ProgramEngagement__c.Name.getDescribe()
+            Contact.Name.getDescribe()
         );
         nameField.put('hidden', hidden);
         fieldByFieldPath.put(nameFieldPath, nameField);

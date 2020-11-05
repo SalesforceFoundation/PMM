@@ -13,6 +13,7 @@ export default class AttendanceRow extends LightningElement {
     @track localFieldSet;
 
     @api unitOfMeasurement;
+    @api contactId;
     @api presentStatus = PRESENT_STATUS;
     oldStatus;
     name;
@@ -52,7 +53,7 @@ export default class AttendanceRow extends LightningElement {
     }
 
     @wire(getRecord, {
-        recordId: "$localRecord.Contact__c",
+        recordId: "$contactId",
         fields: [CONTACT_NAME_FIELD],
     })
     wiredDelivery(result) {

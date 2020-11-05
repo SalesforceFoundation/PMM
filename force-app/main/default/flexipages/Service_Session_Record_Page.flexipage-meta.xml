@@ -37,7 +37,7 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>attendanceUI</componentName>
+                <componentName>attendance</componentName>
             </componentInstance>
         </itemInstances>
         <itemInstances>

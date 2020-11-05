@@ -13,14 +13,14 @@ import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.Atten
 import CREATED_DATE_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedDate";
 import CREATED_BY_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedById";
 
-import Submit from "@salesforce/label/c.Submit";
-import Attendance from "@salesforce/label/c.Attendance";
+import Submit_Label from "@salesforce/label/c.Submit";
+import Attendance_Label from "@salesforce/label/c.Attendance";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 const LONG_DATA_TYPES = ["TEXTAREA", "PICKLIST", "REFERENCE"];
 
-export default class AttendanceUI extends LightningElement {
+export default class Attendance extends LightningElement {
     @api recordId;
     @track serviceDeliveries;
     @track fieldSet;
@@ -28,8 +28,8 @@ export default class AttendanceUI extends LightningElement {
     unitOfMeasurement;
 
     labels = {
-        submit: Submit,
-        attendance: Attendance,
+        submit: Submit_Label,
+        attendance: Attendance_Label,
     };
 
     fields = {
@@ -67,6 +67,9 @@ export default class AttendanceUI extends LightningElement {
 
         if (result.data) {
             this.serviceDeliveries = [...result.data];
+            this.serviceDeliveries.forEach(record => {
+                record.contactId = record[this.fields.contact.fieldApiName];
+            });
         } else if (result.error) {
             handleError(result.error);
         }
@@ -76,11 +79,11 @@ export default class AttendanceUI extends LightningElement {
         objectName: SERVICEDELIVERY_OBJECT.objectApiName,
         fieldSetName: FIELD_SET_NAME,
     })
-    wiredFields({ error, data }) {
-        if (data) {
-            this.configureFieldSet(data.map(a => ({ ...a })));
-        } else if (error) {
-            handleError(error);
+    wiredFields(result) {
+        if (result.data) {
+            this.configureFieldSet(result.data.map(a => ({ ...a })));
+        } else if (result.error) {
+            handleError(result.error);
         }
     }
 

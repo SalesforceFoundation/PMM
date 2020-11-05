@@ -20,6 +20,10 @@ Setup Test Data
     Set suite variable             ${contact}
     ${program} =                   API Create Program
     Set suite variable             ${program}
+    ${program1} =                  API Create Program
+    Set suite variable             ${program1}
+    ${program cohort1} =           API Create Program Cohort          ${Program1}[Id]
+    Set suite variable             ${program cohort1}
 
 
 *** Test Cases ***
@@ -106,3 +110,18 @@ Date validation when program engagement dates are not within program date range
      Click Dialog Button                    Save
      Verify Modal Error                     Select an end date that's on or after the program start date and on or before the program end date.
      Verify Modal Error                     Select a start date that's on or after the program start date and on or before the program end date.
+
+Validate program cohort on PE record
+     [Documentation]                        This test opens the new program engagement dialog, enters a cohort that does not lookup to the
+     ...                                    program entered the dialog, validates that an error message is displayed when saved
+     [tags]                                 W-042238   feature:Program Engagement
+     Go To Page                             Listing                                ${ns}ProgramEngagement__c
+     Click Object Button                    New
+     Wait For Modal                         New                                    Program Engagement
+     Populate Field                         Program Engagement Name                ${program_engagement_name}
+     Populate Lightning Fields              Stage=Applied
+     ...                                    Program=${program}[Name]
+     ...                                    Program Cohort=${program cohort1}[Name]
+     ...                                    Role=Volunteer
+     Click Dialog Button                    Save
+     Verify Modal Error                     Select a Program Cohort that matches the Program.

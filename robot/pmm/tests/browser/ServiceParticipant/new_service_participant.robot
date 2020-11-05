@@ -11,8 +11,8 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
-    ${ns} =                        Get PMM Namespace Prefix
-    Set suite variable             ${ns}
+    ${ns} =                         Get PMM Namespace Prefix
+    Set suite variable              ${ns}
     ${service_participant_name} =   Generate Random String
     Set suite variable              ${service_participant_name}
     ${contact} =                    API Create Contact

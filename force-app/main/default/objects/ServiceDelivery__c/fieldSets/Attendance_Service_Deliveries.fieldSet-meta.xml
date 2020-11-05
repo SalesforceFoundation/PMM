@@ -55,7 +55,7 @@
     <displayedFields>
         <field>Contact__c</field>
         <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
+        <isRequired>true</isRequired>
     </displayedFields>
     <displayedFields>
         <field>Quantity__c</field>
@@ -65,7 +65,7 @@
     <displayedFields>
         <field>AttendanceStatus__c</field>
         <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
+        <isRequired>true</isRequired>
     </displayedFields>
     <displayedFields>
         <field>CreatedDate</field>

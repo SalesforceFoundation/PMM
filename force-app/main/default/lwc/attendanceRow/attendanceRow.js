@@ -3,6 +3,7 @@ import { getRecord } from "lightning/uiRecordApi";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import CONTACT_NAME_FIELD from "@salesforce/schema/Contact.Name";
+import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
 
 // TODO: create design parameters for default status and "present" statuses
@@ -24,6 +25,7 @@ export default class AttendanceRow extends LightningElement {
     }
     set record(value) {
         this.localRecord = Object.assign({}, value);
+        this.contactId = this.localRecord[CONTACT_FIELD.fieldApiName];
     }
 
     @api

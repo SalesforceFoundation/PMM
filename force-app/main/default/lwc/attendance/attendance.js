@@ -67,9 +67,6 @@ export default class Attendance extends LightningElement {
 
         if (result.data) {
             this.serviceDeliveries = [...result.data];
-            this.serviceDeliveries.forEach(record => {
-                record.contactId = record[this.fields.contact.fieldApiName];
-            });
         } else if (result.error) {
             handleError(result.error);
         }

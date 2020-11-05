@@ -1,22 +1,28 @@
 public with sharing class AttendanceSelector {
+    private QueryBuilder queryBuilder = new QueryBuilder();
+
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
         if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
             return new List<ServiceDelivery__c>();
         }
 
-        List<ServiceDelivery__c> serviceDeliveries = [
-            SELECT
-                Id,
-                Contact__c,
-                Service__c,
-                Quantity__c,
-                CreatedDate,
-                CreatedById,
-                AttendanceStatus__c,
-                UnitOfMeasurement__c
-            FROM ServiceDelivery__c
-            WHERE ServiceSession__c = :sessionId AND Contact__c != NULL
-        ];
+        List<String> fields = new List<String>();
+        for (
+            Schema.FieldSetMember f : SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries.getFields()
+        ) {
+            fields.add(f.getFieldPath());
+        }
+
+        queryBuilder.withSObjectType(ServiceDelivery__c.getSObjectType())
+            .withSelectFields(fields)
+            .addCondition(
+                String.valueOf(ServiceDelivery__c.ServiceSession__c) + ' = :sessionId'
+            )
+            .addCondition(String.valueOf(ServiceDelivery__c.Contact__c) + ' != NULL');
+
+        List<ServiceDelivery__c> serviceDeliveries = Database.query(
+            queryBuilder.buildSoqlQuery()
+        );
 
         return Security.stripInaccessible(AccessType.READABLE, serviceDeliveries)
             .getRecords();

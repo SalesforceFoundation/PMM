@@ -27,7 +27,7 @@ const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
 const fieldSetAdapter = registerApexTestWireAdapter(getFieldSet);
 const wiredSessionAdapter = registerLdsTestWireAdapter(getRecord);
 
-//jest.mock("c/attendanceRow");
+jest.mock("c/attendanceRow");
 
 describe("c-attendance", () => {
     let element;
@@ -40,39 +40,33 @@ describe("c-attendance", () => {
         });
         element.recordId = "a06630000074mVnAAI";
     });
-    // getting back no rows
-    // sa11y
 
     it("shows multiple returned rows", async () => {
-        // Emit data from @wire
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
-
-        await expect(element).toBeAccessible();
 
         return global.flushPromises().then(async () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
             expect(attendanceRows).toHaveLength(mockGenerateRoster.length);
+            await expect(element).toBeAccessible();
         });
     });
     it("shows zero returned rows", async () => {
-        // Emit data from @wire
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
-
-        await expect(element).toBeAccessible();
 
         return global.flushPromises().then(async () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
             expect(attendanceRows).toHaveLength(mockGenerateRosterEmpty.length);
+            await expect(element).toBeAccessible();
         });
     });
 });

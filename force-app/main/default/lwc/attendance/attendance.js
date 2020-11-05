@@ -119,13 +119,11 @@ export default class Attendance extends LightningElement {
             } else if (field.apiName === this.fields.quantity.fieldApiName) {
                 field.isQuantityField = true;
                 field.variant = "label-hidden";
-            } else if (field.apiName === this.fields.createdDate.fieldApiName) {
-                field.isOutputField = true;
-            } else if (field.apiName === this.fields.createdBy.fieldApiName) {
-                field.isOutputField = true;
             } else {
-                field.isNormalInputField = true;
+                field.isNormalInputField = field.isUpdateable;
+                field.isOutputField = !field.isUpdateable;
             }
+
             finalFieldSet.push(field);
         });
         this.fieldSet = finalFieldSet;

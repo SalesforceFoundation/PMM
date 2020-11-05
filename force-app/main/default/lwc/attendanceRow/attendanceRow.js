@@ -64,6 +64,8 @@ export default class AttendanceRow extends LightningElement {
         }
         if (result.data) {
             this.name = result.data.fields.Name.value;
+            console.log("here");
+            console.log(this.name);
         }
     }
 

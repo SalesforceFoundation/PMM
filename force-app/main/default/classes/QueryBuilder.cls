@@ -32,6 +32,8 @@ public inherited sharing class QueryBuilder {
         for (Schema.FieldSetMember f : fieldSet.getFields()) {
             this.selectFields.add(f.getFieldPath());
         }
+
+        return this;
     }
 
     public QueryBuilder addCondition(String condition) {

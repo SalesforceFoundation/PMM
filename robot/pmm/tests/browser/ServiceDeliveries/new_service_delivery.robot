@@ -16,19 +16,19 @@ Setup Test Data
     Set suite variable               ${service_delivery_name}
     ${ns} =                          Get PMM Namespace Prefix
     Set suite variable               ${ns}
-    &{contact} =                     API Create Contact
-    Set suite variable               &{contact}
-    &{account1} =                    API Create Account
-    Set suite variable               &{account1}
-    &{program} =                     API Create Program
-    Set suite variable               &{program}
-    &{program_engagement} =          API Create Program Engagement   ${Program}[Id]  ${contact}[Id]
-    Set suite variable               &{program_engagement}
-    &{service} =                     API Create Service   ${Program}[Id]
-    Set suite variable               &{service}
+    ${contact} =                     API Create Contact
+    Set suite variable               ${contact}
+    ${account1} =                    API Create Account
+    Set suite variable               ${account1}
+    ${program} =                     API Create Program
+    Set suite variable               ${program}
+    ${program_engagement} =          API Create Program Engagement   ${Program}[Id]             ${contact}[Id]
+    Set suite variable               ${program_engagement}
+    ${service} =                     API Create Service              ${Program}[Id]
+    Set suite variable               ${service}
     ${quantity} =                    Generate Random String    2     [NUMBERS]
     Set suite variable               ${quantity}
-    ${today} =                       Get Current Date                 result_format=%-m/%-d/%Y 
+    ${today} =                       Get Current Date                result_format=%-m/%-d/%Y 
     Set suite variable               ${today}
 
 

@@ -20,6 +20,10 @@ Setup Test Data
     Set suite variable             ${contact}
     ${program} =                   API Create Program
     Set suite variable             ${program}
+    ${program1} =                  API Create Program
+    Set suite variable             ${program1}
+    ${program cohort1} =           API Create Program Cohort          ${Program1}[Id]
+    Set suite variable             ${program cohort1}
 
 
 *** Test Cases ***
@@ -32,13 +36,13 @@ Create Program Engagement
      Wait For Modal                          New                                    Program Engagement
      Populate Field                          Program Engagement Name                ${program_engagement_name}
      Populate Lightning Fields               Stage=Applied
-     ...                                     Client=&{contact}[FirstName] &{contact}[LastName]
-     ...                                     Program=&{program}[Name]
+     ...                                     Client=${contact}[FirstName] ${contact}[LastName]
+     ...                                     Program=${program}[Name]
      ...                                     Role=Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
-     Verify Details                          Program                  contains                  &{program}[Name]
-     Verify Details                          Client                   contains                  &{contact}[FirstName] &{contact}[LastName]
+     Verify Details                          Program                  contains                  ${program}[Name]
+     Verify Details                          Client                   contains                  ${contact}[FirstName] ${contact}[LastName]
      Page Should Not Contain                 ${program_engagement_name}
      Verify Page Contains Related List       Service Deliveries
      ${program_engagement_id} =              Save Current Record ID For Deletion                ${ns}ProgramEngagement__c
@@ -53,8 +57,8 @@ Create Program Engagement with Auto Name Override
      Wait For Modal                         New                                    Program Engagement
      Populate Field                         Program Engagement Name                ${program_engagement_name}
      Populate Lightning fields              Stage=Applied
-     ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
-     ...                                    Program=&{program}[Name]
+     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
+     ...                                    Program=${program}[Name]
      ...                                    Role=Volunteer
      Set Checkbox                           Auto-Name Override                      checked
      Click Dialog Button                    Save
@@ -72,8 +76,8 @@ Date validation for PE when start date is later than end date
      Wait For Modal                         New                                    Program Engagement
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
      Populate Lightning fields              Stage=Applied
-     ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
-     ...                                    Program=&{program}[Name]
+     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
+     ...                                    Program=${program}[Name]
      ...                                    Role=Volunteer
      ...                                    Start Date=25
      ...                                    End Date=10
@@ -98,11 +102,27 @@ Date validation when program engagement dates are not within program date range
      Wait For Modal                         New                                    Program Engagement
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
      Populate Lightning fields              Stage=Applied
-     ...                                    Client=&{contact}[FirstName] &{contact}[LastName]
-     ...                                    Program=&{program}[Name]
+     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
+     ...                                    Program=${program}[Name]
      ...                                    Role=Volunteer
      Select From Date Picker                Start Date                               10
      Select From Date Picker                End Date                                 25
      Click Dialog Button                    Save
      Verify Modal Error                     Select an end date that's on or after the program start date and on or before the program end date.
      Verify Modal Error                     Select a start date that's on or after the program start date and on or before the program end date.
+     Click Dialog Button                    Cancel
+
+Validate program cohort on new PE dialog
+     [Documentation]                        This test opens the new program engagement dialog, enters a cohort that does not lookup to the
+     ...                                    program entered the dialog, validates that an error message is displayed when saved
+     [tags]                                 W-042238   feature:Program Engagement
+     Go To Page                             Listing                                ${ns}ProgramEngagement__c
+     Click Object Button                    New
+     Wait For Modal                         New                                    Program Engagement
+     Populate Field                         Program Engagement Name                ${program_engagement_name}
+     Populate Lightning Fields              Stage=Applied
+     ...                                    Program=${program}[Name]
+     ...                                    Program Cohort=${program cohort1}[Name]
+     ...                                    Role=Volunteer
+     Click Dialog Button                    Save
+     Verify Modal Error                     Select a Program Cohort that matches the Program.

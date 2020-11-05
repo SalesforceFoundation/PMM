@@ -20,8 +20,7 @@ Setup Test Data
     ${ns} =                     Get PMM Namespace Prefix
     Set suite variable          ${ns}
     &{program} =                API Create Program
-    Store Session Record        ${ns}Program__c         &{program}[Id]
-    Set suite variable          &{program}
+    Set suite variable          ${program}
 
 *** Test Cases ***
 Create Service from top nav
@@ -33,11 +32,11 @@ Create Service from top nav
      Populate Field                         Service Name                ${service_name}
      Populate Field                         Description                 ${Description}
      Populate Field                         Unit of Measurement         ${unit_of_measurement}
-     Populate Lightning Fields              Program=&{program}[Name]
+     Populate Lightning Fields              Program=${program}[Name]
      ...                                    Status=Active
      click Dialog button                    Save
      Wait Until Modal Is Closed
-     verify details                         Program            contains          &{program}[Name]
+     verify details                         Program            contains          ${program}[Name]
      verify details                         Service Name       contains          ${service_name}
      verify page contains related list      Service Deliveries
      ${service_id} =                        Save Current Record ID For Deletion     ${ns}Service__c

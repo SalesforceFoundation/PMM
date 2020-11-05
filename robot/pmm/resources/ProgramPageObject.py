@@ -39,8 +39,4 @@ class ProgramDetailPage(BasePMMPage, DetailPage):
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"
         )
-        self.selenium.location_should_contain(
-            "/lightning/r/Program__c/",
-            message="Current page is not a Program record detail view",
-        )
         self.selenium.wait_until_page_contains("Program Name")

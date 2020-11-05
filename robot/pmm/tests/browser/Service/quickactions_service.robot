@@ -15,19 +15,19 @@ Setup Test Data
     ${ns} =                     Get PMM Namespace Prefix
     Set suite variable          ${ns}
 
-    &{program} =                API Create Program
-    Set suite variable          &{program}
-    &{contact} =                API Create Contact
-    Set suite variable          &{contact}
-    &{service} =                API Create Service              ${Program}[Id]
-    Set suite variable          &{service}
-    &{program_engagement} =     API Create Program Engagement   ${Program}[Id]      ${contact}[Id]
-    Set suite variable          &{program_engagement}
+    ${program} =                API Create Program
+    Set suite variable          ${program}
+    ${contact} =                API Create Contact
+    Set suite variable          ${contact}
+    ${service} =                API Create Service              ${Program}[Id]
+    Set suite variable          ${service}
+    ${program_engagement} =     API Create Program Engagement   ${Program}[Id]      ${contact}[Id]
+    Set suite variable          ${program_engagement}
 
-    &{program1} =               API Create Program
-    Set suite variable          &{program1}
+    ${program1} =               API Create Program
+    Set suite variable          ${program1}
     &{program_engagement1} =    API Create Program Engagement   ${Program1}[Id]      ${contact}[Id]
-    Set suite variable          &{program_engagement1}
+    Set suite variable          ${program_engagement1}
 
     ${today} =                  Get Current Date                result_format=%Y-%m-%d
     Set suite variable          ${today}

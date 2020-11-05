@@ -1,0 +1,8 @@
+.slds-card__body {
+    margin-bottom: 0px;
+}
+
+.slds-accordion__section {
+    padding-right: none;
+    padding-bottom: 0px;
+}

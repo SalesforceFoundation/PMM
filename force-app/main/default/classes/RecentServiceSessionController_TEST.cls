@@ -1,0 +1,65 @@
+@IsTest
+public with sharing class RecentServiceSessionController_TEST {
+    private static BasicStub serviceStub = new BasicStub(
+        RecentServiceSessionService.class
+    );
+
+    @IsTest
+    private static void testGetServiceSessions() {
+        final String methodName = 'getServiceSessions';
+        final String dateRange = 'THIS_WEEK';
+        Map<String, List<ServiceSession__c>> expected = new Map<String, List<ServiceSession__c>>();
+
+        expected.put(System.now().format('EEEE, dd MMMM'), new List<ServiceSession__c>());
+
+        serviceStub.withReturnValue(methodName, String.class, expected);
+
+        Test.startTest();
+        RecentServiceSessionController.serviceSessionService = (RecentServiceSessionService) serviceStub.createMock();
+
+        final Map<String, List<ServiceSession__c>> actual = RecentServiceSessionController.getServiceSessions(
+            dateRange
+        );
+
+        Test.stopTest();
+
+        Set<String> expectedKeySet = new Set<String>{
+            System.now().format('EEEE, dd MMMM')
+        };
+        System.assertEquals(expectedKeySet, actual.keySet());
+
+        serviceStub.assertCalledWith(methodName, String.class, dateRange);
+    }
+
+    @IsTest
+    private static void testGetServiceSessionsWithException() {
+        final String methodName = 'getServiceSessions';
+        final String dateRange = 'THIS_WEEK';
+        Map<String, List<ServiceSession__c>> expected = new Map<String, List<ServiceSession__c>>();
+        expected.put(System.now().format('EEEE, dd MMMM'), new List<ServiceSession__c>());
+
+        serviceStub.withThrowException(methodName, String.class);
+
+        Test.startTest();
+        RecentServiceSessionController.serviceSessionService = (RecentServiceSessionService) serviceStub.createMock();
+
+        final Map<String, List<ServiceSession__c>> actual;
+        Exception actualException;
+
+        try {
+            actual = RecentServiceSessionController.getServiceSessions(dateRange);
+        } catch (Exception e) {
+            actualException = e;
+        }
+
+        Test.stopTest();
+
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+
+        serviceStub.assertCalledWith(methodName, String.class, dateRange);
+    }
+}

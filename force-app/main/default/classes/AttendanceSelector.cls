@@ -6,15 +6,10 @@ public with sharing class AttendanceSelector {
             return new List<ServiceDelivery__c>();
         }
 
-        List<String> fields = new List<String>();
-        for (
-            Schema.FieldSetMember f : SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries.getFields()
-        ) {
-            fields.add(f.getFieldPath());
-        }
+        FieldSet fieldSet = SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
 
         queryBuilder.withSObjectType(ServiceDelivery__c.getSObjectType())
-            .withSelectFields(fields)
+            .withSelectFields(fieldSet)
             .addCondition(
                 String.valueOf(ServiceDelivery__c.ServiceSession__c) + ' = :sessionId'
             )

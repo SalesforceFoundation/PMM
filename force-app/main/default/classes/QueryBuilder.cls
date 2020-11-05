@@ -28,6 +28,12 @@ public inherited sharing class QueryBuilder {
         return this;
     }
 
+    public QueryBuilder withSelectFields(FieldSet fieldSet) {
+        for (Schema.FieldSetMember f : fieldSet.getFields()) {
+            this.selectFields.add(f.getFieldPath());
+        }
+    }
+
     public QueryBuilder addCondition(String condition) {
         conditions.add(condition);
         return this;

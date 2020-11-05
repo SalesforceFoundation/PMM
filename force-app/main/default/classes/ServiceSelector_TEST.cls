@@ -11,7 +11,7 @@
 public with sharing class ServiceSelector_TEST {
     @IsTest
     private static void testGetServicesByProgramIds() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateServiceData();
 
         Program__c program1 = [
             SELECT Id, Name
@@ -55,7 +55,7 @@ public with sharing class ServiceSelector_TEST {
             UserName = 'standarduser1@' + random + '.example.com'
         );
 
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateServiceData();
 
         Program__c program1 = [
             SELECT Id, Name
@@ -77,7 +77,7 @@ public with sharing class ServiceSelector_TEST {
 
     @IsTest
     private static void testGetServicesByProgramEngagementId() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateServiceData();
         Program__c program1 = [
             SELECT Id, Name
             FROM Program__c
@@ -142,7 +142,7 @@ public with sharing class ServiceSelector_TEST {
             UserName = 'standarduser1@' + random + '.example.com'
         );
 
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateServiceData();
 
         Program__c program1 = [
             SELECT Id, Name

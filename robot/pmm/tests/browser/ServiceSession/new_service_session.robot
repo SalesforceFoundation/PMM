@@ -34,7 +34,7 @@ Create a new service session
      Go To PMM App
      Go To Page                              Listing                                ${ns}ServiceSession__c
      Click Object Button                     New
-     Load Page Object                        New                                    ${ns}ServiceSession__c
+     Load Page Object                        New                                    ServiceSession__c
      Populate Field                          Service Session Name                   ${service_session_name}
      Populate Lightning Fields               Service Schedule=${service_schedule}[Name]
      ...                                     Status=Complete

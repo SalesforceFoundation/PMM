@@ -104,8 +104,4 @@ class ProgramEngagementDetailPage(BasePMMPage, DetailPage):
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"
         )
-        self.selenium.location_should_contain(
-            "/lightning/r/ProgramEngagement__c/",
-            message="Current page is not a Program Engagement record detail view",
-        )
         self.selenium.wait_until_page_contains("Program Engagement Name")

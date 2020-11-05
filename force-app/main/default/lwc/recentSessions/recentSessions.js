@@ -63,9 +63,12 @@ export default class RecentSessions extends LightningElement {
             // eslint-disable-next-line guard-for-in
             for (let sessionStartDate in sessions) {
                 //Here we are creating the array to iterate on UI.
+                let currentDate = new Date();
                 this.sessionsData.push({
                     sessionStartDate: sessionStartDate,
                     sessions: this.processSessions(sessions[sessionStartDate]),
+                    openCurrentSection:
+                        new Date(sessionStartDate).getDate() === currentDate.getDate(),
                     totalSessions:
                         sessions[sessionStartDate].length === 1
                             ? sessions[sessionStartDate].length + " " + this.objectLabel
@@ -79,30 +82,6 @@ export default class RecentSessions extends LightningElement {
         }
     }
 
-    handleOpenFirstAccordion() {
-        let accordionSection = this.template.querySelector("c-accordion-section");
-        if (accordionSection) {
-            accordionSection.open();
-        }
-    }
-
-    renderedCallback() {
-        if (!this.isAccordionSectionOpen) {
-            if (this.sessionsData) {
-                this.sessionsData.forEach(element => {
-                    let sessionStart = new Date(element.sessionStartDate);
-                    let currentDate = new Date();
-
-                    //get just the date to compare and if the dates are the same open the accordion
-                    if (sessionStart.getUTCDate() === currentDate.getUTCDate()) {
-                        this.handleOpenFirstAccordion();
-                    }
-                });
-            }
-            this.isAccordionSectionOpen = false;
-        }
-    }
-
     processSessions(records) {
         if (!records) {
             return records;
@@ -113,7 +92,6 @@ export default class RecentSessions extends LightningElement {
         sessions.forEach(element => {
             element.showCompleteIcon = element[prefixNamespace("Status__c")] === COMPLETE;
         });
-
         return sessions;
     }
 

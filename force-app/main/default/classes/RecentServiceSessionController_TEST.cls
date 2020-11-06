@@ -5,7 +5,7 @@ public with sharing class RecentServiceSessionController_TEST {
     @IsTest
     private static void testGetServiceSessionsByStartDate() {
         final String methodName = 'getServiceSessionsByStartDate';
-        final String dateRange = 'THIS_WEEK';
+        final String dateLiteral = 'THIS_WEEK';
 
         Map<String, List<ServiceSession__c>> expected = new Map<String, List<ServiceSession__c>>();
 
@@ -17,20 +17,20 @@ public with sharing class RecentServiceSessionController_TEST {
         RecentServiceSessionController.serviceSessionService = (ServiceSessionService) serviceStub.createMock();
 
         final Map<String, List<ServiceSession__c>> actual = RecentServiceSessionController.getServiceSessionsByStartDate(
-            dateRange
+            dateLiteral
         );
 
         Test.stopTest();
 
         System.assertEquals(expected.keySet(), actual.keySet());
 
-        serviceStub.assertCalledWith(methodName, String.class, dateRange);
+        serviceStub.assertCalledWith(methodName, String.class, dateLiteral);
     }
 
     @IsTest
     private static void testGetServiceSessionsByStartDateWithException() {
         final String methodName = 'getServiceSessionsByStartDate';
-        final String dateRange = 'THIS_WEEK';
+        final String dateLiteral = 'THIS_WEEK';
 
         serviceStub.withThrowException(methodName, String.class);
 
@@ -42,7 +42,7 @@ public with sharing class RecentServiceSessionController_TEST {
 
         try {
             actual = RecentServiceSessionController.getServiceSessionsByStartDate(
-                dateRange
+                dateLiteral
             );
         } catch (Exception e) {
             actualException = e;
@@ -56,6 +56,6 @@ public with sharing class RecentServiceSessionController_TEST {
             'Expected the controller to rethrow the exception from the service.'
         );
 
-        serviceStub.assertCalledWith(methodName, String.class, dateRange);
+        serviceStub.assertCalledWith(methodName, String.class, dateLiteral);
     }
 }

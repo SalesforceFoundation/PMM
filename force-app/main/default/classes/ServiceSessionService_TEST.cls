@@ -18,7 +18,7 @@ public with sharing class ServiceSessionService_TEST {
     private static void testGetServiceSessionsByStartDate() {
         TestDataFactory.generateAttendanceData('Daily');
 
-        final String dateRange = 'THIS_WEEK';
+        final String dateLiteral = 'THIS_WEEK';
         final String methodName = 'getServiceSessionsByStartDate';
         final DateTime currentDate = System.now();
         Map<String, List<ServiceSession__c>> expected = new Map<String, List<ServiceSession__c>>();
@@ -46,7 +46,7 @@ public with sharing class ServiceSessionService_TEST {
         service.serviceSessionSelector = (ServiceSessionSelector) serviceSelectorStub.createMock();
 
         Map<String, List<ServiceSession__c>> actual = service.getServiceSessionsByStartDate(
-            dateRange
+            dateLiteral
         );
 
         Test.stopTest();
@@ -68,6 +68,6 @@ public with sharing class ServiceSessionService_TEST {
             'Actual result does not have the key'
         );
 
-        serviceSelectorStub.assertCalledWith(methodName, String.class, dateRange);
+        serviceSelectorStub.assertCalledWith(methodName, String.class, dateLiteral);
     }
 }

@@ -12,10 +12,10 @@ public with sharing class RecentServiceSessionController {
 
     @AuraEnabled(cacheable=true)
     public static Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
-        String dateRange
+        String dateLiteral
     ) {
         try {
-            return serviceSessionService.getServiceSessionsByStartDate(dateRange);
+            return serviceSessionService.getServiceSessionsByStartDate(dateLiteral);
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }

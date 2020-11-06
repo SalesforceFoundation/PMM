@@ -7,7 +7,7 @@
  *
  */
 public with sharing class ServiceSessionSelector {
-    public List<ServiceSession__c> getServiceSessionsByStartDate(String dateRange) {
+    public List<ServiceSession__c> getServiceSessionsByStartDate(String dateLiteral) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
 
         if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {
@@ -38,7 +38,7 @@ public with sharing class ServiceSessionSelector {
         queryBuilder.addCondition(
             String.valueOf(ServiceSession__c.SessionStart__c) +
             ' = ' +
-            dateRange
+            dateLiteral
         );
 
         queryBuilder.withOrderBy(String.valueOf(ServiceSession__c.SessionStart__c));

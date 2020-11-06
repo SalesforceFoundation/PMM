@@ -15,7 +15,7 @@ public with sharing class ServiceSessionSelector_TEST {
 
     @IsTest
     private static void testGetServiceSessionsForThisWeek() {
-        final String dateRange = 'THIS_WEEK';
+        final String dateLiteral = 'THIS_WEEK';
 
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
@@ -27,7 +27,7 @@ public with sharing class ServiceSessionSelector_TEST {
         Test.startTest();
         ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
         List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsByStartDate(
-            dateRange
+            dateLiteral
         );
         Test.stopTest();
 
@@ -51,7 +51,7 @@ public with sharing class ServiceSessionSelector_TEST {
 
     @IsTest
     private static void testGetServiceSessionsForLastWeek() {
-        final String dateRange = 'LAST_WEEK';
+        final String dateLiteral = 'LAST_WEEK';
 
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
@@ -63,7 +63,7 @@ public with sharing class ServiceSessionSelector_TEST {
         Test.startTest();
         ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
         List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsByStartDate(
-            dateRange
+            dateLiteral
         );
         Test.stopTest();
 
@@ -76,7 +76,7 @@ public with sharing class ServiceSessionSelector_TEST {
 
     @IsTest
     private static void testGetServiceSessionsNoAccess() {
-        final String dateRange = 'LAST_WEEK';
+        final String dateLiteral = 'LAST_WEEK';
 
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
@@ -89,7 +89,7 @@ public with sharing class ServiceSessionSelector_TEST {
         System.runAs(TestUtil.getTestUser()) {
             ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
             List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsByStartDate(
-                dateRange
+                dateLiteral
             );
             System.assertEquals(
                 new List<ServiceSession__c>(),

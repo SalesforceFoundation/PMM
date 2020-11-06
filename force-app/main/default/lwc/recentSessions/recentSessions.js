@@ -14,6 +14,7 @@ import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c
 import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 import SERVICE_SCHEDULE_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
+import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
@@ -21,14 +22,16 @@ const THIS_WEEK = "THIS_WEEK";
 const COMPLETE = "Complete";
 
 export default class RecentSessions extends LightningElement {
-    @track isAccordionSectionOpen = false;
     @track sessionsData = [];
     @track listViewNames = [];
+
     serviceSessionObject = SERVICE_SESSION_OBJECT;
     objectLabel;
     objectLabelPlural;
     serviceScheduleRelationshipName;
     serviceRelationshipName;
+    timeZone = TIME_ZONE;
+    isAccordionSectionOpen = false;
 
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,

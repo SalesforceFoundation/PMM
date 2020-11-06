@@ -69,6 +69,12 @@
                                             title={labels.success}
                                             if:true={session.showCompleteIcon}
                                         ></lightning-icon>
+                                        <lightning-icon
+                                            tabindex="0"
+                                            icon-name="utility:clock"
+                                            size="x-small"
+                                            if:false={session.showCompleteIcon}
+                                        ></lightning-icon>
                                         <lightning-output-field
                                             field-name={fields.status}
                                             variant="label-hidden"
@@ -84,6 +90,7 @@
                                             value={session.sessionStartDate}
                                             hour="2-digit"
                                             minute="2-digit"
+                                            time-zone={timeZone}
                                         ></lightning-formatted-date-time>
                                         <span
                                             class="slds-var-p-left_x-small slds-var-p-right_x-small"

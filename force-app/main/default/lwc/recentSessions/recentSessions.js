@@ -8,9 +8,12 @@ import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import USER_LABEL from "@salesforce/label/c.User";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
+import SERVICE_SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
 import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
 import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
+import SERVICE_SCHEDULE_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__c";
+import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
@@ -24,6 +27,8 @@ export default class RecentSessions extends LightningElement {
     serviceSessionObject = SERVICE_SESSION_OBJECT;
     objectLabel;
     objectLabelPlural;
+    serviceScheduleRelationshipName;
+    serviceRelationshipName;
 
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,
@@ -35,21 +40,36 @@ export default class RecentSessions extends LightningElement {
         status: STATUS_FIELD.fieldApiName,
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
         sessionStartDate: SESSION_START_DATE.fieldApiName,
+        serviceSchedule: SERVICE_SCHEDULE_FIELD.fieldApiName,
+        service: SERVICE_FIELD.fieldApiName,
     };
 
     @wire(getObjectInfo, { objectApiName: SERVICE_SESSION_OBJECT })
-    objectInfo(result, error) {
+    serviceSessionInfo(result, error) {
         if (!result) {
             return;
         }
         if (result.data) {
             this.objectLabel = result.data.label;
             this.objectLabelPlural = result.data.labelPlural;
+            this.serviceScheduleRelationshipName =
+                result.data.fields[this.fields.serviceSchedule].relationshipName;
         } else if (error) {
             console.log(error);
         }
     }
-
+    @wire(getObjectInfo, { objectApiName: SERVICE_SCHEDULE_OBJECT })
+    serviceScheduleInfo(result, error) {
+        if (!result) {
+            return;
+        }
+        if (result.data) {
+            this.serviceRelationshipName =
+                result.data.fields[this.fields.service].relationshipName;
+        } else if (error) {
+            console.log(error);
+        }
+    }
     @wire(getServiceSessions, { dateRange: THIS_WEEK })
     wiredServiceSessions(result, error) {
         if (!result.data) {
@@ -89,10 +109,13 @@ export default class RecentSessions extends LightningElement {
         let sessions = JSON.parse(JSON.stringify(records));
 
         sessions.forEach(element => {
+            let serviceSchedule = element[this.serviceScheduleRelationshipName];
+
             element.showCompleteIcon = element[this.fields.status] === COMPLETE;
             element.showPrimaryServiceProviderIcon =
                 element[this.fields.primaryServiceProvider] !== undefined ? true : false;
             element.sessionStartDate = element[this.fields.sessionStartDate];
+            element.serviceName = serviceSchedule[this.serviceRelationshipName].Name;
         });
 
         return sessions;

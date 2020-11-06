@@ -37,7 +37,7 @@
                                 >
                                     {field.label}
                                 </label>
-                                <div class="slds-form-element__static">
+                                <div class="slds-form-element__static" id={field.apiName}>
                                     {name}
                                 </div>
                             </div>
@@ -55,10 +55,8 @@
                         </template>
                         <template if:true={field.isNormalInputField}>
                             <lightning-input-field
-                                id={field.apiName}
                                 field-name={field.apiName}
                                 onchange={handleInputChange}
-                                disabled={field.disabled}
                                 value={field.value}
                                 variant={field.variant}
                             >

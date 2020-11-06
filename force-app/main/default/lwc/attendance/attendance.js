@@ -13,11 +13,11 @@ import { getRecord } from "lightning/uiRecordApi";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 
-import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
-import UNITMEASUREMENT_RELATED_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__r.Service__r.UnitOfMeasurement__c";
-import UNITMEASUREMENT_SERVICE_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
+import UNIT_MEASUREMENT_RELATED_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__r.Service__r.UnitOfMeasurement__c";
+import UNIT_MEASUREMENT_SERVICE_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
 import CREATED_DATE_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedDate";
 import CREATED_BY_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedById";
@@ -51,7 +51,7 @@ export default class Attendance extends LightningElement {
 
     @wire(getRecord, {
         recordId: "$recordId",
-        fields: [UNITMEASUREMENT_RELATED_FIELD],
+        fields: [UNIT_MEASUREMENT_RELATED_FIELD],
     })
     wiredSession(result) {
         if (!(result.data || result.error)) {
@@ -62,9 +62,9 @@ export default class Attendance extends LightningElement {
             let schedule = getChildObjectByName(result.data.fields, "ServiceSchedule__r");
             let service = getChildObjectByName(schedule.value.fields, "Service__r");
             this.unitOfMeasurement =
-                service.value.fields[UNITMEASUREMENT_SERVICE_FIELD.fieldApiName].value;
+                service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName].value;
         } else if (result.error) {
-            handleError(result.error);
+            console.log(result.error);
         }
     }
 
@@ -76,13 +76,19 @@ export default class Attendance extends LightningElement {
 
         if (result.data) {
             this.serviceDeliveries = [...result.data];
+            this.serviceDeliveries.sort((a, b) => {
+                return getChildObjectByName(a, "Contact__r").Name >
+                    getChildObjectByName(b, "Contact__r").Name
+                    ? 1
+                    : -1;
+            });
         } else if (result.error) {
             handleError(result.error);
         }
     }
 
     @wire(getFieldSet, {
-        objectName: SERVICEDELIVERY_OBJECT.objectApiName,
+        objectName: SERVICE_DELIVERY_OBJECT.objectApiName,
         fieldSetName: FIELD_SET_NAME,
     })
     wiredFields(result) {
@@ -105,15 +111,11 @@ export default class Attendance extends LightningElement {
     configureFieldSet(incomingFieldSet) {
         let finalFieldSet = [];
         incomingFieldSet.forEach(field => {
-            field.disabled = false;
             field.isQuantityField = false;
             field.isOutputField = false;
             field.isNormalInputField = false;
             field.isContactField = false;
 
-            // Number fields are size 1
-            // Client lookup is size 3
-            // Everything else is size 2
             if (SHORT_DATA_TYPES.includes(field.type)) {
                 field.size = 1;
             } else if (LONG_DATA_TYPES.includes(field.type)) {

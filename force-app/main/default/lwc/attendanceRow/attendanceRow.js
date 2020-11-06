@@ -7,12 +7,11 @@
  *
  */
 
-import { LightningElement, api, track, wire } from "lwc";
-import { getRecord } from "lightning/uiRecordApi";
-import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+import { LightningElement, api, track } from "lwc";
+import { getChildObjectByName } from "c/util";
+
+import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
-import CONTACT_NAME_FIELD from "@salesforce/schema/Contact.Name";
-import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
 
 // TODO: create design parameters for default status and "present" statuses
@@ -23,7 +22,6 @@ export default class AttendanceRow extends LightningElement {
     @track localFieldSet;
 
     @api unitOfMeasurement;
-    @api contactId;
     @api presentStatus = PRESENT_STATUS;
     oldStatus;
     name;
@@ -34,7 +32,7 @@ export default class AttendanceRow extends LightningElement {
     }
     set record(value) {
         this.localRecord = Object.assign({}, value);
-        this.contactId = this.localRecord[CONTACT_FIELD.fieldApiName];
+        this.name = getChildObjectByName(this.localRecord, "Contact__r").Name;
     }
 
     @api
@@ -53,7 +51,7 @@ export default class AttendanceRow extends LightningElement {
         status: ATTENDANCE_STATUS_FIELD,
     };
 
-    serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
+    serviceDeliveryObject = SERVICE_DELIVERY_OBJECT;
 
     get recordId() {
         return this.record.Id;
@@ -61,21 +59,6 @@ export default class AttendanceRow extends LightningElement {
 
     get quantity() {
         return this.record[this.fields.quantity.fieldApiName];
-    }
-
-    @wire(getRecord, {
-        recordId: "$contactId",
-        fields: [CONTACT_NAME_FIELD],
-    })
-    wiredDelivery(result) {
-        if (!(result.data || result.error)) {
-            return;
-        }
-        if (result.data) {
-            this.name = result.data.fields.Name.value;
-            console.log("here");
-            console.log(this.name);
-        }
     }
 
     setValues() {

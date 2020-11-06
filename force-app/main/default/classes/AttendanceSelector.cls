@@ -19,6 +19,7 @@ public with sharing class AttendanceSelector {
 
         queryBuilder.withSObjectType(ServiceDelivery__c.getSObjectType())
             .withSelectFields(fieldSet)
+            .withSelectFields(new List<String>{ 'Contact__r.Name' })
             .addCondition(
                 String.valueOf(ServiceDelivery__c.ServiceSession__c) + ' = :sessionId'
             )
@@ -44,6 +45,7 @@ public with sharing class AttendanceSelector {
             SELECT
                 Id,
                 Contact__c,
+                Contact__r.Name,
                 Service__c,
                 ProgramEngagement__c,
                 Service__r.UnitOfMeasurement__c

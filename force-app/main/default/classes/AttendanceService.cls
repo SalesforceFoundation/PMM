@@ -11,6 +11,8 @@ public with sharing class AttendanceService {
     @TestVisible
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
 
+    private static final String DEFAULT_STATUS = 'Present';
+
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
     // Service Deliveries that appear in the Attendance UI is hard-coded here.
@@ -59,7 +61,8 @@ public with sharing class AttendanceService {
         SObject particpantRecord = participant;
         SObject deliveryRecord = new ServiceDelivery__c(
             ServiceSession__c = sessionId,
-            AttendanceStatus__c = 'Present'
+            AttendanceStatus__c = DEFAULT_STATUS,
+            Contact__r = participant.Contact__r
         );
 
         for (SObjectField sourceField : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {

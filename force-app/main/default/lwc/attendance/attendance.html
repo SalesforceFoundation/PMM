@@ -17,7 +17,16 @@
         </div>
 
         <div class="slds-border_top">
-            <div class="slds-scrollable" style="max-height: 500px;">
+            <div>
+                <template if:true={showSpinner}>
+                    <div class="slds-align_absolute-center">
+                        <lightning-spinner
+                            alternative-text={labels.loading}
+                            size="medium"
+                        ></lightning-spinner>
+                    </div>
+                </template>
+
                 <template if:true={serviceDeliveries}>
                     <template for:each={serviceDeliveries} for:item="delivery">
                         <c-attendance-row
@@ -33,7 +42,7 @@
 
         <div slot="footer" class="slds-text-align_right">
             <lightning-button
-                onclick={handleSubmit}
+                onclick={handleSave}
                 variant="brand"
                 label={labels.submit}
                 title={labels.submit}

@@ -25,6 +25,7 @@ export default class AttendanceRow extends LightningElement {
     @api presentStatus = PRESENT_STATUS;
     oldStatus;
     name;
+    _isEdited;
 
     @api
     get record() {
@@ -33,6 +34,8 @@ export default class AttendanceRow extends LightningElement {
     set record(value) {
         this.localRecord = Object.assign({}, value);
         this.name = getChildObjectByName(this.localRecord, "Contact__r").Name;
+        this.setValues();
+        this._isEdited = false;
     }
 
     @api
@@ -41,9 +44,12 @@ export default class AttendanceRow extends LightningElement {
     }
     set fieldSet(value) {
         this.localFieldSet = value;
-        if (value && value.length) {
-            this.setValues();
-        }
+        this.setValues();
+    }
+
+    @api
+    getRow() {
+        return this._isEdited ? this.localRecord : null;
     }
 
     fields = {
@@ -58,15 +64,17 @@ export default class AttendanceRow extends LightningElement {
     }
 
     get quantity() {
-        return this.record[this.fields.quantity.fieldApiName];
+        return this.localRecord[this.fields.quantity.fieldApiName];
     }
 
     setValues() {
-        this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
+        if (this.localFieldSet && this.localFieldSet.length && this.record) {
+            this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
 
-        this.localFieldSet.forEach(field => {
-            field.value = this.record[field.apiName];
-        });
+            this.localFieldSet.forEach(field => {
+                field.value = this.record[field.apiName];
+            });
+        }
     }
 
     handleInputChange(event) {
@@ -75,12 +83,14 @@ export default class AttendanceRow extends LightningElement {
             this.record[this.fields.status.fieldApiName] === this.presentStatus && // status was present
             event.detail.value !== this.presentStatus // new status is not present
         ) {
-            this.record[this.fields.quantity.fieldApiName] = 0; // clear out quantity
+            this.localRecord[this.fields.quantity.fieldApiName] = 0; // clear out quantity
         }
-        this.record[event.target.fieldName] = event.detail.value;
+        this.localRecord[event.target.fieldName] = event.detail.value;
+        this._isEdited = true;
     }
 
     handleQuantityChange(event) {
-        this.record[this.fields.quantity.fieldApiName] = event.detail.value;
+        this.localRecord[this.fields.quantity.fieldApiName] = event.detail.value;
+        this._isEdited = true;
     }
 }

@@ -19,4 +19,13 @@ public with sharing class AttendanceController {
             throw Util.getAuraHandledException(ex);
         }
     }
+
+    @AuraEnabled
+    public static void upsertRows(List<ServiceDelivery__c> serviceDeliveriesToUpsert) {
+        try {
+            service.upsertServiceDeliveries(serviceDeliveriesToUpsert);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
 }

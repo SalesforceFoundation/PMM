@@ -10,6 +10,8 @@
 public with sharing class AttendanceService {
     @TestVisible
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
+    @TestVisible
+    private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
 
     private static final String DEFAULT_STATUS = 'Present';
 
@@ -27,6 +29,18 @@ public with sharing class AttendanceService {
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
         return createRows(sessionId);
+    }
+
+    public void upsertServiceDeliveries(
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert
+    ) {
+        Savepoint savepoint = Database.setSavepoint();
+        try {
+            domain.upsertServiceDeliveries(serviceDeliveriesToUpsert);
+        } catch (Exception ex) {
+            Database.rollback(savepoint);
+            throw new ServiceDeliveryException(ex);
+        }
     }
 
     private List<ServiceDelivery__c> createRows(Id sessionId) {
@@ -73,5 +87,8 @@ public with sharing class AttendanceService {
         }
 
         return (ServiceDelivery__c) deliveryRecord;
+    }
+
+    public class ServiceDeliveryException extends Exception {
     }
 }

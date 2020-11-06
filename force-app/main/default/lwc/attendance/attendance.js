@@ -10,8 +10,10 @@
 import { LightningElement, track, wire, api } from "lwc";
 import { handleError, getChildObjectByName } from "c/util";
 import { getRecord } from "lightning/uiRecordApi";
+import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
+import upsertRows from "@salesforce/apex/AttendanceController.upsertRows";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
@@ -24,6 +26,7 @@ import CREATED_BY_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedById"
 
 import Submit_Label from "@salesforce/label/c.Submit";
 import Attendance_Label from "@salesforce/label/c.Attendance";
+import Loading_Label from "@salesforce/label/c.Loading";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
@@ -34,11 +37,15 @@ export default class Attendance extends LightningElement {
     @track serviceDeliveries;
     @track fieldSet;
 
+    showSpinner = true;
+
     unitOfMeasurement;
+    wiredServiceDeliveriesResult;
 
     labels = {
         submit: Submit_Label,
         attendance: Attendance_Label,
+        loading: Loading_Label,
     };
 
     fields = {
@@ -70,6 +77,7 @@ export default class Attendance extends LightningElement {
 
     @wire(generateRoster, { sessionId: "$recordId" })
     wiredServiceDeliveries(result) {
+        this.wiredServiceDeliveriesResult = result;
         if (!(result.data || result.error)) {
             return;
         }
@@ -85,6 +93,8 @@ export default class Attendance extends LightningElement {
         } else if (result.error) {
             handleError(result.error);
         }
+
+        this.showSpinner = false;
     }
 
     @wire(getFieldSet, {
@@ -138,5 +148,36 @@ export default class Attendance extends LightningElement {
             finalFieldSet.push(field);
         });
         this.fieldSet = finalFieldSet;
+    }
+
+    handleSave() {
+        let rows = this.template.querySelectorAll("c-attendance-row");
+
+        let editedRows = [];
+
+        rows.forEach(row => {
+            let editedRow = row.getRow();
+            if (editedRow) {
+                editedRows.push(editedRow);
+            }
+        });
+        this.showSpinner = true;
+
+        upsertRows({
+            serviceDeliveriesToUpsert: editedRows,
+        })
+            .then(() => {
+                this.handleRefreshApex();
+            })
+            .catch(error => {
+                handleError(error);
+            })
+            .finally(() => {
+                this.showSpinner = false;
+            });
+    }
+
+    async handleRefreshApex() {
+        await refreshApex(this.wiredServiceDeliveriesResult);
     }
 }

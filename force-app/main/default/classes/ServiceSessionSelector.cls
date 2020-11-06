@@ -35,15 +35,11 @@ public with sharing class ServiceSessionSelector {
             .withSObjectType(ServiceSession__c.SObjectType)
             .withSelectFields(fields);
 
-        if (dateRange == 'THIS_WEEK') {
-            queryBuilder.addCondition(
-                String.valueOf(ServiceSession__c.SessionStart__c) + ' = THIS_WEEK'
-            );
-        } else if (dateRange == 'LAST_WEEK') {
-            queryBuilder.addCondition(
-                String.valueOf(ServiceSession__c.SessionStart__c) + ' = LAST_WEEK'
-            );
-        }
+        queryBuilder.addCondition(
+            String.valueOf(ServiceSession__c.SessionStart__c) +
+            ' = ' +
+            dateRange
+        );
 
         queryBuilder.withOrderBy(String.valueOf(ServiceSession__c.SessionStart__c));
         allSessions = Database.query(queryBuilder.buildSoqlQuery());

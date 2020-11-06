@@ -10,38 +10,7 @@
 public with sharing class ServiceSessionSelector_TEST {
     @TestSetup
     private static void createSessionData() {
-        Account newAccount = new Account();
-        newAccount.Name = 'Test Account';
-        insert newAccount;
-
-        Contact newContact = new Contact();
-        newContact.LastName = 'Test Contact';
-        newContact.AccountId = newAccount.Id;
-        insert newContact;
-
-        List<ServiceSession__c> serviceSessions = new List<ServiceSession__c>();
-        ServiceSession__c serviceSession1 = new ServiceSession__c();
-        serviceSession1.Name = 'Session 1';
-        serviceSession1.Status__c = 'Pending';
-        serviceSession1.PrimaryServiceProvider__c = newContact.Id;
-        serviceSession1.SessionStart__c = System.Today().addDays(-2);
-        serviceSessions.add(serviceSession1);
-
-        ServiceSession__c serviceSession2 = new ServiceSession__c();
-        serviceSession2.Name = 'Session 2';
-        serviceSession2.Status__c = 'Pending';
-        serviceSession2.PrimaryServiceProvider__c = newContact.Id;
-        serviceSession2.SessionStart__c = System.Today();
-        serviceSessions.add(serviceSession2);
-
-        ServiceSession__c serviceSession3 = new ServiceSession__c();
-        serviceSession3.Name = 'Session 3';
-        serviceSession3.Status__c = 'Pending';
-        serviceSession3.PrimaryServiceProvider__c = newContact.Id;
-        serviceSession3.SessionStart__c = System.Today().addDays(-7);
-        serviceSessions.add(serviceSession3);
-
-        insert serviceSessions;
+        TestDataFactory.generateAttendanceData('Daily');
     }
 
     @IsTest

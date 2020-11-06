@@ -22,7 +22,11 @@ public with sharing class RecentServiceSessionController_TEST {
 
         Test.stopTest();
 
-        System.assertEquals(expected.keySet(), actual.keySet());
+        System.assertEquals(
+            expected.keySet(),
+            actual.keySet(),
+            'Actual key returned is not the same as expected key'
+        );
 
         serviceStub.assertCalledWith(methodName, String.class, dateLiteral);
     }

@@ -613,13 +613,6 @@
         <value>Total Sessions</value>
     </labels>
     <labels>
-        <fullName>User</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>User</shortDescription>
-        <value>User</value>
-    </labels>
-    <labels>
         <fullName>Util_Error</fullName>
         <categories>Exception</categories>
         <language>en_US</language>

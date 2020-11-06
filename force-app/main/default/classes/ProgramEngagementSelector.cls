@@ -8,9 +8,6 @@
  */
 
 public with sharing class ProgramEngagementSelector {
-    public ProgramEngagementSelector() {
-    }
-
     public List<ProgramEngagement__c> getProgramEngagementsByContactId(Id contactId) {
         if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {
             return new List<ProgramEngagement__c>();

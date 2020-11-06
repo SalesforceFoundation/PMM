@@ -50,6 +50,7 @@ pmm_lex_locators = {
         "c_lightning_selectdate": "//table/tbody/tr/td[@class='slds-day_adjacent-month']/span",
         "c_datepicker": "//*[text()='{}']",
         "override_checkbox": "//lightning-input[contains(@class,'slds-form-element_stacked')]/label[.//span[text()='{}']]/following-sibling::div/span/input[@type='checkbox']",
+        "input_text": "//lightning-input[contains(@class,'slds-form-element')][.//label[text()='{}']]/div/input[@class='slds-input']",
     },
     "related": {
         "button": "//article[contains(@class, 'slds-card slds-card_boundary')][.//span[@title='{}']]//a[@title='{}']",
@@ -80,5 +81,8 @@ pmm_lex_locators = {
             "button": "//button[contains(@class,'slds-button_brand') and text()='{}']",
             "lookup_field": "//lightning-grouped-combobox[contains(@class,'slds-form-element')][.//label[@class='slds-form-element__label' and text()='{}']]/descendant::lightning-base-combobox//div[contains(@class,'slds-combobox')]/input[contains(@class,'slds-input')]",
         },
+    },
+    "service_session": {
+        "date": "//fieldset[contains(@class,'slds-form-element')][./legend[text()='{}']]/descendant::button[@type='button']",
     },
 }

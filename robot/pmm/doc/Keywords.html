@@ -206,18 +206,6 @@
                                 <td class="kwdoc"></td>
                             </tr>
 
-                            <tr class="kwrow" id="pmm.py.Choose Date">
-                                <td class="kwname">
-                                    Choose Date
-                                </td>
-                                <td class="kwargs">
-                                    <i>value</i>
-                                </td>
-                                <td class="kwdoc">
-                                    <p>To pick a date from the lightning date picker</p>
-                                </td>
-                            </tr>
-
                             <tr class="kwrow" id="pmm.py.Click App Link">
                                 <td class="kwname">
                                     Click App Link
@@ -361,21 +349,6 @@
                                 <td class="kwdoc"></td>
                             </tr>
 
-                            <tr class="kwrow" id="pmm.py.Open Date Picker">
-                                <td class="kwname">
-                                    Open Date Picker
-                                </td>
-                                <td class="kwargs">
-                                    <i>title</i>
-                                </td>
-                                <td class="kwdoc">
-                                    <p>
-                                        Opens the date picker by clicking on the date
-                                        picker icon given the title of the field
-                                    </p>
-                                </td>
-                            </tr>
-
                             <tr class="kwrow" id="pmm.py.Page Should Contain Text">
                                 <td class="kwname">
                                     Page Should Contain Text
@@ -385,18 +358,6 @@
                                 </td>
                                 <td class="kwdoc">
                                     <p>Verifies if the page contains the given text</p>
-                                </td>
-                            </tr>
-
-                            <tr class="kwrow" id="pmm.py.Pick Date">
-                                <td class="kwname">
-                                    Pick Date
-                                </td>
-                                <td class="kwargs">
-                                    <i>value</i>
-                                </td>
-                                <td class="kwdoc">
-                                    <p>To pick a date from the date picker</p>
                                 </td>
                             </tr>
 
@@ -485,6 +446,24 @@
                                 </td>
                             </tr>
 
+                            <tr class="kwrow" id="pmm.py.Select From Date Picker">
+                                <td class="kwname">
+                                    Select From Date Picker
+                                </td>
+                                <td class="kwargs">
+                                    <i>title</i>,
+
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Opens the date picker by clicking on the date
+                                        picker icon given the title of the field and
+                                        select a date
+                                    </p>
+                                </td>
+                            </tr>
+
                             <tr class="kwrow" id="pmm.py.Select Value From Dropdown">
                                 <td class="kwname">
                                     Select Value From Dropdown
@@ -532,9 +511,9 @@
                                     <p>
                                         If status is 'checked' then checks the box if its
                                         not already checked. Prints a warning msg if
-                                        already checked 'unchecked' then unchecks the box
-                                        if its not already checked. Prints a warning msg
-                                        if already unchecked
+                                        already checked. If status is 'unchecked' then
+                                        unchecks the box if its not already checked.
+                                        Prints a warning msg if already unchecked
                                     </p>
                                 </td>
                             </tr>
@@ -742,6 +721,23 @@
                                     <i>**fields</i>
                                 </td>
                                 <td class="kwdoc"></td>
+                            </tr>
+
+                            <tr class="kwrow" id="pmm.robot.API Create Service Schedule">
+                                <td class="kwname">
+                                    API Create Service Schedule
+                                </td>
+                                <td class="kwargs">
+                                    <i>service_id</i>,
+
+                                    <i>**fields</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Creates a new Service Schedule. Service Schedule
+                                        details are passed as key value pairs.
+                                    </p>
+                                </td>
                             </tr>
 
                             <tr
@@ -2010,9 +2006,361 @@
                     </table>
                 </div>
             </div>
+
+            <div
+                class="file"
+                id="file-robot/pmm/resources/ServiceParticipantPageObject.py"
+            >
+                <div class="file-header">
+                    <h2 title="robot/pmm/resources/ServiceParticipantPageObject.py">
+                        ServiceParticipantPageObject.py
+                    </h2>
+                    <div class="file-path">
+                        robot/pmm/resources/ServiceParticipantPageObject.py
+                    </div>
+                </div>
+
+                <div class="section" pageobject="Details-ServiceParticipant__c">
+                    <div class="pageobject-header">
+                        <table class="pageobject-header">
+                            <tbody>
+                                <tr class="data">
+                                    <td title="Page Type">Details</td>
+                                    <td title="Object Name">ServiceParticipant__c</td>
+                                </tr>
+                                <tr class="labels">
+                                    <td>Page Type</td>
+                                    <td>Object Name</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="description" title="Description">
+                        <p>
+                            Documentation for library
+                            <code
+                                >ServiceParticipantPageObject.ServiceDeliveryDetailPage</code
+                            >.
+                        </p>
+                    </div>
+                    <table class="kwtable" title="Table of keywords">
+                        <tbody>
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Arguments</th>
+                                <th>Documentation</th>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceParticipantPageObject.py.Log Current Page Object"
+                            >
+                                <td class="kwname">
+                                    Log Current Page Object
+                                </td>
+                                <td class="kwargs"></td>
+                                <td class="kwdoc">
+                                    <p>Logs the name of the current page object</p>
+                                    <p>
+                                        The current page object is also returned as an
+                                        object
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section" pageobject="Listing-ServiceParticipant__c">
+                    <div class="pageobject-header">
+                        <table class="pageobject-header">
+                            <tbody>
+                                <tr class="data">
+                                    <td title="Page Type">Listing</td>
+                                    <td title="Object Name">ServiceParticipant__c</td>
+                                </tr>
+                                <tr class="labels">
+                                    <td>Page Type</td>
+                                    <td>Object Name</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="description" title="Description">
+                        <p>
+                            Documentation for library
+                            <code
+                                >ServiceParticipantPageObject.ServiceParticipantListingPage</code
+                            >.
+                        </p>
+                    </div>
+                    <table class="kwtable" title="Table of keywords">
+                        <tbody>
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Arguments</th>
+                                <th>Documentation</th>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceParticipantPageObject.py.Log Current Page Object"
+                            >
+                                <td class="kwname">
+                                    Log Current Page Object
+                                </td>
+                                <td class="kwargs"></td>
+                                <td class="kwdoc">
+                                    <p>Logs the name of the current page object</p>
+                                    <p>
+                                        The current page object is also returned as an
+                                        object
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div
+                    class="section"
+                    pageobject="NewServiceDelivery-ServiceParticipant__c"
+                >
+                    <div class="pageobject-header">
+                        <table class="pageobject-header">
+                            <tbody>
+                                <tr class="data">
+                                    <td title="Page Type">NewServiceDelivery</td>
+                                    <td title="Object Name">ServiceParticipant__c</td>
+                                </tr>
+                                <tr class="labels">
+                                    <td>Page Type</td>
+                                    <td>Object Name</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="description" title="Description">
+                        <p>
+                            Documentation for library
+                            <code
+                                >ServiceParticipantPageObject.NewServiceDeliveryPage</code
+                            >.
+                        </p>
+                    </div>
+                    <table class="kwtable" title="Table of keywords">
+                        <tbody>
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Arguments</th>
+                                <th>Documentation</th>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceParticipantPageObject.py.Log Current Page Object"
+                            >
+                                <td class="kwname">
+                                    Log Current Page Object
+                                </td>
+                                <td class="kwargs"></td>
+                                <td class="kwdoc">
+                                    <p>Logs the name of the current page object</p>
+                                    <p>
+                                        The current page object is also returned as an
+                                        object
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="file" id="file-robot/pmm/resources/ServiceSessionPageObject.py">
+                <div class="file-header">
+                    <h2 title="robot/pmm/resources/ServiceSessionPageObject.py">
+                        ServiceSessionPageObject.py
+                    </h2>
+                    <div class="file-path">
+                        robot/pmm/resources/ServiceSessionPageObject.py
+                    </div>
+                </div>
+
+                <div class="section" pageobject="Details-ServiceSession__c">
+                    <div class="pageobject-header">
+                        <table class="pageobject-header">
+                            <tbody>
+                                <tr class="data">
+                                    <td title="Page Type">Details</td>
+                                    <td title="Object Name">ServiceSession__c</td>
+                                </tr>
+                                <tr class="labels">
+                                    <td>Page Type</td>
+                                    <td>Object Name</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="description" title="Description">
+                        <p>
+                            Documentation for library
+                            <code>ServiceSessionPageObject.ServiceSessionDetailPage</code
+                            >.
+                        </p>
+                    </div>
+                    <table class="kwtable" title="Table of keywords">
+                        <tbody>
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Arguments</th>
+                                <th>Documentation</th>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSessionPageObject.py.Log Current Page Object"
+                            >
+                                <td class="kwname">
+                                    Log Current Page Object
+                                </td>
+                                <td class="kwargs"></td>
+                                <td class="kwdoc">
+                                    <p>Logs the name of the current page object</p>
+                                    <p>
+                                        The current page object is also returned as an
+                                        object
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section" pageobject="Listing-ServiceSession__c">
+                    <div class="pageobject-header">
+                        <table class="pageobject-header">
+                            <tbody>
+                                <tr class="data">
+                                    <td title="Page Type">Listing</td>
+                                    <td title="Object Name">ServiceSession__c</td>
+                                </tr>
+                                <tr class="labels">
+                                    <td>Page Type</td>
+                                    <td>Object Name</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="description" title="Description">
+                        <p>
+                            Documentation for library
+                            <code
+                                >ServiceSessionPageObject.ServiceParticipantListingPage</code
+                            >.
+                        </p>
+                    </div>
+                    <table class="kwtable" title="Table of keywords">
+                        <tbody>
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Arguments</th>
+                                <th>Documentation</th>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSessionPageObject.py.Log Current Page Object"
+                            >
+                                <td class="kwname">
+                                    Log Current Page Object
+                                </td>
+                                <td class="kwargs"></td>
+                                <td class="kwdoc">
+                                    <p>Logs the name of the current page object</p>
+                                    <p>
+                                        The current page object is also returned as an
+                                        object
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section" pageobject="New-ServiceSession__c">
+                    <div class="pageobject-header">
+                        <table class="pageobject-header">
+                            <tbody>
+                                <tr class="data">
+                                    <td title="Page Type">New</td>
+                                    <td title="Object Name">ServiceSession__c</td>
+                                </tr>
+                                <tr class="labels">
+                                    <td>Page Type</td>
+                                    <td>Object Name</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="description" title="Description">
+                        <p>
+                            Documentation for library
+                            <code>ServiceSessionPageObject.NewServiceSessionPage</code>.
+                        </p>
+                    </div>
+                    <table class="kwtable" title="Table of keywords">
+                        <tbody>
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Arguments</th>
+                                <th>Documentation</th>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSessionPageObject.py.Log Current Page Object"
+                            >
+                                <td class="kwname">
+                                    Log Current Page Object
+                                </td>
+                                <td class="kwargs"></td>
+                                <td class="kwdoc">
+                                    <p>Logs the name of the current page object</p>
+                                    <p>
+                                        The current page object is also returned as an
+                                        object
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSessionPageObject.py.Select Session Date"
+                            >
+                                <td class="kwname">
+                                    Select Session Date
+                                </td>
+                                <td class="kwargs">
+                                    <i>date</i>,
+
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="footer">
-            Generated on Friday September 18, 12:36 PM - cumulusci v3.19.0
+            Generated on Monday November 02, 10:13 AM - cumulusci v3.21.1
         </div>
     </body>
 </html>

@@ -10,33 +10,33 @@ from cumulusci.robotframework.pageobjects import pageobject
 from BaseObjects import BasePMMPage
 
 
-@pageobject("Listing", "Program")
-class ProgramListingPage(BasePMMPage, ListingPage):
-    object_name = "Program"
+@pageobject("Listing", "ServiceParticipant__c")
+class ServiceParticipantListingPage(BasePMMPage, ListingPage):
+    object_name = "ServiceParticipant__c"
 
 
-@pageobject("NewProgram", "Program__c")
-class NewProgramPage(BasePMMPage, BasePage):
+@pageobject("NewServiceDelivery", "ServiceParticipant__c")
+class NewServiceDeliveryPage(BasePMMPage, BasePage):
     def _is_current_page(self):
-        """Verify we are on the New Program modal page
-        by verifying that the section title is 'New Program'
+        """Verify we are on the New Service Participant modal page
+        by verifying that the section title is 'New Service Participant'
         """
         self.selenium.wait_until_location_contains(
             "/new", timeout=60, message="Record view did not open in 1 min"
         )
         self.selenium.location_should_contain(
-            "/lightning/o/Program__c/",
-            message="Section title is not 'New Program' as expected",
+            "/lightning/o/ServiceParticipant__c/",
+            message="Section title is not 'New Service Participant' as expected",
         )
 
 
-@pageobject("Details", "Program__c")
-class ProgramDetailPage(BasePMMPage, DetailPage):
+@pageobject("Details", "ServiceParticipant__c")
+class ServiceDeliveryDetailPage(BasePMMPage, DetailPage):
     def _is_current_page(self):
-        """Verify we are on the Program detail page
+        """Verify we are on the Service Participant detail page
         by verifying that the url contains '/view'
         """
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"
         )
-        self.selenium.wait_until_page_contains("Program Name")
+        self.selenium.wait_until_page_contains("Service Participant Name")

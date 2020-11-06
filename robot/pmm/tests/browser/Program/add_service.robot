@@ -21,7 +21,6 @@ Setup Test Data
     ${unit_of_measurement} =    Generate Random String
     Set suite variable          ${unit_of_measurement}
     &{program} =                API Create Program
-    Store Session Record        ${ns}Program__c          &{program}[Id]
     Set suite variable          &{program}
 
 *** Test Cases ***

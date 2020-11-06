@@ -16,18 +16,20 @@ Setup Test Data
     Set suite variable               ${service_delivery_name}
     ${ns} =                          Get PMM Namespace Prefix
     Set suite variable               ${ns}
-    &{contact} =                     API Create Contact
-    Set suite variable               &{contact}
-    &{account1} =                    API Create Account
-    Set suite variable               &{account1}
-    &{program} =                     API Create Program
-    Set suite variable               &{program}
-    &{program_engagement} =          API Create Program Engagement   ${Program}[Id]  ${contact}[Id]
-    Set suite variable               &{program_engagement}
-    &{service} =                     API Create Service   ${Program}[Id]
-    Set suite variable               &{service}
+    ${contact} =                     API Create Contact
+    Set suite variable               ${contact}
+    ${account1} =                    API Create Account
+    Set suite variable               ${account1}
+    ${program} =                     API Create Program
+    Set suite variable               ${program}
+    ${program_engagement} =          API Create Program Engagement   ${Program}[Id]             ${contact}[Id]
+    Set suite variable               ${program_engagement}
+    ${service} =                     API Create Service              ${Program}[Id]
+    Set suite variable               ${service}
     ${quantity} =                    Generate Random String    2     [NUMBERS]
     Set suite variable               ${quantity}
+    ${today} =                       Get Current Date                result_format=%-m/%-d/%Y 
+    Set suite variable               ${today}
 
 
 *** Test Cases ***
@@ -49,6 +51,7 @@ Create a Service Delivery via UI
     Current Page Should Be                 Details                                 ServiceDelivery__c
     Verify Details                         Service                                 contains             ${service}[Name]
     Verify Details                         Program Engagement                      contains             ${program_engagement}[Name]
+    Verify Details                         Delivery Date                           contains             ${today}
     Page Should Not Contain                ${service_delivery_name}
     Verify Page Contains Related List      Files
     Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
@@ -70,6 +73,7 @@ Create a Service Delivery via UI with Auto Name Override
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
     Verify Details                         Service Delivery Name                   contains             ${service_delivery_name}
+    Verify Details                         Delivery Date                           contains             ${today}
     Verify Page Contains Related List      Files
     Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
 

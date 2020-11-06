@@ -70,7 +70,7 @@ export default class RecentSessions extends LightningElement {
             console.log(error);
         }
     }
-    @wire(getServiceSessions, { dateRange: THIS_WEEK })
+    @wire(getServiceSessions, { dateLiteral: THIS_WEEK })
     wiredServiceSessions(result, error) {
         if (!result.data) {
             return;

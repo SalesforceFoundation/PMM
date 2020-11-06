@@ -25,10 +25,14 @@
                     key={sessionData.sessionStartDate}
                     open-current-section={sessionData.openCurrentSection}
                 >
-                    <div slot="clickableHeaderSection" style="font-size: 14px;">
+                    <div
+                        slot="clickableHeaderSection"
+                        style="font-size: 14px;"
+                        class="slds-var-p-left_x-small"
+                    >
                         {sessionData.sessionStartDate}
                     </div>
-                    <div slot="extraInfoSection">
+                    <div slot="extraInfoSection" class="slds-var-p-left_xxx-small">
                         {sessionData.totalSessions}
                     </div>
 

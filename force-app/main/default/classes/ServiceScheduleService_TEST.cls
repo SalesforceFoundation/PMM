@@ -733,7 +733,7 @@ public with sharing class ServiceScheduleService_TEST {
             new List<Type>{ Id.class, Set<String>.class, Set<String>.class },
             new List<Object>{
                 programId,
-                new SelectParticipantModel().fieldByFieldPath.keySet(),
+                service.getSelectFieldsWithToLabel(actual),
                 ServiceScheduleService.ACTIVE_ENGAGEMENT_STAGES
             }
         );

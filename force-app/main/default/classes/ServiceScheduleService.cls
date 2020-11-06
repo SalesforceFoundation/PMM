@@ -176,12 +176,29 @@ public with sharing class ServiceScheduleService {
 
         model.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
             model.program.Id,
-            model.fieldByFieldPath.keySet(),
+            getSelectFieldsWithToLabel(model),
             ACTIVE_ENGAGEMENT_STAGES
         );
         model.programCohorts = programEngagementSelector.getProgramCohortsByProgramId(
             model.program.Id
         );
+    }
+
+    @TestVisible
+    private Set<String> getSelectFieldsWithToLabel(SelectParticipantModel model) {
+        Set<String> selectFields = new Set<String>();
+        for (String fieldPath : model.fieldByFieldPath.keySet()) {
+            if (
+                ((String) model.fieldByFieldPath.get(fieldPath).get('type'))
+                    .contains('PICKLIST')
+            ) {
+                selectFields.add('toLabel(' + fieldPath + ')');
+                continue;
+            }
+            selectFields.add(fieldPath);
+        }
+
+        return selectFields;
     }
 
     public class ServiceScheduleServiceException extends Exception {

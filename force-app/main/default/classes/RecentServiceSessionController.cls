@@ -8,14 +8,14 @@
  */
 public with sharing class RecentServiceSessionController {
     @TestVisible
-    private static RecentServiceSessionService serviceSessionService = new RecentServiceSessionService();
+    private static ServiceSessionService serviceSessionService = new ServiceSessionService();
 
     @AuraEnabled(cacheable=true)
-    public static Map<String, List<ServiceSession__c>> getServiceSessions(
+    public static Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
         String dateRange
     ) {
         try {
-            return serviceSessionService.getServiceSessions(dateRange);
+            return serviceSessionService.getServiceSessionsByStartDate(dateRange);
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }

@@ -1,13 +1,12 @@
 @IsTest
 public with sharing class RecentServiceSessionController_TEST {
-    private static BasicStub serviceStub = new BasicStub(
-        RecentServiceSessionService.class
-    );
+    private static BasicStub serviceStub = new BasicStub(ServiceSessionService.class);
 
     @IsTest
-    private static void testGetServiceSessions() {
-        final String methodName = 'getServiceSessions';
+    private static void testGetServiceSessionsByStartDate() {
+        final String methodName = 'getServiceSessionsByStartDate';
         final String dateRange = 'THIS_WEEK';
+
         Map<String, List<ServiceSession__c>> expected = new Map<String, List<ServiceSession__c>>();
 
         expected.put(System.now().format('EEEE, dd MMMM'), new List<ServiceSession__c>());
@@ -15,39 +14,36 @@ public with sharing class RecentServiceSessionController_TEST {
         serviceStub.withReturnValue(methodName, String.class, expected);
 
         Test.startTest();
-        RecentServiceSessionController.serviceSessionService = (RecentServiceSessionService) serviceStub.createMock();
+        RecentServiceSessionController.serviceSessionService = (ServiceSessionService) serviceStub.createMock();
 
-        final Map<String, List<ServiceSession__c>> actual = RecentServiceSessionController.getServiceSessions(
+        final Map<String, List<ServiceSession__c>> actual = RecentServiceSessionController.getServiceSessionsByStartDate(
             dateRange
         );
 
         Test.stopTest();
 
-        Set<String> expectedKeySet = new Set<String>{
-            System.now().format('EEEE, dd MMMM')
-        };
-        System.assertEquals(expectedKeySet, actual.keySet());
+        System.assertEquals(expected.keySet(), actual.keySet());
 
         serviceStub.assertCalledWith(methodName, String.class, dateRange);
     }
 
     @IsTest
-    private static void testGetServiceSessionsWithException() {
-        final String methodName = 'getServiceSessions';
+    private static void testGetServiceSessionsByStartDateWithException() {
+        final String methodName = 'getServiceSessionsByStartDate';
         final String dateRange = 'THIS_WEEK';
-        Map<String, List<ServiceSession__c>> expected = new Map<String, List<ServiceSession__c>>();
-        expected.put(System.now().format('EEEE, dd MMMM'), new List<ServiceSession__c>());
 
         serviceStub.withThrowException(methodName, String.class);
 
         Test.startTest();
-        RecentServiceSessionController.serviceSessionService = (RecentServiceSessionService) serviceStub.createMock();
+        RecentServiceSessionController.serviceSessionService = (ServiceSessionService) serviceStub.createMock();
 
         final Map<String, List<ServiceSession__c>> actual;
         Exception actualException;
 
         try {
-            actual = RecentServiceSessionController.getServiceSessions(dateRange);
+            actual = RecentServiceSessionController.getServiceSessionsByStartDate(
+                dateRange
+            );
         } catch (Exception e) {
             actualException = e;
         }

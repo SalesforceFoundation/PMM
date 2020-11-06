@@ -6,3 +6,16 @@
     padding-right: none;
     padding-bottom: 0px;
 }
+
+@media print {
+    .slds-accordion__content {
+        overflow: visible;
+        visibility: visible;
+        opacity: 1;
+        height: auto;
+    }
+}
+
+.slds-is-open {
+    background-color: var(--bgColor);
+}

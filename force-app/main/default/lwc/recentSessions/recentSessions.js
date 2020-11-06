@@ -1,17 +1,16 @@
 import { LightningElement, wire, track } from "lwc";
-import getServiceSessions from "@salesforce/apex/RecentServiceSessionController.getServiceSessions";
+import getServiceSessions from "@salesforce/apex/RecentServiceSessionController.getServiceSessionsByStartDate";
 import { loadStyle } from "lightning/platformResourceLoader";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
-import { prefixNamespace } from "c/util";
 
 import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import USER_LABEL from "@salesforce/label/c.User";
 
-import SERVICESESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
-import NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
+import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
-import PRIMARYSERVICEPROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
+import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
+import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
@@ -22,7 +21,7 @@ export default class RecentSessions extends LightningElement {
     @track isAccordionSectionOpen = false;
     @track sessionsData = [];
     @track listViewNames = [];
-    serviceSessionObject = SERVICESESSION_OBJECT;
+    serviceSessionObject = SERVICE_SESSION_OBJECT;
     objectLabel;
     objectLabelPlural;
 
@@ -33,12 +32,12 @@ export default class RecentSessions extends LightningElement {
     };
 
     fields = {
-        name: NAME_FIELD,
-        status: STATUS_FIELD,
-        primaryServiceProvider: PRIMARYSERVICEPROVIDER_FIELD,
+        status: STATUS_FIELD.fieldApiName,
+        primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
+        sessionStartDate: SESSION_START_DATE.fieldApiName,
     };
 
-    @wire(getObjectInfo, { objectApiName: SERVICESESSION_OBJECT })
+    @wire(getObjectInfo, { objectApiName: SERVICE_SESSION_OBJECT })
     objectInfo(result, error) {
         if (!result) {
             return;
@@ -90,8 +89,12 @@ export default class RecentSessions extends LightningElement {
         let sessions = JSON.parse(JSON.stringify(records));
 
         sessions.forEach(element => {
-            element.showCompleteIcon = element[prefixNamespace("Status__c")] === COMPLETE;
+            element.showCompleteIcon = element[this.fields.status] === COMPLETE;
+            element.showPrimaryServiceProviderIcon =
+                element[this.fields.primaryServiceProvider] !== undefined ? true : false;
+            element.sessionStartDate = element[this.fields.sessionStartDate];
         });
+
         return sessions;
     }
 

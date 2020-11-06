@@ -57,7 +57,7 @@ public with sharing class ServiceSessionSelector_TEST {
 
         Test.startTest();
         ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
-        List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessions(
+        List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsByStartDate(
             dateRange
         );
         Test.stopTest();
@@ -66,6 +66,17 @@ public with sharing class ServiceSessionSelector_TEST {
             expectedSessions.size(),
             actualSessions.size(),
             'The list size of actual Sessions is not the same as the list size of expected Sessions'
+        );
+
+        System.assertEquals(
+            expectedSessions[0].Id,
+            actualSessions[0].Id,
+            'Actual Id returned is not the same as expected Id'
+        );
+        System.assertEquals(
+            expectedSessions[1].Name,
+            actualSessions[1].Name,
+            'Actual Name returned is not the same as expected Name'
         );
     }
 
@@ -82,7 +93,7 @@ public with sharing class ServiceSessionSelector_TEST {
 
         Test.startTest();
         ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
-        List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessions(
+        List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsByStartDate(
             dateRange
         );
         Test.stopTest();
@@ -98,20 +109,6 @@ public with sharing class ServiceSessionSelector_TEST {
     private static void testGetServiceSessionsNoAccess() {
         final String dateRange = 'LAST_WEEK';
 
-        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
-        Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
-        User u = new User(
-            Alias = 'stand',
-            Email = 'standarduser1@' + random + '.example.com',
-            EmailEncodingKey = 'UTF-8',
-            LastName = 'StandardUser',
-            LanguageLocaleKey = 'en_US',
-            LocaleSidKey = 'en_US',
-            ProfileId = p.Id,
-            TimeZoneSidKey = 'America/Los_Angeles',
-            UserName = 'standarduser1@' + random + '.example.com'
-        );
-
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
             FROM ServiceSession__c
@@ -120,9 +117,9 @@ public with sharing class ServiceSessionSelector_TEST {
         ];
 
         Test.startTest();
-        System.runAs(u) {
+        System.runAs(TestUtil.getTestUser()) {
             ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
-            List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessions(
+            List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsByStartDate(
                 dateRange
             );
             System.assertEquals(

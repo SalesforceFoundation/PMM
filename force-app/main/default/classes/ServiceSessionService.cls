@@ -6,15 +6,17 @@
  *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  *
  */
-public with sharing class RecentServiceSessionService {
+public with sharing class ServiceSessionService {
     @TestVisible
     private ServiceSessionSelector serviceSessionSelector = new ServiceSessionSelector();
 
-    public Map<String, List<ServiceSession__c>> getServiceSessions(String dateRange) {
+    public Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
+        String dateRange
+    ) {
         Map<String, List<ServiceSession__c>> serviceSessions = new Map<String, List<ServiceSession__c>>();
 
         for (
-            ServiceSession__c session : serviceSessionSelector.getServiceSessions(
+            ServiceSession__c session : serviceSessionSelector.getServiceSessionsByStartDate(
                 dateRange
             )
         ) {

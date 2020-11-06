@@ -7,17 +7,18 @@
  *
  */
 @IsTest
-public with sharing class RecentServiceSessionService_TEST {
+public with sharing class ServiceSessionService_TEST {
     private static BasicStub serviceSelectorStub = new BasicStub(
         ServiceSessionSelector.class
     );
 
-    private static RecentServiceSessionService service = new RecentServiceSessionService();
+    private static ServiceSessionService service = new ServiceSessionService();
 
     @IsTest
-    private static void testGetServiceSessions() {
+    private static void testGetServiceSessionsByStartDate() {
         final String dateRange = 'THIS_WEEK';
-        final String methodName = 'getServiceSessions';
+        final String methodName = 'getServiceSessionsByStartDate';
+        final DateTime currentDate = System.now();
 
         Account newAccount = new Account();
         newAccount.Name = 'Test Account';
@@ -32,29 +33,29 @@ public with sharing class RecentServiceSessionService_TEST {
         serviceSession.Name = 'Session 1';
         serviceSession.Status__c = 'Pending';
         serviceSession.PrimaryServiceProvider__c = newContact.Id;
-        serviceSession.SessionStart__c = System.now();
+        serviceSession.SessionStart__c = currentDate;
 
         ServiceSession__c serviceSession1 = new ServiceSession__c();
         serviceSession1.Name = 'Session 2';
         serviceSession1.Status__c = 'Pending';
         serviceSession1.PrimaryServiceProvider__c = newContact.Id;
-        serviceSession1.SessionStart__c = System.now();
+        serviceSession1.SessionStart__c = currentDate;
 
         ServiceSession__c serviceSession2 = new ServiceSession__c();
         serviceSession2.Name = 'Session 3';
         serviceSession2.Status__c = 'Pending';
         serviceSession2.PrimaryServiceProvider__c = newContact.Id;
-        serviceSession2.SessionStart__c = System.now().addDays(1);
+        serviceSession2.SessionStart__c = currentDate.addDays(1);
 
         Map<String, List<ServiceSession__c>> expected = new Map<String, List<ServiceSession__c>>();
         List<ServiceSession__c> sessions = new List<ServiceSession__c>{
             serviceSession,
             serviceSession1
         };
-        expected.put(System.now().format('EEEE, dd MMMM'), sessions);
+        expected.put(currentDate.format('EEEE, dd MMMM'), sessions);
 
         expected.put(
-            System.now().addDays(1).format('EEEE, dd MMMM'),
+            currentDate.addDays(1).format('EEEE, dd MMMM'),
             new List<ServiceSession__c>{ serviceSession2 }
         );
 
@@ -71,22 +72,27 @@ public with sharing class RecentServiceSessionService_TEST {
         Test.startTest();
         service.serviceSessionSelector = (ServiceSessionSelector) serviceSelectorStub.createMock();
 
-        Map<String, List<ServiceSession__c>> actual = service.getServiceSessions(
+        Map<String, List<ServiceSession__c>> actual = service.getServiceSessionsByStartDate(
             dateRange
         );
 
         Test.stopTest();
 
         System.assertEquals(
-            expected.get(System.now().format('EEEE, dd MMMM')),
-            actual.get(System.now().format('EEEE, dd MMMM')),
+            expected.get(currentDate.format('EEEE, dd MMMM')),
+            actual.get(currentDate.format('EEEE, dd MMMM')),
             'Expected values is not the same as actual values'
         );
 
         System.assertEquals(
-            expected.get(System.now().addDays(1).format('EEEE, dd MMMM')),
-            actual.get(System.now().addDays(1).format('EEEE, dd MMMM')),
+            expected.get(currentDate.addDays(1).format('EEEE, dd MMMM')),
+            actual.get(currentDate.addDays(1).format('EEEE, dd MMMM')),
             'Expected values is not the same as actual values'
+        );
+
+        System.assert(
+            actual.containsKey(currentDate.format('EEEE, dd MMMM')),
+            'Actual result does not have the key'
         );
 
         serviceSelectorStub.assertCalledWith(methodName, String.class, dateRange);

@@ -7,7 +7,7 @@
  *
  */
 public with sharing class ServiceSessionSelector {
-    public List<ServiceSession__c> getServiceSessions(String dateRange) {
+    public List<ServiceSession__c> getServiceSessionsByStartDate(String dateRange) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
 
         if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {

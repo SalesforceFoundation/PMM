@@ -19,7 +19,14 @@ public with sharing class AttendanceSelector {
 
         queryBuilder.withSObjectType(ServiceDelivery__c.getSObjectType())
             .withSelectFields(fieldSet)
-            .withSelectFields(new List<String>{ 'Contact__r.Name' })
+            .withSelectFields(
+                new List<String>{
+                    String.valueOf(
+                        ServiceDelivery__c.Contact__c.getDescribe()
+                            .getRelationshipName() + String.valueOf(Contact.Name)
+                    )
+                }
+            )
             .addCondition(
                 String.valueOf(ServiceDelivery__c.ServiceSession__c) + ' = :sessionId'
             )

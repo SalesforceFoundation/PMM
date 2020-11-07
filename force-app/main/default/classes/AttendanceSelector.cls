@@ -61,7 +61,7 @@ public with sharing class AttendanceSelector {
 
     public ServiceSession__c getSession(Id sessionId) {
         ServiceSession__c session = [
-            SELECT Id, ServiceSchedule__c
+            SELECT Id, ServiceSchedule__c, PrimaryServiceProvider__c, SessionStart__c
             FROM ServiceSession__c
             WHERE Id = :sessionId
             LIMIT 1

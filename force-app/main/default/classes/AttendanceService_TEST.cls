@@ -129,7 +129,7 @@ public with sharing class AttendanceService_TEST {
         attendanceSelectorStub.withReturnValue(
             getSession,
             Id.class,
-            new ServiceSession__c(ServiceSchedule__c = scheduleId)
+            new ServiceSession__c(Id = sessionId, ServiceSchedule__c = scheduleId)
         );
 
         Test.startTest();

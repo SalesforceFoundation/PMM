@@ -21,7 +21,9 @@ public with sharing class AttendanceController {
     }
 
     @AuraEnabled
-    public static void upsertRows(List<ServiceDelivery__c> serviceDeliveriesToUpsert) {
+    public static void upsertServiceDeliveries(
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert
+    ) {
         try {
             service.upsertServiceDeliveries(serviceDeliveriesToUpsert);
         } catch (Exception ex) {

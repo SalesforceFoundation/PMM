@@ -13,7 +13,7 @@ import { getRecord } from "lightning/uiRecordApi";
 import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
-import upsertRows from "@salesforce/apex/AttendanceController.upsertRows";
+import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";

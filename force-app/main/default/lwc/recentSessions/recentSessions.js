@@ -5,7 +5,6 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi";
 
 import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
-import USER_LABEL from "@salesforce/label/c.User";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import SERVICE_SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
@@ -36,7 +35,6 @@ export default class RecentSessions extends LightningElement {
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,
         sucess: SUCCESS_LABEL,
-        user: USER_LABEL,
     };
 
     fields = {

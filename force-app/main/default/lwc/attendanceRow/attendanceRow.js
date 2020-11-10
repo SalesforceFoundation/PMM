@@ -27,7 +27,6 @@ export default class AttendanceRow extends LightningElement {
     @api unitOfMeasurement;
     @api presentStatus = PRESENT_STATUS;
     @api readOnly = false;
-    oldStatus;
     name;
     _isEdited;
     recordId;

@@ -35,6 +35,7 @@ import SUCCESS_NO_UPDATES_LABEL from "@salesforce/label/c.Save_Attendance_No_Upd
 import UPDATE_LABEL from "@salesforce/label/c.Update";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import CANCEL_LABEL from "@salesforce/label/c.Cancel";
+import QUANTITY_LABEL from "@salesforce/label/c.Quantity";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
@@ -65,6 +66,7 @@ export default class Attendance extends LightningElement {
         update: UPDATE_LABEL,
         save: SAVE_LABEL,
         cancel: CANCEL_LABEL,
+        quantity: QUANTITY_LABEL,
     };
 
     fields = {
@@ -88,10 +90,16 @@ export default class Attendance extends LightningElement {
         if (result.data) {
             let schedule = getChildObjectByName(result.data.fields, "ServiceSchedule__r");
             let service = getChildObjectByName(schedule.value.fields, "Service__r");
-            this.unitOfMeasurement =
-                service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName].value;
-            this.sessionStatus =
-                result.data.fields[this.fields.sessionStatus.fieldApiName].value;
+            this.unitOfMeasurement = service.value.fields[
+                UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName
+            ]
+                ? service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName].value
+                : this.labels.quantity;
+            this.sessionStatus = result.data.fields[
+                this.fields.sessionStatus.fieldApiName
+            ]
+                ? result.data.fields[this.fields.sessionStatus.fieldApiName].value
+                : undefined;
         } else if (result.error) {
             console.log(result.error);
         }

@@ -15,4 +15,5 @@ export default class AttendanceRow extends LightningElement {
     @api presentStatus;
     @api record;
     @api fieldSet;
+    @api readOnly;
 }

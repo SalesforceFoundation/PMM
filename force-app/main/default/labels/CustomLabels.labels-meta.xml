@@ -642,6 +642,14 @@
         <value>You can't access this field. Your Salesforce admin can help with that.</value>
     </labels>
     <labels>
+        <fullName>UpsertOperationException</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Permission Denied for Insert or Update Operation</shortDescription>
+        <value>You don't have access to insert or update this record. Your Salesforce admin can help with that.</value>
+    </labels>
+    <labels>
         <fullName>Warning</fullName>
         <language>en_US</language>
         <protected>true</protected>

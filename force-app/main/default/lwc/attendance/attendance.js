@@ -121,9 +121,8 @@ export default class Attendance extends LightningElement {
                     : -1;
             });
         } else if (result.error) {
-            handleError(result.error);
+            console.log(result.error);
         }
-
         this.showSpinner = false;
     }
 
@@ -135,7 +134,7 @@ export default class Attendance extends LightningElement {
         if (result.data) {
             this.configureFieldSet(result.data.map(a => ({ ...a })));
         } else if (result.error) {
-            handleError(result.error);
+            console.log(result.error);
         }
     }
 
@@ -221,7 +220,7 @@ export default class Attendance extends LightningElement {
                 this.showSpinner = false;
             })
             .catch(error => {
-                console.log(error);
+                handleError(error);
                 this.showSpinner = false;
             });
     }

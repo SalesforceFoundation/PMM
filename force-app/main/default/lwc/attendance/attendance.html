@@ -16,6 +16,15 @@
             </span>
         </div>
 
+        <lightning-button
+            onclick={handleUpdateClick}
+            variant="neutral"
+            label={labels.update}
+            title={labels.update}
+            slot="actions"
+            if:true={isReadOnly}
+        ></lightning-button>
+
         <div class="slds-border_top">
             <div>
                 <template if:true={showSpinner}>
@@ -42,13 +51,28 @@
         </div>
 
         <!-- Footer will only re-render if the if statement is on an element inside it. -->
-        <div slot="footer" class="slds-text-align_right">
+        <div slot="footer" class="slds-text-align_center">
             <lightning-button
                 onclick={handleSave}
                 variant="brand"
                 label={labels.submit}
                 title={labels.submit}
-                if:false={isReadOnly}
+                if:true={isPending}
+            ></lightning-button>
+            <lightning-button
+                onclick={handleCancel}
+                variant="neutral"
+                label={labels.cancel}
+                title={labels.cancel}
+                if:true={isUpdateMode}
+                class="slds-var-p-right_xx-small"
+            ></lightning-button>
+            <lightning-button
+                onclick={handleSave}
+                variant="brand"
+                label={labels.save}
+                title={labels.save}
+                if:true={isUpdateMode}
             ></lightning-button>
         </div>
     </lightning-card>

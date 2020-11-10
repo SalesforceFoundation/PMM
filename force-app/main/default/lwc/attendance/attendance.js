@@ -11,6 +11,7 @@ import { LightningElement, track, wire, api } from "lwc";
 import { handleError, getChildObjectByName, format } from "c/util";
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
@@ -30,12 +31,17 @@ import ATTENDANCE_LABEL from "@salesforce/label/c.Attendance";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import SUCCESS_MESSAGE_LABEL from "@salesforce/label/c.Save_Attendance_Success";
+import SUCCESS_NO_UPDATES_LABEL from "@salesforce/label/c.Save_Attendance_No_Updates";
+import UPDATE_LABEL from "@salesforce/label/c.Update";
+import SAVE_LABEL from "@salesforce/label/c.Save";
+import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 const LONG_DATA_TYPES = ["TEXTAREA", "PICKLIST", "REFERENCE"];
 const ID = "Id";
 const COMPLETE = "Complete";
+const PENDING = "Pending";
 
 export default class Attendance extends LightningElement {
     @api recordId;
@@ -43,6 +49,7 @@ export default class Attendance extends LightningElement {
     @track fieldSet;
 
     showSpinner = true;
+    isUpdateMode = false;
 
     unitOfMeasurement;
     sessionStatus;
@@ -54,6 +61,10 @@ export default class Attendance extends LightningElement {
         loading: LOADING_LABEL,
         success: SUCCESS_LABEL,
         successMessage: SUCCESS_MESSAGE_LABEL,
+        noUpdates: SUCCESS_NO_UPDATES_LABEL,
+        update: UPDATE_LABEL,
+        save: SAVE_LABEL,
+        cancel: CANCEL_LABEL,
     };
 
     fields = {
@@ -120,8 +131,16 @@ export default class Attendance extends LightningElement {
         }
     }
 
-    get isReadOnly() {
+    get isComplete() {
         return this.sessionStatus && this.sessionStatus === COMPLETE;
+    }
+
+    get isReadOnly() {
+        return this.isComplete && !this.isUpdateMode;
+    }
+
+    get isPending() {
+        return this.sessionStatus && this.sessionStatus === PENDING;
     }
 
     get header() {
@@ -182,10 +201,13 @@ export default class Attendance extends LightningElement {
             serviceDeliveriesToUpsert: editedRows,
         })
             .then(() => {
-                this.setStatusComplete();
+                if (this.isPending) {
+                    this.setStatus(COMPLETE);
+                }
                 rows.forEach(row => {
                     row.save();
                 });
+                this.isUpdateMode = false;
                 this.showSuccessToast(editedRows.length);
             })
             .catch(error => {
@@ -196,20 +218,36 @@ export default class Attendance extends LightningElement {
             });
     }
 
-    setStatusComplete() {
+    setStatus(status) {
         let fields = {};
         fields[ID] = this.recordId;
-        fields[this.fields.sessionStatus.fieldApiName] = COMPLETE;
+        fields[this.fields.sessionStatus.fieldApiName] = status;
         updateRecord({ fields }).catch(error => {
             handleError(error);
         });
     }
 
+    handleUpdateClick() {
+        this.isUpdateMode = true;
+    }
+
+    handleCancel() {
+        refreshApex(this.wiredServiceDeliveriesResult);
+        this.isUpdateMode = false;
+    }
+
     showSuccessToast(numSaved) {
+        let message = "";
+        if (numSaved) {
+            message = format(this.labels.successMessage, [numSaved]);
+        } else {
+            message = this.labels.noUpdates;
+        }
+
         const event = new ShowToastEvent({
             title: this.labels.success,
             variant: "success",
-            message: format(this.labels.successMessage, [numSaved]),
+            message: message,
         });
         this.dispatchEvent(event);
     }

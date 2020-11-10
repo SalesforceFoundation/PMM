@@ -58,6 +58,13 @@
         <value>Successfully saved {0} attendance records.</value>
     </labels>
     <labels>
+        <fullName>Save_Attendance_No_Updates</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>There were no edited attendance records to update.</shortDescription>
+        <value>There were no edited attendance records to update.</value>
+    </labels>
+    <labels>
         <fullName>Back</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -375,6 +382,13 @@
         <protected>true</protected>
         <shortDescription>You have rows with errors</shortDescription>
         <value>There are Service Delivery rows with errors.</value>
+    </labels>
+    <labels>
+        <fullName>Update</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Update</shortDescription>
+        <value>Update</value>
     </labels>
     <labels>
         <fullName>Save</fullName>

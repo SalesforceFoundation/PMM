@@ -41,12 +41,14 @@
             </div>
         </div>
 
+        <!-- Footer will only re-render if the if statement is on an element inside it. -->
         <div slot="footer" class="slds-text-align_right">
             <lightning-button
                 onclick={handleSave}
                 variant="brand"
                 label={labels.submit}
                 title={labels.submit}
+                if:false={isReadOnly}
             ></lightning-button>
         </div>
     </lightning-card>

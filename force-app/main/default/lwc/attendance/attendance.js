@@ -8,8 +8,9 @@
  */
 
 import { LightningElement, track, wire, api } from "lwc";
-import { handleError, getChildObjectByName } from "c/util";
+import { handleError, getChildObjectByName, format } from "c/util";
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
@@ -27,6 +28,8 @@ import SESSION_STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c
 import SUBMIT_LABEL from "@salesforce/label/c.Submit";
 import ATTENDANCE_LABEL from "@salesforce/label/c.Attendance";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
+import SUCCESS_LABEL from "@salesforce/label/c.Success";
+import SUCCESS_MESSAGE_LABEL from "@salesforce/label/c.Save_Attendance_Success";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
@@ -49,6 +52,8 @@ export default class Attendance extends LightningElement {
         submit: SUBMIT_LABEL,
         attendance: ATTENDANCE_LABEL,
         loading: LOADING_LABEL,
+        success: SUCCESS_LABEL,
+        successMessage: SUCCESS_MESSAGE_LABEL,
     };
 
     fields = {
@@ -181,6 +186,7 @@ export default class Attendance extends LightningElement {
                 rows.forEach(row => {
                     row.save();
                 });
+                this.showSuccessToast(editedRows.length);
             })
             .catch(error => {
                 handleError(error);
@@ -197,5 +203,14 @@ export default class Attendance extends LightningElement {
         updateRecord({ fields }).catch(error => {
             handleError(error);
         });
+    }
+
+    showSuccessToast(numSaved) {
+        const event = new ShowToastEvent({
+            title: this.labels.success,
+            variant: "success",
+            message: format(this.labels.successMessage, [numSaved]),
+        });
+        this.dispatchEvent(event);
     }
 }

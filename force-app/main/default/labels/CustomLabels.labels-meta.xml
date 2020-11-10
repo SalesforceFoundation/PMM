@@ -51,6 +51,13 @@
         <value>Attendance</value>
     </labels>
     <labels>
+        <fullName>Save_Attendance_Success</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Successfully saved {0} attendance records.</shortDescription>
+        <value>Successfully saved {0} attendance records.</value>
+    </labels>
+    <labels>
         <fullName>Back</fullName>
         <language>en_US</language>
         <protected>false</protected>

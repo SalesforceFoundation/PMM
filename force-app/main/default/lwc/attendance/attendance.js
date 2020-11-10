@@ -218,11 +218,10 @@ export default class Attendance extends LightningElement {
                 });
                 this.isUpdateMode = false;
                 this.showSuccessToast(editedRows.length);
+                this.showSpinner = false;
             })
             .catch(error => {
-                handleError(error);
-            })
-            .finally(() => {
+                console.log(error);
                 this.showSpinner = false;
             });
     }

@@ -212,6 +212,7 @@ export default class Attendance extends LightningElement {
                 if (this.isPending) {
                     this.setStatus(COMPLETE);
                 }
+                refreshApex(this.wiredServiceDeliveriesResult);
                 rows.forEach(row => {
                     row.save();
                 });
@@ -240,7 +241,7 @@ export default class Attendance extends LightningElement {
     }
 
     handleCancel() {
-        refreshApex(this.wiredServiceDeliveriesResult);
+        this.serviceDeliveries = this.serviceDeliveries.map(a => ({ ...a }));
         this.isUpdateMode = false;
     }
 

@@ -9,8 +9,7 @@
 
 import { LightningElement, track, wire, api } from "lwc";
 import { handleError, getChildObjectByName } from "c/util";
-import { getRecord } from "lightning/uiRecordApi";
-import { refreshApex } from "@salesforce/apex";
+import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
@@ -23,14 +22,17 @@ import UNIT_MEASUREMENT_SERVICE_FIELD from "@salesforce/schema/Service__c.UnitOf
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
 import CREATED_DATE_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedDate";
 import CREATED_BY_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedById";
+import SESSION_STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
 
-import Submit_Label from "@salesforce/label/c.Submit";
-import Attendance_Label from "@salesforce/label/c.Attendance";
-import Loading_Label from "@salesforce/label/c.Loading";
+import SUBMIT_LABEL from "@salesforce/label/c.Submit";
+import ATTENDANCE_LABEL from "@salesforce/label/c.Attendance";
+import LOADING_LABEL from "@salesforce/label/c.Loading";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 const LONG_DATA_TYPES = ["TEXTAREA", "PICKLIST", "REFERENCE"];
+const ID = "Id";
+const COMPLETE = "Complete";
 
 export default class Attendance extends LightningElement {
     @api recordId;
@@ -40,12 +42,13 @@ export default class Attendance extends LightningElement {
     showSpinner = true;
 
     unitOfMeasurement;
+    sessionStatus;
     wiredServiceDeliveriesResult;
 
     labels = {
-        submit: Submit_Label,
-        attendance: Attendance_Label,
-        loading: Loading_Label,
+        submit: SUBMIT_LABEL,
+        attendance: ATTENDANCE_LABEL,
+        loading: LOADING_LABEL,
     };
 
     fields = {
@@ -54,11 +57,12 @@ export default class Attendance extends LightningElement {
         attendanceStatus: ATTENDANCE_STATUS_FIELD,
         createdDate: CREATED_DATE_FIELD,
         createdBy: CREATED_BY_FIELD,
+        sessionStatus: SESSION_STATUS_FIELD,
     };
 
     @wire(getRecord, {
         recordId: "$recordId",
-        fields: [UNIT_MEASUREMENT_RELATED_FIELD],
+        fields: [UNIT_MEASUREMENT_RELATED_FIELD, SESSION_STATUS_FIELD],
     })
     wiredSession(result) {
         if (!(result.data || result.error)) {
@@ -70,6 +74,8 @@ export default class Attendance extends LightningElement {
             let service = getChildObjectByName(schedule.value.fields, "Service__r");
             this.unitOfMeasurement =
                 service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName].value;
+            this.sessionStatus =
+                result.data.fields[this.fields.sessionStatus.fieldApiName].value;
         } else if (result.error) {
             console.log(result.error);
         }
@@ -109,6 +115,10 @@ export default class Attendance extends LightningElement {
         }
     }
 
+    get isReadOnly() {
+        return this.sessionStatus && this.sessionStatus === COMPLETE;
+    }
+
     get header() {
         return (
             this.labels.attendance +
@@ -122,8 +132,7 @@ export default class Attendance extends LightningElement {
         let finalFieldSet = [];
         incomingFieldSet.forEach(field => {
             field.isQuantityField = false;
-            field.isOutputField = false;
-            field.isNormalInputField = false;
+            field.isNormalField = false;
             field.isContactField = false;
 
             if (SHORT_DATA_TYPES.includes(field.type)) {
@@ -140,9 +149,10 @@ export default class Attendance extends LightningElement {
             } else if (field.apiName === this.fields.quantity.fieldApiName) {
                 field.isQuantityField = true;
                 field.variant = "label-hidden";
+            } else if (!field.isUpdateable) {
+                field.isOutputField = true; // always output if not updateable, e.g., createddate
             } else {
-                field.isNormalInputField = field.isUpdateable;
-                field.isOutputField = !field.isUpdateable;
+                field.isNormalField = true; // no special handling for display of this field
             }
 
             finalFieldSet.push(field);
@@ -167,7 +177,10 @@ export default class Attendance extends LightningElement {
             serviceDeliveriesToUpsert: editedRows,
         })
             .then(() => {
-                this.handleRefreshApex();
+                this.setStatusComplete();
+                rows.forEach(row => {
+                    row.save();
+                });
             })
             .catch(error => {
                 handleError(error);
@@ -177,7 +190,12 @@ export default class Attendance extends LightningElement {
             });
     }
 
-    async handleRefreshApex() {
-        await refreshApex(this.wiredServiceDeliveriesResult);
+    setStatusComplete() {
+        let fields = {};
+        fields[ID] = this.recordId;
+        fields[this.fields.sessionStatus.fieldApiName] = COMPLETE;
+        updateRecord({ fields }).catch(error => {
+            handleError(error);
+        });
     }
 }

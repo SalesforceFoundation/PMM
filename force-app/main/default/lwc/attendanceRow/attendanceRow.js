@@ -7,10 +7,13 @@
  *
  */
 
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api, track, wire } from "lwc";
 import { getChildObjectByName } from "c/util";
+import { refreshApex } from "@salesforce/apex";
+import { getRecord } from "lightning/uiRecordApi";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+import ID_FIELD from "@salesforce/schema/ServiceDelivery__c.Id";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
 
@@ -23,20 +26,33 @@ export default class AttendanceRow extends LightningElement {
 
     @api unitOfMeasurement;
     @api presentStatus = PRESENT_STATUS;
+    @api readOnly = false;
     oldStatus;
     name;
     _isEdited;
+    recordId;
 
     @api
     get record() {
         return this.localRecord;
     }
     set record(value) {
+        // force lightning data service to refresh its cache so lightning-record-view-form updates its values
+        this.handleRefreshApex();
+
         this.localRecord = Object.assign({}, value);
         this.name = getChildObjectByName(this.localRecord, "Contact__r").Name;
         this.setValues();
         this._isEdited = false;
+        this.recordId = this.localRecord.Id;
     }
+
+    async handleRefreshApex() {
+        await refreshApex(this.wiredServiceDelivery);
+    }
+
+    @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD] }) // Only ID is needed to force-refresh the cache
+    wiredServiceDelivery;
 
     @api
     get fieldSet() {
@@ -52,16 +68,19 @@ export default class AttendanceRow extends LightningElement {
         return this._isEdited ? this.localRecord : null;
     }
 
+    @api
+    save() {
+        // this function ensures the setter gets called.
+        this.record = this.localRecord;
+        this._isEdited = false;
+    }
+
     fields = {
         quantity: QUANTITY_FIELD,
         status: ATTENDANCE_STATUS_FIELD,
     };
 
     serviceDeliveryObject = SERVICE_DELIVERY_OBJECT;
-
-    get recordId() {
-        return this.record.Id;
-    }
 
     get quantity() {
         return this.localRecord[this.fields.quantity.fieldApiName];
@@ -70,7 +89,6 @@ export default class AttendanceRow extends LightningElement {
     setValues() {
         if (this.localFieldSet && this.localFieldSet.length && this.record) {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
-
             this.localFieldSet.forEach(field => {
                 field.value = this.record[field.apiName];
             });

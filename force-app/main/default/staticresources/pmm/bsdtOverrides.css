@@ -31,3 +31,7 @@
 .bsdt .bsdt-shadow {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
 }
+
+.bsdt .small-box {
+    padding: var(--lwc-varSpacingXxxSmall, 0.125rem);
+}

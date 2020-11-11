@@ -23,7 +23,9 @@ public with sharing class AttendanceSelector {
                 new List<String>{
                     String.valueOf(
                         ServiceDelivery__c.Contact__c.getDescribe()
-                            .getRelationshipName() + String.valueOf(Contact.Name)
+                            .getRelationshipName() +
+                        '.' +
+                        String.valueOf(Contact.Name)
                     )
                 }
             )

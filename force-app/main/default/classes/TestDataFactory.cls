@@ -195,4 +195,79 @@ public with sharing class TestDataFactory {
         );
         insert serviceParticipants;
     }
+
+    public static void generateAttendanceData(String frequency) {
+        generateServiceData();
+        DateTime currentDate = System.now();
+
+        serviceSchedules = new List<ServiceSchedule__c>();
+        serviceSchedules.add(
+            new ServiceSchedule__c(
+                Name = 'Payday',
+                Frequency__c = frequency,
+                FirstSessionStart__c = currentDate,
+                FirstSessionEnd__c = currentDate.addDays(2),
+                PrimaryServiceProvider__c = contacts[0].Id,
+                OtherServiceProvider__c = contacts[0].Id
+            )
+        );
+        insert serviceSchedules;
+
+        serviceSessions = new List<ServiceSession__c>();
+        serviceSessions.add(
+            new ServiceSession__c(
+                ServiceSchedule__c = serviceSchedules[0].Id,
+                SessionStart__c = serviceSchedules[0].FirstSessionStart__c,
+                SessionEnd__c = serviceSchedules[0].FirstSessionEnd__c,
+                PrimaryServiceProvider__c = serviceSchedules[0].PrimaryServiceProvider__c,
+                OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c
+            )
+        );
+        serviceSessions.add(
+            new ServiceSession__c(
+                ServiceSchedule__c = serviceSchedules[0].Id,
+                SessionStart__c = serviceSchedules[0].FirstSessionStart__c.addDays(1),
+                SessionEnd__c = serviceSchedules[0].FirstSessionEnd__c,
+                PrimaryServiceProvider__c = serviceSchedules[0].PrimaryServiceProvider__c,
+                OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c
+            )
+        );
+        insert serviceSessions;
+
+        serviceDeliveries[0].ServiceSession__c = serviceSessions[0].Id;
+        update serviceDeliveries[0];
+
+        ProgramEngagement__c engagement = new ProgramEngagement__c();
+        engagement.Name = 'Engagement 1';
+        engagement.Stage__c = 'Enrolled';
+        engagement.Contact__c = contacts[1].Id;
+        engagement.Program__c = programs[0].Id;
+        engagement.Role__c = 'Client';
+        engagement.ProgramCohort__c = programCohorts[0].Id;
+        insert engagement;
+
+        serviceParticipants = new List<ServiceParticipant__c>();
+        serviceParticipants.add(
+            new ServiceParticipant__c(
+                Name = 'Test Participant 1',
+                Contact__c = contacts[0].Id,
+                ProgramEngagement__c = engagements[0].Id,
+                Service__c = services[0].Id,
+                ServiceSchedule__c = serviceSchedules[0].Id,
+                SignUpDate__c = System.today()
+            )
+        );
+
+        serviceParticipants.add(
+            new ServiceParticipant__c(
+                Name = 'Test Participant 2',
+                Contact__c = contacts[1].Id,
+                ProgramEngagement__c = engagement.Id,
+                Service__c = services[0].Id,
+                ServiceSchedule__c = serviceSchedules[0].Id,
+                SignUpDate__c = System.today()
+            )
+        );
+        insert serviceParticipants;
+    }
 }

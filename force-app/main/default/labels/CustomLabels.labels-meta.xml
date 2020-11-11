@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>accordionSection_ToggleInstructionsWhenOpen</fullName>
+        <categories>accordionSection</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Click to toggle the section. This section is open.</shortDescription>
+        <value>Click to toggle the section. This section is open.</value>
+    </labels>
+    <labels>
+        <fullName>accordionSection_ToggleInstructionsWhenClosed</fullName>
+        <categories>accordionSection</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Click to toggle the section. This section is not open.</shortDescription>
+        <value>Click to toggle the section. This section is not open.</value>
+    </labels>
+    <labels>
         <fullName>Add_Entry</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -326,6 +342,13 @@
         <protected>true</protected>
         <shortDescription>Placeholder for Bulk Service Delivery Tool until it returns the Unit of Measure</shortDescription>
         <value>Quantity</value>
+    </labels>
+    <labels>
+        <fullName>RecentSessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Recent Sessions</shortDescription>
+        <value>Recent Sessions</value>
     </labels>
     <labels>
         <fullName>Record_Deleted</fullName>

@@ -41,6 +41,11 @@ public with sharing class SelectParticipantModel {
     };
 
     @AuraEnabled
+    public Map<String, Map<String, Object>> fieldByFieldPath = fieldSetService.getFieldByFieldPath(
+        String.valueOf(ProgramEngagement__c.SObjectType),
+        'SessionParticipantView'
+    );
+    @AuraEnabled
     public List<ProgramEngagement__c> programEngagements;
     @AuraEnabled
     public List<ProgramCohort__c> programCohorts;
@@ -57,6 +62,7 @@ public with sharing class SelectParticipantModel {
 
         populateObjectLabels();
         populateFields();
+        populateRequiredFields();
     }
 
     private void populateObjectLabels() {
@@ -73,5 +79,30 @@ public with sharing class SelectParticipantModel {
         fields = contactFields;
         fields.putAll(engagementFields);
         fields.putAll(scheduleFields);
+    }
+
+    // Ensure fields that are required for naming and filtering data are included
+    private void populateRequiredFields() {
+        String programFieldPath = String.valueOf(ProgramEngagement__c.ProgramCohort__c);
+        Boolean hidden = !fieldByFieldPath.containsKey(programFieldPath);
+
+        Map<String, Object> programField = fieldSetService.getFieldForLwc(
+            ProgramEngagement__c.ProgramCohort__c.getDescribe()
+        );
+        programField.put('hidden', hidden);
+        fieldByFieldPath.put(programFieldPath, programField);
+
+        String nameFieldPath =
+            ProgramEngagement__c.Contact__c.getDescribe().getRelationshipName() +
+            '.' +
+            String.valueOf(Contact.Name);
+
+        hidden = !fieldByFieldPath.containsKey(nameFieldPath);
+
+        Map<String, Object> nameField = fieldSetService.getFieldForLwc(
+            Contact.Name.getDescribe()
+        );
+        nameField.put('hidden', hidden);
+        fieldByFieldPath.put(nameFieldPath, nameField);
     }
 }

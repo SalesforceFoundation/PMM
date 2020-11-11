@@ -17,6 +17,11 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private RecurrenceService recurrenceService = new RecurrenceService();
     private static final String ONE_TIME = 'One Time';
+    @TestVisible
+    private static final Set<String> ACTIVE_ENGAGEMENT_STAGES = new Set<String>{
+        'Active',
+        'Enrolled'
+    };
 
     public ServiceScheduleModel getServiceScheduleModel(Id recordTypeId) {
         return new ServiceScheduleModel(recordTypeId);
@@ -170,11 +175,30 @@ public with sharing class ServiceScheduleService {
         }
 
         model.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
-            model.program.Id
+            model.program.Id,
+            getSelectFieldsWithToLabel(model),
+            ACTIVE_ENGAGEMENT_STAGES
         );
         model.programCohorts = programEngagementSelector.getProgramCohortsByProgramId(
             model.program.Id
         );
+    }
+
+    @TestVisible
+    private Set<String> getSelectFieldsWithToLabel(SelectParticipantModel model) {
+        Set<String> selectFields = new Set<String>();
+        for (String fieldPath : model.fieldByFieldPath.keySet()) {
+            if (
+                ((String) model.fieldByFieldPath.get(fieldPath).get('type'))
+                    .contains('PICKLIST')
+            ) {
+                selectFields.add('toLabel(' + fieldPath + ')');
+                continue;
+            }
+            selectFields.add(fieldPath);
+        }
+
+        return selectFields;
     }
 
     public class ServiceScheduleServiceException extends Exception {

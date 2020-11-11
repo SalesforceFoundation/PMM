@@ -12,6 +12,7 @@ public with sharing class AttendanceService_TEST {
     private static BasicStub attendanceSelectorStub = new BasicStub(
         AttendanceSelector.class
     );
+    private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
 
     private static AttendanceService service = new AttendanceService();
 
@@ -128,7 +129,7 @@ public with sharing class AttendanceService_TEST {
         attendanceSelectorStub.withReturnValue(
             getSession,
             Id.class,
-            new ServiceSession__c(ServiceSchedule__c = scheduleId)
+            new ServiceSession__c(Id = sessionId, ServiceSchedule__c = scheduleId)
         );
 
         Test.startTest();
@@ -259,6 +260,62 @@ public with sharing class AttendanceService_TEST {
             countIds < countParticipants &&
             countIds == countExistingDeliveries,
             'Expected the Ids of the existing Service Deliveries to be returned.'
+        );
+    }
+
+    @IsTest
+    private static void shouldCallDomainToUpsert() {
+        String methodName = 'upsertServiceDeliveries';
+        List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>();
+        service.domain = (ServiceDeliveryDomain) domainStub.createMock();
+
+        Test.startTest();
+        service.upsertServiceDeliveries(deliveries);
+        Test.stopTest();
+
+        domainStub.assertCalledWith(
+            methodName,
+            List<ServiceDelivery__c>.class,
+            deliveries
+        );
+    }
+
+    @IsTest
+    private static void shouldRollbackAndRethrowDomainException() {
+        String methodName = 'upsertServiceDeliveries';
+        List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>();
+        Exception actualException;
+        Integer dmlLimitBefore;
+        Integer dmlLimitAfter;
+        domainStub.withThrowException(methodName, List<ServiceDelivery__c>.class);
+        service.domain = (ServiceDeliveryDomain) domainStub.createMock();
+
+        Test.startTest();
+        try {
+            dmlLimitBefore = System.Limits.getDmlStatements();
+            service.upsertServiceDeliveries(deliveries);
+        } catch (Exception ex) {
+            actualException = ex;
+            dmlLimitAfter = System.Limits.getDmlStatements();
+        }
+
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AttendanceService.ServiceDeliveryException,
+            'Expected the service to catch and rethrow the exception.'
+        );
+
+        System.assertEquals(
+            2,
+            dmlLimitAfter - dmlLimitBefore,
+            'Expected a dml statement for the save point and the rollback.'
+        );
+
+        domainStub.assertCalledWith(
+            methodName,
+            List<ServiceDelivery__c>.class,
+            deliveries
         );
     }
 

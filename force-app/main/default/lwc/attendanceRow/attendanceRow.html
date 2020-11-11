@@ -29,6 +29,7 @@
                         key={field.apiName}
                         class="slds-var-p-around_xx-small"
                     >
+                        <!-- CONTACT FIELD, ALWAYS OUTPUT, CUSTOM VALUE -->
                         <template if:true={field.isContactField}>
                             <div class="slds-form-element slds-form-element_stacked">
                                 <label
@@ -42,26 +43,42 @@
                                 </div>
                             </div>
                         </template>
+
+                        <!-- QUANTITY FIELD, DYNAMIC INPUT/OUTPUT WITH CUSTOM LABEL -->
                         <template if:true={field.isQuantityField}>
-                            <div class="slds-form-element slds-form-element_stacked">
-                                <lightning-input
-                                    label={unitOfMeasurement}
-                                    onchange={handleQuantityChange}
-                                    type="number"
-                                    min="0"
-                                    value={quantity}
-                                ></lightning-input>
-                            </div>
+                            <!-- INPUT -->
+                            <template if:false={readOnly}>
+                                <div class="slds-form-element slds-form-element_stacked">
+                                    <lightning-input
+                                        label={unitOfMeasurement}
+                                        onchange={handleQuantityChange}
+                                        type="number"
+                                        min="0"
+                                        value={quantity}
+                                    ></lightning-input>
+                                </div>
+                            </template>
+
+                            <!-- OUTPUT -->
+                            <template if:true={readOnly}>
+                                <div class="slds-form-element slds-form-element_stacked">
+                                    <label
+                                        for={field.apiName}
+                                        class="slds-form-element__label"
+                                    >
+                                        {unitOfMeasurement}
+                                    </label>
+                                    <lightning-output-field
+                                        id={field.name}
+                                        variant="label-hidden"
+                                        field-name={field.apiName}
+                                    ></lightning-output-field>
+                                </div>
+                            </template>
                         </template>
-                        <template if:true={field.isNormalInputField}>
-                            <lightning-input-field
-                                field-name={field.apiName}
-                                onchange={handleInputChange}
-                                value={field.value}
-                                variant={field.variant}
-                            >
-                            </lightning-input-field>
-                        </template>
+
+                        <!-- READ-ONLY FIELDS LIKE CREATED DATE -->
+                        <!-- extra special handling because of output-field bug that gets created date label wrong -->
                         <template if:true={field.isOutputField}>
                             <template if:true={field.value}>
                                 <div class="slds-form-element slds-form-element_stacked">
@@ -77,6 +94,28 @@
                                         field-name={field.apiName}
                                     ></lightning-output-field>
                                 </div>
+                            </template>
+                        </template>
+
+                        <!-- ALL OTHER FIELDS WITHOUT SPECIAL HANDLING, DYNAMIC INPUT/OUTPUT -->
+                        <template if:true={field.isNormalField}>
+                            <!-- INPUT -->
+                            <template if:false={readOnly}>
+                                <lightning-input-field
+                                    field-name={field.apiName}
+                                    onchange={handleInputChange}
+                                    value={field.value}
+                                    variant={field.variant}
+                                >
+                                </lightning-input-field>
+                            </template>
+
+                            <!-- OUTPUT -->
+                            <template if:true={readOnly}>
+                                <lightning-output-field
+                                    id={field.name}
+                                    field-name={field.apiName}
+                                ></lightning-output-field>
                             </template>
                         </template>
                     </lightning-layout-item>

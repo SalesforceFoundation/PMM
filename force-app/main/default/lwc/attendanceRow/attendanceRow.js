@@ -7,10 +7,12 @@
  *
  */
 
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api, track, wire } from "lwc";
 import { getChildObjectByName } from "c/util";
+import { getRecord, getRecordNotifyChange } from "lightning/uiRecordApi";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+import ID_FIELD from "@salesforce/schema/ServiceDelivery__c.Id";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
 
@@ -23,17 +25,27 @@ export default class AttendanceRow extends LightningElement {
 
     @api unitOfMeasurement;
     @api presentStatus = PRESENT_STATUS;
-    oldStatus;
+    @api readOnly = false;
     name;
+    _isEdited;
+    recordId;
 
     @api
     get record() {
         return this.localRecord;
     }
     set record(value) {
+        getRecordNotifyChange([{ recordId: this.recordId }]);
+
         this.localRecord = Object.assign({}, value);
         this.name = getChildObjectByName(this.localRecord, "Contact__r").Name;
+        this.setValues();
+        this._isEdited = false;
+        this.recordId = this.localRecord.Id;
     }
+
+    @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD] })
+    wiredServiceDelivery;
 
     @api
     get fieldSet() {
@@ -41,9 +53,19 @@ export default class AttendanceRow extends LightningElement {
     }
     set fieldSet(value) {
         this.localFieldSet = value;
-        if (value && value.length) {
-            this.setValues();
-        }
+        this.setValues();
+    }
+
+    @api
+    getRow() {
+        return this._isEdited ? this.localRecord : null;
+    }
+
+    @api
+    save() {
+        // this function ensures the setter gets called.
+        this.record = this.localRecord;
+        this._isEdited = false;
     }
 
     fields = {
@@ -53,20 +75,17 @@ export default class AttendanceRow extends LightningElement {
 
     serviceDeliveryObject = SERVICE_DELIVERY_OBJECT;
 
-    get recordId() {
-        return this.record.Id;
-    }
-
     get quantity() {
-        return this.record[this.fields.quantity.fieldApiName];
+        return this.localRecord[this.fields.quantity.fieldApiName];
     }
 
     setValues() {
-        this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
-
-        this.localFieldSet.forEach(field => {
-            field.value = this.record[field.apiName];
-        });
+        if (this.localFieldSet && this.localFieldSet.length && this.record) {
+            this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
+            this.localFieldSet.forEach(field => {
+                field.value = this.record[field.apiName];
+            });
+        }
     }
 
     handleInputChange(event) {
@@ -75,12 +94,14 @@ export default class AttendanceRow extends LightningElement {
             this.record[this.fields.status.fieldApiName] === this.presentStatus && // status was present
             event.detail.value !== this.presentStatus // new status is not present
         ) {
-            this.record[this.fields.quantity.fieldApiName] = 0; // clear out quantity
+            this.localRecord[this.fields.quantity.fieldApiName] = 0; // clear out quantity
         }
-        this.record[event.target.fieldName] = event.detail.value;
+        this.localRecord[event.target.fieldName] = event.detail.value;
+        this._isEdited = true;
     }
 
     handleQuantityChange(event) {
-        this.record[this.fields.quantity.fieldApiName] = event.detail.value;
+        this.localRecord[this.fields.quantity.fieldApiName] = event.detail.value;
+        this._isEdited = true;
     }
 }

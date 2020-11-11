@@ -10,6 +10,8 @@
 public with sharing class AttendanceService {
     @TestVisible
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
+    @TestVisible
+    private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
 
     private static final String DEFAULT_STATUS = 'Present';
 
@@ -29,6 +31,18 @@ public with sharing class AttendanceService {
         return createRows(sessionId);
     }
 
+    public void upsertServiceDeliveries(
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert
+    ) {
+        Savepoint savepoint = Database.setSavepoint();
+        try {
+            domain.upsertServiceDeliveries(serviceDeliveriesToUpsert);
+        } catch (Exception ex) {
+            Database.rollback(savepoint);
+            throw new ServiceDeliveryException(ex);
+        }
+    }
+
     private List<ServiceDelivery__c> createRows(Id sessionId) {
         Set<Id> existingClients = new Set<Id>();
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
@@ -39,7 +53,8 @@ public with sharing class AttendanceService {
             existingClients.add(delivery.Contact__c);
         }
 
-        Id scheduleId = attendanceSelector.getSession(sessionId).ServiceSchedule__c;
+        ServiceSession__c session = attendanceSelector.getSession(sessionId);
+        Id scheduleId = session.ServiceSchedule__c;
 
         for (
             ServiceParticipant__c participant : attendanceSelector.getServiceParticipantsByScheduleId(
@@ -47,7 +62,7 @@ public with sharing class AttendanceService {
                 existingClients
             )
         ) {
-            deliveries.add(createServiceDelivery(sessionId, participant));
+            deliveries.add(createServiceDelivery(session, participant));
         }
 
         return deliveries;
@@ -55,14 +70,16 @@ public with sharing class AttendanceService {
 
     @TestVisible
     private ServiceDelivery__c createServiceDelivery(
-        Id sessionId,
+        ServiceSession__c session,
         ServiceParticipant__c participant
     ) {
         SObject particpantRecord = participant;
         SObject deliveryRecord = new ServiceDelivery__c(
-            ServiceSession__c = sessionId,
+            ServiceSession__c = session.Id,
             AttendanceStatus__c = DEFAULT_STATUS,
-            Contact__r = participant.Contact__r
+            Contact__r = participant.Contact__r,
+            Service_Provider__c = session.PrimaryServiceProvider__c,
+            DeliveryDate__c = Date.valueOf(session.SessionStart__c)
         );
 
         for (SObjectField sourceField : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {
@@ -73,5 +90,8 @@ public with sharing class AttendanceService {
         }
 
         return (ServiceDelivery__c) deliveryRecord;
+    }
+
+    public class ServiceDeliveryException extends Exception {
     }
 }

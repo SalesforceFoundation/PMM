@@ -51,6 +51,20 @@
         <value>Attendance</value>
     </labels>
     <labels>
+        <fullName>Save_Attendance_Success</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Successfully saved {0} attendance records.</shortDescription>
+        <value>Successfully saved {0} attendance records.</value>
+    </labels>
+    <labels>
+        <fullName>Save_Attendance_No_Updates</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>There were no edited attendance records to update.</shortDescription>
+        <value>There were no edited attendance records to update.</value>
+    </labels>
+    <labels>
         <fullName>Back</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -370,6 +384,13 @@
         <value>There are Service Delivery rows with errors.</value>
     </labels>
     <labels>
+        <fullName>Update</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Update</shortDescription>
+        <value>Update</value>
+    </labels>
+    <labels>
         <fullName>Save</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -619,6 +640,14 @@
         <protected>true</protected>
         <shortDescription>Unsupported Field Error</shortDescription>
         <value>You can't access this field. Your Salesforce admin can help with that.</value>
+    </labels>
+    <labels>
+        <fullName>UpsertOperationException</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Permission Denied for Insert or Update Operation</shortDescription>
+        <value>You don't have access to insert or update this record. Your Salesforce admin can help with that.</value>
     </labels>
     <labels>
         <fullName>Warning</fullName>

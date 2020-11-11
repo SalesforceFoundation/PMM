@@ -9,8 +9,7 @@
 
 import { LightningElement, api, track, wire } from "lwc";
 import { getChildObjectByName } from "c/util";
-import { refreshApex } from "@salesforce/apex";
-import { getRecord } from "lightning/uiRecordApi";
+import { getRecord, getRecordNotifyChange } from "lightning/uiRecordApi";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import ID_FIELD from "@salesforce/schema/ServiceDelivery__c.Id";
@@ -36,8 +35,7 @@ export default class AttendanceRow extends LightningElement {
         return this.localRecord;
     }
     set record(value) {
-        // force lightning data service to refresh its cache so lightning-record-view-form updates its values
-        this.handleRefreshApex();
+        getRecordNotifyChange([{ recordId: this.recordId }]);
 
         this.localRecord = Object.assign({}, value);
         this.name = getChildObjectByName(this.localRecord, "Contact__r").Name;
@@ -46,11 +44,7 @@ export default class AttendanceRow extends LightningElement {
         this.recordId = this.localRecord.Id;
     }
 
-    async handleRefreshApex() {
-        await refreshApex(this.wiredServiceDelivery);
-    }
-
-    @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD] }) // Only ID is needed to force-refresh the cache
+    @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD] })
     wiredServiceDelivery;
 
     @api

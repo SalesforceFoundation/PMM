@@ -8,11 +8,7 @@
   -->
 
 <template>
-    <c-modal
-        header={labels.serviceDeliveries}
-        hide-body-padding="true"
-        default-visible="true"
-    >
+    <c-modal header={labels.serviceDeliveries} hide-body-padding="true">
         <c-bulk-service-delivery-u-i
             default-values={defaultValues}
             ondone={hideModal}

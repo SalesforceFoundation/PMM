@@ -32,6 +32,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     isLoaded = false;
     serviceScheduleModel;
     originalModel;
+    participantColumns;
     labels = {
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
@@ -246,6 +247,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.hideSpinner = false;
         this.serviceScheduleModel.selectedParticipants =
             participantSelector.selectedParticipants;
+        this.participantColumns = participantSelector.columns;
 
         this.setNextStep();
     }

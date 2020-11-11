@@ -9,10 +9,16 @@
 
 @isTest
 public with sharing class ProgramEngagementSelector_TEST {
+    private static final Set<String> ACTIVE_ENGAGEMENT_STAGES = new Set<String>{
+        'Active',
+        'Enrolled'
+    };
+
     @TestSetup
     private static void createProgramEngagementData() {
         ProgramTestDataFactory.insertTestData(true);
     }
+
     @IsTest
     private static void testGetProgramEngagementsByContactId() {
         Contact con = [
@@ -84,18 +90,9 @@ public with sharing class ProgramEngagementSelector_TEST {
 
         List<ProgramEngagement__c> expected = new List<ProgramEngagement__c>(
             [
-                SELECT
-                    Id,
-                    Contact__r.Name,
-                    Contact__r.Email,
-                    Stage__c,
-                    Program__r.Name,
-                    ProgramCohort__c
+                SELECT Id, Contact__r.Name, Contact__r.Email, Stage__c, ProgramCohort__c
                 FROM ProgramEngagement__c
-                WHERE
-                    (Stage__c = 'ENROLLED'
-                    OR Stage__c = 'ACTIVE')
-                    AND Program__c = :program.Id
+                WHERE Stage__c IN :ACTIVE_ENGAGEMENT_STAGES AND Program__c = :program.Id
                 ORDER BY Contact__r.Name ASC
             ]
         );
@@ -103,7 +100,12 @@ public with sharing class ProgramEngagementSelector_TEST {
         Test.startTest();
         ProgramEngagementSelector selector = new ProgramEngagementSelector();
         List<ProgramEngagement__c> actual = selector.getProgramEngagementsByProgramId(
-            program.Id
+            program.Id,
+            new Set<String>{
+                'Name',
+                String.valueOf(ProgramEngagement__c.ProgramCohort__c)
+            },
+            ACTIVE_ENGAGEMENT_STAGES
         );
         Test.stopTest();
         System.assert(
@@ -142,18 +144,9 @@ public with sharing class ProgramEngagementSelector_TEST {
 
         List<ProgramEngagement__c> expected = new List<ProgramEngagement__c>(
             [
-                SELECT
-                    Id,
-                    Contact__r.Name,
-                    Contact__r.Email,
-                    Stage__c,
-                    Program__r.Name,
-                    ProgramCohort__c
+                SELECT Id, Name
                 FROM ProgramEngagement__c
-                WHERE
-                    (Stage__c = 'ENROLLED'
-                    OR Stage__c = 'ACTIVE')
-                    AND Program__c = :program.Id
+                WHERE Stage__c IN :ACTIVE_ENGAGEMENT_STAGES AND Program__c = :program.Id
                 ORDER BY Contact__r.Name ASC
             ]
         );
@@ -162,7 +155,9 @@ public with sharing class ProgramEngagementSelector_TEST {
         System.runAs(u) {
             ProgramEngagementSelector selector = new ProgramEngagementSelector();
             List<ProgramEngagement__c> actual = selector.getProgramEngagementsByProgramId(
-                program.Id
+                program.Id,
+                new Set<String>{ 'Name' },
+                ACTIVE_ENGAGEMENT_STAGES
             );
             System.assertEquals(
                 new List<ProgramEngagement__c>(),

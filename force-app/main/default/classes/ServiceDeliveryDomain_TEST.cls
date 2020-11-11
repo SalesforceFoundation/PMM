@@ -9,6 +9,8 @@
 
 @IsTest
 private with sharing class ServiceDeliveryDomain_TEST {
+    private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
+
     @IsTest
     private static void shouldUpsertServiceDeliveries() {
         TestDataFactory.generateServiceData();
@@ -54,5 +56,42 @@ private with sharing class ServiceDeliveryDomain_TEST {
                 'All records should be renamed.'
             );
         }
+    }
+
+    @IsTest
+    private static void shouldThrowExceptionWhenPermissionCheckFails() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert = new List<ServiceDelivery__c>();
+
+        Test.startTest();
+        try {
+            new ServiceDeliveryDomain()
+                .upsertServiceDeliveries(serviceDeliveriesToUpsert);
+        } catch (Exception ex) {
+            dmlLimitAfter = System.Limits.getDmlStatements();
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof ServiceDeliveryDomain.ServiceDeliveryDomainException,
+            'Expected the domain to throw the exception.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Expected the exception to be thrown before any dml statements.'
+        );
     }
 }

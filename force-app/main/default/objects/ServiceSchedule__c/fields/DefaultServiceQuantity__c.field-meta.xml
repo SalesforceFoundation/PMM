@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DefaultServiceQuantity__c</fullName>
+    <description>The default quantity for attendance Service Deliveries for Service Sessions in this Schedule, expressed in the Unit of Measurement in the Service. For example, 30 minutes of tutoring where the Unit of Measure is hours, Quantity is .50.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The default Service quantity reflected on a Service Delivery when tracking attendance.</inlineHelpText>
+    <label>Default Service Quantity</label>
+    <precision>16</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

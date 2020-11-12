@@ -79,7 +79,8 @@ public with sharing class AttendanceService {
             Contact__r = participant.Contact__r,
             Service_Provider__c = session.PrimaryServiceProvider__c,
             DeliveryDate__c = Date.valueOf(session.SessionStart__c),
-            Service__c = session.ServiceSchedule__r.Service__c
+            Service__c = session.ServiceSchedule__r.Service__c,
+            Quantity__c = session.ServiceSchedule__r.DefaultServiceQuantity__c
         );
 
         for (SObjectField sourceField : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {

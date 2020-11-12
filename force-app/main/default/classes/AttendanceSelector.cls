@@ -76,7 +76,8 @@ public with sharing class AttendanceSelector {
                 ServiceSchedule__c,
                 PrimaryServiceProvider__c,
                 SessionStart__c,
-                ServiceSchedule__r.Service__c
+                ServiceSchedule__r.Service__c,
+                ServiceSchedule__r.DefaultServiceQuantity__c
             FROM ServiceSession__c
             WHERE Id = :sessionId
             LIMIT 1

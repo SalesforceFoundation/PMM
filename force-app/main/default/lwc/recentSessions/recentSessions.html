@@ -46,7 +46,7 @@
                 if:true={sessionsData}
             >
                 <c-accordion-section
-                    class="slds-var-p-right_small relative-container"
+                    class="slds-var-p-right_small"
                     key={sessionData.sessionStartDate}
                     open-current-section={sessionData.openCurrentSection}
                 >
@@ -60,23 +60,32 @@
                     <div slot="extraInfoSection" class="slds-var-p-left_xxx-small">
                         {sessionData.totalSessions}
                     </div>
-
-                    <c-skip-links>
-                        <lightning-layout horizontal-align="spread" multiple-rows="true">
-                            <template for:each={sessionData.sessions} for:item="session">
-                                <lightning-layout-item
-                                    size={sessionsContainerDefaultSize}
-                                    key={session.Id}
-                                    medium-device-size={sessionsContainerMediumSize}
-                                    large-device-size={sessionsContainerLargeSize}
-                                    padding={sessionsContainerPaddingAround}
+                    <div class="slds-is-relative">
+                        <c-skip-links>
+                            <lightning-layout
+                                horizontal-align="spread"
+                                multiple-rows="true"
+                            >
+                                <template
+                                    for:each={sessionData.sessions}
+                                    for:item="session"
                                 >
-                                    <!-- Session card starts here -->
-                                    <c-session-card session={session}></c-session-card>
-                                </lightning-layout-item>
-                            </template>
-                        </lightning-layout>
-                    </c-skip-links>
+                                    <lightning-layout-item
+                                        size={sessionsContainerDefaultSize}
+                                        key={session.Id}
+                                        medium-device-size={sessionsContainerMediumSize}
+                                        large-device-size={sessionsContainerLargeSize}
+                                        padding={sessionsContainerPaddingAround}
+                                    >
+                                        <!-- Session card starts here -->
+                                        <c-session-card
+                                            session={session}
+                                        ></c-session-card>
+                                    </lightning-layout-item>
+                                </template>
+                            </lightning-layout>
+                        </c-skip-links>
+                    </div>
                 </c-accordion-section>
             </template>
         </div>

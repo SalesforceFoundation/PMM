@@ -12,6 +12,7 @@ public with sharing class ServiceSessionSelector_TEST {
     private static void createSessionData() {
         TestDataFactory.generateAttendanceData('Daily');
     }
+    private static set<String> STATUS = new Set<String>{ 'Pending', 'Complete' };
 
     @IsTest
     private static void testGetServiceSessionsForThisWeek() {
@@ -20,7 +21,7 @@ public with sharing class ServiceSessionSelector_TEST {
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
             FROM ServiceSession__c
-            WHERE SessionStart__c = THIS_WEEK
+            WHERE SessionStart__c = THIS_WEEK AND Status__c IN :STATUS
             ORDER BY SessionStart__c
         ];
 
@@ -56,7 +57,7 @@ public with sharing class ServiceSessionSelector_TEST {
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
             FROM ServiceSession__c
-            WHERE SessionStart__c = LAST_WEEK
+            WHERE SessionStart__c = LAST_WEEK AND Status__c IN :STATUS
             ORDER BY SessionStart__c
         ];
 
@@ -81,7 +82,7 @@ public with sharing class ServiceSessionSelector_TEST {
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
             FROM ServiceSession__c
-            WHERE SessionStart__c = LAST_WEEK
+            WHERE SessionStart__c = LAST_WEEK AND Status__c IN :STATUS
             ORDER BY SessionStart__c
         ];
 

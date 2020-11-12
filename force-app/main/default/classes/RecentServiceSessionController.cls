@@ -9,16 +9,17 @@
 public with sharing class RecentServiceSessionController {
     @TestVisible
     private static ServiceSessionService serviceSessionService = new ServiceSessionService();
-    private static final Map<String, String> dateLiteralOptions = new Map<String, String>();
+    private static final Map<String, String> DATE_LITERAL_OPTIONS = new Map<String, String>{
+        'THIS_WEEK' => System.Label.This_Week,
+        'LAST_WEEK' => System.Label.Last_Week
+    };
 
     @AuraEnabled(cacheable=true)
     public static Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
         String dateLiteral
     ) {
         //Need to build the map before checking if the map contains the key
-        getMenuOptions();
-
-        if (!dateLiteralOptions.containsKey(dateLiteral)) {
+        if (!DATE_LITERAL_OPTIONS.containsKey(dateLiteral)) {
             return null;
         }
 
@@ -31,9 +32,6 @@ public with sharing class RecentServiceSessionController {
 
     @AuraEnabled(cacheable=true)
     public static Map<String, String> getMenuOptions() {
-        dateLiteralOptions.put('THIS_WEEK', System.label.This_Week);
-        dateLiteralOptions.put('LAST_WEEK', System.label.Last_Week);
-
-        return dateLiteralOptions;
+        return DATE_LITERAL_OPTIONS;
     }
 }

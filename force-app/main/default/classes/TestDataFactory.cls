@@ -15,6 +15,8 @@ public with sharing class TestDataFactory {
     private static List<Program__c> programs;
     private static List<ProgramCohort__c> programCohorts;
     private static List<ProgramEngagement__c> engagements;
+    private static ProgramEngagement__c engagement1;
+    private static ProgramEngagement__c engagement2;
     private static List<Service__c> services;
     private static List<ServiceDelivery__c> serviceDeliveries;
     private static List<ServiceSchedule__c> serviceSchedules;
@@ -126,93 +128,50 @@ public with sharing class TestDataFactory {
         insert serviceDeliveries;
     }
 
-    public static void generateAttendanceData() {
+    public static void generateAttendanceData(String frequency) {
         generateServiceData();
+
         DateTime nextMonth = DateTime.newInstance(
             System.today().year(),
             System.today().month() + 1,
             1
         );
 
-        serviceSchedules = new List<ServiceSchedule__c>();
-        serviceSchedules.add(
-            new ServiceSchedule__c(
-                Name = 'Payday',
-                Frequency__c = 'Monthly',
-                FirstSessionStart__c = nextMonth,
-                FirstSessionEnd__c = nextMonth.addHours(24),
-                PrimaryServiceProvider__c = contacts[0].Id,
-                OtherServiceProvider__c = contacts[0].Id
-            )
-        );
-        insert serviceSchedules;
+        DateTime currentDate = System.now();
 
-        serviceSessions = new List<ServiceSession__c>();
-        serviceSessions.add(
-            new ServiceSession__c(
-                ServiceSchedule__c = serviceSchedules[0].Id,
-                SessionStart__c = serviceSchedules[0].FirstSessionStart__c,
-                SessionEnd__c = serviceSchedules[0].FirstSessionEnd__c,
-                PrimaryServiceProvider__c = serviceSchedules[0].PrimaryServiceProvider__c,
-                OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c
-            )
-        );
-        insert serviceSessions;
+        if (frequency == 'Monthly') {
+            generateServiceScheduleData('Monthly', nextMonth);
+        } else if (frequency == 'Daily') {
+            generateServiceScheduleData(frequency, currentDate);
+        }
+
+        generateServiceSessionData();
 
         serviceDeliveries[0].ServiceSession__c = serviceSessions[0].Id;
         update serviceDeliveries[0];
 
-        ProgramEngagement__c engagement = new ProgramEngagement__c();
-        engagement.Name = 'Engagement 1';
-        engagement.Stage__c = 'Enrolled';
-        engagement.Contact__c = contacts[1].Id;
-        engagement.Program__c = programs[0].Id;
-        engagement.Role__c = 'Client';
-        engagement.ProgramCohort__c = programCohorts[0].Id;
-        insert engagement;
-
-        serviceParticipants = new List<ServiceParticipant__c>();
-        serviceParticipants.add(
-            new ServiceParticipant__c(
-                Name = 'Test Participant 1',
-                Contact__c = contacts[0].Id,
-                ProgramEngagement__c = engagements[0].Id,
-                Service__c = services[0].Id,
-                ServiceSchedule__c = serviceSchedules[0].Id,
-                SignUpDate__c = System.today()
-            )
-        );
-
-        serviceParticipants.add(
-            new ServiceParticipant__c(
-                Name = 'Test Participant 2',
-                Contact__c = contacts[1].Id,
-                ProgramEngagement__c = engagement.Id,
-                Service__c = services[0].Id,
-                ServiceSchedule__c = serviceSchedules[0].Id,
-                SignUpDate__c = System.today()
-            )
-        );
-        insert serviceParticipants;
+        generateServiceParticipantData();
     }
 
-    public static void generateAttendanceData(String frequency) {
-        generateServiceData();
-        DateTime currentDate = System.now();
-
+    public static void generateServiceScheduleData(
+        String frequency,
+        DateTime sessionStart
+    ) {
         serviceSchedules = new List<ServiceSchedule__c>();
         serviceSchedules.add(
             new ServiceSchedule__c(
                 Name = 'Payday',
                 Frequency__c = frequency,
-                FirstSessionStart__c = currentDate,
-                FirstSessionEnd__c = currentDate.addDays(2),
+                FirstSessionStart__c = sessionStart,
+                FirstSessionEnd__c = sessionStart.addHours(24),
                 PrimaryServiceProvider__c = contacts[0].Id,
                 OtherServiceProvider__c = contacts[0].Id
             )
         );
         insert serviceSchedules;
+    }
 
+    public static void generateServiceSessionData() {
         serviceSessions = new List<ServiceSession__c>();
         serviceSessions.add(
             new ServiceSession__c(
@@ -220,7 +179,8 @@ public with sharing class TestDataFactory {
                 SessionStart__c = serviceSchedules[0].FirstSessionStart__c,
                 SessionEnd__c = serviceSchedules[0].FirstSessionEnd__c,
                 PrimaryServiceProvider__c = serviceSchedules[0].PrimaryServiceProvider__c,
-                OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c
+                OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c,
+                Status__c = 'Pending'
             )
         );
         serviceSessions.add(
@@ -229,23 +189,24 @@ public with sharing class TestDataFactory {
                 SessionStart__c = serviceSchedules[0].FirstSessionStart__c.addDays(1),
                 SessionEnd__c = serviceSchedules[0].FirstSessionEnd__c,
                 PrimaryServiceProvider__c = serviceSchedules[0].PrimaryServiceProvider__c,
-                OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c
+                OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c,
+                Status__c = 'Complete'
+            )
+        );
+        serviceSessions.add(
+            new ServiceSession__c(
+                ServiceSchedule__c = serviceSchedules[0].Id,
+                SessionStart__c = serviceSchedules[0].FirstSessionStart__c.addDays(1),
+                SessionEnd__c = serviceSchedules[0].FirstSessionEnd__c,
+                PrimaryServiceProvider__c = serviceSchedules[0].PrimaryServiceProvider__c,
+                OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c,
+                Status__c = 'Canceled'
             )
         );
         insert serviceSessions;
+    }
 
-        serviceDeliveries[0].ServiceSession__c = serviceSessions[0].Id;
-        update serviceDeliveries[0];
-
-        ProgramEngagement__c engagement = new ProgramEngagement__c();
-        engagement.Name = 'Engagement 1';
-        engagement.Stage__c = 'Enrolled';
-        engagement.Contact__c = contacts[1].Id;
-        engagement.Program__c = programs[0].Id;
-        engagement.Role__c = 'Client';
-        engagement.ProgramCohort__c = programCohorts[0].Id;
-        insert engagement;
-
+    public static void generateServiceParticipantData() {
         serviceParticipants = new List<ServiceParticipant__c>();
         serviceParticipants.add(
             new ServiceParticipant__c(
@@ -262,7 +223,7 @@ public with sharing class TestDataFactory {
             new ServiceParticipant__c(
                 Name = 'Test Participant 2',
                 Contact__c = contacts[1].Id,
-                ProgramEngagement__c = engagement.Id,
+                ProgramEngagement__c = engagements[1].Id,
                 Service__c = services[0].Id,
                 ServiceSchedule__c = serviceSchedules[0].Id,
                 SignUpDate__c = System.today()

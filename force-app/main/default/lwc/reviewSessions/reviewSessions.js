@@ -319,7 +319,6 @@ export default class ReviewSessions extends LightningElement {
         let startTime = new Date(this.addSessionStart);
         let endTime = new Date(this.addSessionStart);
 
-        console.log(this.duration);
         endTime.setHours(startTime.getHours() + this.duration);
         endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
         this.addSessionStart = startTime.toISOString();

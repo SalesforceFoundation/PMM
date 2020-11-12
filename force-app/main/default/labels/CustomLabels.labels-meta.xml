@@ -61,8 +61,8 @@
         <fullName>Save_Attendance_No_Updates</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>There were no edited attendance records to update.</shortDescription>
-        <value>There were no edited attendance records to update.</value>
+        <shortDescription>There are no attendance records to update.</shortDescription>
+        <value>There are no attendance records to update.</value>
     </labels>
     <labels>
         <fullName>Back</fullName>
@@ -647,7 +647,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Permission Denied for Insert or Update Operation</shortDescription>
-        <value>You don't have access to insert or update this record. Your Salesforce admin can help with that.</value>
+        <value>You can't add or update this record. Your Salesforce admin can help with that.</value>
     </labels>
     <labels>
         <fullName>Warning</fullName>

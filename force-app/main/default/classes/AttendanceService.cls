@@ -23,8 +23,7 @@ public with sharing class AttendanceService {
     // information from Participant to Attendance Service Delivery?)
     private static final Map<SObjectField, SObjectField> SERVICE_FIELD_BY_PARTICIPANT_FIELD = new Map<SObjectField, SObjectField>{
         ServiceParticipant__c.Contact__c => ServiceDelivery__c.Contact__c,
-        ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c,
-        ServiceParticipant__c.Service__c => ServiceDelivery__c.Service__c
+        ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c
     };
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
@@ -79,7 +78,8 @@ public with sharing class AttendanceService {
             AttendanceStatus__c = DEFAULT_STATUS,
             Contact__r = participant.Contact__r,
             Service_Provider__c = session.PrimaryServiceProvider__c,
-            DeliveryDate__c = Date.valueOf(session.SessionStart__c)
+            DeliveryDate__c = Date.valueOf(session.SessionStart__c),
+            Service__c = session.ServiceSchedule__r.Service__c
         );
 
         for (SObjectField sourceField : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {

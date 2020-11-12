@@ -62,6 +62,7 @@ public with sharing class AttendanceSelector {
             WHERE
                 ServiceSchedule__c = :scheduleId
                 AND Contact__c NOT IN :contactsToExclude
+                AND Contact__c != NULL
         ];
 
         return Security.stripInaccessible(AccessType.READABLE, serviceParticipants)
@@ -70,7 +71,12 @@ public with sharing class AttendanceSelector {
 
     public ServiceSession__c getSession(Id sessionId) {
         ServiceSession__c session = [
-            SELECT Id, ServiceSchedule__c, PrimaryServiceProvider__c, SessionStart__c
+            SELECT
+                Id,
+                ServiceSchedule__c,
+                PrimaryServiceProvider__c,
+                SessionStart__c,
+                ServiceSchedule__r.Service__c
             FROM ServiceSession__c
             WHERE Id = :sessionId
             LIMIT 1

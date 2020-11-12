@@ -7,6 +7,23 @@
             <h1 slot="title" class="header-title-container slds-card__header-title">
                 {labels.recentSessions}
             </h1>
+            <div>
+                <lightning-button-menu
+                    variant="container"
+                    class="listViewSelector"
+                    label={selectedMenuItemLabel}
+                    onselect={handleMenuItemSelected}
+                >
+                    <template for:each={menuItems} for:item="menuItem">
+                        <lightning-menu-item
+                            label={menuItem.label}
+                            value={menuItem.value}
+                            key={menuItem.label}
+                            checked={menuItem.isChecked}
+                        ></lightning-menu-item>
+                    </template>
+                </lightning-button-menu>
+            </div>
         </div>
 
         <!-- Lightning Card Body -->
@@ -15,13 +32,18 @@
             class="component-height slds-scrollable_y"
             style="margin-bottom: 0px;background-color:#f3f2f2"
         >
+            <lightning-spinner
+                alternative-text={labels.loading}
+                size="small"
+                if:false={hasLoaded}
+            ></lightning-spinner>
             <template
                 for:each={sessionsData}
                 for:item="sessionData"
                 if:true={sessionsData}
             >
                 <c-accordion-section
-                    class="slds-var-p-right_small"
+                    class="slds-var-p-right_small relative-container"
                     key={sessionData.sessionStartDate}
                     open-current-section={sessionData.openCurrentSection}
                 >
@@ -36,90 +58,100 @@
                         {sessionData.totalSessions}
                     </div>
 
-                    <template for:each={sessionData.sessions} for:item="session">
-                        <lightning-record-view-form
-                            record-id={session.Id}
-                            object-api-name={serviceSessionObject}
-                            key={session.Id}
-                        >
-                            <div
-                                class="slds-box slds-var-m-top_x-small slds-theme_default"
-                            >
-                                <lightning-layout
-                                    multiple-rows="true"
-                                    density="compact"
-                                    pull-to-boundary="small"
+                    <c-skip-links>
+                        <lightning-layout horizontal-align="spread" multiple-rows="true">
+                            <template for:each={sessionData.sessions} for:item="session">
+                                <lightning-layout-item
+                                    size={sessionsContainerDefaultSize}
+                                    key={session.Id}
+                                    medium-device-size={sessionsContainerMediumSize}
+                                    large-device-size={sessionsContainerLargeSize}
+                                    padding={sessionsContainerPaddingAround}
                                 >
-                                    <lightning-layout-item
-                                        size="8"
-                                        class="slds-var-p-left_x-small "
+                                    <!-- Session card starts here -->
+                                    <!-- TODO: Pull this below code into a separate component -->
+                                    <lightning-record-view-form
+                                        record-id={session.Id}
+                                        object-api-name={serviceSessionObject}
+                                        key={session.Id}
+                                        density="compact"
                                     >
-                                        <a href="#">{session.Name} </a>
-                                    </lightning-layout-item>
-                                    <lightning-layout-item
-                                        size="4"
-                                        class="slds-list_horizontal slds-grid_vertical-align-center"
-                                    >
-                                        <lightning-icon
-                                            tabindex="0"
-                                            icon-name="utility:success"
-                                            alternative-text={labels.success}
-                                            size="x-small"
-                                            variant="success"
-                                            title={labels.success}
-                                            if:true={session.showCompleteIcon}
-                                        ></lightning-icon>
-                                        <lightning-icon
-                                            tabindex="0"
-                                            icon-name="utility:clock"
-                                            size="x-small"
-                                            if:false={session.showCompleteIcon}
-                                        ></lightning-icon>
-                                        <lightning-output-field
-                                            field-name={fields.status}
-                                            variant="label-hidden"
-                                            class="slds-var-p-left_x-small"
+                                        <lightning-layout
+                                            class="slds-box small-box slds-var-m-top_x-small slds-theme_default"
+                                            multiple-rows="true"
                                         >
-                                        </lightning-output-field>
-                                    </lightning-layout-item>
-                                    <lightning-layout-item
-                                        size="12"
-                                        class="slds-var-p-left_x-small slds-var-m-top_xxx-small slds-list_horizontal"
-                                    >
-                                        <lightning-formatted-date-time
-                                            value={session.sessionStartDate}
-                                            hour="2-digit"
-                                            minute="2-digit"
-                                            time-zone={timeZone}
-                                        ></lightning-formatted-date-time>
-                                        <span
-                                            class="slds-var-p-left_x-small slds-var-p-right_x-small"
-                                            >|</span
-                                        >
-                                        <span>{session.serviceName}</span>
-                                    </lightning-layout-item>
+                                            <lightning-layout-item size="8">
+                                                <a href="#">{session.Name} </a>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item
+                                                size="4"
+                                                class="slds-list_horizontal slds-align_absolute-center"
+                                                flexibility="no-grow,no-shrink"
+                                            >
+                                                <lightning-icon
+                                                    tabindex="0"
+                                                    icon-name="utility:success"
+                                                    alternative-text={labels.success}
+                                                    size="x-small"
+                                                    variant="success"
+                                                    title={labels.success}
+                                                    if:true={session.showCompleteIcon}
+                                                ></lightning-icon>
+                                                <lightning-icon
+                                                    tabindex="0"
+                                                    icon-name="utility:clock"
+                                                    size="x-small"
+                                                    if:false={session.showCompleteIcon}
+                                                ></lightning-icon>
+                                                <lightning-output-field
+                                                    field-name={fields.status}
+                                                    variant="label-hidden"
+                                                    class="slds-var-p-left_x-small"
+                                                >
+                                                </lightning-output-field>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item
+                                                size="12"
+                                                class="slds-var-m-top_xxx-small slds-list_horizontal"
+                                            >
+                                                <div>
+                                                    <lightning-formatted-date-time
+                                                        value={session.sessionStartDate}
+                                                        hour="2-digit"
+                                                        minute="2-digit"
+                                                        time-zone={timeZone}
+                                                    ></lightning-formatted-date-time>
+                                                    <span
+                                                        class="slds-var-p-left_x-small slds-var-p-right_x-small"
+                                                        >|</span
+                                                    >
+                                                    <span>{session.serviceName}</span>
+                                                </div>
+                                            </lightning-layout-item>
 
-                                    <lightning-layout-item
-                                        size="8"
-                                        class="slds-list_horizontal slds-var-m-top_x-small slds-var-p-left_x-small slds-grid_vertical-align-center"
-                                    >
-                                        <lightning-icon
-                                            tabindex="0"
-                                            icon-name="utility:user"
-                                            size="x-small"
-                                            if:true={session.showPrimaryServiceProviderIcon}
-                                        ></lightning-icon>
-                                        <lightning-output-field
-                                            field-name={fields.primaryServiceProvider}
-                                            variant="label-hidden"
-                                            class="slds-var-p-left_x-small"
-                                        >
-                                        </lightning-output-field>
-                                    </lightning-layout-item>
-                                </lightning-layout>
-                            </div>
-                        </lightning-record-view-form>
-                    </template>
+                                            <lightning-layout-item
+                                                size="12"
+                                                class="slds-list_horizontal slds-var-m-top_x-small"
+                                            >
+                                                <lightning-icon
+                                                    tabindex="0"
+                                                    icon-name="utility:user"
+                                                    size="x-small"
+                                                    if:true={session.showPrimaryServiceProviderIcon}
+                                                ></lightning-icon>
+                                                <lightning-output-field
+                                                    field-name={fields.primaryServiceProvider}
+                                                    variant="label-hidden"
+                                                    class="slds-var-p-left_x-small"
+                                                >
+                                                </lightning-output-field>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-record-view-form>
+                                </lightning-layout-item>
+                            </template>
+                        </lightning-layout>
+                    </c-skip-links>
                 </c-accordion-section>
             </template>
         </div>

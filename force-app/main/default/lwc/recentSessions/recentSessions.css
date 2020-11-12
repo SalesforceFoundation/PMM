@@ -1,3 +1,11 @@
 .component-height {
-    max-height: 600px;
+    max-height: 500px;
+}
+
+.relative-container {
+    position: relative;
+}
+
+.small-box {
+    padding: var(--lwc-varSpacingXSmall, 0.5rem);
 }

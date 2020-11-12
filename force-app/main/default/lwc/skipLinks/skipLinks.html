@@ -1,0 +1,23 @@
+<template>
+    <div>
+        <a
+            tabindex="0"
+            onclick={handleSkipToEndClick}
+            onkeydown={handleSkipToEndKeyboard}
+            class="start-link slds-assistive-text slds-assistive-text_focus"
+        >
+            {labels.skipToEndLink}
+        </a>
+
+        <slot></slot>
+
+        <a
+            tabindex="0"
+            onclick={handleSkipToStartClick}
+            onkeydown={handleSkipToStartKeyboard}
+            class="end-link slds-assistive-text slds-assistive-text_focus slds-is-absolute"
+        >
+            {labels.skipToStartLink}
+        </a>
+    </div>
+</template>

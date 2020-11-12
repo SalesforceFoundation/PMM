@@ -1,10 +1,12 @@
-import { LightningElement, wire, track } from "lwc";
+import { LightningElement, wire, track, api } from "lwc";
 import getServiceSessions from "@salesforce/apex/RecentServiceSessionController.getServiceSessionsByStartDate";
+import getMenuOptions from "@salesforce/apex/RecentServiceSessionController.getMenuOptions";
 import { loadStyle } from "lightning/platformResourceLoader";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 
 import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
+import LOADING_LABEL from "@salesforce/label/c.Loading";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import SERVICE_SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
@@ -22,19 +24,29 @@ const COMPLETE = "Complete";
 
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
-    @track listViewNames = [];
+    @track menuItems = [];
+    @api flexipageRegionWidth;
 
-    serviceSessionObject = SERVICE_SESSION_OBJECT;
+    hasLoaded = false;
+    isAccordionSectionOpen = false;
     objectLabel;
     objectLabelPlural;
+    serviceSessionObject = SERVICE_SESSION_OBJECT;
     serviceScheduleRelationshipName;
     serviceRelationshipName;
+    selectedMenuItemLabel;
+    selectedMenuItemValue;
     timeZone = TIME_ZONE;
-    isAccordionSectionOpen = false;
+    sessionsContainerDefaultSize = 12;
+    sessionsContainerSmallSize = 12;
+    sessionsContainerMediumSize = 6;
+    sessionsContainerLargeSize = 6;
+    sessionsContainerPaddingAround;
 
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,
         sucess: SUCCESS_LABEL,
+        loading: LOADING_LABEL,
     };
 
     fields = {
@@ -71,32 +83,28 @@ export default class RecentSessions extends LightningElement {
             console.log(error);
         }
     }
-    @wire(getServiceSessions, { dateLiteral: THIS_WEEK })
-    wiredServiceSessions(result, error) {
+
+    @wire(getMenuOptions)
+    wiredmenuOptions(result, error) {
         if (!result.data) {
             return;
         }
-
         if (result.data) {
-            let sessions = result.data;
+            for (const [key, value] of Object.entries(result.data)) {
+                let menuItem = {};
+                menuItem.label = value;
+                menuItem.value = key;
 
-            // eslint-disable-next-line guard-for-in
-            for (let sessionStartDate in sessions) {
-                //Here we are creating the array to iterate on UI.
-                let currentDate = new Date();
-                this.sessionsData.push({
-                    sessionStartDate: sessionStartDate,
-                    sessions: this.processSessions(sessions[sessionStartDate]),
-                    openCurrentSection:
-                        new Date(sessionStartDate).getDate() === currentDate.getDate(),
-                    totalSessions:
-                        sessions[sessionStartDate].length === 1
-                            ? sessions[sessionStartDate].length + " " + this.objectLabel
-                            : sessions[sessionStartDate].length +
-                              " " +
-                              this.objectLabelPlural,
-                });
+                //Set the default value
+                if (key === THIS_WEEK) {
+                    this.selectedMenuItemLabel = value;
+                    this.selectedMenuItemValue = key;
+                    menuItem.isChecked = true;
+                }
+
+                this.menuItems.push(menuItem);
             }
+            this.handleGetServiceSessions();
         } else if (error) {
             console.log(error);
         }
@@ -124,5 +132,86 @@ export default class RecentSessions extends LightningElement {
 
     connectedCallback() {
         loadStyle(this, pmmFolder + "/recentSessionsOverrides.css");
+
+        if (this.flexipageRegionWidth === "SMALL") {
+            this.sessionsContainerMediumSize = 12;
+            this.sessionsContainerLargeSize = 12;
+            this.sessionsContainerPaddingAround = "";
+        } else if (this.flexipageRegionWidth === "MEDIUM") {
+            this.sessionsContainerLargeSize = 6;
+            this.sessionsContainerPaddingAround = "horizontal-medium";
+        }
+    }
+
+    handleMenuItemSelected(event) {
+        this.menuItems.forEach(element => {
+            if (element.value === event.detail.value) {
+                this.selectedMenuItemLabel = element.label;
+                this.selectedMenuItemValue = element.value;
+                element.isChecked = true;
+            } else {
+                element.isChecked = false;
+            }
+        });
+
+        if (this.selectedMenuItemValue) {
+            this.hasLoaded = false;
+            this.handleGetServiceSessions();
+        }
+    }
+
+    handleGetServiceSessions() {
+        getServiceSessions({ dateLiteral: this.selectedMenuItemValue })
+            .then(result => {
+                if (!result) {
+                    return;
+                }
+
+                if (result) {
+                    if (!this.hasLoaded) {
+                        this.sessionsData = [];
+                        let sessions = result;
+
+                        // eslint-disable-next-line guard-for-in
+                        for (let sessionStartDate in sessions) {
+                            //Here we are creating the array to iterate on UI.
+                            let currentDate = new Date();
+                            this.sessionsData.push({
+                                sessionStartDate: sessionStartDate,
+                                sessions: this.processSessions(
+                                    sessions[sessionStartDate]
+                                ),
+                                openCurrentSection:
+                                    new Date(sessionStartDate).getDate() ===
+                                    currentDate.getDate(),
+                                totalSessions:
+                                    sessions[sessionStartDate].length === 1
+                                        ? sessions[sessionStartDate].length +
+                                          " " +
+                                          this.objectLabel
+                                        : sessions[sessionStartDate].length +
+                                          " " +
+                                          this.objectLabelPlural,
+                            });
+                        }
+                        this.hasLoaded = true;
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    listEscapeHandler(event) {
+        let key = event.key || event.keyCode;
+        if ((event.metaKey || event.ctrlKey) && key === this.HOME) {
+            event.preventDefault();
+            this.template.querySelector("c-skip-links").handleSkipToStartClick();
+        }
+        if ((event.metaKey || event.ctrlKey) && key === this.END) {
+            event.preventDefault();
+            this.template.querySelector("c-skip-links").handleSkipToEndClick();
+        }
     }
 }

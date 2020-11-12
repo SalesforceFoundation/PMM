@@ -8,13 +8,12 @@
             class="slds-box small-box slds-var-m-top_x-small slds-theme_default"
             multiple-rows="true"
         >
-            <lightning-layout-item size="8">
+            <lightning-layout-item size="8" class="slds-truncate">
                 <a href={sessionURL} onkeydown={handleSessionClick}>{session.Name} </a>
             </lightning-layout-item>
             <lightning-layout-item
                 size="4"
-                class="slds-list_horizontal slds-align_absolute-center"
-                flexibility="no-grow,no-shrink"
+                class="slds-list_horizontal slds-align_absolute-center slds-truncate"
             >
                 <lightning-icon
                     icon-name="utility:success"
@@ -38,7 +37,7 @@
             </lightning-layout-item>
             <lightning-layout-item
                 size="12"
-                class="slds-var-m-top_xxx-small slds-list_horizontal"
+                class="slds-var-m-top_xxx-small slds-list_horizontal slds-truncate"
             >
                 <div>
                     <lightning-formatted-date-time
@@ -56,7 +55,7 @@
 
             <lightning-layout-item
                 size="12"
-                class="slds-list_horizontal slds-var-m-top_x-small"
+                class="slds-list_horizontal slds-var-m-top_x-small slds-truncate"
             >
                 <lightning-icon
                     icon-name="utility:user"

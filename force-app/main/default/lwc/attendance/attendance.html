@@ -1,0 +1,79 @@
+<!--
+  - /*
+  -  * Copyright (c) 2020, salesforce.com, inc.
+  -  * All rights reserved.
+  -  * SPDX-License-Identifier: BSD-3-Clause
+  -  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  -  */
+  -->
+
+<template>
+    <lightning-card>
+        <div slot="title">
+            <lightning-icon icon-name="custom:custom15" size="small"></lightning-icon>
+            <span class="slds-p-left_x-small">
+                {header}
+            </span>
+        </div>
+
+        <lightning-button
+            onclick={handleUpdateClick}
+            variant="neutral"
+            label={labels.update}
+            title={labels.update}
+            slot="actions"
+            if:true={isReadOnly}
+        ></lightning-button>
+
+        <div class="slds-border_top">
+            <div>
+                <template if:true={showSpinner}>
+                    <div class="slds-align_absolute-center">
+                        <lightning-spinner
+                            alternative-text={labels.loading}
+                            size="medium"
+                        ></lightning-spinner>
+                    </div>
+                </template>
+
+                <template if:true={serviceDeliveries}>
+                    <template for:each={serviceDeliveries} for:item="delivery">
+                        <c-attendance-row
+                            record={delivery}
+                            field-set={fieldSet}
+                            unit-of-measurement={unitOfMeasurement}
+                            key={delivery.index}
+                            read-only={isReadOnly}
+                        ></c-attendance-row>
+                    </template>
+                </template>
+            </div>
+        </div>
+
+        <!-- Footer will only re-render if the if statement is on an element inside it. -->
+        <div slot="footer" class="slds-text-align_center">
+            <lightning-button
+                onclick={handleSave}
+                variant="brand"
+                label={labels.submit}
+                title={labels.submit}
+                if:true={isPending}
+            ></lightning-button>
+            <lightning-button
+                onclick={handleCancel}
+                variant="neutral"
+                label={labels.cancel}
+                title={labels.cancel}
+                if:true={isUpdateMode}
+                class="slds-var-p-right_xx-small"
+            ></lightning-button>
+            <lightning-button
+                onclick={handleSave}
+                variant="brand"
+                label={labels.save}
+                title={labels.save}
+                if:true={isUpdateMode}
+            ></lightning-button>
+        </div>
+    </lightning-card>
+</template>

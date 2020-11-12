@@ -1,0 +1,46 @@
+{
+    "apiName": "ServiceSession__c",
+    "childRelationships": {},
+    "id": "a06630000074mVnAAI",
+    "lastModifiedById": "00563000004bQesAAE",
+    "lastModifiedDate": "2020-10-28T22:05:30.000Z",
+    "recordTypeId": "012000000000000AAA",
+    "recordTypeInfo": null,
+    "systemModstamp": "2020-10-28T22:05:30.000Z",
+    "fields": {
+        "ServiceSchedule__r": {
+            "displayValue": "Ocean Exploration Series",
+            "value": {
+                "apiName": "ServiceSchedule__c",
+                "childRelationships": {},
+                "id": "a0563000003nNHxAAM",
+                "lastModifiedById": "00563000004bQesAAE",
+                "lastModifiedDate": "2020-10-28T22:05:30.000Z",
+                "recordTypeId": "012000000000000AAA",
+                "recordTypeInfo": null,
+                "systemModstamp": "2020-10-28T22:05:30.000Z",
+                "fields": {
+                    "Service__r": {
+                        "displayValue": "STEM Field Trips",
+                        "value": {
+                            "apiName": "Service__c",
+                            "childRelationships": {},
+                            "id": "a0763000004FxfNAAS",
+                            "lastModifiedById": "00563000004bQesAAE",
+                            "lastModifiedDate": "2020-10-28T22:05:29.000Z",
+                            "recordTypeId": "012000000000000AAA",
+                            "recordTypeInfo": null,
+                            "systemModstamp": "2020-10-28T22:05:29.000Z",
+                            "fields": {
+                                "UnitOfMeasurement__c": {
+                                    "displayValue": null,
+                                    "value": "Field Trips"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

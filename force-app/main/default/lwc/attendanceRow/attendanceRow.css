@@ -7,6 +7,6 @@
  *
  */
 
-.THIS .end-date-field lightning-datepicker {
-    display: none;
+.small-box {
+    padding: var(--lwc-varSpacingXxxSmall, 0.125rem);
 }

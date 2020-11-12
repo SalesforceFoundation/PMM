@@ -5,17 +5,15 @@ import { loadStyle } from "lightning/platformResourceLoader";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 
 import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
-import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import SERVICE_SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
-import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
-import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
 import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 import SERVICE_SCHEDULE_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
-import TIME_ZONE from "@salesforce/i18n/timeZone";
+import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
+import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
@@ -31,12 +29,10 @@ export default class RecentSessions extends LightningElement {
     isAccordionSectionOpen = false;
     objectLabel;
     objectLabelPlural;
-    serviceSessionObject = SERVICE_SESSION_OBJECT;
     serviceScheduleRelationshipName;
     serviceRelationshipName;
     selectedMenuItemLabel;
     selectedMenuItemValue;
-    timeZone = TIME_ZONE;
     sessionsContainerDefaultSize = 12;
     sessionsContainerSmallSize = 12;
     sessionsContainerMediumSize = 6;
@@ -45,16 +41,15 @@ export default class RecentSessions extends LightningElement {
 
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,
-        sucess: SUCCESS_LABEL,
         loading: LOADING_LABEL,
     };
 
     fields = {
-        status: STATUS_FIELD.fieldApiName,
-        primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
         sessionStartDate: SESSION_START_DATE.fieldApiName,
         serviceSchedule: SERVICE_SCHEDULE_FIELD.fieldApiName,
         service: SERVICE_FIELD.fieldApiName,
+        status: STATUS_FIELD.fieldApiName,
+        primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
     };
 
     @wire(getObjectInfo, { objectApiName: SERVICE_SESSION_OBJECT })

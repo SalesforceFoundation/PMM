@@ -18,7 +18,6 @@ public with sharing class RecentServiceSessionController {
     public static Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
         String dateLiteral
     ) {
-        //Need to build the map before checking if the map contains the key
         if (!DATE_LITERAL_OPTIONS.containsKey(dateLiteral)) {
             return null;
         }

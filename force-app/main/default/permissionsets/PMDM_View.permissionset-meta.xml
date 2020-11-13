@@ -181,6 +181,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>ServiceSchedule__c.DefaultServiceQuantity__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>ServiceSchedule__c.FirstSessionEnd__c</field>
         <readable>true</readable>
     </fieldPermissions>

@@ -109,6 +109,7 @@ public with sharing class AttendanceService_TEST {
         String getSession = 'getSession';
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
         List<ServiceParticipant__c> participantsToReturn = new List<ServiceParticipant__c>{
             createMockParticipant(),
             createMockParticipant()
@@ -129,7 +130,11 @@ public with sharing class AttendanceService_TEST {
         attendanceSelectorStub.withReturnValue(
             getSession,
             Id.class,
-            new ServiceSession__c(Id = sessionId, ServiceSchedule__c = scheduleId)
+            new ServiceSession__c(
+                Id = sessionId,
+                ServiceSchedule__c = scheduleId,
+                ServiceSchedule__r = new ServiceSchedule__c(Service__c = serviceId)
+            )
         );
 
         Test.startTest();
@@ -149,9 +154,9 @@ public with sharing class AttendanceService_TEST {
                 'Expected the contact id to have been copied from the particpant.'
             );
             System.assertEquals(
-                participantsToReturn[i].Service__c,
+                serviceId,
                 actualDeliveries[i].Service__c,
-                'Expected the service id to have been copied from the particpant.'
+                'Expected the service id to have been copied from the Session via the Schedule.'
             );
             System.assertEquals(
                 participantsToReturn[i].ProgramEngagement__c,
@@ -335,8 +340,7 @@ public with sharing class AttendanceService_TEST {
         return new ServiceParticipant__c(
             Id = TestUtil.mockId(ServiceParticipant__c.SObjectType),
             Contact__c = TestUtil.mockId(Contact.SObjectType),
-            ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType),
-            Service__c = TestUtil.mockId(Service__c.SObjectType)
+            ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType)
         );
     }
 }

@@ -70,7 +70,7 @@ public with sharing class AttendanceSelector {
     }
 
     public ServiceSession__c getSession(Id sessionId) {
-        ServiceSession__c session = [
+        List<ServiceSession__c> sessions = [
             SELECT
                 Id,
                 ServiceSchedule__c,
@@ -83,8 +83,10 @@ public with sharing class AttendanceSelector {
             LIMIT 1
         ];
 
-        // Used by Apex code only for querying related records
-        // does not require strip inaccessible
-        return session;
+        return (ServiceSession__c) Security.stripInaccessible(
+                AccessType.READABLE,
+                sessions
+            )
+            .getRecords()[0];
     }
 }

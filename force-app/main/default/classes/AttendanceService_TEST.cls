@@ -9,128 +9,115 @@
 
 @IsTest
 public with sharing class AttendanceService_TEST {
-    private static BasicStub attendanceSelectorStub = new BasicStub(
-        AttendanceSelector.class
+    private static Stub selectorStub = new Stub(AttendanceSelector.class);
+    private static Stub.Signature getServiceParticipantsByScheduleId = new Stub.Signature(
+        'getServiceParticipantsByScheduleId',
+        new List<Type>{ Id.class, Set<Id>.class }
     );
-    private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
+    private static Stub.Signature getServiceDeliveriesBySessionId = new Stub.Signature(
+        'getServiceDeliveriesBySessionId',
+        Id.class
+    );
+    private static Stub.Signature getSession = new Stub.Signature('getSession', Id.class);
+
+    private static Stub domainStub = new Stub(ServiceDeliveryDomain.class);
+    private static Stub.Signature upsertServiceDeliveries = new Stub.Signature(
+        'upsertServiceDeliveries',
+        List<ServiceDelivery__c>.class
+    );
 
     private static AttendanceService service = new AttendanceService();
 
     @IsTest
     private static void getRosterShouldCallSelector() {
-        String getServiceDeliveriesBySessionId = 'getServiceDeliveriesBySessionId';
-        String getServiceParticipantsByScheduleId = 'getServiceParticipantsByScheduleId';
-        String getSession = 'getSession';
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
-        service.attendanceSelector = (AttendanceSelector) attendanceSelectorStub.createMock();
-        attendanceSelectorStub.withReturnValue(
-            getServiceDeliveriesBySessionId,
-            Id.class,
-            new List<ServiceDelivery__c>()
-        );
-        attendanceSelectorStub.withReturnValue(
-            getServiceParticipantsByScheduleId,
-            new List<Type>{ Id.class, Set<Id>.class },
-            new List<ServiceParticipant__c>()
-        );
-        attendanceSelectorStub.withReturnValue(
-            getSession,
-            Id.class,
-            new ServiceSession__c(ServiceSchedule__c = scheduleId)
-        );
+
+        selectorStub
+            .when(getServiceDeliveriesBySessionId)
+            .calledWith(new List<Object>{ sessionId })
+            .thenReturn(new List<ServiceDelivery__c>());
+        selectorStub
+            .when(getServiceParticipantsByScheduleId)
+            .calledWith(new List<Object>{ scheduleId, new Set<Id>() })
+            .thenReturn(new List<ServiceParticipant__c>());
+        selectorStub
+            .when(getSession)
+            .calledWith(new List<Object>{ sessionId })
+            .thenReturn(new ServiceSession__c(ServiceSchedule__c = scheduleId));
+        service.attendanceSelector = (AttendanceSelector) selectorStub.create();
 
         Test.startTest();
         service.generateRoster(sessionId);
         Test.stopTest();
 
-        attendanceSelectorStub.assertCalledWith(
-            getServiceDeliveriesBySessionId,
-            Id.class,
-            sessionId
-        );
-
-        attendanceSelectorStub.assertCalledWith(
-            getServiceParticipantsByScheduleId,
-            new List<Type>{ Id.class, Set<Id>.class },
-            new List<Object>{ scheduleId, new Set<Id>() }
-        );
+        selectorStub.assert();
     }
 
     @IsTest
     private static void getRosterShouldReturnExistingDeliveries() {
-        String getServiceDeliveriesBySessionId = 'getServiceDeliveriesBySessionId';
-        String getServiceParticipantsByScheduleId = 'getServiceParticipantsByScheduleId';
-        String getSession = 'getSession';
         List<ServiceDelivery__c> deliveriesToReturn = new List<ServiceDelivery__c>{
             createMockDelivery()
         };
+        Id sessionId = deliveriesToReturn[0].ServiceSession__c;
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        Set<Id> contactIds = new Set<Id>{ deliveriesToReturn[0].Contact__c };
 
-        service.attendanceSelector = (AttendanceSelector) attendanceSelectorStub.createMock();
-        attendanceSelectorStub.withReturnValue(
-            getServiceDeliveriesBySessionId,
-            Id.class,
-            deliveriesToReturn
-        );
-        attendanceSelectorStub.withReturnValue(
-            getServiceParticipantsByScheduleId,
-            new List<Type>{ Id.class, Set<Id>.class },
-            new List<ServiceParticipant__c>()
-        );
-        attendanceSelectorStub.withReturnValue(
-            getSession,
-            Id.class,
-            new ServiceSession__c(ServiceSchedule__c = scheduleId)
-        );
+        selectorStub
+            .when(getServiceDeliveriesBySessionId)
+            .calledWith(new List<Object>{ sessionId })
+            .thenReturn(deliveriesToReturn);
+        selectorStub
+            .when(getServiceParticipantsByScheduleId)
+            .calledWith(new List<Object>{ scheduleId, contactIds })
+            .thenReturn(new List<ServiceParticipant__c>());
+        selectorStub
+            .when(getSession)
+            .calledWith(new List<Object>{ sessionId })
+            .thenReturn(new ServiceSession__c(ServiceSchedule__c = scheduleId));
+        service.attendanceSelector = (AttendanceSelector) selectorStub.create();
 
         Test.startTest();
         System.assertEquals(
             deliveriesToReturn,
-            service.generateRoster(deliveriesToReturn[0].ServiceSession__c),
+            service.generateRoster(sessionId),
             'Expected only the service deliveries returned by the selector.'
         );
         Test.stopTest();
 
-        attendanceSelectorStub.assertCalledWith(
-            getServiceParticipantsByScheduleId,
-            new List<Type>{ Id.class, Set<Id>.class },
-            new List<Object>{
-                scheduleId,
-                new Set<Id>{ deliveriesToReturn[0].Contact__c }
-            }
-        );
+        selectorStub.assert();
     }
 
     @IsTest
     private static void getRosterShouldReturnParticipantsAsDeliveries() {
-        String getServiceDeliveriesBySessionId = 'getServiceDeliveriesBySessionId';
-        String getServiceParticipantsByScheduleId = 'getServiceParticipantsByScheduleId';
-        String getSession = 'getSession';
-        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
-        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
         List<ServiceParticipant__c> participantsToReturn = new List<ServiceParticipant__c>{
             createMockParticipant(),
             createMockParticipant()
         };
         List<ServiceDelivery__c> actualDeliveries;
+        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
 
-        service.attendanceSelector = (AttendanceSelector) attendanceSelectorStub.createMock();
-        attendanceSelectorStub.withReturnValue(
-            getServiceDeliveriesBySessionId,
-            Id.class,
-            new List<ServiceDelivery__c>()
-        );
-        attendanceSelectorStub.withReturnValue(
-            getServiceParticipantsByScheduleId,
-            new List<Type>{ Id.class, Set<Id>.class },
-            participantsToReturn
-        );
-        attendanceSelectorStub.withReturnValue(
-            getSession,
-            Id.class,
-            new ServiceSession__c(Id = sessionId, ServiceSchedule__c = scheduleId)
-        );
+        selectorStub
+            .when(getServiceDeliveriesBySessionId)
+            .calledWith(new List<Object>{ sessionId })
+            .thenReturn(new List<ServiceDelivery__c>());
+        selectorStub
+            .when(getServiceParticipantsByScheduleId)
+            .calledWith(new List<Object>{ scheduleId, new Set<Id>() })
+            .thenReturn(participantsToReturn);
+        selectorStub
+            .when(getSession)
+            .calledWith(new List<Object>{ sessionId })
+            .thenReturn(
+                new ServiceSession__c(
+                    Id = sessionId,
+                    ServiceSchedule__c = scheduleId,
+                    ServiceSchedule__r = new ServiceSchedule__c(Service__c = serviceId)
+                )
+            );
+        service.attendanceSelector = (AttendanceSelector) selectorStub.create();
 
         Test.startTest();
         actualDeliveries = service.generateRoster(sessionId);
@@ -149,7 +136,7 @@ public with sharing class AttendanceService_TEST {
                 'Expected the contact id to have been copied from the particpant.'
             );
             System.assertEquals(
-                participantsToReturn[i].Service__c,
+                serviceId,
                 actualDeliveries[i].Service__c,
                 'Expected the service id to have been copied from the particpant.'
             );
@@ -165,20 +152,11 @@ public with sharing class AttendanceService_TEST {
             );
         }
 
-        attendanceSelectorStub.assertCalledWith(
-            getServiceParticipantsByScheduleId,
-            new List<Type>{ Id.class, Set<Id>.class },
-            new List<Object>{ scheduleId, new Set<Id>{} }
-        );
+        selectorStub.assert();
     }
 
     @IsTest
     private static void getRosterShouldCombineDeliveriesAndParticipants() {
-        String getServiceDeliveriesBySessionId = 'getServiceDeliveriesBySessionId';
-        String getServiceParticipantsByScheduleId = 'getServiceParticipantsByScheduleId';
-        String getSession = 'getSession';
-        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
-        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
         List<ServiceDelivery__c> deliveriesToReturn = new List<ServiceDelivery__c>{
             createMockDelivery()
         };
@@ -187,23 +165,23 @@ public with sharing class AttendanceService_TEST {
             createMockParticipant()
         };
         List<ServiceDelivery__c> actualDeliveries;
+        Id sessionId = deliveriesToReturn[0].ServiceSession__c;
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        Set<Id> contactIds = new Set<Id>{ deliveriesToReturn[0].Contact__c };
 
-        service.attendanceSelector = (AttendanceSelector) attendanceSelectorStub.createMock();
-        attendanceSelectorStub.withReturnValue(
-            getServiceDeliveriesBySessionId,
-            Id.class,
-            deliveriesToReturn
-        );
-        attendanceSelectorStub.withReturnValue(
-            getServiceParticipantsByScheduleId,
-            new List<Type>{ Id.class, Set<Id>.class },
-            participantsToReturn
-        );
-        attendanceSelectorStub.withReturnValue(
-            getSession,
-            Id.class,
-            new ServiceSession__c(ServiceSchedule__c = scheduleId)
-        );
+        selectorStub
+            .when(getServiceDeliveriesBySessionId)
+            .calledWith(new List<Object>{ sessionId })
+            .thenReturn(deliveriesToReturn);
+        selectorStub
+            .when(getServiceParticipantsByScheduleId)
+            .calledWith(new List<Object>{ scheduleId, contactIds })
+            .thenReturn(participantsToReturn);
+        selectorStub
+            .when(getSession)
+            .calledWith(new List<Object>{ sessionId })
+            .thenReturn(new ServiceSession__c(ServiceSchedule__c = scheduleId));
+        service.attendanceSelector = (AttendanceSelector) selectorStub.create();
 
         Test.startTest();
         actualDeliveries = service.generateRoster(sessionId);
@@ -214,6 +192,7 @@ public with sharing class AttendanceService_TEST {
             actualDeliveries.size(),
             'Expected participants returned by the selector as service deliveries with the existing service deliveries to be returned.'
         );
+        selectorStub.assert();
     }
 
     @IsTest
@@ -265,30 +244,33 @@ public with sharing class AttendanceService_TEST {
 
     @IsTest
     private static void shouldCallDomainToUpsert() {
-        String methodName = 'upsertServiceDeliveries';
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>();
-        service.domain = (ServiceDeliveryDomain) domainStub.createMock();
+
+        domainStub
+            .when(upsertServiceDeliveries)
+            .calledWith(new List<Object>{ deliveries })
+            .thenReturn(null);
+
+        service.domain = (ServiceDeliveryDomain) domainStub.create();
 
         Test.startTest();
         service.upsertServiceDeliveries(deliveries);
         Test.stopTest();
 
-        domainStub.assertCalledWith(
-            methodName,
-            List<ServiceDelivery__c>.class,
-            deliveries
-        );
+        domainStub.assert();
     }
 
     @IsTest
     private static void shouldRollbackAndRethrowDomainException() {
-        String methodName = 'upsertServiceDeliveries';
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>();
         Exception actualException;
         Integer dmlLimitBefore;
         Integer dmlLimitAfter;
-        domainStub.withThrowException(methodName, List<ServiceDelivery__c>.class);
-        service.domain = (ServiceDeliveryDomain) domainStub.createMock();
+        domainStub
+            .when(upsertServiceDeliveries)
+            .calledWith(new List<Object>{ deliveries })
+            .thenThrowException();
+        service.domain = (ServiceDeliveryDomain) domainStub.create();
 
         Test.startTest();
         try {
@@ -298,7 +280,6 @@ public with sharing class AttendanceService_TEST {
             actualException = ex;
             dmlLimitAfter = System.Limits.getDmlStatements();
         }
-
         Test.stopTest();
 
         System.assert(
@@ -312,11 +293,7 @@ public with sharing class AttendanceService_TEST {
             'Expected a dml statement for the save point and the rollback.'
         );
 
-        domainStub.assertCalledWith(
-            methodName,
-            List<ServiceDelivery__c>.class,
-            deliveries
-        );
+        domainStub.assert();
     }
 
     private static ServiceDelivery__c createMockDelivery() {

@@ -308,7 +308,7 @@ export default class ReviewSessions extends LightningElement {
 
     handleStartChange(event) {
         if (!event.detail.value) {
-            this.addSessionEnd.value = null;
+            this.addSessionEnd = null;
             return;
         }
         this.addSessionStart = event.detail.value;

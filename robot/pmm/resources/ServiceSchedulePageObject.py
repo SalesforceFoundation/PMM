@@ -10,33 +10,33 @@ from cumulusci.robotframework.pageobjects import pageobject
 from BaseObjects import BasePMMPage
 
 
-@pageobject("Listing", "ServiceParticipant__c")
-class ServiceParticipantListingPage(BasePMMPage, ListingPage):
-    object_name = "ServiceParticipant__c"
+@pageobject("Listing", "ServiceSchedule__c")
+class ServiceScheduleListingPage(BasePMMPage, ListingPage):
+    object_name = "ServiceSchedule__c"
 
 
-@pageobject("NewServiceParticipant", "ServiceParticipant__c")
-class NewServiceParticipantPage(BasePMMPage, BasePage):
+@pageobject("New", "ServiceSchedule__c")
+class NewServiceSchedulePage(BasePMMPage, BasePage):
     def _is_current_page(self):
-        """Verify we are on the New Service Participant modal page
-        by verifying that the section title is 'New Service Participant'
+        """Verify we are on the New Service Schedule modal page
+        by verifying that the section title is 'New Service Schedule'
         """
         self.selenium.wait_until_location_contains(
             "/new", timeout=60, message="Record view did not open in 1 min"
         )
         self.selenium.location_should_contain(
-            "/lightning/o/ServiceParticipant__c/",
-            message="Section title is not 'New Service Participant' as expected",
+            "/lightning/o/ServiceSchedule__c/",
+            message="Section title is not 'New Service Schedule' as expected",
         )
 
 
-@pageobject("Details", "ServiceParticipant__c")
-class ServiceParticipantDetailPage(BasePMMPage, DetailPage):
+@pageobject("Details", "ServiceSchedule__c")
+class ServiceScheduleDetailPage(BasePMMPage, DetailPage):
     def _is_current_page(self):
-        """Verify we are on the Service Participant detail page
+        """Verify we are on the Service Schedule detail page
         by verifying that the url contains '/view'
         """
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"
         )
-        self.selenium.wait_until_page_contains("Service Participant Name")
+        self.selenium.wait_until_page_contains("Service Schedule Name")

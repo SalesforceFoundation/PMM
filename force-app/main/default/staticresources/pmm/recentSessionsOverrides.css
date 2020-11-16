@@ -7,19 +7,6 @@
     padding-bottom: 0px;
 }
 
-@media print {
-    .slds-accordion__content {
-        overflow: visible;
-        visibility: visible;
-        opacity: 1;
-        height: auto;
-    }
-}
-
-.slds-is-open {
-    background-color: var(--bgColor);
-}
-
 .listViewSelector button,
 .listViewSelector button:hover,
 .listViewSelector button:focus,

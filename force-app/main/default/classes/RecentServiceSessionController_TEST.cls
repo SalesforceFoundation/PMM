@@ -84,7 +84,7 @@ public with sharing class RecentServiceSessionController_TEST {
         System.assertEquals(
             expected,
             actual,
-            'Actual returned is not the same as expected'
+            'Expected actual value to be null with an invalid date literal'
         );
     }
 
@@ -103,7 +103,7 @@ public with sharing class RecentServiceSessionController_TEST {
         System.assertEquals(
             expected,
             actual,
-            'Actual returned is not the same as expected'
+            'Actual dateliteral options not the same as expected dateLiteral options'
         );
     }
 }

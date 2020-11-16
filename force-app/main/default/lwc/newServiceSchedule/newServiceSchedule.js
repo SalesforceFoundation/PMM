@@ -195,7 +195,12 @@ export default class NewServiceSchedule extends LightningElement {
         fields: [UNIT_MEASUREMENT_FIELD],
     })
     wiredSession(result) {
-        if (result.data) {
+        if (
+            result.data &&
+            result.data.fields &&
+            result.data.fields[UNIT_MEASUREMENT_FIELD.fieldApiName] &&
+            result.data.fields[UNIT_MEASUREMENT_FIELD.fieldApiName].value
+        ) {
             this.defaultServiceQuantityLabelWithUnit =
                 this.defaultServiceQuantityLabel +
                 " (" +
@@ -224,8 +229,6 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     handleServiceChange(event) {
-        console.log("service changed");
-        console.log(JSON.stringify(event.detail));
         this.serviceId = event.detail.value.length ? event.detail.value[0] : undefined; // lookup values come back as arrays
         if (!this.serviceId) {
             this.defaultServiceQuantityLabelWithUnit = this.defaultServiceQuantityLabel;

@@ -21,14 +21,19 @@ public with sharing class ServiceSessionService_TEST {
         final String dateLiteral = 'THIS_WEEK';
         final String methodName = 'getServiceSessionsByStartDate';
         final DateTime currentDate = System.now();
-        final Set<String> sessionStatus = new Set<String>{ 'Pending', 'Complete' };
+        final Set<String> allowedServiceSessionStatuses = new Set<String>{
+            'Pending',
+            'Complete'
+        };
 
         Map<String, List<ServiceSession__c>> expected = new Map<String, List<ServiceSession__c>>();
 
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
             FROM ServiceSession__c
-            WHERE SessionStart__c = THIS_WEEK AND Status__c IN :sessionStatus
+            WHERE
+                SessionStart__c = THIS_WEEK
+                AND Status__c IN :allowedServiceSessionStatuses
             ORDER BY SessionStart__c
         ];
 

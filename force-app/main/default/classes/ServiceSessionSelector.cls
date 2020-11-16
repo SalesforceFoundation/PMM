@@ -9,7 +9,7 @@
 public with sharing class ServiceSessionSelector {
     public List<ServiceSession__c> getServiceSessionsByStartDate(String dateLiteral) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
-        Set<String> sessionStatus = new Set<String>{ 'Pending', 'Complete' };
+        Set<String> allowedSessionStatuses = new Set<String>{ 'Pending', 'Complete' };
 
         if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {
             return new List<ServiceSession__c>();
@@ -43,7 +43,7 @@ public with sharing class ServiceSessionSelector {
         );
 
         queryBuilder.addCondition(
-            String.valueOf(ServiceSession__c.Status__c) + ' IN :sessionStatus'
+            String.valueOf(ServiceSession__c.Status__c) + ' IN :allowedSessionStatuses'
         );
 
         queryBuilder.withOrderBy(String.valueOf(ServiceSession__c.SessionStart__c));

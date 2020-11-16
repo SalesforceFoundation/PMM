@@ -21,6 +21,7 @@ export default class ServiceScheduleReview extends LightningElement {
     isLoaded = false;
     @track sessionFields;
 
+    @api participantColumns;
     @api
     get serviceScheduleModel() {
         return this._serviceScheduleModel;
@@ -127,19 +128,6 @@ export default class ServiceScheduleReview extends LightningElement {
                 },
             },
         ];
-    }
-
-    get participantDataTableColumns() {
-        let columns = [];
-        this._serviceScheduleModel.engagementFields.forEach(field => {
-            columns.push({
-                label: field.label,
-                fieldName: field.apiName,
-                type: field.type,
-                hideDefaultActions: true,
-            });
-        });
-        return columns;
     }
 
     get serviceParticipantsLabel() {

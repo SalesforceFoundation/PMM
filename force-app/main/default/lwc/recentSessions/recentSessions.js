@@ -52,6 +52,9 @@ export default class RecentSessions extends LightningElement {
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
     };
 
+    HOME = "Home";
+    END = "End";
+
     @wire(getObjectInfo, { objectApiName: SERVICE_SESSION_OBJECT })
     serviceSessionInfo(result, error) {
         if (!result) {

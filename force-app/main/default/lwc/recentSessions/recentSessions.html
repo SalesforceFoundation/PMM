@@ -77,10 +77,11 @@
                                         large-device-size={sessionsContainerLargeSize}
                                         padding={sessionsContainerPaddingAround}
                                     >
-                                        <!-- Session card starts here -->
-                                        <c-session-card
-                                            session={session}
-                                        ></c-session-card>
+                                        <div onkeydown={listEscapeHandler}>
+                                            <c-session-card
+                                                session={session}
+                                            ></c-session-card>
+                                        </div>
                                     </lightning-layout-item>
                                 </template>
                             </lightning-layout>

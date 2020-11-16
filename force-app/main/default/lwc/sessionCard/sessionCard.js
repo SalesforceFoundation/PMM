@@ -40,12 +40,8 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
     }
 
     handleSessionClick(event) {
-        if (
-            (event.key && event.key === " ") ||
-            event.key === this.ENTER ||
-            event.key === 13 ||
-            event.key === 32
-        ) {
+        let key = event.key || event.keyCode;
+        if ((key && key === " ") || key === this.ENTER || key === 13 || key === 32) {
             this[NavigationMixin.Navigate]({
                 type: "standard__recordPage",
                 attributes: {

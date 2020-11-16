@@ -9,6 +9,7 @@
 public with sharing class RecentServiceSessionController {
     @TestVisible
     private static ServiceSessionService serviceSessionService = new ServiceSessionService();
+    @TestVisible
     private static final Map<String, String> DATE_LITERAL_OPTIONS = new Map<String, String>{
         'THIS_WEEK' => System.Label.This_Week,
         'LAST_WEEK' => System.Label.Last_Week

@@ -87,4 +87,23 @@ public with sharing class RecentServiceSessionController_TEST {
             'Actual returned is not the same as expected'
         );
     }
+
+    @IsTest
+    private static void testGetMenuOptions() {
+        final String methodName = 'getMenuOptions';
+
+        Map<String, String> expected = RecentServiceSessionController.DATE_LITERAL_OPTIONS;
+
+        Test.startTest();
+
+        final Map<String, String> actual = RecentServiceSessionController.getMenuOptions();
+
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Actual returned is not the same as expected'
+        );
+    }
 }

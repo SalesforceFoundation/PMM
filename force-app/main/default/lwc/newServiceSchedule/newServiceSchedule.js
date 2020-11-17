@@ -26,6 +26,7 @@ import UNIT_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurem
 
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
+    @api serviceId;
     errorMessage;
     isValid = true;
     objectApiName;
@@ -36,19 +37,15 @@ export default class NewServiceSchedule extends LightningElement {
     };
 
     _serviceScheduleModel;
-    @track
-    picklistFields;
-    @track
-    requiredFields;
-    @track
-    dateFields;
+    @track picklistFields;
+    @track requiredFields;
+    @track dateFields;
     fieldSet;
     isLoaded = false;
     duration = 1;
     defaultServiceQuantity;
     defaultServiceQuantityLabel;
     defaultServiceQuantityLabelWithUnit;
-    serviceId;
 
     @api
     get serviceScheduleModel() {

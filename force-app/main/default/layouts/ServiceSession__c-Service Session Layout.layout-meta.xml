@@ -90,17 +90,13 @@
             <actionType>StandardButton</actionType>
             <sortOrder>3</sortOrder>
         </platformActionListItems>
-        <platformActionListItems>
-            <actionName>Edit</actionName>
-            <actionType>StandardButton</actionType>
-            <sortOrder>0</sortOrder>
-        </platformActionListItems>
     </platformActionList>
     <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
         <fields>DeliveryDate__c</fields>
         <fields>Quantity__c</fields>
+        <fields>AttendanceStatus__c</fields>
         <relatedList>ServiceDelivery__c.ServiceSession__c</relatedList>
         <sortField>DeliveryDate__c</sortField>
         <sortOrder>Asc</sortOrder>

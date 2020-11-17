@@ -219,7 +219,7 @@ public with sharing class AttendanceService_TEST {
     @IsTest
     private static void functionalGenerateRosterWithExistingDelivery() {
         List<ServiceDelivery__c> actualDeliveries;
-        TestDataFactory.generateAttendanceData();
+        TestDataFactory.generateAttendanceData('Monthly');
         ServiceSession__c session = [
             SELECT Id, ServiceSchedule__c
             FROM ServiceSession__c

@@ -14,7 +14,7 @@ public with sharing class AttendanceSelector_TEST {
 
     @TestSetup
     private static void setupServiceSessionData() {
-        TestDataFactory.generateAttendanceData();
+        TestDataFactory.generateAttendanceData('Monthly');
     }
 
     @IsTest

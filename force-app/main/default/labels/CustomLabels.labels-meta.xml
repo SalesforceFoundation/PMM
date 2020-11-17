@@ -5,16 +5,16 @@
         <categories>accordionSection</categories>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Click to toggle the section. This section is open.</shortDescription>
-        <value>Click to toggle the section. This section is open.</value>
+        <shortDescription>Click to hide the section. This section is open.</shortDescription>
+        <value>Click to hide the section. This section is open.</value>
     </labels>
     <labels>
         <fullName>accordionSection_ToggleInstructionsWhenClosed</fullName>
         <categories>accordionSection</categories>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Click to toggle the section. This section is not open.</shortDescription>
-        <value>Click to toggle the section. This section is not open.</value>
+        <shortDescription>Click to show the section. This section is not open.</shortDescription>
+        <value>Click to show the section. This section is not open.</value>
     </labels>
     <labels>
         <fullName>Add_Entry</fullName>
@@ -249,6 +249,13 @@
         <protected>true</protected>
         <shortDescription>Permission Denied for Delete Operation</shortDescription>
         <value>You can't delete this record. Ask your admin for help.</value>
+    </labels>
+    <labels>
+        <fullName>Last_Week</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Picklist option on the recent sessions home page component.</shortDescription>
+        <value>Last Week</value>
     </labels>
     <labels>
         <fullName>Loading</fullName>
@@ -491,6 +498,22 @@
         <value>Select either a Service Schedule End Date or a Number of Service Sessions.</value>
     </labels>
     <labels>
+        <fullName>SkipToStartLink</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Skip to Start of List</shortDescription>
+        <value>Skip to Start of List</value>
+    </labels>
+    <labels>
+        <fullName>SkipToEndLink</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Skip to End of List</shortDescription>
+        <value>Skip to End of List</value>
+    </labels>
+    <labels>
         <fullName>Day_Required_When_Weekly_Selected</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -632,6 +655,13 @@
         <protected>true</protected>
         <shortDescription>Error capturing metrics.</shortDescription>
         <value>We couldn't collect telemetry metrics.</value>
+    </labels>
+    <labels>
+        <fullName>This_Week</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Picklist option on the recent sessions home page component.</shortDescription>
+        <value>This Week</value>
     </labels>
     <labels>
         <fullName>Total_Sessions</fullName>

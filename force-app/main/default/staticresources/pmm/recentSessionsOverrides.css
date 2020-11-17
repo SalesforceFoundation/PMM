@@ -7,15 +7,17 @@
     padding-bottom: 0px;
 }
 
-@media print {
-    .slds-accordion__content {
-        overflow: visible;
-        visibility: visible;
-        opacity: 1;
-        height: auto;
-    }
+.listViewSelector button,
+.listViewSelector button:hover,
+.listViewSelector button:focus,
+.listViewSelector button:active {
+    color: #000000;
 }
 
-.slds-is-open {
-    background-color: var(--bgColor);
+.listViewSelector lightning-primitive-icon {
+    margin-left: 10px;
+}
+
+.slds-button__icon {
+    margin-bottom: 2px;
 }

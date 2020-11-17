@@ -92,7 +92,7 @@ export default class Attendance extends LightningElement {
             let service = getChildObjectByName(schedule.value.fields, "Service__r");
             this.unitOfMeasurement = service.value.fields[
                 UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName
-            ]
+            ].value
                 ? service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName].value
                 : this.labels.quantity;
             this.sessionStatus = result.data.fields[

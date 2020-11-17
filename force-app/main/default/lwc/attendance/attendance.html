@@ -22,7 +22,7 @@
             label={labels.update}
             title={labels.update}
             slot="actions"
-            if:true={isReadOnly}
+            if:true={showUpdateButton}
         ></lightning-button>
 
         <div class="slds-border_top">
@@ -70,31 +70,29 @@
         </div>
 
         <!-- Footer will only re-render if the if statement is on an element inside it. -->
-        <template if:true={hasPermissions}>
-            <div slot="footer" class="slds-text-align_center">
-                <lightning-button
-                    onclick={handleSave}
-                    variant="brand"
-                    label={labels.submit}
-                    title={labels.submit}
-                    if:true={isPending}
-                ></lightning-button>
-                <lightning-button
-                    onclick={handleCancel}
-                    variant="neutral"
-                    label={labels.cancel}
-                    title={labels.cancel}
-                    if:true={isUpdateMode}
-                    class="slds-var-p-right_xx-small"
-                ></lightning-button>
-                <lightning-button
-                    onclick={handleSave}
-                    variant="brand"
-                    label={labels.save}
-                    title={labels.save}
-                    if:true={isUpdateMode}
-                ></lightning-button>
-            </div>
-        </template>
+        <div slot="footer" class="slds-text-align_center">
+            <lightning-button
+                onclick={handleSave}
+                variant="brand"
+                label={labels.submit}
+                title={labels.submit}
+                if:true={showSubmitButton}
+            ></lightning-button>
+            <lightning-button
+                onclick={handleCancel}
+                variant="neutral"
+                label={labels.cancel}
+                title={labels.cancel}
+                if:true={isUpdateMode}
+                class="slds-var-p-right_xx-small"
+            ></lightning-button>
+            <lightning-button
+                onclick={handleSave}
+                variant="brand"
+                label={labels.save}
+                title={labels.save}
+                if:true={isUpdateMode}
+            ></lightning-button>
+        </div>
     </lightning-card>
 </template>

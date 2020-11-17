@@ -44,7 +44,8 @@ public with sharing class AttendanceService {
         }
     }
 
-    public Boolean checkFieldPermissions() {
+    public Map<String, Boolean> checkFieldPermissions() {
+        Map<String, Boolean> result = new Map<String, Boolean>();
         List<String> serviceParticipantFields = new List<String>();
         for (SObjectField field : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {
             serviceParticipantFields.add(field.getDescribe().getName());
@@ -81,15 +82,12 @@ public with sharing class AttendanceService {
             ServiceSchedule__c.DefaultServiceQuantity__c.getDescribe().getName()
         };
 
-        return permValidator.hasFLSAccessForFields(
+        result.put(
+            'read',
+            permValidator.hasFLSAccessForFields(
                 Schema.SObjectType.ServiceParticipant__c.getName(),
                 serviceParticipantFields,
                 'read'
-            ) &&
-            permValidator.hasFLSAccessForFields(
-                Schema.SObjectType.ServiceDelivery__c.getName(),
-                serviceDeliveryFields,
-                'upsert'
             ) &&
             permValidator.hasFLSAccessForFields(
                 Schema.SObjectType.ServiceSession__c.getName(),
@@ -100,7 +98,19 @@ public with sharing class AttendanceService {
                 Schema.SObjectType.ServiceSchedule__c.getName(),
                 scheduleFields,
                 'read'
-            );
+            )
+        );
+
+        result.put(
+            'write',
+            permValidator.hasFLSAccessForFields(
+                Schema.SObjectType.ServiceDelivery__c.getName(),
+                serviceDeliveryFields,
+                'upsert'
+            )
+        );
+
+        return result;
     }
 
     private List<ServiceDelivery__c> createRows(Id sessionId) {

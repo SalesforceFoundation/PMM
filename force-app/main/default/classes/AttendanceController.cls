@@ -32,7 +32,7 @@ public with sharing class AttendanceController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Boolean checkFieldPermissions() {
+    public static Map<String, Boolean> checkFieldPermissions() {
         try {
             return service.checkFieldPermissions();
         } catch (Exception ex) {

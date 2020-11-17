@@ -105,12 +105,12 @@ public with sharing class AttendanceController_TEST {
     @IsTest
     private static void shouldCallServiceToCheckFLS() {
         String methodName = 'checkFieldPermissions';
-        Boolean expected = true;
+        Map<String, Boolean> expected = new Map<String, Boolean>();
         serviceStub.withReturnValue(methodName, expected);
         AttendanceController.service = (AttendanceService) serviceStub.createMock();
 
         Test.startTest();
-        Boolean actual = AttendanceController.checkFieldPermissions();
+        Map<String, Boolean> actual = AttendanceController.checkFieldPermissions();
         Test.stopTest();
 
         serviceStub.assertCalled(methodName);
@@ -128,7 +128,7 @@ public with sharing class AttendanceController_TEST {
         serviceStub.withThrowException(methodName);
         AttendanceController.service = (AttendanceService) serviceStub.createMock();
         Exception actualException;
-        Boolean actual;
+        Map<String, Boolean> actual;
         Test.startTest();
         try {
             actual = AttendanceController.checkFieldPermissions();

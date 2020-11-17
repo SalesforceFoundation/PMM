@@ -335,15 +335,20 @@ public with sharing class AttendanceService_TEST {
         );
         service.permValidator = (PermissionValidator) permValidatorStub.createMock();
 
+        Map<String, Boolean> expected = new Map<String, Boolean>{
+            'read' => true,
+            'write' => true
+        };
+
         Test.startTest();
-        Boolean actual = service.checkFieldPermissions();
+        Map<String, Boolean> actual = service.checkFieldPermissions();
         Test.stopTest();
 
         permValidatorStub.assertCalled(
             methodName,
             new List<Type>{ String.class, List<String>.class, String.class }
         );
-        System.assertEquals(true, actual);
+        System.assertEquals(expected, actual);
     }
 
     private static ServiceDelivery__c createMockDelivery() {

@@ -55,7 +55,8 @@ export default class Attendance extends LightningElement {
 
     showSpinner = true;
     isUpdateMode = false;
-    hasPermissions = false;
+    hasReadPermissions;
+    hasWritePermissions;
 
     unitOfMeasurement;
     sessionStatus;
@@ -92,7 +93,8 @@ export default class Attendance extends LightningElement {
             return;
         }
         if (result.data) {
-            this.hasPermissions = result.data;
+            this.hasReadPermissions = result.data.read;
+            this.hasWritePermissions = result.data.write;
         }
     }
 
@@ -178,6 +180,25 @@ export default class Attendance extends LightningElement {
             (this.serviceDeliveries && this.serviceDeliveries.length
                 ? " (" + this.serviceDeliveries.length + ")"
                 : "")
+        );
+    }
+
+    get hasPermissions() {
+        return this.isReadOnly
+            ? this.hasReadPermissions
+            : this.hasReadPermissions && this.hasWritePermissions;
+    }
+
+    get showUpdateButton() {
+        return this.isReadOnly && this.hasWritePermissions;
+    }
+
+    get showSubmitButton() {
+        return (
+            !this.isReadOnly &&
+            this.isPending &&
+            this.hasWritePermissions &&
+            this.hasReadPermissions
         );
     }
 

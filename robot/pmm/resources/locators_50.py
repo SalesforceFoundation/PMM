@@ -85,4 +85,10 @@ pmm_lex_locators = {
     "service_session": {
         "date": "//fieldset[contains(@class,'slds-form-element')][./legend[text()='{}']]/descendant::button[@type='button']",
     },
+    "service_schedule": {
+        "wizard_title": "//lightning-layout[contains(@class,'slds-grid')]//h3[contains(@class,'slds-section__title') and text()='{}']",
+        "select_participants": "//tr[@class='slds-hint-parent']/th[.//*[text()='{}']]/preceding-sibling::td//span[@class='slds-checkbox_faux']",
+        "accordion": "//section[contains(@class,'slds-accordion')][.//span[contains(@title,'{}')]]//*[text()='{}']",
+        "reiview_wizard": "//div[contains(@class,'slds-form-element')][./span[text()='{}']]/div",
+    },
 }

@@ -34,7 +34,10 @@ Setup Test Data
     ${service_schedule_name} =      Generate New String
     Set suite variable              ${service_schedule_name}
     ${particiapant_capacity} =      Generate Random String  2   [NUMBERS]12346789
-    Set suite variable              ${particiapant_capacity}      
+    Set suite variable              ${particiapant_capacity}
+    ${today} =                      Get Current Date                result_format=%-m/%-d/%Y 
+    Set suite variable              ${session_start}
+
 
 *** Test Cases ***
 Create a New Service Schedule
@@ -50,11 +53,32 @@ Create a New Service Schedule
     Verify Wizard Screen Title              Review Service Sessions
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Add Service Participants
-    Select Service Participants
-       Select Service Participants 
-          Select Service Participants
-        Click Dialog Button                     Add Service Participants
-            Click Dialog Button                     Next 
-            Verify Wizard Screen Title          Review Service Schedule
+    Select Service Participant              ${contact1}[Name]
+    Select Service Participant              ${contact2}[Name]
+    Select Service Participant              ${contact3}[Name]
+    Click Dialog Button                     Add Service Participants
+    Click Dialog Button                     Next 
+    Verify Wizard Screen Title              Review Service Schedule
+    Wizard Review Screen Contains           Service Schedule Name               ${service_schedule_name}
+    Wizard Review Screen Contains           Date and Time               
+    Wizard Review Screen Contains           Participant Capacity
+    Wizard Review Screen Contains           Primary Service Provider
+    Wizard Review Screen Contains           Service Sessions            
+    Wizard Review Screen Contains           Service Participants
+    Wizard Review Screen Contains           Service Participants
+    Wizard Review Screen Contains           Service Participants
+    Click Dialog Button                     Save
+    Wait Until Modal is Closed
+    Verify Details                          Session Start          contains
+    Verify Details                          Session End            contains
+    Verify Details                          Frequency              contains
+    Verify Page Contains Related List       Service Sessions
+    Verify Page Contains Related List       Service Participants
+    Verify Page Contains Related List       Files 
+    
+
+
+
+
 
           

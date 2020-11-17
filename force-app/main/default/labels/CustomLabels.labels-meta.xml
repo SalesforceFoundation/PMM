@@ -68,15 +68,15 @@
         <fullName>No_Participants_Header</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>No participants yet.</shortDescription>
-        <value>No participants yet.</value>
+        <shortDescription>No participants yet</shortDescription>
+        <value>No participants yet</value>
     </labels>
     <labels>
         <fullName>No_Participants_Message</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>After participants are added, track their attendance here.</shortDescription>
-        <value>After participants are added, track their attendance here.</value>
+        <shortDescription>After participants are added to this Service Schedule, track their attendance here.</shortDescription>
+        <value>After participants are added to this Service Schedule, track their attendance here.</value>
     </labels>
     <labels>
         <fullName>No_Permission_Message</fullName>

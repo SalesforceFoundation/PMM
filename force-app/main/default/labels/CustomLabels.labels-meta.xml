@@ -5,16 +5,16 @@
         <categories>accordionSection</categories>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Click to toggle the section. This section is open.</shortDescription>
-        <value>Click to toggle the section. This section is open.</value>
+        <shortDescription>Hide this section</shortDescription>
+        <value>Hide this section</value>
     </labels>
     <labels>
         <fullName>accordionSection_ToggleInstructionsWhenClosed</fullName>
         <categories>accordionSection</categories>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Click to toggle the section. This section is not open.</shortDescription>
-        <value>Click to toggle the section. This section is not open.</value>
+        <shortDescription>Show this section</shortDescription>
+        <value>Show this section</value>
     </labels>
     <labels>
         <fullName>Add_Entry</fullName>

@@ -13,6 +13,7 @@ public with sharing class AttendanceService_TEST {
         AttendanceSelector.class
     );
     private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
+    private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
 
     private static AttendanceService service = new AttendanceService();
 
@@ -322,6 +323,27 @@ public with sharing class AttendanceService_TEST {
             List<ServiceDelivery__c>.class,
             deliveries
         );
+    }
+
+    @IsTest
+    private static void shouldCallPermissionValidator() {
+        String methodName = 'hasFLSAccessForFields';
+        permValidatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ String.class, List<String>.class, String.class },
+            true
+        );
+        service.permValidator = (PermissionValidator) permValidatorStub.createMock();
+
+        Test.startTest();
+        Boolean actual = service.checkFieldPermissions();
+        Test.stopTest();
+
+        permValidatorStub.assertCalled(
+            methodName,
+            new List<Type>{ String.class, List<String>.class, String.class }
+        );
+        System.assertEquals(true, actual);
     }
 
     private static ServiceDelivery__c createMockDelivery() {

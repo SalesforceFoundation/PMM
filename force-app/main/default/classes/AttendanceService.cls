@@ -54,6 +54,20 @@ public with sharing class AttendanceService {
         for (SObjectField field : SERVICE_FIELD_BY_PARTICIPANT_FIELD.values()) {
             serviceDeliveryFields.add(field.getDescribe().getName());
         }
+        serviceDeliveryFields.add(
+            ServiceDelivery__c.ServiceSession__c.getDescribe().getName()
+        );
+        serviceDeliveryFields.add(
+            ServiceDelivery__c.AttendanceStatus__c.getDescribe().getName()
+        );
+        serviceDeliveryFields.add(
+            ServiceDelivery__c.Service_Provider__c.getDescribe().getName()
+        );
+        serviceDeliveryFields.add(
+            ServiceDelivery__c.DeliveryDate__c.getDescribe().getName()
+        );
+        serviceDeliveryFields.add(ServiceDelivery__c.Service__c.getDescribe().getName());
+        serviceDeliveryFields.add(ServiceDelivery__c.Quantity__c.getDescribe().getName());
 
         List<String> sessionFields = new List<String>{
             ServiceSession__c.PrimaryServiceProvider__c.getDescribe().getName(),
@@ -75,7 +89,7 @@ public with sharing class AttendanceService {
             permValidator.hasFLSAccessForFields(
                 Schema.SObjectType.ServiceDelivery__c.getName(),
                 serviceDeliveryFields,
-                'read'
+                'upsert'
             ) &&
             permValidator.hasFLSAccessForFields(
                 Schema.SObjectType.ServiceSession__c.getName(),

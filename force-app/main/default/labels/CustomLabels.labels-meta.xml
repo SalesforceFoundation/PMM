@@ -75,7 +75,7 @@
         <fullName>No_Participants_Message</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>After participants are added to this Service Schedule, track their attendance here.</shortDescription>
+        <shortDescription>Supporting message for Attendance empty state</shortDescription>
         <value>After participants are added to this Service Schedule, track their attendance here.</value>
     </labels>
     <labels>

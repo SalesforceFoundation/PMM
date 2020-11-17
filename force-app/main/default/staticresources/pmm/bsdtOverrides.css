@@ -35,3 +35,7 @@
 .bsdt .small-box {
     padding: var(--lwc-varSpacingXxxSmall, 0.125rem);
 }
+
+c-modal .bsdt .small-box {
+    padding: var(--lwc-spacingMedium, 1rem);
+}

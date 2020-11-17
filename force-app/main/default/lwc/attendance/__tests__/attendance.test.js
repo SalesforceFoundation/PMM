@@ -12,6 +12,7 @@ import Attendance from "c/attendance";
 import { getRecord } from "lightning/uiRecordApi";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
+import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
 import {
     registerApexTestWireAdapter,
     registerLdsTestWireAdapter,
@@ -21,11 +22,13 @@ const mockGenerateRoster = require("./data/generateRoster.json");
 const mockGenerateRosterEmpty = require("../../__tests__/data/emptyList.json");
 const mockGetFieldSet = require("./data/getFieldSet.json");
 const mockWiredSession = require("./data/wiredSession.json");
+const mockWiredPermissions = require("./data/wiredPermissions.json");
 
 //Register the  wire adapters
 const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
 const fieldSetAdapter = registerApexTestWireAdapter(getFieldSet);
 const wiredSessionAdapter = registerLdsTestWireAdapter(getRecord);
+const wiredPermissionsAdapter = registerApexTestWireAdapter(checkFieldPermissions);
 
 jest.mock("c/attendanceRow");
 
@@ -46,6 +49,7 @@ describe("c-attendance", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
+        wiredPermissionsAdapter.emit(mockWiredPermissions);
 
         return global.flushPromises().then(async () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
@@ -60,6 +64,7 @@ describe("c-attendance", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
+        wiredPermissionsAdapter.emit(mockWiredPermissions);
 
         return global.flushPromises().then(async () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(

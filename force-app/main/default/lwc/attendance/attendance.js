@@ -15,6 +15,7 @@ import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
+import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
@@ -36,6 +37,9 @@ import UPDATE_LABEL from "@salesforce/label/c.Update";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import QUANTITY_LABEL from "@salesforce/label/c.Quantity";
+import NO_PARTICIPANTS_HEADER_LABEL from "@salesforce/label/c.No_Participants_Header";
+import NO_PARTICIPANTS_MESSAGE_LABEL from "@salesforce/label/c.No_Participants_Message";
+import NO_PERMISSIONS_MESSAGE_LABEL from "@salesforce/label/c.No_Permission_Message";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
@@ -51,6 +55,7 @@ export default class Attendance extends LightningElement {
 
     showSpinner = true;
     isUpdateMode = false;
+    hasPermissions = false;
 
     unitOfMeasurement;
     sessionStatus;
@@ -67,6 +72,9 @@ export default class Attendance extends LightningElement {
         save: SAVE_LABEL,
         cancel: CANCEL_LABEL,
         quantity: QUANTITY_LABEL,
+        noParticipantsHeader: NO_PARTICIPANTS_HEADER_LABEL,
+        noParticipantsMessage: NO_PARTICIPANTS_MESSAGE_LABEL,
+        noPermissions: NO_PERMISSIONS_MESSAGE_LABEL,
     };
 
     fields = {
@@ -77,6 +85,16 @@ export default class Attendance extends LightningElement {
         createdBy: CREATED_BY_FIELD,
         sessionStatus: SESSION_STATUS_FIELD,
     };
+
+    @wire(checkFieldPermissions, {})
+    wiredPermissions(result) {
+        if (!(result.data || result.error)) {
+            return;
+        }
+        if (result.data) {
+            this.hasPermissions = result.data;
+        }
+    }
 
     @wire(getRecord, {
         recordId: "$recordId",
@@ -138,12 +156,16 @@ export default class Attendance extends LightningElement {
         }
     }
 
+    get hasServiceDeliveries() {
+        return this.serviceDeliveries && this.serviceDeliveries.length;
+    }
+
     get isComplete() {
         return this.sessionStatus && this.sessionStatus === COMPLETE;
     }
 
     get isReadOnly() {
-        return this.isComplete && !this.isUpdateMode;
+        return this.hasServiceDeliveries && this.isComplete && !this.isUpdateMode;
     }
 
     get isPending() {

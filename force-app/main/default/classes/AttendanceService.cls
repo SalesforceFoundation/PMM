@@ -12,6 +12,8 @@ public with sharing class AttendanceService {
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
+    @TestVisible
+    private PermissionValidator permValidator = new PermissionValidator();
 
     private static final String DEFAULT_STATUS = 'Present';
 
@@ -40,6 +42,51 @@ public with sharing class AttendanceService {
             Database.rollback(savepoint);
             throw new ServiceDeliveryException(ex);
         }
+    }
+
+    public Boolean checkFieldPermissions() {
+        List<String> serviceParticipantFields = new List<String>();
+        for (SObjectField field : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {
+            serviceParticipantFields.add(field.getDescribe().getName());
+        }
+
+        List<String> serviceDeliveryFields = new List<String>();
+        for (SObjectField field : SERVICE_FIELD_BY_PARTICIPANT_FIELD.values()) {
+            serviceDeliveryFields.add(field.getDescribe().getName());
+        }
+
+        List<String> sessionFields = new List<String>{
+            ServiceSession__c.PrimaryServiceProvider__c.getDescribe().getName(),
+            ServiceSession__c.SessionStart__c.getDescribe().getName(),
+            ServiceSession__c.ServiceSchedule__c.getDescribe().getName(),
+            ServiceSession__c.SessionStart__c.getDescribe().getName()
+        };
+
+        List<String> scheduleFields = new List<String>{
+            ServiceSchedule__c.Service__c.getDescribe().getName(),
+            ServiceSchedule__c.DefaultServiceQuantity__c.getDescribe().getName()
+        };
+
+        return permValidator.hasFLSAccessForFields(
+                Schema.SObjectType.ServiceParticipant__c.getName(),
+                serviceParticipantFields,
+                'read'
+            ) &&
+            permValidator.hasFLSAccessForFields(
+                Schema.SObjectType.ServiceDelivery__c.getName(),
+                serviceDeliveryFields,
+                'read'
+            ) &&
+            permValidator.hasFLSAccessForFields(
+                Schema.SObjectType.ServiceSession__c.getName(),
+                sessionFields,
+                'read'
+            ) &&
+            permValidator.hasFLSAccessForFields(
+                Schema.SObjectType.ServiceSchedule__c.getName(),
+                scheduleFields,
+                'read'
+            );
     }
 
     private List<ServiceDelivery__c> createRows(Id sessionId) {

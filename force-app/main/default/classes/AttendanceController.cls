@@ -30,4 +30,13 @@ public with sharing class AttendanceController {
             throw Util.getAuraHandledException(ex);
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static Boolean checkFieldPermissions() {
+        try {
+            return service.checkFieldPermissions();
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
 }

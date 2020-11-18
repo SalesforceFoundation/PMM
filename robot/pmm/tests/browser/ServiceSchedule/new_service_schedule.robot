@@ -2,7 +2,8 @@
 
 Resource       robot/pmm/resources/pmm.robot
 Library        cumulusci.robotframework.PageObjects
-...            robot/pmm/resources/ServiceSessionPageObject.py
+...            robot/pmm/resources/ServiceSchedulePageObject.py
+...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
 ...             Open Test Browser
 ...             Setup Test Data
@@ -33,20 +34,22 @@ Setup Test Data
     Set suite variable              ${program_engagement3}
     ${service_schedule_name} =      Generate New String
     Set suite variable              ${service_schedule_name}
-    ${particiapant_capacity} =      Generate Random String  2   [NUMBERS]12346789
-    Set suite variable              ${particiapant_capacity}
     ${today} =                      Get Current Date                result_format=%-m/%-d/%Y 
-    Set suite variable              ${session_start}
+    Set suite variable              ${today}
 
 
 *** Test Cases ***
 Create a New Service Schedule
-    Go To Page                     Details                        Service__c           object_id=${service}[Id]
-    Click Wrapper Related List Button      Service Schedules                New
-    Wait For Modal                          New                                    Service Schedule
+    [Documentation]                        Navigates to service schedule listing page, clicks 'New' on the listing page and
+    ...                                    creates a new record using the wizard, validates the details on the service schedule record
+    [tags]                                 W-8294332        feature:Service Schedule
+    Go To PMM App
+    Go To Page                              Details                        Service__c           object_id=${service}[Id]
+    Click Wrapper Related List Button       Service Schedules              New
+    Current Page Should Be                  New                            ServiceSchedule__c
     Verify Wizard Screen Title              Service Schedule Information
     Populate Field                          Service Schedule Name               ${service_schedule_name}
-    Populate Field                          Participant Capacity                ${particiapant_capacity}
+    Populate Field                          Participant Capacity                10
     Populate Lightning Fields               Primary Service Provider=${contact}[Name]
     ...                                     Date=Today
     Click Dialog Button                     Next
@@ -59,26 +62,22 @@ Create a New Service Schedule
     Click Dialog Button                     Add Service Participants
     Click Dialog Button                     Next 
     Verify Wizard Screen Title              Review Service Schedule
-    Wizard Review Screen Contains           Service Schedule Name               ${service_schedule_name}
-    Wizard Review Screen Contains           Date and Time               
-    Wizard Review Screen Contains           Participant Capacity
-    Wizard Review Screen Contains           Primary Service Provider
-    Wizard Review Screen Contains           Service Sessions            
-    Wizard Review Screen Contains           Service Participants
-    Wizard Review Screen Contains           Service Participants
-    Wizard Review Screen Contains           Service Participants
+    Verify Wizard Review Screen             Service Schedule Name        contains       ${service_schedule_name}      
+    Verify Wizard Review Screen             Participant Capacity         contains       10
+    Verify Wizard Review Screen             Primary Service Provider     contains       ${contact}[Name]
+    Verify Accordion                        Service Sessions             contains       ${today}: ${service_schedule_name}
+    Verify Accordion                        Service Participants         contains       ${contact1}[Name]
+    Verify Accordion                        Service Participants         contains       ${contact2}[Name]
+    Verify Accordion                        Service Participants         contains       ${contact3}[Name]
     Click Dialog Button                     Save
     Wait Until Modal is Closed
-    Verify Details                          Session Start          contains
-    Verify Details                          Session End            contains
-    Verify Details                          Frequency              contains
+    Verify Details                          Service Schedule Name        contains      ${service_schedule_name}
+    Verify Details                          Service                      contains      ${service}[Name]
+    Verify Details                          Frequency                    contains       One Time
     Verify Page Contains Related List       Service Sessions
     Verify Page Contains Related List       Service Participants
-    Verify Page Contains Related List       Files 
-    
-
-
-
-
-
-          
+    Verify Page Contains Related List       Files
+    Page Should Contain                     ${today}: ${service_schedule_name}
+    Page Should Contain                     ${contact1}[Name] - ${service_schedule_name}
+    Page Should Contain                     ${contact2}[Name] - ${service_schedule_name}
+    Page Should Contain                     ${contact3}[Name] - ${service_schedule_name}

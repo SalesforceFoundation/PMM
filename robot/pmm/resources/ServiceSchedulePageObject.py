@@ -25,10 +25,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.wait_until_location_contains(
             "/new", timeout=60, message="Record view did not open in 1 min"
         )
-        self.selenium.location_should_contain(
-            "/lightning/o/ServiceSchedule__c/",
-            message="Section title is not 'New Service Schedule' as expected",
-        )
+        self.selenium.wait_until_page_contains("New Service Schedule")
 
     def verify_wizard_screen_title(self, title):
         """ Verify title on a screen on service schedule wizard  """
@@ -39,21 +36,46 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
 
     def select_service_participant(self, participant):
         """ Selects a service participant, by clicking on the radio button given the name of the participant """
-        locator_button = pmm_lex_locators["service_schedule"]["select_participants"]
+        locator_button = pmm_lex_locators["service_schedule"][
+            "select_participants"
+        ].format(participant)
         self.selenium.scroll_element_into_view(locator_button)
         self.selenium.set_focus_to_element(locator_button)
         self.salesforce._jsclick(locator_button)
 
-    def wizard_review_screen_contains(self, title, value):
-        """Verifies data on wizard screen 4, if the title is Service Session on Service Participant, the value within the accordion
-        is verified else verfies the value given the field name"""
-        if title == "Service Participants" or "Service Sessions":
-            locator = pmm_lex_locators["service_schedule"]["accordion"]
+    def verify_wizard_review_screen(self, title, status, value):
+        """Verifies data on wizard screen 4, If status is 'contains' then the specified value should be present in the field
+        'does not contain' then the specified value should not be present in the field
+        """
+        locator = pmm_lex_locators["service_schedule"]["review_wizard"].format(title)
+        actual_value = self.selenium.get_webelement(locator).text
+        if status == "contains":
+            assert (
+                value == actual_value
+            ), f"Expected value to be {value} but found {actual_value}"
+        elif status == "does not contain":
+            assert (
+                value != actual_value
+            ), f"Expected value {value} should not match {actual_value}"
         else:
-            locator = pmm_lex_locators["service_schedule"]["review_wizard"]
-        self.selenium.wait_until_page_contains_element(
-            locator, error="Review screen does not contain {value} for {title}"
-        )
+            raise Exception("Valid status not entered")
+
+    def verify_accordion(self, title, status, value):
+        """Verifies data on wizard screen 4 accordion, If status is 'contains' then the specified value should be present in the field
+        'does not contain' then the specified value should not be present in the field
+        """
+        locator = pmm_lex_locators["service_schedule"]["accordion"].format(title, value)
+        actual_value = self.selenium.get_webelement(locator).text
+        if status == "contains":
+            assert (
+                value == actual_value
+            ), f"Expected value to be {value} but found {actual_value}"
+        elif status == "does not contain":
+            assert (
+                value != actual_value
+            ), f"Expected value {value} should not match {actual_value}"
+        else:
+            raise Exception("Valid status not entered")
 
 
 @pageobject("Details", "ServiceSchedule__c")

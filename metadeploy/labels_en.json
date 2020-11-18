@@ -51,6 +51,10 @@
         "Deploy Folder of Unmanaged Reports": {
             "message": "Deploy Folder of Unmanaged Reports",
             "description": "title of installation step"
+        },
+        "Recover Deleted Report": {
+            "message": "Recover Deleted Report",
+            "description": "title of installation step"
         }
     },
     "checks": {
@@ -83,6 +87,16 @@
         "error_message": {
             "message": "To get help with this error, go to [help.salesforce.com](https://help.salesforce.com/), find the Support & Services area and log a technical support ticket with Salesforce. Include \u201cPMM\u201d in the subject line and include in your comment the installation link shown here.",
             "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:recover-deleted-report": {
+        "title": {
+            "message": "Recover Deleted Program Management Module Report",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "This installer is designed to correct upgrade issues caused by a Program Management Module report (Clients Enrolled This Month) being deleted. Please do not run this installer unless instructed by Salesforce Support.",
+            "description": "shown before user starts installation (markdown)"
         }
     }
 }

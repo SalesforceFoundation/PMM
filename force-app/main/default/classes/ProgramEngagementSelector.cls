@@ -8,6 +8,8 @@
  */
 
 public with sharing class ProgramEngagementSelector {
+    private QueryBuilder queryBuilder = new QueryBuilder();
+
     public List<ProgramEngagement__c> getProgramEngagementsByContactId(Id contactId) {
         if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {
             return new List<ProgramEngagement__c>();
@@ -43,26 +45,25 @@ public with sharing class ProgramEngagementSelector {
         return programs.isEmpty() ? null : programs[0];
     }
 
-    public List<ProgramEngagement__c> getProgramEngagementsByProgramId(Id programId) {
-        Set<String> engagementStage = new Set<String>{ 'Active', 'Enrolled' };
-
+    public List<ProgramEngagement__c> getProgramEngagementsByProgramId(
+        Id programId,
+        Set<String> fields,
+        Set<String> stages
+    ) {
         if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {
             return new List<ProgramEngagement__c>();
         }
 
-        List<ProgramEngagement__c> programEngagements = [
-            SELECT
-                Id,
-                Contact__c,
-                Contact__r.Name,
-                Contact__r.Email,
-                toLabel(Stage__c),
-                Program__r.Name,
-                ProgramCohort__c
-            FROM ProgramEngagement__c
-            WHERE Stage__c IN :engagementStage AND Program__c = :programId
-            ORDER BY Contact__r.Name ASC
-        ];
+        queryBuilder.withSObjectType(ProgramEngagement__c.getSObjectType())
+            .withSelectFields(new List<String>(fields))
+            .addCondition(
+                String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
+            )
+            .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages');
+
+        List<ProgramEngagement__c> programEngagements = Database.query(
+            queryBuilder.buildSoqlQuery()
+        );
 
         return Security.stripInaccessible(AccessType.READABLE, programEngagements)
             .getRecords();

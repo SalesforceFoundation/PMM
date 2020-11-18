@@ -58,7 +58,7 @@ export default class AttendanceRow extends LightningElement {
 
     @api
     getRow() {
-        return this._isEdited ? this.localRecord : null;
+        return this._isEdited || !this.recordId ? this.localRecord : null;
     }
 
     @api

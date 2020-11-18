@@ -13,6 +13,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>RecentServiceSessionController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>SelectParticipantModel</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -206,6 +210,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>ServiceSchedule__c.DaysOfWeek__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.DefaultServiceQuantity__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

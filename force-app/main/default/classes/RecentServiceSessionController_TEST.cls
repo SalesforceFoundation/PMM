@@ -62,4 +62,48 @@ public with sharing class RecentServiceSessionController_TEST {
 
         serviceStub.assertCalledWith(methodName, String.class, dateLiteral);
     }
+
+    @IsTest
+    private static void testGetServiceSessionsByStartDateWithDateLiteralNotInMap() {
+        final String methodName = 'getServiceSessionsByStartDate';
+        final String dateLiteral = 'TEST';
+
+        Map<String, List<ServiceSession__c>> expected;
+
+        serviceStub.withReturnValue(methodName, String.class, expected);
+
+        Test.startTest();
+        RecentServiceSessionController.serviceSessionService = (ServiceSessionService) serviceStub.createMock();
+
+        final Map<String, List<ServiceSession__c>> actual = RecentServiceSessionController.getServiceSessionsByStartDate(
+            dateLiteral
+        );
+
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Expected actual value to be null with an invalid date literal'
+        );
+    }
+
+    @IsTest
+    private static void testGetMenuOptions() {
+        final String methodName = 'getMenuOptions';
+
+        Map<String, String> expected = RecentServiceSessionController.DATE_LITERAL_OPTIONS;
+
+        Test.startTest();
+
+        final Map<String, String> actual = RecentServiceSessionController.getMenuOptions();
+
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Actual dateliteral options not the same as expected dateLiteral options'
+        );
+    }
 }

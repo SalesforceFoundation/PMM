@@ -669,7 +669,7 @@ public with sharing class ServiceScheduleService_TEST {
 
         programEngagementSelectorStub.withReturnValue(
             programEngagementsMethodName,
-            Id.class,
+            new List<Type>{ Id.class, Set<String>.class, Set<String>.class },
             programEngagementsToReturn
         );
 
@@ -730,8 +730,12 @@ public with sharing class ServiceScheduleService_TEST {
 
         programEngagementSelectorStub.assertCalledWith(
             programEngagementsMethodName,
-            Id.class,
-            programId
+            new List<Type>{ Id.class, Set<String>.class, Set<String>.class },
+            new List<Object>{
+                programId,
+                service.getSelectFieldsWithToLabel(actual),
+                ServiceScheduleService.ACTIVE_ENGAGEMENT_STAGES
+            }
         );
 
         programEngagementSelectorStub.assertCalledWith(

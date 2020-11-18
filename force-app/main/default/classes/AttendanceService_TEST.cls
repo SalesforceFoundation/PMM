@@ -138,7 +138,7 @@ public with sharing class AttendanceService_TEST {
             System.assertEquals(
                 serviceId,
                 actualDeliveries[i].Service__c,
-                'Expected the service id to have been copied from the particpant.'
+                'Expected the service id to have been copied from the Session via the Schedule.'
             );
             System.assertEquals(
                 participantsToReturn[i].ProgramEngagement__c,
@@ -198,7 +198,7 @@ public with sharing class AttendanceService_TEST {
     @IsTest
     private static void functionalGenerateRosterWithExistingDelivery() {
         List<ServiceDelivery__c> actualDeliveries;
-        TestDataFactory.generateAttendanceData();
+        TestDataFactory.generateAttendanceData('Monthly');
         ServiceSession__c session = [
             SELECT Id, ServiceSchedule__c
             FROM ServiceSession__c
@@ -312,8 +312,7 @@ public with sharing class AttendanceService_TEST {
         return new ServiceParticipant__c(
             Id = TestUtil.mockId(ServiceParticipant__c.SObjectType),
             Contact__c = TestUtil.mockId(Contact.SObjectType),
-            ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType),
-            Service__c = TestUtil.mockId(Service__c.SObjectType)
+            ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType)
         );
     }
 }

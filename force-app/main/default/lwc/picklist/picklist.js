@@ -22,10 +22,6 @@ export default class Picklist extends LightningElement {
     @track _options;
 
     get options() {
-        if (this._options) {
-            return this._options;
-        }
-
         if (!this.picklist) {
             return undefined;
         }

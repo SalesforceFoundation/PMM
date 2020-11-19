@@ -121,7 +121,8 @@ public with sharing class ServiceScheduleService_TEST {
             Id = TestUtil.mockId(Contact.SObjectType)
         );
         DateTime firstSessionStart = System.now();
-        DateTime firstSessionEnd = System.now().addHours(2);
+        Integer durationInHours = 36;
+        DateTime firstSessionEnd = System.now().addHours(durationInHours);
         ServiceSchedule__c schedule = new ServiceSchedule__c(
             Name = 'test',
             FirstSessionStart__c = firstSessionStart,
@@ -175,10 +176,7 @@ public with sharing class ServiceScheduleService_TEST {
                 new ServiceSession__c(
                     Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = DateTime.newInstance(
-                        sessionDateTime.date(),
-                        firstSessionEnd.time()
-                    )
+                    SessionEnd__c = sessionDateTime.addHours(durationInHours)
                 )
             );
         }
@@ -235,6 +233,97 @@ public with sharing class ServiceScheduleService_TEST {
             getServiceProviderMethod,
             Set<Id>.class,
             new Set<Id>{ primaryServiceProvider.Id, otherServiceProvider.Id }
+        );
+    }
+
+    @IsTest
+    private static void shouldProcessScheduleOverDST() {
+        String createMethod = 'createRRule';
+        String generateMethod = 'generate';
+        String rRuleString = 'abc';
+        DateTime firstSessionStart = DateTime.newInstance(2020, 10, 30, 22, 0, 0); // 10 PM Oct 31
+        // DST starts at 2AM on Nov 1 2020, so the second 6-hour session SHOULD end at 3AM, not 4AM.
+        // All other sessions should end at 4AM.
+        // Note this test will only pass when run by users using locales that obey DST.
+        Integer durationInHours = 6;
+        DateTime firstSessionEnd = firstSessionStart.addHours(durationInHours);
+        ServiceSchedule__c schedule = new ServiceSchedule__c(
+            Name = 'test',
+            FirstSessionStart__c = firstSessionStart,
+            FirstSessionEnd__c = firstSessionEnd,
+            Interval__c = 1,
+            Frequency__c = 'DAILY',
+            NumberOfServiceSessions__c = 4,
+            DaysOfWeek__c = '1;2;3;4;5;6;7',
+            CreateServiceSessionRecords__c = true
+        );
+        ServiceScheduleModel model = new ServiceScheduleModel();
+        model.serviceSchedule = schedule;
+
+        List<DateTime> expectedDateTimes = new List<DateTime>{
+            firstSessionStart,
+            Datetime.newInstance(2020, 10, 31, 22, 0, 0),
+            Datetime.newInstance(2020, 11, 1, 22, 0, 0),
+            Datetime.newInstance(2020, 11, 2, 22, 0, 0)
+        };
+
+        recurrenceServiceStub.withReturnValue(
+            createMethod,
+            new List<Type>{
+                String.class,
+                Integer.class,
+                Date.class,
+                Integer.class,
+                List<Integer>.class,
+                DateTime.class
+            },
+            rRuleString
+        );
+        recurrenceServiceStub.withReturnValue(
+            generateMethod,
+            new List<Type>{ DateTime.class, String.class, Integer.class },
+            expectedDateTimes
+        );
+        service.recurrenceService = (RecurrenceService) recurrenceServiceStub.createMock();
+
+        List<ServiceSession__c> expectedSessions = new List<ServiceSession__c>();
+        for (DateTime sessionDateTime : expectedDateTimes) {
+            expectedSessions.add(
+                new ServiceSession__c(
+                    Name = sessionDateTime.date().format() + ': ' + schedule.Name,
+                    SessionStart__c = sessionDateTime,
+                    SessionEnd__c = sessionDateTime.addHours(durationInHours)
+                )
+            );
+        }
+
+        ServiceScheduleModel expected = new ServiceScheduleModel();
+        expected.serviceSchedule = schedule;
+        expected.serviceSessions = expectedSessions;
+
+        Test.startTest();
+        ServiceScheduleModel actual = service.processSchedule(model);
+        Test.stopTest();
+        System.assertEquals(
+            expected.serviceSessions,
+            actual.serviceSessions,
+            'Sessions not returned from the service as expected.'
+        );
+        System.assertEquals(
+            Datetime.newInstance(2020, 10, 31, 4, 0, 0),
+            actual.serviceSessions[0].SessionEnd__c
+        );
+        System.assertEquals(
+            Datetime.newInstance(2020, 11, 1, 3, 0, 0),
+            actual.serviceSessions[1].SessionEnd__c
+        );
+        System.assertEquals(
+            Datetime.newInstance(2020, 11, 2, 4, 0, 0),
+            actual.serviceSessions[2].SessionEnd__c
+        );
+        System.assertEquals(
+            Datetime.newInstance(2020, 11, 3, 4, 0, 0),
+            actual.serviceSessions[3].SessionEnd__c
         );
     }
 

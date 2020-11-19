@@ -327,7 +327,7 @@ class pmm(object):
         """During winter 2020 part of the modal fields appear as lightning elements.
         This keyword validates , identifies the element and populates value"""
         for key, value in kwargs.items():
-            if key == "Start Date" or "End Date" or "Delivery Date":
+            if key == "Start Date" or "End Date" or "Delivery Date" or "Date":
                 locator = pmm_lex_locators["new_record"][
                     "c_lightning_datepicker"
                 ].format(key)

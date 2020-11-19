@@ -39,7 +39,7 @@ const LONG_DATA_TYPES = ["TEXTAREA"];
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
-    @api hideFooter = false;
+    @api hideFooter = false; // no longer used; can't remove because public
     @track serviceDeliveries = [{ index: 0 }];
     @track isSaving = false;
     @track saveMessage;
@@ -190,6 +190,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     handleDone() {
         this.resetUI();
+        this.dispatchEvent(new CustomEvent("done"));
     }
 
     handleRowError(event) {

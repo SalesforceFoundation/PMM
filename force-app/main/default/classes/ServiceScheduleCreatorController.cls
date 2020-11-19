@@ -69,8 +69,13 @@ public with sharing class ServiceScheduleCreatorController {
         }
     }
 
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static Date getToday() {
         return Util.getToday();
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static Integer getDayNum(DateTime fullDateTime) {
+        return Util.getDayNum(fullDateTime.date());
     }
 }

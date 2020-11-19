@@ -17,6 +17,7 @@ export default class Modal extends LightningElement {
 
     @api size = "fixed";
     @api isNested = false;
+    @api hideBodyPadding = false;
 
     visibilityClass = MODAL_HIDDEN;
 
@@ -51,6 +52,13 @@ export default class Modal extends LightningElement {
 
     get modalContainerCss() {
         return "slds-modal__container" + (this.size === "fixed" ? " fixed-width" : "");
+    }
+
+    get bodyCss() {
+        return (
+            "slds-modal__content slds-scrollable" +
+            (this.hideBodyPadding ? "" : " slds-p-around_medium")
+        );
     }
 
     @track hasHeaderString = false;

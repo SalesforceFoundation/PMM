@@ -15,8 +15,8 @@ class ServiceParticipantListingPage(BasePMMPage, ListingPage):
     object_name = "ServiceParticipant__c"
 
 
-@pageobject("NewServiceDelivery", "ServiceParticipant__c")
-class NewServiceDeliveryPage(BasePMMPage, BasePage):
+@pageobject("NewServiceParticipant", "ServiceParticipant__c")
+class NewServiceParticipantPage(BasePMMPage, BasePage):
     def _is_current_page(self):
         """Verify we are on the New Service Participant modal page
         by verifying that the section title is 'New Service Participant'
@@ -31,7 +31,7 @@ class NewServiceDeliveryPage(BasePMMPage, BasePage):
 
 
 @pageobject("Details", "ServiceParticipant__c")
-class ServiceDeliveryDetailPage(BasePMMPage, DetailPage):
+class ServiceParticipantDetailPage(BasePMMPage, DetailPage):
     def _is_current_page(self):
         """Verify we are on the Service Participant detail page
         by verifying that the url contains '/view'

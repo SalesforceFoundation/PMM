@@ -8,10 +8,10 @@
   -->
 
 <template>
-    <c-modal header={labels.serviceDeliveries}>
+    <c-modal header={labels.serviceDeliveries} hide-body-padding="true">
         <c-bulk-service-delivery-u-i
             default-values={defaultValues}
-            hide-footer={hideFooter}
+            ondone={hideModal}
         ></c-bulk-service-delivery-u-i>
     </c-modal>
 </template>

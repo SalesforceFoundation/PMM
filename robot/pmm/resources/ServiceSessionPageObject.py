@@ -12,7 +12,7 @@ from BaseObjects import BasePMMPage
 
 
 @pageobject("Listing", "ServiceSession__c")
-class ServiceParticipantListingPage(BasePMMPage, ListingPage):
+class ServiceSessionListingPage(BasePMMPage, ListingPage):
     object_name = "ServiceSession__c"
 
 

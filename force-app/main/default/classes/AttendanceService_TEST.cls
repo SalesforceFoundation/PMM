@@ -330,7 +330,7 @@ public with sharing class AttendanceService_TEST {
         String methodName = 'hasFLSAccessForFields';
         permValidatorStub.withReturnValue(
             methodName,
-            new List<Type>{ String.class, List<String>.class, String.class },
+            new List<Type>{ List<Schema.SObjectField>.class, String.class },
             true
         );
         service.permValidator = (PermissionValidator) permValidatorStub.createMock();
@@ -346,7 +346,7 @@ public with sharing class AttendanceService_TEST {
 
         permValidatorStub.assertCalled(
             methodName,
-            new List<Type>{ String.class, List<String>.class, String.class }
+            new List<Type>{ List<Schema.SObjectField>.class, String.class }
         );
         System.assertEquals(expected, actual);
     }

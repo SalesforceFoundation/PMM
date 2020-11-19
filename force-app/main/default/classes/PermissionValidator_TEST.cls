@@ -102,7 +102,7 @@ private class PermissionValidator_TEST {
     private static void testHasFLSAccessNoFLSField() {
         Boolean noFLSField;
         System.runAs(TestUtil.getTestUser()) {
-            // test user has no custom object permissions
+            // test user's "Standard User" profile has no access to Contact.DoNotCall
             noFLSField = PermissionValidator.getInstance()
                 .hasFLSAccessForFields(
                     'Contact',
@@ -110,7 +110,47 @@ private class PermissionValidator_TEST {
                     'read'
                 );
         }
-        System.assert(!noFLSField, 'Custom field name, expect false');
+        System.assert(!noFLSField, 'Inaccessible field name, expect false');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessInsertNonCreatableFieldByField() {
+        Boolean nonCreatableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Contact.LastModifiedById, 'insert');
+        System.debug(JSON.serialize(Contact.LastModifiedById.getDescribe()));
+        System.assert(!nonCreatableField, 'Can not insert system field, expect false');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpsertNonReparentableByField() {
+        Boolean nonUpdateableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Program__c.LastModifiedById, 'upsert');
+        System.assert(!nonUpdateableField, 'Non updateable system field, expect false');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpsertGoodFieldByField() {
+        Boolean editableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Contact.FirstName, 'upsert');
+        System.assert(editableField, 'Editable field, expect true');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessReadGoodFieldByField() {
+        Boolean readableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Contact.FirstName, 'read');
+        System.assert(readableField, 'Readable field, expect true');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessNoFLSFieldByField() {
+        Boolean noFLSField;
+        System.runAs(TestUtil.getTestUser()) {
+            // test user's "Standard User" profile has no access to Contact.DoNotCall
+            noFLSField = PermissionValidator.getInstance()
+                .hasFLSAccessForFields(Contact.DoNotCall, 'read');
+        }
+        System.assert(!noFLSField, 'Inaccessible field name, expect false');
     }
 
     @IsTest

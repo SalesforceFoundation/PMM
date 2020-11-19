@@ -46,68 +46,33 @@ public with sharing class AttendanceService {
 
     public Map<String, Boolean> checkFieldPermissions() {
         Map<String, Boolean> result = new Map<String, Boolean>();
-        List<String> serviceParticipantFields = new List<String>();
-        for (SObjectField field : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {
-            serviceParticipantFields.add(field.getDescribe().getName());
-        }
-
-        List<String> serviceDeliveryFields = new List<String>();
-        for (SObjectField field : SERVICE_FIELD_BY_PARTICIPANT_FIELD.values()) {
-            serviceDeliveryFields.add(field.getDescribe().getName());
-        }
-        serviceDeliveryFields.add(
-            ServiceDelivery__c.ServiceSession__c.getDescribe().getName()
-        );
-        serviceDeliveryFields.add(
-            ServiceDelivery__c.AttendanceStatus__c.getDescribe().getName()
-        );
-        serviceDeliveryFields.add(
-            ServiceDelivery__c.Service_Provider__c.getDescribe().getName()
-        );
-        serviceDeliveryFields.add(
-            ServiceDelivery__c.DeliveryDate__c.getDescribe().getName()
-        );
-        serviceDeliveryFields.add(ServiceDelivery__c.Service__c.getDescribe().getName());
-        serviceDeliveryFields.add(ServiceDelivery__c.Quantity__c.getDescribe().getName());
-
-        List<String> sessionFields = new List<String>{
-            ServiceSession__c.PrimaryServiceProvider__c.getDescribe().getName(),
-            ServiceSession__c.SessionStart__c.getDescribe().getName(),
-            ServiceSession__c.ServiceSchedule__c.getDescribe().getName(),
-            ServiceSession__c.SessionStart__c.getDescribe().getName()
+        List<Schema.SObjectField> fieldsRequireReadAccess = new List<Schema.SObjectField>{
+            ServiceSession__c.PrimaryServiceProvider__c,
+            ServiceSession__c.SessionStart__c,
+            ServiceSession__c.ServiceSchedule__c,
+            ServiceSession__c.SessionStart__c,
+            ServiceSchedule__c.Service__c
         };
+        fieldsRequireReadAccess.addAll(SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet());
 
-        List<String> scheduleFields = new List<String>{
-            ServiceSchedule__c.Service__c.getDescribe().getName(),
-            ServiceSchedule__c.DefaultServiceQuantity__c.getDescribe().getName()
+        List<Schema.SObjectField> fieldsRequireWriteAccess = new List<Schema.SObjectField>{
+            ServiceDelivery__c.ServiceSession__c,
+            ServiceDelivery__c.AttendanceStatus__c,
+            ServiceDelivery__c.Service_Provider__c,
+            ServiceDelivery__c.DeliveryDate__c,
+            ServiceDelivery__c.Service__c,
+            ServiceDelivery__c.Quantity__c
         };
+        fieldsRequireWriteAccess.addAll(SERVICE_FIELD_BY_PARTICIPANT_FIELD.values());
 
         result.put(
             'read',
-            permValidator.hasFLSAccessForFields(
-                Schema.SObjectType.ServiceParticipant__c.getName(),
-                serviceParticipantFields,
-                'read'
-            ) &&
-            permValidator.hasFLSAccessForFields(
-                Schema.SObjectType.ServiceSession__c.getName(),
-                sessionFields,
-                'read'
-            ) &&
-            permValidator.hasFLSAccessForFields(
-                Schema.SObjectType.ServiceSchedule__c.getName(),
-                scheduleFields,
-                'read'
-            )
+            permValidator.hasFLSAccessForFields(fieldsRequireReadAccess, 'read')
         );
 
         result.put(
             'write',
-            permValidator.hasFLSAccessForFields(
-                Schema.SObjectType.ServiceDelivery__c.getName(),
-                serviceDeliveryFields,
-                'upsert'
-            )
+            permValidator.hasFLSAccessForFields(fieldsRequireWriteAccess, 'upsert')
         );
 
         return result;

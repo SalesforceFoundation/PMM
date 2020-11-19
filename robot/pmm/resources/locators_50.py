@@ -33,7 +33,7 @@ pmm_lex_locators = {
         "quick_dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
         "dropdown_popup": "//div[contains(@class,'slds-listbox') and @role='listbox']",
         "dropdown_value": "//lightning-base-combobox-item[contains(@class,'slds-media')]/span/following-sibling::span[@class='slds-media__body']/span[@title='{}']",
-        "button": "//button[contains(@class, 'slds-button') and @type='button' and @title = '{}']",
+        "button": "//button[contains(@class, 'slds-button') and @type='button' and text() = '{}']",
         "lookup_field": "//div[contains(@class, 'autocompleteWrapper')]//input[@title='{}']",
         "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']",
         "open_date_picker": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]//div//a[contains(@class,'datePicker-openIcon display')]",
@@ -84,5 +84,11 @@ pmm_lex_locators = {
     },
     "service_session": {
         "date": "//fieldset[contains(@class,'slds-form-element')][./legend[text()='{}']]/descendant::button[@type='button']",
+    },
+    "service_schedule": {
+        "wizard_title": "//h3[contains(@class,'slds-section__title') and text()='{}']",
+        "select_participants": "//tr[@class='slds-hint-parent']/th[.//*[text()='{}']]/preceding-sibling::td//span[@class='slds-checkbox_faux']",
+        "accordion": "//section[contains(@class,'slds-accordion')][.//span[contains(@title,'{}')]]//*[text()='{}']",
+        "review_wizard": "//div[contains(@class,'slds-form-element')][./span[text()='{}']]/div",
     },
 }

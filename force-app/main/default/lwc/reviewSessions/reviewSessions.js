@@ -224,6 +224,8 @@ export default class ReviewSessions extends LightningElement {
         this.addSessionEnd = this.serviceSchedule[
             this._serviceScheduleModel.scheduleRecurrenceDateFields.end.apiName
         ];
+
+        this.setDuration();
     }
 
     handleSaveNewSession() {
@@ -317,10 +319,7 @@ export default class ReviewSessions extends LightningElement {
 
     setAddSessionStartTimeAndEndTime() {
         let startTime = new Date(this.addSessionStart);
-        let endTime = new Date(this.addSessionStart);
-
-        endTime.setHours(startTime.getHours() + this.duration);
-        endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
+        let endTime = new Date(startTime.getTime() + this.duration);
         this.addSessionStart = startTime.toISOString();
         this.addSessionEnd = endTime.toISOString();
     }
@@ -333,10 +332,6 @@ export default class ReviewSessions extends LightningElement {
     setDuration() {
         let startTime = new Date(this.addSessionStart);
         let endTime = new Date(this.addSessionEnd);
-
-        this.duration =
-            endTime.getHours() -
-            startTime.getHours() +
-            (endTime.getMinutes() - startTime.getMinutes()) / 60;
+        this.duration = endTime.getTime() - startTime.getTime();
     }
 }

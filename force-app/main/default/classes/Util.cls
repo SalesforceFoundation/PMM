@@ -28,4 +28,8 @@ public with sharing class Util {
     public static Date getToday() {
         return System.today();
     }
+
+    public static Integer getDayNum(Date val) {
+        return Math.mod(Date.newInstance(1900, 1, 7).daysBetween(val), 7) + 1;
+    }
 }

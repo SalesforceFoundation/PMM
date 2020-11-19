@@ -24,6 +24,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         )
         self.selenium.go_to(url)
         self.salesforce.wait_until_loading_is_complete()
+        self.selenium.wait_until_page_contains("Delivery Date")
 
     def verify_current_page(self, label):
         """ Verify we are on the Bulk Service Deliveries page by verifying the header title """

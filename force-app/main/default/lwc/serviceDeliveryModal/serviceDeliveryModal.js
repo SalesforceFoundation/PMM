@@ -15,7 +15,7 @@ import serviceDeliveries from "@salesforce/label/c.Service_Deliveries";
 export default class ServiceDeliveryModal extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
-    @api hideFooter;
+    @api hideFooter; // no longer used; can't remove because public
 
     @track defaultValues;
 

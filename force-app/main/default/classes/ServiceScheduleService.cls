@@ -118,12 +118,14 @@ public with sharing class ServiceScheduleService {
     ) {
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
 
+        Long msInterval = schedule.FirstSessionEnd__c != null
+            ? schedule.FirstSessionEnd__c.getTime() -
+              schedule.FirstSessionStart__c.getTime()
+            : 0;
+
         for (DateTime startDateTime : getDateTimes(schedule, maxSessions)) {
             DateTime endDateTime = schedule.FirstSessionEnd__c != null
-                ? DateTime.newInstance(
-                      startDateTime.date(),
-                      schedule.FirstSessionEnd__c.time()
-                  )
+                ? DateTime.newInstance(startDateTime.getTime() + msInterval)
                 : null;
             sessions.add(createSession(schedule, startDateTime, endDateTime));
         }

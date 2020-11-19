@@ -166,7 +166,7 @@ export default class Attendance extends LightningElement {
         return this.sessionStatus && this.sessionStatus === COMPLETE;
     }
 
-    get isReadOnly() {
+    get isReadMode() {
         return this.hasServiceDeliveries && this.isComplete && !this.isUpdateMode;
     }
 
@@ -184,18 +184,18 @@ export default class Attendance extends LightningElement {
     }
 
     get hasPermissions() {
-        return this.isReadOnly
+        return this.isReadMode
             ? this.hasReadPermissions
             : this.hasReadPermissions && this.hasWritePermissions;
     }
 
     get showUpdateButton() {
-        return this.isReadOnly && this.hasWritePermissions;
+        return this.isReadMode && this.hasWritePermissions;
     }
 
     get showSubmitButton() {
         return (
-            !this.isReadOnly &&
+            !this.isReadMode &&
             this.isPending &&
             this.hasWritePermissions &&
             this.hasReadPermissions

@@ -9,6 +9,11 @@
 
 import { LightningElement, api, track } from "lwc";
 import { format } from "c/util";
+import getDayNum from "@salesforce/apex/ServiceScheduleCreatorController.getDayNum";
+
+import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
+import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
+import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
 
 const WEEKLY = "Weekly";
 const ONE_TIME = "One Time";
@@ -16,10 +21,6 @@ const ON = "On";
 const AFTER = "After";
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
-
-import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
-import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
-import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
 
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
@@ -41,7 +42,7 @@ export default class NewServiceSchedule extends LightningElement {
     dateFields;
     fieldSet;
     isLoaded = false;
-    duration = 1;
+    duration = 3600000; // milliseconds, defaults to 1 hour
 
     @api
     get serviceScheduleModel() {
@@ -162,11 +163,11 @@ export default class NewServiceSchedule extends LightningElement {
 
         this.template.querySelectorAll("lightning-input-field").forEach(field => {
             if (field.fieldName === this.dateFields.start.apiName) {
-                if (!this.dateFields.end.value) {
-                    this.setFirstSessionStartTimeAndEndTime(field.value);
-                }
+                this.setFirstSessionStartTimeAndEndTime(field.value);
             }
         });
+
+        this.defaultDayOfWeek();
     }
 
     get isWeekly() {
@@ -192,6 +193,20 @@ export default class NewServiceSchedule extends LightningElement {
         this.picklistFields.frequency.value = event.detail.length
             ? event.detail[0].value
             : undefined;
+
+        this.defaultDayOfWeek();
+    }
+
+    async defaultDayOfWeek() {
+        if (!(this.isWeekly && this.dateFields.start.value)) {
+            this.picklistFields.daysOfWeek.value = undefined;
+
+            return;
+        }
+
+        await getDayNum({ fullDateTime: this.dateFields.start.value }).then(
+            result => (this.picklistFields.daysOfWeek.value = result.toString())
+        );
     }
 
     handleDaysOfWeekChange(event) {
@@ -212,21 +227,18 @@ export default class NewServiceSchedule extends LightningElement {
     handleStartChange(event) {
         if (!event.detail.value) {
             this.dateFields.end.value = null;
-            return;
+        } else {
+            this.dateFields.start.value = event.detail.value;
+            this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
         }
-        this.dateFields.start.value = event.detail.value;
-
-        this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
+        this.defaultDayOfWeek();
     }
 
     handleEndChange(event) {
         this.dateFields.end.value = event.detail.value;
         let startTime = new Date(this.dateFields.start.value);
-        let endTime = new Date(event.detail.value);
-        this.duration =
-            endTime.getHours() -
-            startTime.getHours() +
-            (endTime.getMinutes() - startTime.getMinutes()) / 60;
+        let endTime = new Date(this.dateFields.end.value);
+        this.duration = endTime.getTime() - startTime.getTime();
     }
 
     setFirstSessionStartTimeAndEndTime(startDate) {
@@ -235,11 +247,8 @@ export default class NewServiceSchedule extends LightningElement {
         }
 
         let startTime = new Date(startDate);
-        let endTime = new Date(startDate);
-
+        let endTime = new Date(startTime.getTime() + this.duration);
         this.dateFields.start.value = new Date(startTime).toISOString();
-        endTime.setHours(startTime.getHours() + this.duration);
-        endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
         this.dateFields.end.value = new Date(endTime).toISOString();
     }
 
@@ -249,6 +258,10 @@ export default class NewServiceSchedule extends LightningElement {
 
     validateServiceScheduleOnOrAfter() {
         let noError = true;
+        if (this.picklistFields.frequency.value === ONE_TIME) {
+            return noError;
+        }
+
         let seriesEndsOnElement = this.template.querySelector(
             '[data-element="seriesEndsOn"]'
         );
@@ -256,10 +269,6 @@ export default class NewServiceSchedule extends LightningElement {
         let numberOfSessionsElement = this.template.querySelector(
             '[data-element="numberOfSessions"]'
         );
-
-        if (this.picklistFields.frequency.value === ONE_TIME) {
-            return noError;
-        }
 
         noError =
             (seriesEndsOnElement === null || !seriesEndsOnElement.value) &&

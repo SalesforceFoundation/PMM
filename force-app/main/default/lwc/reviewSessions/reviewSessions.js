@@ -34,6 +34,9 @@ export default class ReviewSessions extends LightningElement {
     sessionStartLabel;
     sessionEndLabel;
     addSessionError;
+    duration;
+    addSessionStart;
+    addSessionEnd;
 
     @track _serviceSessions = [];
 
@@ -61,6 +64,8 @@ export default class ReviewSessions extends LightningElement {
         this.setEmptyMessage();
         this.setLabels();
         this.setDataTableColumns();
+        this.setAddSessionDates();
+        this.setDuration();
 
         this._serviceSessions = [...this._serviceScheduleModel.serviceSessions];
 
@@ -211,6 +216,18 @@ export default class ReviewSessions extends LightningElement {
         this.columns = COLUMNS;
     }
 
+    setAddSessionDates() {
+        this.addSessionStart = this.serviceSchedule[
+            this._serviceScheduleModel.scheduleRecurrenceDateFields.start.apiName
+        ];
+
+        this.addSessionEnd = this.serviceSchedule[
+            this._serviceScheduleModel.scheduleRecurrenceDateFields.end.apiName
+        ];
+
+        this.setDuration();
+    }
+
     handleSaveNewSession() {
         this.save(true);
     }
@@ -240,7 +257,6 @@ export default class ReviewSessions extends LightningElement {
             .then(result => {
                 this._serviceSessions = [...this._serviceSessions, result];
                 this.setEmptyMessage();
-                inputFields.forEach(field => field.reset());
 
                 if (isSaveAndNew) {
                     return;
@@ -290,5 +306,32 @@ export default class ReviewSessions extends LightningElement {
     handleDispatchLoadedEvent() {
         this.isLoaded = true;
         this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
+    }
+
+    handleStartChange(event) {
+        if (!event.detail.value) {
+            this.addSessionEnd = null;
+            return;
+        }
+        this.addSessionStart = event.detail.value;
+        this.setAddSessionStartTimeAndEndTime();
+    }
+
+    setAddSessionStartTimeAndEndTime() {
+        let startTime = new Date(this.addSessionStart);
+        let endTime = new Date(startTime.getTime() + this.duration);
+        this.addSessionStart = startTime.toISOString();
+        this.addSessionEnd = endTime.toISOString();
+    }
+
+    handleEndChange(event) {
+        this.addSessionEnd = event.detail.value;
+        this.setDuration();
+    }
+
+    setDuration() {
+        let startTime = new Date(this.addSessionStart);
+        let endTime = new Date(this.addSessionEnd);
+        this.duration = endTime.getTime() - startTime.getTime();
     }
 }

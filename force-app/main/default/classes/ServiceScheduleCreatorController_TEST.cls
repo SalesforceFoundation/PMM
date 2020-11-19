@@ -389,4 +389,17 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     private static void shouldReturnToday() {
         System.assertEquals(System.today(), ServiceScheduleCreatorController.getToday());
     }
+
+    @IsTest
+    private static void shouldReturnDayNum() {
+        DateTime sunday = DateTime.newInstance(2012, 1, 1);
+        for (Integer i = 0; i < 7; i++) {
+            System.assertEquals(
+                i + 1,
+                ServiceScheduleCreatorController.getDayNum(sunday.addDays(i)),
+                'The day num was not as expected.'
+            );
+        }
+        System.assertEquals(System.today(), ServiceScheduleCreatorController.getToday());
+    }
 }

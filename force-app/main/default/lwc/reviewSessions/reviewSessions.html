@@ -53,10 +53,14 @@
                             <lightning-record-edit-form object-api-name={objectName}>
                                 <lightning-input-field
                                     field-name={sessionStartFieldName}
+                                    value={addSessionStart}
+                                    onchange={handleStartChange}
                                     required
                                 ></lightning-input-field>
                                 <lightning-input-field
                                     field-name={sessionEndFieldName}
+                                    value={addSessionEnd}
+                                    onchange={handleEndChange}
                                     required
                                 ></lightning-input-field>
                             </lightning-record-edit-form>

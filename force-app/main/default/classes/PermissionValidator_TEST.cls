@@ -72,7 +72,7 @@ private class PermissionValidator_TEST {
     }
 
     @IsTest
-    private static void testHasFLSAccessUpsertNonReparentable() {
+    private static void testHasFLSAccessUpsertNonUpdateable() {
         Boolean nonUpdateableField = PermissionValidator.getInstance()
             .hasFLSAccessForFields(
                 Schema.SObjectType.Program__c.getName(),
@@ -122,7 +122,7 @@ private class PermissionValidator_TEST {
     }
 
     @IsTest
-    private static void testHasFLSAccessUpsertNonReparentableByField() {
+    private static void testHasFLSAccessUpsertNonUpdateableByField() {
         Boolean nonUpdateableField = PermissionValidator.getInstance()
             .hasFLSAccessForFields(Program__c.LastModifiedById, 'upsert');
         System.assert(!nonUpdateableField, 'Non updateable system field, expect false');

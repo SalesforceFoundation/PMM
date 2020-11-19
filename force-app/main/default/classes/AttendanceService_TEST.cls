@@ -348,7 +348,11 @@ public with sharing class AttendanceService_TEST {
             methodName,
             new List<Type>{ List<Schema.SObjectField>.class, String.class }
         );
-        System.assertEquals(expected, actual);
+        System.assertEquals(
+            expected,
+            actual,
+            'Field permissions not returned from Perm Validator as expected.'
+        );
     }
 
     private static ServiceDelivery__c createMockDelivery() {

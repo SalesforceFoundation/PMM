@@ -23,6 +23,7 @@ const mockGenerateRosterEmpty = require("../../__tests__/data/emptyList.json");
 const mockGetFieldSet = require("./data/getFieldSet.json");
 const mockWiredSession = require("./data/wiredSession.json");
 const mockWiredPermissions = require("./data/wiredPermissions.json");
+const mockWiredNoPermissions = require("./data/wiredNoPermissions.json");
 
 //Register the  wire adapters
 const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
@@ -44,7 +45,7 @@ describe("c-attendance", () => {
         element.recordId = "a06630000074mVnAAI";
     });
 
-    it("shows multiple returned rows", async () => {
+    it("shows multiple returned rows with perms", async () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
@@ -59,7 +60,31 @@ describe("c-attendance", () => {
             await expect(element).toBeAccessible();
         });
     });
-    it("shows zero returned rows", async () => {
+    it("shows empty state when zero returned rows with no perms", async () => {
+        document.body.appendChild(element);
+        wiredSessionAdapter.emit(mockWiredSession);
+        fieldSetAdapter.emit(mockGetFieldSet);
+        generateRosterAdapter.emit(mockGenerateRosterEmpty);
+        wiredPermissionsAdapter.emit(mockWiredNoPermissions);
+
+        return global.flushPromises().then(async () => {
+            const attendanceRows = element.shadowRoot.querySelectorAll(
+                "c-attendance-row"
+            );
+            expect(attendanceRows).toHaveLength(mockGenerateRosterEmpty.length);
+
+            const emptyState = element.shadowRoot.querySelectorAll("c-empty-state");
+            expect(emptyState).toHaveLength(1);
+
+            const scopedNotification = element.shadowRoot.querySelectorAll(
+                "c-scoped-notification"
+            );
+            expect(scopedNotification).toHaveLength(0);
+
+            await expect(element).toBeAccessible();
+        });
+    });
+    it("shows empty state when zero returned rows with perms", async () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
@@ -71,6 +96,39 @@ describe("c-attendance", () => {
                 "c-attendance-row"
             );
             expect(attendanceRows).toHaveLength(mockGenerateRosterEmpty.length);
+
+            const emptyState = element.shadowRoot.querySelectorAll("c-empty-state");
+            expect(emptyState).toHaveLength(1);
+
+            const scopedNotification = element.shadowRoot.querySelectorAll(
+                "c-scoped-notification"
+            );
+            expect(scopedNotification).toHaveLength(0);
+
+            await expect(element).toBeAccessible();
+        });
+    });
+    it("shows perms error when rows are returned with no perms", async () => {
+        document.body.appendChild(element);
+        wiredSessionAdapter.emit(mockWiredSession);
+        fieldSetAdapter.emit(mockGetFieldSet);
+        generateRosterAdapter.emit(mockGenerateRoster);
+        wiredPermissionsAdapter.emit(mockWiredNoPermissions);
+
+        return global.flushPromises().then(async () => {
+            const attendanceRows = element.shadowRoot.querySelectorAll(
+                "c-attendance-row"
+            );
+            expect(attendanceRows).toHaveLength(0);
+
+            const emptyState = element.shadowRoot.querySelectorAll("c-empty-state");
+            expect(emptyState).toHaveLength(0);
+
+            const scopedNotification = element.shadowRoot.querySelectorAll(
+                "c-scoped-notification"
+            );
+            expect(scopedNotification).toHaveLength(1);
+
             await expect(element).toBeAccessible();
         });
     });

@@ -12,8 +12,6 @@ public with sharing class AttendanceService {
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
-    @TestVisible
-    private PermissionValidator permValidator = new PermissionValidator();
 
     private static final String DEFAULT_STATUS = 'Present';
 
@@ -67,12 +65,14 @@ public with sharing class AttendanceService {
 
         result.put(
             'read',
-            permValidator.hasFLSAccessForFields(fieldsRequireReadAccess, 'read')
+            PermissionValidator.getInstance()
+                .hasFLSAccessForFields(fieldsRequireReadAccess, 'read')
         );
 
         result.put(
             'write',
-            permValidator.hasFLSAccessForFields(fieldsRequireWriteAccess, 'upsert')
+            PermissionValidator.getInstance()
+                .hasFLSAccessForFields(fieldsRequireWriteAccess, 'upsert')
         );
 
         return result;

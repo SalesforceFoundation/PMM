@@ -333,7 +333,7 @@ public with sharing class AttendanceService_TEST {
             new List<Type>{ List<Schema.SObjectField>.class, String.class },
             true
         );
-        service.permValidator = (PermissionValidator) permValidatorStub.createMock();
+        PermissionValidator.instance = (PermissionValidator) permValidatorStub.createMock();
 
         Map<String, Boolean> expected = new Map<String, Boolean>{
             'read' => true,

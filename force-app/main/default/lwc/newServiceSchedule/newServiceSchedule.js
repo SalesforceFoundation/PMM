@@ -42,7 +42,7 @@ export default class NewServiceSchedule extends LightningElement {
     dateFields;
     fieldSet;
     isLoaded = false;
-    duration = 1;
+    duration = 3600000; // milliseconds, defaults to 1 hour
 
     @api
     get serviceScheduleModel() {
@@ -237,11 +237,8 @@ export default class NewServiceSchedule extends LightningElement {
     handleEndChange(event) {
         this.dateFields.end.value = event.detail.value;
         let startTime = new Date(this.dateFields.start.value);
-        let endTime = new Date(event.detail.value);
-        this.duration =
-            endTime.getHours() -
-            startTime.getHours() +
-            (endTime.getMinutes() - startTime.getMinutes()) / 60;
+        let endTime = new Date(this.dateFields.end.value);
+        this.duration = endTime.getTime() - startTime.getTime();
     }
 
     setFirstSessionStartTimeAndEndTime(startDate) {
@@ -250,11 +247,8 @@ export default class NewServiceSchedule extends LightningElement {
         }
 
         let startTime = new Date(startDate);
-        let endTime = new Date(startDate);
-
+        let endTime = new Date(startTime.getTime() + this.duration);
         this.dateFields.start.value = new Date(startTime).toISOString();
-        endTime.setHours(startTime.getHours() + this.duration);
-        endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
         this.dateFields.end.value = new Date(endTime).toISOString();
     }
 

@@ -15,7 +15,7 @@
                     <template for:each={serviceDeliveries} for:item="delivery">
                         <div
                             key={delivery.index}
-                            class="slds-box slds-m-bottom_medium bsdt-shadow"
+                            class="slds-box small-box slds-m-bottom_medium bsdt-shadow"
                         >
                             <c-service-delivery-row
                                 default-values={defaultValues}
@@ -32,46 +32,25 @@
                         </div>
                     </template>
                 </template>
-                <template if:true={hideFooter}>
-                    <div
-                        class="slds-m-top_xx-large slds-p-top_xx-large slds-p-bottom_xx-large"
-                    >
-                        <lightning-layout class="slds-grid_vertical-align-center">
-                            <lightning-layout-item
-                                flexibility="auto, no-grow"
-                                class="slds-p-left_small"
-                            >
-                                <lightning-button
-                                    variant="brand"
-                                    icon-name="utility:add"
-                                    label={labels.addServiceDelivery}
-                                    onclick={addDelivery}
-                                ></lightning-button>
-                            </lightning-layout-item>
-                        </lightning-layout>
-                    </div>
-                </template>
             </div>
 
-            <template if:false={hideFooter}>
-                <div slot="footer" class="slds-text-align_right">
-                    <lightning-button
-                        variant="brand-outline"
-                        icon-name="utility:add"
-                        label={labels.addEntry}
-                        onclick={addDelivery}
-                        class="slds-p-right_medium"
-                        disabled={isAddEntryDisabled}
-                    ></lightning-button>
-                    <lightning-button
-                        onclick={handleDone}
-                        variant="brand"
-                        label={labels.done}
-                        disabled={isDoneDisabled}
-                        title={doneTitleLabel}
-                    ></lightning-button>
-                </div>
-            </template>
+            <div slot="footer" class="slds-text-align_right">
+                <lightning-button
+                    variant="brand-outline"
+                    icon-name="utility:add"
+                    label={labels.addEntry}
+                    onclick={addDelivery}
+                    class="slds-p-right_medium"
+                    disabled={isAddEntryDisabled}
+                ></lightning-button>
+                <lightning-button
+                    onclick={handleDone}
+                    variant="brand"
+                    label={labels.done}
+                    disabled={isDoneDisabled}
+                    title={doneTitleLabel}
+                ></lightning-button>
+            </div>
         </lightning-card>
     </div>
 </template>

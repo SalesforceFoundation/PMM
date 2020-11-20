@@ -197,6 +197,7 @@ export default class Attendance extends LightningElement {
         return (
             !this.isReadMode &&
             this.isPending &&
+            this.hasServiceDeliveries &&
             this.hasWritePermissions &&
             this.hasReadPermissions
         );

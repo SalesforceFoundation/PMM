@@ -21,7 +21,7 @@ import {
 const mockGenerateRoster = require("./data/generateRoster.json");
 const mockGenerateRosterEmpty = require("../../__tests__/data/emptyList.json");
 const mockGetFieldSet = require("./data/getFieldSet.json");
-const mockWiredSession = require("./data/wiredSession.json");
+const mockWiredSession = require("./data/wiredPendingSession.json");
 const mockWiredPermissions = require("./data/wiredPermissions.json");
 const mockWiredNoPermissions = require("./data/wiredNoPermissions.json");
 
@@ -60,7 +60,7 @@ describe("c-attendance", () => {
             await expect(element).toBeAccessible();
         });
     });
-    it("shows empty state when zero returned rows with no perms", async () => {
+    it("shows empty state and no buttons when zero returned rows with no perms", async () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
@@ -81,10 +81,13 @@ describe("c-attendance", () => {
             );
             expect(scopedNotification).toHaveLength(0);
 
+            const buttons = element.shadowRoot.querySelectorAll("lightning-button");
+            expect(buttons).toHaveLength(0);
+
             await expect(element).toBeAccessible();
         });
     });
-    it("shows empty state when zero returned rows with perms", async () => {
+    it("shows empty state and no buttons when zero returned rows with perms", async () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
@@ -104,6 +107,9 @@ describe("c-attendance", () => {
                 "c-scoped-notification"
             );
             expect(scopedNotification).toHaveLength(0);
+
+            const buttons = element.shadowRoot.querySelectorAll("lightning-button");
+            expect(buttons).toHaveLength(0);
 
             await expect(element).toBeAccessible();
         });

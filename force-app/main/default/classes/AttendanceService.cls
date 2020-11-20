@@ -52,6 +52,16 @@ public with sharing class AttendanceService {
             ServiceSchedule__c.Service__c
         };
         fieldsRequireReadAccess.addAll(SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet());
+        Boolean canReadServiceSchedule = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ServiceSchedule__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            );
+        Boolean canReadServiceParticipant = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ServiceParticipant__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            );
 
         List<Schema.SObjectField> fieldsRequireWriteAccess = new List<Schema.SObjectField>{
             ServiceDelivery__c.ServiceSession__c,
@@ -59,20 +69,41 @@ public with sharing class AttendanceService {
             ServiceDelivery__c.Service_Provider__c,
             ServiceDelivery__c.DeliveryDate__c,
             ServiceDelivery__c.Service__c,
-            ServiceDelivery__c.Quantity__c
+            ServiceDelivery__c.Quantity__c,
+            ServiceSession__c.Status__c
         };
         fieldsRequireWriteAccess.addAll(SERVICE_FIELD_BY_PARTICIPANT_FIELD.values());
+        Boolean canUpsertServiceDelivery =
+            PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceParticipant__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.CREATEABLE
+                ) &&
+            PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceParticipant__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.UPDATEABLE
+                );
+        Boolean canUpdateServiceSession = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ServiceParticipant__c.SObjectType,
+                PermissionValidator.CRUDAccessType.UPDATEABLE
+            );
 
         result.put(
             'read',
             PermissionValidator.getInstance()
-                .hasFLSAccessForFields(fieldsRequireReadAccess, 'read')
+                .hasFLSAccessForFields(fieldsRequireReadAccess, 'read') &&
+            canReadServiceSchedule &&
+            canReadServiceParticipant
         );
 
         result.put(
             'write',
             PermissionValidator.getInstance()
-                .hasFLSAccessForFields(fieldsRequireWriteAccess, 'upsert')
+                .hasFLSAccessForFields(fieldsRequireWriteAccess, 'upsert') &&
+            canUpsertServiceDelivery &&
+            canUpdateServiceSession
         );
 
         return result;

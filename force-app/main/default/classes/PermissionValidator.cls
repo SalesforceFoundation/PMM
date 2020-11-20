@@ -89,6 +89,10 @@ public with sharing class PermissionValidator {
                 operation == 'upsert' && !hasFieldUpsertAccess(field.getDescribe())
             ) {
                 return false;
+            } else if (
+                operation == 'update' && !hasFieldUpdateAccess(field.getDescribe())
+            ) {
+                return false;
             } else if (operation == 'read' && !hasFieldReadAccess(field.getDescribe())) {
                 return false;
             }
@@ -102,6 +106,10 @@ public with sharing class PermissionValidator {
 
     public Boolean hasFieldUpsertAccess(DescribeFieldResult field) {
         return field.isCreateable() && field.isUpdateable();
+    }
+
+    public Boolean hasFieldUpdateAccess(DescribeFieldResult field) {
+        return field.isUpdateable();
     }
 
     public Boolean hasFieldReadAccess(DescribeFieldResult field) {

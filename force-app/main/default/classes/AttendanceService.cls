@@ -63,16 +63,19 @@ public with sharing class AttendanceService {
                 PermissionValidator.CRUDAccessType.READABLE
             );
 
-        List<Schema.SObjectField> fieldsRequireWriteAccess = new List<Schema.SObjectField>{
+        List<Schema.SObjectField> fieldsRequireUpdateAccess = new List<Schema.SObjectField>{
+            ServiceSession__c.Status__c
+        };
+
+        List<Schema.SObjectField> fieldsRequireUpsertAccess = new List<Schema.SObjectField>{
             ServiceDelivery__c.ServiceSession__c,
             ServiceDelivery__c.AttendanceStatus__c,
             ServiceDelivery__c.Service_Provider__c,
             ServiceDelivery__c.DeliveryDate__c,
             ServiceDelivery__c.Service__c,
-            ServiceDelivery__c.Quantity__c,
-            ServiceSession__c.Status__c
+            ServiceDelivery__c.Quantity__c
         };
-        fieldsRequireWriteAccess.addAll(SERVICE_FIELD_BY_PARTICIPANT_FIELD.values());
+        fieldsRequireUpsertAccess.addAll(SERVICE_FIELD_BY_PARTICIPANT_FIELD.values());
         Boolean canUpsertServiceDelivery =
             PermissionValidator.getInstance()
                 .hasObjectAccess(
@@ -101,7 +104,9 @@ public with sharing class AttendanceService {
         result.put(
             'write',
             PermissionValidator.getInstance()
-                .hasFLSAccessForFields(fieldsRequireWriteAccess, 'upsert') &&
+                .hasFLSAccessForFields(fieldsRequireUpsertAccess, 'upsert') &&
+            PermissionValidator.getInstance()
+                .hasFLSAccessForFields(fieldsRequireUpdateAccess, 'update') &&
             canUpsertServiceDelivery &&
             canUpdateServiceSession
         );

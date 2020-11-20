@@ -76,17 +76,17 @@ public with sharing class AttendanceService {
         Boolean canUpsertServiceDelivery =
             PermissionValidator.getInstance()
                 .hasObjectAccess(
-                    ServiceParticipant__c.SObjectType,
+                    ServiceDelivery__c.SObjectType,
                     PermissionValidator.CRUDAccessType.CREATEABLE
                 ) &&
             PermissionValidator.getInstance()
                 .hasObjectAccess(
-                    ServiceParticipant__c.SObjectType,
+                    ServiceDelivery__c.SObjectType,
                     PermissionValidator.CRUDAccessType.UPDATEABLE
                 );
         Boolean canUpdateServiceSession = PermissionValidator.getInstance()
             .hasObjectAccess(
-                ServiceParticipant__c.SObjectType,
+                ServiceSession__c.SObjectType,
                 PermissionValidator.CRUDAccessType.UPDATEABLE
             );
 

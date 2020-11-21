@@ -42,6 +42,78 @@ public with sharing class AttendanceService {
         }
     }
 
+    public Map<String, Boolean> checkFieldPermissions() {
+        Map<String, Boolean> result = new Map<String, Boolean>();
+        List<Schema.SObjectField> fieldsRequireReadAccess = new List<Schema.SObjectField>{
+            ServiceSession__c.PrimaryServiceProvider__c,
+            ServiceSession__c.SessionStart__c,
+            ServiceSession__c.ServiceSchedule__c,
+            ServiceSession__c.SessionStart__c,
+            ServiceSchedule__c.Service__c
+        };
+        fieldsRequireReadAccess.addAll(SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet());
+        Boolean canReadServiceSchedule = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ServiceSchedule__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            );
+        Boolean canReadServiceParticipant = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ServiceParticipant__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            );
+
+        List<Schema.SObjectField> fieldsRequireUpdateAccess = new List<Schema.SObjectField>{
+            ServiceSession__c.Status__c
+        };
+
+        List<Schema.SObjectField> fieldsRequireUpsertAccess = new List<Schema.SObjectField>{
+            ServiceDelivery__c.ServiceSession__c,
+            ServiceDelivery__c.AttendanceStatus__c,
+            ServiceDelivery__c.Service_Provider__c,
+            ServiceDelivery__c.DeliveryDate__c,
+            ServiceDelivery__c.Service__c,
+            ServiceDelivery__c.Quantity__c
+        };
+        fieldsRequireUpsertAccess.addAll(SERVICE_FIELD_BY_PARTICIPANT_FIELD.values());
+        Boolean canUpsertServiceDelivery =
+            PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.CREATEABLE
+                ) &&
+            PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.UPDATEABLE
+                );
+        Boolean canUpdateServiceSession = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ServiceSession__c.SObjectType,
+                PermissionValidator.CRUDAccessType.UPDATEABLE
+            );
+
+        result.put(
+            'read',
+            PermissionValidator.getInstance()
+                .hasFLSAccessForFields(fieldsRequireReadAccess, 'read') &&
+            canReadServiceSchedule &&
+            canReadServiceParticipant
+        );
+
+        result.put(
+            'write',
+            PermissionValidator.getInstance()
+                .hasFLSAccessForFields(fieldsRequireUpsertAccess, 'upsert') &&
+            PermissionValidator.getInstance()
+                .hasFLSAccessForFields(fieldsRequireUpdateAccess, 'update') &&
+            canUpsertServiceDelivery &&
+            canUpdateServiceSession
+        );
+
+        return result;
+    }
+
     private List<ServiceDelivery__c> createRows(Id sessionId) {
         Set<Id> existingClients = new Set<Id>();
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(

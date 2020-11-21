@@ -13,6 +13,7 @@ public with sharing class AttendanceService_TEST {
         AttendanceSelector.class
     );
     private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
+    private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
 
     private static AttendanceService service = new AttendanceService();
 
@@ -321,6 +322,47 @@ public with sharing class AttendanceService_TEST {
             methodName,
             List<ServiceDelivery__c>.class,
             deliveries
+        );
+    }
+
+    @IsTest
+    private static void shouldCallPermissionValidator() {
+        String fieldAccessMethodName = 'hasFLSAccessForFields';
+        String objectAccessMethodName = 'hasObjectAccess';
+
+        permValidatorStub.withReturnValue(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            true
+        );
+        permValidatorStub.withReturnValue(
+            fieldAccessMethodName,
+            new List<Type>{ List<Schema.SObjectField>.class, String.class },
+            true
+        );
+        PermissionValidator.instance = (PermissionValidator) permValidatorStub.createMock();
+
+        Map<String, Boolean> expected = new Map<String, Boolean>{
+            'read' => true,
+            'write' => true
+        };
+
+        Test.startTest();
+        Map<String, Boolean> actual = service.checkFieldPermissions();
+        Test.stopTest();
+
+        permValidatorStub.assertCalled(
+            fieldAccessMethodName,
+            new List<Type>{ List<Schema.SObjectField>.class, String.class }
+        );
+        permValidatorStub.assertCalled(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
+        );
+        System.assertEquals(
+            expected,
+            actual,
+            'Field permissions not returned from Perm Validator as expected.'
         );
     }
 

@@ -81,6 +81,27 @@
         <value>There are no attendance records to update.</value>
     </labels>
     <labels>
+        <fullName>No_Participants_Header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No participants yet</shortDescription>
+        <value>No participants yet</value>
+    </labels>
+    <labels>
+        <fullName>No_Participants_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Attendance empty state</shortDescription>
+        <value>After participants are added to this Service Schedule, track their attendance here.</value>
+    </labels>
+    <labels>
+        <fullName>No_Permission_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You don't have access to this information. Ask your admin for help.</shortDescription>
+        <value>You don't have access to this information. Ask your admin for help.</value>
+    </labels>
+    <labels>
         <fullName>Back</fullName>
         <language>en_US</language>
         <protected>false</protected>

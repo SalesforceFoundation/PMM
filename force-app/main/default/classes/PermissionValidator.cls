@@ -62,6 +62,11 @@ public with sharing class PermissionValidator {
                 ) {
                     return false;
                 } else if (
+                    operation == 'update' &&
+                    !hasFieldUpdateAccess(fieldsMap.get(fieldName).getDescribe())
+                ) {
+                    return false;
+                } else if (
                     operation == 'read' &&
                     !hasFieldReadAccess(fieldsMap.get(fieldName).getDescribe())
                 ) {

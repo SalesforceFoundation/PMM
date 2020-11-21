@@ -327,9 +327,16 @@ public with sharing class AttendanceService_TEST {
 
     @IsTest
     private static void shouldCallPermissionValidator() {
-        String methodName = 'hasFLSAccessForFields';
+        String fieldAccessMethodName = 'hasFLSAccessForFields';
+        String objectAccessMethodName = 'hasObjectAccess';
+
         permValidatorStub.withReturnValue(
-            methodName,
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            true
+        );
+        permValidatorStub.withReturnValue(
+            fieldAccessMethodName,
             new List<Type>{ List<Schema.SObjectField>.class, String.class },
             true
         );
@@ -345,8 +352,12 @@ public with sharing class AttendanceService_TEST {
         Test.stopTest();
 
         permValidatorStub.assertCalled(
-            methodName,
+            fieldAccessMethodName,
             new List<Type>{ List<Schema.SObjectField>.class, String.class }
+        );
+        permValidatorStub.assertCalled(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
         );
         System.assertEquals(
             expected,

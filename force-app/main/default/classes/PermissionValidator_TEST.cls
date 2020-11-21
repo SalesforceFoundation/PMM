@@ -85,9 +85,29 @@ private class PermissionValidator_TEST {
     }
 
     @IsTest
+    private static void testHasFLSAccessUpdateNonUpdateable() {
+        Boolean nonUpdateableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(
+                Schema.SObjectType.Program__c.getName(),
+                new List<String>{
+                    Schema.SObjectType.Program__c.fields.LastModifiedById.getName()
+                },
+                'update'
+            );
+        System.assert(!nonUpdateableField, 'Non updateable system field, expect false');
+    }
+
+    @IsTest
     private static void testHasFLSAccessUpsertGoodField() {
         Boolean editableField = PermissionValidator.getInstance()
             .hasFLSAccessForFields('Contact', new List<String>{ 'FirstName' }, 'upsert');
+        System.assert(editableField, 'Editable field, expect true');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpdateGoodField() {
+        Boolean editableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields('Contact', new List<String>{ 'FirstName' }, 'update');
         System.assert(editableField, 'Editable field, expect true');
     }
 
@@ -129,9 +149,23 @@ private class PermissionValidator_TEST {
     }
 
     @IsTest
+    private static void testHasFLSAccessUpdateNonUpdateableByField() {
+        Boolean nonUpdateableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Program__c.LastModifiedById, 'update');
+        System.assert(!nonUpdateableField, 'Non updateable system field, expect false');
+    }
+
+    @IsTest
     private static void testHasFLSAccessUpsertGoodFieldByField() {
         Boolean editableField = PermissionValidator.getInstance()
             .hasFLSAccessForFields(Contact.FirstName, 'upsert');
+        System.assert(editableField, 'Editable field, expect true');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpdateGoodFieldByField() {
+        Boolean editableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Contact.FirstName, 'update');
         System.assert(editableField, 'Editable field, expect true');
     }
 

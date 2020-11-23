@@ -77,6 +77,30 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         else:
             raise Exception("Valid status not entered")
 
+    def validate_participant_is_added(self, participant):
+        """ Validates that the service participant is added to the participant selector component"""
+        locator = pmm_lex_locators["service_schedule"]["participant_selector"].format(
+            participant
+        )
+        self.selenium.wait_until_page_contains_element(
+            locator, error="Service Participant is not added"
+        )
+
+    def remove_participant(self, participant):
+        """ Validates that the service participant is removed when clicked on X and added to the participant list on screen3 """
+        locator = pmm_lex_locators["service_schedule"]["remove_participant"].format(
+            participant
+        )
+        self.selenium.set_focus_to_element(locator)
+        self.salesforce._jsclick(locator)
+        locator_participant = pmm_lex_locators["service_schedule"][
+            "select_participants"
+        ].format(participant)
+        self.selenium.wait_until_page_contains_element(
+            locator_participant,
+            error="The service participant is not removed from participant selector",
+        )
+
 
 @pageobject("Details", "ServiceSchedule__c")
 class ServiceScheduleDetailPage(BasePMMPage, DetailPage):

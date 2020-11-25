@@ -179,6 +179,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     connectedCallback() {
+        console.log("connectedcallback");
         loadStyle(this, pmmFolder + "/attendancePrintOverride.css");
     }
 
@@ -206,7 +207,6 @@ export default class Attendance extends NavigationMixin(LightningElement) {
                 : "")
         );
     }
-
 
     get printButtonLabel() {
         return this.pageRef.type === PAGE_NAVIGATION_TYPE

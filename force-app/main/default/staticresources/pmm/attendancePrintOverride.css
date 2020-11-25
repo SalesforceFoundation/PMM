@@ -1,0 +1,25 @@
+@media print {
+    .slds-page-header {
+        display: none;
+    }
+
+    lightning-button {
+        display: none;
+    }
+
+    a[href]:after {
+        content: none;
+    }
+
+    .slds-card__footer {
+        display: none;
+    }
+
+    /* div.slds-form {
+        display: none;
+    } */
+}
+
+div.slds-form-element__control > .slds-form-element__static {
+    border: 0px;
+}

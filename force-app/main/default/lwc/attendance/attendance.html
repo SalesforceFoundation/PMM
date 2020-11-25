@@ -8,6 +8,19 @@
   -->
 
 <template>
+    <lightning-card if:true={displayHeader}>
+        <div class="slds-var-m-left_medium">
+            <lightning-record-form
+                record-id={recordId}
+                object-api-name={serviceSession}
+                layout-type="Compact"
+                mode="readonly"
+                columns="7"
+            >
+            </lightning-record-form>
+        </div>
+    </lightning-card>
+
     <lightning-card>
         <div slot="title">
             <lightning-icon icon-name="custom:custom15" size="small"></lightning-icon>
@@ -23,6 +36,14 @@
             title={labels.update}
             slot="actions"
             if:true={isReadOnly}
+        ></lightning-button>
+
+        <lightning-button
+            onclick={handlePrintClick}
+            variant="neutral"
+            label={printButtonLabel}
+            title={printButtonLabel}
+            slot="actions"
         ></lightning-button>
 
         <div class="slds-border_top">

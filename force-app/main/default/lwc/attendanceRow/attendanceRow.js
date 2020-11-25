@@ -7,12 +7,11 @@
  *
  */
 
-import { LightningElement, api, track, wire } from "lwc";
+import { LightningElement, api, track } from "lwc";
 import { getChildObjectByName } from "c/util";
-import { getRecord, getRecordNotifyChange } from "lightning/uiRecordApi";
+import { getRecordNotifyChange } from "lightning/uiRecordApi";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
-import ID_FIELD from "@salesforce/schema/ServiceDelivery__c.Id";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
 
@@ -26,7 +25,11 @@ export default class AttendanceRow extends LightningElement {
     @api unitOfMeasurement;
     @api presentStatus = PRESENT_STATUS;
     @api readOnly = false;
+    @api flexipageRegionWidth;
+
     name;
+    rowContainerMediumSize = 4;
+
     _isEdited;
     recordId;
 
@@ -43,9 +46,6 @@ export default class AttendanceRow extends LightningElement {
         this._isEdited = false;
         this.recordId = this.localRecord.Id;
     }
-
-    @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD] })
-    wiredServiceDelivery;
 
     @api
     get fieldSet() {
@@ -103,5 +103,11 @@ export default class AttendanceRow extends LightningElement {
     handleQuantityChange(event) {
         this.localRecord[this.fields.quantity.fieldApiName] = event.detail.value;
         this._isEdited = true;
+    }
+
+    connectedCallback() {
+        if (this.flexipageRegionWidth === "SMALL") {
+            this.rowContainerMediumSize = 3;
+        }
     }
 }

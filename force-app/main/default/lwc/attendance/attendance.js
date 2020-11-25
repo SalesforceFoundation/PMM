@@ -8,7 +8,10 @@
  */
 
 import { LightningElement, track, wire, api } from "lwc";
-import { handleError, getChildObjectByName, format } from "c/util";
+import { handleError, getChildObjectByName, format, prefixNamespace } from "c/util";
+import { NavigationMixin, CurrentPageReference } from "lightning/navigation";
+import { loadStyle } from "lightning/platformResourceLoader";
+
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
@@ -17,6 +20,7 @@ import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNIT_MEASUREMENT_RELATED_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__r.Service__r.UnitOfMeasurement__c";
@@ -30,12 +34,16 @@ import SUBMIT_LABEL from "@salesforce/label/c.Submit";
 import ATTENDANCE_LABEL from "@salesforce/label/c.Attendance";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
-import SUCCESS_MESSAGE_LABEL from "@salesforce/label/c.Save_Attendance_Success";
-import SUCCESS_NO_UPDATES_LABEL from "@salesforce/label/c.Save_Attendance_No_Updates";
+import SUCCESS_MESSAGE_LABEL from "@salesforce/label/c.Save_Service_Delivery_Success";
+import SUCCESS_NO_UPDATES_LABEL from "@salesforce/label/c.Save_Service_Delivery_No_Updates";
 import UPDATE_LABEL from "@salesforce/label/c.Update";
 import SAVE_LABEL from "@salesforce/label/c.Save";
 import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import QUANTITY_LABEL from "@salesforce/label/c.Quantity";
+import PRINT_LABEL from "@salesforce/label/c.Print";
+import PRINTABLE_VIEWABLE_LABEL from "@salesforce/label/c.Printable_View";
+
+import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
@@ -43,8 +51,9 @@ const LONG_DATA_TYPES = ["TEXTAREA", "PICKLIST", "REFERENCE"];
 const ID = "Id";
 const COMPLETE = "Complete";
 const PENDING = "Pending";
-
-export default class Attendance extends LightningElement {
+const PAGE_NAVIGATION_TYPE = "standard__navItemPage";
+const ATTENDANCE_TAB = "Attendance";
+export default class Attendance extends NavigationMixin(LightningElement) {
     @api recordId;
     @track serviceDeliveries;
     @track fieldSet;
@@ -55,6 +64,8 @@ export default class Attendance extends LightningElement {
     unitOfMeasurement;
     sessionStatus;
     wiredServiceDeliveriesResult;
+
+    serviceSession = SERVICE_SESSION_OBJECT;
 
     labels = {
         submit: SUBMIT_LABEL,
@@ -67,6 +78,8 @@ export default class Attendance extends LightningElement {
         save: SAVE_LABEL,
         cancel: CANCEL_LABEL,
         quantity: QUANTITY_LABEL,
+        print: PRINT_LABEL,
+        printableView: PRINTABLE_VIEWABLE_LABEL,
     };
 
     fields = {
@@ -77,6 +90,14 @@ export default class Attendance extends LightningElement {
         createdBy: CREATED_BY_FIELD,
         sessionStatus: SESSION_STATUS_FIELD,
     };
+
+    @wire(CurrentPageReference)
+    setCurrentPageReference(currentPageReference) {
+        this.pageRef = currentPageReference;
+        if (currentPageReference.state && currentPageReference.state.c__sessionId) {
+            this.recordId = currentPageReference.state.c__sessionId;
+        }
+    }
 
     @wire(getRecord, {
         recordId: "$recordId",
@@ -138,6 +159,10 @@ export default class Attendance extends LightningElement {
         }
     }
 
+    connectedCallback() {
+        loadStyle(this, pmmFolder + "/attendancePrintOverride.css");
+    }
+
     get isComplete() {
         return this.sessionStatus && this.sessionStatus === COMPLETE;
     }
@@ -157,6 +182,16 @@ export default class Attendance extends LightningElement {
                 ? " (" + this.serviceDeliveries.length + ")"
                 : "")
         );
+    }
+
+    get printButtonLabel() {
+        return this.pageRef.type === PAGE_NAVIGATION_TYPE
+            ? this.labels.print
+            : this.labels.printableView;
+    }
+
+    get displayHeader() {
+        return this.pageRef.type === PAGE_NAVIGATION_TYPE ? true : false;
     }
 
     configureFieldSet(incomingFieldSet) {
@@ -257,5 +292,23 @@ export default class Attendance extends LightningElement {
             message: message,
         });
         this.dispatchEvent(event);
+    }
+
+    handlePrintClick() {
+        if (this.pageRef.type === PAGE_NAVIGATION_TYPE) {
+            window.print();
+        } else {
+            this[NavigationMixin.GenerateUrl]({
+                type: PAGE_NAVIGATION_TYPE,
+                attributes: {
+                    apiName: prefixNamespace(ATTENDANCE_TAB),
+                },
+                state: {
+                    c__sessionId: this.recordId,
+                },
+            }).then(url => {
+                window.open(url);
+            });
+        }
     }
 }

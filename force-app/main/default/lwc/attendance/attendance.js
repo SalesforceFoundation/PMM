@@ -179,7 +179,6 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     connectedCallback() {
-        console.log("connectedcallback");
         loadStyle(this, pmmFolder + "/attendancePrintOverride.css");
     }
 

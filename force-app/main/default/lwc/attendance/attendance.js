@@ -18,6 +18,7 @@ import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
+import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
@@ -42,7 +43,9 @@ import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import QUANTITY_LABEL from "@salesforce/label/c.Quantity";
 import PRINT_LABEL from "@salesforce/label/c.Print";
 import PRINTABLE_VIEWABLE_LABEL from "@salesforce/label/c.Printable_View";
-
+import NO_PARTICIPANTS_HEADER_LABEL from "@salesforce/label/c.No_Participants_Header";
+import NO_PARTICIPANTS_MESSAGE_LABEL from "@salesforce/label/c.No_Participants_Message";
+import NO_PERMISSIONS_MESSAGE_LABEL from "@salesforce/label/c.No_Permission_Message";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
@@ -60,6 +63,8 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
     showSpinner = true;
     isUpdateMode = false;
+    hasReadPermissions;
+    hasWritePermissions;
 
     unitOfMeasurement;
     sessionStatus;
@@ -80,6 +85,9 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         quantity: QUANTITY_LABEL,
         print: PRINT_LABEL,
         printableView: PRINTABLE_VIEWABLE_LABEL,
+        noParticipantsHeader: NO_PARTICIPANTS_HEADER_LABEL,
+        noParticipantsMessage: NO_PARTICIPANTS_MESSAGE_LABEL,
+        noPermissions: NO_PERMISSIONS_MESSAGE_LABEL,
     };
 
     fields = {
@@ -99,6 +107,17 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
     }
 
+    @wire(checkFieldPermissions, {})
+    wiredPermissions(result) {
+        if (!(result.data || result.error)) {
+            return;
+        }
+        if (result.data) {
+            this.hasReadPermissions = result.data.read;
+            this.hasWritePermissions = result.data.write;
+        }
+    }
+
     @wire(getRecord, {
         recordId: "$recordId",
         fields: [UNIT_MEASUREMENT_RELATED_FIELD, SESSION_STATUS_FIELD],
@@ -113,7 +132,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             let service = getChildObjectByName(schedule.value.fields, "Service__r");
             this.unitOfMeasurement = service.value.fields[
                 UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName
-            ]
+            ].value
                 ? service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName].value
                 : this.labels.quantity;
             this.sessionStatus = result.data.fields[
@@ -163,12 +182,16 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         loadStyle(this, pmmFolder + "/attendancePrintOverride.css");
     }
 
+    get hasServiceDeliveries() {
+        return this.serviceDeliveries && this.serviceDeliveries.length;
+    }
+
     get isComplete() {
         return this.sessionStatus && this.sessionStatus === COMPLETE;
     }
 
-    get isReadOnly() {
-        return this.isComplete && !this.isUpdateMode;
+    get isReadMode() {
+        return this.hasServiceDeliveries && this.isComplete && !this.isUpdateMode;
     }
 
     get isPending() {
@@ -184,6 +207,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         );
     }
 
+
     get printButtonLabel() {
         return this.pageRef.type === PAGE_NAVIGATION_TYPE
             ? this.labels.print
@@ -192,6 +216,26 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
     get displayHeader() {
         return this.pageRef.type === PAGE_NAVIGATION_TYPE ? true : false;
+    }
+
+    get hasPermissions() {
+        return this.isReadMode
+            ? this.hasReadPermissions
+            : this.hasReadPermissions && this.hasWritePermissions;
+    }
+
+    get showUpdateButton() {
+        return this.isReadMode && this.hasWritePermissions;
+    }
+
+    get showSubmitButton() {
+        return (
+            !this.isReadMode &&
+            this.isPending &&
+            this.hasServiceDeliveries &&
+            this.hasWritePermissions &&
+            this.hasReadPermissions
+        );
     }
 
     configureFieldSet(incomingFieldSet) {

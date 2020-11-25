@@ -7,8 +7,16 @@
  *
  */
 
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api, track, wire } from "lwc";
 import { format } from "c/util";
+import { getRecord } from "lightning/uiRecordApi";
+import getDayNum from "@salesforce/apex/ServiceScheduleCreatorController.getDayNum";
+
+import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
+import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
+import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
+import DEFAULT_SERVICE_QUANTITY from "@salesforce/schema/ServiceSchedule__c.DefaultServiceQuantity__c";
+import UNIT_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
 
 const WEEKLY = "Weekly";
 const ONE_TIME = "One Time";
@@ -17,12 +25,9 @@ const AFTER = "After";
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
 
-import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
-import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
-import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
-
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
+    @api serviceId;
     errorMessage;
     isValid = true;
     objectApiName;
@@ -33,15 +38,15 @@ export default class NewServiceSchedule extends LightningElement {
     };
 
     _serviceScheduleModel;
-    @track
-    picklistFields;
-    @track
-    requiredFields;
-    @track
-    dateFields;
+    @track picklistFields;
+    @track requiredFields;
+    @track dateFields;
     fieldSet;
     isLoaded = false;
-    duration = 1;
+    duration = 3600000; // milliseconds, defaults to 1 hour
+    defaultServiceQuantity;
+    defaultServiceQuantityLabel;
+    defaultServiceQuantityLabelWithUnit;
 
     @api
     get serviceScheduleModel() {
@@ -130,6 +135,12 @@ export default class NewServiceSchedule extends LightningElement {
             serviceSchedule[apiName] = value;
         });
 
+        if (this.defaultServiceQuantity) {
+            serviceSchedule[
+                DEFAULT_SERVICE_QUANTITY.fieldApiName
+            ] = this.defaultServiceQuantity;
+        }
+
         return serviceSchedule;
     }
 
@@ -153,6 +164,14 @@ export default class NewServiceSchedule extends LightningElement {
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
+
+        this.fieldSet.forEach(field => {
+            if (field.apiName === DEFAULT_SERVICE_QUANTITY.fieldApiName) {
+                field.isQuantityField = true;
+                this.defaultServiceQuantityLabel = field.label;
+                this.defaultServiceQuantityLabelWithUnit = field.label;
+            }
+        });
     }
 
     handleLoad() {
@@ -162,11 +181,30 @@ export default class NewServiceSchedule extends LightningElement {
 
         this.template.querySelectorAll("lightning-input-field").forEach(field => {
             if (field.fieldName === this.dateFields.start.apiName) {
-                if (!this.dateFields.end.value) {
-                    this.setFirstSessionStartTimeAndEndTime(field.value);
-                }
+                this.setFirstSessionStartTimeAndEndTime(field.value);
             }
         });
+
+        this.defaultDayOfWeek();
+    }
+
+    @wire(getRecord, {
+        recordId: "$serviceId",
+        fields: [UNIT_MEASUREMENT_FIELD],
+    })
+    wiredSession(result) {
+        if (
+            result.data &&
+            result.data.fields &&
+            result.data.fields[UNIT_MEASUREMENT_FIELD.fieldApiName] &&
+            result.data.fields[UNIT_MEASUREMENT_FIELD.fieldApiName].value
+        ) {
+            this.defaultServiceQuantityLabelWithUnit =
+                this.defaultServiceQuantityLabel +
+                " (" +
+                result.data.fields[UNIT_MEASUREMENT_FIELD.fieldApiName].value +
+                ")";
+        }
     }
 
     get isWeekly() {
@@ -188,10 +226,35 @@ export default class NewServiceSchedule extends LightningElement {
         return this.picklistFields.seriesEnds.value === ON;
     }
 
+    handleServiceChange(event) {
+        this.serviceId = event.detail.value.length ? event.detail.value[0] : undefined; // lookup values come back as arrays
+        if (!this.serviceId) {
+            this.defaultServiceQuantityLabelWithUnit = this.defaultServiceQuantityLabel;
+        }
+    }
+
+    handleDefaultServiceQuantityChange(event) {
+        this.defaultServiceQuantity = event.detail.value;
+    }
+
     handleFrequencyChange(event) {
         this.picklistFields.frequency.value = event.detail.length
             ? event.detail[0].value
             : undefined;
+
+        this.defaultDayOfWeek();
+    }
+
+    async defaultDayOfWeek() {
+        if (!(this.isWeekly && this.dateFields.start.value)) {
+            this.picklistFields.daysOfWeek.value = undefined;
+
+            return;
+        }
+
+        await getDayNum({ fullDateTime: this.dateFields.start.value }).then(
+            result => (this.picklistFields.daysOfWeek.value = result.toString())
+        );
     }
 
     handleDaysOfWeekChange(event) {
@@ -212,21 +275,18 @@ export default class NewServiceSchedule extends LightningElement {
     handleStartChange(event) {
         if (!event.detail.value) {
             this.dateFields.end.value = null;
-            return;
+        } else {
+            this.dateFields.start.value = event.detail.value;
+            this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
         }
-        this.dateFields.start.value = event.detail.value;
-
-        this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
+        this.defaultDayOfWeek();
     }
 
     handleEndChange(event) {
         this.dateFields.end.value = event.detail.value;
         let startTime = new Date(this.dateFields.start.value);
-        let endTime = new Date(event.detail.value);
-        this.duration =
-            endTime.getHours() -
-            startTime.getHours() +
-            (endTime.getMinutes() - startTime.getMinutes()) / 60;
+        let endTime = new Date(this.dateFields.end.value);
+        this.duration = endTime.getTime() - startTime.getTime();
     }
 
     setFirstSessionStartTimeAndEndTime(startDate) {
@@ -235,11 +295,8 @@ export default class NewServiceSchedule extends LightningElement {
         }
 
         let startTime = new Date(startDate);
-        let endTime = new Date(startDate);
-
+        let endTime = new Date(startTime.getTime() + this.duration);
         this.dateFields.start.value = new Date(startTime).toISOString();
-        endTime.setHours(startTime.getHours() + this.duration);
-        endTime.setMinutes(startTime.getMinutes() + (this.duration % 1) * 60);
         this.dateFields.end.value = new Date(endTime).toISOString();
     }
 
@@ -249,6 +306,10 @@ export default class NewServiceSchedule extends LightningElement {
 
     validateServiceScheduleOnOrAfter() {
         let noError = true;
+        if (this.picklistFields.frequency.value === ONE_TIME) {
+            return noError;
+        }
+
         let seriesEndsOnElement = this.template.querySelector(
             '[data-element="seriesEndsOn"]'
         );
@@ -256,10 +317,6 @@ export default class NewServiceSchedule extends LightningElement {
         let numberOfSessionsElement = this.template.querySelector(
             '[data-element="numberOfSessions"]'
         );
-
-        if (this.picklistFields.frequency.value === ONE_TIME) {
-            return noError;
-        }
 
         noError =
             (seriesEndsOnElement === null || !seriesEndsOnElement.value) &&

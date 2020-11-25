@@ -13,6 +13,7 @@ public with sharing class AttendanceService_TEST {
         AttendanceSelector.class
     );
     private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
+    private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
 
     private static AttendanceService service = new AttendanceService();
 
@@ -109,6 +110,7 @@ public with sharing class AttendanceService_TEST {
         String getSession = 'getSession';
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
         List<ServiceParticipant__c> participantsToReturn = new List<ServiceParticipant__c>{
             createMockParticipant(),
             createMockParticipant()
@@ -129,7 +131,11 @@ public with sharing class AttendanceService_TEST {
         attendanceSelectorStub.withReturnValue(
             getSession,
             Id.class,
-            new ServiceSession__c(Id = sessionId, ServiceSchedule__c = scheduleId)
+            new ServiceSession__c(
+                Id = sessionId,
+                ServiceSchedule__c = scheduleId,
+                ServiceSchedule__r = new ServiceSchedule__c(Service__c = serviceId)
+            )
         );
 
         Test.startTest();
@@ -149,9 +155,9 @@ public with sharing class AttendanceService_TEST {
                 'Expected the contact id to have been copied from the particpant.'
             );
             System.assertEquals(
-                participantsToReturn[i].Service__c,
+                serviceId,
                 actualDeliveries[i].Service__c,
-                'Expected the service id to have been copied from the particpant.'
+                'Expected the service id to have been copied from the Session via the Schedule.'
             );
             System.assertEquals(
                 participantsToReturn[i].ProgramEngagement__c,
@@ -319,6 +325,47 @@ public with sharing class AttendanceService_TEST {
         );
     }
 
+    @IsTest
+    private static void shouldCallPermissionValidator() {
+        String fieldAccessMethodName = 'hasFLSAccessForFields';
+        String objectAccessMethodName = 'hasObjectAccess';
+
+        permValidatorStub.withReturnValue(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            true
+        );
+        permValidatorStub.withReturnValue(
+            fieldAccessMethodName,
+            new List<Type>{ List<Schema.SObjectField>.class, String.class },
+            true
+        );
+        PermissionValidator.instance = (PermissionValidator) permValidatorStub.createMock();
+
+        Map<String, Boolean> expected = new Map<String, Boolean>{
+            'read' => true,
+            'write' => true
+        };
+
+        Test.startTest();
+        Map<String, Boolean> actual = service.checkFieldPermissions();
+        Test.stopTest();
+
+        permValidatorStub.assertCalled(
+            fieldAccessMethodName,
+            new List<Type>{ List<Schema.SObjectField>.class, String.class }
+        );
+        permValidatorStub.assertCalled(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
+        );
+        System.assertEquals(
+            expected,
+            actual,
+            'Field permissions not returned from Perm Validator as expected.'
+        );
+    }
+
     private static ServiceDelivery__c createMockDelivery() {
         return new ServiceDelivery__c(
             Id = TestUtil.mockId(ServiceDelivery__c.SObjectType),
@@ -335,8 +382,7 @@ public with sharing class AttendanceService_TEST {
         return new ServiceParticipant__c(
             Id = TestUtil.mockId(ServiceParticipant__c.SObjectType),
             Contact__c = TestUtil.mockId(Contact.SObjectType),
-            ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType),
-            Service__c = TestUtil.mockId(Service__c.SObjectType)
+            ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType)
         );
     }
 }

@@ -44,17 +44,35 @@
                         <lightning-input-field
                             field-name={requiredFields.serviceId.apiName}
                             value={requiredFields.serviceId.value}
+                            onchange={handleServiceChange}
                             required
                         >
                         </lightning-input-field>
                     </lightning-layout-item>
                     <template for:each={fieldSet} for:item="field">
                         <lightning-layout-item key={field.apiName} size={field.size}>
-                            <lightning-input-field
-                                field-name={field.apiName}
-                                value={field.value}
-                                required={field.isRequired}
-                            ></lightning-input-field>
+                            <template if:true={field.isQuantityField}>
+                                <!--QUANTITY FIELD SPECIAL HANDLING FOR LABEL-->
+                                <div class="slds-form-element slds-form-element_stacked">
+                                    <lightning-input
+                                        label={defaultServiceQuantityLabelWithUnit}
+                                        onchange={handleDefaultServiceQuantityChange}
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        value={field.value}
+                                        required={field.isRequired}
+                                        field-level-help={field.helpText}
+                                    ></lightning-input>
+                                </div>
+                            </template>
+                            <template if:false={field.isQuantityField}>
+                                <lightning-input-field
+                                    field-name={field.apiName}
+                                    value={field.value}
+                                    required={field.isRequired}
+                                ></lightning-input-field>
+                            </template>
                         </lightning-layout-item>
                     </template>
                 </lightning-layout>
@@ -83,7 +101,6 @@
                             onchange={handleEndChange}
                             disabled={disableSessionEnd}
                             required
-                            class="end-date-field"
                         ></lightning-input-field>
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.large}>

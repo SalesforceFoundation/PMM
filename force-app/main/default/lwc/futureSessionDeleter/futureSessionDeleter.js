@@ -7,7 +7,7 @@
  *
  */
 
-import { LightningElement, api } from "lwc";
+import { LightningElement, api, wire } from "lwc";
 import { format, handleError } from "c/util";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import deleteSessionsAfter from "@salesforce/apex/ServiceScheduleCreatorController.deleteSessionsAfter";
@@ -38,15 +38,18 @@ export default class FutureSessionDeleter extends LightningElement {
         invalidDate: INVALID_DATE,
     };
 
-    connectedCallback() {
-        getToday()
-            .then(result => {
-                this.startDate = result;
-                this.today = result;
-            })
-            .catch(error => {
-                handleError(error);
-            });
+    @wire(getToday)
+    wiredToday(result) {
+        if (!result) {
+            return;
+        }
+
+        if (result.data) {
+            this.startDate = result.data;
+            this.today = result.data;
+        } else if (result.error) {
+            console.log(result.error);
+        }
     }
 
     handleDelete() {

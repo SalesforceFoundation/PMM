@@ -41,6 +41,7 @@
                     }
                 }
             }
-        }
+        },
+        "Status__c": { "value": "Pending" }
     }
 }

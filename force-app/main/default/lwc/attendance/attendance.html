@@ -35,7 +35,7 @@
             label={labels.update}
             title={labels.update}
             slot="actions"
-            if:true={isReadOnly}
+            if:true={showUpdateButton}
         ></lightning-button>
 
         <lightning-button
@@ -47,28 +47,47 @@
         ></lightning-button>
 
         <div class="slds-border_top">
-            <div>
-                <template if:true={showSpinner}>
-                    <div class="slds-align_absolute-center">
-                        <lightning-spinner
-                            alternative-text={labels.loading}
-                            size="medium"
-                        ></lightning-spinner>
-                    </div>
-                </template>
+            <template if:true={showSpinner}>
+                <div class="slds-align_absolute-center">
+                    <lightning-spinner
+                        alternative-text={labels.loading}
+                        size="medium"
+                    ></lightning-spinner>
+                </div>
+            </template>
 
-                <template if:true={serviceDeliveries}>
+            <template if:true={hasServiceDeliveries}>
+                <template if:true={hasPermissions}>
                     <template for:each={serviceDeliveries} for:item="delivery">
                         <c-attendance-row
                             record={delivery}
                             field-set={fieldSet}
                             unit-of-measurement={unitOfMeasurement}
                             key={delivery.index}
-                            read-only={isReadOnly}
+                            read-only={isReadMode}
                         ></c-attendance-row>
                     </template>
                 </template>
-            </div>
+                <template if:false={hasPermissions}>
+                    <div class="slds-var-p-horizontal_small slds-var-p-top_small">
+                        <c-scoped-notification
+                            theme="warning"
+                            title={labels.noPermissions}
+                        ></c-scoped-notification>
+                    </div>
+                </template>
+            </template>
+
+            <template if:false={hasServiceDeliveries}>
+                <template if:false={showSpinner}>
+                    <div class="slds-var-p-top_small">
+                        <c-empty-state
+                            text={labels.noParticipantsHeader}
+                            sub-text={labels.noParticipantsMessage}
+                        ></c-empty-state>
+                    </div>
+                </template>
+            </template>
         </div>
 
         <!-- Footer will only re-render if the if statement is on an element inside it. -->
@@ -78,7 +97,7 @@
                 variant="brand"
                 label={labels.submit}
                 title={labels.submit}
-                if:true={isPending}
+                if:true={showSubmitButton}
             ></lightning-button>
             <lightning-button
                 onclick={handleCancel}

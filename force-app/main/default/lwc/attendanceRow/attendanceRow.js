@@ -25,10 +25,8 @@ export default class AttendanceRow extends LightningElement {
     @api unitOfMeasurement;
     @api presentStatus = PRESENT_STATUS;
     @api readOnly = false;
-    @api flexipageRegionWidth;
 
     name;
-    rowContainerMediumSize = 4;
 
     _isEdited;
     recordId;
@@ -103,11 +101,5 @@ export default class AttendanceRow extends LightningElement {
     handleQuantityChange(event) {
         this.localRecord[this.fields.quantity.fieldApiName] = event.detail.value;
         this._isEdited = true;
-    }
-
-    connectedCallback() {
-        if (this.flexipageRegionWidth === "SMALL") {
-            this.rowContainerMediumSize = 3;
-        }
     }
 }

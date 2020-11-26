@@ -7,6 +7,8 @@
  *
  */
 public with sharing class ServiceSessionSelector {
+    private static final String RECENT_SESSIONS_VIEW = 'RecentSessionsView';
+
     public List<ServiceSession__c> getServiceSessionsByStartDate(String dateLiteral) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
         Set<String> allowedSessionStatuses = new Set<String>{ 'Pending', 'Complete' };
@@ -25,7 +27,7 @@ public with sharing class ServiceSessionSelector {
             new FieldSetService()
                 .getFieldByFieldPath(
                     String.valueOf(ServiceSession__c.SObjectType),
-                    'RecentSessionsView'
+                    RECENT_SESSIONS_VIEW
                 )
                 .keySet()
         );

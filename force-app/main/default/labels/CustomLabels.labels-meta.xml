@@ -598,6 +598,13 @@
         <value>Months</value>
     </labels>
     <labels>
+        <fullName>Not_Available</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Not Available</shortDescription>
+        <value>N/A</value>
+    </labels>
+    <labels>
         <fullName>Years</fullName>
         <language>en_US</language>
         <protected>true</protected>

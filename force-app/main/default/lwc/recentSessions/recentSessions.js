@@ -9,16 +9,21 @@ import LOADING_LABEL from "@salesforce/label/c.Loading";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import SERVICE_SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
+import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
+import NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
 import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 import SERVICE_SCHEDULE_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
+import SERVICE_LINK_FIELD from "@salesforce/schema/ServiceSession__c.ServiceLink__c";
+
+import getFieldByFieldPath from "@salesforce/apex/FieldSetController.getFieldByFieldPath";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const THIS_WEEK = "THIS_WEEK";
-const COMPLETE = "Complete";
+const FIELD_SET_NAME = "RecentSessionsView";
 
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
@@ -45,15 +50,50 @@ export default class RecentSessions extends LightningElement {
     };
 
     fields = {
+        id: ID_FIELD.fieldApiName,
+        name: NAME_FIELD.fieldApiName,
         sessionStartDate: SESSION_START_DATE.fieldApiName,
         serviceSchedule: SERVICE_SCHEDULE_FIELD.fieldApiName,
         service: SERVICE_FIELD.fieldApiName,
         status: STATUS_FIELD.fieldApiName,
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
+        serviceLink: SERVICE_LINK_FIELD.fieldApiName,
     };
+
+    displayPrimaryServiceProvider;
+    outputFields = [];
 
     HOME = "Home";
     END = "End";
+
+    @wire(getFieldByFieldPath, {
+        objectName: SERVICE_SESSION_OBJECT.objectApiName,
+        fieldSetName: FIELD_SET_NAME,
+    })
+    wiredFields({ error, data }) {
+        if (data) {
+            console.log("fields", JSON.stringify(data));
+            for (const [key, val] of Object.entries(data)) {
+                let outputField = { ...val };
+                console.log(key, val);
+                if (
+                    key === this.fields.id ||
+                    key === this.fields.name ||
+                    key === this.fields.status
+                ) {
+                    continue;
+                } else if (key === this.fields.primaryServiceProvider) {
+                    this.displayPrimaryServiceProvider = true;
+                    continue;
+                }
+                outputField.path = key;
+                console.log(outputField);
+                this.outputFields.push(outputField);
+            }
+        } else if (error) {
+            console.log(error);
+        }
+    }
 
     @wire(getObjectInfo, { objectApiName: SERVICE_SESSION_OBJECT })
     serviceSessionInfo(result, error) {
@@ -83,7 +123,7 @@ export default class RecentSessions extends LightningElement {
     }
 
     @wire(getMenuOptions)
-    wiredmenuOptions(result, error) {
+    wiredMenuOptions(result, error) {
         if (!result.data) {
             return;
         }
@@ -114,16 +154,6 @@ export default class RecentSessions extends LightningElement {
         }
 
         let sessions = JSON.parse(JSON.stringify(records));
-
-        sessions.forEach(element => {
-            let serviceSchedule = element[this.serviceScheduleRelationshipName];
-
-            element.showCompleteIcon = element[this.fields.status] === COMPLETE;
-            element.showPrimaryServiceProviderIcon =
-                element[this.fields.primaryServiceProvider] !== undefined ? true : false;
-            element.sessionStartDate = element[this.fields.sessionStartDate];
-            element.serviceName = serviceSchedule[this.serviceRelationshipName].Name;
-        });
 
         return sessions;
     }

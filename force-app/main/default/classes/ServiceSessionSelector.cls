@@ -21,20 +21,19 @@ public with sharing class ServiceSessionSelector {
         String serviceRelationship =
             ServiceSchedule__c.Service__c.getDescribe().getRelationshipName() + '.';
 
-        List<String> fields = new List<String>{
-            String.valueOf(ServiceSession__c.Id),
-            String.valueOf(ServiceSession__c.Name),
-            String.valueOf(ServiceSession__c.PrimaryServiceProvider__c),
-            String.valueOf(ServiceSession__c.SessionStart__c),
-            String.valueOf(ServiceSession__c.Status__c),
-            scheduleRelationship +
-            serviceRelationship +
-            String.valueOf(Service__c.Name)
-        };
+        Set<String> fields = new Set<String>(
+            new FieldSetService()
+                .getFieldByFieldPath(
+                    String.valueOf(ServiceSession__c.SObjectType),
+                    'RecentSessionsView'
+                )
+                .keySet()
+        );
+        fields.add(String.valueOf(ServiceSession__c.Name)); // Name is required
 
         QueryBuilder queryBuilder = new QueryBuilder()
             .withSObjectType(ServiceSession__c.SObjectType)
-            .withSelectFields(fields);
+            .withSelectFields(new List<String>(fields));
 
         queryBuilder.addCondition(
             String.valueOf(ServiceSession__c.SessionStart__c) +
@@ -49,6 +48,8 @@ public with sharing class ServiceSessionSelector {
         queryBuilder.withOrderBy(String.valueOf(ServiceSession__c.SessionStart__c));
 
         allSessions = Database.query(queryBuilder.buildSoqlQuery());
+
+        System.debug(allSessions);
 
         return Security.stripInaccessible(AccessType.READABLE, allSessions).getRecords();
     }

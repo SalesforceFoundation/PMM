@@ -8,15 +8,9 @@ import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
-import SERVICE_SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
 import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
 import NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
-import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
-import SERVICE_SCHEDULE_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__c";
-import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
-import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
-import SERVICE_LINK_FIELD from "@salesforce/schema/ServiceSession__c.ServiceLink__c";
 
 import getFieldByFieldPath from "@salesforce/apex/FieldSetController.getFieldByFieldPath";
 
@@ -34,8 +28,6 @@ export default class RecentSessions extends LightningElement {
     isAccordionSectionOpen = false;
     objectLabel;
     objectLabelPlural;
-    serviceScheduleRelationshipName;
-    serviceRelationshipName;
     selectedMenuItemLabel;
     selectedMenuItemValue;
     sessionsContainerDefaultSize = 12;
@@ -52,12 +44,7 @@ export default class RecentSessions extends LightningElement {
     fields = {
         id: ID_FIELD.fieldApiName,
         name: NAME_FIELD.fieldApiName,
-        sessionStartDate: SESSION_START_DATE.fieldApiName,
-        serviceSchedule: SERVICE_SCHEDULE_FIELD.fieldApiName,
-        service: SERVICE_FIELD.fieldApiName,
-        status: STATUS_FIELD.fieldApiName,
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
-        serviceLink: SERVICE_LINK_FIELD.fieldApiName,
     };
 
     displayPrimaryServiceProvider;
@@ -72,10 +59,8 @@ export default class RecentSessions extends LightningElement {
     })
     wiredFields({ error, data }) {
         if (data) {
-            console.log("fields", JSON.stringify(data));
             for (const [key, val] of Object.entries(data)) {
                 let outputField = { ...val };
-                console.log(key, val);
                 if (
                     key === this.fields.id ||
                     key === this.fields.name ||
@@ -87,7 +72,6 @@ export default class RecentSessions extends LightningElement {
                     continue;
                 }
                 outputField.path = key;
-                console.log(outputField);
                 this.outputFields.push(outputField);
             }
         } else if (error) {
@@ -103,20 +87,6 @@ export default class RecentSessions extends LightningElement {
         if (result.data) {
             this.objectLabel = result.data.label;
             this.objectLabelPlural = result.data.labelPlural;
-            this.serviceScheduleRelationshipName =
-                result.data.fields[this.fields.serviceSchedule].relationshipName;
-        } else if (error) {
-            console.log(error);
-        }
-    }
-    @wire(getObjectInfo, { objectApiName: SERVICE_SCHEDULE_OBJECT })
-    serviceScheduleInfo(result, error) {
-        if (!result) {
-            return;
-        }
-        if (result.data) {
-            this.serviceRelationshipName =
-                result.data.fields[this.fields.service].relationshipName;
         } else if (error) {
             console.log(error);
         }
@@ -146,16 +116,6 @@ export default class RecentSessions extends LightningElement {
         } else if (error) {
             console.log(error);
         }
-    }
-
-    processSessions(records) {
-        if (!records) {
-            return records;
-        }
-
-        let sessions = JSON.parse(JSON.stringify(records));
-
-        return sessions;
     }
 
     connectedCallback() {
@@ -206,8 +166,8 @@ export default class RecentSessions extends LightningElement {
                             let currentDate = new Date();
                             this.sessionsData.push({
                                 sessionStartDate: sessionStartDate,
-                                sessions: this.processSessions(
-                                    sessions[sessionStartDate]
+                                sessions: JSON.parse(
+                                    JSON.stringify(sessions[sessionStartDate])
                                 ),
                                 openCurrentSection:
                                     new Date(sessionStartDate).getDate() ===

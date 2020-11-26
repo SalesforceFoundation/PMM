@@ -49,8 +49,6 @@ public with sharing class ServiceSessionSelector {
 
         allSessions = Database.query(queryBuilder.buildSoqlQuery());
 
-        System.debug(allSessions);
-
         return Security.stripInaccessible(AccessType.READABLE, allSessions).getRecords();
     }
 }

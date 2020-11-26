@@ -4,13 +4,12 @@ import { NavigationMixin } from "lightning/navigation";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 import LOCALE from "@salesforce/i18n/locale";
 
-import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import NO_PRIMARY_SERVICE_PROVIDER_LABEL from "@salesforce/label/c.Not_Available";
+
+import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
 import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
-import SERVICE_SCHEDULE_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__c";
-import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
 import SERVICE_LINK_FIELD from "@salesforce/schema/ServiceSession__c.ServiceLink__c";
 
@@ -34,8 +33,6 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
 
     fields = {
         sessionStartDate: SESSION_START_DATE.fieldApiName,
-        serviceSchedule: SERVICE_SCHEDULE_FIELD.fieldApiName,
-        service: SERVICE_FIELD.fieldApiName,
         status: STATUS_FIELD.fieldApiName,
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
         serviceLink: SERVICE_LINK_FIELD.fieldApiName,

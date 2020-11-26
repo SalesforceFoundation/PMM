@@ -213,6 +213,10 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             : this.labels.printableView;
     }
 
+    get showPrintButton() {
+        return this.hasReadPermissions && this.hasServiceDeliveries;
+    }
+
     get displayHeader() {
         return this.pageRef.type === PAGE_NAVIGATION_TYPE ? true : false;
     }

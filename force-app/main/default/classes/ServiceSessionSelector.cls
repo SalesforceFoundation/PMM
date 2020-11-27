@@ -32,6 +32,7 @@ public with sharing class ServiceSessionSelector {
                 .keySet()
         );
         fields.add(String.valueOf(ServiceSession__c.Name)); // Name is required
+        fields.add(String.valueOf(ServiceSession__c.Status__c)); // Status is required
 
         QueryBuilder queryBuilder = new QueryBuilder()
             .withSObjectType(ServiceSession__c.SObjectType)

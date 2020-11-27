@@ -44,14 +44,6 @@ export default class FormattedField extends LightningElement {
         return !(this.isDateTime || this.isNumber || this.isDate || this.isTime);
     }
 
-    get isRequired() {
-        return this.field.isRequired;
-    }
-
-    get relationshipName() {
-        return this.field.relationshipName;
-    }
-
     get value() {
         if (!this.record) {
             return undefined;

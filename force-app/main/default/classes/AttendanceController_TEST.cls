@@ -101,4 +101,49 @@ public with sharing class AttendanceController_TEST {
             deliveries
         );
     }
+
+    @IsTest
+    private static void shouldCallServiceToCheckFLS() {
+        String methodName = 'checkFieldPermissions';
+        Map<String, Boolean> expected = new Map<String, Boolean>();
+        serviceStub.withReturnValue(methodName, expected);
+        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+
+        Test.startTest();
+        Map<String, Boolean> actual = AttendanceController.checkFieldPermissions();
+        Test.stopTest();
+
+        serviceStub.assertCalled(methodName);
+        System.assertEquals(
+            expected,
+            actual,
+            'Expected the controller to return the same value returned by the service.'
+        );
+    }
+
+    @IsTest
+    private static void shouldRethrowExceptionFromServiceOnFLSCheck() {
+        String methodName = 'checkFieldPermissions';
+
+        serviceStub.withThrowException(methodName);
+        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+        Exception actualException;
+        Map<String, Boolean> actual;
+        Test.startTest();
+        try {
+            actual = AttendanceController.checkFieldPermissions();
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+        System.assertEquals(null, actual);
+
+        serviceStub.assertCalled(methodName);
+    }
 }

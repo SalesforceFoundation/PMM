@@ -25,6 +25,15 @@ public with sharing class AttendanceService_TEST {
         'upsertServiceDeliveries',
         List<ServiceDelivery__c>.class
     );
+    private static Stub permValidatorStub = new Stub(PermissionValidator.class);
+    private static Stub.Signature hasObjectAccess = new Stub.Signature(
+        'hasObjectAccess',
+        new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
+    );
+    private static Stub.Signature hasFLSAccessForFields = new Stub.Signature(
+        'hasFLSAccessForFields',
+        new List<Type>{ List<Schema.SObjectField>.class, String.class }
+    );
 
     private static AttendanceService service = new AttendanceService();
 
@@ -294,6 +303,24 @@ public with sharing class AttendanceService_TEST {
         );
 
         domainStub.assert();
+    }
+
+    @IsTest
+    private static void shouldCallPermissionValidator() {
+        permValidatorStub.when(hasObjectAccess).calledWithAny().thenReturn(true);
+        permValidatorStub.when(hasFLSAccessForFields).calledWithAny().thenReturn(true);
+        PermissionValidator.instance = (PermissionValidator) permValidatorStub.create();
+
+        Map<String, Boolean> expected = new Map<String, Boolean>{
+            'read' => true,
+            'write' => true
+        };
+
+        Test.startTest();
+        Map<String, Boolean> actual = service.checkFieldPermissions();
+        Test.stopTest();
+
+        permValidatorStub.assert();
     }
 
     private static ServiceDelivery__c createMockDelivery() {

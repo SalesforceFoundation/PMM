@@ -58,21 +58,15 @@
             <lightning-layout-item
                 size="12"
                 class="slds-list_horizontal slds-truncate"
-                if:true={displayPrimaryServiceProvider}
+                if:true={session.hasServiceProviderValue}
             >
                 <lightning-icon icon-name="utility:user" size="xx-small"></lightning-icon>
                 <lightning-output-field
-                    if:true={session.hasServiceProviderValue}
                     field-name={fields.primaryServiceProvider}
                     variant="label-hidden"
                     class="slds-var-p-left_x-small"
                 >
                 </lightning-output-field>
-                <lightning-formatted-text
-                    value={labels.noPrimaryServiceProvider}
-                    if:false={session.hasServiceProviderValue}
-                    class="slds-var-p-left_x-small"
-                ></lightning-formatted-text>
             </lightning-layout-item>
         </lightning-layout>
     </lightning-record-view-form>

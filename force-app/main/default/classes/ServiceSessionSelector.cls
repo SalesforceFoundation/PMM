@@ -33,6 +33,7 @@ public with sharing class ServiceSessionSelector {
         );
         fields.add(String.valueOf(ServiceSession__c.Name)); // Name is required
         fields.add(String.valueOf(ServiceSession__c.Status__c)); // Status is required
+        fields.add(String.valueOf(ServiceSession__c.SessionStart__c)); // Start date is used to group the records
 
         QueryBuilder queryBuilder = new QueryBuilder()
             .withSObjectType(ServiceSession__c.SObjectType)

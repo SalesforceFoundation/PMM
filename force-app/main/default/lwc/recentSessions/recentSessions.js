@@ -47,7 +47,6 @@ export default class RecentSessions extends LightningElement {
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
     };
 
-    displayPrimaryServiceProvider;
     outputFields = [];
 
     HOME = "Home";
@@ -61,14 +60,14 @@ export default class RecentSessions extends LightningElement {
         if (data) {
             for (const [key, val] of Object.entries(data)) {
                 let outputField = { ...val };
+                // Special handling is done with the following fields
+                // and should not be used for field set driven output
                 if (
                     key === this.fields.id ||
                     key === this.fields.name ||
-                    key === this.fields.status
+                    key === this.fields.status ||
+                    key === this.fields.primaryServiceProvider
                 ) {
-                    continue;
-                } else if (key === this.fields.primaryServiceProvider) {
-                    this.displayPrimaryServiceProvider = true;
                     continue;
                 }
                 outputField.path = key;

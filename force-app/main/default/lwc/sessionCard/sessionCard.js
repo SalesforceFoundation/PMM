@@ -5,7 +5,6 @@ import TIME_ZONE from "@salesforce/i18n/timeZone";
 import LOCALE from "@salesforce/i18n/locale";
 
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
-import NO_PRIMARY_SERVICE_PROVIDER_LABEL from "@salesforce/label/c.Not_Available";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
@@ -17,7 +16,6 @@ const COMPLETE = "Complete";
 const STRING = "STRING";
 
 export default class SessionCard extends NavigationMixin(LightningElement) {
-    @api displayPrimaryServiceProvider;
     serviceSessionObject = SERVICE_SESSION_OBJECT;
     sessionURL;
     populatedFields = [];
@@ -28,7 +26,6 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
 
     labels = {
         sucess: SUCCESS_LABEL,
-        noPrimaryServiceProvider: NO_PRIMARY_SERVICE_PROVIDER_LABEL,
     };
 
     fields = {
@@ -56,10 +53,7 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
             if (key === this.fields.status) {
                 this._session.showCompleteIcon =
                     val.toLowerCase() === COMPLETE.toLowerCase();
-            } else if (
-                this.displayPrimaryServiceProvider &&
-                key === this.fields.primaryServiceProvider
-            ) {
+            } else if (key === this.fields.primaryServiceProvider) {
                 this._session.hasServiceProviderValue = val !== undefined;
             } else if (key === this.fields.serviceLink) {
                 this._session[key] = this._session[key].replace(

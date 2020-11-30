@@ -42,55 +42,51 @@
                 for:item="sessionData"
                 if:true={sessionsData}
             >
-                <c-accordion-section
-                    class="slds-var-p-right_small"
-                    key={sessionData.sessionStartDate}
-                    open-current-section={sessionData.openCurrentSection}
-                >
-                    <div
-                        slot="clickableHeaderSection"
-                        style="font-size: 14px;"
-                        class="slds-var-p-left_x-small"
+                <div class="slds-border_bottom" key={sessionData.sessionStartDate}>
+                    <c-accordion-section
+                        class="slds-var-p-right_small"
+                        open-current-section={sessionData.openCurrentSection}
                     >
-                        {sessionData.sessionStartDate}
-                    </div>
-                    <div
-                        slot="extraInfoSection"
-                        class="slds-var-p-left_xxx-small section-divider"
-                    >
-                        <div class="slds-var-p-bottom_xx-small">
+                        <div
+                            slot="clickableHeaderSection"
+                            style="font-size: 14px;"
+                            class="slds-var-p-left_x-small"
+                        >
+                            {sessionData.sessionStartDate}
+                        </div>
+                        <div slot="extraInfoSection" class="slds-var-p-left_xxx-small">
                             {sessionData.totalSessions}
                         </div>
-                    </div>
-                    <div class="slds-is-relative">
-                        <c-skip-links>
-                            <lightning-layout
-                                horizontal-align="spread"
-                                multiple-rows="true"
-                            >
-                                <template
-                                    for:each={sessionData.sessions}
-                                    for:item="session"
+                        <div class="slds-is-relative">
+                            <c-skip-links>
+                                <lightning-layout
+                                    horizontal-align="spread"
+                                    multiple-rows="true"
                                 >
-                                    <lightning-layout-item
-                                        size={sessionsContainerDefaultSize}
-                                        key={session.Id}
-                                        medium-device-size={sessionsContainerMediumSize}
-                                        large-device-size={sessionsContainerLargeSize}
-                                        padding={sessionsContainerPaddingAround}
+                                    <template
+                                        for:each={sessionData.sessions}
+                                        for:item="session"
                                     >
-                                        <div onkeydown={listEscapeHandler}>
-                                            <c-session-card
-                                                output-fields={outputFields}
-                                                session={session}
-                                            ></c-session-card>
-                                        </div>
-                                    </lightning-layout-item>
-                                </template>
-                            </lightning-layout>
-                        </c-skip-links>
-                    </div>
-                </c-accordion-section>
+                                        <lightning-layout-item
+                                            size={sessionsContainerDefaultSize}
+                                            key={session.Id}
+                                            medium-device-size={sessionsContainerMediumSize}
+                                            large-device-size={sessionsContainerLargeSize}
+                                            padding={sessionsContainerPaddingAround}
+                                        >
+                                            <div onkeydown={listEscapeHandler}>
+                                                <c-session-card
+                                                    output-fields={outputFields}
+                                                    session={session}
+                                                ></c-session-card>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </template>
+                                </lightning-layout>
+                            </c-skip-links>
+                        </div>
+                    </c-accordion-section>
+                </div>
             </template>
         </div>
     </lightning-card>

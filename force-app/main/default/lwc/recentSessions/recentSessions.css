@@ -5,7 +5,3 @@
 .small-box {
     padding: var(--lwc-varSpacingXSmall, 0.5rem);
 }
-
-.section-divider {
-    border-bottom: 1px solid #dddbda;
-}

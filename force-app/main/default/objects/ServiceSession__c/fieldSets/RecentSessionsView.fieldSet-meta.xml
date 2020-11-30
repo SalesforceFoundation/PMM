@@ -16,7 +16,7 @@
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
-    <description>The fields displayed on the Recent Sessions home page component.</description>
+    <description>This field set controls the Recent Sessions view on the Home tab.</description>
     <displayedFields>
         <field>SessionStart__c</field>
         <isFieldManaged>false</isFieldManaged>

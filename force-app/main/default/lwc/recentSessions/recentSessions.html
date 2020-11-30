@@ -54,8 +54,13 @@
                     >
                         {sessionData.sessionStartDate}
                     </div>
-                    <div slot="extraInfoSection" class="slds-var-p-left_xxx-small">
-                        {sessionData.totalSessions}
+                    <div
+                        slot="extraInfoSection"
+                        class="slds-var-p-left_xxx-small section-divider"
+                    >
+                        <div class="slds-var-p-bottom_xx-small">
+                            {sessionData.totalSessions}
+                        </div>
                     </div>
                     <div class="slds-is-relative">
                         <c-skip-links>

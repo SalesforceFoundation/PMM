@@ -1,4 +1,8 @@
 @media print {
+    body {
+        max-width: 100%;
+    }
+
     .slds-page-header {
         display: none;
     }

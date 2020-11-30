@@ -42,7 +42,7 @@ import SAVE_LABEL from "@salesforce/label/c.Save";
 import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import QUANTITY_LABEL from "@salesforce/label/c.Quantity";
 import PRINT_LABEL from "@salesforce/label/c.Print";
-import PRINTABLE_VIEWABLE_LABEL from "@salesforce/label/c.Printable_View";
+import PRINTABLE_VIEW_LABEL from "@salesforce/label/c.Printable_View";
 import NO_PARTICIPANTS_HEADER_LABEL from "@salesforce/label/c.No_Participants_Header";
 import NO_PARTICIPANTS_MESSAGE_LABEL from "@salesforce/label/c.No_Participants_Message";
 import NO_PERMISSIONS_MESSAGE_LABEL from "@salesforce/label/c.No_Permission_Message";
@@ -54,7 +54,7 @@ const LONG_DATA_TYPES = ["TEXTAREA", "PICKLIST", "REFERENCE"];
 const ID = "Id";
 const COMPLETE = "Complete";
 const PENDING = "Pending";
-const PAGE_NAVIGATION_TYPE = "standard__navItemPage";
+const ITEM_PAGE_NAVIGATION_TYPE = "standard__navItemPage";
 const ATTENDANCE_TAB = "Attendance";
 export default class Attendance extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -84,7 +84,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         cancel: CANCEL_LABEL,
         quantity: QUANTITY_LABEL,
         print: PRINT_LABEL,
-        printableView: PRINTABLE_VIEWABLE_LABEL,
+        printableView: PRINTABLE_VIEW_LABEL,
         noParticipantsHeader: NO_PARTICIPANTS_HEADER_LABEL,
         noParticipantsMessage: NO_PARTICIPANTS_MESSAGE_LABEL,
         noPermissions: NO_PERMISSIONS_MESSAGE_LABEL,
@@ -208,7 +208,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     get printButtonLabel() {
-        return this.pageRef.type === PAGE_NAVIGATION_TYPE
+        return this.pageRef.type === ITEM_PAGE_NAVIGATION_TYPE
             ? this.labels.print
             : this.labels.printableView;
     }
@@ -218,7 +218,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     get displayHeader() {
-        return this.pageRef.type === PAGE_NAVIGATION_TYPE ? true : false;
+        return this.pageRef.type === ITEM_PAGE_NAVIGATION_TYPE ? true : false;
     }
 
     get hasPermissions() {
@@ -342,11 +342,11 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     handlePrintClick() {
-        if (this.pageRef.type === PAGE_NAVIGATION_TYPE) {
+        if (this.pageRef.type === ITEM_PAGE_NAVIGATION_TYPE) {
             window.print();
         } else {
             this[NavigationMixin.GenerateUrl]({
-                type: PAGE_NAVIGATION_TYPE,
+                type: ITEM_PAGE_NAVIGATION_TYPE,
                 attributes: {
                     apiName: prefixNamespace(ATTENDANCE_TAB),
                 },

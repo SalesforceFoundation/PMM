@@ -15,9 +15,9 @@
         display: none;
     }
 
-    /* div.slds-form {
-        display: none;
-    } */
+    @page {
+        size: landscape;
+    }
 }
 
 div.slds-form-element__control > .slds-form-element__static {

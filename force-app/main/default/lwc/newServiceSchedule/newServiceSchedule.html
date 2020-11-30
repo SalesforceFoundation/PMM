@@ -103,7 +103,32 @@
                         ></c-picklist>
                     </lightning-layout-item>
                     <lightning-layout-item size={sizes.small}>
-                        <lightning-layout if:true={isRecurring}>
+                        <lightning-layout if:true={isRecurring} multiple-rows="true">
+                            <!--INTERVAL-->
+                            <lightning-layout-item size="12">
+                                <lightning-layout vertical-align="end">
+                                    <!--flexibility="auto, no-grow"-->
+                                    <lightning-layout-item>
+                                        {labels.every}
+                                    </lightning-layout-item>
+                                    <lightning-layout-item
+                                        size="3"
+                                        class="slds-var-p-horizontal_x-small"
+                                    >
+                                        <lightning-input-field
+                                            field-name={dateFields.interval.apiName}
+                                            value={dateFields.interval.value}
+                                            variant="label-hidden"
+                                            class="hideHelpText"
+                                            onchange={handleIntervalChange}
+                                        ></lightning-input-field>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item flexibility="auto, no-grow">
+                                        {units}
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                            <!--END CONDITION-->
                             <lightning-layout-item size={sizes.small}>
                                 <c-picklist
                                     picklist={picklistFields.seriesEnds}

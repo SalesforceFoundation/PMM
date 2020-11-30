@@ -28,11 +28,13 @@ public with sharing class AttendanceService_TEST {
     private static Stub permValidatorStub = new Stub(PermissionValidator.class);
     private static Stub.Signature hasObjectAccess = new Stub.Signature(
         'hasObjectAccess',
-        new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
+        SObjectType.class,
+        PermissionValidator.CRUDAccessType.class
     );
     private static Stub.Signature hasFLSAccessForFields = new Stub.Signature(
         'hasFLSAccessForFields',
-        new List<Type>{ List<Schema.SObjectField>.class, String.class }
+        List<Schema.SObjectField>.class,
+        String.class
     );
 
     private static AttendanceService service = new AttendanceService();
@@ -42,25 +44,24 @@ public with sharing class AttendanceService_TEST {
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
 
-        selectorStub
-            .when(getServiceDeliveriesBySessionId)
-            .calledWith(new List<Object>{ sessionId })
-            .thenReturn(new List<ServiceDelivery__c>());
-        selectorStub
-            .when(getServiceParticipantsByScheduleId)
-            .calledWith(new List<Object>{ scheduleId, new Set<Id>() })
-            .thenReturn(new List<ServiceParticipant__c>());
-        selectorStub
-            .when(getSession)
-            .calledWith(new List<Object>{ sessionId })
-            .thenReturn(new ServiceSession__c(ServiceSchedule__c = scheduleId));
+        selectorStub = (new Stub.Builder())
+            .forType(AttendanceSelector.class)
+            .when('getServiceParticipantsByScheduleId', Id.class, Set<Id>.class)
+            .calledWith(sessionId)
+            .thenReturn(new List<ServiceParticipant__c>())
+            .when('getServiceDeliveriesBySessionId', Id.class)
+            .calledWith(scheduleId, new Set<Id>())
+            .thenReturn(new List<ServiceDelivery__c>())
+            .when('getSession', Id.class)
+            .calledWith(sessionId)
+            .thenReturn(new ServiceSession__c(ServiceSchedule__c = scheduleId))
+            .build();
+
         service.attendanceSelector = (AttendanceSelector) selectorStub.create();
 
         Test.startTest();
         service.generateRoster(sessionId);
         Test.stopTest();
-
-        selectorStub.assert();
     }
 
     @IsTest

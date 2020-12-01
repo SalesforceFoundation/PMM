@@ -49,7 +49,7 @@ describe("c-formattedField", () => {
             await expect(element).toBeAccessible();
         });
     });
-    it("displays a lightning formatted text field when a relatd value is present", async () => {
+    it("displays a lightning formatted text field when a related value is present", async () => {
         mockField.path = "Account.Name";
         mockRecord.Account = { Name: "Hola" };
         element.field = mockField;
@@ -64,7 +64,7 @@ describe("c-formattedField", () => {
             await expect(element).toBeAccessible();
         });
     });
-    it("displays a lightning formatted text field when a relatd value is not present", async () => {
+    it("displays a lightning formatted text field when a related value is not present", async () => {
         mockField.path = "Account.Name";
         element.field = mockField;
         element.record = mockRecord;
@@ -78,7 +78,7 @@ describe("c-formattedField", () => {
             await expect(element).toBeAccessible();
         });
     });
-    it("dispalys a lightning formatted text field when a value is missing", async () => {
+    it("displays a lightning formatted text field when a value is missing", async () => {
         mockField.apiName = "Title";
 
         element.field = mockField;
@@ -94,7 +94,7 @@ describe("c-formattedField", () => {
         });
     });
 
-    it("dispalys a lightning formatted text field when the record is missing", async () => {
+    it("displays a lightning formatted text field when the record is missing", async () => {
         element.field = mockField;
         document.body.appendChild(element);
 
@@ -107,7 +107,7 @@ describe("c-formattedField", () => {
         });
     });
 
-    it("dispalys a lightning formatted date time field when type is date", async () => {
+    it("displays a lightning formatted date time field when type is date", async () => {
         let today = new Date();
         mockField.type = "DATE";
         mockField.apiName = "Today";
@@ -126,7 +126,7 @@ describe("c-formattedField", () => {
         });
     });
 
-    it("dispalys a lightning formatted date time field when type is date-time", async () => {
+    it("displays a lightning formatted date time field when type is date-time", async () => {
         let today = new Date();
         mockField.type = "DATETIME";
         mockField.apiName = "Today";
@@ -145,7 +145,7 @@ describe("c-formattedField", () => {
         });
     });
 
-    it("dispalys a lightning formatted time field when type is time", async () => {
+    it("displays a lightning formatted time field when type is time", async () => {
         let time = 1800000;
         mockField.type = "TIME";
         mockField.apiName = "Time";

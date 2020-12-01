@@ -363,7 +363,8 @@ public with sharing class ServiceScheduleService_TEST {
             Id = TestUtil.mockId(Contact.SObjectType)
         );
         DateTime firstSessionStart = System.now();
-        DateTime firstSessionEnd = System.now().addHours(2);
+        Integer hours = 2;
+        DateTime firstSessionEnd = System.now().addHours(hours);
         ServiceSchedule__c schedule = new ServiceSchedule__c(
             Name = 'test',
             FirstSessionStart__c = firstSessionStart,
@@ -417,10 +418,7 @@ public with sharing class ServiceScheduleService_TEST {
                 new ServiceSession__c(
                     Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = DateTime.newInstance(
-                        sessionDateTime.date(),
-                        firstSessionEnd.time()
-                    )
+                    SessionEnd__c = sessionDateTime.addHours(hours)
                 )
             );
         }
@@ -486,7 +484,8 @@ public with sharing class ServiceScheduleService_TEST {
         String getServiceProviderMethod = 'getContactsByIds';
         String rRuleString = 'abc';
         DateTime firstSessionStart = System.now();
-        DateTime firstSessionEnd = System.now().addHours(2);
+        Integer hours = 2;
+        DateTime firstSessionEnd = System.now().addHours(hours);
         ServiceSchedule__c schedule = new ServiceSchedule__c(
             Name = 'test',
             FirstSessionStart__c = firstSessionStart,
@@ -534,10 +533,7 @@ public with sharing class ServiceScheduleService_TEST {
                 new ServiceSession__c(
                     Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = DateTime.newInstance(
-                        sessionDateTime.date(),
-                        firstSessionEnd.time()
-                    )
+                    SessionEnd__c = sessionDateTime.addHours(hours)
                 )
             );
         }

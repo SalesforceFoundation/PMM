@@ -8,17 +8,16 @@ import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
-import SERVICE_SCHEDULE_OBJECT from "@salesforce/schema/ServiceSchedule__c";
-import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
-import SERVICE_SCHEDULE_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__c";
-import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
-import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
+import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
+import NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
+
+import getFieldByFieldPath from "@salesforce/apex/FieldSetController.getFieldByFieldPath";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const THIS_WEEK = "THIS_WEEK";
-const COMPLETE = "Complete";
+const FIELD_SET_NAME = "RecentSessionsView";
 
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
@@ -29,8 +28,6 @@ export default class RecentSessions extends LightningElement {
     isAccordionSectionOpen = false;
     objectLabel;
     objectLabelPlural;
-    serviceScheduleRelationshipName;
-    serviceRelationshipName;
     selectedMenuItemLabel;
     selectedMenuItemValue;
     sessionsContainerDefaultSize = 12;
@@ -45,15 +42,41 @@ export default class RecentSessions extends LightningElement {
     };
 
     fields = {
-        sessionStartDate: SESSION_START_DATE.fieldApiName,
-        serviceSchedule: SERVICE_SCHEDULE_FIELD.fieldApiName,
-        service: SERVICE_FIELD.fieldApiName,
-        status: STATUS_FIELD.fieldApiName,
+        id: ID_FIELD.fieldApiName,
+        name: NAME_FIELD.fieldApiName,
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
     };
 
+    outputFields = [];
+
     HOME = "Home";
     END = "End";
+
+    @wire(getFieldByFieldPath, {
+        objectName: SERVICE_SESSION_OBJECT.objectApiName,
+        fieldSetName: FIELD_SET_NAME,
+    })
+    wiredFields({ error, data }) {
+        if (data) {
+            for (const [key, val] of Object.entries(data)) {
+                let outputField = { ...val };
+                // Special handling is done with the following fields
+                // and should not be used for field set driven output
+                if (
+                    key === this.fields.id ||
+                    key === this.fields.name ||
+                    key === this.fields.status ||
+                    key === this.fields.primaryServiceProvider
+                ) {
+                    continue;
+                }
+                outputField.path = key;
+                this.outputFields.push(outputField);
+            }
+        } else if (error) {
+            console.log(error);
+        }
+    }
 
     @wire(getObjectInfo, { objectApiName: SERVICE_SESSION_OBJECT })
     serviceSessionInfo(result, error) {
@@ -63,27 +86,13 @@ export default class RecentSessions extends LightningElement {
         if (result.data) {
             this.objectLabel = result.data.label;
             this.objectLabelPlural = result.data.labelPlural;
-            this.serviceScheduleRelationshipName =
-                result.data.fields[this.fields.serviceSchedule].relationshipName;
-        } else if (error) {
-            console.log(error);
-        }
-    }
-    @wire(getObjectInfo, { objectApiName: SERVICE_SCHEDULE_OBJECT })
-    serviceScheduleInfo(result, error) {
-        if (!result) {
-            return;
-        }
-        if (result.data) {
-            this.serviceRelationshipName =
-                result.data.fields[this.fields.service].relationshipName;
         } else if (error) {
             console.log(error);
         }
     }
 
     @wire(getMenuOptions)
-    wiredmenuOptions(result, error) {
+    wiredMenuOptions(result, error) {
         if (!result.data) {
             return;
         }
@@ -106,26 +115,6 @@ export default class RecentSessions extends LightningElement {
         } else if (error) {
             console.log(error);
         }
-    }
-
-    processSessions(records) {
-        if (!records) {
-            return records;
-        }
-
-        let sessions = JSON.parse(JSON.stringify(records));
-
-        sessions.forEach(element => {
-            let serviceSchedule = element[this.serviceScheduleRelationshipName];
-
-            element.showCompleteIcon = element[this.fields.status] === COMPLETE;
-            element.showPrimaryServiceProviderIcon =
-                element[this.fields.primaryServiceProvider] !== undefined ? true : false;
-            element.sessionStartDate = element[this.fields.sessionStartDate];
-            element.serviceName = serviceSchedule[this.serviceRelationshipName].Name;
-        });
-
-        return sessions;
     }
 
     connectedCallback() {
@@ -176,8 +165,8 @@ export default class RecentSessions extends LightningElement {
                             let currentDate = new Date();
                             this.sessionsData.push({
                                 sessionStartDate: sessionStartDate,
-                                sessions: this.processSessions(
-                                    sessions[sessionStartDate]
+                                sessions: JSON.parse(
+                                    JSON.stringify(sessions[sessionStartDate])
                                 ),
                                 openCurrentSection:
                                     new Date(sessionStartDate).getDate() ===

@@ -67,18 +67,18 @@
         <value>Attendance</value>
     </labels>
     <labels>
-        <fullName>Save_Attendance_Success</fullName>
+        <fullName>Save_Service_Delivery_Success</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Saved {0} attendance records.</shortDescription>
-        <value>Saved {0} attendance records.</value>
+        <shortDescription>Saved {0} Service Delivery records.</shortDescription>
+        <value>Saved {0} Service Delivery records.</value>
     </labels>
     <labels>
-        <fullName>Save_Attendance_No_Updates</fullName>
+        <fullName>Save_Service_Delivery_No_Updates</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>There are no attendance records to update.</shortDescription>
-        <value>There are no attendance records to update.</value>
+        <shortDescription>There are no Service Delivery records to update.</shortDescription>
+        <value>There are no Service Delivery records to update.</value>
     </labels>
     <labels>
         <fullName>No_Participants_Header</fullName>
@@ -384,6 +384,20 @@
         <protected>true</protected>
         <shortDescription>Previous button</shortDescription>
         <value>Previous</value>
+    </labels>
+    <labels>
+        <fullName>Print</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Print button</shortDescription>
+        <value>Print</value>
+    </labels>
+    <labels>
+        <fullName>Printable_View</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Printable View button</shortDescription>
+        <value>Printable View</value>
     </labels>
     <labels>
         <fullName>Quantity</fullName>

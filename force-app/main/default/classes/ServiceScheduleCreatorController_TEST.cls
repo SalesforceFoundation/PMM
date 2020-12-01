@@ -53,6 +53,48 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
+    private static void shouldPassInfoToServiceOnSaveNewParticipants() {
+        String methodName = 'saveNewParticipants';
+        List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>();
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        ServiceScheduleCreatorController.saveNewParticipants(engagements, scheduleId);
+        Test.stopTest();
+
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ List<ProgramEngagement__c>.class, Id.class },
+            new List<Object>{ engagements, scheduleId }
+        );
+    }
+
+    @IsTest
+    private static void shouldGetExistingParticipantContactIds() {
+        String methodName = 'getExistingParticipantContactIds';
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        List<Id> expected = new List<Id>();
+
+        serviceStub.withReturnValue(methodName, Id.class, expected);
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        List<Id> actual = ServiceScheduleCreatorController.getExistingParticipantContactIds(
+            scheduleId
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Contact Ids not returned from the Service as expected.'
+        );
+        serviceStub.assertCalledWith(methodName, Id.class, scheduleId);
+    }
+
+    @IsTest
     private static void shouldGetNewSessionFromService() {
         DateTime startDateTime = System.now();
         DateTime endDateTime = startDateTime.addHours(1);
@@ -202,6 +244,77 @@ public with sharing class ServiceScheduleCreatorController_TEST {
             actualException.getMessage(),
             'Expected the stub test exception message to have been thrown.'
         );
+    }
+
+    @IsTest
+    private static void rethrowsErrorFromSaveNewParticipantsOnService() {
+        String methodName = 'saveNewParticipants';
+        List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>();
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        Exception actualException;
+
+        serviceStub.withThrowException(
+            methodName,
+            new List<Type>{ List<ProgramEngagement__c>.class, Id.class }
+        );
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        try {
+            ServiceScheduleCreatorController.saveNewParticipants(engagements, scheduleId);
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AuraHandledException,
+            actualException.getTypeName() + ': Expected an aura handled exception.'
+        );
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the stub test exception message to have been thrown.'
+        );
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ List<ProgramEngagement__c>.class, Id.class },
+            new List<Object>{ engagements, scheduleId }
+        );
+    }
+
+    @IsTest
+    private static void rethrowsErrorFromGetExistingParticipantContactIdsOnService() {
+        String methodName = 'getExistingParticipantContactIds';
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+
+        List<Id> actual;
+        Exception actualException;
+        serviceStub.withThrowException(methodName, Id.class);
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+        Test.startTest();
+        try {
+            actual = ServiceScheduleCreatorController.getExistingParticipantContactIds(
+                scheduleId
+            );
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AuraHandledException,
+            actualException.getTypeName() + ': Expected an aura handled exception.'
+        );
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the stub test exception message to have been thrown.'
+        );
+        serviceStub.assertCalledWith(methodName, Id.class, scheduleId);
+        System.assertEquals(null, actual);
     }
 
     @IsTest

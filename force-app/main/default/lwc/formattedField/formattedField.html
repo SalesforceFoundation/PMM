@@ -1,0 +1,36 @@
+<template>
+    <template if:true={field}>
+        <lightning-formatted-date-time
+            if:true={isDateTime}
+            value={value}
+            year="numeric"
+            month="numeric"
+            day="numeric"
+            hour="2-digit"
+            minute="2-digit"
+            time-zone={timeZone}
+            title={label}
+        ></lightning-formatted-date-time>
+        <lightning-formatted-date-time
+            if:true={isDate}
+            value={value}
+            year="numeric"
+            month="numeric"
+            day="numeric"
+            time-zone={timeZone}
+            title={label}
+        ></lightning-formatted-date-time>
+        <lightning-formatted-time
+            if:true={isTime}
+            value={value}
+            title={label}
+        ></lightning-formatted-time>
+        <lightning-formatted-text if:true={isText} value={value} title={label}>
+        </lightning-formatted-text>
+        <lightning-formatted-number
+            if:true={isNumber}
+            value={value}
+            title={label}
+        ></lightning-formatted-number>
+    </template>
+</template>

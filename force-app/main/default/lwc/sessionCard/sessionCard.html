@@ -3,6 +3,7 @@
         record-id={session.Id}
         object-api-name={serviceSessionObject}
         density="compact"
+        if:true={session}
     >
         <lightning-layout
             class="slds-box small-box slds-var-m-top_x-small slds-theme_default"
@@ -35,33 +36,31 @@
                 >
                 </lightning-output-field>
             </lightning-layout-item>
-            <lightning-layout-item
-                size="12"
-                class="slds-var-m-top_xxx-small slds-list_horizontal slds-truncate"
-            >
-                <div>
-                    <lightning-formatted-date-time
-                        value={session.sessionStartDate}
-                        hour="2-digit"
-                        minute="2-digit"
-                        time-zone={timeZone}
-                    ></lightning-formatted-date-time>
-                    <span class="slds-var-p-left_x-small slds-var-p-right_x-small"
-                        >|</span
-                    >
-                    <span>{session.serviceName}</span>
-                </div>
-            </lightning-layout-item>
 
+            <lightning-layout-item size="12" class="slds-var-p-right_x-large">
+                <lightning-layout multiple-rows="true">
+                    <template iterator:it={populatedFields}>
+                        <lightning-layout-item key={it.value.apiName}>
+                            <c-formatted-field
+                                field={it.value}
+                                record={session}
+                            ></c-formatted-field>
+                            <template if:false={it.last}
+                                ><span
+                                    class="slds-var-p-left_xx-small slds-var-p-right_xx-small"
+                                    >{separator}</span
+                                ></template
+                            >
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+            </lightning-layout-item>
             <lightning-layout-item
                 size="12"
-                class="slds-list_horizontal slds-var-m-top_x-small slds-truncate"
+                class="slds-list_horizontal slds-truncate"
+                if:true={session.hasServiceProviderValue}
             >
-                <lightning-icon
-                    icon-name="utility:user"
-                    size="x-small"
-                    if:true={session.showPrimaryServiceProviderIcon}
-                ></lightning-icon>
+                <lightning-icon icon-name="utility:user" size="xx-small"></lightning-icon>
                 <lightning-output-field
                     field-name={fields.primaryServiceProvider}
                     variant="label-hidden"

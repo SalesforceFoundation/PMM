@@ -39,6 +39,22 @@ public with sharing class ServiceScheduleService {
         }
     }
 
+    public List<Id> getExistingParticipantContactIds(Id scheduleId) {
+        return serviceSelector.getExistingParticipantContactIdsByScheduleId(scheduleId);
+    }
+
+    public void saveNewParticipants(
+        List<ProgramEngagement__c> engagements,
+        Id scheduleId
+    ) {
+        ServiceSchedule__c schedule = [
+            SELECT Id, Name, Service__c
+            FROM ServiceSchedule__c
+            WHERE Id = :scheduleId
+        ];
+        domain.insertParticipants(engagements, schedule);
+    }
+
     public SelectParticipantModel getSelectParticipantModel(Id serviceId) {
         SelectParticipantModel model = new SelectParticipantModel();
         populateRecords(serviceId, model);

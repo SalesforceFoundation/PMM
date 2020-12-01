@@ -62,4 +62,28 @@ public with sharing class ServiceSelector {
                 AND DAY_ONLY(convertTimezone(SessionStart__c)) > :startDate
         ];
     }
+
+    public List<Id> getExistingParticipantContactIdsByScheduleId(Id scheduleId) {
+        if (
+            !Schema.SObjectType.Contact.isAccessible() ||
+            !Schema.SObjectType.ServiceParticipant__c.isAccessible()
+        ) {
+            return new List<Id>();
+        }
+        return new List<Id>(
+            new Map<Id, Contact>(
+                    [
+                        SELECT Id
+                        FROM Contact
+                        WHERE
+                            Id IN (
+                                SELECT Contact__c
+                                FROM ServiceParticipant__c
+                                WHERE ServiceSchedule__c = :scheduleId
+                            )
+                    ]
+                )
+                .keySet()
+        );
+    }
 }

@@ -8,8 +8,8 @@
  */
 
 import { LightningElement, track, api, wire } from "lwc";
-
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
+import PE_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 
 export default class ParticipantSelector extends LightningElement {
     @track availableEngagements;
@@ -19,6 +19,7 @@ export default class ParticipantSelector extends LightningElement {
     @api serviceId;
     @api serviceScheduleModel;
     @api selectedParticipants = [];
+    @api previouslySelectedParticipantContactIds = [];
     @api columns;
 
     selectedRowCount = 0;
@@ -34,6 +35,18 @@ export default class ParticipantSelector extends LightningElement {
     objectLabels;
     isLoaded = false;
     rendered = false;
+
+    @api
+    get newParticipantsProgramEngagements() {
+        let result = [];
+        this.selectedParticipants.forEach(row => {
+            let contactId = row[PE_CONTACT_FIELD.fieldApiName];
+            if (!this.previouslySelectedParticipantContactIds.includes(contactId)) {
+                result.push(row);
+            }
+        });
+        return result;
+    }
 
     get labels() {
         return this.serviceScheduleModel.labels.serviceParticipant
@@ -144,8 +157,17 @@ export default class ParticipantSelector extends LightningElement {
         if (this.serviceScheduleModel.selectedParticipants === undefined) {
             return;
         }
-
-        this.selectedRows = this.serviceScheduleModel.selectedParticipants;
+        this.selectedRows = [...this.serviceScheduleModel.selectedParticipants];
+        this.availableEngagements.forEach(eng => {
+            if (
+                this.previouslySelectedParticipantContactIds.includes(
+                    eng[PE_CONTACT_FIELD.fieldApiName]
+                )
+            ) {
+                eng.disableDeselect = true;
+                this.selectedRows.push(eng);
+            }
+        });
         this.handleSelectParticipants();
     }
 
@@ -188,7 +210,7 @@ export default class ParticipantSelector extends LightningElement {
                 iconName: "utility:clear",
                 variant: "bare",
                 iconPosition: "left",
-                disabled: false,
+                disabled: { fieldName: "disableDeselect" },
             },
         });
     }

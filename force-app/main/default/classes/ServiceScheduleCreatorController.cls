@@ -29,10 +29,31 @@ public with sharing class ServiceScheduleCreatorController {
         }
     }
 
+    @AuraEnabled
+    public static void saveNewParticipants(
+        List<ProgramEngagement__c> engagements,
+        Id scheduleId
+    ) {
+        try {
+            service.saveNewParticipants(engagements, scheduleId);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
     @AuraEnabled(cacheable=true)
     public static SelectParticipantModel getSelectParticipantModel(Id serviceId) {
         try {
             return service.getSelectParticipantModel(serviceId);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Id> getExistingParticipantContactIds(Id scheduleId) {
+        try {
+            return service.getExistingParticipantContactIds(scheduleId);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

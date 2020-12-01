@@ -10,6 +10,7 @@
 import { createElement } from "lwc";
 import Attendance from "c/attendance";
 import { getRecord } from "lightning/uiRecordApi";
+import { CurrentPageReference } from "lightning/navigation";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
@@ -24,12 +25,14 @@ const mockGetFieldSet = require("./data/getFieldSet.json");
 const mockWiredSession = require("./data/wiredPendingSession.json");
 const mockWiredPermissions = require("./data/wiredPermissions.json");
 const mockWiredNoPermissions = require("./data/wiredNoPermissions.json");
+const mockCurrentPageReference = require("./data/currentPageReference.json");
 
 //Register the  wire adapters
 const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
 const fieldSetAdapter = registerApexTestWireAdapter(getFieldSet);
 const wiredSessionAdapter = registerLdsTestWireAdapter(getRecord);
 const wiredPermissionsAdapter = registerApexTestWireAdapter(checkFieldPermissions);
+const wiredCurrentPageReference = registerApexTestWireAdapter(CurrentPageReference);
 
 jest.mock("c/attendanceRow");
 
@@ -51,6 +54,7 @@ describe("c-attendance", () => {
         fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredCurrentPageReference.emit(mockCurrentPageReference);
 
         return global.flushPromises().then(async () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
@@ -66,6 +70,7 @@ describe("c-attendance", () => {
         fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
+        wiredCurrentPageReference.emit(mockCurrentPageReference);
 
         return global.flushPromises().then(async () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
@@ -93,6 +98,7 @@ describe("c-attendance", () => {
         fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredCurrentPageReference.emit(mockCurrentPageReference);
 
         return global.flushPromises().then(async () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
@@ -120,6 +126,7 @@ describe("c-attendance", () => {
         fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
+        wiredCurrentPageReference.emit(mockCurrentPageReference);
 
         return global.flushPromises().then(async () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(

@@ -71,6 +71,10 @@
                 <behavior>Edit</behavior>
                 <field>NumberOfServiceSessions__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Interval__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>

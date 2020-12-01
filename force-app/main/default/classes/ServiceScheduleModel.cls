@@ -54,6 +54,9 @@ public with sharing class ServiceScheduleModel {
         ),
         'numberOfSessions' => fieldSetService.getFieldForLWC(
             Schema.ServiceSchedule__c.NumberOfServiceSessions__c.getDescribe()
+        ),
+        'interval' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSchedule__c.Interval__c.getDescribe()
         )
     };
 

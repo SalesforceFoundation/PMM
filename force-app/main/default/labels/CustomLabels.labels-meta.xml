@@ -485,8 +485,8 @@
         <fullName>Every_Custom</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Every...</shortDescription>
-        <value>Every...</value>
+        <shortDescription>Every</shortDescription>
+        <value>Every</value>
     </labels>
     <labels>
         <fullName>Weeks</fullName>
@@ -496,6 +496,13 @@
         <value>Weeks</value>
     </labels>
     <labels>
+        <fullName>Week</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Week</shortDescription>
+        <value>Week</value>
+    </labels>
+    <labels>
         <fullName>Days</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -503,11 +510,25 @@
         <value>Days</value>
     </labels>
     <labels>
+        <fullName>Day</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Day</shortDescription>
+        <value>Day</value>
+    </labels>
+    <labels>
         <fullName>Months</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Months</shortDescription>
         <value>Months</value>
+    </labels>
+    <labels>
+        <fullName>Month</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Month</shortDescription>
+        <value>Month</value>
     </labels>
     <labels>
         <fullName>Years</fullName>

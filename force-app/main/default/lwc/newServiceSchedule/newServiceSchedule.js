@@ -10,15 +10,26 @@
 import { LightningElement, api, track, wire } from "lwc";
 import { format } from "c/util";
 import { getRecord } from "lightning/uiRecordApi";
+import { loadStyle } from "lightning/platformResourceLoader";
 import getDayNum from "@salesforce/apex/ServiceScheduleCreatorController.getDayNum";
+import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
 import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
 import DEFAULT_SERVICE_QUANTITY from "@salesforce/schema/ServiceSchedule__c.DefaultServiceQuantity__c";
 import UNIT_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
+import EVERY_LABEL from "@salesforce/label/c.Every_Custom";
+import DAY_LABEL from "@salesforce/label/c.Day";
+import DAYS_LABEL from "@salesforce/label/c.Days";
+import WEEK_LABEL from "@salesforce/label/c.Week";
+import WEEKS_LABEL from "@salesforce/label/c.Weeks";
+import MONTH_LABEL from "@salesforce/label/c.Month";
+import MONTHS_LABEL from "@salesforce/label/c.Months";
 
 const WEEKLY = "Weekly";
+const MONTHLY = "Monthly";
+const DAILY = "Daily";
 const ONE_TIME = "One Time";
 const ON = "On";
 const AFTER = "After";
@@ -31,7 +42,15 @@ export default class NewServiceSchedule extends LightningElement {
     errorMessage;
     isValid = true;
     objectApiName;
-    labels;
+    @track labels = {
+        day: DAY_LABEL,
+        days: DAYS_LABEL,
+        week: WEEK_LABEL,
+        weeks: WEEKS_LABEL,
+        month: MONTH_LABEL,
+        months: MONTHS_LABEL,
+        every: EVERY_LABEL,
+    };
     sizes = {
         large: LARGE_SIZE,
         small: SMALL_SIZE,
@@ -57,7 +76,10 @@ export default class NewServiceSchedule extends LightningElement {
         // This is a nested object so the inner objects are still read only when using spread alone
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
 
-        this.labels = this._serviceScheduleModel.labels.serviceSchedule;
+        this.labels = {
+            ...this.labels,
+            ...this._serviceScheduleModel.labels.serviceSchedule,
+        };
         this.objectApiName = this._serviceScheduleModel.labels.serviceSchedule.objectApiName;
         this.requiredFields = this._serviceScheduleModel.scheduleRequiredFields;
         this.dateFields = this._serviceScheduleModel.scheduleRecurrenceDateFields;
@@ -144,6 +166,10 @@ export default class NewServiceSchedule extends LightningElement {
         return serviceSchedule;
     }
 
+    connectedCallback() {
+        loadStyle(this, pmmFolder + "/hideHelpIcons.css");
+    }
+
     processFields() {
         let fieldsToSkip = [];
         let self = this;
@@ -211,6 +237,18 @@ export default class NewServiceSchedule extends LightningElement {
         return this.picklistFields.frequency.value === WEEKLY;
     }
 
+    get isMonthly() {
+        return this.picklistFields.frequency.value === MONTHLY;
+    }
+
+    get isDaily() {
+        return this.picklistFields.frequency.value === DAILY;
+    }
+
+    get isOneTime() {
+        return this.picklistFields.frequency.value === ONE_TIME;
+    }
+
     get isRecurring() {
         return (
             this.picklistFields.frequency.value &&
@@ -237,12 +275,32 @@ export default class NewServiceSchedule extends LightningElement {
         this.defaultServiceQuantity = event.detail.value;
     }
 
+    get units() {
+        let interval = this.dateFields.interval.value;
+        if (this.isDaily) {
+            return interval > 1 ? this.labels.days : this.labels.day;
+        } else if (this.isWeekly) {
+            return interval > 1 ? this.labels.weeks : this.labels.week;
+        } else if (this.isMonthly) {
+            return interval > 1 ? this.labels.months : this.labels.month;
+        }
+
+        return "";
+    }
+
+    handleIntervalChange(event) {
+        this.dateFields.interval.value = event.detail.value ? event.detail.value : 1;
+    }
+
     handleFrequencyChange(event) {
         this.picklistFields.frequency.value = event.detail.length
             ? event.detail[0].value
             : undefined;
 
         this.defaultDayOfWeek();
+        if (this.isOneTime) {
+            this.dateFields.interval.value = 1;
+        }
     }
 
     async defaultDayOfWeek() {

@@ -54,7 +54,7 @@ public with sharing class ServiceScheduleDomain {
     ) {
         List<ServiceParticipant__c> participants = new List<ServiceParticipant__c>();
         for (ProgramEngagement__c engagement : engagements) {
-            participants.add(getServiceParticipant(engagement, schedule));
+            participants.add(createServiceParticipant(engagement, schedule));
         }
         insertRelatedRecords((List<SObject>) participants);
     }
@@ -62,12 +62,12 @@ public with sharing class ServiceScheduleDomain {
     private void generateParticipants(ServiceScheduleModel model) {
         for (ProgramEngagement__c engagement : model.selectedParticipants) {
             model.serviceParticipants.add(
-                getServiceParticipant(engagement, model.serviceSchedule)
+                createServiceParticipant(engagement, model.serviceSchedule)
             );
         }
     }
 
-    private ServiceParticipant__c getServiceParticipant(
+    private ServiceParticipant__c createServiceParticipant(
         ProgramEngagement__c engagement,
         ServiceSchedule__c schedule
     ) {

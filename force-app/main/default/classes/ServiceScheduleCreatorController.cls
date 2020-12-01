@@ -30,12 +30,12 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled
-    public static void saveNewParticipants(
+    public static void addParticipants(
         List<ProgramEngagement__c> engagements,
         Id scheduleId
     ) {
         try {
-            service.saveNewParticipants(engagements, scheduleId);
+            service.addParticipants(engagements, scheduleId);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

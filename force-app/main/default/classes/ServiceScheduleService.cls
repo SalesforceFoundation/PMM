@@ -43,10 +43,7 @@ public with sharing class ServiceScheduleService {
         return serviceSelector.getExistingParticipantContactIdsByScheduleId(scheduleId);
     }
 
-    public void saveNewParticipants(
-        List<ProgramEngagement__c> engagements,
-        Id scheduleId
-    ) {
+    public void addParticipants(List<ProgramEngagement__c> engagements, Id scheduleId) {
         ServiceSchedule__c schedule = [
             SELECT Id, Name, Service__c
             FROM ServiceSchedule__c

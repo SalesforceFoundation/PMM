@@ -19,7 +19,7 @@ export default class ParticipantSelector extends LightningElement {
     @api serviceId;
     @api serviceScheduleModel;
     @api selectedParticipants = [];
-    @api previouslySelectedParticipantContactIds = [];
+    @api existingContactIds = [];
     @api columns;
 
     selectedRowCount = 0;
@@ -41,7 +41,7 @@ export default class ParticipantSelector extends LightningElement {
         let result = [];
         this.selectedParticipants.forEach(row => {
             let contactId = row[PE_CONTACT_FIELD.fieldApiName];
-            if (!this.previouslySelectedParticipantContactIds.includes(contactId)) {
+            if (!this.existingContactIds.includes(contactId)) {
                 result.push(row);
             }
         });
@@ -159,11 +159,7 @@ export default class ParticipantSelector extends LightningElement {
         }
         this.selectedRows = [...this.serviceScheduleModel.selectedParticipants];
         this.availableEngagements.forEach(eng => {
-            if (
-                this.previouslySelectedParticipantContactIds.includes(
-                    eng[PE_CONTACT_FIELD.fieldApiName]
-                )
-            ) {
+            if (this.existingContactIds.includes(eng[PE_CONTACT_FIELD.fieldApiName])) {
                 eng.disableDeselect = true;
                 this.selectedRows.push(eng);
             }

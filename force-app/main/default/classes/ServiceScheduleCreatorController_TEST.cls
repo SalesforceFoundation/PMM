@@ -53,15 +53,15 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
-    private static void shouldPassInfoToServiceOnSaveNewParticipants() {
-        String methodName = 'saveNewParticipants';
+    private static void shouldPassInfoToServiceOnAddParticipants() {
+        String methodName = 'addParticipants';
         List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>();
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
 
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         Test.startTest();
-        ServiceScheduleCreatorController.saveNewParticipants(engagements, scheduleId);
+        ServiceScheduleCreatorController.addParticipants(engagements, scheduleId);
         Test.stopTest();
 
         serviceStub.assertCalledWith(
@@ -247,8 +247,8 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
-    private static void rethrowsErrorFromSaveNewParticipantsOnService() {
-        String methodName = 'saveNewParticipants';
+    private static void rethrowsErrorFromAddParticipantsOnService() {
+        String methodName = 'addParticipants';
         List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>();
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
         Exception actualException;
@@ -262,7 +262,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         Test.startTest();
         try {
-            ServiceScheduleCreatorController.saveNewParticipants(engagements, scheduleId);
+            ServiceScheduleCreatorController.addParticipants(engagements, scheduleId);
         } catch (Exception ex) {
             actualException = ex;
         }

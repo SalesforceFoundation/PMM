@@ -14,7 +14,7 @@ import { refreshApex } from "@salesforce/apex";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getExistingParticipantContactIds from "@salesforce/apex/ServiceScheduleCreatorController.getExistingParticipantContactIds";
 import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
-import saveNewParticipants from "@salesforce/apex/ServiceScheduleCreatorController.saveNewParticipants";
+import addParticipants from "@salesforce/apex/ServiceScheduleCreatorController.addParticipants";
 
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import SAVE_LABEL from "@salesforce/label/c.Save";
@@ -29,7 +29,6 @@ export default class ParticipantAdder extends LightningElement {
     errorMessage;
     isLoaded = false;
     serviceScheduleModel;
-    selectedParticipantContactIds;
     existingParticipants;
     labels = {
         save: SAVE_LABEL,
@@ -85,10 +84,6 @@ export default class ParticipantAdder extends LightningElement {
             return;
         }
         this.existingParticipants = result; //cache for refreshing
-
-        if (result.data) {
-            this.selectedParticipantContactIds = result.data;
-        }
     }
 
     handleSave() {
@@ -103,7 +98,7 @@ export default class ParticipantAdder extends LightningElement {
             return;
         }
 
-        saveNewParticipants({
+        addParticipants({
             engagements: participantSelector.newParticipantsProgramEngagements,
             scheduleId: this.recordId,
         })

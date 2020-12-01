@@ -397,6 +397,10 @@
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <tabSettings>
+        <tab>Attendance</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
         <tab>Bulk_Service_Deliveries</tab>
         <visibility>Visible</visibility>
     </tabSettings>

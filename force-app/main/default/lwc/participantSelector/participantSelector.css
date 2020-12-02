@@ -7,14 +7,6 @@
  *
  */
 
-/*
- *
- *  * Copyright (c) 2020, salesforce.com, inc.
- *  * All rights reserved.
- *  * SPDX-License-Identifier: BSD-3-Clause
- *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
- *
- */
 .container {
     border-color: var(--lwc-colorBorder, rgb(221, 219, 218));
     border-radius: var(--lwc-borderRadiusMedium, 0.25rem);

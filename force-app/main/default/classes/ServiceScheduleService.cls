@@ -44,11 +44,7 @@ public with sharing class ServiceScheduleService {
     }
 
     public void addParticipants(List<ProgramEngagement__c> engagements, Id scheduleId) {
-        ServiceSchedule__c schedule = [
-            SELECT Id, Name, Service__c
-            FROM ServiceSchedule__c
-            WHERE Id = :scheduleId
-        ];
+        ServiceSchedule__c schedule = serviceSelector.getScheduleById(scheduleId);
         domain.insertParticipants(engagements, schedule);
     }
 

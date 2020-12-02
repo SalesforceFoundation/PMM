@@ -63,6 +63,17 @@ public with sharing class ServiceSelector {
         ];
     }
 
+    public ServiceSchedule__c getScheduleById(Id scheduleId) {
+        if (!Schema.SObjectType.ServiceSchedule__c.isAccessible()) {
+            return new ServiceSchedule__c();
+        }
+        return [
+            SELECT Id, Name, Service__c
+            FROM ServiceSchedule__c
+            WHERE Id = :scheduleId
+        ];
+    }
+
     public List<Id> getExistingParticipantContactIdsByScheduleId(Id scheduleId) {
         if (
             !Schema.SObjectType.Contact.isAccessible() ||

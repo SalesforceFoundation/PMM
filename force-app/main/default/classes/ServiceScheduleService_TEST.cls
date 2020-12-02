@@ -735,6 +735,47 @@ public with sharing class ServiceScheduleService_TEST {
     }
 
     @IsTest
+    private static void shouldCallSelectorAndDomainOnAddParticipants() {
+        String selectorMethod = 'getScheduleById';
+        String domainMethod = 'insertParticipants';
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>();
+        ServiceSchedule__c expectedSchedule = new ServiceSchedule__c();
+        serviceSelectorStub.withReturnValue(selectorMethod, Id.class, expectedSchedule);
+
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+        service.domain = (ServiceScheduleDomain) domainStub.createMock();
+
+        Test.startTest();
+        service.addParticipants(engagements, scheduleId);
+        Test.stopTest();
+
+        serviceSelectorStub.assertCalledWith(selectorMethod, Id.class, scheduleId);
+        domainStub.assertCalledWith(
+            domainMethod,
+            new List<Type>{ List<ProgramEngagement__c>.class, ServiceSchedule__c.class },
+            new List<Object>{ engagements, expectedSchedule }
+        );
+    }
+
+    @IsTest
+    private static void shouldCallSelectorOnGetExistingParticipants() {
+        String selectorMethod = 'getExistingParticipantContactIdsByScheduleId';
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        List<Id> expected = new List<Id>();
+        serviceSelectorStub.withReturnValue(selectorMethod, Id.class, expected);
+
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+
+        Test.startTest();
+        List<Id> actual = service.getExistingParticipantContactIds(scheduleId);
+        Test.stopTest();
+
+        serviceSelectorStub.assertCalledWith(selectorMethod, Id.class, scheduleId);
+        System.assertEquals(expected, actual);
+    }
+
+    @IsTest
     private static void testGetSelectParticipantModel() {
         final String programEngagementsMethodName = 'getProgramEngagementsByProgramId';
         final String cohortsMethodName = 'getProgramCohortsByProgramId';

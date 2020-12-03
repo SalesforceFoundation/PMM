@@ -108,6 +108,19 @@ public with sharing class ProgramTestDataFactory {
             serviceDeliveries.add(serviceDelivery1);
 
             insert serviceDeliveries;
+
+            ServiceSchedule__c schedule = new ServiceSchedule__c(
+                Service__c = service1.Id,
+                Name = 'Test Service Schedule'
+            );
+            insert schedule;
+
+            ServiceParticipant__c serviceParticipant = new ServiceParticipant__c(
+                Name = 'Test',
+                Contact__c = con1.Id,
+                ServiceSchedule__c = schedule.Id
+            );
+            insert serviceParticipant;
         }
     }
 }

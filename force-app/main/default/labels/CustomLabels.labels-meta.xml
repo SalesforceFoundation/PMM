@@ -15,6 +15,13 @@
         <value>Add {0}</value>
     </labels>
     <labels>
+        <fullName>Add_Service_Participants_Success</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Added {0} Service Participants.</shortDescription>
+        <value>Added {0} Service Participants.</value>
+    </labels>
+    <labels>
         <fullName>Add_Service_Delivery</fullName>
         <categories>Service Delivery</categories>
         <language>en_US</language>

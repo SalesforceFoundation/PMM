@@ -163,6 +163,46 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
+    private static void shouldInsertParticipants() {
+        ServiceSchedule__c schedule = [
+            SELECT Id, Service__c, Name
+            FROM ServiceSchedule__c
+            LIMIT 1
+        ];
+        List<ProgramEngagement__c> engagements = [
+            SELECT Id, Contact__c, Contact__r.Name
+            FROM ProgramEngagement__c
+            ORDER BY Contact__c
+        ];
+        domain.insertParticipants(engagements, schedule);
+        List<ServiceParticipant__c> actual = [
+            SELECT
+                Id,
+                Name,
+                ProgramEngagement__c,
+                ServiceSchedule__c,
+                Service__c,
+                Contact__c
+            FROM ServiceParticipant__c
+            WHERE ProgramEngagement__c IN :engagements
+            ORDER BY Contact__c
+        ];
+        System.assertEquals(engagements.size(), actual.size());
+        for (Integer i = 0; i < engagements.size(); i++) {
+            ProgramEngagement__c engagement = engagements[i];
+            ServiceParticipant__c participant = actual[i];
+            System.assertEquals(
+                (engagement.Contact__r.Name + ' - ' + schedule.Name).abbreviate(80),
+                participant.Name
+            );
+            System.assertEquals(schedule.Id, participant.ServiceSchedule__c);
+            System.assertEquals(schedule.Service__c, participant.Service__c);
+            System.assertEquals(engagement.Id, participant.ProgramEngagement__c);
+            System.assertEquals(engagement.Contact__c, participant.Contact__c);
+        }
+    }
+
+    @IsTest
     private static void throwsExceptionWhenNameTooLong() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();

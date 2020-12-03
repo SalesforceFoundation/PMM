@@ -198,13 +198,6 @@
         <value>Finish</value>
     </labels>
     <labels>
-        <fullName>Week_Ordinal_Of_Month</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>First,Second,Third,Fourth,Fifth</shortDescription>
-        <value>First,Second,Third,Fourth,Fifth</value>
-    </labels>
-    <labels>
         <fullName>Go_Back</fullName>
         <language>en_US</language>
         <protected>true</protected>

@@ -251,11 +251,11 @@
         <value>Your query must include an object.</value>
     </labels>
     <labels>
-        <fullName>Monthly_Of_Day</fullName>
+        <fullName>Monthly_On_Day</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Monthly Of Day</shortDescription>
-        <value>Monthly of Day {0}</value>
+        <shortDescription>Monthly on day</shortDescription>
+        <value>Monthly on day {0}</value>
     </labels>
     <labels>
         <fullName>Monthly_On_The</fullName>

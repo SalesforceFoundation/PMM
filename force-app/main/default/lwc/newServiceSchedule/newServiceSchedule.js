@@ -27,7 +27,7 @@ import MONTH_LABEL from "@salesforce/label/c.Month";
 import MONTHS_LABEL from "@salesforce/label/c.Months";
 import WEEK_ORDINAL_OF_MONTH_LABEL from "@salesforce/label/c.Week_Ordinal_Of_Month";
 import LAST_DAY_OF_MONTH_LABEL from "@salesforce/label/c.Last_Day_Of_Month";
-import MONTHLY_OF_DAY_LABEL from "@salesforce/label/c.Monthly_Of_Day";
+import MONTHLY_ON_DAY_LABEL from "@salesforce/label/c.Monthly_On_Day";
 import MONTHLY_ON_THE_LABEL from "@salesforce/label/c.Monthly_On_The";
 
 const WEEKLY = "Weekly";
@@ -36,19 +36,17 @@ const DAILY = "Daily";
 const ONE_TIME = "One Time";
 const ON = "On";
 const AFTER = "After";
-const BYWEEKDAY = "byWeekDay";
-const BYMONTHDAY = "byMonthDay";
-const LASTDAY = "lastDay";
+const LASTDAY = "LastDayOfMonth";
 
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
-
+const DAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
     errorMessage;
     isValid = true;
     objectApiName;
-    selectedMonthlyRecurrenceValue;
+    selectedMonthlyRecurrenceValue = "";
     sessionStartWeek;
     sessionStartDayOfWeek;
     sessionStartDay;
@@ -63,7 +61,7 @@ export default class NewServiceSchedule extends LightningElement {
         months: MONTHS_LABEL,
         every: EVERY_LABEL,
         lastDayOfMonth: LAST_DAY_OF_MONTH_LABEL,
-        monthlyOfDay: MONTHLY_OF_DAY_LABEL,
+        monthlyOnDay: MONTHLY_ON_DAY_LABEL,
         monthlyOnThe: MONTHLY_ON_THE_LABEL,
         weekOrdinal: WEEK_ORDINAL_OF_MONTH_LABEL,
     };
@@ -385,7 +383,7 @@ export default class NewServiceSchedule extends LightningElement {
         }
     }
 
-    handleMonthlyRecurrenceOptions() {
+    async handleMonthlyRecurrenceOptions() {
         let sessionStartDay = new Date(this.dateFields.start.value).toLocaleString(
             LOCALE,
             {
@@ -394,52 +392,66 @@ export default class NewServiceSchedule extends LightningElement {
             }
         );
 
-        this.selectedMonthlyRecurrenceValue = BYWEEKDAY;
+        let weekNum = this.handleGetWeekDay(sessionStartDay);
+        let day;
 
-        this.handleGetWeekDay(sessionStartDay);
+        await getDayNum({ fullDateTime: this.dateFields.start.value }).then(result => {
+            day = DAYS[result - 1]; //Weekdays are 1 index in apex
+        });
 
-        this.monthlyRecurrenceOptions = [
+        let monthlyOptionApiValue = weekNum + day;
+
+        let monthlyOptionLabel = this.picklistFields.monthlyOption.picklistValues.find(
+            option => option.value === monthlyOptionApiValue
+        ).label;
+
+        let options = [
             {
-                label: format(this.labels.monthlyOfDay, [sessionStartDay]),
-                value: BYWEEKDAY,
+                label: format(this.labels.monthlyOnDay, [sessionStartDay]),
+                value: "",
             },
             {
-                label: this.sessionStartDay,
-                value: BYMONTHDAY,
+                label: monthlyOptionLabel,
+                value: monthlyOptionApiValue,
             },
         ];
 
         if (sessionStartDay >= 28) {
-            this.monthlyRecurrenceOptions.push({
-                label: this.labels.lastDayOfMonth,
-                value: LASTDAY,
+            let startDate = new Date(this.dateFields.start.value);
+            startDate.setDate(startDate.getDate() + 1);
+            let nextDay = startDate.toLocaleString(LOCALE, {
+                timeZone: TIME_ZONE,
+                day: "numeric",
             });
+
+            if (Number(nextDay) === 1) {
+                options.push({
+                    label: this.labels.lastDayOfMonth,
+                    value: LASTDAY,
+                });
+            }
         }
+
+        this.monthlyRecurrenceOptions = options;
     }
 
     handleGetWeekDay(sessionStartDay) {
+        let weekNum;
         let sessionStartDateDiff = sessionStartDay - 7;
-        let weekOrdinal = this.labels.weekOrdinal.split(",");
 
+        //TODO: Change to SWITCH and call  this.handleDayOfWeek only once atthe end.set a local variable and use it to call
         if (sessionStartDateDiff <= 0) {
-            this.handleDayOfWeek(weekOrdinal[0]);
+            weekNum = 1;
         } else if (sessionStartDateDiff >= 1 && sessionStartDateDiff < 7) {
-            this.handleDayOfWeek(weekOrdinal[1]);
+            weekNum = 2;
         } else if (sessionStartDateDiff >= 7 && sessionStartDateDiff < 15) {
-            this.handleDayOfWeek(weekOrdinal[2]);
+            weekNum = 3;
         } else if (sessionStartDateDiff >= 15 && sessionStartDateDiff < 21) {
-            this.handleDayOfWeek(weekOrdinal[3]);
+            weekNum = 4;
         } else if (sessionStartDateDiff >= 21) {
-            this.handleDayOfWeek(weekOrdinal[4]);
+            weekNum = 5;
         }
-    }
 
-    handleDayOfWeek(dayOfWeek) {
-        let sessionDay = new Date(this.dateFields.start.value).toLocaleString(LOCALE, {
-            timeZone: TIME_ZONE,
-            weekday: "long",
-        });
-
-        this.sessionStartDay = format(this.labels.monthlyOnThe, [dayOfWeek, sessionDay]);
+        return weekNum;
     }
 }

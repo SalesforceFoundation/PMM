@@ -8,10 +8,11 @@
   -->
 
 <aura:component implements="force:lightningQuickActionWithoutHeader, force:hasRecordId">
-    <c:futureSessionDeleter onclose="{!c.handleClose}" recordId="{!v.recordId}" />
+    <c:participantAdder onclose="{!c.handleClose}" recordId="{!v.recordId}" />
     <aura:html tag="style">
         .cuf-content { padding: 0 0rem !important; } .slds-p-around--medium { padding:
         0rem !important; } .slds-modal__content{ overflow-y:hidden !important;
-        height:unset !important; max-height:unset !important; }
+        height:unset !important; max-height:unset !important; } .slds-modal__container{
+        width: 80% !important; max-width: 80% !important; }
     </aura:html>
 </aura:component>

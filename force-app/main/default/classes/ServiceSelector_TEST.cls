@@ -10,6 +10,115 @@
 @isTest
 public with sharing class ServiceSelector_TEST {
     @IsTest
+    private static void testGetScheduleById() {
+        ProgramTestDataFactory.insertTestData(true);
+
+        ServiceSchedule__c expected = [
+            SELECT Id, Name, Service__c
+            FROM ServiceSchedule__c
+        ];
+        Test.startTest();
+        ServiceSelector selector = new ServiceSelector();
+        ServiceSchedule__c actual = selector.getScheduleById(expected.Id);
+        Test.stopTest();
+
+        System.assertEquals(expected, actual);
+    }
+
+    @IsTest
+    private static void testGetScheduleByIdNoAccess() {
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+        Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
+        User u = new User(
+            Alias = 'stand',
+            Email = 'standarduser1@' + random + '.example.com',
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'StandardUser',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            ProfileId = p.Id,
+            TimeZoneSidKey = 'America/Los_Angeles',
+            UserName = 'standarduser1@' + random + '.example.com'
+        );
+
+        ProgramTestDataFactory.insertTestData(true);
+
+        Program__c program1 = [
+            SELECT Id, Name
+            FROM Program__c
+            WHERE Name = 'Program 1'
+            LIMIT 1
+        ][0];
+        ServiceSchedule__c expected = [
+            SELECT Id, Name, Service__c
+            FROM ServiceSchedule__c
+        ];
+
+        Test.startTest();
+        System.runAs(u) {
+            ServiceSelector selector = new ServiceSelector();
+            ServiceSchedule__c actual = selector.getScheduleById(expected.Id);
+            System.assertEquals(new ServiceSchedule__c(), actual);
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
+    private static void testGetExistingParticipantContactIdsByScheduleId() {
+        ProgramTestDataFactory.insertTestData(true);
+
+        ServiceSchedule__c schedule = [SELECT Id FROM ServiceSchedule__c];
+
+        List<Contact> contacts = [SELECT Id FROM Contact ORDER BY Id];
+
+        List<Id> expected = new List<Id>{ contacts[0].Id };
+
+        Test.startTest();
+        ServiceSelector selector = new ServiceSelector();
+        List<Id> actual = selector.getExistingParticipantContactIdsByScheduleId(
+            schedule.Id
+        );
+        Test.stopTest();
+
+        System.assertEquals(expected, actual);
+    }
+
+    @IsTest
+    private static void testGetExistingParticipantContactIdsByScheduleIdNoAccess() {
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+        Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
+        User u = new User(
+            Alias = 'stand',
+            Email = 'standarduser1@' + random + '.example.com',
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'StandardUser',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            ProfileId = p.Id,
+            TimeZoneSidKey = 'America/Los_Angeles',
+            UserName = 'standarduser1@' + random + '.example.com'
+        );
+
+        ProgramTestDataFactory.insertTestData(true);
+
+        ServiceSchedule__c schedule = [SELECT Id FROM ServiceSchedule__c];
+
+        List<Contact> contacts = [SELECT Id FROM Contact ORDER BY Id];
+
+        List<Id> expected = new List<Id>();
+
+        Test.startTest();
+        System.runAs(u) {
+            ServiceSelector selector = new ServiceSelector();
+            List<Id> actual = selector.getExistingParticipantContactIdsByScheduleId(
+                schedule.Id
+            );
+            System.assertEquals(expected, actual);
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
     private static void testGetServicesByProgramIds() {
         ProgramTestDataFactory.insertTestData(true);
 

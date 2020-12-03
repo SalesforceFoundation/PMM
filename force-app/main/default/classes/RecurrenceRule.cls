@@ -39,6 +39,7 @@ public with sharing class RecurrenceRule {
     private List<Day> days;
     private Integer bySetPos = -1;
     private Set<Integer> byMonthDays;
+    private String byDay;
 
     public RecurrenceRule reset() {
         rRule = null;
@@ -49,6 +50,7 @@ public with sharing class RecurrenceRule {
         days = null;
         bySetPos = -1;
         byMonthDays = null;
+        byDay = null;
         return this;
     }
 
@@ -112,6 +114,12 @@ public with sharing class RecurrenceRule {
             byMonthDays = daysToAdd;
         }
 
+        return this;
+    }
+
+    public RecurrenceRule withByDay(String day) {
+        //construct byday to be BYDAY=+2TU
+        // this.day = day;
         return this;
     }
 

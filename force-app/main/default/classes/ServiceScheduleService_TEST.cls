@@ -363,7 +363,8 @@ public with sharing class ServiceScheduleService_TEST {
             Id = TestUtil.mockId(Contact.SObjectType)
         );
         DateTime firstSessionStart = System.now();
-        DateTime firstSessionEnd = System.now().addHours(2);
+        Integer hours = 2;
+        DateTime firstSessionEnd = System.now().addHours(hours);
         ServiceSchedule__c schedule = new ServiceSchedule__c(
             Name = 'test',
             FirstSessionStart__c = firstSessionStart,
@@ -417,10 +418,7 @@ public with sharing class ServiceScheduleService_TEST {
                 new ServiceSession__c(
                     Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = DateTime.newInstance(
-                        sessionDateTime.date(),
-                        firstSessionEnd.time()
-                    )
+                    SessionEnd__c = sessionDateTime.addHours(hours)
                 )
             );
         }
@@ -486,7 +484,8 @@ public with sharing class ServiceScheduleService_TEST {
         String getServiceProviderMethod = 'getContactsByIds';
         String rRuleString = 'abc';
         DateTime firstSessionStart = System.now();
-        DateTime firstSessionEnd = System.now().addHours(2);
+        Integer hours = 2;
+        DateTime firstSessionEnd = System.now().addHours(hours);
         ServiceSchedule__c schedule = new ServiceSchedule__c(
             Name = 'test',
             FirstSessionStart__c = firstSessionStart,
@@ -534,10 +533,7 @@ public with sharing class ServiceScheduleService_TEST {
                 new ServiceSession__c(
                     Name = sessionDateTime.date().format() + ': ' + schedule.Name,
                     SessionStart__c = sessionDateTime,
-                    SessionEnd__c = DateTime.newInstance(
-                        sessionDateTime.date(),
-                        firstSessionEnd.time()
-                    )
+                    SessionEnd__c = sessionDateTime.addHours(hours)
                 )
             );
         }
@@ -736,6 +732,47 @@ public with sharing class ServiceScheduleService_TEST {
             List<ServiceSession__c>.class,
             expectedSessions
         );
+    }
+
+    @IsTest
+    private static void shouldCallSelectorAndDomainOnAddParticipants() {
+        String selectorMethod = 'getScheduleById';
+        String domainMethod = 'insertParticipants';
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>();
+        ServiceSchedule__c expectedSchedule = new ServiceSchedule__c();
+        serviceSelectorStub.withReturnValue(selectorMethod, Id.class, expectedSchedule);
+
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+        service.domain = (ServiceScheduleDomain) domainStub.createMock();
+
+        Test.startTest();
+        service.addParticipants(engagements, scheduleId);
+        Test.stopTest();
+
+        serviceSelectorStub.assertCalledWith(selectorMethod, Id.class, scheduleId);
+        domainStub.assertCalledWith(
+            domainMethod,
+            new List<Type>{ List<ProgramEngagement__c>.class, ServiceSchedule__c.class },
+            new List<Object>{ engagements, expectedSchedule }
+        );
+    }
+
+    @IsTest
+    private static void shouldCallSelectorOnGetExistingParticipants() {
+        String selectorMethod = 'getExistingParticipantContactIdsByScheduleId';
+        Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
+        List<Id> expected = new List<Id>();
+        serviceSelectorStub.withReturnValue(selectorMethod, Id.class, expected);
+
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+
+        Test.startTest();
+        List<Id> actual = service.getExistingParticipantContactIds(scheduleId);
+        Test.stopTest();
+
+        serviceSelectorStub.assertCalledWith(selectorMethod, Id.class, scheduleId);
+        System.assertEquals(expected, actual);
     }
 
     @IsTest

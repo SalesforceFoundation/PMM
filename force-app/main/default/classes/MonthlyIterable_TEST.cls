@@ -568,4 +568,28 @@ public with sharing class MonthlyIterable_TEST {
         //     'List of Dates returned from the iterator was not as expected'
         // );
     }
+
+    @IsTest
+    private static void shouldIterateEveryFirstWednesdayOfTheMonthWithInterval2OverAGivenYearUntilGivenEndDate() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        rRule.withRuleString(
+            'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYSETPOS=-1;BYWEEKDAY:RR'
+        );
+    }
+
+    @IsTest
+    private static void shouldIterateEveryFifthMondayOfTheMonthOverAGivenYearUntilGivenEndDate() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        rRule.withRuleString(
+            'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYSETPOS=-1;BYWEEKDAY:RR'
+        );
+    }
+
+    @IsTest
+    private static void shouldIterateEveryFifthMondayOfTheMonthUntilCount() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        rRule.withRuleString(
+            'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYSETPOS=-1;BYWEEKDAY:RR'
+        );
+    }
 }

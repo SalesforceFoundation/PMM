@@ -191,6 +191,27 @@
         <value>Finish</value>
     </labels>
     <labels>
+        <fullName>First</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>First</shortDescription>
+        <value>First</value>
+    </labels>
+    <labels>
+        <fullName>Fifth</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Fifth</shortDescription>
+        <value>Fifth</value>
+    </labels>
+    <labels>
+        <fullName>Fourth</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Fourth</shortDescription>
+        <value>Fourth</value>
+    </labels>
+    <labels>
         <fullName>Go_Back</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -222,12 +243,33 @@
         <value>Loading</value>
     </labels>
     <labels>
+        <fullName>Last_Day_Of_Month</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Last Day Of Month</shortDescription>
+        <value>Last day of Month</value>
+    </labels>
+    <labels>
         <fullName>MissingSObjectType</fullName>
         <categories>Exception</categories>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Missing SObject Type</shortDescription>
         <value>Your query must include an object.</value>
+    </labels>
+    <labels>
+        <fullName>Monthly_Of_Day</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Monthly Of Day</shortDescription>
+        <value>Monthly of Day {0}</value>
+    </labels>
+    <labels>
+        <fullName>Monthly_On_The</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Monthly On The</shortDescription>
+        <value>Monthly on the {0}</value>
     </labels>
     <labels>
         <fullName>New_Program_Engagement</fullName>
@@ -403,6 +445,13 @@
         <protected>true</protected>
         <shortDescription>Saving</shortDescription>
         <value>Saving</value>
+    </labels>
+    <labels>
+        <fullName>Second</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Second</shortDescription>
+        <value>Second</value>
     </labels>
     <labels>
         <fullName>Search_this_list</fullName>
@@ -594,6 +643,13 @@
         <protected>true</protected>
         <shortDescription>Success</shortDescription>
         <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>Third</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Third</shortDescription>
+        <value>Third</value>
     </labels>
     <labels>
         <fullName>TelemetryException</fullName>

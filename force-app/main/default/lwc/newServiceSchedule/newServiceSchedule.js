@@ -12,6 +12,8 @@ import { format } from "c/util";
 import { loadStyle } from "lightning/platformResourceLoader";
 import getDayNum from "@salesforce/apex/ServiceScheduleCreatorController.getDayNum";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
+import TIME_ZONE from "@salesforce/i18n/timeZone";
+import LOCALE from "@salesforce/i18n/locale";
 
 import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
@@ -23,11 +25,7 @@ import WEEK_LABEL from "@salesforce/label/c.Week";
 import WEEKS_LABEL from "@salesforce/label/c.Weeks";
 import MONTH_LABEL from "@salesforce/label/c.Month";
 import MONTHS_LABEL from "@salesforce/label/c.Months";
-import FIRST_LABEL from "@salesforce/label/c.First";
-import SECOND_LABEL from "@salesforce/label/c.Second";
-import THIRD_LABEL from "@salesforce/label/c.Third";
-import FOURTH_LABEL from "@salesforce/label/c.Fourth";
-import FIFTH_LABEL from "@salesforce/label/c.Fifth";
+import WEEK_ORDINAL_OF_MONTH_LABEL from "@salesforce/label/c.Week_Ordinal_Of_Month";
 import LAST_DAY_OF_MONTH_LABEL from "@salesforce/label/c.Last_Day_Of_Month";
 import MONTHLY_OF_DAY_LABEL from "@salesforce/label/c.Monthly_Of_Day";
 import MONTHLY_ON_THE_LABEL from "@salesforce/label/c.Monthly_On_The";
@@ -53,6 +51,7 @@ export default class NewServiceSchedule extends LightningElement {
     selectedMonthlyRecurrenceValue;
     sessionStartWeek;
     sessionStartDayOfWeek;
+    sessionStartDay;
     @track monthlyRecurrenceOptions = [];
 
     @track labels = {
@@ -63,14 +62,10 @@ export default class NewServiceSchedule extends LightningElement {
         month: MONTH_LABEL,
         months: MONTHS_LABEL,
         every: EVERY_LABEL,
-        first: FIRST_LABEL,
-        second: SECOND_LABEL,
-        third: THIRD_LABEL,
-        fourth: FOURTH_LABEL,
-        fifth: FIFTH_LABEL,
         lastDayOfMonth: LAST_DAY_OF_MONTH_LABEL,
         monthlyOfDay: MONTHLY_OF_DAY_LABEL,
         monthlyOnThe: MONTHLY_ON_THE_LABEL,
+        weekOrdinal: WEEK_ORDINAL_OF_MONTH_LABEL,
     };
     sizes = {
         large: LARGE_SIZE,
@@ -391,53 +386,60 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     handleMonthlyRecurrenceOptions() {
-        let sessionStartDate = new Date(this.dateFields.start.value).getDate();
+        let sessionStartDay = new Date(this.dateFields.start.value).toLocaleString(
+            LOCALE,
+            {
+                timeZone: TIME_ZONE,
+                day: "numeric",
+            }
+        );
+
         this.selectedMonthlyRecurrenceValue = BYWEEKDAY;
 
-        this.handleGetWeekDay(sessionStartDate);
+        this.handleGetWeekDay(sessionStartDay);
 
         this.monthlyRecurrenceOptions = [
             {
-                label: format(this.labels.monthlyOfDay, [sessionStartDate]),
+                label: format(this.labels.monthlyOfDay, [sessionStartDay]),
                 value: BYWEEKDAY,
             },
             {
-                label: format(this.labels.monthlyOnThe, [this.sessionStartDayOfWeek]),
+                label: this.sessionStartDay,
                 value: BYMONTHDAY,
             },
-            { label: this.labels.lastDayOfMonth, value: LASTDAY },
         ];
+
+        if (sessionStartDay >= 28) {
+            this.monthlyRecurrenceOptions.push({
+                label: this.labels.lastDayOfMonth,
+                value: LASTDAY,
+            });
+        }
     }
 
-    handleGetWeekDay(sessionStartDate) {
-        let sessionStartDateDiff = sessionStartDate - 7;
+    handleGetWeekDay(sessionStartDay) {
+        let sessionStartDateDiff = sessionStartDay - 7;
+        let weekOrdinal = this.labels.weekOrdinal.split(",");
 
         if (sessionStartDateDiff <= 0) {
-            this.handleDayOfWeek(this.labels.first);
+            this.handleDayOfWeek(weekOrdinal[0]);
         } else if (sessionStartDateDiff >= 1 && sessionStartDateDiff < 7) {
-            this.handleDayOfWeek(this.labels.second);
+            this.handleDayOfWeek(weekOrdinal[1]);
         } else if (sessionStartDateDiff >= 7 && sessionStartDateDiff < 15) {
-            this.handleDayOfWeek(this.labels.third);
+            this.handleDayOfWeek(weekOrdinal[2]);
         } else if (sessionStartDateDiff >= 15 && sessionStartDateDiff < 21) {
-            this.handleDayOfWeek(this.labels.fourth);
+            this.handleDayOfWeek(weekOrdinal[3]);
         } else if (sessionStartDateDiff >= 21) {
-            this.handleDayOfWeek(this.labels.fifth);
+            this.handleDayOfWeek(weekOrdinal[4]);
         }
     }
 
     handleDayOfWeek(dayOfWeek) {
-        let sessionStartDay = new Date(this.dateFields.start.value).getDay();
+        let sessionDay = new Date(this.dateFields.start.value).toLocaleString(LOCALE, {
+            timeZone: TIME_ZONE,
+            weekday: "long",
+        });
 
-        let weekDays = [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-        ];
-
-        this.sessionStartDayOfWeek = dayOfWeek + " " + weekDays[sessionStartDay];
+        this.sessionStartDay = format(this.labels.monthlyOnThe, [dayOfWeek, sessionDay]);
     }
 }

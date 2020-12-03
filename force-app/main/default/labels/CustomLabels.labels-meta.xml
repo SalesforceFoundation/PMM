@@ -198,25 +198,11 @@
         <value>Finish</value>
     </labels>
     <labels>
-        <fullName>First</fullName>
+        <fullName>Week_Ordinal_Of_Month</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>First</shortDescription>
-        <value>First</value>
-    </labels>
-    <labels>
-        <fullName>Fifth</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Fifth</shortDescription>
-        <value>Fifth</value>
-    </labels>
-    <labels>
-        <fullName>Fourth</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Fourth</shortDescription>
-        <value>Fourth</value>
+        <shortDescription>First,Second,Third,Fourth,Fifth</shortDescription>
+        <value>First,Second,Third,Fourth,Fifth</value>
     </labels>
     <labels>
         <fullName>Go_Back</fullName>
@@ -276,7 +262,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Monthly On The</shortDescription>
-        <value>Monthly on the {0}</value>
+        <value>Monthly on the {0} {1}</value>
     </labels>
     <labels>
         <fullName>New_Program_Engagement</fullName>
@@ -452,13 +438,6 @@
         <protected>true</protected>
         <shortDescription>Saving</shortDescription>
         <value>Saving</value>
-    </labels>
-    <labels>
-        <fullName>Second</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Second</shortDescription>
-        <value>Second</value>
     </labels>
     <labels>
         <fullName>Search_this_list</fullName>
@@ -650,13 +629,6 @@
         <protected>true</protected>
         <shortDescription>Success</shortDescription>
         <value>Success</value>
-    </labels>
-    <labels>
-        <fullName>Third</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Third</shortDescription>
-        <value>Third</value>
     </labels>
     <labels>
         <fullName>TelemetryException</fullName>

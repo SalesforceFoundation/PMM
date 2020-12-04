@@ -85,6 +85,21 @@ public with sharing class RecurrenceRule_TEST {
     }
 
     @IsTest
+    private static void shouldSetAndGetByDay() {
+        String byDayPicklistValue = '2SU';
+
+        Test.startTest();
+        RecurrenceRule rule = new RecurrenceRule().withByDay(byDayPicklistValue);
+        Test.stopTest();
+
+        System.assertEquals(
+            '+' + byDayPicklistValue,
+            rule.getByDay(),
+            'The actual byDay returned is not the same as expected byDay.'
+        );
+    }
+
+    @IsTest
     private static void shouldSetAndGetDaysFromEnums() {
         List<RecurrenceRule.Day> days = new List<RecurrenceRule.Day>{
             RecurrenceRule.Day.WE,
@@ -345,6 +360,46 @@ public with sharing class RecurrenceRule_TEST {
     }
 
     @IsTest
+    private static void shouldSetRuleStringAndParseWith2ndMonday() {
+        String rrString = 'FREQ=DAILY;INTERVAL=3;UNTIL=20200301T000000Z;COUNT=50;BYDAY=+2MO';
+
+        Test.startTest();
+        RecurrenceRule rule = new RecurrenceRule().withRuleString(rrString);
+        Test.stopTest();
+
+        System.assertEquals(
+            rrString,
+            rule.rRule,
+            'Actual rRule returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getFrequency(),
+            RecurrenceRule.Frequency.DAILY,
+            'Actual frequency returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getInterval(),
+            3,
+            'Actual interval returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getEndDate(),
+            Date.newInstance(2020, 3, 1),
+            'Actual EndDate returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getCount(),
+            50,
+            'Actual count returned is not the same as expected'
+        );
+        System.assertEquals(
+            rule.getByDay(),
+            '+2MO',
+            'Actual byDay returned is not the same as expected'
+        );
+    }
+
+    @IsTest
     private static void shouldCatchInvalidRRuleKey() {
         String rrString = 'FREQ=DAILY;GARBAGE=2';
         RecurrenceRule rule = new RecurrenceRule();
@@ -391,6 +446,26 @@ public with sharing class RecurrenceRule_TEST {
             .withFrequency('MONTHLY')
             .withEndDate(Date.newInstance(2020, 7, 31))
             .withByMonthDays(DateTime.newInstance(2020, 1, 31, 13, 0, 0));
+
+        Test.startTest();
+        String actual = rule.build();
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Actual rRule string is not the same as expected'
+        );
+    }
+
+    @IsTest
+    private static void shouldBuildMonthlyFrequencyWithbyDaySecondMonday() {
+        String expected = 'FREQ=MONTHLY;UNTIL=20200731T000000Z;BYDAY=+2MO;BYSETPOS=-1';
+
+        RecurrenceRule rule = new RecurrenceRule()
+            .withFrequency('MONTHLY')
+            .withEndDate(Date.newInstance(2020, 7, 31))
+            .withByDay('2MO');
 
         Test.startTest();
         String actual = rule.build();

@@ -25,7 +25,6 @@ import WEEK_LABEL from "@salesforce/label/c.Week";
 import WEEKS_LABEL from "@salesforce/label/c.Weeks";
 import MONTH_LABEL from "@salesforce/label/c.Month";
 import MONTHS_LABEL from "@salesforce/label/c.Months";
-import WEEK_ORDINAL_OF_MONTH_LABEL from "@salesforce/label/c.Week_Ordinal_Of_Month";
 import LAST_DAY_OF_MONTH_LABEL from "@salesforce/label/c.Last_Day_Of_Month";
 import MONTHLY_ON_DAY_LABEL from "@salesforce/label/c.Monthly_On_Day";
 import MONTHLY_ON_THE_LABEL from "@salesforce/label/c.Monthly_On_The";
@@ -63,7 +62,6 @@ export default class NewServiceSchedule extends LightningElement {
         lastDayOfMonth: LAST_DAY_OF_MONTH_LABEL,
         monthlyOnDay: MONTHLY_ON_DAY_LABEL,
         monthlyOnThe: MONTHLY_ON_THE_LABEL,
-        weekOrdinal: WEEK_ORDINAL_OF_MONTH_LABEL,
     };
     sizes = {
         large: LARGE_SIZE,

@@ -117,9 +117,9 @@ public with sharing class RecurrenceRule {
         return this;
     }
 
-    public RecurrenceRule withByDay(String day) {
-        //construct byday to be BYDAY=+2TU
-        // this.day = day;
+    public RecurrenceRule withByDay(String byDay) {
+        // rRule spec is '+2SU' for 'second Sunday of the month', but our picklist just stores '2SU' for simplicity
+        this.byDay = '+' + byDay;
         return this;
     }
 
@@ -160,6 +160,10 @@ public with sharing class RecurrenceRule {
         return byMonthDays;
     }
 
+    public String getByDay() {
+        return byDay;
+    }
+
     public List<Integer> getDayNums() {
         List<Integer> result = new List<Integer>();
         for (Day day : days) {
@@ -196,12 +200,18 @@ public with sharing class RecurrenceRule {
         }
 
         // BYDAY
-        if (days != null && days.size() > 0) {
-            List<String> dayStrings = new List<String>();
-            for (Day day : days) {
-                dayStrings.add(day.name());
+        if (freq == Frequency.MONTHLY) {
+            if (byDay != null) {
+                ruleParts.add('BYDAY=' + byDay);
             }
-            ruleParts.add('BYDAY=' + String.join(dayStrings, ','));
+        } else {
+            if (days != null && days.size() > 0) {
+                List<String> dayStrings = new List<String>();
+                for (Day day : days) {
+                    dayStrings.add(day.name());
+                }
+                ruleParts.add('BYDAY=' + String.join(dayStrings, ','));
+            }
         }
 
         //BYSETPOS
@@ -251,11 +261,15 @@ public with sharing class RecurrenceRule {
                         count = Integer.valueOf(thisValue);
                     }
                     when 'BYDAY' {
-                        List<String> dayStrings = thisValue.split(',');
-                        days = new List<Day>();
-                        for (Day day : Day.values()) {
-                            if (dayStrings.contains(day.name())) {
-                                days.add(day);
+                        if (thisValue.startsWith('+')) {
+                            byDay = thisValue;
+                        } else {
+                            List<String> dayStrings = thisValue.split(',');
+                            days = new List<Day>();
+                            for (Day day : Day.values()) {
+                                if (dayStrings.contains(day.name())) {
+                                    days.add(day);
+                                }
                             }
                         }
                     }

@@ -541,10 +541,8 @@ public with sharing class MonthlyIterable_TEST {
 
     @IsTest
     private static void shouldIterateEveryFirstWednesdayOfTheMonthOverAGivenYearUntilGivenEndDate() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        rRule.withRuleString(
-            'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYSETPOS=-1;BYWEEKDAY:RR'
-        );
+        // DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        // rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;');
         // List<DateTime> expected = new List<DateTime>{
         //     DateTime.newInstance(2020, 12, 31, 13, 0, 0),
         //     DateTime.newInstance(2021, 2, 28, 13, 0, 0),
@@ -571,25 +569,25 @@ public with sharing class MonthlyIterable_TEST {
 
     @IsTest
     private static void shouldIterateEveryFirstWednesdayOfTheMonthWithInterval2OverAGivenYearUntilGivenEndDate() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        rRule.withRuleString(
-            'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYSETPOS=-1;BYWEEKDAY:RR'
-        );
+        // DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        // rRule.withRuleString(
+        //     'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1'
+        // );
     }
 
     @IsTest
     private static void shouldIterateEveryFifthMondayOfTheMonthOverAGivenYearUntilGivenEndDate() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        rRule.withRuleString(
-            'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYSETPOS=-1;BYWEEKDAY:RR'
-        );
+        // DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        // rRule.withRuleString(
+        //     'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1'
+        // );
     }
 
     @IsTest
     private static void shouldIterateEveryFifthMondayOfTheMonthUntilCount() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        rRule.withRuleString(
-            'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYSETPOS=-1;BYWEEKDAY:RR'
-        );
+        // DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        // rRule.withRuleString(
+        //     'FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1'
+        // );
     }
 }

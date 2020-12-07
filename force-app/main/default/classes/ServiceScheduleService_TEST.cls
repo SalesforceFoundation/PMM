@@ -19,6 +19,7 @@ public with sharing class ServiceScheduleService_TEST {
         ProgramEngagementSelector.class
     );
     private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
+    private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
 
     @TestSetup
     private static void setupTestData() {
@@ -773,6 +774,44 @@ public with sharing class ServiceScheduleService_TEST {
 
         serviceSelectorStub.assertCalledWith(selectorMethod, Id.class, scheduleId);
         System.assertEquals(expected, actual);
+    }
+
+    @IsTest
+    private static void shouldCallPermissionValidator() {
+        String fieldAccessMethodName = 'hasFLSAccessForFields';
+        String objectAccessMethodName = 'hasObjectAccess';
+
+        permValidatorStub.withReturnValue(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            true
+        );
+        permValidatorStub.withReturnValue(
+            fieldAccessMethodName,
+            new List<Type>{ List<Schema.SObjectField>.class, String.class },
+            true
+        );
+        PermissionValidator.instance = (PermissionValidator) permValidatorStub.createMock();
+
+        Boolean expected = true;
+
+        Test.startTest();
+        Boolean actual = service.checkAddParticipantsFieldPermissions();
+        Test.stopTest();
+
+        permValidatorStub.assertCalled(
+            fieldAccessMethodName,
+            new List<Type>{ List<Schema.SObjectField>.class, String.class }
+        );
+        permValidatorStub.assertCalled(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
+        );
+        System.assertEquals(
+            expected,
+            actual,
+            'Field permissions not returned from Perm Validator as expected.'
+        );
     }
 
     @IsTest

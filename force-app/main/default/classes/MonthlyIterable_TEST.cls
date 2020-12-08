@@ -569,77 +569,77 @@ public with sharing class MonthlyIterable_TEST {
 
     @IsTest
     private static void shouldIterateEveryFirstWednesdayOfTheMonthWithInterval2OverAGivenYearUntilGivenEndDate() {
-        // DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        // rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=2;BYDAY=+1WE');
-        // List<DateTime> expected = new List<DateTime>{
-        //     DateTime.newInstance(2020, 12, 2, 13, 0, 0),
-        //     DateTime.newInstance(2021, 2, 3, 13, 0, 0),
-        //     DateTime.newInstance(2021, 4, 7, 13, 0, 0)
-        // };
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=2;BYDAY=+1WE');
+        List<DateTime> expected = new List<DateTime>{
+            DateTime.newInstance(2020, 12, 2, 13, 0, 0),
+            DateTime.newInstance(2021, 2, 3, 13, 0, 0),
+            DateTime.newInstance(2021, 4, 7, 13, 0, 0)
+        };
 
-        // MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
+        MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
 
-        // Test.startTest();
-        // List<DateTime> actual = new List<DateTime>();
-        // while (iterable.hasNext()) {
-        //     actual.add(DateTime.newInstance(iterable.next(), datetimeStart.time()));
-        // }
-        // Test.stopTest();
+        Test.startTest();
+        List<DateTime> actual = new List<DateTime>();
+        while (iterable.hasNext()) {
+            actual.add(DateTime.newInstance(iterable.next(), datetimeStart.time()));
+        }
+        Test.stopTest();
 
-        // System.assertEquals(
-        //     expected,
-        //     actual,
-        //     'List of Dates returned from the iterator was not as expected'
-        // );
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected'
+        );
     }
 
     @IsTest
     private static void shouldIterateEveryFifthMondayOfTheMonthOverAGivenYearUntilGivenEndDate() {
-        // DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        // rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYDAY=+5MO');
-        // List<DateTime> expected = new List<DateTime>{
-        //     DateTime.newInstance(2021, 3, 29, 13, 0, 0),
-        //     DateTime.newInstance(2021, 5, 31, 13, 0, 0)
-        // };
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYDAY=+5MO');
+        List<DateTime> expected = new List<DateTime>{
+            DateTime.newInstance(2021, 3, 29, 13, 0, 0),
+            DateTime.newInstance(2021, 5, 31, 13, 0, 0)
+        };
 
-        // MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
+        MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
 
-        // Test.startTest();
-        // List<DateTime> actual = new List<DateTime>();
-        // while (iterable.hasNext()) {
-        //     actual.add(DateTime.newInstance(iterable.next(), datetimeStart.time()));
-        // }
-        // Test.stopTest();
+        Test.startTest();
+        List<DateTime> actual = new List<DateTime>();
+        while (iterable.hasNext()) {
+            actual.add(DateTime.newInstance(iterable.next(), datetimeStart.time()));
+        }
+        Test.stopTest();
 
-        // System.assertEquals(
-        //     expected,
-        //     actual,
-        //     'List of Dates returned from the iterator was not as expected'
-        // );
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected'
+        );
     }
 
-    // @IsTest
-    // private static void shouldIterateEveryFifthMondayOfTheMonthUntilCount() {
-    //     DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-    //     rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;BYDAY=+5MO;COUNT=5');
-    //     List<DateTime> expected = new List<DateTime>{
-    //         DateTime.newInstance(2021, 3, 29, 13, 0, 0),
-    //         DateTime.newInstance(2021, 5, 31, 13, 0, 0)
-    //     };
+    @IsTest
+    private static void shouldIterateEveryFifthMondayOfTheMonthUntilCount() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;BYDAY=+5MO;COUNT=5');
+        List<DateTime> expected = new List<DateTime>{
+            DateTime.newInstance(2021, 3, 29, 13, 0, 0),
+            DateTime.newInstance(2021, 5, 31, 13, 0, 0)
+        };
 
-    //     MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
+        MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
 
-    //     Test.startTest();
-    //     List<DateTime> actual = new List<DateTime>();
-    //     while (iterable.hasNext()) {
-    //         actual.add(DateTime.newInstance(iterable.next(), datetimeStart.time()));
-    //     }
-    //     Test.stopTest();
+        Test.startTest();
+        List<DateTime> actual = new List<DateTime>();
+        while (iterable.hasNext()) {
+            actual.add(DateTime.newInstance(iterable.next(), datetimeStart.time()));
+        }
+        Test.stopTest();
 
-    //     System.assertEquals(
-    //         expected,
-    //         actual,
-    //         'List of Dates returned from the iterator was not as expected'
-    //     );
-    // }
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected'
+        );
+    }
 }

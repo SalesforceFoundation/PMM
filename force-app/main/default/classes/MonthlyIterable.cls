@@ -62,22 +62,20 @@ public with sharing class MonthlyIterable extends DailyIterable {
                 Date tempDate = firstOccurenceOfMonth.addDays(
                     (monthlyRecurrenceNumber - 1) * 7
                 );
-                Integer counter = 0;
 
-                while (tempDate.month() > runningDate.month() && counter < 5) {
-                    runningDate = tempDate;
+                while (tempDate.month() > runningDate.month()) {
+                    runningDate = tempDate.toStartOfMonth();
                     firstOccurenceOfMonth = getFirstOccurenceOfMonth();
                     tempDate = firstOccurenceOfMonth.addDays(
                         (monthlyRecurrenceNumber - 1) * 7
                     );
-                    counter++;
                 }
 
                 runningDate = tempDate;
             }
         } else if (rRule.getByDay() != null && runningCount > 0) {
             System.debug('inside else running');
-            runningDate.toStartOfMonth().addMonths(rRule.getInterval());
+            runningDate = runningDate.toStartOfMonth().addMonths(rRule.getInterval());
             Integer monthlyRecurrenceNumber = Integer.valueOf(getRecurrenceWeek());
             // now compare that to the start date
             Date firstOccurenceOfMonth = getFirstOccurenceOfMonth();
@@ -91,13 +89,12 @@ public with sharing class MonthlyIterable extends DailyIterable {
                 );
                 Integer counter = 0;
 
-                while (tempDate.month() > runningDate.month() && counter < 5) {
-                    runningDate.addMonths(rRule.getInterval());
+                while (tempDate.month() > runningDate.month()) {
+                    runningDate = runningDate.addMonths(rRule.getInterval());
                     firstOccurenceOfMonth = getFirstOccurenceOfMonth();
                     tempDate = firstOccurenceOfMonth.addDays(
                         (monthlyRecurrenceNumber - 1) * 7
                     );
-                    counter++;
                 }
                 runningDate = tempDate;
             }
@@ -138,7 +135,8 @@ public with sharing class MonthlyIterable extends DailyIterable {
 
         String recurrenceWeekDayAbbr = getWeekDayAbbr();
         Integer recurrenceWeekDayNum = rRule.getDayNum(recurrenceWeekDayAbbr) + 1;
-
+        System.debug('recurrenceWeekDayNum' + recurrenceWeekDayNum);
+        System.debug('startOfMonthDayNum' + startOfMonthDayNum);
         if (recurrenceWeekDayNum == startOfMonthDayNum) {
             firstWeekDayOccurence = startOfMonth;
         } else if (recurrenceWeekDayNum < startOfMonthDayNum) {
@@ -150,7 +148,7 @@ public with sharing class MonthlyIterable extends DailyIterable {
                 recurrenceWeekDayNum - startOfMonthDayNum
             );
         }
-
+        System.debug('firstWeekDayOccurence' + firstWeekDayOccurence);
         return firstWeekDayOccurence;
     }
 }

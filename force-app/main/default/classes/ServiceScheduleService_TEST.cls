@@ -796,7 +796,7 @@ public with sharing class ServiceScheduleService_TEST {
         Boolean expected = true;
 
         Test.startTest();
-        Boolean actual = service.checkAddParticipantsFieldPermissions();
+        Boolean actual = service.checkAddParticipantsPermissions();
         Test.stopTest();
 
         permValidatorStub.assertCalled(

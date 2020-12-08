@@ -60,9 +60,9 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Boolean checkAddParticipantsFieldPermissions() {
+    public static Boolean checkAddParticipantsPermissions() {
         try {
-            return service.checkAddParticipantsFieldPermissions();
+            return service.checkAddParticipantsPermissions();
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

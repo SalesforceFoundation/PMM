@@ -43,7 +43,7 @@ public with sharing class ServiceScheduleService {
         return serviceSelector.getExistingParticipantContactIdsByScheduleId(scheduleId);
     }
 
-    public Boolean checkAddParticipantsFieldPermissions() {
+    public Boolean checkAddParticipantsPermissions() {
         Boolean canReadServiceSchedule = PermissionValidator.getInstance()
             .hasObjectAccess(
                 ServiceSchedule__c.SObjectType,

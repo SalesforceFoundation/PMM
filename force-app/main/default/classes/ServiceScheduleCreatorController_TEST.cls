@@ -96,13 +96,13 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
     @IsTest
     private static void shouldCallServiceToCheckFLS() {
-        String methodName = 'checkAddParticipantsFieldPermissions';
+        String methodName = 'checkAddParticipantsPermissions';
         Boolean expected = true;
         serviceStub.withReturnValue(methodName, expected);
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         Test.startTest();
-        Boolean actual = ServiceScheduleCreatorController.checkAddParticipantsFieldPermissions();
+        Boolean actual = ServiceScheduleCreatorController.checkAddParticipantsPermissions();
         Test.stopTest();
 
         serviceStub.assertCalled(methodName);
@@ -115,7 +115,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
     @IsTest
     private static void shouldRethrowExceptionFromServiceOnFLSCheck() {
-        String methodName = 'checkAddParticipantsFieldPermissions';
+        String methodName = 'checkAddParticipantsPermissions';
 
         serviceStub.withThrowException(methodName);
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
@@ -123,7 +123,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         Boolean actual;
         Test.startTest();
         try {
-            actual = ServiceScheduleCreatorController.checkAddParticipantsFieldPermissions();
+            actual = ServiceScheduleCreatorController.checkAddParticipantsPermissions();
         } catch (Exception ex) {
             actualException = ex;
         }

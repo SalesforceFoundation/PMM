@@ -15,7 +15,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getExistingParticipantContactIds from "@salesforce/apex/ServiceScheduleCreatorController.getExistingParticipantContactIds";
 import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
 import addParticipants from "@salesforce/apex/ServiceScheduleCreatorController.addParticipants";
-import checkFieldPermissions from "@salesforce/apex/ServiceScheduleCreatorController.checkAddParticipantsFieldPermissions";
+import checkPermissions from "@salesforce/apex/ServiceScheduleCreatorController.checkAddParticipantsPermissions";
 
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import SAVE_LABEL from "@salesforce/label/c.Save";
@@ -43,7 +43,7 @@ export default class ParticipantAdder extends LightningElement {
         noPermissions: NO_PERMISSIONS_MESSAGE_LABEL,
     };
 
-    @wire(checkFieldPermissions, {})
+    @wire(checkPermissions, {})
     wiredPermissions(result) {
         if (!(result.data || result.error)) {
             return;
@@ -145,7 +145,7 @@ export default class ParticipantAdder extends LightningElement {
         this.dispatchEvent(event);
     }
 
-    get isDisabled() {
-        return !this.isLoaded;
+    get isSaveDisabled() {
+        return !this.isLoaded || !this.hasPermissions;
     }
 }

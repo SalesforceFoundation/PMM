@@ -26,6 +26,8 @@ export default class AttendanceRow extends LightningElement {
     @api presentStatus = PRESENT_STATUS;
     @api readOnly = false;
 
+    rowDisabled = false;
+
     name;
 
     _isEdited;
@@ -101,5 +103,10 @@ export default class AttendanceRow extends LightningElement {
     handleQuantityChange(event) {
         this.localRecord[this.fields.quantity.fieldApiName] = event.detail.value;
         this._isEdited = true;
+    }
+
+    handleToggle(event) {
+        this.rowDisabled = !event.detail.checked;
+        console.log(this.rowDisabled);
     }
 }

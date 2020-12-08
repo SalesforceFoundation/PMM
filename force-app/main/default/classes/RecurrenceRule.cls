@@ -172,6 +172,16 @@ public with sharing class RecurrenceRule {
         return result;
     }
 
+    public Integer getDayNum(String dayAbbr) {
+        Integer result;
+        for (Day day : Day.values()) {
+            if (day.name().equalsIgnoreCase(dayAbbr)) {
+                result = day.ordinal();
+            }
+        }
+        return result;
+    }
+
     public String build() {
         List<String> ruleParts = new List<String>();
 

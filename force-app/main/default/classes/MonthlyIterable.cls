@@ -22,7 +22,9 @@ public with sharing class MonthlyIterable extends DailyIterable {
     }
 
     public override void calculateRunningDate() {
-        if (runningCount == 0) {
+        System.debug('rRule.getByDay()' + rRule.getByDay());
+        System.debug('runningCount' + runningCount);
+        if (runningCount == 0 && rRule.getByDay() == null) {
             return; // Use first running date;
         }
 
@@ -47,6 +49,60 @@ public with sharing class MonthlyIterable extends DailyIterable {
                 runningDate = runningDate.addMonths(rRule.getInterval())
                     .addDays(startDay - runningDate.day());
             }
+        } else if (rRule.getByDay() != null && runningCount == 0) {
+            Integer monthlyRecurrenceNumber = Integer.valueOf(getRecurrenceWeek());
+            // now compare that to the start date
+            Date firstOccurenceOfMonth = getFirstOccurenceOfMonth();
+            System.debug('firstOccurenceOfMonth : ' + firstOccurenceOfMonth);
+
+            // if start date < new date then we can keep this as first date
+            if (monthlyRecurrenceNumber == 1) {
+                runningDate = firstOccurenceOfMonth;
+            } else {
+                Date tempDate = firstOccurenceOfMonth.addDays(
+                    (monthlyRecurrenceNumber - 1) * 7
+                );
+                Integer counter = 0;
+
+                while (tempDate.month() > runningDate.month() && counter < 5) {
+                    runningDate = tempDate;
+                    firstOccurenceOfMonth = getFirstOccurenceOfMonth();
+                    tempDate = firstOccurenceOfMonth.addDays(
+                        (monthlyRecurrenceNumber - 1) * 7
+                    );
+                    counter++;
+                }
+
+                runningDate = tempDate;
+            }
+        } else if (rRule.getByDay() != null && runningCount > 0) {
+            System.debug('inside else running');
+            runningDate.toStartOfMonth().addMonths(rRule.getInterval());
+            Integer monthlyRecurrenceNumber = Integer.valueOf(getRecurrenceWeek());
+            // now compare that to the start date
+            Date firstOccurenceOfMonth = getFirstOccurenceOfMonth();
+            System.debug('firstOccurenceOfMonth : ' + firstOccurenceOfMonth);
+            // if start date < new date then we can keep this as first date
+            if (monthlyRecurrenceNumber == 1) {
+                runningDate = firstOccurenceOfMonth;
+            } else {
+                Date tempDate = firstOccurenceOfMonth.addDays(
+                    (monthlyRecurrenceNumber - 1) * 7
+                );
+                Integer counter = 0;
+
+                while (tempDate.month() > runningDate.month() && counter < 5) {
+                    runningDate.addMonths(rRule.getInterval());
+                    firstOccurenceOfMonth = getFirstOccurenceOfMonth();
+                    tempDate = firstOccurenceOfMonth.addDays(
+                        (monthlyRecurrenceNumber - 1) * 7
+                    );
+                    counter++;
+                }
+                runningDate = tempDate;
+            }
+
+            System.debug('runningDate : ' + runningDate);
         } else {
             //The below value is defaulted to the day of the start date and is used to add days to runningDate below.
             startDay = runningDate.day();
@@ -54,5 +110,47 @@ public with sharing class MonthlyIterable extends DailyIterable {
             runningDate = runningDate.addMonths(rRule.getInterval())
                 .addDays(startDay - runningDate.day());
         }
+    }
+
+    public String getRecurrenceWeek() {
+        String byDay = rRule.getByDay();
+        String dayNumber = byDay.subString(1, 2); // This holds first or second
+
+        return dayNumber;
+    }
+
+    public String getWeekDayAbbr() {
+        String byDay = rRule.getByDay();
+        String weekDayName = byDay.subString(2); //This holds the day name
+        return weekDayName;
+    }
+
+    public Date getFirstOccurenceOfMonth() {
+        Date firstWeekDayOccurence;
+        // We need to see what month and get to the start of the month
+        Date startOfMonth = runningDate.toStartOfMonth();
+
+        // Check what day of the week the start of the month is i.e Tuesday, wednesday
+        Integer startOfMonthDayNum = Util.getDayNum(startOfMonth);
+        // Get the first occurance to the day
+        // since we are doing tpStartOfmonth that will give us the first occurence of the day
+        // get the occurence they are looking for that month
+
+        String recurrenceWeekDayAbbr = getWeekDayAbbr();
+        Integer recurrenceWeekDayNum = rRule.getDayNum(recurrenceWeekDayAbbr) + 1;
+
+        if (recurrenceWeekDayNum == startOfMonthDayNum) {
+            firstWeekDayOccurence = startOfMonth;
+        } else if (recurrenceWeekDayNum < startOfMonthDayNum) {
+            firstWeekDayOccurence = startOfMonth.addDays(
+                7 - (startOfMonthDayNum - recurrenceWeekDayNum)
+            );
+        } else {
+            firstWeekDayOccurence = startOfMonth.addDays(
+                recurrenceWeekDayNum - startOfMonthDayNum
+            );
+        }
+
+        return firstWeekDayOccurence;
     }
 }

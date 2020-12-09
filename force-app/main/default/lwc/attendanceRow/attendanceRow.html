@@ -122,16 +122,19 @@
                 </template>
 
                 <!-- SKIP PARTICIPANT TOGGLE -->
-                <lightning-layout-item size="2" class="slds-var-p-around_xx-small">
-                    <lightning-input
-                        type="toggle"
-                        label="Log Attendance for this Participant?"
-                        message-toggle-active="Yes"
-                        message-toggle-inactive="No"
-                        onchange={handleToggle}
-                        checked
-                    >
-                    </lightning-input>
+                <lightning-layout-item
+                    class="slds-var-p-around_medium"
+                    flexibility="auto, no-grow"
+                    alignment-bump="left"
+                    if:true={showSkip}
+                >
+                    <lightning-button-icon-stateful
+                        icon-name="utility:block_visitor"
+                        size="medium"
+                        alternative-text={labels.skip}
+                        onclick={handleToggleButton}
+                        selected={rowDisabled}
+                    ></lightning-button-icon-stateful>
                 </lightning-layout-item>
             </lightning-layout>
         </lightning-record-edit-form>

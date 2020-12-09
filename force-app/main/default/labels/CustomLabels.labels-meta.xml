@@ -232,8 +232,8 @@
         <fullName>Last_Day_Of_Month</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Last Day Of Month</shortDescription>
-        <value>Last day of Month</value>
+        <shortDescription>Last Day of the Month</shortDescription>
+        <value>Last Day of the Month</value>
     </labels>
     <labels>
         <fullName>MissingSObjectType</fullName>
@@ -247,8 +247,8 @@
         <fullName>Monthly_On_Day</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Monthly on day</shortDescription>
-        <value>Monthly on day {0}</value>
+        <shortDescription>Monthly on Day</shortDescription>
+        <value>Monthly on Day {0}</value>
     </labels>
     <labels>
         <fullName>Monthly_On_The</fullName>

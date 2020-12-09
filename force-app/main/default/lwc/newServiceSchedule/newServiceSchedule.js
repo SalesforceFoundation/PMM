@@ -435,20 +435,8 @@ export default class NewServiceSchedule extends LightningElement {
 
     handleGetWeekDay(sessionStartDay) {
         let weekNum;
-        let sessionStartDateDiff = sessionStartDay - 7;
 
-        //TODO: Change to SWITCH and call  this.handleDayOfWeek only once atthe end.set a local variable and use it to call
-        if (sessionStartDateDiff <= 0) {
-            weekNum = 1;
-        } else if (sessionStartDateDiff >= 1 && sessionStartDateDiff < 7) {
-            weekNum = 2;
-        } else if (sessionStartDateDiff >= 7 && sessionStartDateDiff < 15) {
-            weekNum = 3;
-        } else if (sessionStartDateDiff >= 15 && sessionStartDateDiff < 21) {
-            weekNum = 4;
-        } else if (sessionStartDateDiff >= 21) {
-            weekNum = 5;
-        }
+        weekNum = Math.ceil(sessionStartDay / 7);
 
         return weekNum;
     }

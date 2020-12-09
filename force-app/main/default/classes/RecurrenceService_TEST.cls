@@ -119,7 +119,7 @@ public with sharing class RecurrenceService_TEST {
         String daysMethod = 'withDays';
         String resetMethod = 'reset';
         String buildMethod = 'build';
-        String byDay = '+1MO';
+        String byDay = '1MO';
         ruleStub.withReturnValue(buildMethod, rRule);
 
         service.recurrenceRule = (RecurrenceRule) ruleStub.createMock();

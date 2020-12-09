@@ -135,7 +135,7 @@ public with sharing class ServiceScheduleService_TEST {
             PrimaryServiceProvider__c = primaryServiceProvider.Id,
             OtherServiceProvider__c = otherServiceProvider.Id,
             CreateServiceSessionRecords__c = true,
-            MonthlyRecurrenceOption__c = '+1MO'
+            MonthlyRecurrenceOption__c = '1MO'
         );
         ServiceScheduleModel model = new ServiceScheduleModel();
         model.serviceSchedule = schedule;

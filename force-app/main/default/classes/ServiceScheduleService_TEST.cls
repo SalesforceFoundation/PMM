@@ -134,7 +134,8 @@ public with sharing class ServiceScheduleService_TEST {
             DaysOfWeek__c = '1;2;3;4;5;6;7',
             PrimaryServiceProvider__c = primaryServiceProvider.Id,
             OtherServiceProvider__c = otherServiceProvider.Id,
-            CreateServiceSessionRecords__c = true
+            CreateServiceSessionRecords__c = true,
+            MonthlyRecurrenceOption__c = '+1MO'
         );
         ServiceScheduleModel model = new ServiceScheduleModel();
         model.serviceSchedule = schedule;
@@ -219,7 +220,8 @@ public with sharing class ServiceScheduleService_TEST {
                 schedule.ServiceScheduleEndDate__c,
                 Integer.valueOf(schedule.NumberOfServiceSessions__c),
                 new List<Integer>{ 1, 2, 3, 4, 5, 6, 7 },
-                firstSessionStart
+                firstSessionStart,
+                schedule.MonthlyRecurrenceOption__c
             }
         );
         recurrenceServiceStub.assertCalledWith(

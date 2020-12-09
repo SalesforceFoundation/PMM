@@ -620,9 +620,13 @@ public with sharing class MonthlyIterable_TEST {
     @IsTest
     private static void shouldIterateEveryFifthMondayOfTheMonthUntilCount() {
         DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;BYDAY=+5MO;COUNT=5');
+        rRule.withRuleString('FREQ=MONTHLY;BYDAY=+5MO;COUNT=5');
         List<DateTime> expected = new List<DateTime>{
-            DateTime.newInstance(2021, 3, 29, 13, 0, 0)
+            DateTime.newInstance(2021, 3, 29, 13, 0, 0),
+            DateTime.newInstance(2021, 5, 31, 13, 0, 0),
+            DateTime.newInstance(2021, 8, 30, 13, 0, 0),
+            DateTime.newInstance(2021, 11, 29, 13, 0, 0),
+            DateTime.newInstance(2022, 1, 31, 13, 0, 0)
         };
 
         MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);

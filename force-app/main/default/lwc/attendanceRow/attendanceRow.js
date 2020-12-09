@@ -116,10 +116,6 @@ export default class AttendanceRow extends LightningElement {
         return !this.recordId && !this.readOnly;
     }
 
-    handleToggle(event) {
-        this.rowDisabled = event.detail.checked;
-    }
-
     handleToggleButton() {
         this.rowDisabled = !this.rowDisabled;
         if (this.rowDisabled) {

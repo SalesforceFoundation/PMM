@@ -15,7 +15,7 @@
 - [ ] Permission sets are updated to account for CRUD|FLS|Tab|Classes
 - [ ] Field sets are updated to account for new fields
 - [ ] UX approval or UX not necessary
-- [ ] Link the pull request and work item by PR comment and Chatter post respectively, e.g. GUS: W-0000000: Work Name (https://github.com/SalesforceFoundation/Grants-Management/pull/426)
+- [ ] Link the pull request and work item by PR comment and Chatter post respectively, e.g. GUS: W-0000000: Work Name (https://github.com/SalesforceFoundation/PMM/pull/303)
 - [ ] All **acceptance criteria** have been met
     - [ ] Developer
     - [ ] Code Reviewer

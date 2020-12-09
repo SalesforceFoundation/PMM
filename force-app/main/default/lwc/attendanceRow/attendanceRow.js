@@ -90,11 +90,11 @@ export default class AttendanceRow extends LightningElement {
         if (
             event.target.fieldName === this.fields.status.fieldApiName && // status is changing
             this.record[this.fields.status.fieldApiName] === this.presentStatus && // status was present
-            event.detail.value !== this.presentStatus // new status is not present
+            event.target.value !== this.presentStatus // new status is not present
         ) {
             this.localRecord[this.fields.quantity.fieldApiName] = 0; // clear out quantity
         }
-        this.localRecord[event.target.fieldName] = event.detail.value;
+        this.localRecord[event.target.fieldName] = event.target.value;
         this._isEdited = true;
     }
 

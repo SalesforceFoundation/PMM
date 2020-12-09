@@ -132,9 +132,9 @@
                                 >
                                     <lightning-layout-item size={sizes.large}>
                                         <lightning-combobox
-                                            name="progress"
                                             options={monthlyRecurrenceOptions}
                                             value={selectedMonthlyRecurrenceValue}
+                                            onchange={handleMonthlyRecurrenceOptionsChange}
                                             if:true={isMonthly}
                                         ></lightning-combobox>
                                     </lightning-layout-item>

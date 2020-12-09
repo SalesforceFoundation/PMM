@@ -152,7 +152,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Date.class,
                 Integer.class,
                 List<Integer>.class,
-                DateTime.class
+                DateTime.class,
+                String.class
             },
             rRuleString
         );
@@ -209,7 +210,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Date.class,
                 Integer.class,
                 List<Integer>.class,
-                DateTime.class
+                DateTime.class,
+                String.class
             },
             new List<Object>{
                 schedule.Frequency__c,
@@ -394,7 +396,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Date.class,
                 Integer.class,
                 List<Integer>.class,
-                DateTime.class
+                DateTime.class,
+                String.class
             },
             rRuleString
         );
@@ -450,7 +453,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Date.class,
                 Integer.class,
                 List<Integer>.class,
-                DateTime.class
+                DateTime.class,
+                String.class
             },
             new List<Object>{
                 schedule.Frequency__c,
@@ -515,7 +519,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Date.class,
                 Integer.class,
                 List<Integer>.class,
-                DateTime.class
+                DateTime.class,
+                String.class
             },
             rRuleString
         );
@@ -564,7 +569,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Date.class,
                 Integer.class,
                 List<Integer>.class,
-                DateTime.class
+                DateTime.class,
+                String.class
             },
             new List<Object>{
                 schedule.Frequency__c,
@@ -637,7 +643,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Date.class,
                 Integer.class,
                 List<Integer>.class,
-                DateTime.class
+                DateTime.class,
+                String.class
             },
             rRuleString
         );
@@ -677,7 +684,8 @@ public with sharing class ServiceScheduleService_TEST {
                 Date.class,
                 Integer.class,
                 List<Integer>.class,
-                DateTime.class
+                DateTime.class,
+                String.class
             },
             new List<Object>{
                 schedule.Frequency__c,

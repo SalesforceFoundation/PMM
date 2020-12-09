@@ -196,6 +196,7 @@ export default class NewServiceSchedule extends LightningElement {
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
+        this.handleMonthlyRecurrenceOptions();
     }
 
     handleLoad() {
@@ -382,6 +383,10 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     async handleMonthlyRecurrenceOptions() {
+        if (this.picklistFields.monthlyOption.value !== undefined) {
+            this.selectedMonthlyRecurrenceValue = this.picklistFields.monthlyOption.value;
+        }
+
         let sessionStartDay = new Date(this.dateFields.start.value).toLocaleString(
             LOCALE,
             {
@@ -439,5 +444,14 @@ export default class NewServiceSchedule extends LightningElement {
         weekNum = Math.ceil(sessionStartDay / 7);
 
         return weekNum;
+    }
+
+    handleMonthlyRecurrenceOptionsChange(event) {
+        this.selectedMonthlyRecurrenceValue = event.detail.value;
+        if (event.detail.value !== "") {
+            this.picklistFields.monthlyOption.value = this.selectedMonthlyRecurrenceValue;
+        } else {
+            this.picklistFields.monthlyOption.value = undefined;
+        }
     }
 }

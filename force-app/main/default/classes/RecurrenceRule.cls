@@ -119,7 +119,10 @@ public with sharing class RecurrenceRule {
 
     public RecurrenceRule withByDay(String byDay) {
         // rRule spec is '+2SU' for 'second Sunday of the month', but our picklist just stores '2SU' for simplicity
-        this.byDay = '+' + byDay;
+        if (byDay != null) {
+            this.byDay = '+' + byDay;
+        }
+
         return this;
     }
 

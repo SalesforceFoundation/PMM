@@ -568,13 +568,14 @@ public with sharing class MonthlyIterable_TEST {
     }
 
     @IsTest
-    private static void shouldIterateEveryFirstWednesdayOfTheMonthWithInterval2OverAGivenYearUntilGivenEndDate() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=2;BYDAY=+1WE');
+    private static void shouldIterateEverySecondWednesdayOfTheMonthWithInterval2UntilGivenEndDate() {
+        DateTime dateTimeStart = DateTime.newInstance(2021, 2, 10, 13, 0, 0);
+        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20211002T000000Z;INTERVAL=2;BYDAY=+2WE');
         List<DateTime> expected = new List<DateTime>{
-            DateTime.newInstance(2020, 12, 2, 13, 0, 0),
-            DateTime.newInstance(2021, 2, 3, 13, 0, 0),
-            DateTime.newInstance(2021, 4, 7, 13, 0, 0)
+            DateTime.newInstance(2021, 2, 10, 13, 0, 0),
+            DateTime.newInstance(2021, 4, 14, 13, 0, 0),
+            DateTime.newInstance(2021, 6, 9, 13, 0, 0),
+            DateTime.newInstance(2021, 8, 11, 13, 0, 0)
         };
 
         MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
@@ -594,8 +595,8 @@ public with sharing class MonthlyIterable_TEST {
     }
 
     @IsTest
-    private static void shouldIterateEveryFifthMondayOfTheMonthOverAGivenYearUntilGivenEndDate() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+    private static void shouldIterateEveryFifthMondayOfTheMonthUntilGivenEndDate() {
+        DateTime dateTimeStart = DateTime.newInstance(2021, 1, 10, 13, 0, 0);
         rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210502T000000Z;INTERVAL=1;BYDAY=+5MO');
         List<DateTime> expected = new List<DateTime>{
             DateTime.newInstance(2021, 3, 29, 13, 0, 0)
@@ -619,14 +620,14 @@ public with sharing class MonthlyIterable_TEST {
 
     @IsTest
     private static void shouldIterateEveryFifthMondayOfTheMonthUntilCount() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
+        DateTime dateTimeStart = DateTime.newInstance(2021, 6, 10, 13, 0, 0);
         rRule.withRuleString('FREQ=MONTHLY;BYDAY=+5MO;COUNT=5');
         List<DateTime> expected = new List<DateTime>{
-            DateTime.newInstance(2021, 3, 29, 13, 0, 0),
-            DateTime.newInstance(2021, 5, 31, 13, 0, 0),
             DateTime.newInstance(2021, 8, 30, 13, 0, 0),
             DateTime.newInstance(2021, 11, 29, 13, 0, 0),
-            DateTime.newInstance(2022, 1, 31, 13, 0, 0)
+            DateTime.newInstance(2022, 1, 31, 13, 0, 0),
+            DateTime.newInstance(2022, 5, 30, 13, 0, 0),
+            DateTime.newInstance(2022, 8, 29, 13, 0, 0)
         };
 
         MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
@@ -647,15 +648,15 @@ public with sharing class MonthlyIterable_TEST {
 
     @IsTest
     private static void shouldIterateEveryFifthTuesdayOfTheMonthUntilGivenDate() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 12, 2, 13, 0, 0);
-        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20220502T000000Z;BYDAY=+5TU');
+        DateTime dateTimeStart = DateTime.newInstance(2021, 2, 2, 13, 0, 0);
+        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20220602T000000Z;BYDAY=+5TU');
         List<DateTime> expected = new List<DateTime>{
-            DateTime.newInstance(2020, 12, 29, 13, 0, 0),
             DateTime.newInstance(2021, 3, 30, 13, 0, 0),
             DateTime.newInstance(2021, 6, 29, 13, 0, 0),
             DateTime.newInstance(2021, 8, 31, 13, 0, 0),
             DateTime.newInstance(2021, 11, 30, 13, 0, 0),
-            DateTime.newInstance(2022, 3, 29, 13, 0, 0)
+            DateTime.newInstance(2022, 3, 29, 13, 0, 0),
+            DateTime.newInstance(2022, 5, 31, 13, 0, 0)
         };
 
         MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);

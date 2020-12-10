@@ -64,29 +64,29 @@ public with sharing class MonthlyIterable extends DailyIterable {
         return weekDayName;
     }
 
-    public Date getFirstOccurenceOfMonth() {
-        Date firstWeekDayOccurence;
+    public Date getFirstOccurrenceOfMonth() {
+        Date firstWeekDayOccurrence;
         // We need to see what month and get to the start of the month
         Date startOfMonth = runningDate.toStartOfMonth();
 
-        // Check what day of the week the start of the month is i.e Tuesday, wednesday
+        // Check what day of the week the start of the month is i.e Tuesday, Wednesday
         Integer startOfMonthDayNum = Util.getDayNum(startOfMonth);
 
         String recurrenceWeekDayAbbr = getWeekDayAbbr();
         Integer recurrenceWeekDayNum = rRule.getDayNum(recurrenceWeekDayAbbr) + 1;
         if (recurrenceWeekDayNum == startOfMonthDayNum) {
-            firstWeekDayOccurence = startOfMonth;
+            firstWeekDayOccurrence = startOfMonth;
         } else if (recurrenceWeekDayNum < startOfMonthDayNum) {
-            firstWeekDayOccurence = startOfMonth.addDays(
+            firstWeekDayOccurrence = startOfMonth.addDays(
                 7 - (startOfMonthDayNum - recurrenceWeekDayNum)
             );
         } else {
-            firstWeekDayOccurence = startOfMonth.addDays(
+            firstWeekDayOccurrence = startOfMonth.addDays(
                 recurrenceWeekDayNum - startOfMonthDayNum
             );
         }
 
-        return firstWeekDayOccurence;
+        return firstWeekDayOccurrence;
     }
 
     public void calculateRecurrenceRunningDate() {
@@ -95,12 +95,12 @@ public with sharing class MonthlyIterable extends DailyIterable {
         }
 
         Integer monthlyRecurrenceNumber = Integer.valueOf(getRecurrenceWeek());
-        Date firstOccurenceOfMonth = getFirstOccurenceOfMonth();
+        Date firstOccurrenceOfMonth = getFirstOccurrenceOfMonth();
 
         if (monthlyRecurrenceNumber == 1) {
-            runningDate = firstOccurenceOfMonth;
+            runningDate = firstOccurrenceOfMonth;
         } else {
-            Date tempDate = firstOccurenceOfMonth.addDays(
+            Date tempDate = firstOccurrenceOfMonth.addDays(
                 (monthlyRecurrenceNumber - 1) * 7
             );
 
@@ -114,8 +114,8 @@ public with sharing class MonthlyIterable extends DailyIterable {
                     runningDate = runningDate.addMonths(rRule.getInterval());
                 }
 
-                firstOccurenceOfMonth = getFirstOccurenceOfMonth();
-                tempDate = firstOccurenceOfMonth.addDays(
+                firstOccurrenceOfMonth = getFirstOccurrenceOfMonth();
+                tempDate = firstOccurrenceOfMonth.addDays(
                     (monthlyRecurrenceNumber - 1) * 7
                 );
             }

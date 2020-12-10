@@ -15,6 +15,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getExistingParticipantContactIds from "@salesforce/apex/ServiceScheduleCreatorController.getExistingParticipantContactIds";
 import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
 import addParticipants from "@salesforce/apex/ServiceScheduleCreatorController.addParticipants";
+import checkPermissions from "@salesforce/apex/ServiceScheduleCreatorController.checkAddParticipantsPermissions";
 
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import SAVE_LABEL from "@salesforce/label/c.Save";
@@ -23,6 +24,7 @@ import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
 import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 import SAVE_SUCCESS from "@salesforce/label/c.Add_Service_Participants_Success";
+import NO_PERMISSIONS_MESSAGE_LABEL from "@salesforce/label/c.No_Permission_Message";
 
 export default class ParticipantAdder extends LightningElement {
     @api recordId;
@@ -30,6 +32,7 @@ export default class ParticipantAdder extends LightningElement {
     isLoaded = false;
     serviceScheduleModel;
     existingParticipants;
+    hasPermissions;
     labels = {
         save: SAVE_LABEL,
         success: SUCCESS_LABEL,
@@ -37,7 +40,18 @@ export default class ParticipantAdder extends LightningElement {
         cancel: CANCEL_LABEL,
         loading: LOADING_LABEL,
         successMessage: SAVE_SUCCESS,
+        noPermissions: NO_PERMISSIONS_MESSAGE_LABEL,
     };
+
+    @wire(checkPermissions, {})
+    wiredPermissions(result) {
+        if (!(result.data || result.error)) {
+            return;
+        }
+        if (result.data) {
+            this.hasPermissions = result.data;
+        }
+    }
 
     @wire(getRecord, {
         recordId: "$recordId",
@@ -131,7 +145,7 @@ export default class ParticipantAdder extends LightningElement {
         this.dispatchEvent(event);
     }
 
-    get isDisabled() {
-        return !this.isLoaded;
+    get isSaveDisabled() {
+        return !this.isLoaded || !this.hasPermissions;
     }
 }

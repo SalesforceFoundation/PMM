@@ -279,6 +279,13 @@
         <value>Next</value>
     </labels>
     <labels>
+        <fullName>No_Permission_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You don't have access to this information. Ask your admin for help.</shortDescription>
+        <value>You don't have access to this information. Ask your admin for help.</value>
+    </labels>
+    <labels>
         <fullName>No_Service_On_BSDT</fullName>
         <language>en_US</language>
         <protected>true</protected>

@@ -13,23 +13,33 @@
             {labels.addServiceParticipants}
         </h2>
     </header>
-
     <template if:true={isLoaded}>
-        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-            <c-participant-selector
-                service-id={serviceId}
-                schedule-id={recordId}
-                existing-contact-ids={existingParticipants.data}
-                service-schedule-model={serviceScheduleModel}
-            ></c-participant-selector>
-            <template if:true={errorMessage}>
+        <template if:false={hasPermissions}>
+            <div class="slds-var-p-around_small">
                 <c-scoped-notification
-                    theme="error"
-                    title={errorMessage}
-                    class="slds-var-p-around_small"
-                ></c-scoped-notification
-            ></template>
-        </div>
+                    theme="warning"
+                    title={labels.noPermissions}
+                ></c-scoped-notification>
+            </div>
+        </template>
+
+        <template if:true={hasPermissions}>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <c-participant-selector
+                    service-id={serviceId}
+                    schedule-id={recordId}
+                    existing-contact-ids={existingParticipants.data}
+                    service-schedule-model={serviceScheduleModel}
+                ></c-participant-selector>
+                <template if:true={errorMessage}>
+                    <c-scoped-notification
+                        theme="error"
+                        title={errorMessage}
+                        class="slds-var-p-around_small"
+                    ></c-scoped-notification
+                ></template>
+            </div>
+        </template>
     </template>
 
     <footer class="slds-modal__footer">

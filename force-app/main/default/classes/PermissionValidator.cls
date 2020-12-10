@@ -53,13 +53,17 @@ public with sharing class PermissionValidator {
                     return true;
                 } else if (
                     operation == 'insert' &&
-                    !fieldsMap.get(fieldName).getDescribe().isCreateable()
+                    !hasFieldCreateAccess(fieldsMap.get(fieldName).getDescribe())
                 ) {
                     return false;
                 } else if (
                     operation == 'upsert' &&
-                    (!fieldsMap.get(fieldName).getDescribe().isCreateable() ||
-                    !fieldsMap.get(fieldName).getDescribe().isUpdateable())
+                    !hasFieldUpsertAccess(fieldsMap.get(fieldName).getDescribe())
+                ) {
+                    return false;
+                } else if (
+                    operation == 'update' &&
+                    !hasFieldUpdateAccess(fieldsMap.get(fieldName).getDescribe())
                 ) {
                     return false;
                 } else if (
@@ -73,6 +77,44 @@ public with sharing class PermissionValidator {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Boolean hasFLSAccessForFields(Schema.SObjectField field, String operation) {
+        return hasFLSAccessForFields(new List<Schema.SObjectField>{ field }, operation);
+    }
+
+    public Boolean hasFLSAccessForFields(
+        List<Schema.SObjectField> fields,
+        String operation
+    ) {
+        for (Schema.SObjectField field : fields) {
+            if (operation == 'insert' && !hasFieldCreateAccess(field.getDescribe())) {
+                return false;
+            } else if (
+                operation == 'upsert' && !hasFieldUpsertAccess(field.getDescribe())
+            ) {
+                return false;
+            } else if (
+                operation == 'update' && !hasFieldUpdateAccess(field.getDescribe())
+            ) {
+                return false;
+            } else if (operation == 'read' && !hasFieldReadAccess(field.getDescribe())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Boolean hasFieldCreateAccess(DescribeFieldResult field) {
+        return field.isCreateable();
+    }
+
+    public Boolean hasFieldUpsertAccess(DescribeFieldResult field) {
+        return field.isCreateable() && field.isUpdateable();
+    }
+
+    public Boolean hasFieldUpdateAccess(DescribeFieldResult field) {
+        return field.isUpdateable();
     }
 
     public Boolean hasFieldReadAccess(DescribeFieldResult field) {

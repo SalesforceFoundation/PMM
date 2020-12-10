@@ -8,6 +8,10 @@
                 <span class="slds-card__header-title">{labels.recentSessions}</span>
             </h1>
             <div>
+                <c-list-view-selector
+                    object-api-name={objectApiName}
+                    onselect={handleListViewSelected}
+                ></c-list-view-selector>
                 <lightning-button-menu
                     variant="container"
                     class="listViewSelector"

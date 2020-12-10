@@ -1,0 +1,26 @@
+<template>
+    <div class="slds-var-p-top_x-small slds-text-heading_small">
+        <lightning-button-menu
+            variant="container"
+            onselect={handleListViewSelected}
+            label={selectedListView.label}
+            class="listViewSelector"
+            if:true={options}
+        >
+            <div
+                role="presentation"
+                class="slds-text-title_caps slds-var-m-around_medium"
+            >
+                {labels.listViewLabel}
+            </div>
+            <template for:each={options} for:item="option">
+                <lightning-menu-item
+                    label={option.label}
+                    value={option.value}
+                    key={option.value}
+                    checked={option.isChecked}
+                ></lightning-menu-item>
+            </template>
+        </lightning-button-menu>
+    </div>
+</template>

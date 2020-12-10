@@ -26,6 +26,7 @@ export default class RecentSessions extends LightningElement {
 
     hasLoaded = false;
     isAccordionSectionOpen = false;
+    objectApiName = SERVICE_SESSION_OBJECT.objectApiName;
     objectLabel;
     objectLabelPlural;
     selectedMenuItemLabel;
@@ -35,6 +36,7 @@ export default class RecentSessions extends LightningElement {
     sessionsContainerMediumSize = 6;
     sessionsContainerLargeSize = 6;
     sessionsContainerPaddingAround;
+    sessionIds;
 
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,
@@ -147,8 +149,26 @@ export default class RecentSessions extends LightningElement {
         }
     }
 
+    handleListViewSelected() {
+        let listViewSelector = this.template.querySelector("c-list-view-selector");
+        if (!listViewSelector) {
+            return;
+        }
+
+        let records = listViewSelector.records;
+        if (!records) {
+            return;
+        }
+
+        this.sessionIds = listViewSelector.records.map(session => session.id);
+        this.handleGetServiceSessions();
+    }
+
     handleGetServiceSessions() {
-        getServiceSessions({ dateLiteral: this.selectedMenuItemValue })
+        getServiceSessions({
+            dateLiteral: this.selectedMenuItemValue,
+            sessionIds: this.sessionIds,
+        })
             .then(result => {
                 if (!result) {
                     return;

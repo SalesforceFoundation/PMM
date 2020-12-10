@@ -162,6 +162,7 @@ export default class RecentSessions extends LightningElement {
 
         this.sessionIds = listViewSelector.records.map(session => session.id);
         this.handleGetServiceSessions();
+        console.table(this.sessionIds);
     }
 
     handleGetServiceSessions() {

@@ -191,13 +191,13 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Sessions not returned from the service as expected.'
         );
         System.assertEquals(
-            expected.serviceSchedule,
-            actual.serviceSchedule,
+            String.valueOf(expected.serviceSchedule),
+            String.valueOf(actual.serviceSchedule),
             'Schedule not returned from the service as expected.'
         );
 
@@ -305,8 +305,8 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Sessions not returned from the service as expected.'
         );
         System.assertEquals(
@@ -432,13 +432,13 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Sessions not returned from the service as expected.'
         );
         System.assertEquals(
-            expected.serviceSchedule,
-            actual.serviceSchedule,
+            String.valueOf(expected.serviceSchedule),
+            String.valueOf(actual.serviceSchedule),
             'Schedule not returned from the service as expected.'
         );
 
@@ -546,13 +546,13 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Sessions not returned from the service as expected.'
         );
         System.assertEquals(
-            expected.serviceSchedule,
-            actual.serviceSchedule,
+            String.valueOf(expected.serviceSchedule),
+            String.valueOf(actual.serviceSchedule),
             'Schedule not returned from the service as expected.'
         );
 
@@ -606,8 +606,8 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Expected an empty list of sessions to be returned.'
         );
     }

@@ -45,6 +45,7 @@ Create Program Engagement
      Verify Details                          Client                   contains                  ${contact}[FirstName] ${contact}[LastName]
      Page Should Not Contain                 ${program_engagement_name}
      Verify Page Contains Related List       Service Deliveries
+     Verify Page Contains Related List       Service Participant
      ${program_engagement_id} =              Save Current Record ID For Deletion                ${ns}ProgramEngagement__c
 
 

@@ -39,4 +39,6 @@ Create Service from top nav
      verify details                         Program            contains          ${program}[Name]
      verify details                         Service Name       contains          ${service_name}
      verify page contains related list      Service Deliveries
+     Verify Page Contains Related List      Service Schedule
+     Verify Page Contains Related List      Service Participant
      ${service_id} =                        Save Current Record ID For Deletion     ${ns}Service__c

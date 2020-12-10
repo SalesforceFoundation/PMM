@@ -43,6 +43,45 @@ public with sharing class ServiceScheduleService {
         return serviceSelector.getExistingParticipantContactIdsByScheduleId(scheduleId);
     }
 
+    public Boolean checkAddParticipantsPermissions() {
+        Boolean canReadServiceSchedule = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ServiceSchedule__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            );
+        Boolean canReadProgramEngagement = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ProgramEngagement__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            );
+        Boolean canCreateServiceParticipant = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ServiceParticipant__c.SObjectType,
+                PermissionValidator.CRUDAccessType.CREATEABLE
+            );
+        List<Schema.SObjectField> fieldsRequireReadAccess = new List<Schema.SObjectField>{
+            ServiceSchedule__c.Service__c,
+            ServiceSchedule__c.Name,
+            ProgramEngagement__c.Contact__c,
+            Contact.Name
+        };
+        List<Schema.SObjectField> fieldsRequireInsertAccess = new List<Schema.SObjectField>{
+            ServiceParticipant__c.Name,
+            ServiceParticipant__c.ServiceSchedule__c,
+            ServiceParticipant__c.Service__c,
+            ServiceParticipant__c.ProgramEngagement__c,
+            ServiceParticipant__c.Contact__c
+        };
+
+        return PermissionValidator.getInstance()
+                .hasFLSAccessForFields(fieldsRequireReadAccess, 'read') &&
+            PermissionValidator.getInstance()
+                .hasFLSAccessForFields(fieldsRequireInsertAccess, 'insert') &&
+            canReadServiceSchedule &&
+            canReadProgramEngagement &&
+            canCreateServiceParticipant;
+    }
+
     public void addParticipants(List<ProgramEngagement__c> engagements, Id scheduleId) {
         ServiceSchedule__c schedule = serviceSelector.getScheduleById(scheduleId);
         domain.insertParticipants(engagements, schedule);

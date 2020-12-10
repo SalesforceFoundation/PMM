@@ -72,7 +72,7 @@ private class PermissionValidator_TEST {
     }
 
     @IsTest
-    private static void testHasFLSAccessUpsertNonReparentable() {
+    private static void testHasFLSAccessUpsertNonUpdateable() {
         Boolean nonUpdateableField = PermissionValidator.getInstance()
             .hasFLSAccessForFields(
                 Schema.SObjectType.Program__c.getName(),
@@ -85,9 +85,29 @@ private class PermissionValidator_TEST {
     }
 
     @IsTest
+    private static void testHasFLSAccessUpdateNonUpdateable() {
+        Boolean nonUpdateableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(
+                Schema.SObjectType.Program__c.getName(),
+                new List<String>{
+                    Schema.SObjectType.Program__c.fields.LastModifiedById.getName()
+                },
+                'update'
+            );
+        System.assert(!nonUpdateableField, 'Non updateable system field, expect false');
+    }
+
+    @IsTest
     private static void testHasFLSAccessUpsertGoodField() {
         Boolean editableField = PermissionValidator.getInstance()
             .hasFLSAccessForFields('Contact', new List<String>{ 'FirstName' }, 'upsert');
+        System.assert(editableField, 'Editable field, expect true');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpdateGoodField() {
+        Boolean editableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields('Contact', new List<String>{ 'FirstName' }, 'update');
         System.assert(editableField, 'Editable field, expect true');
     }
 
@@ -102,7 +122,7 @@ private class PermissionValidator_TEST {
     private static void testHasFLSAccessNoFLSField() {
         Boolean noFLSField;
         System.runAs(TestUtil.getTestUser()) {
-            // test user has no custom object permissions
+            // test user's "Standard User" profile has no access to Contact.DoNotCall
             noFLSField = PermissionValidator.getInstance()
                 .hasFLSAccessForFields(
                     'Contact',
@@ -110,7 +130,61 @@ private class PermissionValidator_TEST {
                     'read'
                 );
         }
-        System.assert(!noFLSField, 'Custom field name, expect false');
+        System.assert(!noFLSField, 'Inaccessible field name, expect false');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessInsertNonCreatableFieldByField() {
+        Boolean nonCreatableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Contact.LastModifiedById, 'insert');
+        System.debug(JSON.serialize(Contact.LastModifiedById.getDescribe()));
+        System.assert(!nonCreatableField, 'Can not insert system field, expect false');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpsertNonUpdateableByField() {
+        Boolean nonUpdateableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Program__c.LastModifiedById, 'upsert');
+        System.assert(!nonUpdateableField, 'Non updateable system field, expect false');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpdateNonUpdateableByField() {
+        Boolean nonUpdateableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Program__c.LastModifiedById, 'update');
+        System.assert(!nonUpdateableField, 'Non updateable system field, expect false');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpsertGoodFieldByField() {
+        Boolean editableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Contact.FirstName, 'upsert');
+        System.assert(editableField, 'Editable field, expect true');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessUpdateGoodFieldByField() {
+        Boolean editableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Contact.FirstName, 'update');
+        System.assert(editableField, 'Editable field, expect true');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessReadGoodFieldByField() {
+        Boolean readableField = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(Contact.FirstName, 'read');
+        System.assert(readableField, 'Readable field, expect true');
+    }
+
+    @IsTest
+    private static void testHasFLSAccessNoFLSFieldByField() {
+        Boolean noFLSField;
+        System.runAs(TestUtil.getTestUser()) {
+            // test user's "Standard User" profile has no access to Contact.DoNotCall
+            noFLSField = PermissionValidator.getInstance()
+                .hasFLSAccessForFields(Contact.DoNotCall, 'read');
+        }
+        System.assert(!noFLSField, 'Inaccessible field name, expect false');
     }
 
     @IsTest

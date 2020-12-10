@@ -124,6 +124,16 @@ export default class AttendanceRow extends LightningElement {
     handleToggleButton() {
         this.rowDisabled = !this.rowDisabled;
         if (this.rowDisabled) {
+            let inputFields = [
+                ...this.template.querySelectorAll("lightning-input"),
+                ...this.template.querySelectorAll("lightning-input-field"),
+            ];
+            inputFields.forEach(field => {
+                field.value = null;
+            });
+
+            this.localRecord[this.fields.quantity.fieldApiName] = null;
+
             this.localFieldSet.forEach(field => {
                 field.value = null;
             });

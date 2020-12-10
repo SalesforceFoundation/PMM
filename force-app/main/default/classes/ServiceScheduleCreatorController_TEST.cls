@@ -95,6 +95,51 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
+    private static void shouldCallServiceToCheckFLS() {
+        String methodName = 'checkAddParticipantsPermissions';
+        Boolean expected = true;
+        serviceStub.withReturnValue(methodName, expected);
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        Test.startTest();
+        Boolean actual = ServiceScheduleCreatorController.checkAddParticipantsPermissions();
+        Test.stopTest();
+
+        serviceStub.assertCalled(methodName);
+        System.assertEquals(
+            expected,
+            actual,
+            'Expected the controller to return the same value returned by the service.'
+        );
+    }
+
+    @IsTest
+    private static void shouldRethrowExceptionFromServiceOnFLSCheck() {
+        String methodName = 'checkAddParticipantsPermissions';
+
+        serviceStub.withThrowException(methodName);
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+        Exception actualException;
+        Boolean actual;
+        Test.startTest();
+        try {
+            actual = ServiceScheduleCreatorController.checkAddParticipantsPermissions();
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+        System.assertEquals(null, actual);
+
+        serviceStub.assertCalled(methodName);
+    }
+
+    @IsTest
     private static void shouldGetNewSessionFromService() {
         DateTime startDateTime = System.now();
         DateTime endDateTime = startDateTime.addHours(1);

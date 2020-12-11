@@ -1,16 +1,14 @@
 <template>
     <lightning-card>
         <!-- Lightning Card Header -->
-        <div
-            class="slds-border_bottom slds-var-p-left_small slds-var-p-bottom_small slds-var-p-top_xxx-small"
-        >
+        <div class="slds-border_bottom slds-var-p-left_small slds-var-p-bottom_xxx-small">
             <h1 slot="title" class="header-title-container slds-text-title_bold">
                 <span class="slds-card__header-title">{labels.recentSessions}</span>
             </h1>
-            <lightning-layout class="slds-var-p-top_x-small">
+            <lightning-layout class="slds-var-p-top_xx-small">
                 <lightning-layout-item>
                     <div class="slds-form-element">
-                        <label class="slds-form-element__label">
+                        <label class="slds-form-element__label slds-m-bottom_none">
                             {labels.listView}
                         </label>
                         <div class="slds-form-element__control">
@@ -23,7 +21,7 @@
                 </lightning-layout-item>
                 <lightning-layout-item>
                     <div class="slds-form-element slds-var-p-left_small">
-                        <label class="slds-form-element__label">
+                        <label class="slds-form-element__label slds-m-bottom_none">
                             {labels.duration}
                         </label>
                         <div class="slds-form-element__control">
@@ -47,11 +45,14 @@
                 </lightning-layout-item>
             </lightning-layout>
         </div>
-        <c-scoped-notification
-            theme="warning"
-            title={labels.listViewLimit}
-            if:true={listViewLimitReached}
-        ></c-scoped-notification>
+        <div class="slds-var-p-around_small">
+            <c-scoped-notification
+                theme="warning"
+                rounded="true"
+                title={labels.listViewLimit}
+                if:true={listViewLimitReached}
+            ></c-scoped-notification>
+        </div>
         <!-- Lightning Card Body -->
 
         <div

@@ -21,6 +21,7 @@ const INVERSE_ICON_THEMES = [SUCCESS, INFO, ERROR];
 export default class ScopedNotification extends LightningElement {
     @api theme = "light";
     @api title;
+    @api rounded = false;
 
     labels = {
         error: ERROR_LABEL,
@@ -34,6 +35,10 @@ export default class ScopedNotification extends LightningElement {
         } else {
             const theme = !THEMES.includes(this.theme) ? INFO : this.theme;
             slds += `slds-theme_${theme}`;
+        }
+
+        if (this.rounded) {
+            slds += " slds-box";
         }
 
         return slds;

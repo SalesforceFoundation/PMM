@@ -7,6 +7,8 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
 import LIST_VIEW_LIMIT_LABEL from "@salesforce/label/c.List_View_Limit";
+import LIST_VIEW_LABEL from "@salesforce/label/c.List_View";
+import DURATION_LABEL from "@salesforce/label/c.Duration";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
@@ -45,6 +47,8 @@ export default class RecentSessions extends LightningElement {
         recentSessions: RECENT_SESSIONS_LABEL,
         loading: LOADING_LABEL,
         listViewLimit: LIST_VIEW_LIMIT_LABEL,
+        listView: LIST_VIEW_LABEL,
+        duration: DURATION_LABEL,
     };
 
     fields = {

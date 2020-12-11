@@ -1,6 +1,9 @@
 import { api, LightningElement, track, wire } from "lwc";
 import { getListUi } from "lightning/uiListApi";
+import { loadStyle } from "lightning/platformResourceLoader";
+
 import userId from "@salesforce/user/Id";
+import pmmFolder from "@salesforce/resourceUrl/pmm";
 import LIST_VIEW_LABEL from "@salesforce/label/c.List_Views";
 import PIN_LIST_VIEW_LABEL from "@salesforce/label/c.Pin_List_View";
 
@@ -24,12 +27,24 @@ export default class ListViewSelector extends LightningElement {
         pinListView: PIN_LIST_VIEW_LABEL,
     };
 
+    connectedCallback() {
+        loadStyle(this, pmmFolder + "/listViewSelectorOverrides.css");
+    }
+
     @wire(getListUi, { objectApiName: "$objectApiName" })
-    wiredListViews;
+    listViews({ error, data }) {
+        if (data) {
+            this.selectPinnedList();
+            this.options = data;
+            this.selectDefaultList();
+        } else if (error) {
+            console.log(JSON.stringify(error));
+        }
+    }
 
     @wire(getListUi, {
         objectApiName: "$objectApiName",
-        listViewApiName: "$selectedListView.value",
+        listViewApiName: "$selectedListViewValue",
         pageSize: 2000,
         pageToken: "$pageToken",
     })
@@ -46,6 +61,25 @@ export default class ListViewSelector extends LightningElement {
         }
     }
 
+    get selectedListViewValue() {
+        return this.selectedListView.value;
+    }
+
+    selectPinnedList() {
+        this.pinnedListView = JSON.parse(localStorage.getItem(this.pinnedListViewKey));
+
+        if (!this.selectedListView.value && this.pinnedListView) {
+            this.selectedListView = this.pinnedListView;
+        }
+    }
+
+    selectDefaultList() {
+        if (!this.selectedListView.value && this._options.length) {
+            this._options[0].isChecked = true;
+            this.selectedListView = { ...this._options[0] };
+        }
+    }
+
     handleNextPage() {
         this.pageToken = this.nextPageToken;
     }
@@ -54,37 +88,18 @@ export default class ListViewSelector extends LightningElement {
         this.pageToken = this.previousPageToken;
     }
 
-    get options() {
-        if (
-            this._options.length > 0 ||
-            !this.wiredListViews ||
-            !this.wiredListViews.data
-        ) {
-            return this._options;
-        }
-
-        this.pinnedListView = JSON.parse(localStorage.getItem(this.pinnedListViewKey));
-
-        if (!this.selectedListView.value && this.pinnedListView) {
-            this.selectedListView = this.pinnedListView;
-        }
-
-        this._options = this.wiredListViews.data.lists.map(listView => {
+    set options(data) {
+        this._options = data.lists.map(listView => {
             return {
                 label: listView.label,
                 value: listView.apiName,
                 isChecked: listView.apiName === this.selectedListView.value,
             };
         });
-        if (!this._options.length) {
-            return this._options;
-        }
+    }
 
-        if (!this.selectedListView.value) {
-            this._options[0].isChecked = true;
-            this.selectedListView = { ...this._options[0] };
-        }
-
+    get options() {
+        console.log(this._options);
         return this._options;
     }
 

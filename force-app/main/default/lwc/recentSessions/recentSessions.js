@@ -125,6 +125,7 @@ export default class RecentSessions extends LightningElement {
 
     connectedCallback() {
         loadStyle(this, pmmFolder + "/recentSessionsOverrides.css");
+        loadStyle(this, pmmFolder + "/listViewSelectorOverrides.css");
 
         if (this.flexipageRegionWidth === "SMALL") {
             this.sessionsContainerMediumSize = 12;

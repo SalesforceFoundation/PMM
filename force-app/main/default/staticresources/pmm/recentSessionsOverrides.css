@@ -7,17 +7,6 @@
     padding-bottom: 0px;
 }
 
-.listViewSelector button,
-.listViewSelector button:hover,
-.listViewSelector button:focus,
-.listViewSelector button:active {
-    color: #000000;
-}
-
-.listViewSelector lightning-primitive-icon {
-    margin-left: 10px;
-}
-
 .slds-button__icon {
     margin-bottom: 2px;
 }

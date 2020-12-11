@@ -30,6 +30,7 @@ public with sharing class RecurrenceRule {
         SA
     }
 
+    private static String LAST_DAY_OF_MONTH = 'LastDayOfMonth';
     @TestVisible
     private String rRule;
     private Frequency freq;
@@ -98,29 +99,19 @@ public with sharing class RecurrenceRule {
         }
 
         Set<Integer> daysToAdd = new Set<Integer>();
+        daysToAdd.addAll(new Set<Integer>{ 28, 29, 30, 31 });
 
-        switch on dateTimeStart.day() {
-            when 29 {
-                daysToAdd.addAll(new Set<Integer>{ 28, 29 });
-            }
-            when 30 {
-                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30 });
-            }
-            when 31 {
-                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30, 31 });
-            }
-        }
-        if (daysToAdd.size() != 0) {
-            byMonthDays = daysToAdd;
-        }
+        byMonthDays = daysToAdd;
 
         return this;
     }
 
     public RecurrenceRule withByDay(String byDay) {
         // rRule spec is '+2SU' for 'second Sunday of the month', but our picklist just stores '2SU' for simplicity
-        if (byDay != null) {
+        if (byDay != LAST_DAY_OF_MONTH && byDay != null) {
             this.byDay = '+' + byDay;
+        } else {
+            this.byDay = byDay;
         }
 
         return this;
@@ -238,8 +229,9 @@ public with sharing class RecurrenceRule {
             for (Integer monthday : byMonthDays) {
                 monthDays.add(String.valueOf(monthday));
             }
-
-            ruleParts.add('BYMONTHDAY=' + String.join(monthDays, ','));
+            if (byDay != null && byDay == LAST_DAY_OF_MONTH) {
+                ruleParts.add('BYMONTHDAY=' + String.join(monthDays, ','));
+            }
         }
 
         rRule = String.join(ruleParts, ';');

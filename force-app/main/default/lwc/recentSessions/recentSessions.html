@@ -29,7 +29,11 @@
                 </lightning-button-menu>
             </div>
         </div>
-
+        <c-scoped-notification
+            theme="warning"
+            title={labels.listViewLimit}
+            if:true={listViewLimitReached}
+        ></c-scoped-notification>
         <!-- Lightning Card Body -->
 
         <div

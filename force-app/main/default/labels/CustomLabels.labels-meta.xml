@@ -633,6 +633,13 @@
         <value>Day</value>
     </labels>
     <labels>
+        <fullName>List_View_Limit</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning when list view limit is reached.</shortDescription>
+        <value>The selected list view has 2000+ records, all matching records may not be displayed.</value>
+    </labels>
+    <labels>
         <fullName>Months</fullName>
         <language>en_US</language>
         <protected>true</protected>

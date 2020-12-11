@@ -16,6 +16,7 @@ export default class ListViewSelector extends LightningElement {
     perviousPageToken = null;
     error;
     pinnedListViewKey = `${PINNED_LIST_VIEW}_${userId}`;
+    pinnedListView;
     _options = [];
 
     labels = {
@@ -62,13 +63,10 @@ export default class ListViewSelector extends LightningElement {
             return this._options;
         }
 
-        if (
-            !this.selectedListView.value &&
-            localStorage.getItem(this.pinnedListViewKey)
-        ) {
-            this.selectedListView = JSON.parse(
-                localStorage.getItem(this.pinnedListViewKey)
-            );
+        this.pinnedListView = JSON.parse(localStorage.getItem(this.pinnedListViewKey));
+
+        if (!this.selectedListView.value && this.pinnedListView) {
+            this.selectedListView = this.pinnedListView;
         }
 
         this._options = this.wiredListViews.data.lists.map(listView => {
@@ -90,11 +88,20 @@ export default class ListViewSelector extends LightningElement {
         return this._options;
     }
 
+    get pinnedState() {
+        return (
+            this.pinnedListView &&
+            this.selectedListView &&
+            this.pinnedListView.value === this.selectedListView.value
+        );
+    }
+
     handlePinListView() {
         localStorage.setItem(
             this.pinnedListViewKey,
             JSON.stringify(this.selectedListView)
         );
+        this.pinnedListView = this.selectedListView;
     }
 
     handleListViewSelected(event) {

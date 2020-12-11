@@ -6,6 +6,7 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi";
 
 import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
+import LIST_VIEW_LIMIT_LABEL from "@salesforce/label/c.List_View_Limit";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
@@ -18,6 +19,7 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const THIS_WEEK = "THIS_WEEK";
 const FIELD_SET_NAME = "RecentSessionsView";
+const MAX_LIST_VIEW_RECORDS = 2000;
 
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
@@ -42,6 +44,7 @@ export default class RecentSessions extends LightningElement {
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,
         loading: LOADING_LABEL,
+        listViewLimit: LIST_VIEW_LIMIT_LABEL,
     };
 
     fields = {
@@ -153,6 +156,10 @@ export default class RecentSessions extends LightningElement {
     handleListViewSelected(event) {
         this.sessionIds = event.detail.map(session => session.id);
         this.filter();
+    }
+
+    get listViewLimitReached() {
+        return this.sessionIds && this.sessionIds.length >= MAX_LIST_VIEW_RECORDS;
     }
 
     filter() {

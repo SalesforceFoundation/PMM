@@ -26,13 +26,14 @@
                 </lightning-button-menu>
             </lightning-layout-item>
             <lightning-layout-item padding="horizontal-small">
-                <lightning-button-icon
+                <lightning-button-icon-stateful
                     icon-name="utility:pin"
                     alternative-text={labels.pinListView}
                     variant="brand"
                     size="x-small"
+                    selected={pinnedState}
                     onclick={handlePinListView}
-                ></lightning-button-icon>
+                ></lightning-button-icon-stateful>
             </lightning-layout-item>
         </lightning-layout>
     </div>

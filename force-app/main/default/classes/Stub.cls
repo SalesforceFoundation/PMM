@@ -12,21 +12,15 @@
 //             .build();
 public with sharing class Stub implements System.StubProvider {
     private Type objType;
-
-    public class Builder {
-        public Builder(Type objType) {
-            this.objType = objType;
-        }
-
-        public trackMethodCall(Signature signature, List<Object> args) {
-            this.methodCall.add()
-        }
-    }
-    private Type objType;
-    List<MethoCall> methodCalls = new List<MethoCall>();
+    List<MethodCall> methodCalls = new List<MethodCall>();
 
     public Stub(Type objType) {
         this.objType = objType;
+    }
+
+    public Stub(Type objType, List<MethodCall> methodCalls) {
+        this(objType);
+        this.methodCalls = methodCalls;
     }
 
     public Object handleMethodCall(
@@ -39,7 +33,7 @@ public with sharing class Stub implements System.StubProvider {
     ) {
         Signature signature = new Signature(methodName, paramTypes);
 
-        for (MethoCall methodCall : methodCalls) {
+        for (MethodCall methodCall : methodCalls) {
             if (methodCall.matches(signature, args)) {
                 return methodCall.handleCall();
             }
@@ -48,14 +42,8 @@ public with sharing class Stub implements System.StubProvider {
         return null;
     }
 
-    public MethoCall when(Signature signature) {
-        MethoCall methodCall = new MethoCall(signature);
-        methodCalls.add(methodCall);
-        return methodCall;
-    }
-
     public void assert() {
-        for (MethoCall methodCall : methodCalls) {
+        for (MethodCall methodCall : methodCalls) {
             methodCall.assert();
         }
     }
@@ -64,18 +52,18 @@ public with sharing class Stub implements System.StubProvider {
         return Test.createStub(objType, this);
     }
 
-    public class MethoCall {
+    public class MethodCall {
         private Signature signature;
         private List<Object> args;
         private Boolean anyArgs = false;
         private Object returnValue;
         private Boolean throwException = false;
-        private List<Id> recordIds;
+        private List<Id> ids;
         private Boolean isExpected = true;
         private Integer callCount = 0;
         private String testExceptionMessage = 'Exception thrown by Basic Stub.';
 
-        public MethoCall(Signature signature) {
+        public MethodCall(Signature signature) {
             this.signature = signature;
         }
 
@@ -90,10 +78,10 @@ public with sharing class Stub implements System.StubProvider {
                 );
             }
 
-            if (recordIds != null) {
+            if (ids != null) {
                 List<SObject> sObjects = (List<SObject>) args[0];
                 for (Integer i = 0; i < sObjects.size(); i++) {
-                    sObjects[i].Id = recordIds[i];
+                    sObjects[i].Id = ids[i];
                 }
             }
 
@@ -120,33 +108,33 @@ public with sharing class Stub implements System.StubProvider {
             }
         }
 
-        public MethoCall calledWith(List<Object> args) {
+        public MethodCall calledWith(List<Object> args) {
             this.args = args;
             return this;
         }
 
-        public MethoCall calledWithAny() {
+        public MethodCall calledWithAny() {
             this.anyArgs = true;
             return this;
         }
 
-        public MethoCall shouldNotBeCalled() {
+        public MethodCall shouldNotBeCalled() {
             isExpected = false;
             return this;
         }
 
-        public MethoCall thenReturn(Object returnValue) {
+        public MethodCall thenReturn(Object returnValue) {
             this.returnValue = returnValue;
             return this;
         }
 
-        public MethoCall thenSetRecordIds(Signature signature, List<Id> recordIds) {
-            this.recordIds = recordIds;
+        public MethodCall setIds(List<Id> ids) {
+            this.ids = ids;
             return this;
         }
 
         // TODO: Allow exceptions to be passed in.
-        public MethoCall thenThrowException() {
+        public MethodCall thenThrowException() {
             throwException = true;
             return this;
         }
@@ -185,26 +173,6 @@ public with sharing class Stub implements System.StubProvider {
             this.paramTypes = paramTypes;
         }
 
-        public Signature(String methodName, Type paramType, Type paramType2, Type paramType3, Type paramType4) {
-            this(methodName, new List<Type>{ paramType, paramType2, paramType3, paramType4 });
-        }
-
-        public Signature(String methodName, Type paramType, Type paramType2, Type paramType3) {
-            this(methodName, new List<Type>{ paramType, paramType2, paramType3 });
-        }
-
-        public Signature(String methodName, Type paramType, Type paramType2) {
-            this(methodName, new List<Type>{ paramType, paramType2});
-        }
-
-        public Signature(String methodName, Type paramType) {
-            this(methodName, new List<Type>{ paramType });
-        }
-
-        public Signature(String methodName) {
-            this(methodName, new List<Type>());
-        }
-
         public Boolean equals(Object otherInstance) {
             if (otherInstance instanceof Signature) {
                 Signature otherSignature = (Signature) otherInstance;
@@ -212,25 +180,6 @@ public with sharing class Stub implements System.StubProvider {
                 paramTypes.equals(otherSignature.paramTypes));
             }
             return false;
-        }
-
-        public Integer hashCode() {
-            return this.getId().hashCode();
-        }
-
-        private String getId() {
-            if (!String.isBlank(signature)) {
-                return signature;
-            }
-
-            String format = '{0}:{1}';
-
-            signature = String.format(
-                format,
-                new List<String>{ methodName, String.valueOf(paramTypes) }
-            );
-
-            return signature;
         }
     }
 

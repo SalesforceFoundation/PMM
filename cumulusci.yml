@@ -1,4 +1,4 @@
-minimum_cumulusci_version: "3.16"
+minimum_cumulusci_version: "3.23.0"
 project:
     name: PMM
     package:
@@ -32,49 +32,6 @@ sources:
         github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
-    inject_namespaced_org_quick_action:
-        description: "Selectively inject namespace references into QuickAction metadata"
-        class_path: cumulusci.tasks.util.FindReplace
-        options:
-            path: force-app/main/default/quickActions
-            find: "%%%NAMESPACED_ORG%%%"
-            replace: "pmdm__"
-            file_pattern: "*"
-
-    clear_namespaced_org_quick_action:
-        description: "Selectively inject namespace references into QuickAction metadata"
-        class_path: cumulusci.tasks.util.FindReplace
-        options:
-            path: force-app/main/default/quickActions
-            find: "%%%NAMESPACED_ORG%%%"
-            replace: ""
-            file_pattern: "*"
-
-    # inject_namespaced_org_flow:
-    #     description: "Selectively inject namespace references into Flow metadata"
-    #     class_path: cumulusci.tasks.util.FindReplace
-    #     options:
-    #         path: force-app/main/default/flows
-    #         find: "%%%NAMESPACE%%%"
-    #         replace: "pmdm__"
-    #         file_pattern: "*"
-
-    # clear_namespaced_org_flow:
-    #     description: "Selectively inject namespace references into Flow metadata"
-    #     class_path: cumulusci.tasks.util.FindReplace
-    #     options:
-    #         path: force-app/main/default/flows
-    #         find: "%%%NAMESPACE%%%"
-    #         replace: ""
-    #         file_pattern: "*"
-
-    source_revert:
-        description: "Preserve the source so it can be modified during deployment"
-        class_path: tasks.GenericSrcRevert.GenericSrcRevert
-        options:
-            path: force-app/main/default
-            revert_path: force-app-bak
-
     robot:
         options:
             suites: robot/pmm/tests
@@ -156,7 +113,6 @@ tasks:
         class_path: cumulusci.tasks.salesforce.Deploy
         options:
             path: unpackaged/tests/serviceDeliveryModal
-            namespace_inject: $project_config.project__package__namespace
 
     deploy_dev_config:
         group: "PMM: Config"
@@ -164,7 +120,6 @@ tasks:
         class_path: cumulusci.tasks.salesforce.Deploy
         options:
             path: unpackaged/config/dev
-            namespace_inject: $project_config.project__package__namespace
 
     deploy_customer_profiles:
         group: "PMM: Config"
@@ -172,21 +127,20 @@ tasks:
         class_path: cumulusci.tasks.salesforce.Deploy
         options:
             path: unpackaged/config/customer_profiles
-            namespace_inject: $project_config.project__package__namespace
 
 flows:
     load_data:
         steps:
             1:
                 task: disable_tdtm_trigger_handlers
-                when: "org_config.has_minimum_package_version('npsp', '1.0')"
+                when: "'npsp' in org_config.installed_packages'"
             3:
                 task: load_dataset
                 options:
                     drop_missing_schema: True
             4:
                 task: restore_tdtm_trigger_handlers
-                when: "org_config.has_minimum_package_version('npsp', '1.0')"
+                when: "'npsp' in org_config.installed_packages'"
             5:
                 task: execute_anon
                 options:
@@ -199,7 +153,7 @@ flows:
                 options:
                     objects:
                         - npe4__Relationship__c
-                when: "org_config.has_minimum_package_version('npsp', '1.0')"
+                when: "'npsp' in org_config.installed_packages'"
             2:
                 task: delete_data
                 options:
@@ -227,8 +181,6 @@ flows:
                 flow: load_data
             4:
                 task: deploy_customer_profiles
-                options:
-                    unmanaged: False
 
     config_qa:
         steps:
@@ -256,16 +208,10 @@ flows:
                 flow: None
             2:
                 task: deploy_post
-                options:
-                    unmanaged: False
             3:
                 task: update_admin_profile
-                options:
-                    managed: True
             4:
                 task: deploy_customer_profiles
-                options:
-                    unmanaged: False
 
     install_regression:
         steps:
@@ -288,10 +234,10 @@ flows:
                 options:
                     security_type: PUSH
             6:
-                task: dx
+                task: assign_permission_sets
                 options:
-                    command: "force:user:permset:assign --permsetname PMDM_Manage"
-                ignore_failure: True
+                    api_names:
+                        - PMDM_Manage
             7:
                 flow: load_data
             8:
@@ -301,44 +247,6 @@ flows:
         steps:
             1:
                 flow: npsp:install_prod
-
-    deploy_unmanaged:
-        steps:
-            2.98:
-                task: source_revert
-                options:
-                    revert: False
-            2.99:
-                task: inject_namespaced_org_quick_action
-                when: org_config.namespaced
-            2.999:
-                task: clear_namespaced_org_quick_action
-                when: not org_config.namespaced
-            # 2.9999:
-            #     task: inject_namespaced_org_flow
-            #     when: org_config.namespaced
-            # 2.99999:
-            #     task: clear_namespaced_org_flow
-            #     when: not org_config.namespaced
-            4.099:
-                task: source_revert
-                options:
-                    revert: True
-
-    #deploy_packaging:
-    #    steps:
-    #        Moved the steps as 3.02 below
-
-    deploy_packaging:
-        steps:
-            3.01:
-                task: inject_namespaced_org_quick_action
-                options:
-                    path: "src/quickActions"
-            # 3.02:
-            #     task: inject_namespaced_org_flow
-            #     options:
-            #         path: "src/flows"
 
     customer_org:
         steps:
@@ -350,12 +258,8 @@ flows:
                 task: deploy_customer_profiles
                 ui_options:
                     name: "Deploy Program Management Profile"
-                options:
-                    unmanaged: False
             4:
                 task: deploy_post
-                options:
-                    unmanaged: False
                 ui_options:
                     reports:
                         name: "Deploy Folder of Unmanaged Reports"
@@ -396,7 +300,6 @@ plans:
                 task: deploy
                 options:
                     path: unpackaged/post/reports
-                    unmanaged: False
                 ui_options:
                     name: "Deploy Folder of Unmanaged Reports"
     recover-deleted-report:
@@ -414,6 +317,5 @@ plans:
                 task: deploy
                 options:
                     path: unpackaged/config/fix_deleted_reports
-                    unmanaged: False
                 ui_options:
                     name: "Recover Deleted Report"

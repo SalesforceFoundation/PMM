@@ -1,0 +1,29 @@
+@media print {
+    body {
+        max-width: 100%;
+    }
+
+    .slds-page-header {
+        display: none;
+    }
+
+    lightning-button {
+        display: none;
+    }
+
+    a[href]:after {
+        content: none;
+    }
+
+    .slds-card__footer {
+        display: none;
+    }
+
+    @page {
+        size: A4 landscape;
+    }
+}
+
+div.slds-form-element__control > .slds-form-element__static {
+    border: 0px;
+}

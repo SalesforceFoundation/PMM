@@ -31,6 +31,13 @@
         <value>Add {0}</value>
     </labels>
     <labels>
+        <fullName>Add_Service_Participants_Success</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Added {0} Service Participants.</shortDescription>
+        <value>Added {0} Service Participants.</value>
+    </labels>
+    <labels>
         <fullName>Add_Service_Delivery</fullName>
         <categories>Service Delivery</categories>
         <language>en_US</language>
@@ -67,18 +74,18 @@
         <value>Attendance</value>
     </labels>
     <labels>
-        <fullName>Save_Attendance_Success</fullName>
+        <fullName>Save_Service_Delivery_Success</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Saved {0} attendance records.</shortDescription>
-        <value>Saved {0} attendance records.</value>
+        <shortDescription>Saved {0} Service Delivery records.</shortDescription>
+        <value>Saved {0} Service Delivery records.</value>
     </labels>
     <labels>
-        <fullName>Save_Attendance_No_Updates</fullName>
+        <fullName>Save_Service_Delivery_No_Updates</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>There are no attendance records to update.</shortDescription>
-        <value>There are no attendance records to update.</value>
+        <shortDescription>There are no Service Delivery records to update.</shortDescription>
+        <value>There are no Service Delivery records to update.</value>
     </labels>
     <labels>
         <fullName>No_Participants_Header</fullName>
@@ -386,6 +393,20 @@
         <value>Previous</value>
     </labels>
     <labels>
+        <fullName>Print</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Print button</shortDescription>
+        <value>Print</value>
+    </labels>
+    <labels>
+        <fullName>Printable_View</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Printable View button</shortDescription>
+        <value>Printable View</value>
+    </labels>
+    <labels>
         <fullName>Quantity</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -573,8 +594,8 @@
         <fullName>Every_Custom</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Every...</shortDescription>
-        <value>Every...</value>
+        <shortDescription>Every</shortDescription>
+        <value>Every</value>
     </labels>
     <labels>
         <fullName>Weeks</fullName>
@@ -584,6 +605,13 @@
         <value>Weeks</value>
     </labels>
     <labels>
+        <fullName>Week</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Week</shortDescription>
+        <value>Week</value>
+    </labels>
+    <labels>
         <fullName>Days</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -591,11 +619,25 @@
         <value>Days</value>
     </labels>
     <labels>
+        <fullName>Day</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Day</shortDescription>
+        <value>Day</value>
+    </labels>
+    <labels>
         <fullName>Months</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Months</shortDescription>
         <value>Months</value>
+    </labels>
+    <labels>
+        <fullName>Month</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Month</shortDescription>
+        <value>Month</value>
     </labels>
     <labels>
         <fullName>Years</fullName>

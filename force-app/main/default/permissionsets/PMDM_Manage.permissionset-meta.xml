@@ -64,6 +64,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>ProgramEngagement__c.Contact__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>ProgramEngagement__c.AutoName_Override__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -396,6 +401,10 @@
         <object>Service__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <tabSettings>
+        <tab>Attendance</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
     <tabSettings>
         <tab>Bulk_Service_Deliveries</tab>
         <visibility>Visible</visibility>

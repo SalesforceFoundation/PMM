@@ -1,0 +1,51 @@
+<!--
+  - /*
+  -  * Copyright (c) 2020, salesforce.com, inc.
+  -  * All rights reserved.
+  -  * SPDX-License-Identifier: BSD-3-Clause
+  -  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  -  */
+  -->
+
+<template>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+            {labels.addServiceParticipants}
+        </h2>
+    </header>
+
+    <template if:true={isLoaded}>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <c-participant-selector
+                service-id={serviceId}
+                schedule-id={recordId}
+                existing-contact-ids={existingParticipants.data}
+                service-schedule-model={serviceScheduleModel}
+            ></c-participant-selector>
+            <template if:true={errorMessage}>
+                <c-scoped-notification
+                    theme="error"
+                    title={errorMessage}
+                    class="slds-var-p-around_small"
+                ></c-scoped-notification
+            ></template>
+        </div>
+    </template>
+
+    <footer class="slds-modal__footer">
+        <lightning-button
+            onclick={handleCancel}
+            label={labels.cancel}
+            title={labels.cancel}
+        ></lightning-button>
+        <lightning-button
+            label={labels.save}
+            title={labels.save}
+            variant="brand"
+            onclick={handleSave}
+            class="slds-m-left_x-small"
+            disabled={isSaveDisabled}
+        >
+        </lightning-button>
+    </footer>
+</template>

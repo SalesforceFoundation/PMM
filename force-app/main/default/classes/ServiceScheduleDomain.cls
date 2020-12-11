@@ -48,21 +48,36 @@ public with sharing class ServiceScheduleDomain {
         }
     }
 
+    public void insertParticipants(
+        List<ProgramEngagement__c> engagements,
+        ServiceSchedule__c schedule
+    ) {
+        List<ServiceParticipant__c> participants = new List<ServiceParticipant__c>();
+        for (ProgramEngagement__c engagement : engagements) {
+            participants.add(createServiceParticipant(engagement, schedule));
+        }
+        insertRelatedRecords((List<SObject>) participants);
+    }
+
     private void generateParticipants(ServiceScheduleModel model) {
         for (ProgramEngagement__c engagement : model.selectedParticipants) {
-            ServiceParticipant__c participant = new ServiceParticipant__c(
-                Name = (engagement.Contact__r.Name +
-                    ' - ' +
-                    model.serviceSchedule.Name)
-                    .abbreviate(80),
-                ServiceSchedule__c = model.serviceSchedule.Id,
-                Service__c = model.serviceSchedule.Service__c,
-                ProgramEngagement__c = engagement.Id,
-                Contact__c = engagement.Contact__c
+            model.serviceParticipants.add(
+                createServiceParticipant(engagement, model.serviceSchedule)
             );
-
-            model.serviceParticipants.add(participant);
         }
+    }
+
+    private ServiceParticipant__c createServiceParticipant(
+        ProgramEngagement__c engagement,
+        ServiceSchedule__c schedule
+    ) {
+        return new ServiceParticipant__c(
+            Name = (engagement.Contact__r.Name + ' - ' + schedule.Name).abbreviate(80),
+            ServiceSchedule__c = schedule.Id,
+            Service__c = schedule.Service__c,
+            ProgramEngagement__c = engagement.Id,
+            Contact__c = engagement.Contact__c
+        );
     }
 
     private void validateCreateAccess(List<SObject> sObjects) {

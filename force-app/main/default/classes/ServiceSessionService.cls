@@ -11,15 +11,13 @@ public with sharing class ServiceSessionService {
     private ServiceSessionSelector serviceSessionSelector = new ServiceSessionSelector();
 
     public Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
-        String dateLiteral,
-        Set<Id> sessionIds
+        String dateLiteral
     ) {
         Map<String, List<ServiceSession__c>> serviceSessions = new Map<String, List<ServiceSession__c>>();
 
         for (
             ServiceSession__c session : serviceSessionSelector.getServiceSessionsByStartDate(
-                dateLiteral,
-                sessionIds
+                dateLiteral
             )
         ) {
             List<ServiceSession__c> sessions = new List<ServiceSession__c>();

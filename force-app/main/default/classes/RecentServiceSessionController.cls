@@ -17,20 +17,14 @@ public with sharing class RecentServiceSessionController {
 
     @AuraEnabled(cacheable=true)
     public static Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
-        String dateLiteral,
-        List<Id> sessionIds
+        String dateLiteral
     ) {
         if (!DATE_LITERAL_OPTIONS.containsKey(dateLiteral)) {
             return null;
         }
 
-        System.debug(sessionIds);
-
         try {
-            return serviceSessionService.getServiceSessionsByStartDate(
-                dateLiteral,
-                new Set<Id>(sessionIds)
-            );
+            return serviceSessionService.getServiceSessionsByStartDate(dateLiteral);
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }

@@ -21,9 +21,11 @@ const FIELD_SET_NAME = "RecentSessionsView";
 
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
+    @track sessionIds;
     @track menuItems = [];
     @api flexipageRegionWidth;
 
+    _sessionsData;
     hasLoaded = false;
     isAccordionSectionOpen = false;
     objectApiName = SERVICE_SESSION_OBJECT.objectApiName;
@@ -36,7 +38,6 @@ export default class RecentSessions extends LightningElement {
     sessionsContainerMediumSize = 6;
     sessionsContainerLargeSize = 6;
     sessionsContainerPaddingAround;
-    sessionIds;
 
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,
@@ -149,26 +150,32 @@ export default class RecentSessions extends LightningElement {
         }
     }
 
-    handleListViewSelected() {
-        let listViewSelector = this.template.querySelector("c-list-view-selector");
-        if (!listViewSelector) {
+    handleListViewSelected(event) {
+        this.sessionIds = event.detail.map(session => session.id);
+        this.filter();
+    }
+
+    filter() {
+        if (!this.sessionIds || !this.sessionIds.length || !this._sessionsData) {
             return;
         }
 
-        let records = listViewSelector.records;
-        if (!records) {
-            return;
-        }
+        this.sessionsData = [];
+        this._sessionsData.forEach(_sessionData => {
+            let sessionData = { ..._sessionData };
+            sessionData.sessions = [...sessionData.sessions].filter(session =>
+                this.sessionIds.includes(session.Id)
+            );
 
-        this.sessionIds = listViewSelector.records.map(session => session.id);
-        this.handleGetServiceSessions();
-        console.table(this.sessionIds);
+            if (sessionData.sessions && sessionData.sessions.length) {
+                this.sessionsData.push(sessionData);
+            }
+        });
     }
 
     handleGetServiceSessions() {
         getServiceSessions({
             dateLiteral: this.selectedMenuItemValue,
-            sessionIds: this.sessionIds,
         })
             .then(result => {
                 if (!result) {
@@ -177,14 +184,14 @@ export default class RecentSessions extends LightningElement {
 
                 if (result) {
                     if (!this.hasLoaded) {
-                        this.sessionsData = [];
+                        this._sessionsData = [];
                         let sessions = result;
 
                         // eslint-disable-next-line guard-for-in
                         for (let sessionStartDate in sessions) {
                             //Here we are creating the array to iterate on UI.
                             let currentDate = new Date();
-                            this.sessionsData.push({
+                            this._sessionsData.push({
                                 sessionStartDate: sessionStartDate,
                                 sessions: JSON.parse(
                                     JSON.stringify(sessions[sessionStartDate])
@@ -202,6 +209,7 @@ export default class RecentSessions extends LightningElement {
                                           this.objectLabelPlural,
                             });
                         }
+                        this.filter();
                         this.hasLoaded = true;
                     }
                 }

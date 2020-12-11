@@ -9,10 +9,7 @@
 public with sharing class ServiceSessionSelector {
     private static final String RECENT_SESSIONS_VIEW = 'RecentSessionsView';
 
-    public List<ServiceSession__c> getServiceSessionsByStartDate(
-        String dateLiteral,
-        Set<Id> sessionIds
-    ) {
+    public List<ServiceSession__c> getServiceSessionsByStartDate(String dateLiteral) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
         Set<String> allowedSessionStatuses = new Set<String>{ 'Pending', 'Complete' };
 
@@ -51,12 +48,6 @@ public with sharing class ServiceSessionSelector {
         queryBuilder.addCondition(
             String.valueOf(ServiceSession__c.Status__c) + ' IN :allowedSessionStatuses'
         );
-
-        if (sessionIds != null && !sessionIds.isEmpty()) {
-            queryBuilder.addCondition(
-                String.valueOf(ServiceSession__c.Id) + ' IN :sessionIds'
-            );
-        }
 
         queryBuilder.withOrderBy(String.valueOf(ServiceSession__c.SessionStart__c));
 

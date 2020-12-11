@@ -1,26 +1,39 @@
 <template>
     <div class="slds-var-p-top_x-small slds-text-heading_small">
-        <lightning-button-menu
-            variant="container"
-            onselect={handleListViewSelected}
-            label={selectedListView.label}
-            class="listViewSelector"
-            if:true={options}
-        >
-            <div
-                role="presentation"
-                class="slds-text-title_caps slds-var-m-around_medium"
-            >
-                {labels.listViewLabel}
-            </div>
-            <template for:each={options} for:item="option">
-                <lightning-menu-item
-                    label={option.label}
-                    value={option.value}
-                    key={option.value}
-                    checked={option.isChecked}
-                ></lightning-menu-item>
-            </template>
-        </lightning-button-menu>
+        <lightning-layout>
+            <lightning-layout-item>
+                <lightning-button-menu
+                    variant="container"
+                    onselect={handleListViewSelected}
+                    label={selectedListView.label}
+                    class="listViewSelector"
+                    if:true={options}
+                >
+                    <div
+                        role="presentation"
+                        class="slds-text-title_caps slds-var-m-around_medium"
+                    >
+                        {labels.listViewLabel}
+                    </div>
+                    <template for:each={options} for:item="option">
+                        <lightning-menu-item
+                            label={option.label}
+                            value={option.value}
+                            key={option.value}
+                            checked={option.isChecked}
+                        ></lightning-menu-item>
+                    </template>
+                </lightning-button-menu>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-small">
+                <lightning-button-icon
+                    icon-name="utility:pin"
+                    alternative-text={labels.pinListView}
+                    variant="brand"
+                    size="x-small"
+                    onclick={handlePinListView}
+                ></lightning-button-icon>
+            </lightning-layout-item>
+        </lightning-layout>
     </div>
 </template>

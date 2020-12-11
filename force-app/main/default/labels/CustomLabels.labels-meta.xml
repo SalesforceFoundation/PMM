@@ -647,6 +647,13 @@
         <value>Month</value>
     </labels>
     <labels>
+        <fullName>Pin_List_View</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Pin List View</shortDescription>
+        <value>Pin List View</value>
+    </labels>
+    <labels>
         <fullName>Years</fullName>
         <language>en_US</language>
         <protected>true</protected>

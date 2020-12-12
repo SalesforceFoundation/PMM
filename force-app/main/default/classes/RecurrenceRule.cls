@@ -99,9 +99,12 @@ public with sharing class RecurrenceRule {
         }
 
         Set<Integer> daysToAdd = new Set<Integer>();
+
         daysToAdd.addAll(new Set<Integer>{ 28, 29, 30, 31 });
 
-        byMonthDays = daysToAdd;
+        if (daysToAdd.size() != 0) {
+            byMonthDays = daysToAdd;
+        }
 
         return this;
     }
@@ -205,9 +208,10 @@ public with sharing class RecurrenceRule {
 
         // BYDAY
         if (freq == Frequency.MONTHLY) {
-            if (byDay != null) {
+            if (byDay != null && byDay != LAST_DAY_OF_MONTH) {
                 ruleParts.add('BYDAY=' + byDay);
             }
+            // setByMonthDays(byDay);
         } else {
             if (days != null && days.size() > 0) {
                 List<String> dayStrings = new List<String>();
@@ -229,6 +233,7 @@ public with sharing class RecurrenceRule {
             for (Integer monthday : byMonthDays) {
                 monthDays.add(String.valueOf(monthday));
             }
+
             if (byDay != null && byDay == LAST_DAY_OF_MONTH) {
                 ruleParts.add('BYMONTHDAY=' + String.join(monthDays, ','));
             }

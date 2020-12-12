@@ -674,4 +674,48 @@ public with sharing class MonthlyIterable_TEST {
             'List of Dates returned from the iterator was not as expected'
         );
     }
+
+    @IsTest
+    private static void shouldIterate30thOfTheMonthUntilGivenEndDate() {
+        DateTime dateTimeStart = DateTime.newInstance(2020, 1, 30, 13, 0, 0);
+        rRule.withRuleString('FREQ=MONTHLY;UNTIL=20210630T000000Z;INTERVAL=1');
+        List<DateTime> expected = new List<DateTime>{
+            DateTime.newInstance(2020, 1, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 2, 29, 13, 0, 0),
+            DateTime.newInstance(2020, 3, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 4, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 5, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 6, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 7, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 8, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 9, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 10, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 11, 30, 13, 0, 0),
+            DateTime.newInstance(2020, 12, 30, 13, 0, 0),
+            DateTime.newInstance(2021, 1, 30, 13, 0, 0),
+            DateTime.newInstance(2021, 2, 28, 13, 0, 0),
+            DateTime.newInstance(2021, 3, 30, 13, 0, 0),
+            DateTime.newInstance(2021, 4, 30, 13, 0, 0),
+            DateTime.newInstance(2021, 5, 30, 13, 0, 0),
+            DateTime.newInstance(2021, 6, 30, 13, 0, 0)
+        };
+
+        MonthlyIterable iterable = new MonthlyIterable(dateTimeStart.date(), rRule);
+
+        Test.startTest();
+        List<DateTime> actual = new List<DateTime>();
+        while (iterable.hasNext()) {
+            actual.add(DateTime.newInstance(iterable.next(), datetimeStart.time()));
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'List of Dates returned from the iterator was not as expected. - ' +
+            expected.size() +
+            ' : ' +
+            actual.size()
+        );
+    }
 }

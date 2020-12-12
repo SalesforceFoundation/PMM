@@ -152,40 +152,6 @@ public with sharing class RecurrenceRule_TEST {
     }
 
     @IsTest
-    private static void shouldSetAndGetByMonthDayFor29thOfTheMonth() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 1, 29, 13, 0, 0);
-        Set<Integer> monthDays = new Set<Integer>{ 28, 29 };
-        Test.startTest();
-        RecurrenceRule rule = new RecurrenceRule()
-            .withFrequency('MONTHLY')
-            .withByMonthDays(dateTimeStart);
-        Test.stopTest();
-
-        System.assertEquals(
-            monthDays,
-            rule.getByMonthDays(),
-            'The actual byMonthDays returned is not the same as expected byMonthDays.'
-        );
-    }
-
-    @IsTest
-    private static void shouldSetAndGetByMonthDayFor30thOfTheMonth() {
-        DateTime dateTimeStart = DateTime.newInstance(2020, 1, 30, 13, 0, 0);
-        Set<Integer> monthDays = new Set<Integer>{ 28, 29, 30 };
-        Test.startTest();
-        RecurrenceRule rule = new RecurrenceRule()
-            .withFrequency('MONTHLY')
-            .withByMonthDays(dateTimeStart);
-        Test.stopTest();
-
-        System.assertEquals(
-            monthDays,
-            rule.getByMonthDays(),
-            'The actual byMonthDays returned is not the same as expected byMonthDays.'
-        );
-    }
-
-    @IsTest
     private static void shouldSetAndGetByMonthDayFor31stOfTheMonth() {
         DateTime dateTimeStart = DateTime.newInstance(2020, 12, 31, 13, 0, 0);
         Set<Integer> monthDays = new Set<Integer>{ 28, 29, 30, 31 };
@@ -445,7 +411,8 @@ public with sharing class RecurrenceRule_TEST {
         RecurrenceRule rule = new RecurrenceRule()
             .withFrequency('MONTHLY')
             .withEndDate(Date.newInstance(2020, 7, 31))
-            .withByMonthDays(DateTime.newInstance(2020, 1, 31, 13, 0, 0));
+            .withByMonthDays(DateTime.newInstance(2020, 1, 31, 13, 0, 0))
+            .withByDay('LastDayOfMonth');
 
         Test.startTest();
         String actual = rule.build();

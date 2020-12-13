@@ -211,7 +211,6 @@ public with sharing class RecurrenceRule {
             if (byDay != null && byDay != LAST_DAY_OF_MONTH) {
                 ruleParts.add('BYDAY=' + byDay);
             }
-            // setByMonthDays(byDay);
         } else {
             if (days != null && days.size() > 0) {
                 List<String> dayStrings = new List<String>();

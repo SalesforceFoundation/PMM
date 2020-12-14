@@ -24,6 +24,7 @@
                         large-device-size={field.size}
                         key={field.apiName}
                         class="slds-var-p-around_xx-small"
+                        disabled={rowDisabled}
                     >
                         <!-- CONTACT FIELD, ALWAYS OUTPUT, CUSTOM VALUE -->
                         <template if:true={field.isContactField}>
@@ -52,6 +53,7 @@
                                         min="0"
                                         step=".01"
                                         value={quantity}
+                                        disabled={rowDisabled}
                                     ></lightning-input>
                                 </div>
                             </template>
@@ -103,6 +105,7 @@
                                     onchange={handleInputChange}
                                     value={field.value}
                                     variant={field.variant}
+                                    disabled={rowDisabled}
                                 >
                                 </lightning-input-field>
                             </template>
@@ -117,6 +120,22 @@
                         </template>
                     </lightning-layout-item>
                 </template>
+
+                <!-- SKIP PARTICIPANT TOGGLE -->
+                <lightning-layout-item
+                    class="slds-var-p-around_medium"
+                    flexibility="auto, no-grow"
+                    alignment-bump="left"
+                    if:true={showSkip}
+                >
+                    <lightning-button-icon-stateful
+                        icon-name="utility:block_visitor"
+                        size="medium"
+                        alternative-text={labels.skip}
+                        onclick={handleToggleButton}
+                        selected={rowDisabled}
+                    ></lightning-button-icon-stateful>
+                </lightning-layout-item>
             </lightning-layout>
         </lightning-record-edit-form>
     </div>

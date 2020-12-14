@@ -221,6 +221,13 @@
         <value>Done</value>
     </labels>
     <labels>
+        <fullName>Dont_Log_Attendance</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Don't log attendance for this participant</shortDescription>
+        <value>Don't log attendance for this participant</value>
+    </labels>
+    <labels>
         <fullName>Enabled</fullName>
         <language>en_US</language>
         <protected>true</protected>

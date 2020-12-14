@@ -92,5 +92,7 @@ pmm_lex_locators = {
         "review_wizard": "//div[contains(@class,'slds-form-element')][./span[text()='{}']]/div",
         "participant_selector": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::*[text()='{}']",
         "remove_participant": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::tr[./th/descendant::*[text()='{}']]/descendant::button[contains(@class,'slds-button')]",
+        "frequency": "//span[contains(@class,'slds-button')][./input[@value='{}']]",
+        "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
     },
 }

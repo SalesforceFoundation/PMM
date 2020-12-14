@@ -101,6 +101,28 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
             error="The service participant is not removed from participant selector",
         )
 
+    def set_frequency(self, frequency):
+        """ """
+        locator = pmm_lex_locators["service_schedule"]["frequency"].format(frequency)
+        self.selenium.scroll_element_into_view(locator)
+        self.selenium.set_focus_to_element(locator)
+        self.salesforce._jsclick(locator)
+
+    def set_service_schedule_ends(self, frequency, field, value):
+        """ """
+        locator = pmm_lex_locators["service_schedule"]["ends_radio_button"].format(
+            frequency
+        )
+        self.selenium.scroll_element_into_view(locator)
+        self.selenium.set_focus_to_element(locator)
+        self.salesforce._jsclick(locator)
+        locator_session = pmm_lex_locators["service_schedule"]["session_end"].format(
+            field
+        )
+        self.selenium.get_webelement(locator_session).click()
+        self.selenium.set_focus_to_element(locator_session)
+        self.selenium.get_webelement(locator_session).send_keys(value)
+
 
 @pageobject("Details", "ServiceSchedule__c")
 class ServiceScheduleDetailPage(BasePMMPage, DetailPage):

@@ -9,7 +9,7 @@
 
 public with sharing class MonthlyIterable extends DailyIterable {
     private List<Integer> byMonthDays;
-    Integer firstOccurenceRunningDay;
+    Integer firstOccurrenceRunningDay;
 
     public MonthlyIterable(Date runningDate, RecurrenceRule rRule) {
         super(runningDate, rRule);
@@ -24,7 +24,7 @@ public with sharing class MonthlyIterable extends DailyIterable {
 
     public override void calculateRunningDate() {
         if (runningCount == 0 && rRule.getByDay() == null) {
-            firstOccurenceRunningDay = runningDate.day();
+            firstOccurrenceRunningDay = runningDate.day();
             return; // Use first running date;
         }
 
@@ -51,9 +51,9 @@ public with sharing class MonthlyIterable extends DailyIterable {
             runningDate = runningDate.addMonths(rRule.getInterval())
                 .addDays(startDay - runningDate.day());
 
-            if (firstOccurenceRunningDay > startDay) {
+            if (firstOccurrenceRunningDay > startDay) {
                 runningDate = runningDate.addDays(
-                    firstOccurenceRunningDay - runningDate.day()
+                    firstOccurrenceRunningDay - runningDate.day()
                 );
             }
         }

@@ -133,14 +133,14 @@ flows:
         steps:
             1:
                 task: disable_tdtm_trigger_handlers
-                when: "'npsp' in org_config.installed_packages'"
+                when: "'npsp' in org_config.installed_packages"
             3:
                 task: load_dataset
                 options:
                     drop_missing_schema: True
             4:
                 task: restore_tdtm_trigger_handlers
-                when: "'npsp' in org_config.installed_packages'"
+                when: "'npsp' in org_config.installed_packages"
             5:
                 task: execute_anon
                 options:

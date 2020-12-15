@@ -11,6 +11,7 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    [Documentation]         Sets the fields required to create a contact record.
     ${first_name} =         Generate Random String
     Set suite variable      ${first_name}
     ${last_name} =          Generate Random String
@@ -40,5 +41,5 @@ Create a Contact
     verify page contains related list      Program Engagements
     verify page contains related list      Service Deliveries
     verify page contains related list      Files
-    Verify Page Contains Related List      Service Participant
+    Verify Page Contains Related List      Service Participants
     

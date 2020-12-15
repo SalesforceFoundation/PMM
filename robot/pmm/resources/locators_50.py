@@ -92,8 +92,9 @@ pmm_lex_locators = {
         "review_wizard": "//div[contains(@class,'slds-form-element')][./span[text()='{}']]/div",
         "participant_selector": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::*[text()='{}']",
         "remove_participant": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::tr[./th/descendant::*[text()='{}']]/descendant::button[contains(@class,'slds-button')]",
-        "frequency": "//span[contains(@class,'slds-button')][./input[@value='{}']]",
+        "frequency": "//span[contains(@class,'slds-button')]/label/span[@class='slds-radio_faux' and text()='{}']",
+        "ends_radio_button": "//span[@class='slds-radio'][./input[@value='{}']]/descendant::span[@class='slds-radio_faux']",
         "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
-        "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-icon",
+        "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
     },
 }

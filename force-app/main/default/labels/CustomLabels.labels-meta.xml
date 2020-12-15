@@ -102,13 +102,6 @@
         <value>After participants are added to this Service Schedule, track their attendance here.</value>
     </labels>
     <labels>
-        <fullName>No_Permission_Message</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>You don't have access to this information. Ask your admin for help.</shortDescription>
-        <value>You don't have access to this information. Ask your admin for help.</value>
-    </labels>
-    <labels>
         <fullName>Back</fullName>
         <language>en_US</language>
         <protected>false</protected>

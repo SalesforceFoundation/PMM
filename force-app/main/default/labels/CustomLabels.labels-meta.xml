@@ -676,6 +676,13 @@
         <value>Pin List View</value>
     </labels>
     <labels>
+        <fullName>Pin_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>To unpin, pin another list view</shortDescription>
+        <value>To unpin, pin another list view</value>
+    </labels>
+    <labels>
         <fullName>Years</fullName>
         <language>en_US</language>
         <protected>true</protected>

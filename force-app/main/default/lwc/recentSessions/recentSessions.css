@@ -1,7 +1,12 @@
 .component-height {
     max-height: 500px;
+    margin-bottom: 0;
 }
 
 .small-box {
     padding: var(--lwc-varSpacingXSmall, 0.5rem);
+}
+
+.card-background {
+    background-color: #f3f2f2;
 }

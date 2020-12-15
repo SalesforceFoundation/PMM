@@ -4,13 +4,16 @@ import { loadStyle } from "lightning/platformResourceLoader";
 
 import userId from "@salesforce/user/Id";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
-import LIST_VIEW_LABEL from "@salesforce/label/c.List_Views";
+
+import LIST_VIEWS_LABEL from "@salesforce/label/c.List_Views";
 import PIN_LIST_VIEW_LABEL from "@salesforce/label/c.Pin_List_View";
+import PIN_TITLE_LABEL from "@salesforce/label/c.Pin_Title";
 
 const PINNED_LIST_VIEW = "PinnedListView";
 
 export default class ListViewSelector extends LightningElement {
     @api objectApiName;
+    @api label;
     @track selectedListView = {};
 
     records;
@@ -23,8 +26,9 @@ export default class ListViewSelector extends LightningElement {
     _options = [];
 
     labels = {
-        listViews: LIST_VIEW_LABEL,
+        listViews: LIST_VIEWS_LABEL,
         pinListView: PIN_LIST_VIEW_LABEL,
+        pinTitle: PIN_TITLE_LABEL,
     };
 
     connectedCallback() {
@@ -99,7 +103,6 @@ export default class ListViewSelector extends LightningElement {
     }
 
     get options() {
-        console.log(this._options);
         return this._options;
     }
 

@@ -7,21 +7,18 @@
             </h1>
             <lightning-layout class="slds-var-p-top_small">
                 <lightning-layout-item>
-                    <div class="slds-form-element">
-                        <label class="slds-form-element__label slds-m-bottom_none">
-                            {labels.listView}
-                        </label>
-                        <div class="slds-form-element__control">
-                            <c-list-view-selector
-                                object-api-name={objectApiName}
-                                onselect={handleListViewSelected}
-                            ></c-list-view-selector>
-                        </div>
-                    </div>
+                    <c-list-view-selector
+                        object-api-name={objectApiName}
+                        onselect={handleListViewSelected}
+                        label={labels.listView}
+                    ></c-list-view-selector>
                 </lightning-layout-item>
                 <lightning-layout-item>
                     <div class="slds-form-element slds-var-p-left_small">
-                        <label class="slds-form-element__label slds-m-bottom_none">
+                        <label
+                            class="slds-form-element__label slds-m-bottom_none"
+                            for="durationSelector"
+                        >
                             {labels.duration}
                         </label>
                         <div class="slds-form-element__control">
@@ -30,6 +27,7 @@
                                 class="listViewSelector"
                                 label={selectedMenuItemLabel}
                                 onselect={handleMenuItemSelected}
+                                id="durationSelector"
                             >
                                 <template for:each={menuItems} for:item="menuItem">
                                     <lightning-menu-item
@@ -45,7 +43,7 @@
                 </lightning-layout-item>
             </lightning-layout>
         </div>
-        <div class="slds-var-p-around_small" style="background-color:#f3f2f2">
+        <div class="slds-var-p-around_small card-background">
             <c-scoped-notification
                 theme="warning"
                 rounded="true"
@@ -55,10 +53,7 @@
         </div>
         <!-- Lightning Card Body -->
 
-        <div
-            class="component-height slds-scrollable_y"
-            style="margin-bottom: 0px;background-color:#f3f2f2"
-        >
+        <div class="component-height slds-scrollable_y card-background">
             <lightning-spinner
                 alternative-text={labels.loading}
                 size="small"

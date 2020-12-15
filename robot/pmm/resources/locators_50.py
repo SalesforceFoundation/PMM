@@ -94,5 +94,6 @@ pmm_lex_locators = {
         "remove_participant": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::tr[./th/descendant::*[text()='{}']]/descendant::button[contains(@class,'slds-button')]",
         "frequency": "//span[contains(@class,'slds-button')][./input[@value='{}']]",
         "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
+        "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-icon",
     },
 }

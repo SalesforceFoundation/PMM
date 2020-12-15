@@ -123,6 +123,16 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.set_focus_to_element(locator_session)
         self.selenium.get_webelement(locator_session).send_keys(value)
 
+    def remove_session(self, session_name):
+        """ """
+        locator = pmm_lex_locators["service_schedule"]["remove_session"].format(
+            session_name
+        )
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.click_element(locator)
+        self.selenium.wait_until_page_contains("Add Service Session")
+        self.selenium.wait_until_page_does_not_contain(session_name)
+
 
 @pageobject("Details", "ServiceSchedule__c")
 class ServiceScheduleDetailPage(BasePMMPage, DetailPage):

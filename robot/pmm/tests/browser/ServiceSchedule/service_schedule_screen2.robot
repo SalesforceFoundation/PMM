@@ -12,6 +12,16 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    ${ns} =                         Get PMM Namespace Prefix
+    Set suite variable              ${ns}
+    ${program} =                    API Create Program
+    Set suite variable              ${program}
+    ${service} =                    API Create Service                  ${Program}[Id]
+    Set suite variable              ${service}
+    ${today} =                      Get Current Date                result_format=%-m/%-d/%Y 
+    Set suite variable              ${today}
+    ${service_schedule_name} =      Generate New String
+    Set suite variable              ${service_schedule_name}
 
 *** Test Cases ***
 Max number of service session
@@ -26,4 +36,14 @@ Max number of service session
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Review Service Sessions
     Page Should Contain                     We can only create 500 sessions for a Service Schedule. Only the sessions listed here will be created.
-    
+    Page Should Not Contain                 Add Service session
+    Remove Session                          ${today}: ${service}[Name]
+    Click Dialog Button                     Next
+    Verify Wizard Screen Title              Add Service Participants
+    Click Dialog Button                     Next
+    Verify Wizard Screen Title              Review Service Schedule
+    Page Should Contain                     Service Sessions (500)
+    Click Dialog Button                     Save
+    Wait Until Modal is Closed
+    Verify Details                          Service Schedule Name             contains      ${service_schedule_name}
+    Verify Details                          Number of Service Sessions        contains      600

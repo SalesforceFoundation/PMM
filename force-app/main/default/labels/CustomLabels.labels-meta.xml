@@ -279,11 +279,33 @@
         <value>You can't delete this record. Ask your admin for help.</value>
     </labels>
     <labels>
+        <fullName>Duration</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Duration</shortDescription>
+        <value>Duration</value>
+    </labels>
+    <labels>
         <fullName>Last_Week</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Picklist option on the recent sessions home page component.</shortDescription>
         <value>Last Week</value>
+    </labels>
+    <labels>
+        <fullName>List_View</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>List View</shortDescription>
+        <value>List View</value>
+    </labels>
+    <labels>
+        <fullName>List_Views</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>List Views</shortDescription>
+        <value>List Views</value>
     </labels>
     <labels>
         <fullName>Loading</fullName>
@@ -633,6 +655,13 @@
         <value>Day</value>
     </labels>
     <labels>
+        <fullName>List_View_Limit</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning when list view limit is reached.</shortDescription>
+        <value>There are over 2,000 records. Some records may not be shown.</value>
+    </labels>
+    <labels>
         <fullName>Months</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -645,6 +674,20 @@
         <protected>true</protected>
         <shortDescription>Month</shortDescription>
         <value>Month</value>
+    </labels>
+    <labels>
+        <fullName>Pin_List_View</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Pin List View</shortDescription>
+        <value>Pin List View</value>
+    </labels>
+    <labels>
+        <fullName>Pin_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>To unpin, pin another list view</shortDescription>
+        <value>To unpin, pin another list view</value>
     </labels>
     <labels>
         <fullName>Years</fullName>

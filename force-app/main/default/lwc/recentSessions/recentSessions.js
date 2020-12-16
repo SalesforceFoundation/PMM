@@ -6,6 +6,9 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi";
 
 import RECENT_SESSIONS_LABEL from "@salesforce/label/c.RecentSessions";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
+import LIST_VIEW_LIMIT_LABEL from "@salesforce/label/c.List_View_Limit";
+import LIST_VIEW_LABEL from "@salesforce/label/c.List_View";
+import DURATION_LABEL from "@salesforce/label/c.Duration";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
@@ -18,14 +21,18 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const THIS_WEEK = "THIS_WEEK";
 const FIELD_SET_NAME = "RecentSessionsView";
+const MAX_LIST_VIEW_RECORDS = 2000;
 
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
+    @track sessionIds;
     @track menuItems = [];
     @api flexipageRegionWidth;
 
+    _sessionsData;
     hasLoaded = false;
     isAccordionSectionOpen = false;
+    objectApiName = SERVICE_SESSION_OBJECT.objectApiName;
     objectLabel;
     objectLabelPlural;
     selectedMenuItemLabel;
@@ -39,6 +46,9 @@ export default class RecentSessions extends LightningElement {
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,
         loading: LOADING_LABEL,
+        listViewLimit: LIST_VIEW_LIMIT_LABEL,
+        listView: LIST_VIEW_LABEL,
+        duration: DURATION_LABEL,
     };
 
     fields = {
@@ -119,6 +129,7 @@ export default class RecentSessions extends LightningElement {
 
     connectedCallback() {
         loadStyle(this, pmmFolder + "/recentSessionsOverrides.css");
+        loadStyle(this, pmmFolder + "/listViewSelectorOverrides.css");
 
         if (this.flexipageRegionWidth === "SMALL") {
             this.sessionsContainerMediumSize = 12;
@@ -147,8 +158,42 @@ export default class RecentSessions extends LightningElement {
         }
     }
 
+    handleListViewSelected(event) {
+        this.sessionIds = event.detail.map(session => session.id);
+        this.filter();
+    }
+
+    get listViewLimitReached() {
+        return this.sessionIds && this.sessionIds.length >= MAX_LIST_VIEW_RECORDS;
+    }
+
+    filter() {
+        if (!this.sessionIds || !this._sessionsData) {
+            return;
+        }
+
+        this.sessionsData = [];
+
+        if (!this.sessionIds.length) {
+            return;
+        }
+
+        this._sessionsData.forEach(_sessionData => {
+            let sessionData = { ..._sessionData };
+            sessionData.sessions = [...sessionData.sessions].filter(session =>
+                this.sessionIds.includes(session.Id)
+            );
+
+            if (sessionData.sessions && sessionData.sessions.length) {
+                this.sessionsData.push(sessionData);
+            }
+        });
+    }
+
     handleGetServiceSessions() {
-        getServiceSessions({ dateLiteral: this.selectedMenuItemValue })
+        getServiceSessions({
+            dateLiteral: this.selectedMenuItemValue,
+        })
             .then(result => {
                 if (!result) {
                     return;
@@ -156,14 +201,14 @@ export default class RecentSessions extends LightningElement {
 
                 if (result) {
                     if (!this.hasLoaded) {
-                        this.sessionsData = [];
+                        this._sessionsData = [];
                         let sessions = result;
 
                         // eslint-disable-next-line guard-for-in
                         for (let sessionStartDate in sessions) {
                             //Here we are creating the array to iterate on UI.
                             let currentDate = new Date();
-                            this.sessionsData.push({
+                            this._sessionsData.push({
                                 sessionStartDate: sessionStartDate,
                                 sessions: JSON.parse(
                                     JSON.stringify(sessions[sessionStartDate])
@@ -181,6 +226,7 @@ export default class RecentSessions extends LightningElement {
                                           this.objectLabelPlural,
                             });
                         }
+                        this.filter();
                         this.hasLoaded = true;
                     }
                 }

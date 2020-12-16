@@ -20,7 +20,7 @@ describe("c-formattedField", () => {
     afterEach(global.clearDOM);
 
     beforeEach(() => {
-        element = createElement("c-formattedField", {
+        element = createElement("c-formatted-field", {
             is: FormattedField,
         });
 

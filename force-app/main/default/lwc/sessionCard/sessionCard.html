@@ -1,0 +1,82 @@
+<!--
+  - /*
+  -  * Copyright (c) 2020, salesforce.com, inc.
+  -  * All rights reserved.
+  -  * SPDX-License-Identifier: BSD-3-Clause
+  -  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  -  */
+  -->
+
+<template>
+    <lightning-record-view-form
+        record-id={session.Id}
+        object-api-name={serviceSessionObject}
+        density="compact"
+        if:true={session}
+    >
+        <lightning-layout
+            class="slds-box small-box slds-var-m-top_x-small slds-theme_default"
+            multiple-rows="true"
+        >
+            <lightning-layout-item size="8" class="slds-truncate">
+                <a href={sessionURL} onkeydown={handleSessionClick}>{session.Name} </a>
+            </lightning-layout-item>
+            <lightning-layout-item
+                size="4"
+                class="slds-list_horizontal slds-align_absolute-center slds-truncate"
+            >
+                <lightning-icon
+                    icon-name="utility:success"
+                    alternative-text={labels.success}
+                    size="x-small"
+                    variant="success"
+                    title={labels.success}
+                    if:true={session.showCompleteIcon}
+                ></lightning-icon>
+                <lightning-icon
+                    icon-name="utility:clock"
+                    size="x-small"
+                    if:false={session.showCompleteIcon}
+                ></lightning-icon>
+                <lightning-output-field
+                    field-name={fields.status}
+                    variant="label-hidden"
+                    class="slds-var-p-left_x-small"
+                >
+                </lightning-output-field>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" class="slds-var-p-right_x-large">
+                <lightning-layout multiple-rows="true">
+                    <template iterator:it={populatedFields}>
+                        <lightning-layout-item key={it.value.apiName}>
+                            <c-formatted-field
+                                field={it.value}
+                                record={session}
+                            ></c-formatted-field>
+                            <template if:false={it.last}
+                                ><span
+                                    class="slds-var-p-left_xx-small slds-var-p-right_xx-small"
+                                    >{separator}</span
+                                ></template
+                            >
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+            </lightning-layout-item>
+            <lightning-layout-item
+                size="12"
+                class="slds-list_horizontal slds-truncate"
+                if:true={session.hasServiceProviderValue}
+            >
+                <lightning-icon icon-name="utility:user" size="xx-small"></lightning-icon>
+                <lightning-output-field
+                    field-name={fields.primaryServiceProvider}
+                    variant="label-hidden"
+                    class="slds-var-p-left_x-small"
+                >
+                </lightning-output-field>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-record-view-form>
+</template>

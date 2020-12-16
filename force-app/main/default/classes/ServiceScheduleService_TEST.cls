@@ -23,7 +23,7 @@ public with sharing class ServiceScheduleService_TEST {
 
     @TestSetup
     private static void setupTestData() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateServiceData();
     }
 
     @IsTest

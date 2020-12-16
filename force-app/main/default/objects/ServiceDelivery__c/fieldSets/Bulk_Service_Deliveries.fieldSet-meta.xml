@@ -7,6 +7,11 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
+        <field>AttendanceStatus__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
         <field>AutonameOverride__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>

@@ -11,7 +11,7 @@
 public with sharing class ServiceSelector_TEST {
     @IsTest
     private static void testGetScheduleById() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateAttendanceData('Daily');
 
         ServiceSchedule__c expected = [
             SELECT Id, Name, Service__c
@@ -41,7 +41,7 @@ public with sharing class ServiceSelector_TEST {
             UserName = 'standarduser1@' + random + '.example.com'
         );
 
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateAttendanceData('Daily');
 
         Program__c program1 = [
             SELECT Id, Name
@@ -65,13 +65,13 @@ public with sharing class ServiceSelector_TEST {
 
     @IsTest
     private static void testGetExistingParticipantContactIdsByScheduleId() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateAttendanceData('Daily');
 
         ServiceSchedule__c schedule = [SELECT Id FROM ServiceSchedule__c];
 
         List<Contact> contacts = [SELECT Id FROM Contact ORDER BY Id];
 
-        List<Id> expected = new List<Id>{ contacts[0].Id };
+        List<Id> expected = new List<Id>{ contacts[0].Id, contacts[1].Id };
 
         Test.startTest();
         ServiceSelector selector = new ServiceSelector();
@@ -99,7 +99,7 @@ public with sharing class ServiceSelector_TEST {
             UserName = 'standarduser1@' + random + '.example.com'
         );
 
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateAttendanceData('Daily');
 
         ServiceSchedule__c schedule = [SELECT Id FROM ServiceSchedule__c];
 
@@ -120,7 +120,7 @@ public with sharing class ServiceSelector_TEST {
 
     @IsTest
     private static void testGetServicesByProgramIds() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateAttendanceData('Daily');
 
         Program__c program1 = [
             SELECT Id, Name
@@ -164,7 +164,7 @@ public with sharing class ServiceSelector_TEST {
             UserName = 'standarduser1@' + random + '.example.com'
         );
 
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateAttendanceData('Daily');
 
         Program__c program1 = [
             SELECT Id, Name
@@ -186,7 +186,7 @@ public with sharing class ServiceSelector_TEST {
 
     @IsTest
     private static void testGetServicesByProgramEngagementId() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateAttendanceData('Daily');
         Program__c program1 = [
             SELECT Id, Name
             FROM Program__c
@@ -251,7 +251,7 @@ public with sharing class ServiceSelector_TEST {
             UserName = 'standarduser1@' + random + '.example.com'
         );
 
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateAttendanceData('Daily');
 
         Program__c program1 = [
             SELECT Id, Name

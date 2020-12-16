@@ -36,7 +36,7 @@ describe("c-listViewSelector", () => {
             const lightningMenuItem = element.shadowRoot.querySelector(
                 "lightning-menu-item"
             );
-            expect(lightningMenuItem.value).toBe("All");
+            expect(lightningMenuItem.label).toBe("All");
             expect(lightningMenuItem.checked).toBeTruthy();
             await expect(element).toBeAccessible();
         });

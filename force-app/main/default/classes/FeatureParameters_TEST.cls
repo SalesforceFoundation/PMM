@@ -15,7 +15,7 @@ public with sharing class FeatureParameters_TEST {
 
     @TestSetup
     static void generateData() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateServiceData();
     }
 
     @IsTest

@@ -10,6 +10,7 @@
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import unknownErrorLabel from "@salesforce/label/c.Util_Unknown_Error";
 import errorLabel from "@salesforce/label/c.Util_Error";
+import ISCLIENT_FIELD from "@salesforce/schema/Contact.IsClient__c";
 
 /**
  * Returns if value is a string literal or String instance
@@ -255,7 +256,7 @@ const getChildObjectByName = (object, property) => {
         if (Object.prototype.hasOwnProperty.call(object, property)) {
             return object[property];
         }
-        let namespacedProperty = "caseman__" + property;
+        let namespacedProperty = "pmdm__" + property;
         if (Object.prototype.hasOwnProperty.call(object, namespacedProperty)) {
             return object[namespacedProperty];
         }
@@ -289,6 +290,15 @@ const createUUID = () => {
     return uuid;
 };
 
+const prefixNamespace = value => {
+    let namespace = ISCLIENT_FIELD.fieldApiName.substring(
+        0,
+        ISCLIENT_FIELD.fieldApiName.indexOf("IsClient__c")
+    );
+
+    return namespace + value;
+};
+
 export {
     isString,
     showToast,
@@ -303,4 +313,5 @@ export {
     getChildObjectByName,
     debouncify,
     createUUID,
+    prefixNamespace,
 };

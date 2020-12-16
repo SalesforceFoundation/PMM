@@ -4,6 +4,18 @@
         <application>Program_Management</application>
         <visible>true</visible>
     </applicationVisibilities>
+    <classAccesses>
+        <apexClass>AttendanceController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>FieldSetController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>RecentServiceSessionController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>false</editable>
         <field>Contact.IsClient__c</field>
@@ -91,6 +103,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>ServiceDelivery__c.AttendanceStatus__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>ServiceDelivery__c.AutonameOverride__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -146,11 +163,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceParticipant__c.Service__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>ServiceParticipant__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -182,6 +194,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>ServiceSchedule__c.DaysOfWeek__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.DefaultServiceQuantity__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -231,11 +248,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>ServiceSchedule__c.Service__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>ServiceSchedule__c.ServiceScheduleEndDate__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -246,12 +258,27 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>ServiceSchedule__c.Service__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>ServiceSession__c.OtherServiceProvider__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>ServiceSession__c.PrimaryServiceProvider__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSession__c.ServiceLink__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSession__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -267,11 +294,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>ServiceSession__c.Status__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ServiceSession__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -363,6 +385,10 @@
         <object>Service__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <tabSettings>
+        <tab>Attendance</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
     <tabSettings>
         <tab>ProgramCohort__c</tab>
         <visibility>Visible</visibility>

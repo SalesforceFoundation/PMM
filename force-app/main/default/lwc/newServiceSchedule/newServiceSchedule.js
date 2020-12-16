@@ -12,6 +12,8 @@ import { format } from "c/util";
 import { loadStyle } from "lightning/platformResourceLoader";
 import getDayNum from "@salesforce/apex/ServiceScheduleCreatorController.getDayNum";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
+import TIME_ZONE from "@salesforce/i18n/timeZone";
+import LOCALE from "@salesforce/i18n/locale";
 
 import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
@@ -23,6 +25,9 @@ import WEEK_LABEL from "@salesforce/label/c.Week";
 import WEEKS_LABEL from "@salesforce/label/c.Weeks";
 import MONTH_LABEL from "@salesforce/label/c.Month";
 import MONTHS_LABEL from "@salesforce/label/c.Months";
+import LAST_DAY_OF_MONTH_LABEL from "@salesforce/label/c.Last_Day_Of_Month";
+import MONTHLY_ON_DAY_LABEL from "@salesforce/label/c.Monthly_On_Day";
+import MONTHLY_ON_THE_LABEL from "@salesforce/label/c.Monthly_On_The";
 
 const WEEKLY = "Weekly";
 const MONTHLY = "Monthly";
@@ -30,14 +35,22 @@ const DAILY = "Daily";
 const ONE_TIME = "One Time";
 const ON = "On";
 const AFTER = "After";
+const LASTDAY = "LastDayOfMonth";
+
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
-
+const DAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
     errorMessage;
     isValid = true;
     objectApiName;
+    selectedMonthlyRecurrenceValue = "";
+    sessionStartWeek;
+    sessionStartDayOfWeek;
+    sessionStartDay;
+    @track monthlyRecurrenceOptions = [];
+
     @track labels = {
         day: DAY_LABEL,
         days: DAYS_LABEL,
@@ -46,6 +59,9 @@ export default class NewServiceSchedule extends LightningElement {
         month: MONTH_LABEL,
         months: MONTHS_LABEL,
         every: EVERY_LABEL,
+        lastDayOfMonth: LAST_DAY_OF_MONTH_LABEL,
+        monthlyOnDay: MONTHLY_ON_DAY_LABEL,
+        monthlyOnThe: MONTHLY_ON_THE_LABEL,
     };
     sizes = {
         large: LARGE_SIZE,
@@ -180,6 +196,7 @@ export default class NewServiceSchedule extends LightningElement {
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
+        this.handleMonthlyRecurrenceOptions();
     }
 
     handleLoad() {
@@ -253,6 +270,10 @@ export default class NewServiceSchedule extends LightningElement {
         if (this.isOneTime) {
             this.dateFields.interval.value = 1;
         }
+
+        if (event.detail[0].value === MONTHLY) {
+            this.handleMonthlyRecurrenceOptions();
+        }
     }
 
     async defaultDayOfWeek() {
@@ -290,6 +311,10 @@ export default class NewServiceSchedule extends LightningElement {
             this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
         }
         this.defaultDayOfWeek();
+
+        if (this.picklistFields.frequency.value === MONTHLY) {
+            this.handleMonthlyRecurrenceOptions();
+        }
     }
 
     handleEndChange(event) {
@@ -354,6 +379,79 @@ export default class NewServiceSchedule extends LightningElement {
         if (seriesEndsOn === AFTER) {
             this._serviceScheduleModel.scheduleRecurrenceDateFields.seriesEndsOn.value =
                 "";
+        }
+    }
+
+    async handleMonthlyRecurrenceOptions() {
+        if (this.picklistFields.monthlyOption.value !== undefined) {
+            this.selectedMonthlyRecurrenceValue = this.picklistFields.monthlyOption.value;
+        }
+
+        let sessionStartDay = new Date(this.dateFields.start.value).toLocaleString(
+            LOCALE,
+            {
+                timeZone: TIME_ZONE,
+                day: "numeric",
+            }
+        );
+
+        let weekNum = this.handleGetWeekDay(sessionStartDay);
+        let day;
+
+        await getDayNum({ fullDateTime: this.dateFields.start.value }).then(result => {
+            day = DAYS[result - 1]; //Weekdays are 1 index in apex
+        });
+
+        let monthlyOptionApiValue = weekNum + day;
+
+        let monthlyOptionLabel = this.picklistFields.monthlyOption.picklistValues.find(
+            option => option.value === monthlyOptionApiValue
+        ).label;
+
+        let options = [
+            {
+                label: format(this.labels.monthlyOnDay, [sessionStartDay]),
+                value: "",
+            },
+            {
+                label: monthlyOptionLabel,
+                value: monthlyOptionApiValue,
+            },
+        ];
+
+        if (sessionStartDay >= 28) {
+            let startDate = new Date(this.dateFields.start.value);
+            startDate.setDate(startDate.getDate() + 1);
+            let nextDay = startDate.toLocaleString(LOCALE, {
+                timeZone: TIME_ZONE,
+                day: "numeric",
+            });
+
+            if (Number(nextDay) === 1) {
+                options.push({
+                    label: this.labels.lastDayOfMonth,
+                    value: LASTDAY,
+                });
+            }
+        }
+
+        this.monthlyRecurrenceOptions = options;
+    }
+
+    handleGetWeekDay(sessionStartDay) {
+        let weekNum;
+
+        weekNum = Math.ceil(sessionStartDay / 7);
+
+        return weekNum;
+    }
+
+    handleMonthlyRecurrenceOptionsChange(event) {
+        this.selectedMonthlyRecurrenceValue = event.detail.value;
+        if (event.detail.value !== "") {
+            this.picklistFields.monthlyOption.value = this.selectedMonthlyRecurrenceValue;
+        } else {
+            this.picklistFields.monthlyOption.value = undefined;
         }
     }
 }

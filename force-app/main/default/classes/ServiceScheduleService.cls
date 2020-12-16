@@ -192,14 +192,20 @@ public with sharing class ServiceScheduleService {
             ? Integer.valueOf(schedule.Interval__c)
             : null;
 
+        String byDay = schedule.MonthlyRecurrenceOption__c != null
+            ? schedule.MonthlyRecurrenceOption__c
+            : null;
+
         String rRule = recurrenceService.createRRule(
             schedule.Frequency__c,
             interval,
             schedule.ServiceScheduleEndDate__c,
             Integer.valueOf(schedule.NumberOfServiceSessions__c),
             getDayNums(schedule.DaysOfWeek__c),
-            schedule.FirstSessionStart__c
+            schedule.FirstSessionStart__c,
+            schedule.MonthlyRecurrenceOption__c
         );
+
         return recurrenceService.generate(
             schedule.FirstSessionStart__c,
             rRule,

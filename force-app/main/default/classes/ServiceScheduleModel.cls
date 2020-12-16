@@ -70,6 +70,9 @@ public with sharing class ServiceScheduleModel {
         ),
         'seriesEnds' => fieldSetService.getPicklistFieldForLWC(
             Schema.ServiceSchedule__c.ServiceScheduleEnds__c.getDescribe()
+        ),
+        'monthlyOption' => fieldSetService.getPicklistFieldForLWC(
+            Schema.ServiceSchedule__c.MonthlyRecurrenceOption__c.getDescribe()
         )
     };
 

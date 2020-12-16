@@ -229,12 +229,33 @@
         <value>Loading</value>
     </labels>
     <labels>
+        <fullName>Last_Day_Of_Month</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Last Day of the Month</shortDescription>
+        <value>Last Day of the Month</value>
+    </labels>
+    <labels>
         <fullName>MissingSObjectType</fullName>
         <categories>Exception</categories>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Missing SObject Type</shortDescription>
         <value>Your query must include an object.</value>
+    </labels>
+    <labels>
+        <fullName>Monthly_On_Day</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Monthly on Day</shortDescription>
+        <value>Monthly on Day {0}</value>
+    </labels>
+    <labels>
+        <fullName>Monthly_On_The</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Monthly On The</shortDescription>
+        <value>Monthly on the {0} {1}</value>
     </labels>
     <labels>
         <fullName>New_Program_Engagement</fullName>

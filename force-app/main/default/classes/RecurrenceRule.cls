@@ -30,6 +30,7 @@ public with sharing class RecurrenceRule {
         SA
     }
 
+    private static String LAST_DAY_OF_MONTH = 'LastDayOfMonth';
     @TestVisible
     private String rRule;
     private Frequency freq;
@@ -39,6 +40,7 @@ public with sharing class RecurrenceRule {
     private List<Day> days;
     private Integer bySetPos = -1;
     private Set<Integer> byMonthDays;
+    private String byDay;
 
     public RecurrenceRule reset() {
         rRule = null;
@@ -49,6 +51,7 @@ public with sharing class RecurrenceRule {
         days = null;
         bySetPos = -1;
         byMonthDays = null;
+        byDay = null;
         return this;
     }
 
@@ -97,19 +100,21 @@ public with sharing class RecurrenceRule {
 
         Set<Integer> daysToAdd = new Set<Integer>();
 
-        switch on dateTimeStart.day() {
-            when 29 {
-                daysToAdd.addAll(new Set<Integer>{ 28, 29 });
-            }
-            when 30 {
-                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30 });
-            }
-            when 31 {
-                daysToAdd.addAll(new Set<Integer>{ 28, 29, 30, 31 });
-            }
-        }
+        daysToAdd.addAll(new Set<Integer>{ 28, 29, 30, 31 });
+
         if (daysToAdd.size() != 0) {
             byMonthDays = daysToAdd;
+        }
+
+        return this;
+    }
+
+    public RecurrenceRule withByDay(String byDay) {
+        // rRule spec is '+2SU' for 'second Sunday of the month', but our picklist just stores '2SU' for simplicity
+        if (byDay != LAST_DAY_OF_MONTH && byDay != null) {
+            this.byDay = '+' + byDay;
+        } else {
+            this.byDay = byDay;
         }
 
         return this;
@@ -152,10 +157,24 @@ public with sharing class RecurrenceRule {
         return byMonthDays;
     }
 
+    public String getByDay() {
+        return byDay;
+    }
+
     public List<Integer> getDayNums() {
         List<Integer> result = new List<Integer>();
         for (Day day : days) {
             result.add(day.ordinal());
+        }
+        return result;
+    }
+
+    public Integer getDayNum(String dayAbbr) {
+        Integer result;
+        for (Day day : Day.values()) {
+            if (day.name().equalsIgnoreCase(dayAbbr)) {
+                result = day.ordinal();
+            }
         }
         return result;
     }
@@ -188,12 +207,18 @@ public with sharing class RecurrenceRule {
         }
 
         // BYDAY
-        if (days != null && days.size() > 0) {
-            List<String> dayStrings = new List<String>();
-            for (Day day : days) {
-                dayStrings.add(day.name());
+        if (freq == Frequency.MONTHLY) {
+            if (byDay != null && byDay != LAST_DAY_OF_MONTH) {
+                ruleParts.add('BYDAY=' + byDay);
             }
-            ruleParts.add('BYDAY=' + String.join(dayStrings, ','));
+        } else {
+            if (days != null && days.size() > 0) {
+                List<String> dayStrings = new List<String>();
+                for (Day day : days) {
+                    dayStrings.add(day.name());
+                }
+                ruleParts.add('BYDAY=' + String.join(dayStrings, ','));
+            }
         }
 
         //BYSETPOS
@@ -208,7 +233,9 @@ public with sharing class RecurrenceRule {
                 monthDays.add(String.valueOf(monthday));
             }
 
-            ruleParts.add('BYMONTHDAY=' + String.join(monthDays, ','));
+            if (byDay != null && byDay == LAST_DAY_OF_MONTH) {
+                ruleParts.add('BYMONTHDAY=' + String.join(monthDays, ','));
+            }
         }
 
         rRule = String.join(ruleParts, ';');
@@ -243,11 +270,15 @@ public with sharing class RecurrenceRule {
                         count = Integer.valueOf(thisValue);
                     }
                     when 'BYDAY' {
-                        List<String> dayStrings = thisValue.split(',');
-                        days = new List<Day>();
-                        for (Day day : Day.values()) {
-                            if (dayStrings.contains(day.name())) {
-                                days.add(day);
+                        if (thisValue.startsWith('+')) {
+                            byDay = thisValue;
+                        } else {
+                            List<String> dayStrings = thisValue.split(',');
+                            days = new List<Day>();
+                            for (Day day : Day.values()) {
+                                if (dayStrings.contains(day.name())) {
+                                    days.add(day);
+                                }
                             }
                         }
                     }

@@ -244,6 +244,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>ServiceSchedule__c.MonthlyRecurrenceOption__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>ServiceSchedule__c.NumberOfServiceSessions__c</field>
         <readable>true</readable>
     </fieldPermissions>

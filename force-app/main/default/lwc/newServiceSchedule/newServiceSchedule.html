@@ -127,6 +127,18 @@
                                         {units}
                                     </lightning-layout-item>
                                 </lightning-layout>
+                                <lightning-layout
+                                    class="slds-var-p-top_xx-small slds-var-p-bottom_medium"
+                                >
+                                    <lightning-layout-item size={sizes.large}>
+                                        <lightning-combobox
+                                            options={monthlyRecurrenceOptions}
+                                            value={selectedMonthlyRecurrenceValue}
+                                            onchange={handleMonthlyRecurrenceOptionsChange}
+                                            if:true={isMonthly}
+                                        ></lightning-combobox>
+                                    </lightning-layout-item>
+                                </lightning-layout>
                             </lightning-layout-item>
                             <!--END CONDITION-->
                             <lightning-layout-item size={sizes.small}>

@@ -28,6 +28,8 @@
         "object-api-name",
         "field-name",
         "content",
-        "placeholder"
+        "placeholder",
+        "text",
+        "sub-text"
     ]
 }

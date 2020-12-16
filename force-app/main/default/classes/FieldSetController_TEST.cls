@@ -90,4 +90,80 @@ public with sharing class FieldSetController_TEST {
             new List<Object>{ objectName, fieldSetName, false }
         );
     }
+
+    @IsTest
+    private static void whenGetFieldByFieldPathsSuccessfully() {
+        String objectName = 'ProgramEngagement__c';
+        String fieldSetName = 'CreateProgramEngagement';
+        final Map<String, Map<String, Object>> expected = new Map<String, Map<String, Object>>();
+
+        fieldSetServiceStub.withReturnValue(
+            'getFieldByFieldPath',
+            new List<Type>{ String.class, String.class },
+            expected
+        );
+
+        Test.startTest();
+
+        FieldSetController.fieldSetService = (FieldSetService) fieldSetServiceStub.createMock();
+        final Map<String, Map<String, Object>> actual = FieldSetController.getFieldByFieldPath(
+            objectName,
+            fieldSetName
+        );
+
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Expected the controller to return the map returned by the service.'
+        );
+
+        fieldSetServiceStub.assertCalledWith(
+            'getFieldByFieldPath',
+            new List<Type>{ String.class, String.class },
+            new List<Object>{ objectName, fieldSetName }
+        );
+    }
+
+    @IsTest
+    private static void whenGetFieldByFieldPathThrowsException() {
+        String objectName = 'ProgramEngagement__c';
+        String fieldSetName = 'CreateProgramEngagement';
+
+        fieldSetServiceStub.withThrowException(
+            'getFieldByFieldPath',
+            new List<Type>{ String.class, String.class }
+        );
+
+        Test.startTest();
+
+        FieldSetController.fieldSetService = (FieldSetService) fieldSetServiceStub.createMock();
+
+        Exception actualException;
+
+        try {
+            FieldSetController.getFieldByFieldPath(objectName, fieldSetName);
+        } catch (Exception e) {
+            actualException = e;
+        }
+
+        Test.stopTest();
+
+        System.assertEquals(
+            true,
+            actualException instanceof AuraHandledException,
+            actualException
+        );
+        System.assertEquals(
+            fieldSetServiceStub.testExceptionMessage,
+            actualException.getMessage()
+        );
+
+        fieldSetServiceStub.assertCalledWith(
+            'getFieldByFieldPath',
+            new List<Type>{ String.class, String.class },
+            new List<Object>{ objectName, fieldSetName }
+        );
+    }
 }

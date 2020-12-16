@@ -1,0 +1,27 @@
+{
+    "lists": [
+        {
+            "apiName": "All",
+            "id": "00B550000041z1hEAA",
+            "label": "All",
+            "listUiUrl": "/services/data/v50.0/ui-api/list-ui/ServiceSession__c/All"
+        },
+        {
+            "apiName": "Stem_Enrichment",
+            "id": "00B5500000429lIEAQ",
+            "label": "Stem Enrichment",
+            "listUiUrl": "/services/data/v50.0/ui-api/list-ui/ServiceSession__c/Stem_Enrichment"
+        }
+    ],
+    "count": 2,
+    "currentPageToken": "0",
+    "currentPageUrl": "/services/data/v50.0/ui-api/list-ui/ServiceSession__c?pageSize=20&pageToken=0",
+    "nextPageToken": null,
+    "nextPageUrl": null,
+    "previousPageToken": null,
+    "previousPageUrl": null,
+    "objectApiName": "ServiceSession__c",
+    "pageSize": 20,
+    "queryString": null,
+    "recentListsOnly": false
+}

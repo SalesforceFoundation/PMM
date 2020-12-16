@@ -1,0 +1,54 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item>
+            <div class="slds-form-element">
+                <label
+                    class="slds-form-element__label slds-m-bottom_none"
+                    for="listViewSelector"
+                >
+                    {label}
+                </label>
+                <div class="slds-form-element__control">
+                    <lightning-button-menu
+                        variant="container"
+                        onselect={handleListViewSelected}
+                        label={selectedListView.label}
+                        class="listViewSelector"
+                        id="listViewSelector"
+                        if:true={options}
+                    >
+                        <div
+                            role="presentation"
+                            class="slds-text-title_caps slds-var-m-around_medium"
+                        >
+                            {labels.listViewLabel}
+                        </div>
+                        <template for:each={options} for:item="option">
+                            <lightning-menu-item
+                                label={option.label}
+                                value={option.value}
+                                key={option.value}
+                                checked={option.isChecked}
+                            ></lightning-menu-item>
+                        </template>
+                    </lightning-button-menu>
+                </div>
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item
+            padding="horizontal-small"
+            alignment-bump="top"
+            class="slds-var-p-bottom_x-small"
+        >
+            <lightning-button-icon-stateful
+                icon-name="utility:pin"
+                alternative-text={labels.pinTitle}
+                title={labels.title}
+                variant="brand"
+                size="x-small"
+                selected={pinnedState}
+                onclick={handlePinListView}
+            ></lightning-button-icon-stateful>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

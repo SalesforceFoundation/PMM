@@ -14,6 +14,9 @@ import { getRecordNotifyChange } from "lightning/uiRecordApi";
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
+import SKIP_LABEL from "@salesforce/label/c.Dont_Log_Attendance";
+
+// TODO: design parameter for "Allow users to skip logging attendance for selected participants."
 
 // TODO: create design parameters for default status and "present" statuses
 const PRESENT_STATUS = "Present";
@@ -27,9 +30,13 @@ export default class AttendanceRow extends LightningElement {
     @api readOnly = false;
 
     name;
-
     _isEdited;
     recordId;
+    rowDisabled = false;
+
+    labels = {
+        skip: SKIP_LABEL,
+    };
 
     @api
     get record() {
@@ -56,7 +63,9 @@ export default class AttendanceRow extends LightningElement {
 
     @api
     getRow() {
-        return this._isEdited || !this.recordId ? this.localRecord : null;
+        return !this.rowDisabled && (this._isEdited || !this.recordId)
+            ? this.localRecord
+            : null;
     }
 
     @api
@@ -78,7 +87,12 @@ export default class AttendanceRow extends LightningElement {
     }
 
     setValues() {
-        if (this.localFieldSet && this.localFieldSet.length && this.record) {
+        if (
+            this.localFieldSet &&
+            this.localFieldSet.length &&
+            this.record &&
+            !this.rowDisabled
+        ) {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(field => {
                 field.value = this.record[field.apiName];
@@ -101,5 +115,28 @@ export default class AttendanceRow extends LightningElement {
     handleQuantityChange(event) {
         this.localRecord[this.fields.quantity.fieldApiName] = event.detail.value;
         this._isEdited = true;
+    }
+
+    get showSkip() {
+        return !this.recordId && !this.readOnly;
+    }
+
+    handleToggleButton() {
+        this.rowDisabled = !this.rowDisabled;
+        if (this.rowDisabled) {
+            let inputFields = [
+                ...this.template.querySelectorAll("lightning-input"),
+                ...this.template.querySelectorAll("lightning-input-field"),
+            ];
+            inputFields.forEach(field => {
+                field.value = null;
+            });
+
+            this.localRecord[this.fields.quantity.fieldApiName] = null;
+
+            this.localFieldSet.forEach(field => {
+                field.value = null;
+            });
+        }
     }
 }

@@ -16,7 +16,7 @@ public with sharing class ProgramEngagementSelector_TEST {
 
     @TestSetup
     private static void createProgramEngagementData() {
-        ProgramTestDataFactory.insertTestData(true);
+        TestDataFactory.generateServiceData();
     }
 
     @IsTest

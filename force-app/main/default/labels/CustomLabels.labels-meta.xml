@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>accordionSection_ToggleInstructionsWhenOpen</fullName>
+        <categories>accordionSection</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Click to hide the section. This section is open.</shortDescription>
+        <value>Click to hide the section. This section is open.</value>
+    </labels>
+    <labels>
+        <fullName>accordionSection_ToggleInstructionsWhenClosed</fullName>
+        <categories>accordionSection</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Click to show the section. This section is not open.</shortDescription>
+        <value>Click to show the section. This section is not open.</value>
+    </labels>
+    <labels>
         <fullName>Add_Entry</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -49,6 +65,41 @@
         <protected>false</protected>
         <shortDescription>Anonymous</shortDescription>
         <value>Anonymous</value>
+    </labels>
+    <labels>
+        <fullName>Attendance</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Attendance</shortDescription>
+        <value>Attendance</value>
+    </labels>
+    <labels>
+        <fullName>Save_Service_Delivery_Success</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Saved {0} Service Delivery records.</shortDescription>
+        <value>Saved {0} Service Delivery records.</value>
+    </labels>
+    <labels>
+        <fullName>Save_Service_Delivery_No_Updates</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>There are no Service Delivery records to update.</shortDescription>
+        <value>There are no Service Delivery records to update.</value>
+    </labels>
+    <labels>
+        <fullName>No_Participants_Header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No participants yet</shortDescription>
+        <value>No participants yet</value>
+    </labels>
+    <labels>
+        <fullName>No_Participants_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Attendance empty state</shortDescription>
+        <value>After participants are added to this Service Schedule, track their attendance here.</value>
     </labels>
     <labels>
         <fullName>Back</fullName>
@@ -163,6 +214,13 @@
         <value>Done</value>
     </labels>
     <labels>
+        <fullName>Dont_Log_Attendance</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Don't log attendance for this participant</shortDescription>
+        <value>Don't log attendance for this participant</value>
+    </labels>
+    <labels>
         <fullName>Enabled</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -219,6 +277,35 @@
         <protected>true</protected>
         <shortDescription>Permission Denied for Delete Operation</shortDescription>
         <value>You can't delete this record. Ask your admin for help.</value>
+    </labels>
+    <labels>
+        <fullName>Duration</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Duration</shortDescription>
+        <value>Duration</value>
+    </labels>
+    <labels>
+        <fullName>Last_Week</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Picklist option on the recent sessions home page component.</shortDescription>
+        <value>Last Week</value>
+    </labels>
+    <labels>
+        <fullName>List_View</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>List View</shortDescription>
+        <value>List View</value>
+    </labels>
+    <labels>
+        <fullName>List_Views</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>List Views</shortDescription>
+        <value>List Views</value>
     </labels>
     <labels>
         <fullName>Loading</fullName>
@@ -356,11 +443,32 @@
         <value>Previous</value>
     </labels>
     <labels>
+        <fullName>Print</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Print button</shortDescription>
+        <value>Print</value>
+    </labels>
+    <labels>
+        <fullName>Printable_View</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Printable View button</shortDescription>
+        <value>Printable View</value>
+    </labels>
+    <labels>
         <fullName>Quantity</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Placeholder for Bulk Service Delivery Tool until it returns the Unit of Measure</shortDescription>
         <value>Quantity</value>
+    </labels>
+    <labels>
+        <fullName>RecentSessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Recent Sessions</shortDescription>
+        <value>Recent Sessions</value>
     </labels>
     <labels>
         <fullName>Record_Deleted</fullName>
@@ -396,6 +504,13 @@
         <protected>true</protected>
         <shortDescription>You have rows with errors</shortDescription>
         <value>There are Service Delivery rows with errors.</value>
+    </labels>
+    <labels>
+        <fullName>Update</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Update</shortDescription>
+        <value>Update</value>
     </labels>
     <labels>
         <fullName>Save</fullName>
@@ -475,6 +590,22 @@
         <value>Select either a Service Schedule End Date or a Number of Service Sessions.</value>
     </labels>
     <labels>
+        <fullName>SkipToStartLink</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Skip to Start of List</shortDescription>
+        <value>Skip to Start of List</value>
+    </labels>
+    <labels>
+        <fullName>SkipToEndLink</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Skip to End of List</shortDescription>
+        <value>Skip to End of List</value>
+    </labels>
+    <labels>
         <fullName>Day_Required_When_Weekly_Selected</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -545,6 +676,13 @@
         <value>Day</value>
     </labels>
     <labels>
+        <fullName>List_View_Limit</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning when list view limit is reached.</shortDescription>
+        <value>There are over 2,000 records. Some records may not be shown.</value>
+    </labels>
+    <labels>
         <fullName>Months</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -557,6 +695,20 @@
         <protected>true</protected>
         <shortDescription>Month</shortDescription>
         <value>Month</value>
+    </labels>
+    <labels>
+        <fullName>Pin_List_View</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Pin List View</shortDescription>
+        <value>Pin List View</value>
+    </labels>
+    <labels>
+        <fullName>Pin_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>To unpin, pin another list view</shortDescription>
+        <value>To unpin, pin another list view</value>
     </labels>
     <labels>
         <fullName>Years</fullName>
@@ -639,6 +791,13 @@
         <value>We couldn't collect telemetry metrics.</value>
     </labels>
     <labels>
+        <fullName>This_Week</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Picklist option on the recent sessions home page component.</shortDescription>
+        <value>This Week</value>
+    </labels>
+    <labels>
         <fullName>Total_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -668,6 +827,14 @@
         <protected>true</protected>
         <shortDescription>Unsupported Field Error</shortDescription>
         <value>You can't access this field. Your Salesforce admin can help with that.</value>
+    </labels>
+    <labels>
+        <fullName>UpsertOperationException</fullName>
+        <categories></categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Permission Denied for Insert or Update Operation</shortDescription>
+        <value>You can't add or update this record. Your Salesforce admin can help with that.</value>
     </labels>
     <labels>
         <fullName>Warning</fullName>

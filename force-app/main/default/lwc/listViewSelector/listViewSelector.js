@@ -47,8 +47,7 @@ export default class ListViewSelector extends LightningElement {
     }
 
     @wire(getListUi, {
-        objectApiName: "$objectApiName",
-        listViewApiName: "$selectedListViewValue",
+        listViewId: "$selectedListViewValue",
         pageSize: 2000,
         pageToken: "$pageToken",
     })
@@ -96,8 +95,8 @@ export default class ListViewSelector extends LightningElement {
         this._options = data.lists.map(listView => {
             return {
                 label: listView.label,
-                value: listView.apiName,
-                isChecked: listView.apiName === this.selectedListView.value,
+                value: listView.id,
+                isChecked: listView.id === this.selectedListView.value,
             };
         });
     }

@@ -168,11 +168,16 @@ export default class RecentSessions extends LightningElement {
     }
 
     filter() {
-        if (!this.sessionIds || !this.sessionIds.length || !this._sessionsData) {
+        if (!this.sessionIds || !this._sessionsData) {
             return;
         }
 
         this.sessionsData = [];
+
+        if (!this.sessionIds.length) {
+            return;
+        }
+
         this._sessionsData.forEach(_sessionData => {
             let sessionData = { ..._sessionData };
             sessionData.sessions = [...sessionData.sessions].filter(session =>

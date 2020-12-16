@@ -102,13 +102,6 @@
         <value>After participants are added to this Service Schedule, track their attendance here.</value>
     </labels>
     <labels>
-        <fullName>No_Permission_Message</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>You don't have access to this information. Ask your admin for help.</shortDescription>
-        <value>You don't have access to this information. Ask your admin for help.</value>
-    </labels>
-    <labels>
         <fullName>Back</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -219,6 +212,13 @@
         <protected>true</protected>
         <shortDescription>Done</shortDescription>
         <value>Done</value>
+    </labels>
+    <labels>
+        <fullName>Dont_Log_Attendance</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Don't log attendance for this participant</shortDescription>
+        <value>Don't log attendance for this participant</value>
     </labels>
     <labels>
         <fullName>Enabled</fullName>
@@ -343,6 +343,13 @@
         <protected>true</protected>
         <shortDescription>Next button</shortDescription>
         <value>Next</value>
+    </labels>
+    <labels>
+        <fullName>No_Permission_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You don't have access to this information. Ask your admin for help.</shortDescription>
+        <value>You don't have access to this information. Ask your admin for help.</value>
     </labels>
     <labels>
         <fullName>No_Service_On_BSDT</fullName>

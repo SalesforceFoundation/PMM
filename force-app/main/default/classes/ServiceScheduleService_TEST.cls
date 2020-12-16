@@ -19,6 +19,7 @@ public with sharing class ServiceScheduleService_TEST {
         ProgramEngagementSelector.class
     );
     private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
+    private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
 
     @TestSetup
     private static void setupTestData() {
@@ -191,13 +192,13 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Sessions not returned from the service as expected.'
         );
         System.assertEquals(
-            expected.serviceSchedule,
-            actual.serviceSchedule,
+            String.valueOf(expected.serviceSchedule),
+            String.valueOf(actual.serviceSchedule),
             'Schedule not returned from the service as expected.'
         );
 
@@ -305,8 +306,8 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Sessions not returned from the service as expected.'
         );
         System.assertEquals(
@@ -432,13 +433,13 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Sessions not returned from the service as expected.'
         );
         System.assertEquals(
-            expected.serviceSchedule,
-            actual.serviceSchedule,
+            String.valueOf(expected.serviceSchedule),
+            String.valueOf(actual.serviceSchedule),
             'Schedule not returned from the service as expected.'
         );
 
@@ -546,13 +547,13 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Sessions not returned from the service as expected.'
         );
         System.assertEquals(
-            expected.serviceSchedule,
-            actual.serviceSchedule,
+            String.valueOf(expected.serviceSchedule),
+            String.valueOf(actual.serviceSchedule),
             'Schedule not returned from the service as expected.'
         );
 
@@ -606,8 +607,8 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actual = service.processSchedule(model);
         Test.stopTest();
         System.assertEquals(
-            expected.serviceSessions,
-            actual.serviceSessions,
+            String.valueOf(expected.serviceSessions),
+            String.valueOf(actual.serviceSessions),
             'Expected an empty list of sessions to be returned.'
         );
     }
@@ -773,6 +774,44 @@ public with sharing class ServiceScheduleService_TEST {
 
         serviceSelectorStub.assertCalledWith(selectorMethod, Id.class, scheduleId);
         System.assertEquals(expected, actual);
+    }
+
+    @IsTest
+    private static void shouldCallPermissionValidator() {
+        String fieldAccessMethodName = 'hasFLSAccessForFields';
+        String objectAccessMethodName = 'hasObjectAccess';
+
+        permValidatorStub.withReturnValue(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            true
+        );
+        permValidatorStub.withReturnValue(
+            fieldAccessMethodName,
+            new List<Type>{ List<Schema.SObjectField>.class, String.class },
+            true
+        );
+        PermissionValidator.instance = (PermissionValidator) permValidatorStub.createMock();
+
+        Boolean expected = true;
+
+        Test.startTest();
+        Boolean actual = service.checkAddParticipantsPermissions();
+        Test.stopTest();
+
+        permValidatorStub.assertCalled(
+            fieldAccessMethodName,
+            new List<Type>{ List<Schema.SObjectField>.class, String.class }
+        );
+        permValidatorStub.assertCalled(
+            objectAccessMethodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
+        );
+        System.assertEquals(
+            expected,
+            actual,
+            'Field permissions not returned from Perm Validator as expected.'
+        );
     }
 
     @IsTest

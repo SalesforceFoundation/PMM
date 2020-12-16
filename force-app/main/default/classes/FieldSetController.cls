@@ -28,4 +28,16 @@ public with sharing class FieldSetController {
             throw Util.getAuraHandledException(e);
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Map<String, Object>> getFieldByFieldPath(
+        String objectName,
+        String fieldSetName
+    ) {
+        try {
+            return fieldSetService.getFieldByFieldPath(objectName, fieldSetName);
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+    }
 }

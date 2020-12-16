@@ -137,7 +137,6 @@ private class PermissionValidator_TEST {
     private static void testHasFLSAccessInsertNonCreatableFieldByField() {
         Boolean nonCreatableField = PermissionValidator.getInstance()
             .hasFLSAccessForFields(Contact.LastModifiedById, 'insert');
-        System.debug(JSON.serialize(Contact.LastModifiedById.getDescribe()));
         System.assert(!nonCreatableField, 'Can not insert system field, expect false');
     }
 

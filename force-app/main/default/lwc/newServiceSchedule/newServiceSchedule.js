@@ -7,8 +7,9 @@
  *
  */
 
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api, track, wire } from "lwc";
 import { format } from "c/util";
+import { getRecord } from "lightning/uiRecordApi";
 import { loadStyle } from "lightning/platformResourceLoader";
 import getDayNum from "@salesforce/apex/ServiceScheduleCreatorController.getDayNum";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
@@ -18,6 +19,8 @@ import LOCALE from "@salesforce/i18n/locale";
 import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
 import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
+import DEFAULT_SERVICE_QUANTITY from "@salesforce/schema/ServiceSchedule__c.DefaultServiceQuantity__c";
+import UNIT_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
 import EVERY_LABEL from "@salesforce/label/c.Every_Custom";
 import DAY_LABEL from "@salesforce/label/c.Day";
 import DAYS_LABEL from "@salesforce/label/c.Days";
@@ -42,6 +45,7 @@ const SMALL_SIZE = 6;
 const DAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
+    @api serviceId;
     errorMessage;
     isValid = true;
     objectApiName;
@@ -69,15 +73,15 @@ export default class NewServiceSchedule extends LightningElement {
     };
 
     _serviceScheduleModel;
-    @track
-    picklistFields;
-    @track
-    requiredFields;
-    @track
-    dateFields;
+    @track picklistFields;
+    @track requiredFields;
+    @track dateFields;
     fieldSet;
     isLoaded = false;
     duration = 3600000; // milliseconds, defaults to 1 hour
+    defaultServiceQuantity;
+    defaultServiceQuantityLabel;
+    defaultServiceQuantityLabelWithUnit;
 
     @api
     get serviceScheduleModel() {
@@ -169,6 +173,12 @@ export default class NewServiceSchedule extends LightningElement {
             serviceSchedule[apiName] = value;
         });
 
+        if (this.defaultServiceQuantity) {
+            serviceSchedule[
+                DEFAULT_SERVICE_QUANTITY.fieldApiName
+            ] = this.defaultServiceQuantity;
+        }
+
         return serviceSchedule;
     }
 
@@ -196,6 +206,15 @@ export default class NewServiceSchedule extends LightningElement {
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
                 return field;
             });
+
+        this.fieldSet.forEach(field => {
+            if (field.apiName === DEFAULT_SERVICE_QUANTITY.fieldApiName) {
+                field.isQuantityField = true;
+                this.defaultServiceQuantityLabel = field.label;
+                this.defaultServiceQuantityLabelWithUnit = field.label;
+            }
+        });
+
         this.handleMonthlyRecurrenceOptions();
     }
 
@@ -211,6 +230,25 @@ export default class NewServiceSchedule extends LightningElement {
         });
 
         this.defaultDayOfWeek();
+    }
+
+    @wire(getRecord, {
+        recordId: "$serviceId",
+        fields: [UNIT_MEASUREMENT_FIELD],
+    })
+    wiredSession(result) {
+        if (
+            result.data &&
+            result.data.fields &&
+            result.data.fields[UNIT_MEASUREMENT_FIELD.fieldApiName] &&
+            result.data.fields[UNIT_MEASUREMENT_FIELD.fieldApiName].value
+        ) {
+            this.defaultServiceQuantityLabelWithUnit =
+                this.defaultServiceQuantityLabel +
+                " (" +
+                result.data.fields[UNIT_MEASUREMENT_FIELD.fieldApiName].value +
+                ")";
+        }
     }
 
     get isWeekly() {
@@ -242,6 +280,17 @@ export default class NewServiceSchedule extends LightningElement {
 
     get isEndsOn() {
         return this.picklistFields.seriesEnds.value === ON;
+    }
+
+    handleServiceChange(event) {
+        this.serviceId = event.detail.value.length ? event.detail.value[0] : undefined; // lookup values come back as arrays
+        if (!this.serviceId) {
+            this.defaultServiceQuantityLabelWithUnit = this.defaultServiceQuantityLabel;
+        }
+    }
+
+    handleDefaultServiceQuantityChange(event) {
+        this.defaultServiceQuantity = event.detail.value;
     }
 
     get units() {

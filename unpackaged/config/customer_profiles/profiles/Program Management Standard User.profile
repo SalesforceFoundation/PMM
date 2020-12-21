@@ -38,7 +38,7 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>%%%NAMESPACE%%%ProgramTestDataFactory</apexClass>
+        <apexClass>%%%NAMESPACE%%%TestDataFactory</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>

@@ -62,7 +62,7 @@ pmm_lex_locators = {
     "toast_link": "//span[contains(@class,'toastMessage')]/a[@class='forceActionLink']/div[contains(@title,'{}')]",
     "toast_msg": "//span[contains(@class,'toastMessage') and text()='{}']",
     "bulk_service_delivery_locators": {
-        "new_lookup": '//div[{}][contains(@class,"slds-box")]//div[@class="sd-input"][./div[contains(@class,"slds-truncate") and contains(text(),"{}")]]/descendant::lightning-base-combobox//div[contains(@class,"slds-combobox")]/input[contains(@class,"slds-input")]',
+        "new_lookup": '//div[{}][contains(@class,"slds-box")]//div[@class="sd-input"][./div[contains(@class,"slds-truncate") and contains(text(),"{}")]]/descendant::input[contains(@class,"slds-input")]',
         "new_field": '//div[{}][contains(@class,"slds-box")]//div[contains(@class,"slds-form-element__control")]/input[contains(@name,"{}")]',
         "icon": '//button[contains(@class,"slds-button_icon") and @title="{}"]/lightning-primitive-icon',
         "page_header": "//header[contains(@class,'flexipageHeader')]//h2[@class='truncate' and text()='{}']",

@@ -26,9 +26,9 @@
                     <div class="slds-form-element slds-var-p-left_small">
                         <label
                             class="slds-form-element__label slds-m-bottom_none"
-                            for="durationSelector"
+                            for="timeFrameSelector"
                         >
-                            {labels.duration}
+                            {labels.timeFrame}
                         </label>
                         <div class="slds-form-element__control">
                             <lightning-button-menu
@@ -36,7 +36,7 @@
                                 class="listViewSelector"
                                 label={selectedMenuItemLabel}
                                 onselect={handleMenuItemSelected}
-                                id="durationSelector"
+                                id="timeFrameSelector"
                             >
                                 <template for:each={menuItems} for:item="menuItem">
                                     <lightning-menu-item

@@ -14,7 +14,7 @@ import { getRecordNotifyChange } from "lightning/uiRecordApi";
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.AttendanceStatus__c";
-import SKIP_LABEL from "@salesforce/label/c.Dont_Log_Attendance";
+import SKIP_LABEL from "@salesforce/label/c.Dont_Track_Attendance";
 
 // TODO: design parameter for "Allow users to skip logging attendance for selected participants."
 

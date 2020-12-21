@@ -67,11 +67,11 @@
         <value>Anonymous</value>
     </labels>
     <labels>
-        <fullName>Attendance</fullName>
+        <fullName>TrackAttendance</fullName>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>Attendance</shortDescription>
-        <value>Attendance</value>
+        <shortDescription>Track Attendance</shortDescription>
+        <value>Track Attendance</value>
     </labels>
     <labels>
         <fullName>Save_Service_Delivery_Success</fullName>
@@ -214,11 +214,11 @@
         <value>Done</value>
     </labels>
     <labels>
-        <fullName>Dont_Log_Attendance</fullName>
+        <fullName>Dont_Track_Attendance</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Don't log attendance for this participant</shortDescription>
-        <value>Don't log attendance for this participant</value>
+        <shortDescription>Don't track attendance for this participant</shortDescription>
+        <value>Don't track attendance for this participant</value>
     </labels>
     <labels>
         <fullName>Enabled</fullName>
@@ -279,12 +279,12 @@
         <value>You can't delete this record. Ask your admin for help.</value>
     </labels>
     <labels>
-        <fullName>Duration</fullName>
+        <fullName>Time_Frame</fullName>
         <categories></categories>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Duration</shortDescription>
-        <value>Duration</value>
+        <shortDescription>Time Frame</shortDescription>
+        <value>Time Frame</value>
     </labels>
     <labels>
         <fullName>Last_Week</fullName>
@@ -680,7 +680,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Warning when list view limit is reached.</shortDescription>
-        <value>There are over 2,000 records. Some records may not be shown.</value>
+        <value>This list view has over 2,000 records. Some records may not be shown.</value>
     </labels>
     <labels>
         <fullName>Months</fullName>

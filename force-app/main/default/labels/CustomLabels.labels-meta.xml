@@ -680,7 +680,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Warning when list view limit is reached.</shortDescription>
-        <value>This List View has over 2,000 records. Some records may not be shown.</value>
+        <value>This list view has over 2,000 records. Some records may not be shown.</value>
     </labels>
     <labels>
         <fullName>Months</fullName>

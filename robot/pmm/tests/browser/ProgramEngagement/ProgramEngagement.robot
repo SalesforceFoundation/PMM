@@ -12,6 +12,7 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    [Documentation]                Creates Program records and program cohort using API, Sets the fields required to create a program engagment record.
     ${ns} =                        Get PMM Namespace Prefix
     Set suite variable             ${ns}
     ${program_engagement_name} =   Generate Random String
@@ -45,6 +46,7 @@ Create Program Engagement
      Verify Details                          Client                   contains                  ${contact}[FirstName] ${contact}[LastName]
      Page Should Not Contain                 ${program_engagement_name}
      Verify Page Contains Related List       Service Deliveries
+     Verify Page Contains Related List       Service Participants
      ${program_engagement_id} =              Save Current Record ID For Deletion                ${ns}ProgramEngagement__c
 
 

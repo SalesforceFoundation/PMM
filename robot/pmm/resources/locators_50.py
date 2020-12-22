@@ -62,7 +62,7 @@ pmm_lex_locators = {
     "toast_link": "//span[contains(@class,'toastMessage')]/a[@class='forceActionLink']/div[contains(@title,'{}')]",
     "toast_msg": "//span[contains(@class,'toastMessage') and text()='{}']",
     "bulk_service_delivery_locators": {
-        "new_lookup": '//div[{}][contains(@class,"slds-box")]//div[@class="sd-input"][./div[contains(@class,"slds-truncate") and contains(text(),"{}")]]/descendant::lightning-base-combobox//div[contains(@class,"slds-combobox")]/input[contains(@class,"slds-input")]',
+        "new_lookup": '//div[{}][contains(@class,"slds-box")]//div[@class="sd-input"][./div[contains(@class,"slds-truncate") and contains(text(),"{}")]]/descendant::input[contains(@class,"slds-input")]',
         "new_field": '//div[{}][contains(@class,"slds-box")]//div[contains(@class,"slds-form-element__control")]/input[contains(@name,"{}")]',
         "icon": '//button[contains(@class,"slds-button_icon") and @title="{}"]/lightning-primitive-icon',
         "page_header": "//header[contains(@class,'flexipageHeader')]//h2[@class='truncate' and text()='{}']",
@@ -92,5 +92,9 @@ pmm_lex_locators = {
         "review_wizard": "//div[contains(@class,'slds-form-element')][./span[text()='{}']]/div",
         "participant_selector": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::*[text()='{}']",
         "remove_participant": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::tr[./th/descendant::*[text()='{}']]/descendant::button[contains(@class,'slds-button')]",
+        "frequency": "//span[contains(@class,'slds-button')]/label/span[@class='slds-radio_faux' and text()='{}']",
+        "ends_radio_button": "//span[@class='slds-radio'][./input[@value='{}']]/descendant::span[@class='slds-radio_faux']",
+        "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
+        "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
     },
 }

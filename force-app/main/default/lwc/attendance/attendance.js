@@ -32,7 +32,7 @@ import CREATED_BY_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedById"
 import SESSION_STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
 
 import SUBMIT_LABEL from "@salesforce/label/c.Submit";
-import ATTENDANCE_LABEL from "@salesforce/label/c.Attendance";
+import TRACK_ATTENDANCE_LABEL from "@salesforce/label/c.TrackAttendance";
 import LOADING_LABEL from "@salesforce/label/c.Loading";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import SUCCESS_MESSAGE_LABEL from "@salesforce/label/c.Save_Service_Delivery_Success";
@@ -74,7 +74,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
     labels = {
         submit: SUBMIT_LABEL,
-        attendance: ATTENDANCE_LABEL,
+        trackAttendance: TRACK_ATTENDANCE_LABEL,
         loading: LOADING_LABEL,
         success: SUCCESS_LABEL,
         successMessage: SUCCESS_MESSAGE_LABEL,
@@ -196,15 +196,6 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
     get isPending() {
         return this.sessionStatus && this.sessionStatus === PENDING;
-    }
-
-    get header() {
-        return (
-            this.labels.attendance +
-            (this.serviceDeliveries && this.serviceDeliveries.length
-                ? " (" + this.serviceDeliveries.length + ")"
-                : "")
-        );
     }
 
     get printButtonLabel() {

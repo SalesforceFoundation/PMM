@@ -114,7 +114,8 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
             "new_lookup"
         ].format(row, title)
         self.selenium.set_focus_to_element(locator)
-        self.selenium.get_webelement(locator).click()
+        element_click = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element_click)
         popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_popup"]
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="The dropdown did not open"

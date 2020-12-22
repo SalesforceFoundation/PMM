@@ -191,6 +191,8 @@ flows:
         steps:
             3:
                 flow: load_data
+            4:
+                flow: create_users_and_assign_permission_sets
 
     config_managed:
         steps:
@@ -198,6 +200,8 @@ flows:
                 flow: load_data
             4:
                 task: deploy_customer_profiles
+            5:
+                flow: create_users_and_assign_permission_sets
 
     config_qa:
         steps:

@@ -101,6 +101,41 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
             error="The service participant is not removed from participant selector",
         )
 
+    def set_frequency(self, frequency):
+        """ Sets the frequency on Screen1 of Service Schedule Wizard """
+        locator = pmm_lex_locators["service_schedule"]["frequency"].format(frequency)
+        self.selenium.scroll_element_into_view(locator)
+        self.selenium.set_focus_to_element(locator)
+        self.salesforce._jsclick(locator)
+
+    def set_service_schedule_ends(self, frequency, field, value):
+        """Sets the Service Session end to 'On/After given the frequency and also fills in the number of service session field if frequency is  'After' or Service Session End Date field if frequency in 'On'"""
+        locator = pmm_lex_locators["service_schedule"]["ends_radio_button"].format(
+            frequency
+        )
+        self.selenium.scroll_element_into_view(locator)
+        self.selenium.set_focus_to_element(locator)
+        self.salesforce._jsclick(locator)
+        locator_session = pmm_lex_locators["service_schedule"]["session_end"].format(
+            field
+        )
+        self.selenium.set_focus_to_element(locator_session)
+        self.selenium.get_webelement(locator_session).click()
+        self.selenium.get_webelement(locator_session).send_keys(value)
+
+    def remove_session(self, session_name):
+        """ On Screen2 of wizard, clicks on 'x' to remove the session given the service session name, and validates that it is removed, checks that the warning message is not displayed and 'Add Service Session' button is displayed """
+        locator = pmm_lex_locators["service_schedule"]["remove_session"].format(
+            session_name
+        )
+        self.selenium.set_focus_to_element(locator)
+        self.salesforce._jsclick(locator)
+        self.selenium.wait_until_page_does_not_contain(session_name)
+        self.selenium.wait_until_page_does_not_contain(
+            "We can only create 500 sessions for a Service Schedule. Only the sessions listed here will be created."
+        )
+        self.selenium.wait_until_page_contains("Add Service Session")
+
 
 @pageobject("Details", "ServiceSchedule__c")
 class ServiceScheduleDetailPage(BasePMMPage, DetailPage):

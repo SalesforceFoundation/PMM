@@ -2362,6 +2362,27 @@
 
                             <tr
                                 class="kwrow"
+                                id="ServiceSchedulePageObject.py.Remove Session"
+                            >
+                                <td class="kwname">
+                                    Remove Session
+                                </td>
+                                <td class="kwargs">
+                                    <i>session_name</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        On Screen2 of wizard, clicks on 'x' to remove the
+                                        session given the service session name, and
+                                        validates that it is removed, checks that the
+                                        warning message is not displayed and 'Add Service
+                                        Session' button is displayed
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
                                 id="ServiceSchedulePageObject.py.Select Service Participant"
                             >
                                 <td class="kwname">
@@ -2374,6 +2395,49 @@
                                     <p>
                                         Selects a service participant, by clicking on the
                                         radio button given the name of the participant
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSchedulePageObject.py.Set Frequency"
+                            >
+                                <td class="kwname">
+                                    Set Frequency
+                                </td>
+                                <td class="kwargs">
+                                    <i>frequency</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Sets the frequency on Screen1 of Service Schedule
+                                        Wizard
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSchedulePageObject.py.Set Service Schedule Ends"
+                            >
+                                <td class="kwname">
+                                    Set Service Schedule Ends
+                                </td>
+                                <td class="kwargs">
+                                    <i>frequency</i>,
+
+                                    <i>field</i>,
+
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Sets the Service Session end to 'On/After given
+                                        the frequency and also fills in the number of
+                                        service session field if frequency is 'After' or
+                                        Service Session End Date field if frequency in
+                                        'On'
                                     </p>
                                 </td>
                             </tr>
@@ -2652,7 +2716,7 @@
             </div>
         </div>
         <div class="footer">
-            Generated on Monday November 23, 04:39 PM - cumulusci v3.23.0
+            Generated on Tuesday December 22, 03:02 PM - cumulusci v3.25.0
         </div>
     </body>
 </html>

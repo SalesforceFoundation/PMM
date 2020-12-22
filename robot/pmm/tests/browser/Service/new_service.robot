@@ -11,6 +11,7 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    [Documentation]             Creates a Program record using API, Sets the fields required to create a service record.
     ${service__name} =          Generate Random String
     Set suite variable          ${service_name}
     ${Description} =            Generate Random String
@@ -39,4 +40,6 @@ Create Service from top nav
      verify details                         Program            contains          ${program}[Name]
      verify details                         Service Name       contains          ${service_name}
      verify page contains related list      Service Deliveries
+     Verify Page Contains Related List      Service Schedules
+     Verify Page Contains Related List      Service Participants
      ${service_id} =                        Save Current Record ID For Deletion     ${ns}Service__c

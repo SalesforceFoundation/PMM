@@ -9,7 +9,7 @@
 
 public with sharing class Util {
     public static AuraHandledException getAuraHandledException(Exception ex) {
-        String message = ex.getMessage();
+        String message = ex.getMessage() + ': ' + ex.getCause();
 
         AuraHandledException auraEx = new AuraHandledException(message);
         auraEx.setMessage(message);

@@ -146,6 +146,23 @@ flows:
                 options:
                     path: "data/scripts/update_all_records_as_recently_viewed.apex"
 
+    create_users_and_assign_permission_sets:
+        steps:
+            1:
+                task: dx
+                options:
+                    command: "force:user:create --setalias rosa --definitionfile unpackaged/users/rosa.json"
+                ignore_failure: True
+            2:
+                task: assign_permission_sets
+                options:
+                    api_names:
+                        - PMDM_View
+                        - PMDM_Deliver
+                        - PMDM_Manage
+                    user_alias: rosa
+                ignore_failure: True
+
     delete_data:
         steps:
             1:
@@ -174,6 +191,8 @@ flows:
         steps:
             3:
                 flow: load_data
+            4:
+                flow: create_users_and_assign_permission_sets
 
     config_managed:
         steps:
@@ -181,6 +200,8 @@ flows:
                 flow: load_data
             4:
                 task: deploy_customer_profiles
+            5:
+                flow: create_users_and_assign_permission_sets
 
     config_qa:
         steps:

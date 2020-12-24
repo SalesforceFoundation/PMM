@@ -51,6 +51,15 @@ public inherited sharing class QueryBuilder {
         return this;
     }
 
+    public QueryBuilder reset() {
+        sObjectType = null;
+        selectFields = new List<String>();
+        conditions = new List<String>();
+        orderByField = null;
+        limitTo = null;
+        return this;
+    }
+
     public String buildSoqlQuery() {
         return String.format(
             'SELECT {0} FROM {1}{2}{3}{4}',

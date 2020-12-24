@@ -17,7 +17,9 @@ public with sharing class AttendanceSelector {
 
         FieldSet fieldSet = SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
 
-        queryBuilder.withSObjectType(ServiceDelivery__c.getSObjectType())
+        queryBuilder
+            .reset()
+            .withSObjectType(ServiceDelivery__c.getSObjectType())
             .withSelectFields(fieldSet)
             .withSelectFields(
                 new List<String>{
@@ -88,5 +90,31 @@ public with sharing class AttendanceSelector {
                 sessions
             )
             .getRecords()[0];
+    }
+
+    public List<ServiceDelivery__c> getAttendanceRecords(
+        SObjectField field,
+        Set<Id> recordIds,
+        List<String> statuses
+    ) {
+        queryBuilder
+            .reset()
+            .withSelectFields(
+                new List<String>{
+                    String.valueOf(field),
+                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c)
+                }
+            )
+            .withSObjectType(ServiceDelivery__c.SObjectType)
+            .addCondition(String.valueOf(field) + ' IN :recordIds')
+            .addCondition(
+                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) + ' IN :statuses'
+            )
+            .withOrderBy(String.valueOf(field));
+
+        System.debug(queryBuilder.buildSoqlQuery());
+
+        // TODO: Deal with system vs user?
+        return Database.query(queryBuilder.buildSoqlQuery());
     }
 }

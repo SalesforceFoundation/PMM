@@ -13,7 +13,13 @@ public with sharing class AttendanceService {
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
 
-    private static final String DEFAULT_STATUS = 'Present';
+    private static final String PRESENT_STATUS = 'Present';
+    private static final Map<SObjectField, SObjectField> TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.TotalAttended__c
+    };
+    private static final Map<SObjectField, SObjectField> TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.TotalAbsent__c
+    };
 
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
@@ -114,6 +120,70 @@ public with sharing class AttendanceService {
         return result;
     }
 
+    public void calculateTotals(Map<SObjectField, Set<Id>> recordIdsByLookupField) {
+        Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
+
+        if (recordIdsByLookupField == null || recordIdsByLookupField.isEmpty()) {
+            return;
+        }
+
+        List<String> statuses = getStatuses();
+        if (statuses.isEmpty()) {
+            return;
+        }
+
+        for (SObjectField lookupField : recordIdsByLookupField.keySet()) {
+            for (
+                ServiceDelivery__c delivery : attendanceSelector.getAttendanceRecords(
+                    lookupField,
+                    recordIdsByLookupField.get(lookupField),
+                    statuses
+                )
+            ) {
+                Id targetId = (Id) delivery.get(lookupField);
+                SObject targetObject = targetObjectById.get(targetId);
+
+                if (targetObject == null) {
+                    targetObject = targetId.getSObjectType().newSObject(targetId);
+                    targetObjectById.put(targetId, targetObject);
+                }
+
+                SObjectField field;
+
+                if (delivery.AttendanceStatus__c == PRESENT_STATUS) {
+                    field = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(lookupField);
+                } else {
+                    field = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupField);
+                }
+
+                try {
+                    Integer count = targetObject.get(field) == null
+                        ? 0
+                        : (Integer) targetObject.get(field);
+                    count++;
+                    targetObject.put(field, count);
+                } catch (Exception ex) {
+                    System.debug(ex.getMessage());
+                }
+            }
+        }
+
+        update targetObjectById.values();
+    }
+
+    private List<String> getStatuses() {
+        List<String> statuses = new List<String>();
+
+        for (
+            PicklistEntry entry : ServiceDelivery__c.AttendanceStatus__c.getDescribe()
+                .getPicklistValues()
+        ) {
+            statuses.add(entry.getValue());
+        }
+
+        return statuses;
+    }
+
     private List<ServiceDelivery__c> createRows(Id sessionId) {
         Set<Id> existingClients = new Set<Id>();
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
@@ -147,7 +217,7 @@ public with sharing class AttendanceService {
         SObject particpantRecord = participant;
         SObject deliveryRecord = new ServiceDelivery__c(
             ServiceSession__c = session.Id,
-            AttendanceStatus__c = DEFAULT_STATUS,
+            AttendanceStatus__c = PRESENT_STATUS,
             Contact__r = participant.Contact__r,
             Service_Provider__c = session.PrimaryServiceProvider__c,
             DeliveryDate__c = Date.valueOf(session.SessionStart__c),

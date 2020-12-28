@@ -113,12 +113,13 @@ API Create Service Session
     ${session_start} =          Get Current Date     result_format=%Y-%m-%dT%H:%M:%S.%f
     ${session_end} =            Get Current Date     increment=30   result_format=%Y-%m-%dT%H:%M:%S.%f
     ${ns} =                     Get PMM Namespace Prefix
-    [Arguments]                 ${service_schedule_id}    &{fields}
+    [Arguments]                 ${service_schedule_id}   ${status}     &{fields}
     ${service_session_id} =     Salesforce Insert  ${ns}ServiceSession__c
     ...                             Name=${service_session_name}
     ...                             ${ns}ServiceSchedule__c=${service_schedule_id}
     ...                             ${ns}SessionStart__c=${session_start}
     ...                             ${ns}SessionEnd__c=${session_end} 
+    ...                             ${ns}Status__c=${status}
     &{service_session} =       Salesforce Get  ${ns}ServiceSession__c  ${service_session_id}
     Store Session Record      ${ns}ServiceSession__c  ${service_session_id}
     [Return]            &{service_session}

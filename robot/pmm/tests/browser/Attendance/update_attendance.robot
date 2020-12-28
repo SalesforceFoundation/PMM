@@ -27,8 +27,10 @@ Setup Test Data
     Set suite variable              ${service}
     ${service_schedule} =           API Create Service Schedule         ${service}[Id]
     Set suite variable              ${service_schedule}
-    ${service_session} =            API Create Service Session          ${service_schedule}[Id]                    ${ns}Status__c=Pending
-    Set suite variable              ${service_session}
+    ${service_session1} =           API Create Service Session          ${service_schedule}[Id]     Pending
+    Set suite variable              ${service_session1}
+    ${service_session2} =           API Create Service Session          ${service_schedule}[Id]     Complete
+    Set suite variable              ${service_session2}
     ${service_participant1} =       API Create Service Participant      ${contact1}[Id]   ${service_schedule}[Id]  ${service}[Id]
     Set suite variable              ${service_participant1}
     ${service_participant2} =       API Create Service Participant      ${contact2}[Id]   ${service_schedule}[Id]  ${service}[Id]
@@ -41,7 +43,7 @@ Update attendance when service session status is Pending
     [Documentation]                 This test updates attendance for a service session record with Pending Status
     [tags]                          W-8607484  feature:Attendance
     Go To PMM App
-    Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session}[Id]
+    Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain             ${contact1}[Name]
     Page Should Contain             ${contact2}[Name]
     Page Should Contain             ${contact3}[Name]
@@ -53,5 +55,22 @@ Update attendance when service session status is Pending
     Click Button                    Submit
     Verify Toast Message            Saved 3 Service Delivery records.
     Page Should Contain             Created Date
-    Page Should Contain             Attendance (3)
     
+Update attendance when service session status is Complete
+    [Documentation]                 This test updates attendance for a service session record with Complete Status
+    [tags]                          W-8607484  feature:Attendance
+    Go To PMM App
+    Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session2}[Id]
+    Page Should Contain             ${contact1}[Name]
+    Page Should Contain             ${contact2}[Name]
+    Page Should Contain             ${contact3}[Name]
+    Click Button                    Update
+    Page Should Contain             Track Attendance
+    Load Page Object                Custom         Bulk_Service_Deliveries          
+    Populate Attendance Field           1      Hours                10
+    Populate Attendance Dropdown        1      Attendance Status    Present
+    Populate Attendance Dropdown        2      Attendance Status    Unexcused Absence
+    Populate Attendance Dropdown        3      Attendance Status    Excused Absence
+    Click Button                    Save
+    Verify Toast Message            Saved 3 Service Delivery records.
+    Page Should Contain             Created Date

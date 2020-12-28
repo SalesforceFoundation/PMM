@@ -54,3 +54,26 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
             "/view", timeout=60, message="Detail view did not open in 1 min"
         )
         self.selenium.wait_until_page_contains("Service Session Name")
+
+    def populate_attendance_field(self, row, label, value):
+        """ Populate text field on attendance component given the attendance row number """
+        locator = pmm_lex_locators["attendance"]["attendance_text"].format(row, label)
+        self.selenium.get_webelement(locator).click()
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).send_keys(value)
+
+    def populate_attendance_dropdown(self, row, title, value):
+        """populate dropdown on attendace row given the attendance row number"""
+        locator = pmm_lex_locators["attendance"]["dropdown_field"].format(row, title)
+        self.selenium.set_focus_to_element(locator)
+        element_click = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element_click)
+        popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_popup"]
+        self.selenium.wait_until_page_contains_element(
+            popup_loc, error="The dropdown did not open"
+        )
+        value_loc = pmm_lex_locators["bulk_service_delivery_locators"][
+            "select_dropdown_value"
+        ].format(value)
+        element_click = self.selenium.driver.find_element_by_xpath(value_loc)
+        self.selenium.driver.execute_script("arguments[0].click()", element_click)

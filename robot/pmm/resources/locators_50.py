@@ -97,4 +97,8 @@ pmm_lex_locators = {
         "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
         "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
     },
+    "attendance": {
+        "attendance_text": "//c-attendance-row[{}]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",
+        "dropdown_field": "//c-attendance-row[{}]//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]//input",
+    },
 }

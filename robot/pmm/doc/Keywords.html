@@ -723,6 +723,30 @@
                                 <td class="kwdoc"></td>
                             </tr>
 
+                            <tr
+                                class="kwrow"
+                                id="pmm.robot.API Create Service Participant"
+                            >
+                                <td class="kwname">
+                                    API Create Service Participant
+                                </td>
+                                <td class="kwargs">
+                                    <i>contact_id</i>,
+
+                                    <i>service_schedule_id</i>,
+
+                                    <i>service_id</i>,
+
+                                    <i>**fields</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Creates a new Service Participant. Service
+                                        Participant details are passed as key value pairs.
+                                    </p>
+                                </td>
+                            </tr>
+
                             <tr class="kwrow" id="pmm.robot.API Create Service Schedule">
                                 <td class="kwname">
                                     API Create Service Schedule
@@ -735,6 +759,23 @@
                                 <td class="kwdoc">
                                     <p>
                                         Creates a new Service Schedule. Service Schedule
+                                        details are passed as key value pairs.
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr class="kwrow" id="pmm.robot.API Create Service Session">
+                                <td class="kwname">
+                                    API Create Service Session
+                                </td>
+                                <td class="kwargs">
+                                    <i>service_schedule_id</i>,
+
+                                    <i>**fields</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Creates a new Service Session. Service Session
                                         details are passed as key value pairs.
                                     </p>
                                 </td>
@@ -2588,6 +2629,50 @@
                                     </p>
                                 </td>
                             </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSessionPageObject.py.Populate Attendance Dropdown"
+                            >
+                                <td class="kwname">
+                                    Populate Attendance Dropdown
+                                </td>
+                                <td class="kwargs">
+                                    <i>row</i>,
+
+                                    <i>title</i>,
+
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        populate dropdown on attendace row given the
+                                        attendance row number
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSessionPageObject.py.Populate Attendance Field"
+                            >
+                                <td class="kwname">
+                                    Populate Attendance Field
+                                </td>
+                                <td class="kwargs">
+                                    <i>row</i>,
+
+                                    <i>label</i>,
+
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Populate text field on attendance component given
+                                        the attendance row number
+                                    </p>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -2716,7 +2801,7 @@
             </div>
         </div>
         <div class="footer">
-            Generated on Tuesday December 22, 03:02 PM - cumulusci v3.25.0
+            Generated on Monday December 28, 01:00 PM - cumulusci v3.25.0
         </div>
     </body>
 </html>

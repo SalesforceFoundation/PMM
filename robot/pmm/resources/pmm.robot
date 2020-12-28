@@ -96,9 +96,8 @@ API Create Service Schedule
     [Documentation]     Creates a new Service Schedule. Service Schedule details are passed as key value pairs.
     ${service_schedule_name} =   Generate Random String
     ${ns} =                      Get PMM Namespace Prefix
+    ${session_start} =           Get Current Date     result_format=%Y-%m-%dT%H:%M:%S.%f
     [Arguments]                     ${service_id}    &{fields}
-    ${session_start} =         Get Current Date     result_format=%Y-%m-%dT%H:%M:%S.%f
-    ${service_schedule_name} =   Generate Random String
     ${service_schedule_id} =     Salesforce Insert  ${ns}ServiceSchedule__c
     ...                             Name=${service_schedule_name}
     ...                             ${ns}Service__c=${service_id}
@@ -108,6 +107,35 @@ API Create Service Schedule
     Store Session Record      ${ns}ServiceSchedule__c  ${service_schedule_id}
     [Return]            &{service_schedule}
 
+API Create Service Session
+    [Documentation]     Creates a new Service Session. Service Session details are passed as key value pairs.
+    ${service_session_name} =   Generate Random String
+    ${session_start} =          Get Current Date     result_format=%Y-%m-%dT%H:%M:%S.%f
+    ${session_end} =            Get Current Date     increment=30   result_format=%Y-%m-%dT%H:%M:%S.%f
+    ${ns} =                     Get PMM Namespace Prefix
+    [Arguments]                 ${service_schedule_id}    &{fields}
+    ${service_session_id} =     Salesforce Insert  ${ns}ServiceSession__c
+    ...                             Name=${service_session_name}
+    ...                             ${ns}ServiceSchedule__c=${service_schedule_id}
+    ...                             ${ns}SessionStart__c=${session_start}
+    ...                             ${ns}SessionEnd__c=${session_end} 
+    &{service_session} =       Salesforce Get  ${ns}ServiceSession__c  ${service_session_id}
+    Store Session Record      ${ns}ServiceSession__c  ${service_session_id}
+    [Return]            &{service_session}
+
+API Create Service Participant
+    [Documentation]     Creates a new Service Participant. Service Participant details are passed as key value pairs.
+    ${service_participant_name} =   Generate Random String
+    ${ns} =                     Get PMM Namespace Prefix
+    [Arguments]                 ${contact_id}  ${service_schedule_id}   ${service_id}   &{fields}
+    ${service_participant_id} =     Salesforce Insert  ${ns}ServiceParticipant__c
+    ...                             Name=${service_participant_name}
+    ...                             ${ns}Contact__c=${contact_id}
+    ...                             ${ns}ServiceSchedule__c=${service_schedule_id}
+    ...                             ${ns}Service__c=${service_id}
+    &{service_participant} =       Salesforce Get  ${ns}ServiceParticipant__c  ${service_participant_id}
+    Store Session Record      ${ns}ServiceParticipant__c  ${service_participant_id}
+    [Return]            &{service_participant}
 
 Capture Screenshot and Delete Records and Close Browser
     [Documentation]         This keyword will capture a screenshot before closing the browser and deleting records when test fails

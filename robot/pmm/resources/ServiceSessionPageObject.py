@@ -77,3 +77,38 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
         ].format(value)
         element_click = self.selenium.driver.find_element_by_xpath(value_loc)
         self.selenium.driver.execute_script("arguments[0].click()", element_click)
+
+    def dim_attendance_row(self, row, status):
+        """If status is set to 'Select' then the attendance row is Dimmed, if status is set to
+        'Is displayed' then validate that the Dim icon is displayed given the row number. If status
+        is set to 'not displayed' then validate that the dim icon is not displayed given the row number
+        """
+        locator = pmm_lex_locators["attendance"]["dim_icon"].format(row)
+        if status == "Is displayed":
+            self.selenium.wait_until_page_contains_element(
+                locator, error="Dim attendance icon is not displayed"
+            )
+        elif status == "Is not displayed":
+            self.selenium.wait_until_page_does_not_contain_element(
+                locator, error="Dim attendance icon is displayed"
+            )
+        elif status == "Select":
+            self.selenium.set_focus_to_element(locator)
+            self.selenium.click_element(locator)
+        else:
+            raise Exception("Valid status not entered")
+
+    def validate_attendance_info_in_row(self, row, field, status, value):
+        """ Validate details on attendance component given the row number and field name """
+        locator = pmm_lex_locators["attendance"]["details"].format(row, field)
+        actual_value = self.selenium.get_webelement(locator).text
+        if status == "contains":
+            assert (
+                value == actual_value
+            ), f"Expected value to be {value} but found {actual_value}"
+        elif status == "does not contain":
+            assert (
+                value != actual_value
+            ), f"Expected value {value} should not match {actual_value}"
+        else:
+            raise Exception("Valid status not entered")

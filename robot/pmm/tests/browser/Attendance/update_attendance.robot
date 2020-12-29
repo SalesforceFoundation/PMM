@@ -46,8 +46,7 @@ Update attendance when service session status is Pending
     Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain             ${contact1}[Name]
     Page Should Contain             ${contact2}[Name]
-    Page Should Contain             ${contact3}[Name]
-    Load Page Object                Custom         Bulk_Service_Deliveries          
+    Page Should Contain             ${contact3}[Name]          
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
     Populate Attendance Dropdown        2      Attendance Status    Unexcused Absence
@@ -55,18 +54,18 @@ Update attendance when service session status is Pending
     Click Button                    Submit
     Verify Toast Message            Saved 3 Service Delivery records.
     Page Should Contain             Created Date
+    Verify Details                  Status          contains        Complete
     
 Update attendance when service session status is Complete
     [Documentation]                 This test updates attendance for a service session record with Complete Status
-    [tags]                          W-8607484  feature:Attendance
+    [tags]                          W-8611541  feature:Attendance
     Go To PMM App
     Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session2}[Id]
     Page Should Contain             ${contact1}[Name]
     Page Should Contain             ${contact2}[Name]
     Page Should Contain             ${contact3}[Name]
     Click Button                    Update
-    Page Should Contain             Track Attendance
-    Load Page Object                Custom         Bulk_Service_Deliveries          
+    Page Should Contain             Track Attendance         
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
     Populate Attendance Dropdown        2      Attendance Status    Unexcused Absence

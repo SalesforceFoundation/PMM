@@ -771,6 +771,8 @@
                                 <td class="kwargs">
                                     <i>service_schedule_id</i>,
 
+                                    <i>status</i>,
+
                                     <i>**fields</i>
                                 </td>
                                 <td class="kwdoc">
@@ -2615,6 +2617,30 @@
 
                             <tr
                                 class="kwrow"
+                                id="ServiceSessionPageObject.py.Dim Attendance Row"
+                            >
+                                <td class="kwname">
+                                    Dim Attendance Row
+                                </td>
+                                <td class="kwargs">
+                                    <i>row</i>,
+
+                                    <i>status</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        If status is set to 'Select' then the attendance
+                                        row is Dimmed, if status is set to 'Is displayed'
+                                        then validate that the Dim icon is displayed given
+                                        the row number. If status is set to 'not
+                                        displayed' then validate that the dim icon is not
+                                        displayed given the row number
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
                                 id="ServiceSessionPageObject.py.Log Current Page Object"
                             >
                                 <td class="kwname">
@@ -2670,6 +2696,30 @@
                                     <p>
                                         Populate text field on attendance component given
                                         the attendance row number
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr
+                                class="kwrow"
+                                id="ServiceSessionPageObject.py.Validate Attendance Info In Row"
+                            >
+                                <td class="kwname">
+                                    Validate Attendance Info In Row
+                                </td>
+                                <td class="kwargs">
+                                    <i>row</i>,
+
+                                    <i>field</i>,
+
+                                    <i>status</i>,
+
+                                    <i>value</i>
+                                </td>
+                                <td class="kwdoc">
+                                    <p>
+                                        Validate details on attendance component given the
+                                        row number and field name
                                     </p>
                                 </td>
                             </tr>
@@ -2801,7 +2851,7 @@
             </div>
         </div>
         <div class="footer">
-            Generated on Monday December 28, 01:00 PM - cumulusci v3.25.0
+            Generated on Tuesday December 29, 12:20 PM - cumulusci v3.25.0
         </div>
     </body>
 </html>

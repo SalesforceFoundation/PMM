@@ -320,7 +320,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Last Day of the Month</shortDescription>
-        <value>Last Day of the Month</value>
+        <value>on the Last Day</value>
     </labels>
     <labels>
         <fullName>MissingSObjectType</fullName>
@@ -335,7 +335,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Monthly on Day</shortDescription>
-        <value>Monthly on Day {0}</value>
+        <value>on Day {0}</value>
     </labels>
     <labels>
         <fullName>Monthly_On_The</fullName>

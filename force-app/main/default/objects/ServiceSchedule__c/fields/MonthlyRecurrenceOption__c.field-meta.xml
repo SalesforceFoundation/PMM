@@ -13,182 +13,182 @@
             <value>
                 <fullName>LastDayOfMonth</fullName>
                 <default>false</default>
-                <label>Last Day of Month</label>
+                <label>on the Last Day</label>
             </value>
             <value>
                 <fullName>1MO</fullName>
                 <default>false</default>
-                <label>Monthly on the First Monday</label>
+                <label>on the First Monday</label>
             </value>
             <value>
                 <fullName>2MO</fullName>
                 <default>false</default>
-                <label>Monthly on the Second Monday</label>
+                <label>on the Second Monday</label>
             </value>
             <value>
                 <fullName>3MO</fullName>
                 <default>false</default>
-                <label>Monthly on the Third Monday</label>
+                <label>on the Third Monday</label>
             </value>
             <value>
                 <fullName>4MO</fullName>
                 <default>false</default>
-                <label>Monthly on the Fourth Monday</label>
+                <label>on the Fourth Monday</label>
             </value>
             <value>
                 <fullName>5MO</fullName>
                 <default>false</default>
-                <label>Monthly on the Fifth Monday</label>
+                <label>on the Fifth Monday</label>
             </value>
             <value>
                 <fullName>1TU</fullName>
                 <default>false</default>
-                <label>Monthly on the First Tuesday</label>
+                <label>on the First Tuesday</label>
             </value>
             <value>
                 <fullName>2TU</fullName>
                 <default>false</default>
-                <label>Monthly on the Second Tuesday</label>
+                <label>on the Second Tuesday</label>
             </value>
             <value>
                 <fullName>3TU</fullName>
                 <default>false</default>
-                <label>Monthly on the Third Tuesday</label>
+                <label>on the Third Tuesday</label>
             </value>
             <value>
                 <fullName>4TU</fullName>
                 <default>false</default>
-                <label>Monthly on the Fourth Tuesday</label>
+                <label>on the Fourth Tuesday</label>
             </value>
             <value>
                 <fullName>5TU</fullName>
                 <default>false</default>
-                <label>Monthly on the Fifth Tuesday</label>
+                <label>on the Fifth Tuesday</label>
             </value>
             <value>
                 <fullName>1WE</fullName>
                 <default>false</default>
-                <label>Monthly on the First Wednesday</label>
+                <label>on the First Wednesday</label>
             </value>
             <value>
                 <fullName>2WE</fullName>
                 <default>false</default>
-                <label>Monthly on the Second Wednesday</label>
+                <label>on the Second Wednesday</label>
             </value>
             <value>
                 <fullName>3WE</fullName>
                 <default>false</default>
-                <label>Monthly on the Third Wednesday</label>
+                <label>on the Third Wednesday</label>
             </value>
             <value>
                 <fullName>4WE</fullName>
                 <default>false</default>
-                <label>Monthly on the Fourth Wednesday</label>
+                <label>on the Fourth Wednesday</label>
             </value>
             <value>
                 <fullName>5WE</fullName>
                 <default>false</default>
-                <label>Monthly on the Fifth Wednesday</label>
+                <label>on the Fifth Wednesday</label>
             </value>
             <value>
                 <fullName>1TH</fullName>
                 <default>false</default>
-                <label>Monthly on the First Thursday</label>
+                <label>on the First Thursday</label>
             </value>
             <value>
                 <fullName>2TH</fullName>
                 <default>false</default>
-                <label>Monthly on the Second Thursday</label>
+                <label>on the Second Thursday</label>
             </value>
             <value>
                 <fullName>3TH</fullName>
                 <default>false</default>
-                <label>Monthly on the Third Thursday</label>
+                <label>on the Third Thursday</label>
             </value>
             <value>
                 <fullName>4TH</fullName>
                 <default>false</default>
-                <label>Monthly on the Fourth Thursday</label>
+                <label>on the Fourth Thursday</label>
             </value>
             <value>
                 <fullName>5TH</fullName>
                 <default>false</default>
-                <label>Monthly on the Fifth Thursday</label>
+                <label>on the Fifth Thursday</label>
             </value>
             <value>
                 <fullName>1FR</fullName>
                 <default>false</default>
-                <label>Monthly on the First Friday</label>
+                <label>on the First Friday</label>
             </value>
             <value>
                 <fullName>2FR</fullName>
                 <default>false</default>
-                <label>Monthly on the Second Friday</label>
+                <label>on the Second Friday</label>
             </value>
             <value>
                 <fullName>3FR</fullName>
                 <default>false</default>
-                <label>Monthly on the Third Friday</label>
+                <label>on the Third Friday</label>
             </value>
             <value>
                 <fullName>4FR</fullName>
                 <default>false</default>
-                <label>Monthly on the Fourth Friday</label>
+                <label>on the Fourth Friday</label>
             </value>
             <value>
                 <fullName>5FR</fullName>
                 <default>false</default>
-                <label>Monthly on the Fifth Friday</label>
+                <label>on the Fifth Friday</label>
             </value>
             <value>
                 <fullName>1SA</fullName>
                 <default>false</default>
-                <label>Monthly on the First Saturday</label>
+                <label>on the First Saturday</label>
             </value>
             <value>
                 <fullName>2SA</fullName>
                 <default>false</default>
-                <label>Monthly on the Second Saturday</label>
+                <label>on the Second Saturday</label>
             </value>
             <value>
                 <fullName>3SA</fullName>
                 <default>false</default>
-                <label>Monthly on the Third Saturday</label>
+                <label>on the Third Saturday</label>
             </value>
             <value>
                 <fullName>4SA</fullName>
                 <default>false</default>
-                <label>Monthly on the Fourth Saturday</label>
+                <label>on the Fourth Saturday</label>
             </value>
             <value>
                 <fullName>5SA</fullName>
                 <default>false</default>
-                <label>Monthly on the Fifth Saturday</label>
+                <label>on the Fifth Saturday</label>
             </value>
             <value>
                 <fullName>1SU</fullName>
                 <default>false</default>
-                <label>Monthly on the First Sunday</label>
+                <label>on the First Sunday</label>
             </value>
             <value>
                 <fullName>2SU</fullName>
                 <default>false</default>
-                <label>Monthly on the Second Sunday</label>
+                <label>on the Second Sunday</label>
             </value>
             <value>
                 <fullName>3SU</fullName>
                 <default>false</default>
-                <label>Monthly on the Third Sunday</label>
+                <label>on the Third Sunday</label>
             </value>
             <value>
                 <fullName>4SU</fullName>
                 <default>false</default>
-                <label>Monthly on the Fourth Sunday</label>
+                <label>on the Fourth Sunday</label>
             </value>
             <value>
                 <fullName>5SU</fullName>
                 <default>false</default>
-                <label>Monthly on the Fifth Sunday</label>
+                <label>on the Fifth Sunday</label>
             </value>
         </valueSetDefinition>
     </valueSet>

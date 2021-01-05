@@ -144,14 +144,14 @@
                                     <lightning-layout-item flexibility="auto, no-grow">
                                         {units}
                                     </lightning-layout-item>
-                                </lightning-layout>
-                                <lightning-layout
-                                    class="slds-var-p-top_xx-small slds-var-p-bottom_medium"
-                                >
-                                    <lightning-layout-item size={sizes.large}>
+                                    <lightning-layout-item
+                                        size={sizes.small}
+                                        class="slds-var-p-left_x-small"
+                                    >
                                         <lightning-combobox
                                             options={monthlyRecurrenceOptions}
                                             value={selectedMonthlyRecurrenceValue}
+                                            variant="label-hidden"
                                             onchange={handleMonthlyRecurrenceOptionsChange}
                                             if:true={isMonthly}
                                         ></lightning-combobox>
@@ -159,7 +159,10 @@
                                 </lightning-layout>
                             </lightning-layout-item>
                             <!--END CONDITION-->
-                            <lightning-layout-item size={sizes.small}>
+                            <lightning-layout-item
+                                size={sizes.small}
+                                class="slds-var-p-top_x-small"
+                            >
                                 <c-picklist
                                     picklist={picklistFields.seriesEnds}
                                     value={picklistFields.seriesEnds.value}

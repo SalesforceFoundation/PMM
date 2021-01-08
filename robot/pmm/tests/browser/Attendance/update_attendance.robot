@@ -49,7 +49,9 @@ Update attendance when service session status is Pending
     Page Should Contain             ${contact3}[Name]          
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
+    Populate Attendance Field           2      Hours                10
     Populate Attendance Dropdown        2      Attendance Status    Unexcused Absence
+    Populate Attendance Field           3      Hours                10
     Populate Attendance Dropdown        3      Attendance Status    Excused Absence
     Click Button                    Submit
     Verify Toast Message            Saved 3 Service Delivery records.

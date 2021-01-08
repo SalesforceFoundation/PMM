@@ -54,3 +54,61 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
             "/view", timeout=60, message="Detail view did not open in 1 min"
         )
         self.selenium.wait_until_page_contains("Service Session Name")
+
+    def populate_attendance_field(self, row, label, value):
+        """ Populate text field on attendance component given the attendance row number """
+        locator = pmm_lex_locators["attendance"]["attendance_text"].format(row, label)
+        self.selenium.get_webelement(locator).click()
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).send_keys(value)
+
+    def populate_attendance_dropdown(self, row, title, value):
+        """populate dropdown on attendace row given the attendance row number"""
+        locator = pmm_lex_locators["attendance"]["dropdown_field"].format(row, title)
+        self.selenium.set_focus_to_element(locator)
+        element_click = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element_click)
+        popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_popup"]
+        self.selenium.wait_until_page_contains_element(
+            popup_loc, error="The dropdown did not open"
+        )
+        value_loc = pmm_lex_locators["bulk_service_delivery_locators"][
+            "select_dropdown_value"
+        ].format(value)
+        element_click = self.selenium.driver.find_element_by_xpath(value_loc)
+        self.selenium.driver.execute_script("arguments[0].click()", element_click)
+
+    def dim_attendance_row(self, row, status):
+        """If status is set to 'Select' then the attendance row is Dimmed, if status is set to
+        'Is displayed' then validate that the Dim icon is displayed given the row number. If status
+        is set to 'not displayed' then validate that the dim icon is not displayed given the row number
+        """
+        locator = pmm_lex_locators["attendance"]["dim_icon"].format(row)
+        if status == "Is displayed":
+            self.selenium.wait_until_page_contains_element(
+                locator, error="Dim attendance icon is not displayed"
+            )
+        elif status == "Is not displayed":
+            self.selenium.wait_until_page_does_not_contain_element(
+                locator, error="Dim attendance icon is displayed"
+            )
+        elif status == "Select":
+            self.selenium.set_focus_to_element(locator)
+            self.selenium.click_element(locator)
+        else:
+            raise Exception("Valid status not entered")
+
+    def validate_attendance_info_in_row(self, row, field, status, value):
+        """ Validate details on attendance component given the row number and field name """
+        locator = pmm_lex_locators["attendance"]["details"].format(row, field)
+        actual_value = self.selenium.get_webelement(locator).text
+        if status == "contains":
+            assert (
+                value == actual_value
+            ), f"Expected value to be {value} but found {actual_value}"
+        elif status == "does not contain":
+            assert (
+                value != actual_value
+            ), f"Expected value {value} should not match {actual_value}"
+        else:
+            raise Exception("Valid status not entered")

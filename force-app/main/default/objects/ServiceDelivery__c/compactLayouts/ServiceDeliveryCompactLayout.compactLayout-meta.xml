@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ServiceDeliveryCompactLayout</fullName>
+    <fields>Name</fields>
     <fields>Service__c</fields>
     <fields>ServiceSession__c</fields>
     <fields>Contact__c</fields>

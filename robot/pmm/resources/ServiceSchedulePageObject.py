@@ -129,9 +129,10 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
             session_name
         )
         self.selenium.set_focus_to_element(locator)
-        self.salesforce._jsclick(locator)
-        self.selenium.wait_until_page_does_not_contain(session_name)
-        self.selenium.wait_until_page_does_not_contain(
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element)
+        self.selenium.wait_until_page_does_not_contain_element(session_name, timeout=60)
+        self.selenium.wait_until_page_does_not_contain_element(
             "We can only create 500 sessions for a Service Schedule. Only the sessions listed here will be created."
         )
         self.selenium.wait_until_page_contains("Add Service Session")

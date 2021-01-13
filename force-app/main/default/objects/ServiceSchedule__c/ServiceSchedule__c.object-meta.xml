@@ -158,7 +158,7 @@
     </nameField>
     <pluralLabel>Service Schedules</pluralLabel>
     <searchLayouts>
-        <searchResultsAdditionalFields>PrimaryServiceProvider__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service__c</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

@@ -44,6 +44,7 @@ Create program engagement from BSDT
     Verify Current Page                     Bulk Service Deliveries
     Populate Bsdt Lookup                    1           Client                  ${contact}[FirstName] ${contact}[LastName]
     Page Should Contain                     ${contact}[FirstName] ${contact}[LastName]
+    Sleep                                   2s
     Populate Bsdt Dropdown                  1           Program Engagement      New Program Engagement
     Load Page Object                        NewProgramEngagement                ${ns}ProgramEngagement__c
     Verify Dialog Title                     New Program Engagement

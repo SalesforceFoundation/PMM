@@ -11,6 +11,7 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    [Documentation]                 Creates a Service Schedule, Service Participant and PE using API.
     ${ns} =                         Get PMM Namespace Prefix
     Set suite variable              ${ns}
     ${contact1}                     API Create Contact

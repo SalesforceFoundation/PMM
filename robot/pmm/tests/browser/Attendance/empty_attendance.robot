@@ -32,3 +32,4 @@ Validate Empty Attendance State
     Go To PMM App
     Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain             No participants yet
+    

@@ -12,6 +12,7 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    [Documentation]                Creates program with start date set to today/later than today/earlier than today using API
     ${ns} =                        Get PMM Namespace Prefix
     Set suite variable             ${ns}
     ${program_engagement_name} =   Generate Random String

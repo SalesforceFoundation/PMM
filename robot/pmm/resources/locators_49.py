@@ -1,6 +1,6 @@
 """ Locators for summer'21 """
 
-from locators_50 import pmm_lex_locators
+from locators_51 import pmm_lex_locators
 import copy
 
 pmm_lex_locators = copy.deepcopy(pmm_lex_locators)

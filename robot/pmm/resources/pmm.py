@@ -13,12 +13,14 @@ from robot.libraries.BuiltIn import RobotNotRunningError
 from cumulusci.robotframework.utils import selenium_retry
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.keys import Keys
+from locators_51 import pmm_lex_locators as locators_51
 from locators_50 import pmm_lex_locators as locators_50
 from locators_49 import pmm_lex_locators as locators_49
 
 locators_by_api_version = {
     49.0: locators_49,  # summer '20
     50.0: locators_50,  # winter '21
+    51.0: locators_51,  # winter '21
 }
 # will get populated in _init_locators
 pmm_lex_locators = {}
@@ -321,7 +323,7 @@ class pmm(object):
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
         )
-        self.selenium.click_element(locator)
+        self.salesforce._jsclick(locator)
 
     def populate_lightning_fields(self, **kwargs):
         """During winter 2020 part of the modal fields appear as lightning elements.

@@ -47,7 +47,7 @@ Add contact to program quick action on Program
      ...                              Stage=Enrolled
      ...                              Start Date=Today
      Populate Lightning Fields        Program Cohort=&{program_cohort}[Name]
-     Click Modal button               Save
+     Click Dialog button               Save
      Wait Until Modal Is Closed
      Current Page Should Be           Details               Program__c
      Load Related List                Program Engagements
@@ -67,7 +67,7 @@ Validate cohort and PE look up to the same program
      Populate Modal Form            Role=Client
      ...                            Stage=Applied
      ...                            Program Cohort=${program_cohort1}[Name]
-     Click Modal Button             Save
+     Click Dialog Button             Save
      Verify Modal Error             Select a Program Cohort that matches the Program.
 
 Autopopulate fields when stage is set to Applied and Start Date is today
@@ -81,7 +81,7 @@ Autopopulate fields when stage is set to Applied and Start Date is today
      Populate Modal Form                     Role=Client
      ...                                     Stage=Applied
      ...                                     Start Date=Today
-     Click Modal Button                      Save
+     Click Dialog Button                      Save
      Wait Until Modal Is Closed
      click new related record link           &{contact1}[FirstName] &{contact1}[LastName] ${result_date}: &{program}[Name]
      Verify Details                          Application Date                  does not contain       ${today}  

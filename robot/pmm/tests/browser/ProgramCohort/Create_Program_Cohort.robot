@@ -55,9 +55,9 @@ Date validation for cohort when Start date is later than end date
      Click Object Button                    New
      Wait For Modal                         New                     Program Cohort
      Populate Field                         Program Cohort          ${program_cohort}
-     Populate Field                         Description             New Program Cohort via Robot Test  
+     Populate Field                         Description             New Program Cohort via Robot Test 
+     Populate Lookup Field                  Program                 ${program}[Name] 
      Populate Lightning Fields              Status=Active
-     ...                                    Program=${program}[Name]
      ...                                    Start Date=25
      ...                                    End Date=10
      Click Dialog Button                    Save

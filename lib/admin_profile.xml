@@ -4,7 +4,6 @@
         <members>*</members>
         <members>Account</members>
         <members>Case</members>
-        <members>Contract</members>
         <members>Opportunity</members>
         <name>CustomObject</name>
     </types>

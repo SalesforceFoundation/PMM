@@ -4,12 +4,18 @@
         <members>*</members>
         <members>Account</members>
         <members>Case</members>
+        <members>Contact</members>
+        <members>Contract</members>
         <members>Opportunity</members>
         <name>CustomObject</name>
     </types>
     <types>
         <members>*</members>
         <name>BusinessProcess</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>CustomTab</name>
     </types>
     <types>
         <members>Admin</members>

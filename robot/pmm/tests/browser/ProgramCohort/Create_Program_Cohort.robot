@@ -33,10 +33,10 @@ Create Program Cohort
      Wait For Modal                         New                     Program Cohort
      Populate Field                         Program Cohort          ${program_cohort} 
      Populate Field                         Description             New Program Cohort via Robot Test
-     Populate Lightning Fields              Status=Active
-     ...                                    Program=${program}[Name]
-     ...                                    Start Date=10
-     ...                                    End Date=25
+     Select Value From Dropdown             Status                    Active
+    # ...                                    Start Date=10
+    # ...                                    End Date=25
+     Populate Lookup Field                  Program               ${program}[Name]    
      Click Dialog Button                    Save
      Wait Until Modal Is Closed
      Verify Details                         Program Cohort          contains        ${program_cohort}

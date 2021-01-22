@@ -100,8 +100,10 @@ class pmm(object):
         locator = pmm_lex_locators["app_link"]
         self.selenium.wait_until_page_contains_element(locator, error="App not found")
         self.selenium.set_focus_to_element(locator)
-        element = self.selenium.driver.find_element_by_xpath(locator)
-        self.selenium.driver.execute_script("arguments[0].click()", element)
+        self.salesforce._jsclick(locator)
+
+    # element = self.selenium.driver.find_element_by_xpath(locator)
+    # self.selenium.driver.execute_script("arguments[0].click()", element)
 
     def check_if_element_exists(self, xpath):
         elements = self.selenium.get_element_count(xpath)
@@ -323,7 +325,9 @@ class pmm(object):
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
         )
-        self.salesforce._jsclick(locator)
+        self.selenium.set_focus_to_element(locator)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element)
 
     def populate_lightning_fields(self, **kwargs):
         """During winter 2020 part of the modal fields appear as lightning elements.

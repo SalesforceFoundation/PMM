@@ -125,7 +125,7 @@ Autopopulate fields when stage is set to Active with Program start date is today
      Verify Details                          Start Date                      contains               ${today}
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
-Autopopulate fields when stage is set to Active with Program start date is earlier than today
+Autopopulate fields when stage is set to Applied with Program start date is earlier than today
      [Documentation]                         Validates that application date is not set to today when stage is 'Active' and Program
      ...                                     start date is earlier than 'Today'
      [tags]                                  W-8746330   feature:Program Engagement
@@ -134,7 +134,7 @@ Autopopulate fields when stage is set to Active with Program start date is earli
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
-     Select Value From Dropdown              Stage               Active
+     Select Value From Dropdown              Stage               Applied
      Populate Lightning fields               Program=${program3}[Name]                                   
      ...                                     Role=Service Provider
      Click Dialog Button                     Save

@@ -11,7 +11,7 @@
         <chartType>HorizontalBar</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>ServiceSession__c.PrimaryServiceProvider__c</groupingColumn>
+        <groupingColumn>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%PrimaryServiceProvider__c</groupingColumn>
         <location>CHART_BOTTOM</location>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
@@ -28,22 +28,22 @@
         <field>CUST_NAME</field>
     </columns>
     <columns>
-        <field>ServiceSession__c.SessionStart__c</field>
+        <field>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%SessionStart__c</field>
     </columns>
     <columns>
-        <field>ServiceSession__c.Status__c</field>
+        <field>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%Status__c</field>
     </columns>
     <description>Which Service Providers have past sessions that are not complete?</description>
     <filter>
         <criteriaItems>
-            <column>ServiceSession__c.Status__c</column>
+            <column>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%Status__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>notEqual</operator>
             <value>Complete,Canceled</value>
         </criteriaItems>
         <criteriaItems>
-            <column>ServiceSession__c.SessionStart__c</column>
+            <column>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%SessionStart__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>lessThan</operator>
@@ -54,7 +54,7 @@
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>ServiceSession__c.PrimaryServiceProvider__c</field>
+        <field>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%PrimaryServiceProvider__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <name>Pending Sessions in Past by Provider</name>
@@ -62,15 +62,15 @@
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>CustomEntity$ServiceSession__c</reportType>
+    <reportType>CustomEntity$%%%NAMESPACE%%%ServiceSession__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
-    <sortColumn>ServiceSession__c.SessionStart__c</sortColumn>
+    <sortColumn>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%SessionStart__c</sortColumn>
     <sortOrder>Asc</sortOrder>
     <timeFrameFilter>
-        <dateColumn>ServiceSession__c.SessionStart__c</dateColumn>
+        <dateColumn>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%SessionStart__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

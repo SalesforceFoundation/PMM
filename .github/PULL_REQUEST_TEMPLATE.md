@@ -2,7 +2,7 @@
 
 # Changes
 
-# Issues Closed
+# Work Items Closed
 
 # New Metadata
 

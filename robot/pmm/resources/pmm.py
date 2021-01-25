@@ -405,3 +405,13 @@ class pmm(object):
                 )
             cb_found = True
         assert cb_found, " Checkbox not found "
+
+    def select_button_on_modal(self, label):
+        """ Click on a button to on the new record dialog"""
+        locator = pmm_lex_locators["new_record"]["modal_button"].format(label)
+        self.selenium.wait_until_element_is_enabled(
+            locator, error="Button is not enabled"
+        )
+        self.selenium.set_focus_to_element(locator)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element)

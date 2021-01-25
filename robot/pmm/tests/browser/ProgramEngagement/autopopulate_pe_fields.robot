@@ -17,10 +17,10 @@ Setup Test Data
     Set suite variable             ${ns}
     ${program_engagement_name} =   Generate Random String
     Set suite variable             ${program_engagement_name}
-    &{contact} =                   API Create Contact
-    Set suite variable             &{contact}
-    &{program} =                   API Create Program
-    Set suite variable             &{program}
+    ${contact} =                   API Create Contact
+    Set suite variable             ${contact}
+    ${program} =                   API Create Program
+    Set suite variable             ${program}
     ${today} =                     Get Current Date               result_format=%-m/%-d/%Y
     Set suite variable             ${today}
     ${created_date} =              Get Current Date               result_format=%Y-%m-%d
@@ -29,6 +29,8 @@ Setup Test Data
     Set suite variable             ${future_date}
     ${earlier_date} =              Get Current Date               result_format=%Y-%m-%d            increment=-5 days
     Set suite variable             ${earlier_date}
+    ${start_date} =                Get Current Date               result_format=%-m/%-d/%Y            increment=-5 days
+    Set suite variable             ${start_date}
     ${program1} =                  API Create Program            ${ns}StartDate__c=${future_date}
     Set suite variable             ${program1}
     ${program2} =                  API Create Program            ${ns}StartDate__c=${created_date}
@@ -47,7 +49,7 @@ Autopopulate fields when stage is set to Applied
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Populate Lightning fields               Stage=Applied
-     ...                                     Program=&{program}[Name]
+     ...                                     Program=${program}[Name]
      ...                                     Role=Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
@@ -65,7 +67,7 @@ Autopopulate fields when stage is set to Completed
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Populate Lightning fields               Stage=Completed
-     ...                                     Program=&{program}[Name]
+     ...                                     Program=${program}[Name]
      ...                                     Role=Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
@@ -83,7 +85,7 @@ Autopopulate fields when stage is set to Withdrawn
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Populate Lightning fields               Stage=Withdrawn
-     ...                                     Program=&{program}[Name]
+     ...                                     Program=${program}[Name]
      ...                                     Role=Service Provider
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
@@ -137,6 +139,7 @@ Autopopulate fields when stage is set to Applied with Program start date is earl
      Select Value From Dropdown              Stage               Applied
      Populate Lightning fields               Program=${program3}[Name]                                   
      ...                                     Role=Service Provider
+     Populate Field                          Start Date               ${start_date}
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Application Date                 does not contain               ${today}

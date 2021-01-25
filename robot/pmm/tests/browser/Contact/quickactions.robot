@@ -37,7 +37,7 @@ Add contact to program quick action
      [Documentation]                  Add a contact to a program using quick action and verify the record
      [tags]                           W-037575  feature:Program Engagement
      Go To PMM App
-     Go To Page                       Details                                 Contact              object_id=&{contact}[Id]
+     Go To Page                       Details                                 Contact              object_id=${contact}[Id]
      page should contain              ${contact}[Name]
      Click Quick Action Button        Add Contact to Program
      Verify Current Page Title        Add Contact to Program
@@ -46,7 +46,7 @@ Add contact to program quick action
      ...                              Stage=Active
      ...                              Program Cohort=${program_cohort}[Name]
      ...                              Start Date=Today
-     Click Dialog Button              Save
+     Select Button On Modal           Save
      Wait Until Modal Is Closed
      Load Related List                Program Engagements
      Click New Related Record Link    ${contact}[FirstName] ${contact}[LastName] ${result_date}: ${program}[Name]
@@ -64,7 +64,7 @@ Add service delivery on a contact
      Populate Modal Form              Program Engagement=${program_engagement}[Name]
      ...                              Service=${service}[Name]
      ...                              Quantity=${quantity}
-     Click Dialog button              Save
+     Select Button On Modal           Save
      Wait Until Modal Is Closed
      Load Related List                Service Deliveries
      Click New Related Record Link    ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]

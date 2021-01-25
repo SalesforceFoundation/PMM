@@ -27,11 +27,10 @@ Create a Contact
     Click Object Button                    New
     Load Page object                       NewContact                           Contact
     verify current page title              New Contact
-    Populate Field                         First Name                           ${first_name}
-    Populate Field                         Last Name                            ${last_name}
-    Set Checkbox                           Client                               checked
-    Populate Field                         Email                                user@example.com
-    Click Modal button                     Save
+    Populate Modal Form                    First Name=${first_name}
+    ...                                    Last Name=${last_name}
+    ...                                    Email=user@example.com
+    Click Dialog Button                    Save
     Wait Until Modal Is Closed
     Verify Details                         Name                                 contains            ${first_name} ${last_name}
     Verify Details                         Email                                contains            user@example.com
@@ -39,4 +38,4 @@ Create a Contact
     Verify Page Contains Related List      Service Deliveries
     Verify Page Contains Related List      Files
     Verify Page Contains Related List      Service Participants
-    
+    Page Should Contain                    Client

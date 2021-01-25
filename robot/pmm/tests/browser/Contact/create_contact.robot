@@ -30,7 +30,7 @@ Create a Contact
     Populate Modal Form                    First Name=${first_name}
     ...                                    Last Name=${last_name}
     ...                                    Email=user@example.com
-    Click Dialog Button                    Save
+    Save Contact
     Wait Until Modal Is Closed
     Verify Details                         Name                                 contains            ${first_name} ${last_name}
     Verify Details                         Email                                contains            user@example.com

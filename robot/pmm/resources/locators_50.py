@@ -5,9 +5,9 @@ import copy
 
 pmm_lex_locators = copy.deepcopy(pmm_lex_locators)
 
-pmm_lex_locators["new_record"][
-    "button"
-] = "//button[contains(@class, 'slds-button') and @type='button' and (text() or @title = '{}')]"
+pmm_lex_locators[
+    "contact_save"
+] = "//button[contains(@class,'slds-button--neutral') and (text() or @title='Save')]"
 pmm_lex_locators["related"][
     "button"
 ] = "//article[contains(@class, 'slds-card slds-card_boundary')][.//span[@title='{}']]//a[@title='{}']"

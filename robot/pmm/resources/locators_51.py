@@ -62,6 +62,7 @@ pmm_lex_locators = {
     "listview_link": "//a[contains(@class,'slds-truncate') and text()='{}']",
     "toast_link": "//span[contains(@class,'toastMessage')]/a[@class='forceActionLink']/div[contains(@title,'{}')]",
     "toast_msg": "//span[contains(@class,'toastMessage') and text()='{}']",
+    "contact_save": "//button[contains(@class,'slds-button_brand') and (text() or @title='Save')]",
     "bulk_service_delivery_locators": {
         "new_lookup": '//div[{}][contains(@class,"slds-box")]//div[@class="sd-input"][./div[contains(@class,"slds-truncate") and contains(text(),"{}")]]/descendant::input[contains(@class,"slds-input")]',
         "new_field": '//div[{}][contains(@class,"slds-box")]//div[contains(@class,"slds-form-element__control")]/input[contains(@name,"{}")]',

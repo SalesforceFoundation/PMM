@@ -102,6 +102,8 @@ pmm_lex_locators = {
     "attendance": {
         "attendance_text": "//c-attendance-row[{}]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",
         "dropdown_field": "//c-attendance-row[{}]//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]//input",
+        "select_popup": "//c-attendance-row[{}]//div[contains(@class,'slds-listbox')]",
+        "dropdown_value": "//c-attendance-row[{}]//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(text(),'{}')]",
         "dim_icon": "//c-attendance-row[{}]//button[contains(@class,'slds-button')]/lightning-primitive-icon",
         "details": "//c-attendance-row[{}]//*[self::div or self::lightning-output-field][contains(@class,'slds-form-element_stacked')][.//*[text()='{}']]//div[@class='slds-form-element__control']/*[self::lightning-formatted-text or self::lightning-formatted-number]",
     },

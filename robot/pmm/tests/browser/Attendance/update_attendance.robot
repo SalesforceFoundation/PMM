@@ -55,7 +55,8 @@ Update attendance when service session status is Pending
     Populate Attendance Dropdown        3      Attendance Status    Excused Absence
     Click Button                    Submit
     Verify Toast Message            Saved 3 Service Delivery records.
-    Page Should Contain             Created Date
+    Reload Page
+    Page Should Contain             Present
     Verify Details                  Status          contains        Complete
     
 Update attendance when service session status is Complete

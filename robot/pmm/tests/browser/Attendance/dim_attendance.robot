@@ -65,7 +65,7 @@ Validate Dim attendance icon is displayed only for newly added rows
     [tags]                          W-8613706 feature:Attendance
     Go To PMM App
     Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session3}[Id]
-    Page Should Contain             ${contact1}[Name]
+    Page Should Contain Text        ${contact1}[Name]
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
     Click Button                        Submit

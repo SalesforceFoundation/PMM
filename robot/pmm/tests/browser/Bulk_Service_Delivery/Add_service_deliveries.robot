@@ -13,6 +13,7 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    [Documentation]             Creates Service and PE using API and sets the fields required to add service deliveries on BSDT.
     ${ns} =                     Get PMM Namespace Prefix
     Set suite variable          ${ns}
     ${quantity1} =              Generate Random String          2     [NUMBERS]
@@ -56,7 +57,6 @@ Add service delivery on bulk service delivery
     [tags]                      W-040316   feature:Service Delivery
     Go To PMM App
     Go To Page                  Custom                              Bulk_Service_Deliveries
-    Verify Current Page         Bulk Service Deliveries
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
     Populate Bsdt Dropdown      1           Service                 ${service1}[Name]
@@ -84,7 +84,6 @@ Verify error message when there are no services associated with the program
     ...                         services associated with the program.
     [tags]                      W-040316   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
-    Verify Current Page         Bulk Service Deliveries
     Populate Bsdt Lookup        1           Client                  ${contact3}[FirstName] ${contact3}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement3}[Name]
     verify error message        No services found, choose another program engagement.
@@ -95,7 +94,6 @@ Delete service delivery on bsdt
     ...                         that a warning dialog is displayed when deleted.
     [tags]                      W-042916   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
-    Verify Current Page         Bulk Service Deliveries
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
     Populate Bsdt Dropdown      1           Service                 ${service1}[Name]

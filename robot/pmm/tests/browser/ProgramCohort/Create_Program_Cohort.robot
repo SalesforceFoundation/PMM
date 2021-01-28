@@ -34,9 +34,9 @@ Create Program Cohort
      Populate Field                         Program Cohort          ${program_cohort} 
      Populate Field                         Description             New Program Cohort via Robot Test
      Populate Lightning Fields              Status=Active
-     ...                                    Program=${program}[Name]
      ...                                    Start Date=10
      ...                                    End Date=25
+     Populate Lookup Field                  Program               ${program}[Name]    
      Click Dialog Button                    Save
      Wait Until Modal Is Closed
      Verify Details                         Program Cohort          contains        ${program_cohort}
@@ -55,9 +55,9 @@ Date validation for cohort when Start date is later than end date
      Click Object Button                    New
      Wait For Modal                         New                     Program Cohort
      Populate Field                         Program Cohort          ${program_cohort}
-     Populate Field                         Description             New Program Cohort via Robot Test  
+     Populate Field                         Description             New Program Cohort via Robot Test 
+     Populate Lookup Field                  Program                 ${program}[Name] 
      Populate Lightning Fields              Status=Active
-     ...                                    Program=${program}[Name]
      ...                                    Start Date=25
      ...                                    End Date=10
      Click Dialog Button                    Save
@@ -77,7 +77,7 @@ Date validation when cohort dates are not within program date range
      Click Dialog Button                    Save
      Wait Until Modal Is Closed
      Load Related List                      Program Cohorts
-     Click Related List Button              Program Cohorts                        New
+     Click Wrapper Related List Button      Program Cohorts                        New
      Populate Field                         Program Cohort                         ${program_cohort}
      Populate Lightning Fields              Status=Completed
      Select From Date Picker                Start Date                               10

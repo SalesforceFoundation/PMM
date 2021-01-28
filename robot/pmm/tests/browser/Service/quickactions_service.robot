@@ -46,7 +46,7 @@ Create a new service delivery on service using quick action
      Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
      ...                            Program Engagement=${program_engagement}[Name]
      ...                            Quantity=${quantity}
-     Click Modal Button             Save
+     Select Button On Modal         Save
      Wait Until Modal Is Closed
      Current Page Should Be         Details                        Service__c
      Load Related List              Service Deliveries
@@ -64,5 +64,5 @@ Validate service and program engagement lookup to same program
      Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
      ...                            Program Engagement=${program_engagement1}[Name]
      ...                            Quantity=${quantity}
-     Click Modal Button             Save
+     Select Button On Modal         Save
      verify modal Error             Select a Program Engagement that matches the Program of the related Service.

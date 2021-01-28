@@ -13,12 +13,14 @@ from robot.libraries.BuiltIn import RobotNotRunningError
 from cumulusci.robotframework.utils import selenium_retry
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.keys import Keys
+from locators_51 import pmm_lex_locators as locators_51
 from locators_50 import pmm_lex_locators as locators_50
 from locators_49 import pmm_lex_locators as locators_49
 
 locators_by_api_version = {
     49.0: locators_49,  # summer '20
     50.0: locators_50,  # winter '21
+    51.0: locators_51,  # winter '21
 }
 # will get populated in _init_locators
 pmm_lex_locators = {}
@@ -98,8 +100,10 @@ class pmm(object):
         locator = pmm_lex_locators["app_link"]
         self.selenium.wait_until_page_contains_element(locator, error="App not found")
         self.selenium.set_focus_to_element(locator)
-        element = self.selenium.driver.find_element_by_xpath(locator)
-        self.selenium.driver.execute_script("arguments[0].click()", element)
+        self.salesforce._jsclick(locator)
+
+    # element = self.selenium.driver.find_element_by_xpath(locator)
+    # self.selenium.driver.execute_script("arguments[0].click()", element)
 
     def check_if_element_exists(self, xpath):
         elements = self.selenium.get_element_count(xpath)
@@ -321,7 +325,9 @@ class pmm(object):
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
         )
-        self.selenium.click_element(locator)
+        self.selenium.set_focus_to_element(locator)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element)
 
     def populate_lightning_fields(self, **kwargs):
         """During winter 2020 part of the modal fields appear as lightning elements.
@@ -399,3 +405,13 @@ class pmm(object):
                 )
             cb_found = True
         assert cb_found, " Checkbox not found "
+
+    def select_button_on_modal(self, label):
+        """ Click on a button to on the new record dialog"""
+        locator = pmm_lex_locators["new_record"]["modal_button"].format(label)
+        self.selenium.wait_until_element_is_enabled(
+            locator, error="Button is not enabled"
+        )
+        self.selenium.set_focus_to_element(locator)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element)

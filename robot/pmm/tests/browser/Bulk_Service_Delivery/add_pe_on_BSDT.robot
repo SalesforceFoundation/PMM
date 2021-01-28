@@ -14,6 +14,7 @@ Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
 Setup Test Data
+    [Documentation]         Creates service using API and sets the fields required to create a Program Engagement record.
     ${ns} =                 Get PMM Namespace Prefix
     Set suite variable      ${ns}
     ${quantity} =           Generate Random String    2     [NUMBERS]
@@ -41,7 +42,6 @@ Create program engagement from BSDT
     [tags]                                  W-040316   feature:Service Delivery
     Go To PMM App
     Go To Page                              Custom                              Bulk_Service_Deliveries
-    Verify Current Page                     Bulk Service Deliveries
     Populate Bsdt Lookup                    1           Client                  ${contact}[FirstName] ${contact}[LastName]
     Page Should Contain                     ${contact}[FirstName] ${contact}[LastName]
     Sleep                                   2s

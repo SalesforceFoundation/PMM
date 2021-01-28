@@ -40,7 +40,7 @@ Create a new service delivery using quick action
      Click Quick Action Button      Create New Service Delivery
      Populate Modal Form            Service=${service}[Name]
      ...                            Quantity=${quantity}
-     Click Modal Button             Save
+     Select Button On Modal         Save
      Wait Until Modal Is Closed
      Current Page Should Be         Details                         ProgramEngagement__c
      Load Related List              Service Deliveries

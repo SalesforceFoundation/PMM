@@ -26,16 +26,6 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         self.salesforce.wait_until_loading_is_complete()
         self.selenium.wait_until_page_contains("Delivery Date")
 
-    def verify_current_page(self, label):
-        """ Verify we are on the Bulk Service Deliveries page by verifying the header title """
-        locator = pmm_lex_locators["bulk_service_delivery_locators"][
-            "page_header"
-        ].format(label)
-        self.selenium.wait_until_page_contains_element(
-            locator,
-            error="The header for this page is not 'Bulk Service Deliveries' as expected",
-        )
-
     def verify_error_message(self, message):
         """Verify error message on bsdt"""
         locator = pmm_lex_locators["bulk_service_delivery_locators"][

@@ -39,4 +39,4 @@ class ServiceDetailPage(BasePMMPage, DetailPage):
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"
         )
-        self.selenium.wait_until_page_contains("Service Participant")
+        self.selenium.wait_until_page_contains("Unit of Measurement")

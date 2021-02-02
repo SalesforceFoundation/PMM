@@ -51,6 +51,10 @@
         "Deploy Folder of Unmanaged Reports": {
             "message": "未管理レポートのフォルダのリリース",
             "description": "title of installation step"
+        },
+        "Recover Deleted Report": {
+            "message": "削除済みレポートの復元",
+            "description": "title of installation step"
         }
     },
     "checks": {
@@ -60,6 +64,10 @@
         },
         "Please install Program Management Module in your org prior to installing reports.": {
             "message": "レポートをインストールする前に組織に Program Management Module をインストールしてください。",
+            "description": "shown if validation fails"
+        },
+        "Program Management Module requires Chatter. Please enable Chatter in your org and try again.": {
+            "message": "Program Management Module には Chatter が必要です。組織で Chatter を有効化して、もう一度お試しください。",
             "description": "shown if validation fails"
         }
     },
@@ -79,6 +87,16 @@
         "error_message": {
             "message": "このエラーについて支援を受けるには、[help.salesforce.com](https://help.salesforce.com/) にアクセスし、[サポートとサービス] 領域を見つけて、Salesforce でテクニカルサポートのチケットを登録してください。件名行に「PMM」を含め、コメントにはここに表示されているインストールリンクを含めてください。",
             "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:recover-deleted-report": {
+        "title": {
+            "message": "削除済み Program Management Module レポートの復元",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "このインストーラは、削除される Program Management Module レポート ([Clients Enrolled This Month (今月登録された顧客)]) が原因で発生したアップグレードの問題を修正するように設計されています。Salesforce サポートからの指示がない限り、このインストーラを実行しないでください。",
+            "description": "shown before user starts installation (markdown)"
         }
     }
 }

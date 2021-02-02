@@ -77,11 +77,6 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>CreatedById</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>CreatedDate</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
@@ -162,22 +157,12 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>Contact__r.IndividualId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>Account__r.Industry</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
         <field>Contact__r.IsClient__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>LastModifiedById</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
@@ -252,11 +237,6 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>Account__r.OperatingHoursId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>Contact__r.OtherCity</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
@@ -283,31 +263,6 @@
     </availableFields>
     <availableFields>
         <field>Contact__r.OtherStreet</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>Account__r.OwnerId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>Contact__r.OwnerId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>ProgramCohort__r.OwnerId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>Program__r.OwnerId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>OwnerId</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>

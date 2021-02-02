@@ -37,11 +37,6 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>CreatedById</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>CreatedDate</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
@@ -162,16 +157,6 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>OtherServiceProvider__r.IndividualId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>PrimaryServiceProvider__r.IndividualId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>ServiceSchedule__r.Interval__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
@@ -187,11 +172,6 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>LastModifiedById</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>LastModifiedDate</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
@@ -203,11 +183,6 @@
     </availableFields>
     <availableFields>
         <field>PrimaryServiceProvider__r.LastName</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>LastViewedDate</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
@@ -367,16 +342,6 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>OtherServiceProvider__r.OwnerId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>OwnerId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>ServiceSchedule__r.ParticipantCapacity__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
@@ -393,16 +358,6 @@
     </availableFields>
     <availableFields>
         <field>ServiceSchedule__r.PrimaryServiceProvider__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>OtherServiceProvider__r.ReportsToId</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>PrimaryServiceProvider__r.ReportsToId</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>MonthlyRecurrenceOption__c</name>
+    <label>Optie voor maandelijkse herhaling</label>
+    <picklistValues>
+        <masterLabel>on the Last Day</masterLabel>
+        <translation>op de laatste dag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Monday</masterLabel>
+        <translation>op de eerste maandag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Monday</masterLabel>
+        <translation>op de tweede maandag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Monday</masterLabel>
+        <translation>op de derde maandag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Monday</masterLabel>
+        <translation>op de vierde maandag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Monday</masterLabel>
+        <translation>op de vijfde maandag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Tuesday</masterLabel>
+        <translation>op de eerste dinsdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Tuesday</masterLabel>
+        <translation>op de tweede dinsdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Tuesday</masterLabel>
+        <translation>op de derde dinsdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Tuesday</masterLabel>
+        <translation>op de vierde dinsdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Tuesday</masterLabel>
+        <translation>op de vijfde dinsdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Wednesday</masterLabel>
+        <translation>op de eerste woensdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Wednesday</masterLabel>
+        <translation>op de tweede woensdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Wednesday</masterLabel>
+        <translation>op de derde woensdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Wednesday</masterLabel>
+        <translation>op de vierde woensdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Wednesday</masterLabel>
+        <translation>op de vijfde woensdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Thursday</masterLabel>
+        <translation>op de eerste donderdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Thursday</masterLabel>
+        <translation>op de tweede donderdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Thursday</masterLabel>
+        <translation>op de derde donderdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Thursday</masterLabel>
+        <translation>op de vierde donderdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Thursday</masterLabel>
+        <translation>op de vijfde donderdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Friday</masterLabel>
+        <translation>op de eerste vrijdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Friday</masterLabel>
+        <translation>op de tweede vrijdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Friday</masterLabel>
+        <translation>op de derde vrijdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Friday</masterLabel>
+        <translation>op de vierde vrijdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Friday</masterLabel>
+        <translation>op de vijfde vrijdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Saturday</masterLabel>
+        <translation>op de eerste zaterdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Saturday</masterLabel>
+        <translation>op de tweede zaterdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Saturday</masterLabel>
+        <translation>op de derde zaterdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Saturday</masterLabel>
+        <translation>op de vierde zaterdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Saturday</masterLabel>
+        <translation>op de vijfde zaterdag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Sunday</masterLabel>
+        <translation>op de eerste zondag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Sunday</masterLabel>
+        <translation>op de tweede zondag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Sunday</masterLabel>
+        <translation>op de derde zondag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Sunday</masterLabel>
+        <translation>op de vierde zondag</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Sunday</masterLabel>
+        <translation>op de vijfde zondag</translation>
+    </picklistValues>
+</CustomFieldTranslation>

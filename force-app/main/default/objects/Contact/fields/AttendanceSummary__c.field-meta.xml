@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AttendanceSummary__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(NOT(ISNULL(AttendanceRate__c)),
+    TEXT(AttendanceRate__c) &amp; &quot; (&quot; &amp; 
+    TEXT(NumPresentServiceDeliveries__c) &amp; 
+    &quot;/&quot; &amp; 
+    TEXT(NumPresentServiceDeliveries__c + NumAbsentServiceDeliveries__c) &amp;
+    &quot;)&quot;,
+    &quot;&quot;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Attendance Summary</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

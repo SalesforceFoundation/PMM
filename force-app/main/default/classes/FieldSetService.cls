@@ -122,7 +122,6 @@ public with sharing class FieldSetService {
         return objectDescribe.fields.getMap().get(compoundFieldName).getDescribe();
     }
 
-    @TestVisible
     private DescribeSObjectResult getObjectDescribe(
         DescribeSObjectResult objectDescribe,
         String fieldPath

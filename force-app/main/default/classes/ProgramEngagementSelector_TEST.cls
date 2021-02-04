@@ -21,12 +21,7 @@ public with sharing class ProgramEngagementSelector_TEST {
 
     @IsTest
     private static void testGetProgramEngagementsByContactId() {
-        Contact con = [
-            SELECT Id, Name
-            FROM Contact
-            WHERE LastName = 'Test Contact'
-            LIMIT 1
-        ][0];
+        Contact con = [SELECT Id, Name FROM Contact LIMIT 1][0];
 
         Set<Id> expectedIds = (new Map<Id, ProgramEngagement__c>(
                 [
@@ -66,12 +61,7 @@ public with sharing class ProgramEngagementSelector_TEST {
             UserName = 'standarduser2@' + random + '.example.com'
         );
 
-        Contact con = [
-            SELECT Id, Name
-            FROM Contact
-            WHERE LastName = 'Test Contact'
-            LIMIT 1
-        ][0];
+        Contact con = [SELECT Id, Name FROM Contact LIMIT 1][0];
 
         Test.startTest();
         System.runAs(u) {
@@ -93,7 +83,6 @@ public with sharing class ProgramEngagementSelector_TEST {
                 SELECT Id, Contact__r.Name, Contact__r.Email, Stage__c, ProgramCohort__c
                 FROM ProgramEngagement__c
                 WHERE Stage__c IN :ACTIVE_ENGAGEMENT_STAGES AND Program__c = :program.Id
-                ORDER BY Contact__r.Name ASC
             ]
         );
 
@@ -147,7 +136,6 @@ public with sharing class ProgramEngagementSelector_TEST {
                 SELECT Id, Name
                 FROM ProgramEngagement__c
                 WHERE Stage__c IN :ACTIVE_ENGAGEMENT_STAGES AND Program__c = :program.Id
-                ORDER BY Contact__r.Name ASC
             ]
         );
 

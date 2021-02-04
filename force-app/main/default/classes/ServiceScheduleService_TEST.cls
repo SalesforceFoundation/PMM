@@ -1005,7 +1005,8 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceSchedule__c actualSchedule = [
             SELECT Id
             FROM ServiceSchedule__c
-            WHERE Name = :schedule.Name
+            ORDER BY Id DESC
+            LIMIT 1
         ];
         List<ServiceSession__c> actualSessions = [
             SELECT Id

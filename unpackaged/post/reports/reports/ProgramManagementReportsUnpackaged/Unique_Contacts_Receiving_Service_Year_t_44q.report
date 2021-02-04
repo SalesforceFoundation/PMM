@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <aggregateTypes>Unique</aggregateTypes>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Contact__c</field>
+    </columns>
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%DeliveryDate__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Quantity__c</field>
+    </columns>
+    <columns>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%UnitOfMeasurement__c</field>
+    </columns>
+    <description>How many unique Contacts have received a Service?</description>
+    <format>Summary</format>
+    <groupingsDown>
+        <aggregateType>Unique</aggregateType>
+        <dateGranularity>Day</dateGranularity>
+        <field>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Service__c</field>
+        <sortByName>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%Contact__c</sortByName>
+        <sortOrder>Asc</sortOrder>
+        <sortType>Aggregate</sortType>
+    </groupingsDown>
+    <name>Unique Contacts Receiving Service</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$%%%NAMESPACE%%%ServiceDelivery__c</reportType>
+    <scope>organization</scope>
+    <showDetails>false</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>%%%NAMESPACE%%%ServiceDelivery__c.%%%NAMESPACE%%%DeliveryDate__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

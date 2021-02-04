@@ -43,12 +43,7 @@ public with sharing class ServiceSelector_TEST {
 
         TestDataFactory.generateAttendanceData('Daily');
 
-        Program__c program1 = [
-            SELECT Id, Name
-            FROM Program__c
-            WHERE Name = 'Program 1'
-            LIMIT 1
-        ][0];
+        Program__c program1 = [SELECT Id, Name FROM Program__c LIMIT 1][0];
         ServiceSchedule__c expected = [
             SELECT Id, Name, Service__c
             FROM ServiceSchedule__c
@@ -122,12 +117,7 @@ public with sharing class ServiceSelector_TEST {
     private static void testGetServicesByProgramIds() {
         TestDataFactory.generateAttendanceData('Daily');
 
-        Program__c program1 = [
-            SELECT Id, Name
-            FROM Program__c
-            WHERE Name = 'Program 1'
-            LIMIT 1
-        ][0];
+        Program__c program1 = [SELECT Id, Name FROM Program__c LIMIT 1][0];
 
         Set<Id> expectedIds = (new Map<Id, Service__c>(
                 [SELECT Id FROM Service__c WHERE Program__c = :program1.Id]
@@ -166,12 +156,7 @@ public with sharing class ServiceSelector_TEST {
 
         TestDataFactory.generateAttendanceData('Daily');
 
-        Program__c program1 = [
-            SELECT Id, Name
-            FROM Program__c
-            WHERE Name = 'Program 1'
-            LIMIT 1
-        ][0];
+        Program__c program1 = [SELECT Id, Name FROM Program__c LIMIT 1][0];
 
         Test.startTest();
         System.runAs(u) {
@@ -187,12 +172,7 @@ public with sharing class ServiceSelector_TEST {
     @IsTest
     private static void testGetServicesByProgramEngagementId() {
         TestDataFactory.generateAttendanceData('Daily');
-        Program__c program1 = [
-            SELECT Id, Name
-            FROM Program__c
-            WHERE Name = 'Program 1'
-            LIMIT 1
-        ][0];
+        Program__c program1 = [SELECT Id, Name FROM Program__c LIMIT 1][0];
 
         ProgramEngagement__c engagement1 = [
             SELECT Id, Name
@@ -253,12 +233,7 @@ public with sharing class ServiceSelector_TEST {
 
         TestDataFactory.generateAttendanceData('Daily');
 
-        Program__c program1 = [
-            SELECT Id, Name
-            FROM Program__c
-            WHERE Name = 'Program 1'
-            LIMIT 1
-        ][0];
+        Program__c program1 = [SELECT Id, Name FROM Program__c LIMIT 1][0];
 
         ProgramEngagement__c engagement1 = [
             SELECT Id, Name

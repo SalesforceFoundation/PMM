@@ -65,8 +65,11 @@ public with sharing class FieldSetService {
             }
 
             DescribeFieldResult fieldDescribe = field.getSObjectField().getDescribe();
-            fieldDescribe = getCompoundFieldDescribe(objectDescribe, fieldDescribe);
-
+            fieldDescribe = getCompoundFieldDescribe(
+                objectDescribe,
+                fieldDescribe,
+                field.getFieldPath()
+            );
             fieldByApiName.put(fieldDescribe.getName(), getFieldForLWC(fieldDescribe));
         }
 
@@ -100,17 +103,40 @@ public with sharing class FieldSetService {
      * to be added so we need to extract it from the SObjectDescribe
      * @param DescribeSObjectResult objectDescribe
      * @param DescribeFieldResult fieldDescribe
+     * @param String fieldPath
      * @return      DescribeFieldResult
      */
     @TestVisible
     private DescribeFieldResult getCompoundFieldDescribe(
         DescribeSObjectResult objectDescribe,
-        DescribeFieldResult fieldDescribe
+        DescribeFieldResult fieldDescribe,
+        String fieldPath
     ) {
         String compoundFieldName = fieldDescribe.getCompoundFieldName();
-        return compoundFieldName == null
-            ? fieldDescribe
-            : objectDescribe.fields.getMap().get(compoundFieldName).getDescribe();
+        if (compoundFieldName == null) {
+            return fieldDescribe;
+        }
+
+        objectDescribe = getObjectDescribe(objectDescribe, fieldPath);
+
+        return objectDescribe.fields.getMap().get(compoundFieldName).getDescribe();
+    }
+
+    @TestVisible
+    private DescribeSObjectResult getObjectDescribe(
+        DescribeSObjectResult objectDescribe,
+        String fieldPath
+    ) {
+        if (!fieldPath.contains('.')) {
+            return objectDescribe;
+        }
+
+        String relationshipField = fieldPath.split('\\.')[0].replace('__r', '__c');
+        return objectDescribe.fields.getMap()
+                .get(relationshipField)
+                .getDescribe()
+                .getReferenceTo()[0]
+            .getDescribe();
     }
 
     /**

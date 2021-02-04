@@ -33,7 +33,7 @@
     <columns>
         <field>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%Status__c</field>
     </columns>
-    <description>Which Service Providers have past sessions that are not complete?</description>
+    <description>Which past Service Sessions aren’t marked Complete?</description>
     <filter>
         <criteriaItems>
             <column>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%Status__c</column>
@@ -57,7 +57,7 @@
         <field>%%%NAMESPACE%%%ServiceSession__c.%%%NAMESPACE%%%PrimaryServiceProvider__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Pending Sessions in Past by Provider</name>
+    <name>Past Sessions in Pending Status</name>
     <params>
         <name>co</name>
         <value>1</value>

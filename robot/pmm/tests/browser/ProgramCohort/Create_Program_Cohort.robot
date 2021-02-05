@@ -6,12 +6,18 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ProgramPageObject.py
 ...            robot/pmm/resources/ProgramCohortPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+#...             Initialize test user         AND
+...             Open test browser 
+#...             Open test browser            useralias=UUser           AND
 ...             Setup Test Data
-Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+#Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Keywords ***
-Setup Test Data
+#Initialize test user
+  #   ${test_user}=              Set Variable      UUser
+   #  Set Suite Variable         ${test_user}
+
+Setup Test Data                   
     ${ns} =                     Get PMM Namespace Prefix
     Set suite variable          ${ns}
     ${program_cohort} =         Generate Random String
@@ -86,4 +92,6 @@ Date validation when cohort dates are not within program date range
      Verify Modal Error                     End Date must be within the Program Start and End Dates
      Verify Modal Error                     Start Date must be within the range of the related Program Start and End Dates.
 
-     
+Program detail test
+     Go To Page                             Details                                 Program__c                   object_id=${program1}[Id]
+     sleep                                   2s

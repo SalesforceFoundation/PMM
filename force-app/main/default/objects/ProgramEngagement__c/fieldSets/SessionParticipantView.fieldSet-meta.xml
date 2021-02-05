@@ -7,7 +7,27 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
+        <field>ApplicationDate__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
+        <field>AttendanceRate__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
+        <field>AttendanceSummary__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
         <field>AutoName_Override__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
+        <field>Contact__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
@@ -17,22 +37,22 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
+        <field>LastServiceDate__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
         <field>Name</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>Role__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>true</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>ApplicationDate__c</field>
+        <field>NumAbsentServiceDeliveries__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>StartDate__c</field>
+        <field>NumPresentServiceDeliveries__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
@@ -44,10 +64,15 @@
     <availableFields>
         <field>Program__c</field>
         <isFieldManaged>false</isFieldManaged>
-        <isRequired>true</isRequired>
+        <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>Contact__c</field>
+        <field>Role__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
+        <field>StartDate__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>

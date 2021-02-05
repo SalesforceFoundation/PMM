@@ -29,6 +29,7 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track hideSpinner = false;
     @api recordTypeId;
+    isSaving = false;
     isLoaded = false;
     serviceScheduleModel;
     originalModel;
@@ -171,6 +172,10 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     save(isSaveAndNew) {
+        if (this.isSaving) {
+            return;
+        }
+        this.isSaving = true;
         persist({ model: this.serviceScheduleModel })
             .then(result => {
                 this._serviceSchedules.push(result.serviceSchedule);
@@ -185,6 +190,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 }
             })
             .catch(error => {
+                this.isSaving = false;
                 handleError(error);
             });
     }

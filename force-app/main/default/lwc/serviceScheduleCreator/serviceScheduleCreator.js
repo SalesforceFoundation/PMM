@@ -306,6 +306,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     init() {
         this.isLoaded = false;
         this.hideSpinner = false;
+        this.isSaving = false;
         this._steps.restart();
         this._currentStep = undefined;
         this.serviceScheduleModel = JSON.parse(JSON.stringify(this.originalModel));

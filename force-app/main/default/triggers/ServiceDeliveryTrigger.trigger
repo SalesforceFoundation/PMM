@@ -1,4 +1,4 @@
-trigger ServiceDeliveryTrigger on SOBJECT(
+trigger ServiceDeliveryTrigger on ServiceDelivery__c(
     after insert,
     after update,
     after delete,

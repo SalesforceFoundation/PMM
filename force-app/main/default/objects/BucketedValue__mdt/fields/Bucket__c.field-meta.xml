@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bucket__c</fullName>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Which Bucket does this value belong to?</inlineHelpText>
+    <label>Bucket</label>
+    <referenceTo>Bucket__mdt</referenceTo>
+    <relationshipLabel>Bucketed Values</relationshipLabel>
+    <relationshipName>Bucketed_Values</relationshipName>
+    <required>true</required>
+    <type>MetadataRelationship</type>
+    <unique>false</unique>
+</CustomField>

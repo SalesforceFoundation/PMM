@@ -3,7 +3,7 @@
     <fullName>AttendanceSummary__c</fullName>
     <externalId>false</externalId>
     <formula>IF(NOT(ISBLANK(AttendanceRate__c)),
-    TEXT(AttendanceRate__c) &amp; &quot; (&quot; &amp; 
+    TEXT(ROUND(AttendanceRate__c,2)*100) &amp; &quot;% (&quot; &amp; 
     TEXT(NumPresentServiceDeliveries__c) &amp; 
     &quot;/&quot; &amp; 
     TEXT(NumPresentServiceDeliveries__c + NumAbsentServiceDeliveries__c) &amp;

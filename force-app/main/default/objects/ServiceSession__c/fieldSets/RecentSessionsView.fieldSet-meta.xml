@@ -2,27 +2,7 @@
 <FieldSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>RecentSessionsView</fullName>
     <availableFields>
-        <field>AttendanceRate__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>AttendanceSummary__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>OtherServiceProvider__r.Name</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>NumAbsentServiceDeliveries__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
-        <field>NumPresentServiceDeliveries__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>

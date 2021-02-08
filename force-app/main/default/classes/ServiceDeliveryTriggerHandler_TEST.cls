@@ -5,7 +5,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         TestDataFactory.generateServiceData();
     }
 
-    private ServiceDelivery__c getServiceDelivery() {
+    private static ServiceDelivery__c getServiceDelivery() {
         Service__c service = [SELECT Id FROM Service__c LIMIT 1];
         return new ServiceDelivery__c(Name = 'test', Service__c = service.Id);
     }

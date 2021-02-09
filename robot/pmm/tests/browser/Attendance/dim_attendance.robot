@@ -41,7 +41,7 @@ Dim attendance rows and validate service deliveries are not created
     [Documentation]                 This test Dims an attendance row and validates that the toast message is displayed
     [tags]                          W-8613706    perm:admin   perm:manage    perm:deliver   feature:Attendance
     Go To PMM App
-    Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session1}[Id]
+    Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain Text        ${contact1}[Name]
     Dim attendance Row              1         Select
     Click Button                    Submit
@@ -52,7 +52,7 @@ Dim attendance row and validate that the Quantity and Attendance Status is reset
     ...                             the data is reset when clicked on Submit
     [tags]                          W-8613706    perm:admin   perm:manage     perm:deliver   feature:Attendance
     Go To PMM App
-    Go To Page                          Details         ${ns}ServiceSession__c        object_id=${service_session2}[Id]
+    Go To Page                          Details         ServiceSession__c        object_id=${service_session2}[Id]
     Page Should Contain Text            ${contact1}[Name]
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
@@ -66,7 +66,7 @@ Validate Dim attendance icon is displayed only for newly added rows
     ...                             that the dim icon is displayed only for the newly added row.
     [tags]                          W-8613706    perm:admin   perm:manage   perm:deliver   feature:Attendance
     Go To PMM App
-    Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session3}[Id]
+    Go To Page                      Details         ServiceSession__c        object_id=${service_session3}[Id]
     Page Should Contain Text        ${contact1}[Name]
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present

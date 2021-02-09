@@ -1,7 +1,7 @@
 @IsTest
 public with sharing class ServiceDeliveryTriggerHandler_TEST {
     @TestSetup
-    private static void makeData() {
+    private static void createServiceData() {
         TestDataFactory.generateServiceData();
     }
 

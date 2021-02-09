@@ -5,10 +5,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSessionPageObject.py
 ...            robot/pmm/resources/BulkServiceDeliveryPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -28,7 +30,7 @@ Setup Test Data
 *** Test Cases ***
 Validate Empty Attendance State
     [Documentation]                 This test confirms that the service session empty state message shows in track attendance
-    [tags]                          W-8607484  feature:Attendance
+    [tags]                          W-8607484   perm:admin   perm:manage   perm:deliver   feature:Attendance
     Go To PMM App
     Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain             No participants yet

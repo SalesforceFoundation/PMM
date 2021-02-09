@@ -6,9 +6,12 @@ Library         cumulusci.robotframework.PageObjects
 ...             robot/pmm/resources/ProgramEngagementPageObject.py
 ...             robot/pmm/resources/ServiceDeliveryPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -33,13 +36,13 @@ Setup Test Data
 Create a new service delivery using quick action
      [Documentation]                This test loads the program engagement record, clicks on the new service delivery quick action and creates
      ...                            new service delivery record.
-     [tags]                         W-037572  feature:Service Delivery
+     [tags]                         W-037572        perm:admin   perm:manage       perm:deliver    feature:Service Delivery
      Go To PMM App
      Go To Page                     Details                        ProgramEngagement__c      object_id=${program_engagement}[Id]
      Verify Details                 Program Engagement Name        contains                   ${contact}[FirstName] ${contact}[LastName] ${today}: ${program}[Name]
      Click Quick Action Button      Create New Service Delivery
-     Populate Modal Form            Service=${service}[Name]
-     ...                            Quantity=${quantity}
+     Populate Lookup Field          Service                        ${service}[Name]
+     Populate Modal Form            Quantity=${quantity}
      Select Button On Modal         Save
      Wait Until Modal Is Closed
      Current Page Should Be         Details                         ProgramEngagement__c

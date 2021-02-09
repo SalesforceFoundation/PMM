@@ -5,10 +5,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSessionPageObject.py
 ...            robot/pmm/resources/BulkServiceDeliveryPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -41,7 +43,7 @@ Setup Test Data
 *** Test Cases ***
 Update attendance when service session status is Pending
     [Documentation]                 This test updates attendance for a service session record with Pending Status
-    [tags]                          W-8607484  feature:Attendance
+    [tags]                          W-8607484   perm:admin   perm:manage    feature:Attendance
     Go To PMM App
     Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain Text        ${contact1}[Name]
@@ -61,7 +63,7 @@ Update attendance when service session status is Pending
     
 Update attendance when service session status is Complete
     [Documentation]                 This test updates attendance for a service session record with Complete Status
-    [tags]                          W-8611541  feature:Attendance
+    [tags]                          W-8611541    perm:admin   perm:manage     feature:Attendance
     Go To PMM App
     Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session2}[Id]
     Page Should Contain Text        ${contact1}[Name]

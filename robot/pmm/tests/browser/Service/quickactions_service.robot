@@ -6,9 +6,12 @@ Library         cumulusci.robotframework.PageObjects
 ...             robot/pmm/resources/ServiceDeliveryPageObject.py
 ...             robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -38,7 +41,7 @@ Setup Test Data
 Create a new service delivery on service using quick action
      [Documentation]                This test loads the service record, clicks on the new service delivery quick action and creates
      ...                            new service delivery record.
-     [tags]                         W-042516  feature:Service Delivery
+     [tags]                         W-042516      perm:admin   perm:manage    perm:deliver    feature:Service Delivery
      Go To PMM App
      Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
@@ -57,7 +60,7 @@ Create a new service delivery on service using quick action
 Validate service and program engagement lookup to same program
      [Documentation]                This test loads the program engagement record, clicks on the new service delivery quick action and
      ...                            validates an error message is displayed when service and program engagement do not lookup to the same program
-     [tags]                         W-042516  feature:Service Delivery
+     [tags]                         W-042516      perm:admin   perm:manage    perm:deliver   feature:Service Delivery
      Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery

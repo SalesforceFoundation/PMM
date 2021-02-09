@@ -5,9 +5,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/pmm.py
 ...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -25,6 +28,7 @@ Setup Test Data
 
 *** Test Cases ***
 Create Service from top nav
+    [tags]                                  perm:admin   perm:manage 
      Go To PMM App
      Go To Page                             Listing                     ${ns}Service__c
      Click Object Button                    New
@@ -33,9 +37,9 @@ Create Service from top nav
      Populate Field                         Service Name                ${service_name}
      Populate Field                         Description                 ${Description}
      Populate Field                         Unit of Measurement         ${unit_of_measurement}
-     Populate Lightning Fields              Program=${program}[Name]
-     ...                                    Status=Active
-     click Dialog button                    Save
+     Populate Lookup Field                  Program                     ${program}[Name]
+     Populate Lightning Fields              Status=Active
+     Click Dialog button                    Save
      Wait Until Modal Is Closed
      verify details                         Program            contains          ${program}[Name]
      verify details                         Service Name       contains          ${service_name}

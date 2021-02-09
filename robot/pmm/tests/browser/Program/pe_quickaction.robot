@@ -6,10 +6,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ProgramPageObject.py
 ...            robot/pmm/resources/ProgramEngagementPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -36,6 +38,7 @@ Setup Test Data
 
 *** Test Cases ***
 Add contact to program quick action on Program
+     [tags]                           perm:admin    perm:manage    perm:deliver
      Go To PMM App
      Go To Page                       Details                                 Program__c                    object_id=${program}[Id]
      page should contain              ${program}[Name]
@@ -59,7 +62,7 @@ Add contact to program quick action on Program
 Validate cohort and PE look up to the same program
      [Documentation]                This test loads the program record, clicks on add contact to program quick action. Verifies that
      ...                            an error message is displayed when program cohort and PE do not lookup to the same program
-     [tags]                         W-042769  feature:Program Engagement
+     [tags]                         W-042769    perm:admin   perm:manage     perm:deliver   feature:Program Engagement
      Go To Page                     Details                                  Program__c           object_id=${program}[Id]
      Verify Details                 Program Name                             contains             ${program}[Name]
      Click Quick Action Button      Add Contact to Program
@@ -73,7 +76,7 @@ Validate cohort and PE look up to the same program
 Autopopulate fields when stage is set to Applied and Start Date is today
      [Documentation]                Autopopulates PE name with anonymous and verifies that application date is not set to today when  
      ...                            the stage is set as applied and start date is set to today on new program engagment dialog
-     [tags]                         W-037569   feature:Program Engagement
+     [tags]                         W-037569    perm:admin   perm:manage    perm:deliver     feature:Program Engagement
      Go To Page                              Details                                  Program__c           object_id=${program}[Id]
      Verify Details                          Program Name                             contains             ${program}[Name]
      Click Quick Action Button               Add Contact to Program 

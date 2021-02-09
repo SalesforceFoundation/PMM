@@ -6,9 +6,13 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ProgramEngagementPageObject.py
 ...            robot/pmm/resources/ProgramPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
+
 
 *** Keywords ***
 Setup Test Data
@@ -30,15 +34,15 @@ Setup Test Data
 *** Test Cases ***
 Create Program Engagement
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-     [tags]                                  W-037565   feature:Program Engagement
+     [tags]                                  W-037565      pperm:admin   perm:manage       perm:deliver    feature:Program Engagement
      Go To PMM App
      Go To Page                              Listing                                ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                                    Program Engagement
      Populate Field                          Program Engagement Name                ${program_engagement_name}
+     Populate Lookup Field                   Program                                ${program}[Name]
+     Populate Lookup Field                   Client                                 ${contact}[FirstName] ${contact}[LastName]
      Populate Lightning Fields               Stage=Applied
-     ...                                     Client=${contact}[FirstName] ${contact}[LastName]
-     ...                                     Program=${program}[Name]
      ...                                     Role=Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
@@ -53,14 +57,14 @@ Create Program Engagement
 Create Program Engagement with Auto Name Override
     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list
      ...                                    and Checking Auto-Name Override checkbox. Verify PE name is same as what user added.
-    [tags]                                  W-037577   feature:Program Engagement
+    [tags]                                  W-037577        perm:admin   perm:manage      perm:deliver    feature:Program Engagement
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
      Populate Field                         Program Engagement Name                ${program_engagement_name}
+     Populate Lookup Field                  Program                                ${program}[Name]
+     Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
      Populate Lightning fields              Stage=Applied
-     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
-     ...                                    Program=${program}[Name]
      ...                                    Role=Volunteer
      Set Checkbox                           Auto-Name Override                      checked
      Click Dialog Button                    Save
@@ -72,14 +76,14 @@ Create Program Engagement with Auto Name Override
 Date validation for PE when start date is later than end date
      [Documentation]                        This test opens the new program engagement dialog and enters a end date earlier than start date
      ...                                    and verifies that an error message is displayed
-     [tags]                                 W-042238   feature:Program Engagement
+     [tags]                                 W-042238   perm:admin   perm:manage       perm:deliver    feature:Program Engagement
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
+     Populate Lookup Field                  Program                                ${program}[Name]
+     Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
      Populate Lightning fields              Stage=Applied
-     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
-     ...                                    Program=${program}[Name]
      ...                                    Role=Volunteer
      ...                                    Start Date=25
      ...                                    End Date=10
@@ -91,7 +95,7 @@ Date validation when program engagement dates are not within program date range
      [Documentation]                        This test opens the program record, edits the start and end dates and goes to the PE listing
      ...                                    page, clicks on new and verifes that an error message is displayed when PE date 
      ...                                    range is outside the program date range 
-     [tags]                                 W-042238   feature:Program Engagement
+     [tags]                                 W-042238   perm:admin   perm:manage     perm:deliver    feature:Program Engagement
      Go To Page                             Details                                 Program__c                   object_id=${program}[Id]
      Click Quick Action Button              Edit
      Verify Current Page Title              Edit ${program}[Name]
@@ -103,9 +107,9 @@ Date validation when program engagement dates are not within program date range
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
+     Populate Lookup Field                  Program                                ${program}[Name]
+     Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
      Populate Lightning fields              Stage=Applied
-     ...                                    Client=${contact}[FirstName] ${contact}[LastName]
-     ...                                    Program=${program}[Name]
      ...                                    Role=Volunteer
      Select From Date Picker                Start Date                               10
      Select From Date Picker                End Date                                 25
@@ -117,14 +121,14 @@ Date validation when program engagement dates are not within program date range
 Validate program cohort on new PE dialog
      [Documentation]                        This test opens the new program engagement dialog, enters a cohort that does not lookup to the
      ...                                    program entered the dialog, validates that an error message is displayed when saved
-     [tags]                                 W-042238   feature:Program Engagement
+     [tags]                                 W-042238    perm:admin   perm:manage     perm:deliver     feature:Program Engagement
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
      Populate Field                         Program Engagement Name                ${program_engagement_name}
+     Populate Lookup Field                  Program                                ${program}[Name]
+     Populate Lookup Field                  Program Cohort                         ${program cohort1}[Name]
      Populate Lightning Fields              Stage=Applied
-     ...                                    Program=${program}[Name]
-     ...                                    Program Cohort=${program cohort1}[Name]
      ...                                    Role=Volunteer
      Click Dialog Button                    Save
      Verify Modal Error                     Select a Program Cohort that matches the Program.

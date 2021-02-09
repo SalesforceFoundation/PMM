@@ -384,11 +384,11 @@ public without sharing class FeatureParameters {
 
     @TestVisible
     private without sharing class AttendanceWithServiceDeliveriesLast30 implements FeatureManagement.FeatureParameter {
-        private string attendanceStatusField = String.valueOf(
+        private String attendanceStatusField = String.valueOf(
             ServiceDelivery__c.AttendanceStatus__c
         );
 
-        private string serviceDeliveryIdField = String.valueOf(ServiceDelivery__c.Id);
+        private String serviceDeliveryIdField = String.valueOf(ServiceDelivery__c.Id);
 
         private String attendanceStatusServiceDelivery =
             String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +

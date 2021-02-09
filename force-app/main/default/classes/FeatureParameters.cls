@@ -26,7 +26,8 @@ public without sharing class FeatureParameters {
         ACTIVE_PROGRAMS_WITH_ENGAGEMENTS_LAST30,
         ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30,
         PERM_SET_DELIVER_USERS,
-        PERM_SET_MANAGE_USERS
+        PERM_SET_MANAGE_USERS,
+        ATTENDANCE_WITH_SERVICE_DELIVERIES_LAST30
     }
 
     private static final String ACTIVE_PROGRAM_CONDITION =
@@ -74,6 +75,9 @@ public without sharing class FeatureParameters {
             }
             when PERM_SET_MANAGE_USERS {
                 return new PermSetManageUsers();
+            }
+            when ATTENDANCE_WITH_SERVICE_DELIVERIES_LAST30 {
+                return new AttendanceWithServiceDeliveriesLast30();
             }
             when else {
                 return null;
@@ -375,6 +379,73 @@ public without sharing class FeatureParameters {
 
         private Object getValue() {
             return finder.findCount();
+        }
+    }
+
+    @TestVisible
+    private without sharing class AttendanceWithServiceDeliveriesLast30 implements FeatureManagement.FeatureParameter {
+        private string attendanceStatusField = String.valueOf(
+            ServiceDelivery__c.AttendanceStatus__c
+        );
+
+        private string serviceDeliveryIdField = String.valueOf(ServiceDelivery__c.Id);
+        private String attendanceStatusServiceDelivery =
+            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) + ' != \'NULL\'';
+
+        @TestVisible
+        private QueryBuilder queryBuilder {
+            get {
+                if (queryBuilder == null) {
+                    queryBuilder = new QueryBuilder()
+                        .withSObjectType(ServiceDelivery__c.SObjectType)
+                        .withSelectFields(
+                            new List<String>{
+                                serviceDeliveryIdField,
+                                attendanceStatusField
+                            }
+                        )
+                        .addCondition(attendanceStatusServiceDelivery)
+                        .addCondition(CREATED_LAST_30_CONDITION);
+                }
+
+                return queryBuilder;
+            }
+            set;
+        }
+
+        @TestVisible
+        private Finder finder {
+            get {
+                if (finder == null) {
+                    finder = new Finder(queryBuilder);
+                }
+
+                return finder;
+            }
+            set;
+        }
+
+        public void send() {
+            final Object value = getValue();
+
+            if (value instanceof Integer) {
+                FeatureManagement.getInstance()
+                    .setPackageIntegerValue(getName(), (Integer) value);
+            }
+        }
+
+        private String getName() {
+            return DeveloperName.ATTENDANCE_WITH_SERVICE_DELIVERIES_LAST30.name()
+                .remove('_');
+        }
+
+        private Object getValue() {
+            List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) finder.findRecords();
+            Set<Id> serviceDeliveryIds = new Set<Id>();
+            for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {
+                serviceDeliveryIds.add(serviceDelivery.Id);
+            }
+            return serviceDeliveryIds.size();
         }
     }
 }

@@ -389,8 +389,11 @@ public without sharing class FeatureParameters {
         );
 
         private string serviceDeliveryIdField = String.valueOf(ServiceDelivery__c.Id);
+
         private String attendanceStatusServiceDelivery =
-            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) + ' != \'NULL\'';
+            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
+            ' IN' +
+            getAttendanceStatusPicklistValues();
 
         @TestVisible
         private QueryBuilder queryBuilder {
@@ -407,7 +410,6 @@ public without sharing class FeatureParameters {
                         .addCondition(attendanceStatusServiceDelivery)
                         .addCondition(CREATED_LAST_30_CONDITION);
                 }
-
                 return queryBuilder;
             }
             set;
@@ -446,6 +448,19 @@ public without sharing class FeatureParameters {
                 serviceDeliveryIds.add(serviceDelivery.Id);
             }
             return serviceDeliveryIds.size();
+        }
+
+        public List<String> getAttendanceStatusPicklistValues() {
+            List<String> attendanceStatusOptions = new List<String>();
+
+            for (
+                Schema.PicklistEntry ple : ServiceDelivery__c.AttendanceStatus__c.getDescribe()
+                    .getPicklistValues()
+            ) {
+                attendanceStatusOptions.add('\'' + ple.getValue() + '\'');
+            }
+
+            return attendanceStatusOptions;
         }
     }
 }

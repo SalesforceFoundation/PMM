@@ -335,11 +335,18 @@ public with sharing class FeatureParameters_TEST {
     @IsTest
     private static void shouldPassActualAttendanceWithServiceDeliveriesLast30() {
         Set<Id> serviceDeliveryIds = new Set<Id>();
+        List<String> attendanceStatusOptions = new List<String>{
+            'Present',
+            'Unexcused Absence',
+            'Excused Absence'
+        };
 
         List<ServiceDelivery__c> serviceDeliveries = [
             SELECT Id, AttendanceStatus__c
             FROM ServiceDelivery__c
-            WHERE AttendanceStatus__c != 'NULL' AND CreatedDate = LAST_N_DAYS:30
+            WHERE
+                AttendanceStatus__c IN :attendanceStatusOptions
+                AND CreatedDate = LAST_N_DAYS:30
         ];
 
         for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {

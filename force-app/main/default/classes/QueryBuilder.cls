@@ -73,6 +73,15 @@ public inherited sharing class QueryBuilder {
         );
     }
 
+    public QueryBuilder reset() {
+        sObjectType = null;
+        selectFields = new List<String>();
+        conditions = new List<String>();
+        orderByField = null;
+        limitTo = null;
+        return this;
+    }
+
     private String buildSelectFields() {
         validate();
 

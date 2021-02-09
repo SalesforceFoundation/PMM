@@ -4,11 +4,11 @@
     <columns>MasterLabel</columns>
     <columns>DeveloperName</columns>
     <columns>NamespacePrefix</columns>
-    <columns>FeatureActive__c</columns>
+    <columns>IsActive__c</columns>
     <columns>IsProtected</columns>
     <filterScope>Everything</filterScope>
     <filters>
-        <field>FeatureActive__c</field>
+        <field>IsActive__c</field>
         <operation>equals</operation>
         <value>1</value>
     </filters>

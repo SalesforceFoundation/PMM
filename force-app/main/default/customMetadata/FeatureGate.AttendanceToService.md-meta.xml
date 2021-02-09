@@ -3,7 +3,7 @@
     <label>Roll up Attendance to Service</label>
     <protected>false</protected>
     <values>
-        <field>FeatureActive__c</field>
+        <field>IsActive__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
 </CustomMetadata>

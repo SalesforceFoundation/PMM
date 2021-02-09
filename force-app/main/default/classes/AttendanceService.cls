@@ -12,8 +12,16 @@ public with sharing class AttendanceService {
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
+    @TestVisible
+    private AttendanceSystemAccess systemAccess = new AttendanceSystemAccess();
 
     private static final String DEFAULT_STATUS = 'Present';
+    private static final Map<SObjectField, SObjectField> TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumPresentServiceDeliveries__c
+    };
+    private static final Map<SObjectField, SObjectField> TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumAbsentServiceDeliveries__c
+    };
 
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
@@ -40,6 +48,61 @@ public with sharing class AttendanceService {
             Database.rollback(savepoint);
             throw new ServiceDeliveryException(ex);
         }
+    }
+
+    public void rollup(Map<SObjectField, Set<Id>> recordIdsByLookupField) {
+        Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
+
+        if (recordIdsByLookupField == null || recordIdsByLookupField.isEmpty()) {
+            return;
+        }
+
+        List<String> presentStatuses = new List<String>{ 'Present' };
+        List<String> absentStatuses = new List<String>{
+            'Unexcused Absence',
+            'Excused Absence'
+        };
+        List<String> allStatuses = new List<String>();
+        allStatuses.addAll(presentStatuses);
+        allStatuses.addAll(absentStatuses);
+
+        for (SObjectField lookupField : recordIdsByLookupField.keySet()) {
+            for (
+                ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
+                    lookupField,
+                    recordIdsByLookupField.get(lookupField),
+                    allStatuses
+                )
+            ) {
+                Id targetId = (Id) delivery.get(lookupField);
+                SObject targetObject = targetObjectById.get(targetId);
+
+                if (targetObject == null) {
+                    targetObject = targetId.getSObjectType().newSObject(targetId);
+                    targetObjectById.put(targetId, targetObject);
+                }
+
+                SObjectField field;
+
+                if (presentStatuses.contains(delivery.AttendanceStatus__c)) {
+                    field = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(lookupField);
+                } else if (absentStatuses.contains(delivery.AttendanceStatus__c)) {
+                    field = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupField);
+                }
+
+                try {
+                    Integer count = targetObject.get(field) == null
+                        ? 0
+                        : (Integer) targetObject.get(field);
+                    count++;
+                    targetObject.put(field, count);
+                } catch (Exception ex) {
+                    System.debug(ex.getMessage());
+                }
+            }
+        }
+
+        systemAccess.updateRecords(targetObjectById.values());
     }
 
     public Map<String, Boolean> checkFieldPermissions() {

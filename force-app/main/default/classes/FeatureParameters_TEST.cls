@@ -331,4 +331,46 @@ public with sharing class FeatureParameters_TEST {
             PermissionSetId = permission.Id
         );
     }
+
+    @IsTest
+    private static void shouldPassActualAttendanceWithServiceDeliveriesLast30() {
+        Set<Id> serviceDeliveryIds = new Set<Id>();
+        List<String> attendanceStatusOptions = new List<String>{
+            'Present',
+            'Unexcused Absence',
+            'Excused Absence'
+        };
+
+        List<ServiceDelivery__c> serviceDeliveries = [
+            SELECT Id, AttendanceStatus__c
+            FROM ServiceDelivery__c
+            WHERE
+                AttendanceStatus__c IN :attendanceStatusOptions
+                AND CreatedDate = LAST_N_DAYS:30
+        ];
+
+        for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {
+            serviceDeliveryIds.add(serviceDelivery.Id);
+        }
+
+        System.assert(
+            !serviceDeliveryIds.isEmpty(),
+            'Sanity check: Test setup should have generated at least 1 service delivery record with an attendance status.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.ATTENDANCE_WITH_SERVICE_DELIVERIES_LAST30.name()
+            .remove('_');
+        final Integer expectedValue = serviceDeliveryIds.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.AttendanceWithServiceDeliveriesLast30().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
 }

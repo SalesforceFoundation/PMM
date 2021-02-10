@@ -40,12 +40,6 @@ public with sharing class ServiceScheduleService_TEST {
         Test.stopTest();
 
         System.assertEquals(
-            String.valueOf(expectedModel),
-            String.valueOf(actualModel),
-            'Expected the service to return a new service schedule model.'
-        );
-
-        System.assertEquals(
             String.valueOf(expectedModel.serviceSchedule),
             String.valueOf(actualModel.serviceSchedule),
             'Expected the model to have a new service schedule record.'

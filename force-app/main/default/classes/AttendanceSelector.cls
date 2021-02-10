@@ -10,6 +10,9 @@
 public with sharing class AttendanceSelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
+    private static final String ABSENT = 'Absent';
+    private static final String PRESENT = 'Present';
+
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
         if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
             return new List<ServiceDelivery__c>();
@@ -88,5 +91,22 @@ public with sharing class AttendanceSelector {
                 sessions
             )
             .getRecords()[0];
+    }
+
+    public List<Bucket__mdt> getAttendanceBuckets() {
+        List<String> bucketNames = new List<String>{
+            Util.prefixNamespace(ABSENT),
+            Util.prefixNamespace(PRESENT)
+        };
+
+        return [
+            SELECT
+                Id,
+                DeveloperName,
+                BucketedField__r.Field__r.QualifiedApiName,
+                (SELECT Id, Value__c FROM BucketedValues__r)
+            FROM Bucket__mdt
+            WHERE QualifiedApiName IN :bucketNames
+        ];
     }
 }

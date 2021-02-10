@@ -1,21 +1,25 @@
 public with sharing class ServiceDeliveryTriggerHandler {
-    private static Map<String, SObjectField> LOOKUP_FIELD_BY_FEATURE = new Map<String, SObjectField>{
-        'AttendanceToServiceSession' => ServiceDelivery__c.ServiceSession__c
-    };
+    private AttendanceService service = new AttendanceService();
+
+    private SObjectField attendanceStatus = ServiceDelivery__c.AttendanceStatus__c;
+    private Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>();
     private Map<SObjectType, List<SObject>> sObjectsByType = new Map<SObjectType, List<SObject>>();
+    private static Map<String, SObjectField> LOOKUP_FIELD_BY_FEATURE = new Map<String, SObjectField>{
+        'AttendanceToContact' => ServiceDelivery__c.Contact__c,
+        'AttendanceToService' => ServiceDelivery__c.Service__c,
+        'AttendanceToServiceSession' => ServiceDelivery__c.ServiceSession__c,
+        'AttendanceToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
+    };
     private Set<SObjectField> lookupFields {
         get {
             if (lookupFields == null) {
-                lookupFields = retrieveLookupFields();
+                lookupFields = getLookupFields();
             }
 
             return lookupFields;
         }
         set;
     }
-    private Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>();
-    private SObjectField attendanceStatus = ServiceDelivery__c.AttendanceStatus__c;
-    private AttendanceService service = new AttendanceService();
 
     public void execute() {
         if (!Trigger.isExecuting) {
@@ -69,7 +73,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
 
     private void extractRecordIdsToRecalculate(SObject oldRecord, SObject newRecord) {
         Object oldValue = oldRecord == null ? null : oldRecord.get(attendanceStatus);
-        Object newValue = newRecord.get(attendanceStatus);
+        Object newValue = newRecord == null ? null : newRecord.get(attendanceStatus);
 
         if (oldValue == newValue) {
             return;
@@ -77,7 +81,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
 
         for (SObjectField lookupField : lookupFields) {
             Id oldId = (Id) (oldRecord == null ? null : oldRecord.get(lookupField));
-            Id newId = (Id) newRecord.get(lookupField);
+            Id newId = (Id) (newRecord == null ? null : newRecord.get(lookupField));
 
             if (oldValue == newValue && oldId == newId) {
                 continue;
@@ -99,17 +103,16 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
     }
 
-    private Set<SObjectField> retrieveLookupFields() {
+    private Set<SObjectField> getLookupFields() {
         Set<SObjectField> fields = new Set<SObjectField>();
-        List<FeatureGate__mdt> features = [
-            SELECT DeveloperName
-            FROM FeatureGate__mdt
-            WHERE DeveloperName LIKE 'Attendance%' AND IsActive__c = TRUE
-        ];
+        List<FeatureGate__mdt> features = FeatureGate__mdt.getAll().values();
 
         for (FeatureGate__mdt feature : features) {
             System.debug(feature.DeveloperName);
-            if (LOOKUP_FIELD_BY_FEATURE.containsKey(feature.DeveloperName)) {
+            if (
+                feature.IsActive__c &&
+                LOOKUP_FIELD_BY_FEATURE.containsKey(feature.DeveloperName)
+            ) {
                 fields.add(LOOKUP_FIELD_BY_FEATURE.get(feature.DeveloperName));
             }
         }

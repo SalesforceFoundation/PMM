@@ -17,10 +17,16 @@ public with sharing class AttendanceService {
 
     private static final String DEFAULT_STATUS = 'Present';
     private static final Map<SObjectField, SObjectField> TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
-        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumPresentServiceDeliveries__c
+        ServiceDelivery__c.Service__c => Service__c.NumPresentServiceDeliveries__c,
+        ServiceDelivery__c.Contact__c => Contact.NumPresentServiceDeliveries__c,
+        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumPresentServiceDeliveries__c,
+        ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.NumPresentServiceDeliveries__c
     };
     private static final Map<SObjectField, SObjectField> TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
-        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumAbsentServiceDeliveries__c
+        ServiceDelivery__c.Service__c => Service__c.NumAbsentServiceDeliveries__c,
+        ServiceDelivery__c.Contact__c => Contact.NumAbsentServiceDeliveries__c,
+        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumAbsentServiceDeliveries__c,
+        ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.NumAbsentServiceDeliveries__c
     };
 
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
@@ -33,6 +39,16 @@ public with sharing class AttendanceService {
         ServiceParticipant__c.Contact__c => ServiceDelivery__c.Contact__c,
         ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c
     };
+
+    public Map<String, List<String>> statusBuckets {
+        get {
+            if (statusBuckets == null) {
+                statusBuckets = getStatusBuckets();
+            }
+            return statusBuckets;
+        }
+        set;
+    }
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
         return createRows(sessionId);
@@ -48,43 +64,6 @@ public with sharing class AttendanceService {
             Database.rollback(savepoint);
             throw new ServiceDeliveryException(ex);
         }
-    }
-
-    public Map<String, List<String>> statusBuckets {
-        get {
-            if (statusBuckets == null) {
-                statusBuckets = new Map<String, List<String>>();
-                BucketedField__mdt attendanceStatusBucketedField = BucketedField__mdt.getAll()
-                    .get('AttendanceStatuses');
-
-                List<Bucket__mdt> buckets = [
-                    SELECT
-                        Id,
-                        DeveloperName,
-                        BucketedField__r.Field__r.QualifiedApiName,
-                        (SELECT Id, Value__c FROM BucketedValues__r)
-                    FROM Bucket__mdt
-                    WHERE BucketedField__c = :attendanceStatusBucketedField.Id
-                ];
-                // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
-                // with SOQL for this layer.
-
-                for (Bucket__mdt bucket : buckets) {
-                    statusBuckets.put(bucket.DeveloperName, new List<String>());
-                    for (BucketedValue__mdt value : bucket.BucketedValues__r) {
-                        statusBuckets.get(bucket.DeveloperName).add(value.Value__c);
-                    }
-                }
-
-                // TODO: this actually supports /n/ buckets, wheras our calcs really only support "Present" and "Absent",
-                // so maybe we should query directly for thos instead of going via the field key on line 58.
-                // Note the top-level would still be useful for health check-ing un-used or non-existent picklist values.
-
-                System.debug(JSON.serialize(statusBuckets));
-            }
-            return statusBuckets;
-        }
-        set;
     }
 
     public void rollup(Map<SObjectField, Set<Id>> recordIdsByLookupField) {
@@ -260,6 +239,27 @@ public with sharing class AttendanceService {
         }
 
         return (ServiceDelivery__c) deliveryRecord;
+    }
+
+    private Map<String, List<String>> getStatusBuckets() {
+        Map<String, List<String>> buckets = new Map<String, List<String>>();
+
+        // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
+        // with SOQL for this layer.
+        for (Bucket__mdt bucket : attendanceSelector.getAttendanceBuckets()) {
+            buckets.put(bucket.DeveloperName, new List<String>());
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                buckets.get(bucket.DeveloperName).add(value.Value__c);
+            }
+        }
+
+        // TODO: this actually supports /n/ buckets, wheras our calcs really only support "Present" and "Absent",
+        // so maybe we should query directly for those instead of going via the field key on line 58.
+        // Note the top-level would still be useful for health check-ing un-used or non-existent picklist values.
+
+        System.debug(JSON.serialize(buckets));
+
+        return buckets;
     }
 
     public class ServiceDeliveryException extends Exception {

@@ -50,6 +50,43 @@ public with sharing class AttendanceService {
         }
     }
 
+    public Map<String, List<String>> statusBuckets {
+        get {
+            if (statusBuckets == null) {
+                statusBuckets = new Map<String, List<String>>();
+                BucketedField__mdt attendanceStatusBucketedField = BucketedField__mdt.getAll()
+                    .get('AttendanceStatuses');
+
+                List<Bucket__mdt> buckets = [
+                    SELECT
+                        Id,
+                        DeveloperName,
+                        BucketedField__r.Field__r.QualifiedApiName,
+                        (SELECT Id, Value__c FROM BucketedValues__r)
+                    FROM Bucket__mdt
+                    WHERE BucketedField__c = :attendanceStatusBucketedField.Id
+                ];
+                // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
+                // with SOQL for this layer.
+
+                for (Bucket__mdt bucket : buckets) {
+                    statusBuckets.put(bucket.DeveloperName, new List<String>());
+                    for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                        statusBuckets.get(bucket.DeveloperName).add(value.Value__c);
+                    }
+                }
+
+                // TODO: this actually supports /n/ buckets, wheras our calcs really only support "Present" and "Absent",
+                // so maybe we should query directly for thos instead of going via the field key on line 58.
+                // Note the top-level would still be useful for health check-ing un-used or non-existent picklist values.
+
+                System.debug(JSON.serialize(statusBuckets));
+            }
+            return statusBuckets;
+        }
+        set;
+    }
+
     public void rollup(Map<SObjectField, Set<Id>> recordIdsByLookupField) {
         Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
 
@@ -57,11 +94,8 @@ public with sharing class AttendanceService {
             return;
         }
 
-        List<String> presentStatuses = new List<String>{ 'Present' };
-        List<String> absentStatuses = new List<String>{
-            'Unexcused Absence',
-            'Excused Absence'
-        };
+        List<String> presentStatuses = statusBuckets.get('Present');
+        List<String> absentStatuses = statusBuckets.get('Absent');
         List<String> allStatuses = new List<String>();
         allStatuses.addAll(presentStatuses);
         allStatuses.addAll(absentStatuses);

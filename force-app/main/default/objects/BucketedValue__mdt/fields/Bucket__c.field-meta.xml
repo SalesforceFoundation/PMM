@@ -7,7 +7,7 @@
     <label>Bucket</label>
     <referenceTo>Bucket__mdt</referenceTo>
     <relationshipLabel>Bucketed Values</relationshipLabel>
-    <relationshipName>Bucketed_Values</relationshipName>
+    <relationshipName>BucketedValues</relationshipName>
     <required>true</required>
     <type>MetadataRelationship</type>
     <unique>false</unique>

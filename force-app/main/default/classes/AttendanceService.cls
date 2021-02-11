@@ -40,7 +40,8 @@ public with sharing class AttendanceService {
         ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c
     };
 
-    public Map<String, List<String>> statusBuckets {
+    @TestVisible
+    private Map<String, List<String>> statusBuckets {
         get {
             if (statusBuckets == null) {
                 statusBuckets = getStatusBuckets();
@@ -85,6 +86,15 @@ public with sharing class AttendanceService {
                 targetObjectById
             );
 
+            System.assert(
+                systemAccess.getAttendanceRecords(
+                    targetField,
+                    idsByLookupFieldToTarget.get(targetField),
+                    allStatuses
+                ) != null,
+                'attendanceRecords'
+            );
+
             for (
                 ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
                     targetField,
@@ -115,27 +125,6 @@ public with sharing class AttendanceService {
         }
 
         systemAccess.updateRecords(targetObjectById.values());
-    }
-
-    private void addDefaultTargetObjects(
-        SObjectField targetField,
-        Set<Id> targetIds,
-        Map<Id, SObject> targetObjectById
-    ) {
-        SObjectField attendedField = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(
-            targetField
-        );
-        SObjectField absentField = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
-
-        for (Id targetId : targetIds) {
-            SObject targetObject = targetObjectById.get(targetId);
-            if (targetObject == null) {
-                targetObject = targetId.getSObjectType().newSObject(targetId);
-                targetObjectById.put(targetId, targetObject);
-                targetObject.put(attendedField, null);
-                targetObject.put(absentField, null);
-            }
-        }
     }
 
     public Map<String, Boolean> checkFieldPermissions() {
@@ -272,6 +261,27 @@ public with sharing class AttendanceService {
         }
 
         return buckets;
+    }
+
+    private void addDefaultTargetObjects(
+        SObjectField targetField,
+        Set<Id> targetIds,
+        Map<Id, SObject> targetObjectById
+    ) {
+        SObjectField attendedField = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(
+            targetField
+        );
+        SObjectField absentField = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+
+        for (Id targetId : targetIds) {
+            SObject targetObject = targetObjectById.get(targetId);
+            if (targetObject == null) {
+                targetObject = targetId.getSObjectType().newSObject(targetId);
+                targetObjectById.put(targetId, targetObject);
+                targetObject.put(attendedField, null);
+                targetObject.put(absentField, null);
+            }
+        }
     }
 
     public class ServiceDeliveryException extends Exception {

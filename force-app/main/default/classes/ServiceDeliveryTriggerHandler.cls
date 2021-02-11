@@ -1,4 +1,5 @@
 public with sharing class ServiceDeliveryTriggerHandler {
+    @TestVisible
     private AttendanceService service = new AttendanceService();
 
     private SObjectField attendanceStatus = ServiceDelivery__c.AttendanceStatus__c;
@@ -26,7 +27,13 @@ public with sharing class ServiceDeliveryTriggerHandler {
             return;
         }
 
-        switch on Trigger.operationType {
+        delegate(Trigger.operationType);
+        service.rollup(recordIdsByLookupField);
+    }
+
+    @TestVisible
+    private void delegate(TriggerOperation operationType) {
+        switch on operationType {
             when AFTER_DELETE {
                 handleAfterDelete();
             }
@@ -43,8 +50,6 @@ public with sharing class ServiceDeliveryTriggerHandler {
                 return;
             }
         }
-
-        service.rollup(recordIdsByLookupField);
     }
 
     private void handleAfterDelete() {
@@ -71,6 +76,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
     }
 
+    @TestVisible
     private void extractRecordIdsToRecalculate(SObject oldRecord, SObject newRecord) {
         Object oldValue = oldRecord == null ? null : oldRecord.get(attendanceStatus);
         Object newValue = newRecord == null ? null : newRecord.get(attendanceStatus);

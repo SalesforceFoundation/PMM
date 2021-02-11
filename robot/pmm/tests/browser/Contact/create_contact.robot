@@ -5,9 +5,12 @@ Library         cumulusci.robotframework.PageObjects
 ...             robot/pmm/resources/pmm.py
 ...             robot/pmm/resources/ContactPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -22,6 +25,7 @@ Setup Test Data
 *** Test Cases ***
 Create a Contact 
     [Documentation]                        This test creates a Contact and verifies the details of the contact
+    [tags]                                 perm:admin   perm:manage      perm:deliver    feature:Contact
     Go To PMM App
     Go To Page                             Listing                              Contact
     Click Object Button                    New

@@ -5,10 +5,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSchedulePageObject.py
 ...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -29,7 +31,7 @@ Max number of service session
     [Documentation]                 Validates that only 500 sessions are created when entering a higher value on Screen1.
     ...                             Validates that a warning message is displayed on Screen2  and is removed when one service session
     ...                             is deleted.
-    [tags]                           W-8559800       feature:Service Schedule
+    [tags]                           W-8559800      perm:admin   perm:manage       feature:Service Schedule
     Go To PMM App   
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New

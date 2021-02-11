@@ -7,9 +7,12 @@ Library         cumulusci.robotframework.PageObjects
 ...             robot/pmm/resources/ProgramEngagementPageObject.py
 ...             robot/pmm/resources/ServiceDeliveryPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -35,7 +38,7 @@ Setup Test Data
 *** Test Cases ***
 Add contact to program quick action
      [Documentation]                  Add a contact to a program using quick action and verify the record
-     [tags]                           W-037575  feature:Program Engagement
+     [tags]                           W-037575    perm:admin   perm:manage      perm:deliver    feature:Program Engagement
      Go To PMM App
      Go To Page                       Details                                 Contact              object_id=${contact}[Id]
      page should contain              ${contact}[Name]
@@ -56,7 +59,7 @@ Add contact to program quick action
      
 Add service delivery on a contact
      [Documentation]                  Add a service delivery on a contact and verify the record
-     [tags]                           W-037575  feature:Service Delivery
+     [tags]                           W-037575    perm:admin   perm:manage     perm:deliver    feature:Service Delivery
      Go To Page                       Details                                 Contact                  object_id=${contact}[Id]
      page should contain              ${contact}[Name]
      Click Quick Action Button        Create New Service Delivery

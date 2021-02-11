@@ -27,10 +27,8 @@ Setup Test Data
     Set suite variable          ${program}
 
 *** Test Cases ***
-Create a new Service
-    [Documentation]                        This test creates a new Service record and verifies that the Service record
-    ...                                    has all the values in the dialog.
-    [tags]                                  perm:admin   perm:manage        feature:Service
+Create Service from top nav
+    [tags]                                  perm:admin   perm:manage 
      Go To PMM App
      Go To Page                             Listing                     ${ns}Service__c
      Click Object Button                    New

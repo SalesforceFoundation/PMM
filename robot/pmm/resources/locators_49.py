@@ -1,4 +1,4 @@
-""" Locators for summer'20 """
+""" Locators for summer'21 """
 
 from locators_51 import pmm_lex_locators
 import copy

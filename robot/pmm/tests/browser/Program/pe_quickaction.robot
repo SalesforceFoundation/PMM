@@ -38,9 +38,7 @@ Setup Test Data
 
 *** Test Cases ***
 Add contact to program quick action on Program
-     [Documentation]                  Add a contact to a program using quick action and verify that the Program Engagement
-     ...                              related list is updated.
-     [tags]                           perm:admin    perm:manage    perm:deliver           feature: Program Engagement
+     [tags]                           perm:admin    perm:manage    perm:deliver
      Go To PMM App
      Go To Page                       Details                                 Program__c                    object_id=${program}[Id]
      page should contain              ${program}[Name]

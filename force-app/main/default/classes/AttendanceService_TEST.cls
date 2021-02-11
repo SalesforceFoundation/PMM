@@ -95,6 +95,35 @@ public with sharing class AttendanceService_TEST {
     }
 
     @IsTest
+    private static void shouldNotCountWhenIdIsNull() {
+        String getAttendanceRecords = 'getAttendanceRecords';
+        Contact contactRecord = new Contact(
+            Id = TestUtil.mockId(Contact.SObjectType),
+            NumPresentServiceDeliveries__c = null,
+            NumAbsentServiceDeliveries__c = null
+        );
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
+        };
+        systemAccessStub.withReturnValue(
+            getAttendanceRecords,
+            new List<Type>{ SObjectField.class, Set<Id>.class, List<String>.class },
+            new List<ServiceDelivery__c>{
+                new ServiceDelivery__c(Contact__c = null, AttendanceStatus__c = 'Present')
+            }
+        );
+        service.systemAccess = (AttendanceSystemAccess) systemAccessStub.createMock();
+
+        service.rollup(idsByLookupFieldToTarget);
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ contactRecord }
+        );
+    }
+
+    @IsTest
     private static void shouldIncrementAbsentCountWhenAbsentRecordFound() {
         String getAttendanceRecords = 'getAttendanceRecords';
         Contact contactRecord = new Contact(

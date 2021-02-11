@@ -16,7 +16,7 @@ public with sharing class AttendanceService {
     private AttendanceSystemAccess systemAccess = new AttendanceSystemAccess();
 
     private static final String DEFAULT_STATUS = 'Present';
-    private static final Map<SObjectField, SObjectField> TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+    private static final Map<SObjectField, SObjectField> TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
         ServiceDelivery__c.Service__c => Service__c.NumPresentServiceDeliveries__c,
         ServiceDelivery__c.Contact__c => Contact.NumPresentServiceDeliveries__c,
         ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumPresentServiceDeliveries__c,
@@ -86,15 +86,6 @@ public with sharing class AttendanceService {
                 targetObjectById
             );
 
-            System.assert(
-                systemAccess.getAttendanceRecords(
-                    targetField,
-                    idsByLookupFieldToTarget.get(targetField),
-                    allStatuses
-                ) != null,
-                'attendanceRecords'
-            );
-
             for (
                 ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
                     targetField,
@@ -103,11 +94,14 @@ public with sharing class AttendanceService {
                 )
             ) {
                 Id targetId = (Id) delivery.get(targetField);
+                if (targetId == null) {
+                    continue;
+                }
                 SObject targetObject = targetObjectById.get(targetId);
                 SObjectField field;
 
                 if (presentStatuses.contains(delivery.AttendanceStatus__c)) {
-                    field = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(targetField);
+                    field = TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
                 } else if (absentStatuses.contains(delivery.AttendanceStatus__c)) {
                     field = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
                 }
@@ -268,9 +262,7 @@ public with sharing class AttendanceService {
         Set<Id> targetIds,
         Map<Id, SObject> targetObjectById
     ) {
-        SObjectField attendedField = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(
-            targetField
-        );
+        SObjectField attendedField = TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
         SObjectField absentField = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
 
         for (Id targetId : targetIds) {

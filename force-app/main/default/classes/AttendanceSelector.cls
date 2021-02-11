@@ -10,7 +10,9 @@
 public with sharing class AttendanceSelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
+    @TestVisible
     private static final String ABSENT = 'Absent';
+    @TestVisible
     private static final String PRESENT = 'Present';
 
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
@@ -109,6 +111,7 @@ public with sharing class AttendanceSelector {
                 (SELECT Id, Value__c FROM BucketedValues__r)
             FROM Bucket__mdt
             WHERE QualifiedApiName IN :bucketNames
+            ORDER BY QualifiedApiName
         ];
     }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * Copyright (c) 2021, salesforce.com, inc.
  *  * All rights reserved.
  *  * SPDX-License-Identifier: BSD-3-Clause
  *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
@@ -22,6 +22,11 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
     private static final String ABSENCE_STATUS = 'Excused Absence';
     private static ServiceDelivery__c oldRecord = new ServiceDelivery__c();
     private static ServiceDelivery__c newRecord = new ServiceDelivery__c();
+
+    @TestSetup
+    private static void createServiceData() {
+        TestDataFactory.generateAttendanceData('Monthly');
+    }
 
     ////////// Unit Tests //////////
 
@@ -210,11 +215,6 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         ];
     }
 
-    @TestSetup
-    private static void createServiceData() {
-        TestDataFactory.generateAttendanceData('Monthly');
-    }
-
     @IsTest
     private static void shouldNotRollupWhenNotATrigger() {
         handler.service = (AttendanceService) serviceStub.createMock();
@@ -237,7 +237,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         requery();
 
         // The attendance records were inserted in the setupTest method
-        System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
+        System.assertEquals(2, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(1, contactRecord.NumAbsentServiceDeliveries__c);
         System.assertEquals(1, service.NumPresentServiceDeliveries__c);
         System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
@@ -260,7 +260,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
         requery();
 
-        System.assertEquals(2, contactRecord.NumPresentServiceDeliveries__c);
+        System.assertEquals(3, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(null, contactRecord.NumAbsentServiceDeliveries__c);
         System.assertEquals(2, service.NumPresentServiceDeliveries__c);
         System.assertEquals(null, service.NumAbsentServiceDeliveries__c);
@@ -282,7 +282,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
         requery();
 
-        System.assertEquals(null, contactRecord.NumPresentServiceDeliveries__c);
+        System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(1, contactRecord.NumAbsentServiceDeliveries__c);
         System.assertEquals(null, service.NumPresentServiceDeliveries__c);
         System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
@@ -305,7 +305,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
         requery();
 
-        System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
+        System.assertEquals(2, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(1, contactRecord.NumAbsentServiceDeliveries__c);
         System.assertEquals(1, service.NumPresentServiceDeliveries__c);
         System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
@@ -322,7 +322,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
     private static void setupTest() {
         requery();
 
-        System.assertEquals(null, contactRecord.NumPresentServiceDeliveries__c);
+        System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(null, contactRecord.NumAbsentServiceDeliveries__c);
         System.assertEquals(null, service.NumPresentServiceDeliveries__c);
         System.assertEquals(null, service.NumAbsentServiceDeliveries__c);

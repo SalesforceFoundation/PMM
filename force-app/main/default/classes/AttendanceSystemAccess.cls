@@ -1,3 +1,15 @@
+/*
+ *
+ *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
+/*
+ * We must bypass sharing in order to rollup all detail records to the parent entity.
+ */
 public without sharing class AttendanceSystemAccess {
     private QueryBuilder queryBuilder = new QueryBuilder();
 

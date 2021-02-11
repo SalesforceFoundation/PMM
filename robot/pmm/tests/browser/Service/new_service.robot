@@ -28,7 +28,9 @@ Setup Test Data
 
 *** Test Cases ***
 Create Service from top nav
-    [tags]                                  perm:admin   perm:manage 
+    [Documentation]                        This test creates Service record and verifies that the Service record
+    ...                                    has all the values from the form
+    [tags]                                  perm:admin   perm:manage    feature:Service
      Go To PMM App
      Go To Page                             Listing                     ${ns}Service__c
      Click Object Button                    New

@@ -29,6 +29,8 @@ Setup Test Data
 *** Test Cases ***
 
 Create Service from Program Object
+    [Documentation]                  On Program detail record, clicks New button on Service related list, populates the field on 
+    ...                              the dialog and Saves. Validates that the Service related list is updated with the new record
     [tags]                                  perm:admin   perm:manage     feature:Service
      Go To PMM App
      Go To Page                             Details                 Program__c            object_id=${program}[Id]

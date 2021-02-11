@@ -31,7 +31,7 @@ Setup Test Data
 Create a Program via UI
     [Documentation]                        This test creates Program and verifies that the Program record
     ...                                    has all the values from the form
-    [tags]                                 perm:admin   perm:manage
+    [tags]                                 perm:admin   perm:manage         feature:Program
     Go To PMM App
     Go To Page                              Listing                               ${ns}Program__c
     Click Object Button                     New

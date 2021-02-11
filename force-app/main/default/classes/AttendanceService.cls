@@ -66,11 +66,9 @@ public with sharing class AttendanceService {
         }
     }
 
-    public void rollup(Map<SObjectField, Set<Id>> recordIdsByParent) {
-        System.debug(recordIdsByParent);
+    public void rollup(Map<SObjectField, Set<Id>> idsByTargetField) {
         Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
-
-        if (recordIdsByParent == null || recordIdsByParent.isEmpty()) {
+        if (idsByTargetField == null || idsByTargetField.isEmpty()) {
             return;
         }
 
@@ -80,71 +78,60 @@ public with sharing class AttendanceService {
         allStatuses.addAll(presentStatuses);
         allStatuses.addAll(absentStatuses);
 
-        for (SObjectField lookupField : recordIdsByParent.keySet()) {
-            List<ServiceDelivery__c> childServiceDeliveries = systemAccess.getAttendanceRecords(
-                lookupField,
-                recordIdsByParent.get(lookupField),
-                allStatuses
+        for (SObjectField targetField : idsByTargetField.keySet()) {
+            addDefaultTargetObjects(
+                targetField,
+                idsByTargetField.get(targetField),
+                targetObjectById
             );
 
-            Set<Id> parentIdsUpdated = new Set<Id>();
-
-            for (ServiceDelivery__c delivery : childServiceDeliveries) {
-                Id targetId = (Id) delivery.get(lookupField);
-
-                parentIdsUpdated.add(targetId);
-
+            for (
+                ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
+                    targetField,
+                    idsByTargetField.get(targetField),
+                    allStatuses
+                )
+            ) {
+                Id targetId = (Id) delivery.get(targetField);
                 SObject targetObject = targetObjectById.get(targetId);
-
-                if (targetObject == null) {
-                    targetObject = targetId.getSObjectType().newSObject(targetId);
-                    targetObject.put(
-                        TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(lookupField),
-                        null
-                    );
-                    targetObject.put(
-                        TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupField),
-                        null
-                    );
-                    targetObjectById.put(targetId, targetObject);
-                }
-
                 SObjectField field;
+
                 if (presentStatuses.contains(delivery.AttendanceStatus__c)) {
-                    field = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(lookupField);
+                    field = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(targetField);
                 } else if (absentStatuses.contains(delivery.AttendanceStatus__c)) {
-                    field = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupField);
+                    field = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
                 }
 
-                try {
-                    Integer count = targetObject.get(field) == null
-                        ? 0
-                        : (Integer) targetObject.get(field);
-                    count++;
-                    targetObject.put(field, count);
-                } catch (Exception ex) {
-                    System.debug(ex.getMessage());
+                if (field == null) {
+                    return;
                 }
-            }
 
-            // Fill in for parents who lost all their children so weren't returned in the SD Query
-            for (Id parentId : recordIdsByParent.get(lookupField)) {
-                if (!parentIdsUpdated.contains(parentId)) {
-                    SObject targetObject = parentId.getSObjectType().newSObject(parentId);
-                    targetObject.put(
-                        TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(lookupField),
-                        null
-                    );
-                    targetObject.put(
-                        TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupField),
-                        null
-                    );
-                    targetObjectById.put(parentId, targetObject);
-                }
+                targetObject.put(field, ((Integer) targetObject.get(field)) + 1);
             }
         }
 
         systemAccess.updateRecords(targetObjectById.values());
+    }
+
+    private void addDefaultTargetObjects(
+        SObjectField targetField,
+        Set<Id> targetIds,
+        Map<Id, SObject> targetObjectById
+    ) {
+        SObjectField attendedField = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(
+            targetField
+        );
+        SObjectField absentField = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+
+        for (Id targetId : targetIds) {
+            SObject targetObject = targetObjectById.get(targetId);
+            if (targetObject == null) {
+                targetObject = targetId.getSObjectType().newSObject(targetId);
+                targetObjectById.put(targetId, targetObject);
+                targetObject.put(attendedField, 0);
+                targetObject.put(absentField, 0);
+            }
+        }
     }
 
     public Map<String, Boolean> checkFieldPermissions() {

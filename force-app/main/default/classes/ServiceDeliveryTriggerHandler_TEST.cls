@@ -43,16 +43,15 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         refreshData();
 
         System.assertEquals(null, contact.NumPresentServiceDeliveries__c);
-        //TODO : fix expect vs actual position
-        System.assertEquals(contact.NumAbsentServiceDeliveries__c, null);
-        System.assertEquals(service.NumPresentServiceDeliveries__c, null);
-        System.assertEquals(service.NumAbsentServiceDeliveries__c, null);
-        System.assertEquals(sessions[0].NumPresentServiceDeliveries__c, null);
-        System.assertEquals(sessions[0].NumAbsentServiceDeliveries__c, null);
-        System.assertEquals(sessions[1].NumPresentServiceDeliveries__c, null);
-        System.assertEquals(sessions[1].NumAbsentServiceDeliveries__c, null);
-        System.assertEquals(programEngagement.NumPresentServiceDeliveries__c, null);
-        System.assertEquals(programEngagement.NumAbsentServiceDeliveries__c, null);
+        System.assertEquals(null, contact.NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, service.NumPresentServiceDeliveries__c);
+        System.assertEquals(null, service.NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, sessions[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, sessions[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, sessions[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, sessions[1].NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, programEngagement.NumPresentServiceDeliveries__c);
+        System.assertEquals(null, programEngagement.NumAbsentServiceDeliveries__c);
 
         List<ServiceDelivery__c> serviceDeliveries = new List<ServiceDelivery__c>{
             new ServiceDelivery__c(

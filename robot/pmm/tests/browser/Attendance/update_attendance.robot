@@ -5,10 +5,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSessionPageObject.py
 ...            robot/pmm/resources/BulkServiceDeliveryPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -41,12 +43,9 @@ Setup Test Data
 *** Test Cases ***
 Update attendance when service session status is Pending
     [Documentation]                 This test updates attendance for a service session record with Pending Status
-    [tags]                          W-8607484  feature:Attendance
+    [tags]                          W-8607484   perm:admin   perm:manage    feature:Attendance
     Go To PMM App
-    Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session1}[Id]
-    Page Should Contain Text        ${contact1}[Name]
-    Page Should Contain Text        ${contact2}[Name]
-    Page Should Contain Text        ${contact3}[Name]          
+    Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]         
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
     Populate Attendance Field           2      Hours                10
@@ -58,15 +57,15 @@ Update attendance when service session status is Pending
     Reload Page
     Page Should Contain             Present
     Verify Details                  Status          contains        Complete
+    Page Should Contain Text        ${contact1}[Name]
+    Page Should Contain Text        ${contact2}[Name]
+    Page Should Contain Text        ${contact3}[Name] 
     
 Update attendance when service session status is Complete
     [Documentation]                 This test updates attendance for a service session record with Complete Status
-    [tags]                          W-8611541  feature:Attendance
+    [tags]                          W-8611541    perm:admin   perm:manage     feature:Attendance
     Go To PMM App
-    Go To Page                      Details         ${ns}ServiceSession__c        object_id=${service_session2}[Id]
-    Page Should Contain Text        ${contact1}[Name]
-    Page Should Contain Text        ${contact2}[Name]
-    Page Should Contain Text        ${contact3}[Name]
+    Go To Page                      Details         ServiceSession__c        object_id=${service_session2}[Id]
     Click Button                    Update
     Page Should Contain             Track Attendance         
     Populate Attendance Field           1      Hours                10
@@ -77,3 +76,6 @@ Update attendance when service session status is Complete
     Verify Toast Message            Saved 3 Service Delivery records.
     Page Should Contain             Present
     Page Should Contain             Created Date
+    Page Should Contain Text        ${contact1}[Name]
+    Page Should Contain Text        ${contact2}[Name]
+    Page Should Contain Text        ${contact3}[Name]

@@ -7,10 +7,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceDeliveryPageObject.py
 ...            robot/pmm/resources/ProgramEngagementPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -39,7 +41,7 @@ Setup Test Data
 Create program engagement from BSDT
     [Documentation]                         This test adds service deliveries on bulk service delivery by creating
     ...                                     a new PE on bsdt page
-    [tags]                                  W-040316   feature:Service Delivery
+    [tags]                                  W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To PMM App
     Go To Page                              Custom                              Bulk_Service_Deliveries
     Populate Bsdt Lookup                    1           Client                  ${contact}[FirstName] ${contact}[LastName]

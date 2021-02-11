@@ -5,7 +5,7 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSchedulePageObject.py
 ...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
-...             Open test browser            useralias=${test_user}             AND
+...             Open test browser            useralias=${test_user}        AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
@@ -36,28 +36,11 @@ Setup Test Data
 
 
 *** Test Cases ***
-Add Service Participant quick action
-    [Documentation]                        Navigates to service schedule details page, creates two PE using API and clicks on Add service
-    ...                                    Participants quick action, add more participants and Save. Validates that the contact name is 
-    ...                                    displayed on the service schedule page
-    [tags]                                 W-8720124     perm:admin   perm:manage         feature:Service Schedule
+View Perms Add Service Participant quick action
+    [Documentation]                        Logged in as a non admin user with view perm sets, navigates to service schedule details page, clicks on Add service
+    ...                                    Participants quick action, and validates that a warning message is displayed
+    [tags]                                 unstable         perm:view      feature:Service Schedule
     Go To PMM App   
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
-    API Create Program Engagement   ${Program}[Id]  ${contact2}[Id]
-    API Create Program Engagement   ${Program}[Id]  ${contact3}[Id]
-    Reload Page
-    Page Should Contain                     ${service_schedule}[Name]
     Click Quick Action Button               Add More Participants
-    Load Page Object                        New             ServiceSchedule__c
-    Verify Wizard Screen Title              Add Service Participants
-    Select Service Participant              ${contact2}[Name]
-    Select Service Participant              ${contact3}[Name]
-    Click Dialog Button                     Add Service Participants    
-    Validate Participant Is Added           ${contact1}[Name]
-    Validate Participant Is Added           ${contact2}[Name]
-    Validate Participant Is Added           ${contact3}[Name]
-    Click Dialog Button                     Save
-    Wait Until Modal is Closed
-    Page Should Contain                     ${service_participant1}[Name]
-    Page Should Contain                     ${contact2}[Name] - ${service_schedule}[Name]
-    Page Should Contain                     ${contact3}[Name] - ${service_schedule}[Name]
+    Page Should Contain                     You don't have access to this information. Ask your admin for help.

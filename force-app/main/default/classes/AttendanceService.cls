@@ -66,9 +66,9 @@ public with sharing class AttendanceService {
         }
     }
 
-    public void rollup(Map<SObjectField, Set<Id>> idsByTargetField) {
+    public void rollup(Map<SObjectField, Set<Id>> idsByLookupFieldToTarget) {
         Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
-        if (idsByTargetField == null || idsByTargetField.isEmpty()) {
+        if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {
             return;
         }
 
@@ -78,17 +78,17 @@ public with sharing class AttendanceService {
         allStatuses.addAll(presentStatuses);
         allStatuses.addAll(absentStatuses);
 
-        for (SObjectField targetField : idsByTargetField.keySet()) {
+        for (SObjectField targetField : idsByLookupFieldToTarget.keySet()) {
             addDefaultTargetObjects(
                 targetField,
-                idsByTargetField.get(targetField),
+                idsByLookupFieldToTarget.get(targetField),
                 targetObjectById
             );
 
             for (
                 ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
                     targetField,
-                    idsByTargetField.get(targetField),
+                    idsByLookupFieldToTarget.get(targetField),
                     allStatuses
                 )
             ) {
@@ -106,7 +106,11 @@ public with sharing class AttendanceService {
                     return;
                 }
 
-                targetObject.put(field, ((Integer) targetObject.get(field)) + 1);
+                Integer count = targetObject.get(field) == null
+                    ? 0
+                    : (Integer) targetObject.get(field);
+                count++;
+                targetObject.put(field, count);
             }
         }
 
@@ -128,8 +132,8 @@ public with sharing class AttendanceService {
             if (targetObject == null) {
                 targetObject = targetId.getSObjectType().newSObject(targetId);
                 targetObjectById.put(targetId, targetObject);
-                targetObject.put(attendedField, 0);
-                targetObject.put(absentField, 0);
+                targetObject.put(attendedField, null);
+                targetObject.put(absentField, null);
             }
         }
     }

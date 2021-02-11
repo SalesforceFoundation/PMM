@@ -75,7 +75,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
         Object oldValue = oldRecord == null ? null : oldRecord.get(attendanceStatus);
         Object newValue = newRecord == null ? null : newRecord.get(attendanceStatus);
 
-        if (oldValue == newValue) {
+        if (oldValue == null && newValue == null) {
             return;
         }
 

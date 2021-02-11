@@ -80,10 +80,10 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
 
         for (SObjectField lookupField : lookupFields) {
-            Id oldId = (Id) (oldRecord == null ? null : oldRecord.get(lookupField));
-            Id newId = (Id) (newRecord == null ? null : newRecord.get(lookupField));
+            Id oldParentId = (Id) (oldRecord == null ? null : oldRecord.get(lookupField));
+            Id newParentId = (Id) (newRecord == null ? null : newRecord.get(lookupField));
 
-            if (oldValue == newValue && oldId == newId) {
+            if (oldValue == newValue && oldParentId == newParentId) {
                 continue;
             }
 
@@ -93,12 +93,12 @@ public with sharing class ServiceDeliveryTriggerHandler {
                 recordIdsByLookupField.put(lookupField, recordIds);
             }
 
-            if (oldId != null) {
-                recordIds.add(oldId);
+            if (oldParentId != null) {
+                recordIds.add(oldParentId);
             }
 
-            if (newId != null) {
-                recordIds.add(newId);
+            if (newParentId != null) {
+                recordIds.add(newParentId);
             }
         }
     }
@@ -108,7 +108,6 @@ public with sharing class ServiceDeliveryTriggerHandler {
         List<FeatureGate__mdt> features = FeatureGate__mdt.getAll().values();
 
         for (FeatureGate__mdt feature : features) {
-            System.debug(feature.DeveloperName);
             if (
                 feature.IsActive__c &&
                 LOOKUP_FIELD_BY_FEATURE.containsKey(feature.DeveloperName)

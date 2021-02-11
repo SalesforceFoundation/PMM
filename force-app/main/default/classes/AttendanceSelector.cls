@@ -99,6 +99,8 @@ public with sharing class AttendanceSelector {
             Util.prefixNamespace(PRESENT)
         };
 
+        // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
+        // with SOQL for this layer.
         return [
             SELECT
                 Id,

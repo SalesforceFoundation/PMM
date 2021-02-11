@@ -21,8 +21,6 @@ public without sharing class AttendanceSystemAccess {
             )
             .withOrderBy(String.valueOf(field));
 
-        System.debug(queryBuilder.buildSoqlQuery());
-
         return Database.query(queryBuilder.buildSoqlQuery());
     }
 

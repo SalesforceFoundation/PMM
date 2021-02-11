@@ -66,10 +66,11 @@ public with sharing class AttendanceService {
         }
     }
 
-    public void rollup(Map<SObjectField, Set<Id>> recordIdsByLookupField) {
+    public void rollup(Map<SObjectField, Set<Id>> recordIdsByParent) {
+        System.debug(recordIdsByParent);
         Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
 
-        if (recordIdsByLookupField == null || recordIdsByLookupField.isEmpty()) {
+        if (recordIdsByParent == null || recordIdsByParent.isEmpty()) {
             return;
         }
 
@@ -79,24 +80,36 @@ public with sharing class AttendanceService {
         allStatuses.addAll(presentStatuses);
         allStatuses.addAll(absentStatuses);
 
-        for (SObjectField lookupField : recordIdsByLookupField.keySet()) {
-            for (
-                ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
-                    lookupField,
-                    recordIdsByLookupField.get(lookupField),
-                    allStatuses
-                )
-            ) {
+        for (SObjectField lookupField : recordIdsByParent.keySet()) {
+            List<ServiceDelivery__c> childServiceDeliveries = systemAccess.getAttendanceRecords(
+                lookupField,
+                recordIdsByParent.get(lookupField),
+                allStatuses
+            );
+
+            Set<Id> parentIdsUpdated = new Set<Id>();
+
+            for (ServiceDelivery__c delivery : childServiceDeliveries) {
                 Id targetId = (Id) delivery.get(lookupField);
+
+                parentIdsUpdated.add(targetId);
+
                 SObject targetObject = targetObjectById.get(targetId);
 
                 if (targetObject == null) {
                     targetObject = targetId.getSObjectType().newSObject(targetId);
+                    targetObject.put(
+                        TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(lookupField),
+                        null
+                    );
+                    targetObject.put(
+                        TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupField),
+                        null
+                    );
                     targetObjectById.put(targetId, targetObject);
                 }
 
                 SObjectField field;
-
                 if (presentStatuses.contains(delivery.AttendanceStatus__c)) {
                     field = TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(lookupField);
                 } else if (absentStatuses.contains(delivery.AttendanceStatus__c)) {
@@ -111,6 +124,22 @@ public with sharing class AttendanceService {
                     targetObject.put(field, count);
                 } catch (Exception ex) {
                     System.debug(ex.getMessage());
+                }
+            }
+
+            // Fill in for parents who lost all their children so weren't returned in the SD Query
+            for (Id parentId : recordIdsByParent.get(lookupField)) {
+                if (!parentIdsUpdated.contains(parentId)) {
+                    SObject targetObject = parentId.getSObjectType().newSObject(parentId);
+                    targetObject.put(
+                        TOTAL_ATTENDED_FIELD_BY_LOOKUP_FIELD.get(lookupField),
+                        null
+                    );
+                    targetObject.put(
+                        TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupField),
+                        null
+                    );
+                    targetObjectById.put(parentId, targetObject);
                 }
             }
         }
@@ -244,20 +273,12 @@ public with sharing class AttendanceService {
     private Map<String, List<String>> getStatusBuckets() {
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
-        // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
-        // with SOQL for this layer.
         for (Bucket__mdt bucket : attendanceSelector.getAttendanceBuckets()) {
             buckets.put(bucket.DeveloperName, new List<String>());
             for (BucketedValue__mdt value : bucket.BucketedValues__r) {
                 buckets.get(bucket.DeveloperName).add(value.Value__c);
             }
         }
-
-        // TODO: this actually supports /n/ buckets, wheras our calcs really only support "Present" and "Absent",
-        // so maybe we should query directly for those instead of going via the field key on line 58.
-        // Note the top-level would still be useful for health check-ing un-used or non-existent picklist values.
-
-        System.debug(JSON.serialize(buckets));
 
         return buckets;
     }

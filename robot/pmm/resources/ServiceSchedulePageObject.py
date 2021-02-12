@@ -139,13 +139,12 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
 
     def set_end_date(self, date, value):
         """ On Screen1 of wizard, enters a service session end date that is different from the start date """
-        locator = pmm_lex_locators["service_schedule"]["first_session_end"].format(
-            date
-        )
+        locator = pmm_lex_locators["service_schedule"]["first_session_end"].format(date)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
         self.selenium.clear_element_text(locator)
         self.selenium.get_webelement(locator).send_keys(value)
+
 
 @pageobject("Details", "ServiceSchedule__c")
 class ServiceScheduleDetailPage(BasePMMPage, DetailPage):

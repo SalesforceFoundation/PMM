@@ -5,9 +5,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSchedulePageObject.py
 ...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data

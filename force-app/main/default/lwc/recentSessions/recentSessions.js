@@ -214,27 +214,29 @@ export default class RecentSessions extends LightningElement {
                         let sessions = result;
 
                         // eslint-disable-next-line guard-for-in
-                        for (let sessionStartDate in sessions) {
+                        Object.keys(sessions).forEach(sessionStartDateValue => {
                             //Here we are creating the array to iterate on UI.
                             let currentDate = new Date();
                             this._sessionsData.push({
-                                sessionStartDate: sessionStartDate,
+                                sessionStartDate:
+                                    sessions[sessionStartDateValue][0].SessionStart__c,
                                 sessions: JSON.parse(
-                                    JSON.stringify(sessions[sessionStartDate])
+                                    JSON.stringify(sessions[sessionStartDateValue])
                                 ),
                                 openCurrentSection:
-                                    new Date(sessionStartDate).getDate() ===
-                                    currentDate.getDate(),
+                                    new Date(
+                                        sessions[sessionStartDateValue][0].SessionStart__c
+                                    ).getDate() === currentDate.getDate(),
                                 totalSessions:
-                                    sessions[sessionStartDate].length === 1
-                                        ? sessions[sessionStartDate].length +
+                                    sessions[sessionStartDateValue].length === 1
+                                        ? sessions[sessionStartDateValue].length +
                                           " " +
                                           this.objectLabel
-                                        : sessions[sessionStartDate].length +
+                                        : sessions[sessionStartDateValue].length +
                                           " " +
                                           this.objectLabelPlural,
                             });
-                        }
+                        });
                         this.filter();
                         this.hasLoaded = true;
                     }

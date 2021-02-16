@@ -220,13 +220,17 @@ export default class RecentSessions extends LightningElement {
                             let currentDate = new Date();
                             this._sessionsData.push({
                                 sessionStartDate:
-                                    sessions[sessionStartDateValue][0][SESSION_START_FIELD.fieldApiName],
+                                    sessions[sessionStartDateValue][0][
+                                        SESSION_START_FIELD.fieldApiName
+                                    ],
                                 sessions: JSON.parse(
                                     JSON.stringify(sessions[sessionStartDateValue])
                                 ),
                                 openCurrentSection:
                                     new Date(
-                                        sessions[sessionStartDateValue][0][SESSION_START_FIELD.fieldApiName]
+                                        sessions[sessionStartDateValue][0][
+                                            SESSION_START_FIELD.fieldApiName
+                                        ]
                                     ).getDate() === currentDate.getDate(),
                                 totalSessions:
                                     sessions[sessionStartDateValue].length === 1

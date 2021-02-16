@@ -23,6 +23,7 @@ import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
 import NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
+import SESSION_START_FIELD from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 
 import getFieldByFieldPath from "@salesforce/apex/FieldSetController.getFieldByFieldPath";
 
@@ -219,13 +220,13 @@ export default class RecentSessions extends LightningElement {
                             let currentDate = new Date();
                             this._sessionsData.push({
                                 sessionStartDate:
-                                    sessions[sessionStartDateValue][0].SessionStart__c,
+                                    sessions[sessionStartDateValue][0][SESSION_START_FIELD.fieldApiName],
                                 sessions: JSON.parse(
                                     JSON.stringify(sessions[sessionStartDateValue])
                                 ),
                                 openCurrentSection:
                                     new Date(
-                                        sessions[sessionStartDateValue][0].SessionStart__c
+                                        sessions[sessionStartDateValue][0][SESSION_START_FIELD.fieldApiName]
                                     ).getDate() === currentDate.getDate(),
                                 totalSessions:
                                     sessions[sessionStartDateValue].length === 1

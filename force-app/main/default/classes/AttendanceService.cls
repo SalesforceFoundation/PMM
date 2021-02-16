@@ -12,8 +12,22 @@ public with sharing class AttendanceService {
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
+    @TestVisible
+    private AttendanceSystemAccess systemAccess = new AttendanceSystemAccess();
 
     private static final String DEFAULT_STATUS = 'Present';
+    private static final Map<SObjectField, SObjectField> TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceDelivery__c.Service__c => Service__c.NumPresentServiceDeliveries__c,
+        ServiceDelivery__c.Contact__c => Contact.NumPresentServiceDeliveries__c,
+        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumPresentServiceDeliveries__c,
+        ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.NumPresentServiceDeliveries__c
+    };
+    private static final Map<SObjectField, SObjectField> TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceDelivery__c.Service__c => Service__c.NumAbsentServiceDeliveries__c,
+        ServiceDelivery__c.Contact__c => Contact.NumAbsentServiceDeliveries__c,
+        ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumAbsentServiceDeliveries__c,
+        ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.NumAbsentServiceDeliveries__c
+    };
 
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
@@ -25,6 +39,17 @@ public with sharing class AttendanceService {
         ServiceParticipant__c.Contact__c => ServiceDelivery__c.Contact__c,
         ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c
     };
+
+    @TestVisible
+    private Map<String, List<String>> statusBuckets {
+        get {
+            if (statusBuckets == null) {
+                statusBuckets = getStatusBuckets();
+            }
+            return statusBuckets;
+        }
+        set;
+    }
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
         return createRows(sessionId);
@@ -40,6 +65,60 @@ public with sharing class AttendanceService {
             Database.rollback(savepoint);
             throw new ServiceDeliveryException(ex);
         }
+    }
+
+    public void rollup(Map<SObjectField, Set<Id>> idsByLookupFieldToTarget) {
+        Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
+        if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {
+            return;
+        }
+
+        List<String> presentStatuses = statusBuckets.get('Present');
+        List<String> absentStatuses = statusBuckets.get('Absent');
+        List<String> allStatuses = new List<String>();
+        allStatuses.addAll(presentStatuses);
+        allStatuses.addAll(absentStatuses);
+
+        for (SObjectField targetField : idsByLookupFieldToTarget.keySet()) {
+            addDefaultTargetObjects(
+                targetField,
+                idsByLookupFieldToTarget.get(targetField),
+                targetObjectById
+            );
+
+            for (
+                ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
+                    targetField,
+                    idsByLookupFieldToTarget.get(targetField),
+                    allStatuses
+                )
+            ) {
+                Id targetId = (Id) delivery.get(targetField);
+                if (targetId == null) {
+                    continue;
+                }
+                SObject targetObject = targetObjectById.get(targetId);
+                SObjectField field;
+
+                if (presentStatuses.contains(delivery.AttendanceStatus__c)) {
+                    field = TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+                } else if (absentStatuses.contains(delivery.AttendanceStatus__c)) {
+                    field = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+                }
+
+                if (field == null) {
+                    return;
+                }
+
+                Integer count = targetObject.get(field) == null
+                    ? 0
+                    : (Integer) targetObject.get(field);
+                count++;
+                targetObject.put(field, count);
+            }
+        }
+
+        systemAccess.updateRecords(targetObjectById.values());
     }
 
     public Map<String, Boolean> checkFieldPermissions() {
@@ -163,6 +242,38 @@ public with sharing class AttendanceService {
         }
 
         return (ServiceDelivery__c) deliveryRecord;
+    }
+
+    private Map<String, List<String>> getStatusBuckets() {
+        Map<String, List<String>> buckets = new Map<String, List<String>>();
+
+        for (Bucket__mdt bucket : attendanceSelector.getAttendanceBuckets()) {
+            buckets.put(bucket.DeveloperName, new List<String>());
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                buckets.get(bucket.DeveloperName).add(value.Value__c);
+            }
+        }
+
+        return buckets;
+    }
+
+    private void addDefaultTargetObjects(
+        SObjectField targetField,
+        Set<Id> targetIds,
+        Map<Id, SObject> targetObjectById
+    ) {
+        SObjectField attendedField = TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+        SObjectField absentField = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+
+        for (Id targetId : targetIds) {
+            SObject targetObject = targetObjectById.get(targetId);
+            if (targetObject == null) {
+                targetObject = targetId.getSObjectType().newSObject(targetId);
+                targetObjectById.put(targetId, targetObject);
+                targetObject.put(attendedField, null);
+                targetObject.put(absentField, null);
+            }
+        }
     }
 
     public class ServiceDeliveryException extends Exception {

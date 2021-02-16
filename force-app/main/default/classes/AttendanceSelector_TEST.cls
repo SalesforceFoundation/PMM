@@ -114,6 +114,27 @@ public with sharing class AttendanceSelector_TEST {
     }
 
     @IsTest
+    private static void getAttendanceBucketsReturnsPackagedBuckets() {
+        List<Bucket__mdt> buckets = selector.getAttendanceBuckets();
+
+        System.assertEquals(
+            2,
+            buckets.size(),
+            'Expected the 2 packaged attendance records to be returned.'
+        );
+        System.assertEquals(
+            AttendanceSelector.ABSENT,
+            buckets[0].DeveloperName,
+            'Expected the Absent bucket to be returned first.'
+        );
+        System.assertEquals(
+            AttendanceSelector.PRESENT,
+            buckets[1].DeveloperName,
+            'Expected the Present bucket to be returned second.'
+        );
+    }
+
+    @IsTest
     private static void returnsEmptyDeliveryListWithoutReadAccess() {
         User standardUser = TestUtil.getTestUser();
         Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;

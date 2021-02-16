@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <label>Roll up Attendance to Service</label>
+    <label>Unexcused Absence</label>
     <protected>false</protected>
     <values>
-        <field>IsActive__c</field>
-        <value xsi:type="xsd:boolean">true</value>
+        <field>Bucket__c</field>
+        <value xsi:type="xsd:string">Absent</value>
+    </values>
+    <values>
+        <field>Value__c</field>
+        <value xsi:type="xsd:string">Unexcused Absence</value>
     </values>
 </CustomMetadata>

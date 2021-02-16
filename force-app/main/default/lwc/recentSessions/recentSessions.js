@@ -23,6 +23,7 @@ import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
 import NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
+import SESSION_START_FIELD from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 
 import getFieldByFieldPath from "@salesforce/apex/FieldSetController.getFieldByFieldPath";
 
@@ -214,27 +215,33 @@ export default class RecentSessions extends LightningElement {
                         let sessions = result;
 
                         // eslint-disable-next-line guard-for-in
-                        for (let sessionStartDate in sessions) {
+                        Object.keys(sessions).forEach(sessionStartDateValue => {
                             //Here we are creating the array to iterate on UI.
                             let currentDate = new Date();
                             this._sessionsData.push({
-                                sessionStartDate: sessionStartDate,
+                                sessionStartDate:
+                                    sessions[sessionStartDateValue][0][
+                                        SESSION_START_FIELD.fieldApiName
+                                    ],
                                 sessions: JSON.parse(
-                                    JSON.stringify(sessions[sessionStartDate])
+                                    JSON.stringify(sessions[sessionStartDateValue])
                                 ),
                                 openCurrentSection:
-                                    new Date(sessionStartDate).getDate() ===
-                                    currentDate.getDate(),
+                                    new Date(
+                                        sessions[sessionStartDateValue][0][
+                                            SESSION_START_FIELD.fieldApiName
+                                        ]
+                                    ).getDate() === currentDate.getDate(),
                                 totalSessions:
-                                    sessions[sessionStartDate].length === 1
-                                        ? sessions[sessionStartDate].length +
+                                    sessions[sessionStartDateValue].length === 1
+                                        ? sessions[sessionStartDateValue].length +
                                           " " +
                                           this.objectLabel
-                                        : sessions[sessionStartDate].length +
+                                        : sessions[sessionStartDateValue].length +
                                           " " +
                                           this.objectLabelPlural,
                             });
-                        }
+                        });
                         this.filter();
                         this.hasLoaded = true;
                     }

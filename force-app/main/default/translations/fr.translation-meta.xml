@@ -406,7 +406,7 @@
     </customLabels>
     <customLabels>
         <name>Selected_Records</name>
-        <label>Enregistrements sélectionnés</label>
+        <label>Enregistrements sélectionnés </label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
@@ -450,7 +450,7 @@
     </customLabels>
     <customLabels>
         <name>Total_Sessions</name>
-        <label>Nombre total de sessions</label>
+        <label>Nombre total de sessions </label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>

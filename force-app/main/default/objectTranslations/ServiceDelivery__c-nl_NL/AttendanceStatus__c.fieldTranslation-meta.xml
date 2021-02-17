@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AttendanceStatus__c</name>
+    <label>Aanwezigheidsstatus</label>
+    <picklistValues>
+        <masterLabel>Present</masterLabel>
+        <translation>Aanwezig</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Unexcused Absence</masterLabel>
+        <translation>Afwezig zonder geldige reden</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Excused Absence</masterLabel>
+        <translation>Afwezig met geldige reden</translation>
+    </picklistValues>
+</CustomFieldTranslation>

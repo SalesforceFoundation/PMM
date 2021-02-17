@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>CreateServiceSessionRecords__c</name>
-    <help>Cuando se selecciona, se crean registros para cada Sesión de servicio.</help>
-    <label>Crear registros de Sesión de servicio</label>
+    <help>Cuando se selecciona, se crearán registros de sesiones de servicio automáticamente.</help>
+    <label>Crear sesiones de servicio</label>
 </CustomFieldTranslation>

@@ -51,6 +51,10 @@
         "Deploy Folder of Unmanaged Reports": {
             "message": "Bereitstellen des Ordners für nicht verwaltete Berichte",
             "description": "title of installation step"
+        },
+        "Recover Deleted Report": {
+            "message": "Gelöschten Bericht wiederherstellen",
+            "description": "title of installation step"
         }
     },
     "checks": {
@@ -60,6 +64,10 @@
         },
         "Please install Program Management Module in your org prior to installing reports.": {
             "message": "Bitte installieren Sie das Program Management Module in Ihrer Organisation, bevor Sie Berichte installieren.",
+            "description": "shown if validation fails"
+        },
+        "Program Management Module requires Chatter. Please enable Chatter in your org and try again.": {
+            "message": "Für das Program Management Module ist Chatter erforderlich. Aktivieren Sie Chatter in Ihrer Organisation, und versuchen Sie es noch einmal.",
             "description": "shown if validation fails"
         }
     },
@@ -79,6 +87,16 @@
         "error_message": {
             "message": "Um Hilfe zu diesem Fehler zu erhalten, navigieren Sie zu [help.salesforce.com](https://help.salesforce.com/), suchen Sie den Support & Services-Bereich, und öffnen Sie ein Ticket beim technischen Support bei Salesforce. Geben Sie „PMM“ in die Betreffzeile ein, und schließen Sie in Ihren Kommentar den hier abgebildeten Installationslink ein.",
             "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:recover-deleted-report": {
+        "title": {
+            "message": "Gelöschten Program Management Module-Bericht wiederherstellen",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Dieses Installationsprogramm ist darauf ausgelegt, Upgradeprobleme zu beheben, die durch einen gelöschten Bericht des Program Management Moduls (Clients Enrolled This Month, In diesem Monat registrierte Kunden) verursacht werden. Führen Sie dieses Installationsprogramm nur auf Aufforderung durch den Salesforce-Support hin aus.",
+            "description": "shown before user starts installation (markdown)"
         }
     }
 }

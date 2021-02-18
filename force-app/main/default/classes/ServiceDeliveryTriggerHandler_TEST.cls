@@ -194,7 +194,12 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     private static void requery() {
         contactRecord = [
-            SELECT Id, NumPresentServiceDeliveries__c, NumAbsentServiceDeliveries__c
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                LastServiceDate__c,
+                ConsecutiveAbsences__c
             FROM Contact
             LIMIT 1
         ];
@@ -206,10 +211,16 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         sessions = [
             SELECT Id, NumPresentServiceDeliveries__c, NumAbsentServiceDeliveries__c
             FROM ServiceSession__c
+            ORDER BY SessionStart__c ASC
             LIMIT 2
         ];
         programEngagement = [
-            SELECT Id, NumPresentServiceDeliveries__c, NumAbsentServiceDeliveries__c
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                LastServiceDate__c,
+                ConsecutiveAbsences__c
             FROM ProgramEngagement__c
             LIMIT 1
         ];
@@ -239,6 +250,11 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         // The attendance records were inserted in the setupTest method
         System.assertEquals(2, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(1, contactRecord.NumAbsentServiceDeliveries__c);
+        // System.assertEquals(
+        //     sessions[0].SessionStart__c.date(),
+        //     contactRecord.LastServiceDate__c
+        // );
+        System.assertEquals(1, contactRecord.ConsecutiveAbsences__c);
         System.assertEquals(1, service.NumPresentServiceDeliveries__c);
         System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
         System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
@@ -247,6 +263,11 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         System.assertEquals(1, sessions[1].NumAbsentServiceDeliveries__c);
         System.assertEquals(1, programEngagement.NumPresentServiceDeliveries__c);
         System.assertEquals(1, programEngagement.NumAbsentServiceDeliveries__c);
+        // System.assertEquals(
+        //     sessions[0].SessionStart__c.date(),
+        //     programEngagement.LastServiceDate__c
+        // );
+        System.assertEquals(1, programEngagement.ConsecutiveAbsences__c);
     }
 
     @IsTest
@@ -254,7 +275,8 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         setupTest();
 
         Test.startTest();
-        serviceDeliveries[1].AttendanceStatus__c = 'Present';
+        // this SD was absent
+        serviceDeliveries[1].AttendanceStatus__c = PRESENT_STATUS;
         update serviceDeliveries[1];
         Test.stopTest();
 
@@ -262,6 +284,11 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
         System.assertEquals(3, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(null, contactRecord.NumAbsentServiceDeliveries__c);
+        // System.assertEquals(
+        //     sessions[1].SessionStart__c.date(),
+        //     contactRecord.LastServiceDate__c
+        // );
+        System.assertEquals(0, contactRecord.ConsecutiveAbsences__c);
         System.assertEquals(2, service.NumPresentServiceDeliveries__c);
         System.assertEquals(null, service.NumAbsentServiceDeliveries__c);
         System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
@@ -270,6 +297,11 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         System.assertEquals(null, sessions[1].NumAbsentServiceDeliveries__c);
         System.assertEquals(2, programEngagement.NumPresentServiceDeliveries__c);
         System.assertEquals(null, programEngagement.NumAbsentServiceDeliveries__c);
+        // System.assertEquals(
+        //     sessions[1].SessionStart__c.date(),
+        //     programEngagement.LastServiceDate__c
+        // );
+        System.assertEquals(0, programEngagement.ConsecutiveAbsences__c);
     }
 
     @IsTest
@@ -284,6 +316,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
         System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(1, contactRecord.NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, contactRecord.ConsecutiveAbsences__c);
         System.assertEquals(null, service.NumPresentServiceDeliveries__c);
         System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
         System.assertEquals(null, sessions[0].NumPresentServiceDeliveries__c);
@@ -307,6 +340,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
         System.assertEquals(2, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(1, contactRecord.NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, contactRecord.ConsecutiveAbsences__c);
         System.assertEquals(1, service.NumPresentServiceDeliveries__c);
         System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
         System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
@@ -340,7 +374,8 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
                 Contact__c = contactRecord.Id,
                 ServiceSession__c = sessions[0].Id,
                 ProgramEngagement__c = programEngagement.Id,
-                AttendanceStatus__c = 'Present'
+                AttendanceStatus__c = PRESENT_STATUS,
+                DeliveryDate__c = System.today() - 1
             ),
             new ServiceDelivery__c(
                 Name = 'test2',
@@ -348,7 +383,8 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
                 Contact__c = contactRecord.Id,
                 ServiceSession__c = sessions[1].Id,
                 ProgramEngagement__c = programEngagement.Id,
-                AttendanceStatus__c = 'Excused Absence'
+                AttendanceStatus__c = ABSENCE_STATUS,
+                DeliveryDate__c = System.today()
             )
         };
 

@@ -28,6 +28,10 @@ public with sharing class AttendanceService {
         ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumAbsentServiceDeliveries__c,
         ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.NumAbsentServiceDeliveries__c
     };
+    private static final Map<SObjectField, SObjectField> CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceDelivery__c.Contact__c => Contact.ConsecutiveAbsences__c,
+        ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.ConsecutiveAbsences__c
+    };
 
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
@@ -69,6 +73,7 @@ public with sharing class AttendanceService {
 
     public void rollup(Map<SObjectField, Set<Id>> idsByLookupFieldToTarget) {
         Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
+        Map<Id, Integer> consecutiveAbsencesById = new Map<Id, Integer>();
         if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {
             return;
         }
@@ -93,28 +98,55 @@ public with sharing class AttendanceService {
                     allStatuses
                 )
             ) {
+                System.debug(delivery);
                 Id targetId = (Id) delivery.get(targetField);
                 if (targetId == null) {
                     continue;
                 }
                 SObject targetObject = targetObjectById.get(targetId);
-                SObjectField field;
-
+                SObjectField rollupField;
+                SObjectField consecutiveAbsencesField = CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD.get(
+                    targetField
+                );
+                Integer consecutiveAbsencesCount = consecutiveAbsencesById.get(targetId);
                 if (presentStatuses.contains(delivery.AttendanceStatus__c)) {
-                    field = TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+                    rollupField = TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+
+                    if (consecutiveAbsencesField != null) {
+                        if (consecutiveAbsencesCount == null) {
+                            consecutiveAbsencesById.put(targetId, 0);
+                        }
+                        targetObject.put(
+                            consecutiveAbsencesField,
+                            consecutiveAbsencesCount
+                        );
+                    }
                 } else if (absentStatuses.contains(delivery.AttendanceStatus__c)) {
-                    field = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+                    rollupField = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+
+                    if (consecutiveAbsencesField != null) {
+                        if (consecutiveAbsencesCount == null) {
+                            // nothing counted yet; start counting
+                            consecutiveAbsencesById.put(targetId, 1);
+                        } else if (targetObject.get(consecutiveAbsencesField) == null) {
+                            // hasn't been set in the attended block yet; keep counting
+                            consecutiveAbsencesById.put(
+                                targetId,
+                                consecutiveAbsencesCount + 1
+                            );
+                        }
+                    }
                 }
 
-                if (field == null) {
+                if (rollupField == null) {
                     return;
                 }
 
-                Integer count = targetObject.get(field) == null
+                Integer count = targetObject.get(rollupField) == null
                     ? 0
-                    : (Integer) targetObject.get(field);
+                    : (Integer) targetObject.get(rollupField);
                 count++;
-                targetObject.put(field, count);
+                targetObject.put(rollupField, count);
             }
         }
 
@@ -264,6 +296,9 @@ public with sharing class AttendanceService {
     ) {
         SObjectField attendedField = TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
         SObjectField absentField = TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(targetField);
+        SObjectField consecutiveAbsenceField = CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD.get(
+            targetField
+        );
 
         for (Id targetId : targetIds) {
             SObject targetObject = targetObjectById.get(targetId);
@@ -272,6 +307,9 @@ public with sharing class AttendanceService {
                 targetObjectById.put(targetId, targetObject);
                 targetObject.put(attendedField, null);
                 targetObject.put(absentField, null);
+                if (consecutiveAbsenceField != null) {
+                    targetObject.put(consecutiveAbsenceField, null);
+                }
             }
         }
     }

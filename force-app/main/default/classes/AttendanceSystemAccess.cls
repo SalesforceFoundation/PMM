@@ -23,7 +23,8 @@ public without sharing class AttendanceSystemAccess {
             .withSelectFields(
                 new List<String>{
                     String.valueOf(field),
-                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c)
+                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
+                    String.valueOf(ServiceDelivery__c.DeliveryDate__c)
                 }
             )
             .withSObjectType(ServiceDelivery__c.SObjectType)
@@ -31,7 +32,12 @@ public without sharing class AttendanceSystemAccess {
             .addCondition(
                 String.valueOf(ServiceDelivery__c.AttendanceStatus__c) + ' IN :statuses'
             )
-            .withOrderBy(String.valueOf(field));
+            .withOrderBy(
+                String.valueOf(field) +
+                ', ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' DESC'
+            );
 
         return Database.query(queryBuilder.buildSoqlQuery());
     }

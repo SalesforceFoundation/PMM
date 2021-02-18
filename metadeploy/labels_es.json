@@ -51,6 +51,10 @@
         "Deploy Folder of Unmanaged Reports": {
             "message": "Implementar carpeta de informes sin gestionar",
             "description": "title of installation step"
+        },
+        "Recover Deleted Report": {
+            "message": "Recuperar informe eliminado",
+            "description": "title of installation step"
         }
     },
     "checks": {
@@ -60,6 +64,10 @@
         },
         "Please install Program Management Module in your org prior to installing reports.": {
             "message": "Instale Program Management Module en su organización antes de instalar informes.",
+            "description": "shown if validation fails"
+        },
+        "Program Management Module requires Chatter. Please enable Chatter in your org and try again.": {
+            "message": "Program Management Module requiere Chatter. Active Chatter en su organización e inténtelo de nuevo.",
             "description": "shown if validation fails"
         }
     },
@@ -79,6 +87,16 @@
         "error_message": {
             "message": "Para obtener ayuda sobre este error, diríjase a [help.salesforce.com](https://help.salesforce.com/), encuentre el área Asistencia y Servicios y registre un ticket de asistencia técnica con Salesforce. Incluya “PMM” en la línea de asunto y también en sus comentarios el vínculo de instalación que se muestra aquí.",
             "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:recover-deleted-report": {
+        "title": {
+            "message": "Recuperar informe de Program Management Module eliminado",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Este instalador está diseñado para corregir problemas de actualización provocados por la eliminación de un informe de Program Management Module (Clientes inscritos este mes). No ejecute este instalador a no ser que se lo indique el Servicio de asistencia de Salesforce.",
+            "description": "shown before user starts installation (markdown)"
         }
     }
 }

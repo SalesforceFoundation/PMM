@@ -153,17 +153,37 @@ public with sharing class FieldSetService_TEST {
 
     @IsTest
     private static void shouldReturnCompoundFieldDescribe() {
-        String expectedFieldName = String.valueOf(Contact.Name);
+        String expectedFieldName = String.valueOf(Contact.MailingAddress);
         DescribeFieldResult actualField = new FieldSetService()
             .getCompoundFieldDescribe(
                 SObjectType.Contact,
-                SObjectType.Contact.fields.FirstName
+                SObjectType.Contact.fields.MailingStreet,
+                String.valueOf(Contact.MailingStreet)
             );
 
         System.assertEquals(
             expectedFieldName,
             actualField.getName(),
             'Expected the Compound Field to be returned.'
+        );
+    }
+
+    @IsTest
+    private static void shouldReturnCompoundFieldDescribeFromRelatedObject() {
+        String expectedFieldName = String.valueOf(Contact.MailingAddress);
+        DescribeFieldResult actualField = new FieldSetService()
+            .getCompoundFieldDescribe(
+                SObjectType.ProgramEngagement__c,
+                SObjectType.Contact.fields.MailingStreet,
+                ProgramEngagement__c.Contact__c.getDescribe().getRelationshipName() +
+                '.' +
+                String.valueOf(Contact.MailingStreet)
+            );
+
+        System.assertEquals(
+            expectedFieldName,
+            actualField.getName(),
+            'Expected the Compound Field from the related object to be returned.'
         );
     }
 

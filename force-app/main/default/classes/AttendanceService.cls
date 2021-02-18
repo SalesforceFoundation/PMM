@@ -135,7 +135,7 @@ public with sharing class AttendanceService {
                                 consecutiveAbsencesField
                             );
                             targetObject.put(
-                                consecutiveAbsenceField,
+                                consecutiveAbsencesField,
                                 consecutiveAbsencesCount++
                             );
                         }

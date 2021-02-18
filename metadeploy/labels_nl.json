@@ -51,6 +51,10 @@
         "Deploy Folder of Unmanaged Reports": {
             "message": "Map met onbeheerde rapporten implementeren",
             "description": "title of installation step"
+        },
+        "Recover Deleted Report": {
+            "message": "Verwijderd rapport herstellen",
+            "description": "title of installation step"
         }
     },
     "checks": {
@@ -60,6 +64,10 @@
         },
         "Please install Program Management Module in your org prior to installing reports.": {
             "message": "Installeer de Program Management Module in uw organisatie voordat u rapporten installeert.",
+            "description": "shown if validation fails"
+        },
+        "Program Management Module requires Chatter. Please enable Chatter in your org and try again.": {
+            "message": "Program Management Module vereist Chatter. Schakel Chatter in voor uw organisatie en probeer het opnieuw.",
             "description": "shown if validation fails"
         }
     },
@@ -79,6 +87,16 @@
         "error_message": {
             "message": "Ga voor assistentie bij deze fout naar [help.salesforce.com](https://help.salesforce.com/), zoek het gebied Ondersteuning en services, en leg een ticket voor technische ondersteuning vast bij Salesforce. Vermeld \"PMM\" in de onderwerpregel en neem in uw opmerking de hier getoonde installatiekoppeling op.",
             "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:recover-deleted-report": {
+        "title": {
+            "message": "Verwijderd Program Management Module-rapport herstellen",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Het installatieprogramma is ontwikkeld voor het corrigeren van upgradeproblemen die zijn veroorzaakt door het verwijderen van een Program Management Module-rapport (klanten deze maand ingeschreven). Voer dit installatieprogramma niet uit tenzij u hiervoor instructies ontvangt van de Salesforce-klantenservice.",
+            "description": "shown before user starts installation (markdown)"
         }
     }
 }

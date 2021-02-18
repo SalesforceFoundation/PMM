@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Stage__c</fullName>
-    <description>These Picklist values describe a Contact&#39;s stage of engagement in a Program and are displayed in a Path. Values are determined by your Admin.</description>
+    <description>A Contact&#39;s stage in a Program Engagement. Picklist values are determined by your Admin. Don&#39;t delete or modify the API Name of the Active And Enrolled picklist values as they are referenced in PMM reports.</description>
     <externalId>false</externalId>
     <inlineHelpText>These Picklist values describe a Contact&#39;s stage of engagement in a Program and are displayed in a Path. Values are determined by your Admin.</inlineHelpText>
     <label>Stage</label>

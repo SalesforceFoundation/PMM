@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>DefaultServiceQuantity__c</name>
+    <help>Die Standard-Leistungsmenge, die eine Leistungserbringung wiedergibt, wenn die Teilnahme nachverfolgt wird.</help>
+    <label>Standard-Leistungsmenge</label>
+</CustomFieldTranslation>

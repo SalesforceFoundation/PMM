@@ -5,9 +5,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSchedulePageObject.py
 ...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -37,12 +40,13 @@ Add Service Participant quick action
     [Documentation]                        Navigates to service schedule details page, creates two PE using API and clicks on Add service
     ...                                    Participants quick action, add more participants and Save. Validates that the contact name is 
     ...                                    displayed on the service schedule page
-    [tags]                                 W-8720124        feature:Service Schedule
+    [tags]                                 W-8720124     perm:admin   perm:manage         feature:Service Schedule
     Go To PMM App   
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
     API Create Program Engagement   ${Program}[Id]  ${contact2}[Id]
     API Create Program Engagement   ${Program}[Id]  ${contact3}[Id]
     Reload Page
+    Page Should Contain                     ${service_schedule}[Name]
     Click Quick Action Button               Add More Participants
     Load Page Object                        New             ServiceSchedule__c
     Verify Wizard Screen Title              Add Service Participants

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
+        <name>accordionSection_ToggleInstructionsWhenOpen</name>
+        <label>Cliquez pour masquer la section. Cette section est ouverte.</label>
+    </customLabels>
+    <customLabels>
+        <name>accordionSection_ToggleInstructionsWhenClosed</name>
+        <label>Cliquez pour afficher la section. Cette section n’est pas ouverte.</label>
+    </customLabels>
+    <customLabels>
         <name>Add_Entry</name>
         <label>Ajouter une entrée</label>
     </customLabels>
     <customLabels>
         <name>Add_Record</name>
         <label>Ajouter {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Service_Participants_Success</name>
+        <label>{0} participants au service ajoutés.</label>
     </customLabels>
     <customLabels>
         <name>Add_Service_Delivery</name>
@@ -25,6 +37,26 @@
         <label>Anonyme</label>
     </customLabels>
     <customLabels>
+        <name>TrackAttendance</name>
+        <label>Suivre les présences</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_Service_Delivery_Success</name>
+        <label>{0} enregistrements de livraison de services enregistrés.</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_Service_Delivery_No_Updates</name>
+        <label>Aucun enregistrement de livraison de services à mettre à jour.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Participants_Header</name>
+        <label>Aucun participant pour le moment</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Participants_Message</name>
+        <label>Une fois les participants ajoutés à ce calendrier de service, suivez leurs présences ici.</label>
+    </customLabels>
+    <customLabels>
         <name>Back</name>
         <label>Retour</label>
     </customLabels>
@@ -34,7 +66,7 @@
     </customLabels>
     <customLabels>
         <name>Clicking_Back_Button_In_Modal_Warning</name>
-        <label>Revenir en arrière ? Les modifications que vous avez apportées sur cette page ne seront pas enregistrées.</label>
+        <label>Les modifications que vous avez apportées sur cette page ne seront pas enregistrées.</label>
     </customLabels>
     <customLabels>
         <name>Clone_Service_Participant</name>
@@ -54,11 +86,23 @@
     </customLabels>
     <customLabels>
         <name>Delete_Future_Sessions</name>
-        <label>Supprimer toutes les sessions futures</label>
+        <label>Supprimer les futures sessions de service</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_Success</name>
+        <label>{0} sessions de service supprimées.</label>
     </customLabels>
     <customLabels>
         <name>Delete_X_Future_Sessions</name>
-        <label>Cette action supprimera {0} futurs enregistrements de session.</label>
+        <label>Cette action supprimera {0} futurs enregistrements de session de service.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_After</name>
+        <label>Supprimer toutes les sessions de service après cette date :</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_Invalid_Date</name>
+        <label>La date doit être la date du jour ou une date ultérieure.</label>
     </customLabels>
     <customLabels>
         <name>Creating_Service_Session_Warning</name>
@@ -77,8 +121,16 @@
         <label>Terminé</label>
     </customLabels>
     <customLabels>
+        <name>Dont_Track_Attendance</name>
+        <label>Ne pas suivre les présences de ce participant</label>
+    </customLabels>
+    <customLabels>
         <name>Enabled</name>
         <label>Activé</label>
+    </customLabels>
+    <customLabels>
+        <name>End_Date_After_Start_Date</name>
+        <label>{0} doit être avant {1}</label>
     </customLabels>
     <customLabels>
         <name>Error</name>
@@ -93,12 +145,52 @@
         <label>Terminer</label>
     </customLabels>
     <customLabels>
+        <name>Go_Back</name>
+        <label>Revenir en arrière ?</label>
+    </customLabels>
+    <customLabels>
         <name>Insert_Operation_Exception</name>
-        <label>Autorisation refusée pour l&apos;opération d&apos;insertion.</label>
+        <label>Vous ne pouvez pas ajouter cet enregistrement. Demandez de l’aide à votre administrateur.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Operation_Exception</name>
+        <label>Vous ne pouvez pas supprimer cet enregistrement. Demandez de l’aide à votre administrateur.</label>
+    </customLabels>
+    <customLabels>
+        <name>Time_Frame</name>
+        <label>Délai d&apos;exécution</label>
+    </customLabels>
+    <customLabels>
+        <name>Last_Week</name>
+        <label>La semaine dernière</label>
+    </customLabels>
+    <customLabels>
+        <name>List_View</name>
+        <label>Vue de liste</label>
+    </customLabels>
+    <customLabels>
+        <name>List_Views</name>
+        <label>Vues de liste</label>
+    </customLabels>
+    <customLabels>
+        <name>Loading</name>
+        <label>Chargement</label>
+    </customLabels>
+    <customLabels>
+        <name>Last_Day_Of_Month</name>
+        <label>le dernier jour</label>
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
         <label>Votre requête doit inclure un objet.</label>
+    </customLabels>
+    <customLabels>
+        <name>Monthly_On_Day</name>
+        <label>le {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Monthly_On_The</name>
+        <label>Tous les mois le {0} {1}</label>
     </customLabels>
     <customLabels>
         <name>New_Program_Engagement</name>
@@ -113,12 +205,20 @@
         <label>Suivant</label>
     </customLabels>
     <customLabels>
+        <name>No_Permission_Message</name>
+        <label>Vous n’avez pas accès à cette information. Demandez de l’aide à votre administrateur.</label>
+    </customLabels>
+    <customLabels>
         <name>No_Service_On_BSDT</name>
         <label>Le champ Service doit être inclus dans l’ensemble de champs Livraisons de services en masse pour enregistrer les enregistrements. Demandez de l’aide à votre administrateur.</label>
     </customLabels>
     <customLabels>
         <name>No_Service_Participants_Created_Warning</name>
-        <label>Aucun contact n’est sélectionné, donc aucun participant au service ne sera créé.</label>
+        <label>Aucun participant n’est sélectionné, donc aucun participant au service ne sera créé.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Sessions_Created_Warning</name>
+        <label>Aucune session n’a été ajoutée, donc aucune session de service ne sera créée.</label>
     </customLabels>
     <customLabels>
         <name>No_Services_For_Program_Engagement</name>
@@ -149,8 +249,20 @@
         <label>Précédent</label>
     </customLabels>
     <customLabels>
+        <name>Print</name>
+        <label>Imprimer</label>
+    </customLabels>
+    <customLabels>
+        <name>Printable_View</name>
+        <label>Vue Imprimable</label>
+    </customLabels>
+    <customLabels>
         <name>Quantity</name>
         <label>Quantité</label>
+    </customLabels>
+    <customLabels>
+        <name>RecentSessions</name>
+        <label>Sessions récentes</label>
     </customLabels>
     <customLabels>
         <name>Record_Deleted</name>
@@ -171,6 +283,10 @@
     <customLabels>
         <name>Rows_With_Errors</name>
         <label>Certaines lignes de livraison de services contiennent des erreurs.</label>
+    </customLabels>
+    <customLabels>
+        <name>Update</name>
+        <label>Mettre à jour</label>
     </customLabels>
     <customLabels>
         <name>Save</name>
@@ -202,7 +318,7 @@
     </customLabels>
     <customLabels>
         <name>Select_Create_Service_Session_Warning</name>
-        <label>L&apos;option Créer enregistrements Session de service n’est pas sélectionnée, donc aucun enregistrement ne sera créé. Cliquez sur Ajouter une session de service pour ajouter des enregistrements Session de service.</label>
+        <label>L’option Créer des sessions de service n’est pas sélectionnée, donc aucun enregistrement ne sera automatiquement créé. Cliquez sur Ajouter une session de service pour ajouter manuellement des enregistrements Session de service.</label>
     </customLabels>
     <customLabels>
         <name>Select_Program_Engagement</name>
@@ -215,6 +331,18 @@
     <customLabels>
         <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
         <label>Sélectionnez une date de fin du calendrier de service ou un nombre de sessions de service.</label>
+    </customLabels>
+    <customLabels>
+        <name>SkipToStartLink</name>
+        <label>Aller au début de la liste</label>
+    </customLabels>
+    <customLabels>
+        <name>SkipToEndLink</name>
+        <label>Aller à la fin de la liste</label>
+    </customLabels>
+    <customLabels>
+        <name>Day_Required_When_Weekly_Selected</name>
+        <label>Sélectionnez au moins un jour de la semaine.</label>
     </customLabels>
     <customLabels>
         <name>Every_Week</name>
@@ -234,19 +362,43 @@
     </customLabels>
     <customLabels>
         <name>Every_Custom</name>
-        <label>Tous les...</label>
+        <label>Tous les</label>
     </customLabels>
     <customLabels>
         <name>Weeks</name>
         <label>Semaines</label>
     </customLabels>
     <customLabels>
+        <name>Week</name>
+        <label>Semaine</label>
+    </customLabels>
+    <customLabels>
         <name>Days</name>
         <label>Jours</label>
     </customLabels>
     <customLabels>
+        <name>Day</name>
+        <label>Jour</label>
+    </customLabels>
+    <customLabels>
+        <name>List_View_Limit</name>
+        <label>Cette vue de liste contient plus de 2 000 enregistrements. Certains enregistrements peuvent ne pas être affichés.</label>
+    </customLabels>
+    <customLabels>
         <name>Months</name>
         <label>Mois</label>
+    </customLabels>
+    <customLabels>
+        <name>Month</name>
+        <label>Mois</label>
+    </customLabels>
+    <customLabels>
+        <name>Pin_List_View</name>
+        <label>Épingler la vue de liste</label>
+    </customLabels>
+    <customLabels>
+        <name>Pin_Title</name>
+        <label>Pour annuler l’épinglage, épingler une autre vue de liste</label>
     </customLabels>
     <customLabels>
         <name>Years</name>
@@ -254,7 +406,7 @@
     </customLabels>
     <customLabels>
         <name>Selected_Records</name>
-        <label>Enregistrements sélectionnés</label>
+        <label>Enregistrements sélectionnés </label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
@@ -293,8 +445,12 @@
         <label>Nous n’avons pas pu collecter de métriques de télémétrie.</label>
     </customLabels>
     <customLabels>
+        <name>This_Week</name>
+        <label>Semaine en cours</label>
+    </customLabels>
+    <customLabels>
         <name>Total_Sessions</name>
-        <label>Nombre total de sessions</label>
+        <label>Nombre total de sessions </label>
     </customLabels>
     <customLabels>
         <name>Util_Error</name>
@@ -309,9 +465,17 @@
         <label>Vous ne pouvez pas accéder à ce champ. Demandez de l’aide à votre administrateur Salesforce.</label>
     </customLabels>
     <customLabels>
+        <name>UpsertOperationException</name>
+        <label>Vous ne pouvez ni ajouter ni mettre à jour cet enregistrement. Demandez de l’aide à votre administrateur Salesforce.</label>
+    </customLabels>
+    <customLabels>
         <name>Warning</name>
         <label>Avertissement</label>
     </customLabels>
+    <customTabs>
+        <name>Attendance</name>
+        <label>Présence</label>
+    </customTabs>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>Livraisons de services en masse</label>
@@ -331,5 +495,13 @@
     <quickActions>
         <name>Program__c.AddContactToProgram</name>
         <label>Ajouter un contact au programme</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Delete_Future_Sessions</name>
+        <label>Supprimer les futures sessions de service</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Participants</name>
+        <label>Ajouter d’autres participants</label>
     </quickActions>
 </Translations>

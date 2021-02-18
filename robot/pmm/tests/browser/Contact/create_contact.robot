@@ -5,9 +5,12 @@ Library         cumulusci.robotframework.PageObjects
 ...             robot/pmm/resources/pmm.py
 ...             robot/pmm/resources/ContactPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -20,26 +23,23 @@ Setup Test Data
     Set suite variable      ${description}
 
 *** Test Cases ***
-
 Create a Contact 
-
     [Documentation]                        This test creates a Contact and verifies the details of the contact
+    [tags]                                 perm:admin   perm:manage      perm:deliver    feature:Contact
     Go To PMM App
     Go To Page                             Listing                              Contact
     Click Object Button                    New
     Load Page object                       NewContact                           Contact
     verify current page title              New Contact
-    Populate modal Form                    First Name=${first_name}
+    Populate Modal Form                    First Name=${first_name}
     ...                                    Last Name=${last_name}
-    ...                                    Client=checked
     ...                                    Email=user@example.com
-    Click modal button                     Save
+    Save Contact
     Wait Until Modal Is Closed
-    current page should be                 Details                              Contact
-    verify details                         Name                                 contains            ${first_name} ${last_name}
-    verify details                         Email                                contains            user@example.com
-    verify page contains related list      Program Engagements
-    verify page contains related list      Service Deliveries
-    verify page contains related list      Files
+    Verify Details                         Name                                 contains            ${first_name} ${last_name}
+    Verify Details                         Email                                contains            user@example.com
+    Verify Page Contains Related List      Program Engagements
+    Verify Page Contains Related List      Service Deliveries
+    Verify Page Contains Related List      Files
     Verify Page Contains Related List      Service Participants
-    
+    Page Should Contain                    Client

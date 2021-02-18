@@ -7,12 +7,16 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceDeliveryPageObject.py
 ...            robot/pmm/resources/ProgramEngagementPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
+*** Variables ***
+${test_user}             UUser
+
 *** Keywords ***
 Setup Test Data
+    [Documentation]             Creates Service and PE using API and sets the fields required to add service deliveries on BSDT.
     ${ns} =                     Get PMM Namespace Prefix
     Set suite variable          ${ns}
     ${quantity1} =              Generate Random String          2     [NUMBERS]
@@ -53,10 +57,9 @@ Add service delivery on bulk service delivery
     [Documentation]             This test adds two service deliveries on bulk service delivery and 
     ...                         navigates to service delivery listview and verifies that the service delivery 
     ...                         records are displayed
-    [tags]                      W-040316   feature:Service Delivery
+    [tags]                      W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To PMM App
     Go To Page                  Custom                              Bulk_Service_Deliveries
-    Verify Current Page         Bulk Service Deliveries
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
     Populate Bsdt Dropdown      1           Service                 ${service1}[Name]
@@ -82,9 +85,8 @@ Add service delivery on bulk service delivery
 Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no
     ...                         services associated with the program.
-    [tags]                      W-040316   feature:Service Delivery
+    [tags]                      W-040316     perm:admin   perm:manage     perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
-    Verify Current Page         Bulk Service Deliveries
     Populate Bsdt Lookup        1           Client                  ${contact3}[FirstName] ${contact3}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement3}[Name]
     verify error message        No services found, choose another program engagement.
@@ -93,9 +95,8 @@ Verify error message when there are no services associated with the program
 Delete service delivery on bsdt
     [Documentation]             This test creates a service delivery on BSDT and then deletes it, verifies
     ...                         that a warning dialog is displayed when deleted.
-    [tags]                      W-042916   feature:Service Delivery
+    [tags]                      W-042916     perm:admin   perm:manage     perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
-    Verify Current Page         Bulk Service Deliveries
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
     Populate Bsdt Dropdown      1           Service                 ${service1}[Name]

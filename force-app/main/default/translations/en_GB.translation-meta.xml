@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
+        <name>accordionSection_ToggleInstructionsWhenOpen</name>
+        <label>Click to hide the section. This section is open.</label>
+    </customLabels>
+    <customLabels>
+        <name>accordionSection_ToggleInstructionsWhenClosed</name>
+        <label>Click to show the section. This section is not open.</label>
+    </customLabels>
+    <customLabels>
         <name>Add_Entry</name>
         <label>Add Entry</label>
     </customLabels>
     <customLabels>
         <name>Add_Record</name>
         <label>Add {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Service_Participants_Success</name>
+        <label>Added {0} Service Participants.</label>
     </customLabels>
     <customLabels>
         <name>Add_Service_Delivery</name>
@@ -25,6 +37,26 @@
         <label>Anonymous</label>
     </customLabels>
     <customLabels>
+        <name>TrackAttendance</name>
+        <label>Track Attendance</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_Service_Delivery_Success</name>
+        <label>Saved {0} Service Delivery records.</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_Service_Delivery_No_Updates</name>
+        <label>There are no Service Delivery records to update.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Participants_Header</name>
+        <label>No participants yet</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Participants_Message</name>
+        <label>After participants are added to this Service Schedule, track their attendance here.</label>
+    </customLabels>
+    <customLabels>
         <name>Back</name>
         <label>Back</label>
     </customLabels>
@@ -34,7 +66,7 @@
     </customLabels>
     <customLabels>
         <name>Clicking_Back_Button_In_Modal_Warning</name>
-        <label>Go back? Changes you made on this page won&apos;t be saved.</label>
+        <label>Changes you made on this page won&apos;t be saved.</label>
     </customLabels>
     <customLabels>
         <name>Clone_Service_Participant</name>
@@ -54,11 +86,23 @@
     </customLabels>
     <customLabels>
         <name>Delete_Future_Sessions</name>
-        <label>Delete All Future Sessions</label>
+        <label>Delete Future Service Sessions</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_Success</name>
+        <label>Successfully deleted {0} Service Sessions.</label>
     </customLabels>
     <customLabels>
         <name>Delete_X_Future_Sessions</name>
-        <label>This will delete {0} future Session records.</label>
+        <label>This will delete {0} future Service Session records.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_After</name>
+        <label>Delete all Service Sessions after this date:</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_Invalid_Date</name>
+        <label>Date must be today or after.</label>
     </customLabels>
     <customLabels>
         <name>Creating_Service_Session_Warning</name>
@@ -77,8 +121,16 @@
         <label>Done</label>
     </customLabels>
     <customLabels>
+        <name>Dont_Track_Attendance</name>
+        <label>Don&apos;t track attendance for this participant</label>
+    </customLabels>
+    <customLabels>
         <name>Enabled</name>
         <label>Enabled</label>
+    </customLabels>
+    <customLabels>
+        <name>End_Date_After_Start_Date</name>
+        <label>{0} must be before {1}</label>
     </customLabels>
     <customLabels>
         <name>Error</name>
@@ -93,12 +145,52 @@
         <label>Finish</label>
     </customLabels>
     <customLabels>
+        <name>Go_Back</name>
+        <label>Go Back?</label>
+    </customLabels>
+    <customLabels>
         <name>Insert_Operation_Exception</name>
-        <label>Permission Denied for Insert Operation.</label>
+        <label>You can&apos;t add this record. Ask your admin for help.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Operation_Exception</name>
+        <label>You can&apos;t delete this record. Ask your admin for help.</label>
+    </customLabels>
+    <customLabels>
+        <name>Time_Frame</name>
+        <label>Time Frame</label>
+    </customLabels>
+    <customLabels>
+        <name>Last_Week</name>
+        <label>Last Week</label>
+    </customLabels>
+    <customLabels>
+        <name>List_View</name>
+        <label>List View</label>
+    </customLabels>
+    <customLabels>
+        <name>List_Views</name>
+        <label>List Views</label>
+    </customLabels>
+    <customLabels>
+        <name>Loading</name>
+        <label>Loading</label>
+    </customLabels>
+    <customLabels>
+        <name>Last_Day_Of_Month</name>
+        <label>on the Last Day</label>
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
         <label>Your query must include an object.</label>
+    </customLabels>
+    <customLabels>
+        <name>Monthly_On_Day</name>
+        <label>on Day {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Monthly_On_The</name>
+        <label>Monthly on the {0} {1}</label>
     </customLabels>
     <customLabels>
         <name>New_Program_Engagement</name>
@@ -113,12 +205,20 @@
         <label>Next</label>
     </customLabels>
     <customLabels>
+        <name>No_Permission_Message</name>
+        <label>You don&apos;t have access to this information. Ask your admin for help.</label>
+    </customLabels>
+    <customLabels>
         <name>No_Service_On_BSDT</name>
         <label>The Service field must be included in the Bulk Service Deliveries field set to save records. Ask your admin for help.</label>
     </customLabels>
     <customLabels>
         <name>No_Service_Participants_Created_Warning</name>
-        <label>No Contacts are selected, so no Service Participants will be created.</label>
+        <label>No participants are selected, so no Service Participants will be created.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Sessions_Created_Warning</name>
+        <label>No sessions were added, so no Service Sessions will be created.</label>
     </customLabels>
     <customLabels>
         <name>No_Services_For_Program_Engagement</name>
@@ -149,8 +249,20 @@
         <label>Previous</label>
     </customLabels>
     <customLabels>
+        <name>Print</name>
+        <label>Print</label>
+    </customLabels>
+    <customLabels>
+        <name>Printable_View</name>
+        <label>Printable View</label>
+    </customLabels>
+    <customLabels>
         <name>Quantity</name>
         <label>Quantity</label>
+    </customLabels>
+    <customLabels>
+        <name>RecentSessions</name>
+        <label>Recent Sessions</label>
     </customLabels>
     <customLabels>
         <name>Record_Deleted</name>
@@ -171,6 +283,10 @@
     <customLabels>
         <name>Rows_With_Errors</name>
         <label>There are Service Delivery rows with errors.</label>
+    </customLabels>
+    <customLabels>
+        <name>Update</name>
+        <label>Update</label>
     </customLabels>
     <customLabels>
         <name>Save</name>
@@ -202,7 +318,7 @@
     </customLabels>
     <customLabels>
         <name>Select_Create_Service_Session_Warning</name>
-        <label>Create Service Session records isn&apos;t selected, so no records will be created. Click Add Service Session to add Service Session records</label>
+        <label>Create Service Sessions isn&apos;t selected, so no records will be automatically created. Click Add Service Session to manually add Service Session records.</label>
     </customLabels>
     <customLabels>
         <name>Select_Program_Engagement</name>
@@ -215,6 +331,18 @@
     <customLabels>
         <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
         <label>Select either a Service Schedule End Date or a Number of Service Sessions.</label>
+    </customLabels>
+    <customLabels>
+        <name>SkipToStartLink</name>
+        <label>Skip to Start of List</label>
+    </customLabels>
+    <customLabels>
+        <name>SkipToEndLink</name>
+        <label>Skip to End of List</label>
+    </customLabels>
+    <customLabels>
+        <name>Day_Required_When_Weekly_Selected</name>
+        <label>Select at least one day of the week.</label>
     </customLabels>
     <customLabels>
         <name>Every_Week</name>
@@ -234,19 +362,43 @@
     </customLabels>
     <customLabels>
         <name>Every_Custom</name>
-        <label>Every...</label>
+        <label>Every</label>
     </customLabels>
     <customLabels>
         <name>Weeks</name>
         <label>Weeks</label>
     </customLabels>
     <customLabels>
+        <name>Week</name>
+        <label>Week</label>
+    </customLabels>
+    <customLabels>
         <name>Days</name>
         <label>Days</label>
     </customLabels>
     <customLabels>
+        <name>Day</name>
+        <label>Day</label>
+    </customLabels>
+    <customLabels>
+        <name>List_View_Limit</name>
+        <label>This list view has over 2,000 records. Some records may not be shown.</label>
+    </customLabels>
+    <customLabels>
         <name>Months</name>
         <label>Months</label>
+    </customLabels>
+    <customLabels>
+        <name>Month</name>
+        <label>Month</label>
+    </customLabels>
+    <customLabels>
+        <name>Pin_List_View</name>
+        <label>Pin List View</label>
+    </customLabels>
+    <customLabels>
+        <name>Pin_Title</name>
+        <label>To unpin, pin another list view</label>
     </customLabels>
     <customLabels>
         <name>Years</name>
@@ -293,6 +445,10 @@
         <label>We couldn&apos;t collect telemetry metrics.</label>
     </customLabels>
     <customLabels>
+        <name>This_Week</name>
+        <label>This Week</label>
+    </customLabels>
+    <customLabels>
         <name>Total_Sessions</name>
         <label>Total Sessions</label>
     </customLabels>
@@ -309,9 +465,17 @@
         <label>You can&apos;t access this field. Your Salesforce admin can help with that.</label>
     </customLabels>
     <customLabels>
+        <name>UpsertOperationException</name>
+        <label>You can&apos;t add or update this record. Your Salesforce admin can help with that.</label>
+    </customLabels>
+    <customLabels>
         <name>Warning</name>
         <label>Warning</label>
     </customLabels>
+    <customTabs>
+        <name>Attendance</name>
+        <label>Attendance</label>
+    </customTabs>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>Bulk Service Deliveries</label>
@@ -331,5 +495,13 @@
     <quickActions>
         <name>Program__c.AddContactToProgram</name>
         <label>Add Contact to Program</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Delete_Future_Sessions</name>
+        <label>Delete Future Service Sessions</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Participants</name>
+        <label>Add More Participants</label>
     </quickActions>
 </Translations>

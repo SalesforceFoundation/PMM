@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AttendanceStatus__c</name>
+    <label>Attendance Status</label>
+    <picklistValues>
+        <masterLabel>Present</masterLabel>
+        <translation>Present</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Unexcused Absence</masterLabel>
+        <translation>Unexcused Absence</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Excused Absence</masterLabel>
+        <translation>Excused Absence</translation>
+    </picklistValues>
+</CustomFieldTranslation>

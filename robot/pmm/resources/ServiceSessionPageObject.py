@@ -53,7 +53,7 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
         self.selenium.wait_until_location_contains(
             "/view", timeout=60, message="Detail view did not open in 1 min"
         )
-        self.selenium.wait_until_page_contains("Service Session Name")
+        self.selenium.wait_until_page_contains("Service Session Name", timeout=60)
 
     def populate_attendance_field(self, row, label, value):
         """ Populate text field on attendance component given the attendance row number """
@@ -66,15 +66,14 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
         """populate dropdown on attendace row given the attendance row number"""
         locator = pmm_lex_locators["attendance"]["dropdown_field"].format(row, title)
         self.selenium.set_focus_to_element(locator)
+        # self.salesforce._jsclick(locator)
         element_click = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element_click)
-        popup_loc = pmm_lex_locators["bulk_service_delivery_locators"]["select_popup"]
+        popup_loc = pmm_lex_locators["attendance"]["select_popup"].format(row)
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="The dropdown did not open"
         )
-        value_loc = pmm_lex_locators["bulk_service_delivery_locators"][
-            "select_dropdown_value"
-        ].format(value)
+        value_loc = pmm_lex_locators["attendance"]["dropdown_value"].format(row, value)
         element_click = self.selenium.driver.find_element_by_xpath(value_loc)
         self.selenium.driver.execute_script("arguments[0].click()", element_click)
 

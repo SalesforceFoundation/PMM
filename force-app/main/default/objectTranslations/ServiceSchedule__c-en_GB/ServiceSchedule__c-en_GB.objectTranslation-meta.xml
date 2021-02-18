@@ -3,6 +3,10 @@
     <layouts>
         <layout>Service Schedule Layout</layout>
         <sections>
+            <label>Date and Time</label>
+            <section>Date and Time</section>
+        </sections>
+        <sections>
             <label>Custom Links</label>
             <section>Custom Links</section>
         </sections>

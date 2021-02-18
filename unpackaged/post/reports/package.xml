@@ -7,6 +7,8 @@
         <members>ProgramManagementReportsUnpackaged/Service_Deliveries_by_Provider_LastMonth_PEO</members>
         <members>ProgramManagementReportsUnpackaged/My_Service_Deliveries_Last_Month_J5z</members>
         <members>ProgramManagementReportsUnpackaged/My_Service_Delivery_by_Client_Last_Month_nw5</members>
+        <members>ProgramManagementReportsUnpackaged/Past_Sessions_in_Pending_Status_jZH</members>
+        <members>ProgramManagementReportsUnpackaged/Unique_Contacts_Receiving_Service_Year_t_44q</members>
         <name>Report</name>
     </types>
     <version>48.0</version>

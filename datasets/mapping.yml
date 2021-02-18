@@ -348,6 +348,7 @@ ServiceSchedule__c:
         - ParticipantCapacity__c
         - ServiceScheduleEndDate__c
         - ServiceScheduleEnds__c
+        - DefaultServiceQuantity__c
 
     lookups:
         PrimaryServiceProvider__c:
@@ -406,6 +407,7 @@ ServiceDelivery__c:
         - AutonameOverride__c
         - DeliveryDate__c
         - Quantity__c
+        - AttendanceStatus__c
 
     lookups:
         Service__c:

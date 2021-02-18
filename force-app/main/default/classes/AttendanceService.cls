@@ -28,7 +28,7 @@ public with sharing class AttendanceService {
         ServiceDelivery__c.ServiceSession__c => ServiceSession__c.NumAbsentServiceDeliveries__c,
         ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.NumAbsentServiceDeliveries__c
     };
-    private static final Map<SObjectField, SObjectField> CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD = new Map<SObjectType, SObjectField>{
+    private static final Map<SObjectField, SObjectField> CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
         ServiceDelivery__c.Contact__c => Contact.ConsecutiveAbsences__c,
         ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.ConsecutiveAbsences__c
     };

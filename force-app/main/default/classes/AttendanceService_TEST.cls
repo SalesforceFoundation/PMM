@@ -73,7 +73,8 @@ public with sharing class AttendanceService_TEST {
         Contact contactRecord = new Contact(
             Id = TestUtil.mockId(Contact.SObjectType),
             NumPresentServiceDeliveries__c = null,
-            NumAbsentServiceDeliveries__c = null
+            NumAbsentServiceDeliveries__c = null,
+            ConsecutiveAbsences__c = null
         );
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
             ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
@@ -100,7 +101,8 @@ public with sharing class AttendanceService_TEST {
         Contact contactRecord = new Contact(
             Id = TestUtil.mockId(Contact.SObjectType),
             NumPresentServiceDeliveries__c = null,
-            NumAbsentServiceDeliveries__c = null
+            NumAbsentServiceDeliveries__c = null,
+            ConsecutiveAbsences__c = null
         );
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
             ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
@@ -129,7 +131,8 @@ public with sharing class AttendanceService_TEST {
         Contact contactRecord = new Contact(
             Id = TestUtil.mockId(Contact.SObjectType),
             NumPresentServiceDeliveries__c = null,
-            NumAbsentServiceDeliveries__c = 1
+            NumAbsentServiceDeliveries__c = 1,
+            ConsecutiveAbsences__c = 1
         );
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
             ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
@@ -161,7 +164,8 @@ public with sharing class AttendanceService_TEST {
         Contact contactRecord = new Contact(
             Id = TestUtil.mockId(Contact.SObjectType),
             NumPresentServiceDeliveries__c = 1,
-            NumAbsentServiceDeliveries__c = null
+            NumAbsentServiceDeliveries__c = null,
+            ConsecutiveAbsences__c = 0
         );
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
             ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
@@ -172,7 +176,8 @@ public with sharing class AttendanceService_TEST {
             new List<ServiceDelivery__c>{
                 new ServiceDelivery__c(
                     Contact__c = contactRecord.Id,
-                    AttendanceStatus__c = 'Present'
+                    AttendanceStatus__c = 'Present',
+                    DeliveryDate__c = System.today()
                 )
             }
         );
@@ -192,8 +197,9 @@ public with sharing class AttendanceService_TEST {
         String getAttendanceRecords = 'getAttendanceRecords';
         Contact contactRecord = new Contact(
             Id = TestUtil.mockId(Contact.SObjectType),
-            NumPresentServiceDeliveries__c = 2,
-            NumAbsentServiceDeliveries__c = 1
+            NumPresentServiceDeliveries__c = 1,
+            NumAbsentServiceDeliveries__c = 3,
+            ConsecutiveAbsences__c = 2
         );
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
             ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
@@ -204,15 +210,23 @@ public with sharing class AttendanceService_TEST {
             new List<ServiceDelivery__c>{
                 new ServiceDelivery__c(
                     Contact__c = contactRecord.Id,
-                    AttendanceStatus__c = 'Excused Absence'
+                    AttendanceStatus__c = 'Excused Absence',
+                    DeliveryDate__c = System.today()
                 ),
                 new ServiceDelivery__c(
                     Contact__c = contactRecord.Id,
-                    AttendanceStatus__c = 'Present'
+                    AttendanceStatus__c = 'Unexcused Absence',
+                    DeliveryDate__c = System.today() - 1
                 ),
                 new ServiceDelivery__c(
                     Contact__c = contactRecord.Id,
-                    AttendanceStatus__c = 'Present'
+                    AttendanceStatus__c = 'Present',
+                    DeliveryDate__c = System.today() - 2
+                ),
+                new ServiceDelivery__c(
+                    Contact__c = contactRecord.Id,
+                    AttendanceStatus__c = 'Unexcused Absence',
+                    DeliveryDate__c = System.today() - 3
                 )
             }
         );

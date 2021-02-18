@@ -23,8 +23,7 @@ public without sharing class AttendanceSystemAccess {
             .withSelectFields(
                 new List<String>{
                     String.valueOf(field),
-                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
-                    String.valueOf(ServiceDelivery__c.DeliveryDate__c)
+                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c)
                 }
             )
             .withSObjectType(ServiceDelivery__c.SObjectType)
@@ -36,7 +35,7 @@ public without sharing class AttendanceSystemAccess {
                 String.valueOf(field) +
                 ', ' +
                 String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' DESC'
+                ' DESC, Id DESC' // TODO: Discuss with the team how to best handle multiple from the same day
             );
 
         return Database.query(queryBuilder.buildSoqlQuery());

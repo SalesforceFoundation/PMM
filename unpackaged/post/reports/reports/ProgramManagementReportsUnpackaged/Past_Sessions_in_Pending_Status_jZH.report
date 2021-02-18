@@ -49,7 +49,6 @@
             <operator>lessThan</operator>
             <value>TODAY</value>
         </criteriaItems>
-        <language>en_US</language>
     </filter>
     <format>Summary</format>
     <groupingsDown>

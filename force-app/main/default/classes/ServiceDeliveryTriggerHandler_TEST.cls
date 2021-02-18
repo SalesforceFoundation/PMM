@@ -316,7 +316,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
         System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
         System.assertEquals(1, contactRecord.NumAbsentServiceDeliveries__c);
-        System.assertEquals(0, contactRecord.ConsecutiveAbsences__c);
+        System.assertEquals(1, contactRecord.ConsecutiveAbsences__c);
         System.assertEquals(null, service.NumPresentServiceDeliveries__c);
         System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
         System.assertEquals(null, sessions[0].NumPresentServiceDeliveries__c);

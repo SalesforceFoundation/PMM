@@ -12,11 +12,6 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
-        <field>CreatedById</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>false</isRequired>
-    </availableFields>
-    <availableFields>
         <field>DeliveryDate__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>

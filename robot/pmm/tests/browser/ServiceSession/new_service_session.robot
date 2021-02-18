@@ -4,9 +4,12 @@ Resource       robot/pmm/resources/pmm.robot
 Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSessionPageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
 
 
 *** Keywords ***
@@ -30,15 +33,15 @@ Setup Test Data
 Create a new service session
     [Documentation]                        Navigates to service session listing page, clicks 'New' on the listing page and
     ...                                    creates a new record, validates the details on the service session record
-    [tags]                                 W-8294332        feature:Service Session
+    [tags]                                 W-8294332     perm:admin   perm:manage         feature:Service Session
      Go To PMM App
      Go To Page                              Listing                                ${ns}ServiceSession__c
      Click Object Button                     New
      Load Page Object                        New                                    ServiceSession__c
      Populate Field                          Service Session Name                   ${service_session_name}
-     Populate Lightning Fields               Service Schedule=${service_schedule}[Name]
-     ...                                     Status=Complete
-     ...                                     Primary Service Provider=${contact}[Name]
+     Populate Lookup Field                   Service Schedule                       ${service_schedule}[Name]
+     Populate Lookup Field                   Primary Service Provider               ${contact}[Name]
+     Populate Lightning Fields               Status=Complete
      Select Session Date                     Session Start          Today
      Click Dialog Button                     Save
      Wait Until Modal Is Closed

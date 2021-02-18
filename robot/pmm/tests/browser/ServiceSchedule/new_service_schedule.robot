@@ -5,10 +5,12 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSchedulePageObject.py
 ...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
+*** Variables ***
+${test_user}             UUser
 
 *** Keywords ***
 Setup Test Data
@@ -42,7 +44,7 @@ Setup Test Data
 Create a New Service Schedule
     [Documentation]                        Navigates to service schedule listing page, clicks 'New' on the listing page and
     ...                                    creates a new record using the wizard, validates the details on the service schedule record
-    [tags]                                 W-8294332        feature:Service Schedule
+    [tags]                                 W-8294332     perm:admin   perm:manage         feature:Service Schedule
     Go To PMM App
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
@@ -50,8 +52,8 @@ Create a New Service Schedule
     Verify Wizard Screen Title              Service Schedule Information
     Populate Field                          Service Schedule Name               ${service_schedule_name}
     Populate Field                          Participant Capacity                10
-    Populate Lightning Fields               Primary Service Provider=${contact}[Name]
-    ...                                     Date=Today
+    Populate Lookup Field                   Primary Service Provider            ${contact}[Name]
+    Populate Lightning Fields               Date=Today
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Review Service Sessions
     Click Dialog Button                     Next

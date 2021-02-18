@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>DefaultServiceQuantity__c</name>
+    <help>出席を追跡する場合にサービス提供に反映されるデフォルトのサービス数量。</help>
+    <label>デフォルトのサービス数量</label>
+</CustomFieldTranslation>

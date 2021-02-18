@@ -5,9 +5,13 @@ Library        cumulusci.robotframework.PageObjects
 ...            robot/pmm/resources/ServiceSchedulePageObject.py
 ...            robot/pmm/resources/ServicePageObject.py
 Suite Setup     Run Keywords
-...             Open Test Browser
+...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
 Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+
+*** Variables ***
+${test_user}             UUser
+
 
 *** Keywords ***
 Setup Test Data
@@ -39,7 +43,7 @@ Setup Test Data
 Add/remove service participants on Screen3
     [Documentation]                        On service schedule wizard, add/remove service participants on screen 3 and validate that the
     ...                                    added participants are displayed on screen 4 and when the wizard is saved
-    [tags]                                 W-8449817       feature:Service Schedule
+    [tags]                                 W-8449817    perm:admin    perm:manage        feature:Service Schedule
     Go To PMM App
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New

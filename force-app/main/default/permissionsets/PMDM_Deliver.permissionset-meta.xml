@@ -43,6 +43,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Contact.ConsecutiveAbsences__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Contact.IsClient__c</field>
         <readable>true</readable>
@@ -100,6 +105,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>ProgramEngagement__c.AutoName_Override__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ProgramEngagement__c.ConsecutiveAbsences__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

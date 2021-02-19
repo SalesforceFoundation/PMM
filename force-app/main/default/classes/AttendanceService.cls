@@ -13,7 +13,7 @@ public with sharing class AttendanceService {
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
     @TestVisible
-    private AttendanceSystemAccess systemAccess = new AttendanceSystemAccess();
+    private ServiceDeliverySystemAccess systemAccess = new ServiceDeliverySystemAccess();
 
     private static final String DEFAULT_STATUS = 'Present';
     private static final Map<SObjectField, SObjectField> TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
@@ -71,7 +71,7 @@ public with sharing class AttendanceService {
         }
     }
 
-    public void rollup(Map<SObjectField, Set<Id>> idsByLookupFieldToTarget) {
+    public void rollupAttendance(Map<SObjectField, Set<Id>> idsByLookupFieldToTarget) {
         Map<Id, SObject> targetObjectById = new Map<Id, SObject>();
         Set<Id> consecutiveAbsencesCountComplete = new Set<Id>();
         if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {
@@ -136,7 +136,7 @@ public with sharing class AttendanceService {
                             );
                             targetObject.put(
                                 consecutiveAbsencesField,
-                                consecutiveAbsencesCount++
+                                consecutiveAbsencesCount + 1
                             );
                         }
                     }

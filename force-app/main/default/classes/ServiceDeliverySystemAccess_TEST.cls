@@ -8,8 +8,8 @@
  */
 
 @IsTest
-public with sharing class AttendanceSystemAccess_TEST {
-    private static AttendanceSystemAccess systemAccess = new AttendanceSystemAccess();
+public with sharing class ServiceDeliverySystemAccess_TEST {
+    private static ServiceDeliverySystemAccess systemAccess = new ServiceDeliverySystemAccess();
     private static Service__c serviceRecord;
     private static final String PRESENT_STATUS = 'Present';
 

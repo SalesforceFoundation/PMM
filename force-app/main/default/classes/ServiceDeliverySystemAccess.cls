@@ -10,7 +10,7 @@
 /*
  * We must bypass sharing in order to rollup all detail records to the parent entity.
  */
-public without sharing class AttendanceSystemAccess {
+public without sharing class ServiceDeliverySystemAccess {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
     public List<ServiceDelivery__c> getAttendanceRecords(

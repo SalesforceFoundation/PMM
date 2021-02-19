@@ -17,11 +17,13 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
     private static ServiceDeliveryTriggerHandler handler = new ServiceDeliveryTriggerHandler();
     private static BasicStub serviceStub = new BasicStub(AttendanceService.class);
 
-    private static final String ROLLUP_METHOD = 'rollup';
+    private static final String ROLLUP_ATTENDANCE_METHOD = 'rollupAttendance';
     private static final String PRESENT_STATUS = 'Present';
     private static final String ABSENCE_STATUS = 'Excused Absence';
     private static ServiceDelivery__c oldRecord = new ServiceDelivery__c();
     private static ServiceDelivery__c newRecord = new ServiceDelivery__c();
+    private static final SObjectField ATTENDANCE_STATUS_FIELD = ServiceDelivery__c.AttendanceStatus__c;
+    private static Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>();
 
     @TestSetup
     private static void createServiceData() {
@@ -36,10 +38,15 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         newRecord.AttendanceSTatus__c = ABSENCE_STATUS;
 
         Test.startTest();
-        handler.extractRecordIdsToRecalculate(oldRecord, newRecord);
+        handler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS_FIELD,
+            recordIdsByLookupField
+        );
         Test.stopTest();
 
-        serviceStub.assertCalled(ROLLUP_METHOD);
+        serviceStub.assertCalled(ROLLUP_ATTENDANCE_METHOD);
     }
 
     private static void shouldCallRollupWhenStatusNulled() {
@@ -49,10 +56,15 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         newRecord.AttendanceSTatus__c = null;
 
         Test.startTest();
-        handler.extractRecordIdsToRecalculate(oldRecord, newRecord);
+        handler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS_FIELD,
+            recordIdsByLookupField
+        );
         Test.stopTest();
 
-        serviceStub.assertCalled(ROLLUP_METHOD);
+        serviceStub.assertCalled(ROLLUP_ATTENDANCE_METHOD);
     }
 
     private static void shouldCallRollupWhenStatusSet() {
@@ -62,10 +74,15 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         newRecord.AttendanceSTatus__c = PRESENT_STATUS;
 
         Test.startTest();
-        handler.extractRecordIdsToRecalculate(oldRecord, newRecord);
+        handler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS_FIELD,
+            recordIdsByLookupField
+        );
         Test.stopTest();
 
-        serviceStub.assertCalled(ROLLUP_METHOD);
+        serviceStub.assertCalled(ROLLUP_ATTENDANCE_METHOD);
     }
 
     private static void shouldCallRollupWhenOnlyContactChanges() {
@@ -75,13 +92,19 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         newRecord.AttendanceSTatus__c = PRESENT_STATUS;
         oldRecord.Contact__c = TestUtil.mockId(Contact.SObjectType);
         newRecord.Contact__c = TestUtil.mockId(Contact.SObjectType);
+        //TODO: add an assertion that these are different?
 
         Test.startTest();
-        handler.extractRecordIdsToRecalculate(oldRecord, newRecord);
+        handler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS_FIELD,
+            recordIdsByLookupField
+        );
         Test.stopTest();
 
         serviceStub.assertCalledWith(
-            ROLLUP_METHOD,
+            ROLLUP_ATTENDANCE_METHOD,
             Map<SObjectField, Set<Id>>.class,
             new Map<SObjectField, Set<Id>>{
                 ServiceDelivery__c.Contact__c => new Set<Id>{
@@ -105,11 +128,16 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         );
 
         Test.startTest();
-        handler.extractRecordIdsToRecalculate(oldRecord, newRecord);
+        handler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS_FIELD,
+            recordIdsByLookupField
+        );
         Test.stopTest();
 
         serviceStub.assertCalledWith(
-            ROLLUP_METHOD,
+            ROLLUP_ATTENDANCE_METHOD,
             Map<SObjectField, Set<Id>>.class,
             new Map<SObjectField, Set<Id>>{
                 ServiceDelivery__c.ProgramEngagement__c => new Set<Id>{
@@ -129,11 +157,16 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         newRecord.ServiceSession__c = TestUtil.mockId(ServiceSession__c.SObjectType);
 
         Test.startTest();
-        handler.extractRecordIdsToRecalculate(oldRecord, newRecord);
+        handler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS_FIELD,
+            recordIdsByLookupField
+        );
         Test.stopTest();
 
         serviceStub.assertCalledWith(
-            ROLLUP_METHOD,
+            ROLLUP_ATTENDANCE_METHOD,
             Map<SObjectField, Set<Id>>.class,
             new Map<SObjectField, Set<Id>>{
                 ServiceDelivery__c.ServiceSession__c => new Set<Id>{
@@ -153,11 +186,16 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         newRecord.Service__c = TestUtil.mockId(Service__c.SObjectType);
 
         Test.startTest();
-        handler.extractRecordIdsToRecalculate(oldRecord, newRecord);
+        handler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS_FIELD,
+            recordIdsByLookupField
+        );
         Test.stopTest();
 
         serviceStub.assertCalledWith(
-            ROLLUP_METHOD,
+            ROLLUP_ATTENDANCE_METHOD,
             Map<SObjectField, Set<Id>>.class,
             new Map<SObjectField, Set<Id>>{
                 ServiceDelivery__c.Service__c => new Set<Id>{
@@ -169,17 +207,23 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
     }
 
     private static void shouldNotCallRollupWhenServiceChangesWithoutStatus() {
+        // TODO: update method name? it says should not call but we are asserting the call?
         handler.service = (AttendanceService) serviceStub.createMock();
 
         oldRecord.Service__c = TestUtil.mockId(Service__c.SObjectType);
         newRecord.Service__c = TestUtil.mockId(Service__c.SObjectType);
 
         Test.startTest();
-        handler.extractRecordIdsToRecalculate(oldRecord, newRecord);
+        handler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS_FIELD,
+            recordIdsByLookupField
+        );
         Test.stopTest();
 
         serviceStub.assertCalledWith(
-            ROLLUP_METHOD,
+            ROLLUP_ATTENDANCE_METHOD,
             Map<SObjectField, Set<Id>>.class,
             new Map<SObjectField, Set<Id>>{
                 ServiceDelivery__c.Service__c => new Set<Id>{
@@ -231,7 +275,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.service = (AttendanceService) serviceStub.createMock();
         handler.execute();
 
-        serviceStub.assertNotCalled(ROLLUP_METHOD);
+        serviceStub.assertNotCalled(ROLLUP_ATTENDANCE_METHOD);
     }
 
     @IsTest
@@ -239,7 +283,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.service = (AttendanceService) serviceStub.createMock();
         handler.delegate(System.TriggerOperation.BEFORE_INSERT);
 
-        serviceStub.assertNotCalled(ROLLUP_METHOD);
+        serviceStub.assertNotCalled(ROLLUP_ATTENDANCE_METHOD);
     }
 
     @IsTest

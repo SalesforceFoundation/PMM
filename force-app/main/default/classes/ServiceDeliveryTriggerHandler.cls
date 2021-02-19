@@ -11,14 +11,16 @@ public with sharing class ServiceDeliveryTriggerHandler {
     @TestVisible
     private AttendanceService service = new AttendanceService();
 
-    private SObjectField attendanceStatus = ServiceDelivery__c.AttendanceStatus__c;
-    private Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>();
+    private final SObjectField ATTENDANCE_STATUS = ServiceDelivery__c.AttendanceStatus__c;
+    private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
+    private Map<SObjectField, Set<Id>> recordIdsByLookupFieldForAttendance = new Map<SObjectField, Set<Id>>();
+    private Map<SObjectField, Set<Id>> recordIdsByLookupFieldForLastServiceDate = new Map<SObjectField, Set<Id>>();
     private Map<SObjectType, List<SObject>> sObjectsByType = new Map<SObjectType, List<SObject>>();
     private static Map<String, SObjectField> LOOKUP_FIELD_BY_FEATURE = new Map<String, SObjectField>{
-        'AttendanceToContact' => ServiceDelivery__c.Contact__c,
-        'AttendanceToService' => ServiceDelivery__c.Service__c,
-        'AttendanceToServiceSession' => ServiceDelivery__c.ServiceSession__c,
-        'AttendanceToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
+        'ServiceDeliveriesToContact' => ServiceDelivery__c.Contact__c,
+        'ServiceDeliveriesToService' => ServiceDelivery__c.Service__c,
+        'ServiceDeliveriesToServiceSession' => ServiceDelivery__c.ServiceSession__c,
+        'ServiceDeliveriesToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
     };
     private Set<SObjectField> lookupFields {
         get {
@@ -37,7 +39,8 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
 
         delegate(Trigger.operationType);
-        service.rollup(recordIdsByLookupField);
+        service.rollupAttendance(recordIdsByLookupFieldForAttendance);
+        // service.rollupLastServiceDate(recordIdsByLookupFieldForLastServiceDate);
     }
 
     @TestVisible
@@ -63,32 +66,81 @@ public with sharing class ServiceDeliveryTriggerHandler {
 
     private void handleAfterDelete() {
         for (SObject record : Trigger.old) {
-            extractRecordIdsToRecalculate(record, null);
+            extractRecordIdsToRecalculate(
+                record,
+                null,
+                ATTENDANCE_STATUS,
+                recordIdsByLookupFieldForAttendance
+            );
+            extractRecordIdsToRecalculate(
+                record,
+                null,
+                DELIVERY_DATE,
+                recordIdsByLookupFieldForLastServiceDate
+            );
         }
     }
 
     private void handleAfterInsert() {
         for (SObject record : Trigger.new) {
-            extractRecordIdsToRecalculate(null, record);
+            extractRecordIdsToRecalculate(
+                null,
+                record,
+                ATTENDANCE_STATUS,
+                recordIdsByLookupFieldForAttendance
+            );
+            extractRecordIdsToRecalculate(
+                null,
+                record,
+                DELIVERY_DATE,
+                recordIdsByLookupFieldForLastServiceDate
+            );
         }
     }
 
     private void handleAfterUndelete() {
         for (SObject record : Trigger.new) {
-            extractRecordIdsToRecalculate(null, record);
+            extractRecordIdsToRecalculate(
+                null,
+                record,
+                ATTENDANCE_STATUS,
+                recordIdsByLookupFieldForAttendance
+            );
+            extractRecordIdsToRecalculate(
+                null,
+                record,
+                DELIVERY_DATE,
+                recordIdsByLookupFieldForLastServiceDate
+            );
         }
     }
 
     private void handleAfterUpdate() {
         for (SObject record : Trigger.new) {
-            extractRecordIdsToRecalculate(Trigger.oldMap.get(record.Id), record);
+            extractRecordIdsToRecalculate(
+                Trigger.oldMap.get(record.Id),
+                record,
+                ATTENDANCE_STATUS,
+                recordIdsByLookupFieldForAttendance
+            );
+            extractRecordIdsToRecalculate(
+                Trigger.oldMap.get(record.Id),
+                record,
+                DELIVERY_DATE,
+                recordIdsByLookupFieldForLastServiceDate
+            );
         }
     }
 
     @TestVisible
-    private void extractRecordIdsToRecalculate(SObject oldRecord, SObject newRecord) {
-        Object oldValue = oldRecord == null ? null : oldRecord.get(attendanceStatus);
-        Object newValue = newRecord == null ? null : newRecord.get(attendanceStatus);
+    private void extractRecordIdsToRecalculate(
+        SObject oldRecord,
+        SObject newRecord,
+        SObjectField fieldToInspect,
+        Map<SObjectField, Set<Id>> recordIdsByLookupField
+    ) {
+        Object oldValue = oldRecord == null ? null : oldRecord.get(fieldToInspect);
+        Object newValue = newRecord == null ? null : newRecord.get(fieldToInspect);
 
         if (oldValue == null && newValue == null) {
             return;

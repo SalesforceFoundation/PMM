@@ -13,7 +13,7 @@ public with sharing class AttendanceService {
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
     @TestVisible
-    private ServiceDeliverySystemAccess systemAccess = new ServiceDeliverySystemAccess();
+    private SystemAccess systemAccess = new SystemAccess();
 
     private static final String DEFAULT_STATUS = 'Present';
     private static final Map<SObjectField, SObjectField> TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
@@ -32,6 +32,11 @@ public with sharing class AttendanceService {
         ServiceDelivery__c.Contact__c => Contact.ConsecutiveAbsences__c,
         ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.ConsecutiveAbsences__c
     };
+    private static final Map<SObjectField, SObjectField> LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD = new Map<SObjectField, SObjectField>{
+        ServiceDelivery__c.Contact__c => Contact.LastServiceDate__c,
+        ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.LastServiceDate__c
+    };
+    private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
 
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
@@ -155,6 +160,62 @@ public with sharing class AttendanceService {
         }
 
         systemAccess.updateRecords(targetObjectById.values());
+    }
+
+    public void rollupLastServiceDate(
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget
+    ) {
+        List<SObject> parentRecordsToUpdate = new List<SObject>();
+        if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {
+            return;
+        }
+
+        for (SObjectField lookupFieldOnDelivery : idsByLookupFieldToTarget.keySet()) {
+            if (idsByLookupFieldToTarget.get(lookupFieldOnDelivery).isEmpty()) {
+                continue;
+            }
+
+            SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD.get(
+                lookupFieldOnDelivery
+            );
+
+            SObjectType parentObject = lookupFieldOnDelivery.getDescribe()
+                .getReferenceTo()[0];
+            String relationshipName;
+            for (
+                ChildRelationship child : parentObject.getDescribe()
+                    .getChildRelationships()
+            ) {
+                if (child.getField() == lookupFieldOnDelivery) {
+                    relationshipName = child.getRelationshipName();
+                    break;
+                }
+            }
+
+            for (
+                SObject parentRecord : systemAccess.getParentsWithServiceDeliveries(
+                    lookupFieldOnDelivery,
+                    idsByLookupFieldToTarget.get(lookupFieldOnDelivery),
+                    parentObject,
+                    relationshipName
+                )
+            ) {
+                List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) parentRecord.getSObjects(
+                    relationshipName
+                );
+                if (serviceDeliveries == null || serviceDeliveries.isEmpty()) {
+                    parentRecord.put(lastServiceDateField, null);
+                } else {
+                    parentRecord.put(
+                        lastServiceDateField,
+                        (Date) serviceDeliveries[0].get(DELIVERY_DATE)
+                    );
+                }
+                parentRecordsToUpdate.add(parentRecord);
+            }
+        }
+
+        systemAccess.updateRecords(parentRecordsToUpdate);
     }
 
     public Map<String, Boolean> checkFieldPermissions() {

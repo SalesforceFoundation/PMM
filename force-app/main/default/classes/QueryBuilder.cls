@@ -8,15 +8,26 @@
  */
 
 public inherited sharing class QueryBuilder {
-    private SObjectType sObjectType;
+    private String entity;
     private List<String> selectFields = new List<String>();
     private List<String> conditions = new List<String>();
     private String orderByField;
     private Integer limitTo;
+    private List<QueryBuilder> subqueries = new List<QueryBuilder>();
     private static final String AND_OPERATOR = ' AND ';
 
     public QueryBuilder withSObjectType(SObjectType sObjectType) {
-        this.sObjectType = sObjectType;
+        entity = sObjectType.getDescribe().getName();
+        return this;
+    }
+
+    public QueryBuilder withChildRelationshipName(String childRelationshipName) {
+        entity = childRelationshipName;
+        return this;
+    }
+
+    public QueryBuilder addSubQuery(QueryBuilder subquery) {
+        subqueries.add(subquery);
         return this;
     }
 
@@ -56,7 +67,7 @@ public inherited sharing class QueryBuilder {
             'SELECT {0} FROM {1}{2}{3}{4}',
             new List<String>{
                 buildSelectFields(),
-                sObjectType.getDescribe().getName(),
+                entity,
                 buildWhereClause(),
                 buildOrderBy(),
                 buildLimit()
@@ -69,12 +80,13 @@ public inherited sharing class QueryBuilder {
 
         return String.format(
             'SELECT count() FROM {0}{1}',
-            new List<String>{ sObjectType.getDescribe().getName(), buildWhereClause() }
+            new List<String>{ entity, buildWhereClause() }
         );
     }
 
     public QueryBuilder reset() {
-        sObjectType = null;
+        entity = null;
+        subqueries = new List<QueryBuilder>();
         selectFields = new List<String>();
         conditions = new List<String>();
         orderByField = null;
@@ -95,11 +107,15 @@ public inherited sharing class QueryBuilder {
             }
         }
 
+        for (QueryBuilder subquery : subqueries) {
+            fields.add('(' + subquery.buildSoqlQuery() + ')');
+        }
+
         return String.join(new List<String>(fields), ', ');
     }
 
     private void validate() {
-        if (sObjectType == null) {
+        if (entity == null) {
             throw new QueryBuilderException(System.Label.MissingSObjectType);
         }
     }

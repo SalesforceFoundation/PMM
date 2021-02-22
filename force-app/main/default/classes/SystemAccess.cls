@@ -10,7 +10,7 @@
 /*
  * We must bypass sharing in order to rollup all detail records to the parent entity.
  */
-public without sharing class ServiceDeliverySystemAccess {
+public without sharing class SystemAccess {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
     public List<ServiceDelivery__c> getAttendanceRecords(
@@ -38,6 +38,32 @@ public without sharing class ServiceDeliverySystemAccess {
                 ' DESC, Id DESC' // TODO: Discuss with the team how to best handle multiple from the same day
             );
 
+        return Database.query(queryBuilder.buildSoqlQuery());
+    }
+
+    public List<SObject> getParentsWithServiceDeliveries(
+        SObjectField field,
+        Set<Id> recordIds,
+        SObjectType parentObject,
+        String relationshipName
+    ) {
+        QueryBuilder serviceDeliverySubquery = new QueryBuilder()
+            .withChildRelationshipName(relationshipName)
+            .withSelectFields(
+                new List<String>{ String.valueOf(ServiceDelivery__c.DeliveryDate__c) }
+            )
+            .addCondition(String.valueOf(ServiceDelivery__c.Quantity__c) + ' > 0')
+            .withOrderBy(
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' DESC NULLS LAST'
+            )
+            .withLimit(1);
+
+        queryBuilder
+            .reset()
+            .withSelectFields(new List<String>{ 'Id' })
+            .addSubQuery(serviceDeliverySubquery)
+            .withSObjectType(parentObject)
+            .addCondition('Id IN :recordIds');
         return Database.query(queryBuilder.buildSoqlQuery());
     }
 

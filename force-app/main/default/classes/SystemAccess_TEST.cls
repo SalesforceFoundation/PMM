@@ -8,8 +8,8 @@
  */
 
 @IsTest
-public with sharing class ServiceDeliverySystemAccess_TEST {
-    private static ServiceDeliverySystemAccess systemAccess = new ServiceDeliverySystemAccess();
+public with sharing class SystemAccess_TEST {
+    private static SystemAccess systemAccess = new SystemAccess();
     private static Service__c serviceRecord;
     private static final String PRESENT_STATUS = 'Present';
 
@@ -27,7 +27,7 @@ public with sharing class ServiceDeliverySystemAccess_TEST {
     }
 
     @IsTest
-    private static void shouldGetAllRecordsForStandardUser() {
+    private static void shouldGetAllAttendanceRecordsForStandardUser() {
         serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
 
         User standardUser = TestUtil.getTestUser();
@@ -38,6 +38,33 @@ public with sharing class ServiceDeliverySystemAccess_TEST {
                 ServiceDelivery__c.Service__c,
                 new Set<Id>{ serviceRecord.Id },
                 new List<String>{ PRESENT_STATUS }
+            );
+        }
+
+        System.assertEquals(
+            1,
+            recordsWithAccess.size(),
+            'Expected the user to be able to bypass sharing.'
+        );
+    }
+
+    @IsTest
+    private static void shouldGetAllParentRecordsForStandardUser() {
+        serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
+
+        User standardUser = TestUtil.getTestUser();
+        List<Service__c> recordsWithAccess;
+
+        System.runAs(standardUser) {
+            recordsWithAccess = systemAccess.getParentsWithServiceDeliveries(
+                //         SObjectField field,
+                // Set<Id> recordIds,
+                // SObjectType parentObject,
+                // String relationshipName
+                ServiceDelivery__c.Service__c,
+                new Set<Id>{ serviceRecord.Id },
+                Service__c.SObjectType,
+                'ServiceDeliveries__r'
             );
         }
 

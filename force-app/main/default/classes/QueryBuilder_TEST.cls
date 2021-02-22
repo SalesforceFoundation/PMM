@@ -157,4 +157,22 @@ public with sharing class QueryBuilder_TEST {
             'Expected the exception message to be thrown.'
         );
     }
+
+    @IsTest
+    private static void shouldBuildSoqlQueryWithSubqueries() {
+        final String expectedSoqlQuery = 'SELECT id, (SELECT id FROM Contacts), (SELECT id FROM Cases) FROM Account';
+        QueryBuilder subquery1 = new QueryBuilder().withChildRelationshipName('Contacts');
+        QueryBuilder subquery2 = new QueryBuilder().withChildRelationshipName('Cases');
+        final String actualSoqlQuery = new QueryBuilder()
+            .withSObjectType(Account.SObjectType)
+            .addSubquery(subquery1)
+            .addSubquery(subquery2)
+            .buildSoqlQuery();
+
+        System.assertEquals(
+            expectedSoqlQuery,
+            actualSoqlQuery,
+            'The soql query string with subqueries was not as expected.'
+        );
+    }
 }

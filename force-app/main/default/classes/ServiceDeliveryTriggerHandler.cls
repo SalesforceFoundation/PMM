@@ -47,8 +47,10 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
 
         delegate(Trigger.operationType);
-        service.rollupAttendance(recordIdsByLookupFieldForAttendance);
-        service.rollupLastServiceDate(recordIdsByLookupFieldForLastServiceDate);
+        service.doRollups(
+            recordIdsByLookupFieldForAttendance,
+            recordIdsByLookupFieldForLastServiceDate
+        );
     }
 
     @TestVisible

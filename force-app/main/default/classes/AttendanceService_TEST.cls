@@ -23,7 +23,7 @@ public with sharing class AttendanceService_TEST {
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>();
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupAttendance(idsByLookupFieldToTarget);
+        service.doRollups(idsByLookupFieldToTarget, null);
 
         systemAccessStub.assertNotCalled('getAttendanceRecords');
         systemAccessStub.assertNotCalled('updateRecords');
@@ -34,7 +34,7 @@ public with sharing class AttendanceService_TEST {
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>();
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupLastServiceDate(idsByLookupFieldToTarget);
+        service.doRollups(null, idsByLookupFieldToTarget);
 
         systemAccessStub.assertNotCalled('getParentsWithServiceDeliveries');
         systemAccessStub.assertNotCalled('updateRecords');
@@ -59,7 +59,7 @@ public with sharing class AttendanceService_TEST {
         );
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupAttendance(idsByLookupFieldToTarget);
+        service.doRollups(idsByLookupFieldToTarget, null);
 
         systemAccessStub.assertNotCalled('updateRecords');
     }
@@ -95,7 +95,7 @@ public with sharing class AttendanceService_TEST {
         );
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupAttendance(idsByLookupFieldToTarget);
+        service.doRollups(idsByLookupFieldToTarget, null);
 
         systemAccessStub.assertCalledWith(
             'updateRecords',
@@ -107,9 +107,15 @@ public with sharing class AttendanceService_TEST {
     @IsTest
     private static void shouldSetLastServiceDateToNullWhenNoRecordsFound() {
         String getParentsWithServiceDeliveries = 'getParentsWithServiceDeliveries';
-        Contact contactRecord = new Contact(
-            Id = TestUtil.mockId(Contact.SObjectType),
-            LastServiceDate__c = null
+        Map<String, Object> contactFields = new Map<String, Object>{
+            'Id' => TestUtil.mockId(Contact.SObjectType),
+            String.valueOf(Contact.LastServiceDate__c) => null,
+            ServiceDelivery__c.Contact__c.getDescribe()
+                .getRelationshipName() => new List<ServiceDelivery__c>()
+        };
+        Contact contactRecord = (Contact) JSON.deserialize(
+            JSON.serialize(contactFields),
+            Contact.class
         );
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
             ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
@@ -126,7 +132,7 @@ public with sharing class AttendanceService_TEST {
         );
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupLastServiceDate(idsByLookupFieldToTarget);
+        service.doRollups(null, idsByLookupFieldToTarget);
 
         systemAccessStub.assertCalledWith(
             'updateRecords',
@@ -156,7 +162,7 @@ public with sharing class AttendanceService_TEST {
         );
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupAttendance(idsByLookupFieldToTarget);
+        service.doRollups(idsByLookupFieldToTarget, null);
 
         systemAccessStub.assertCalledWith(
             'updateRecords',
@@ -189,7 +195,7 @@ public with sharing class AttendanceService_TEST {
         );
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupAttendance(idsByLookupFieldToTarget);
+        service.doRollups(idsByLookupFieldToTarget, null);
 
         systemAccessStub.assertCalledWith(
             'updateRecords',
@@ -223,7 +229,7 @@ public with sharing class AttendanceService_TEST {
         );
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupAttendance(idsByLookupFieldToTarget);
+        service.doRollups(idsByLookupFieldToTarget, null);
 
         systemAccessStub.assertCalledWith(
             'updateRecords',
@@ -272,7 +278,7 @@ public with sharing class AttendanceService_TEST {
         );
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
 
-        service.rollupAttendance(idsByLookupFieldToTarget);
+        service.doRollups(idsByLookupFieldToTarget, null);
 
         systemAccessStub.assertCalledWith(
             'updateRecords',

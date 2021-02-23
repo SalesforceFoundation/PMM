@@ -57,10 +57,6 @@ public with sharing class SystemAccess_TEST {
 
         System.runAs(standardUser) {
             recordsWithAccess = systemAccess.getParentsWithServiceDeliveries(
-                //         SObjectField field,
-                // Set<Id> recordIds,
-                // SObjectType parentObject,
-                // String relationshipName
                 ServiceDelivery__c.Service__c,
                 new Set<Id>{ serviceRecord.Id },
                 Service__c.SObjectType,

@@ -100,7 +100,11 @@ public with sharing class AttendanceService {
         allStatuses.addAll(absentStatuses);
 
         for (SObjectField lookupFieldOnDelivery : idsByLookupFieldToTarget.keySet()) {
-            addDefaultTargetObjects(
+            if (idsByLookupFieldToTarget.get(lookupFieldOnDelivery).isEmpty()) {
+                continue;
+            }
+
+            addDefaultTargetObjectsForAttendance(
                 lookupFieldOnDelivery,
                 idsByLookupFieldToTarget.get(lookupFieldOnDelivery)
             );
@@ -365,7 +369,7 @@ public with sharing class AttendanceService {
         return buckets;
     }
 
-    private void addDefaultTargetObjects(
+    private void addDefaultTargetObjectsForAttendance(
         SObjectField lookupFieldOnDelivery,
         Set<Id> targetIds
     ) {

@@ -76,70 +76,41 @@ public with sharing class ServiceDeliveryTriggerHandler {
 
     private void handleAfterDelete() {
         for (SObject record : Trigger.old) {
-            extractRecordIdsToRecalculate(
-                record,
-                null,
-                ATTENDANCE_STATUS,
-                recordIdsByLookupFieldForAttendance
-            );
-            extractRecordIdsToRecalculate(
-                record,
-                null,
-                DELIVERY_DATE,
-                recordIdsByLookupFieldForLastServiceDate
-            );
+            extractRecordIdsToRecalculate(record, null);
         }
     }
 
     private void handleAfterInsert() {
         for (SObject record : Trigger.new) {
-            extractRecordIdsToRecalculate(
-                null,
-                record,
-                ATTENDANCE_STATUS,
-                recordIdsByLookupFieldForAttendance
-            );
-            extractRecordIdsToRecalculate(
-                null,
-                record,
-                DELIVERY_DATE,
-                recordIdsByLookupFieldForLastServiceDate
-            );
+            extractRecordIdsToRecalculate(null, record);
         }
     }
 
     private void handleAfterUndelete() {
         for (SObject record : Trigger.new) {
-            extractRecordIdsToRecalculate(
-                null,
-                record,
-                ATTENDANCE_STATUS,
-                recordIdsByLookupFieldForAttendance
-            );
-            extractRecordIdsToRecalculate(
-                null,
-                record,
-                DELIVERY_DATE,
-                recordIdsByLookupFieldForLastServiceDate
-            );
+            extractRecordIdsToRecalculate(null, record);
         }
     }
 
     private void handleAfterUpdate() {
         for (SObject record : Trigger.new) {
-            extractRecordIdsToRecalculate(
-                Trigger.oldMap.get(record.Id),
-                record,
-                ATTENDANCE_STATUS,
-                recordIdsByLookupFieldForAttendance
-            );
-            extractRecordIdsToRecalculate(
-                Trigger.oldMap.get(record.Id),
-                record,
-                DELIVERY_DATE,
-                recordIdsByLookupFieldForLastServiceDate
-            );
+            extractRecordIdsToRecalculate(Trigger.oldMap.get(record.Id), record);
         }
+    }
+
+    private void extractRecordIdsToRecalculate(SObject oldRecord, SObject newRecord) {
+        extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            DELIVERY_DATE,
+            recordIdsByLookupFieldForLastServiceDate
+        );
+        extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS,
+            recordIdsByLookupFieldForAttendance
+        );
     }
 
     @TestVisible

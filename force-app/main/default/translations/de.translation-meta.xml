@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
+        <name>accordionSection_ToggleInstructionsWhenOpen</name>
+        <label>Zum Ausblenden des Abschnitts klicken. Dieser Abschnitt ist geöffnet.</label>
+    </customLabels>
+    <customLabels>
+        <name>accordionSection_ToggleInstructionsWhenClosed</name>
+        <label>Zum Anzeigen des Abschnitts klicken. Dieser Abschnitt ist nicht geöffnet.</label>
+    </customLabels>
+    <customLabels>
         <name>Add_Entry</name>
         <label>Eintrag hinzufügen</label>
     </customLabels>
     <customLabels>
         <name>Add_Record</name>
         <label>{0} hinzufügen</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Service_Participants_Success</name>
+        <label>{0} Leistungsteilnehmer hinzugefügt.</label>
     </customLabels>
     <customLabels>
         <name>Add_Service_Delivery</name>
@@ -25,6 +37,26 @@
         <label>Anonym</label>
     </customLabels>
     <customLabels>
+        <name>TrackAttendance</name>
+        <label>Teilnahme nachverfolgen</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_Service_Delivery_Success</name>
+        <label>{0} Datensätze für Leistungserbringungen gespeichert.</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_Service_Delivery_No_Updates</name>
+        <label>Es sind keine Datensätze für Leistungserbringungen zum Aktualisieren vorhanden.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Participants_Header</name>
+        <label>Noch keine Teilnehmer</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Participants_Message</name>
+        <label>Nachdem diesem Leistungszeitplan Teilnehmer hinzugefügt wurden, verfolgen Sie ihre Anwesenheit hier nach.</label>
+    </customLabels>
+    <customLabels>
         <name>Back</name>
         <label>Zurück</label>
     </customLabels>
@@ -34,7 +66,7 @@
     </customLabels>
     <customLabels>
         <name>Clicking_Back_Button_In_Modal_Warning</name>
-        <label>Zurück wechseln? Die Änderungen, die Sie auf dieser Seite vorgenommen haben, werden nicht gespeichert.</label>
+        <label>Änderungen, die Sie auf dieser Seite vorgenommen haben, werden nicht gespeichert.</label>
     </customLabels>
     <customLabels>
         <name>Clone_Service_Participant</name>
@@ -54,11 +86,23 @@
     </customLabels>
     <customLabels>
         <name>Delete_Future_Sessions</name>
-        <label>Alle zukünftigen Sitzungen löschen</label>
+        <label>Zukünftige Leistungssitzungen löschen</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_Success</name>
+        <label>{0} Leistungssitzungen erfolgreich gelöscht.</label>
     </customLabels>
     <customLabels>
         <name>Delete_X_Future_Sessions</name>
-        <label>Hierdurch werden {0} zukünftige Sitzungsdatensätze gelöscht.</label>
+        <label>Hierdurch werden {0} Datensätze zukünftiger Leistungssitzungen gelöscht.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_After</name>
+        <label>Alle Leistungssitzungen nach diesem Datum löschen:</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_Invalid_Date</name>
+        <label>Das Datum muss heute oder später sein.</label>
     </customLabels>
     <customLabels>
         <name>Creating_Service_Session_Warning</name>
@@ -77,8 +121,16 @@
         <label>Fertig</label>
     </customLabels>
     <customLabels>
+        <name>Dont_Track_Attendance</name>
+        <label>Teilnahme für diesen Teilnehmer nicht nachverfolgen</label>
+    </customLabels>
+    <customLabels>
         <name>Enabled</name>
         <label>Aktiviert</label>
+    </customLabels>
+    <customLabels>
+        <name>End_Date_After_Start_Date</name>
+        <label>{0} muss vor {1} sein</label>
     </customLabels>
     <customLabels>
         <name>Error</name>
@@ -93,12 +145,52 @@
         <label>Fertig stellen</label>
     </customLabels>
     <customLabels>
+        <name>Go_Back</name>
+        <label>Zurückgehen?</label>
+    </customLabels>
+    <customLabels>
         <name>Insert_Operation_Exception</name>
-        <label>Die Berechtigung für den Einfügevorgang wurde verweigert.</label>
+        <label>Sie können diesen Datensatz nicht hinzufügen. Bitten Sie Ihren Administrator um Hilfe.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Operation_Exception</name>
+        <label>Sie können diesen Datensatz nicht löschen. Bitten Sie Ihren Administrator um Hilfe.</label>
+    </customLabels>
+    <customLabels>
+        <name>Time_Frame</name>
+        <label>Zeitrahmen</label>
+    </customLabels>
+    <customLabels>
+        <name>Last_Week</name>
+        <label>Letzte Woche</label>
+    </customLabels>
+    <customLabels>
+        <name>List_View</name>
+        <label>Listenansichten</label>
+    </customLabels>
+    <customLabels>
+        <name>List_Views</name>
+        <label>Listenansichten</label>
+    </customLabels>
+    <customLabels>
+        <name>Loading</name>
+        <label>Wird geladen...</label>
+    </customLabels>
+    <customLabels>
+        <name>Last_Day_Of_Month</name>
+        <label>am letzten Tag</label>
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
         <label>Ihre Abfrage muss ein Objekt enthalten.</label>
+    </customLabels>
+    <customLabels>
+        <name>Monthly_On_Day</name>
+        <label>am Tag {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Monthly_On_The</name>
+        <label>Monatlich am {0} {1}</label>
     </customLabels>
     <customLabels>
         <name>New_Program_Engagement</name>
@@ -113,12 +205,20 @@
         <label>Weiter</label>
     </customLabels>
     <customLabels>
+        <name>No_Permission_Message</name>
+        <label>Sie haben keinen Zugriff auf diese Informationen. Bitten Sie Ihren Administrator um Hilfe.</label>
+    </customLabels>
+    <customLabels>
         <name>No_Service_On_BSDT</name>
         <label>Das Feld &quot;Leistung&quot; muss im festgelegten Feld &quot;Massenerbringung von Leistungen&quot; enthalten sind, um Datensätze zu speichern. Bitten Sie Ihren Administrator um Hilfe.</label>
     </customLabels>
     <customLabels>
         <name>No_Service_Participants_Created_Warning</name>
-        <label>Es sind keine Kontakte ausgewählt, daher werden keine Leistungsteilnehmer erstellt.</label>
+        <label>Es sind keine Teilnehmer ausgewählt, daher werden keine Leistungsteilnehmer erstellt.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Sessions_Created_Warning</name>
+        <label>Es wurden keine Sitzungen hinzugefügt, daher werden keine Leistungssitzungen erstellt.</label>
     </customLabels>
     <customLabels>
         <name>No_Services_For_Program_Engagement</name>
@@ -149,8 +249,20 @@
         <label>Zurück</label>
     </customLabels>
     <customLabels>
+        <name>Print</name>
+        <label>Drucken</label>
+    </customLabels>
+    <customLabels>
+        <name>Printable_View</name>
+        <label>Druckansicht</label>
+    </customLabels>
+    <customLabels>
         <name>Quantity</name>
         <label>Anzahl</label>
+    </customLabels>
+    <customLabels>
+        <name>RecentSessions</name>
+        <label>Aktuelle Sitzungen</label>
     </customLabels>
     <customLabels>
         <name>Record_Deleted</name>
@@ -171,6 +283,10 @@
     <customLabels>
         <name>Rows_With_Errors</name>
         <label>Einige Zeilen mit Leistungserbringungen enthalten Fehler.</label>
+    </customLabels>
+    <customLabels>
+        <name>Update</name>
+        <label>Aktualisieren</label>
     </customLabels>
     <customLabels>
         <name>Save</name>
@@ -202,7 +318,7 @@
     </customLabels>
     <customLabels>
         <name>Select_Create_Service_Session_Warning</name>
-        <label>Das Erstellen von Datensätzen für Leistungssitzungen ist nicht ausgewählt, daher werden keine Datensätze erstellt. Klicken Sie auf &quot;Leistungssitzung hinzufügen&quot;, um Datensätze für Leistungssitzungen hinzuzufügen</label>
+        <label>Das Erstellen von Leistungssitzungen ist nicht ausgewählt, daher werden automatisch keine Datensätze erstellt. Klicken Sie auf &quot;Leistungssitzung hinzufügen&quot;, um Datensätze für Leistungssitzungen manuell hinzuzufügen.</label>
     </customLabels>
     <customLabels>
         <name>Select_Program_Engagement</name>
@@ -215,6 +331,18 @@
     <customLabels>
         <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
         <label>Wählen Sie entweder ein Enddatum für den Leistungszeitplan oder eine Anzahl von Leistungssitzungen aus.</label>
+    </customLabels>
+    <customLabels>
+        <name>SkipToStartLink</name>
+        <label>Zum Anfang der Liste springen</label>
+    </customLabels>
+    <customLabels>
+        <name>SkipToEndLink</name>
+        <label>Zum Ende der Liste springen</label>
+    </customLabels>
+    <customLabels>
+        <name>Day_Required_When_Weekly_Selected</name>
+        <label>Wählen Sie mindestens einen Wochentag aus.</label>
     </customLabels>
     <customLabels>
         <name>Every_Week</name>
@@ -234,19 +362,43 @@
     </customLabels>
     <customLabels>
         <name>Every_Custom</name>
-        <label>Alle...</label>
+        <label>Alle</label>
     </customLabels>
     <customLabels>
         <name>Weeks</name>
         <label>Wochen</label>
     </customLabels>
     <customLabels>
+        <name>Week</name>
+        <label>Woche</label>
+    </customLabels>
+    <customLabels>
         <name>Days</name>
         <label>Tage</label>
     </customLabels>
     <customLabels>
+        <name>Day</name>
+        <label>Tag</label>
+    </customLabels>
+    <customLabels>
+        <name>List_View_Limit</name>
+        <label>Diese Listenansicht enthält über 2.000 Datensätze. Einige Datensätze werden möglicherweise nicht angezeigt.</label>
+    </customLabels>
+    <customLabels>
         <name>Months</name>
         <label>Monate</label>
+    </customLabels>
+    <customLabels>
+        <name>Month</name>
+        <label>Monat</label>
+    </customLabels>
+    <customLabels>
+        <name>Pin_List_View</name>
+        <label>Listenansicht anheften</label>
+    </customLabels>
+    <customLabels>
+        <name>Pin_Title</name>
+        <label>Zum Lösen heften Sie eine andere Listenansicht an</label>
     </customLabels>
     <customLabels>
         <name>Years</name>
@@ -293,6 +445,10 @@
         <label>Wir konnten keine Telemetrie-Metriken erfassen.</label>
     </customLabels>
     <customLabels>
+        <name>This_Week</name>
+        <label>Diese Woche</label>
+    </customLabels>
+    <customLabels>
         <name>Total_Sessions</name>
         <label>Sitzungen gesamt</label>
     </customLabels>
@@ -309,9 +465,17 @@
         <label>Sie besitzen keinen Zugriff auf dieses Feld. Ihr Salesforce-Administrator kann Ihnen in der Sache weiterhelfen.</label>
     </customLabels>
     <customLabels>
+        <name>UpsertOperationException</name>
+        <label>Sie können diesen Datensatz nicht hinzufügen oder aktualisieren. Ihr Salesforce-Administrator kann Ihnen dabei helfen.</label>
+    </customLabels>
+    <customLabels>
         <name>Warning</name>
         <label>Warnung</label>
     </customLabels>
+    <customTabs>
+        <name>Attendance</name>
+        <label>Teilnahme</label>
+    </customTabs>
     <customTabs>
         <name>Bulk_Service_Deliveries</name>
         <label>Massenerbringung von Leistungen</label>
@@ -331,5 +495,13 @@
     <quickActions>
         <name>Program__c.AddContactToProgram</name>
         <label>Kontakt zu Programm hinzufügen</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Delete_Future_Sessions</name>
+        <label>Zukünftige Leistungssitzungen löschen</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Participants</name>
+        <label>Weitere Teilnehmer hinzufügen</label>
     </quickActions>
 </Translations>

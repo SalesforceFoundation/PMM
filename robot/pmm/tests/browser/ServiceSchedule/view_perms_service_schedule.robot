@@ -43,5 +43,5 @@ View Perms Add Service Participant quick action
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
     Click Quick Action Button               Add More Participants
     Page Should Contain                     You don't have access to this information. Ask your admin for help.
-    Sleep                                   4s
+
     

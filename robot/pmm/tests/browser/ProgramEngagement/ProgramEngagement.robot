@@ -34,16 +34,15 @@ Setup Test Data
 *** Test Cases ***
 Create Program Engagement
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-     [tags]                                  W-037565      pperm:admin   perm:manage       perm:deliver    feature:Program Engagement
-     Go To PMM App
+     [tags]                                  W-037565      perm:admin   perm:manage       perm:deliver    feature:Program Engagement
      Go To Page                              Listing                                ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                                    Program Engagement
      Populate Field                          Program Engagement Name                ${program_engagement_name}
      Populate Lookup Field                   Program                                ${program}[Name]
      Populate Lookup Field                   Client                                 ${contact}[FirstName] ${contact}[LastName]
-     Populate Lightning Fields               Stage=Applied
-     ...                                     Role=Volunteer
+     Select Value From Dropdown              Stage                                  Applied
+     Select Value From Dropdown              Role                                   Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Program                  contains                  ${program}[Name]
@@ -64,8 +63,8 @@ Create Program Engagement with Auto Name Override
      Populate Field                         Program Engagement Name                ${program_engagement_name}
      Populate Lookup Field                  Program                                ${program}[Name]
      Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
-     Populate Lightning fields              Stage=Applied
-     ...                                    Role=Volunteer
+     Select Value From Dropdown             Stage                                  Applied
+     Select Value From Dropdown             Role                                   Volunteer
      Set Checkbox                           Auto-Name Override                      checked
      Click Dialog Button                    Save
      Wait Until Modal Is Closed
@@ -83,9 +82,9 @@ Date validation for PE when start date is later than end date
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
      Populate Lookup Field                  Program                                ${program}[Name]
      Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
-     Populate Lightning fields              Stage=Applied
-     ...                                    Role=Volunteer
-     ...                                    Start Date=25
+     Select Value From Dropdown             Stage                                  Applied
+     Select Value From Dropdown             Role                                   Volunteer
+     Populate Lightning fields              Start Date=25
      ...                                    End Date=10
      Click Dialog Button                    Save
      Verify Modal Error                     Start Date must be before End Date
@@ -109,8 +108,8 @@ Date validation when program engagement dates are not within program date range
      Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
      Populate Lookup Field                  Program                                ${program}[Name]
      Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
-     Populate Lightning fields              Stage=Applied
-     ...                                    Role=Volunteer
+     Select Value From Dropdown             Stage                                  Applied
+     Select Value From Dropdown             Role                                   Volunteer
      Select From Date Picker                Start Date                               10
      Select From Date Picker                End Date                                 25
      Click Dialog Button                    Save
@@ -128,7 +127,7 @@ Validate program cohort on new PE dialog
      Populate Field                         Program Engagement Name                ${program_engagement_name}
      Populate Lookup Field                  Program                                ${program}[Name]
      Populate Lookup Field                  Program Cohort                         ${program cohort1}[Name]
-     Populate Lightning Fields              Stage=Applied
-     ...                                    Role=Volunteer
+     Select Value From Dropdown             Stage                                  Applied
+     Select Value From Dropdown             Role                                   Volunteer
      Click Dialog Button                    Save
      Verify Modal Error                     Select a Program Cohort that matches the Program.

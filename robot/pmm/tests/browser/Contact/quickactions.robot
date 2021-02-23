@@ -39,11 +39,9 @@ Setup Test Data
 Add contact to program quick action
      [Documentation]                  Add a contact to a program using quick action and verify the record
      [tags]                           W-037575    perm:admin   perm:manage      perm:deliver    feature:Program Engagement
-     Go To PMM App
      Go To Page                       Details                                 Contact              object_id=${contact}[Id]
-     page should contain              ${contact}[Name]
+     Verify Details                   Name                                    contains             ${contact}[Name]
      Click Quick Action Button        Add Contact to Program
-     Verify Current Page Title        Add Contact to Program
      Populate Lookup Field            Program          ${program}[Name]    
      Populate Modal form              Role=Client
      ...                              Stage=Active
@@ -61,9 +59,8 @@ Add service delivery on a contact
      [Documentation]                  Add a service delivery on a contact and verify the record
      [tags]                           W-037575    perm:admin   perm:manage     perm:deliver    feature:Service Delivery
      Go To Page                       Details                                 Contact                  object_id=${contact}[Id]
-     page should contain              ${contact}[Name]
+     Verify Details                   Name                                    contains             ${contact}[Name]
      Click Quick Action Button        Create New Service Delivery
-     Verify Current Page Title        Create New Service Delivery
      Populate Modal Form              Program Engagement=${program_engagement}[Name]
      ...                              Service=${service}[Name]
      ...                              Quantity=${quantity}

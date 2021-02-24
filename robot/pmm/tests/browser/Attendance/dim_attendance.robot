@@ -59,6 +59,7 @@ Validate Dim attendance icon is displayed only for newly added rows
     Page Should Contain Text            Track Attendance
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
+    Sleep                               2s
     Click Dialog Button             Submit
     API Create Service Participant  ${contact2}[Id]   ${service_schedule}[Id]  ${service}[Id]
     Reload Page

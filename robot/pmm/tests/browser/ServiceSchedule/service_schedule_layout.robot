@@ -45,7 +45,7 @@ Add Service Participant quick action
     API Create Program Engagement   ${Program}[Id]  ${contact2}[Id]
     API Create Program Engagement   ${Program}[Id]  ${contact3}[Id]
     Reload Page
-    Page Should Contain                     ${service_schedule}[Name]
+    Verify Details                          Service Schedule Name          contains                   ${service_schedule}[Name]
     Click Quick Action Button               Add More Participants
     Load Page Object                        New             ServiceSchedule__c
     Verify Wizard Screen Title              Add Service Participants

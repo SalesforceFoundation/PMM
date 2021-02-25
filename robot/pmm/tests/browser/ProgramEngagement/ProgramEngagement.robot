@@ -84,8 +84,8 @@ Date validation for PE when start date is later than end date
      Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
      Select Value From Dropdown             Stage                                  Applied
      Select Value From Dropdown             Role                                   Volunteer
-     Populate Lightning fields              Start Date=25
-     ...                                    End Date=10
+     Select From Date Picker                Start Date                               25
+     Select From Date Picker                End Date                                 10
      Click Dialog Button                    Save
      Verify Modal Error                     Start Date must be before End Date
      Click Dialog Button                    Cancel

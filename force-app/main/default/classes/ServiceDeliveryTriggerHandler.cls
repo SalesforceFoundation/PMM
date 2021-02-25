@@ -11,14 +11,24 @@ public with sharing class ServiceDeliveryTriggerHandler {
     @TestVisible
     private AttendanceService service = new AttendanceService();
 
-    private SObjectField attendanceStatus = ServiceDelivery__c.AttendanceStatus__c;
-    private Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>();
+    private final SObjectField ATTENDANCE_STATUS = ServiceDelivery__c.AttendanceStatus__c;
+    private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
+    private Map<SObjectField, Set<Id>> recordIdsByLookupFieldForAttendance = new Map<SObjectField, Set<Id>>{
+        ServiceDelivery__c.Contact__c => new Set<Id>(),
+        ServiceDelivery__c.Service__c => new Set<Id>(),
+        ServiceDelivery__c.ServiceSession__c => new Set<Id>(),
+        ServiceDelivery__c.ProgramEngagement__c => new Set<Id>()
+    };
+    private Map<SObjectField, Set<Id>> recordIdsByLookupFieldForLastServiceDate = new Map<SObjectField, Set<Id>>{
+        ServiceDelivery__c.Contact__c => new Set<Id>(),
+        ServiceDelivery__c.ProgramEngagement__c => new Set<Id>()
+    };
     private Map<SObjectType, List<SObject>> sObjectsByType = new Map<SObjectType, List<SObject>>();
     private static Map<String, SObjectField> LOOKUP_FIELD_BY_FEATURE = new Map<String, SObjectField>{
-        'AttendanceToContact' => ServiceDelivery__c.Contact__c,
-        'AttendanceToService' => ServiceDelivery__c.Service__c,
-        'AttendanceToServiceSession' => ServiceDelivery__c.ServiceSession__c,
-        'AttendanceToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
+        'ServiceDeliveriesToContact' => ServiceDelivery__c.Contact__c,
+        'ServiceDeliveriesToService' => ServiceDelivery__c.Service__c,
+        'ServiceDeliveriesToServiceSession' => ServiceDelivery__c.ServiceSession__c,
+        'ServiceDeliveriesToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
     };
     private Set<SObjectField> lookupFields {
         get {
@@ -37,7 +47,10 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
 
         delegate(Trigger.operationType);
-        service.rollup(recordIdsByLookupField);
+        service.doRollups(
+            recordIdsByLookupFieldForAttendance,
+            recordIdsByLookupFieldForLastServiceDate
+        );
     }
 
     @TestVisible
@@ -85,16 +98,40 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
     }
 
-    @TestVisible
     private void extractRecordIdsToRecalculate(SObject oldRecord, SObject newRecord) {
-        Object oldValue = oldRecord == null ? null : oldRecord.get(attendanceStatus);
-        Object newValue = newRecord == null ? null : newRecord.get(attendanceStatus);
+        extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            DELIVERY_DATE,
+            recordIdsByLookupFieldForLastServiceDate
+        );
+        extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            ATTENDANCE_STATUS,
+            recordIdsByLookupFieldForAttendance
+        );
+    }
+
+    @TestVisible
+    private void extractRecordIdsToRecalculate(
+        SObject oldRecord,
+        SObject newRecord,
+        SObjectField fieldToInspect,
+        Map<SObjectField, Set<Id>> recordIdsByLookupField
+    ) {
+        Object oldValue = oldRecord == null ? null : oldRecord.get(fieldToInspect);
+        Object newValue = newRecord == null ? null : newRecord.get(fieldToInspect);
 
         if (oldValue == null && newValue == null) {
             return;
         }
 
         for (SObjectField lookupField : lookupFields) {
+            if (!recordIdsByLookupField.containsKey(lookupField)) {
+                continue;
+            }
+
             Id oldParentId = (Id) (oldRecord == null ? null : oldRecord.get(lookupField));
             Id newParentId = (Id) (newRecord == null ? null : newRecord.get(lookupField));
 
@@ -103,10 +140,6 @@ public with sharing class ServiceDeliveryTriggerHandler {
             }
 
             Set<Id> recordIds = recordIdsByLookupField.get(lookupField);
-            if (recordIds == null) {
-                recordIds = new Set<Id>();
-                recordIdsByLookupField.put(lookupField, recordIds);
-            }
 
             if (oldParentId != null) {
                 recordIds.add(oldParentId);

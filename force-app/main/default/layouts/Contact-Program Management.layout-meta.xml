@@ -20,6 +20,10 @@
                 <behavior>Readonly</behavior>
                 <field>AttendanceSummary__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>LastServiceDate__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

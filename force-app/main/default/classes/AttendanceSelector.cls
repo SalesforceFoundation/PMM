@@ -108,6 +108,7 @@ public with sharing class AttendanceSelector {
                 Id,
                 DeveloperName,
                 BucketedField__r.Field__r.QualifiedApiName,
+                QualifiedApiName,
                 (SELECT Id, Value__c FROM BucketedValues__r)
             FROM Bucket__mdt
             WHERE QualifiedApiName IN :bucketNames

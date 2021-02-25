@@ -129,7 +129,7 @@ public with sharing class TestDataFactory {
         ServiceDelivery__c serviceDelivery2 = new ServiceDelivery__c();
         serviceDelivery2.ProgramEngagement__c = engagements[1].Id;
         serviceDelivery2.Contact__c = contacts[0].Id;
-        serviceDelivery2.DeliveryDate__c = System.today();
+        serviceDelivery2.DeliveryDate__c = System.today() - 2;
         ServiceDelivery2.AttendanceStatus__c = 'Present';
         serviceDelivery2.Quantity__c = 3;
         serviceDelivery2.Service__c = service2.Id;

@@ -46,14 +46,13 @@ Autopopulate fields when stage is set to Applied
      [Documentation]                         Autopopulates application date and PE name with anonymous when the stage is set as 
      ...                                     applied on new program engagment dialog
      [tags]                                  W-037569    perm:admin   perm:manage    perm:deliver   feature:Program Engagement
-     Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Populate Lookup Field                   Program                        ${program}[Name]
-     Populate Lightning fields               Stage=Applied
-     ...                                     Role=Volunteer
+     Select Value From Dropdown              Stage                          Applied
+     Select Value From Dropdown              Role                           Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Application Date                 contains               ${today}
@@ -64,14 +63,13 @@ Autopopulate fields when stage is set to Completed
      [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
      ...                                     completed on new program engagment dialog
      [tags]                                  W-037569       perm:admin   perm:manage     perm:deliver      feature:Program Engagement
-     Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Populate Lookup Field                   Program                        ${program}[Name]
-     Populate Lightning fields               Stage=Completed
-     ...                                     Role=Volunteer
+     Select Value From Dropdown              Stage                          Completed
+     Select Value From Dropdown              Role                           Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          End Date                         contains               ${today}
@@ -82,14 +80,13 @@ Autopopulate fields when stage is set to Withdrawn
      [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
      ...                                     withdrawn on new program engagment dialog
      [tags]                                  W-037569     perm:admin   perm:manage     perm:deliver   feature:Program Engagement
-     Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Populate Lookup Field                   Program                        ${program}[Name]
-     Populate Lightning fields               Stage=Withdrawn
-     ...                                     Role=Service Provider
+     Select Value From Dropdown              Stage                          Withdrawn
+     Select Value From Dropdown              Role                           Service Provider
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          End Date                         contains               ${today}
@@ -100,14 +97,13 @@ Autopopulate fields when stage is set to Active with Program start date is later
      [Documentation]                         Validates that start date is not set to today when stage is 'Active' and Program
      ...                                     start date is later than 'Today'
      [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement
-     Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Select Value From Dropdown              Stage               Active
      Populate Lookup Field                   Program                        ${program1}[Name]
-     Populate Lightning fields               Role=Service Provider
+     Select Value From Dropdown              Role                           Service Provider
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Start Date                      does not contain               ${today}
@@ -117,14 +113,13 @@ Autopopulate fields when stage is set to Active with Program start date is today
      [Documentation]                         Validates that start date is set to today when stage is 'Active' and Program
      ...                                     start date is than 'Today'
      [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement
-     Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Select Value From Dropdown              Stage               Active
      Populate Lookup Field                   Program                        ${program2}[Name]
-     Populate Lightning fields               Role=Service Provider
+     Select Value From Dropdown              Role                           Service Provider
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Start Date                      contains               ${today}
@@ -134,14 +129,13 @@ Autopopulate fields when stage is set to Applied with Program start date is earl
      [Documentation]                         Validates that application date is not set to today when stage is 'Active' and Program
      ...                                     start date is earlier than 'Today'
      [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement
-     Go To PMM App
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
      Select Value From Dropdown              Stage               Applied
      Populate Lookup Field                   Program                        ${program3}[Name]
-     Populate Lightning fields               Role=Service Provider
+     Select Value From Dropdown              Role                           Service Provider
      Populate Field                          Start Date               ${start_date}
      Click Dialog Button                     Save
      Wait Until Modal Is Closed

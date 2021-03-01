@@ -31,8 +31,7 @@ Max number of service session
     [Documentation]                 Validates that only 500 sessions are created when entering a higher value on Screen1.
     ...                             Validates that a warning message is displayed on Screen2  and is removed when one service session
     ...                             is deleted.
-    [tags]                           W-8559800      perm:admin   perm:manage       feature:Service Schedule
-    Go To PMM App   
+    [tags]                           W-8559800      perm:admin   perm:manage       feature:Service Schedule  
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
@@ -54,4 +53,3 @@ Max number of service session
     Wait Until Modal is Closed
     Verify Details                          Service Schedule Name             contains      ${service_schedule_name}
     Verify Details                          Number of Service Sessions        contains      600
-

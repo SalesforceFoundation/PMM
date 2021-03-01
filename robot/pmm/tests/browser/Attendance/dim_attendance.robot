@@ -44,11 +44,10 @@ Setup Test Data
 Dim attendance rows and validate service deliveries are not created
     [Documentation]                 This test Dims an attendance row and validates that the toast message is displayed
     [tags]                          W-8613706    perm:admin   perm:manage    perm:deliver   feature:Attendance
-    Go To PMM App
     Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain Text        Track Attendance
     Dim attendance Row              1         Select
-    Click Button                    Submit
+    Click Dialog Button             Submit
     Verify Toast Message            There are no Service Delivery records to update.
     Page Should Contain Text        ${contact1}[Name]
 
@@ -56,15 +55,15 @@ Validate Dim attendance icon is displayed only for newly added rows
     [Documentation]                 This test updates the attendance row and Submits. Creates a new Service participant and validates
     ...                             that the dim icon is displayed only for the newly added row.
     [tags]                          W-8613706    perm:admin   perm:manage   perm:deliver   feature:Attendance
-    Go To PMM App
     Go To Page                      Details         ServiceSession__c        object_id=${service_session3}[Id]
     Page Should Contain Text            Track Attendance
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
-    Click Button                        Submit
+    Sleep                               2s
+    Click Dialog Button             Submit
     API Create Service Participant  ${contact2}[Id]   ${service_schedule}[Id]  ${service}[Id]
     Reload Page
-    Click Button                    Update
+    Click Dialog Button             Update
     Dim Attendance Row              1       Is not displayed
     Dim Attendance Row              2       Is displayed
     Page Should Contain             ${contact1}[Name]
@@ -74,12 +73,11 @@ Dim attendance row and validate that the Quantity and Attendance Status is reset
     [Documentation]                 This test updates the attendance row, clicks on the Dim icon and validates that
     ...                             the data is reset when clicked on Submit
     [tags]                          W-8613706    perm:admin   perm:manage     perm:deliver   feature:Attendance
-    Go To PMM App
     Go To Page                          Details         ServiceSession__c        object_id=${service_session2}[Id]
     Page Should Contain Text            ${contact1}[Name]
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
     Dim Attendance Row                  1      Select
-    Click Button                        Submit
+    Click Dialog Button                 Submit
     Validate Attendance Info In Row     1     Hours                 does not contain    10
     Validate Attendance Info In Row     1     Attendance Status     does not contain    Present

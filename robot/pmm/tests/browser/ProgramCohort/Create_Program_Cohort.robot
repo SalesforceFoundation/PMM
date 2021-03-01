@@ -30,7 +30,6 @@ Create Program Cohort
      [Documentation]                        This test creates a program cohort and verifies the cohort
      ...                                    record matches the values entered in the form
      [tags]                                 W-037572     perm:admin   perm:manage     feature:Program Cohort
-     Go To PMM App
      Go To Page                             Listing                 ${ns}ProgramCohort__c   
      Click Object Button                    New
      Wait For Modal                         New                     Program Cohort

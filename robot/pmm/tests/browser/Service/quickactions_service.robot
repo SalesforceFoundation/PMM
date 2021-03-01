@@ -42,7 +42,6 @@ Create a new service delivery on service using quick action
      [Documentation]                This test loads the service record, clicks on the new service delivery quick action and creates
      ...                            new service delivery record.
      [tags]                         W-042516      perm:admin   perm:manage    perm:deliver    feature:Service Delivery
-     Go To PMM App
      Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery

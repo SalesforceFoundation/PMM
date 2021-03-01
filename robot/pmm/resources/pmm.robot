@@ -138,6 +138,20 @@ API Create Service Participant
     Store Session Record      ${ns}ServiceParticipant__c  ${service_participant_id}
     [Return]            &{service_participant}
 
+API Create Service Delivery
+    [Documentation]     Creates a new Service Delivery record. Service Delivery details are passed as key value pairs.
+    ${service_delivery_name} =   Generate Random String
+    ${ns} =                     Get PMM Namespace Prefix
+    [Arguments]                 ${contact_id}  ${program_engagement_id}   ${service_id}   &{fields}
+    ${service_delivery_id} =     Salesforce Insert  ${ns}ServiceDelivery__c
+    ...                             Name=${service_delivery_name}
+    ...                             ${ns}Contact__c=${contact_id}
+    ...                             ${ns}ProgramEngagement__c=${program_engagement_id}
+    ...                             ${ns}Service__c=${service_id}
+    &{service_delivery} =       Salesforce Get  ${ns}ServiceDelivery__c  ${service_delivery_id}
+    Store Session Record      ${ns}ServiceDelivery__c  ${service_delivery_id}
+    [Return]            &{service_delivery}
+
 Capture Screenshot and Delete Records and Close Browser
     [Documentation]         This keyword will capture a screenshot before closing the browser and deleting records when test fails
     Run Keyword If Any Tests Failed      Capture Page Screenshot

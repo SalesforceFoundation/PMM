@@ -37,7 +37,6 @@ Create a new service delivery using quick action
      [Documentation]                This test loads the program engagement record, clicks on the new service delivery quick action and creates
      ...                            new service delivery record.
      [tags]                         W-037572        perm:admin   perm:manage       perm:deliver    feature:Service Delivery
-     Go To PMM App
      Go To Page                     Details                        ProgramEngagement__c      object_id=${program_engagement}[Id]
      Verify Details                 Program Engagement Name        contains                   ${contact}[FirstName] ${contact}[LastName] ${today}: ${program}[Name]
      Click Quick Action Button      Create New Service Delivery

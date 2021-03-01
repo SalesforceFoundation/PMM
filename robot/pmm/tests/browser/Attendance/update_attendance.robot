@@ -44,7 +44,6 @@ Setup Test Data
 Update attendance when service session status is Pending
     [Documentation]                 This test updates attendance for a service session record with Pending Status
     [tags]                          W-8607484   perm:admin   perm:manage    feature:Attendance
-    Go To PMM App
     Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]         
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
@@ -52,7 +51,7 @@ Update attendance when service session status is Pending
     Populate Attendance Dropdown        2      Attendance Status    Unexcused Absence
     Populate Attendance Field           3      Hours                10
     Populate Attendance Dropdown        3      Attendance Status    Excused Absence
-    Click Button                    Submit
+    Click Dialog Button             Submit
     Verify Toast Message            Saved 3 Service Delivery records.
     Reload Page
     Page Should Contain             Present
@@ -64,15 +63,14 @@ Update attendance when service session status is Pending
 Update attendance when service session status is Complete
     [Documentation]                 This test updates attendance for a service session record with Complete Status
     [tags]                          W-8611541    perm:admin   perm:manage     feature:Attendance
-    Go To PMM App
     Go To Page                      Details         ServiceSession__c        object_id=${service_session2}[Id]
-    Click Button                    Update
+    Click Dialog Button             Update
     Page Should Contain             Track Attendance         
     Populate Attendance Field           1      Hours                10
     Populate Attendance Dropdown        1      Attendance Status    Present
     Populate Attendance Dropdown        2      Attendance Status    Unexcused Absence
     Populate Attendance Dropdown        3      Attendance Status    Excused Absence
-    Click Button                    Save
+    Click Dialog Button             Save
     Verify Toast Message            Saved 3 Service Delivery records.
     Page Should Contain             Present
     Page Should Contain             Created Date

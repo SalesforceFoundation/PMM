@@ -25,8 +25,7 @@ Setup Test Data
 *** Test Cases ***
 Create a Contact 
     [Documentation]                        This test creates a Contact and verifies the details of the contact
-    [tags]                                 perm:admin   perm:manage      perm:deliver    feature:Contact
-    Go To PMM App
+    [tags]                                 perm:admin   perm:manage      perm:deliver    perm:view    feature:Contact
     Go To Page                             Listing                              Contact
     Click Object Button                    New
     Load Page object                       NewContact                           Contact

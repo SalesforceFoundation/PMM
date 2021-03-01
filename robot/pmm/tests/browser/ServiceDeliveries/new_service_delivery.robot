@@ -39,7 +39,6 @@ Create a Service Delivery via UI
     [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
     ...                                    has all the values from the form
     [tags]                                 perm:admin   perm:manage     perm:deliver     feature:Service Delivery
-    Go To PMM App
     Go To Page                             Listing                                 ${ns}ServiceDelivery__c
     Click Object Button                    New
     Wait For Modal                         New                                     Service Delivery

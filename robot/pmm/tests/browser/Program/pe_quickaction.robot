@@ -41,12 +41,9 @@ Add contact to program quick action on Program
      [Documentation]                  Add a contact to a program using quick action and verify that the Program Engagement
      ...                              related list is updated.
      [tags]                           perm:admin    perm:manage    perm:deliver      feature:Program Engagment
-     Go To PMM App
      Go To Page                       Details                                 Program__c                    object_id=${program}[Id]
-     page should contain              ${program}[Name]
-     click quick action button        Add Contact to Program
-     Load Page Object                 NewProgramEngagement                    ${ns}ProgramEngagement__c
-     verify current page title        Add Contact to Program
+     Verify Details                   Program Name                            contains                      ${program}[Name]
+     Click Quick Action Button        Add Contact to Program
      Populate Modal form              Client=${contact}[FirstName] ${contact}[LastName]
      ...                              Role=Client
      ...                              Stage=Enrolled

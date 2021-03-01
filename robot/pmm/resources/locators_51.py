@@ -97,6 +97,7 @@ pmm_lex_locators = {
         "frequency": "//span[contains(@class,'slds-button')]/label/span[@class='slds-radio_faux' and text()='{}']",
         "ends_radio_button": "//span[@class='slds-radio'][./input[@value='{}']]/descendant::span[@class='slds-radio_faux']",
         "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
+        "first_session_end": "//lightning-input[contains(@class,'slds-form-element')][./descendant::*[text()='{}']]/descendant::div//input[@class='slds-input']",
         "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
     },
     "attendance": {

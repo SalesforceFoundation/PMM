@@ -109,8 +109,23 @@ public with sharing class ServiceDeliveryTriggerHandler {
         extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS },
+            ATTENDANCE_STATUS,
             recordIdsByLookupFieldForAttendance
+        );
+    }
+
+    @TestVisible
+    private void extractRecordIdsToRecalculate(
+        SObject oldRecord,
+        SObject newRecord,
+        SObjectField fieldToInspect,
+        Map<SObjectField, Set<Id>> recordIdsByLookupField
+    ) {
+        extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            new List<SObjectField>{ fieldToInspect },
+            recordIdsByLookupField
         );
     }
 
@@ -121,15 +136,6 @@ public with sharing class ServiceDeliveryTriggerHandler {
         List<SObjectField> fieldsToInspect,
         Map<SObjectField, Set<Id>> recordIdsByLookupField
     ) {
-        for (SObjectField fieldToInspect : fieldsToInspect) {
-            Object oldValue = oldRecord == null ? null : oldRecord.get(fieldToInspect);
-            Object newValue = newRecord == null ? null : newRecord.get(fieldToInspect);
-
-            if (oldValue == null && newValue == null) {
-                return;
-            }
-        }
-
         for (SObjectField lookupField : lookupFields) {
             if (!recordIdsByLookupField.containsKey(lookupField)) {
                 continue;
@@ -138,6 +144,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
             Id oldParentId = (Id) (oldRecord == null ? null : oldRecord.get(lookupField));
             Id newParentId = (Id) (newRecord == null ? null : newRecord.get(lookupField));
 
+            Boolean hasChange = false;
             for (SObjectField fieldToInspect : fieldsToInspect) {
                 Object oldValue = oldRecord == null
                     ? null
@@ -145,9 +152,14 @@ public with sharing class ServiceDeliveryTriggerHandler {
                 Object newValue = newRecord == null
                     ? null
                     : newRecord.get(fieldToInspect);
-                if (oldValue == newValue && oldParentId == newParentId) {
-                    continue;
+                hasChange = oldValue != newValue || oldParentId != newParentId;
+                if (hasChange) {
+                    break;
                 }
+            }
+
+            if (!hasChange) {
+                continue;
             }
 
             Set<Id> recordIds = recordIdsByLookupField.get(lookupField);

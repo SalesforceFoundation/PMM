@@ -41,7 +41,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
+            ATTENDANCE_STATUS_FIELD,
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -59,7 +59,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
+            ATTENDANCE_STATUS_FIELD,
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -77,7 +77,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
+            ATTENDANCE_STATUS_FIELD,
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -98,7 +98,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
+            ATTENDANCE_STATUS_FIELD,
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -131,7 +131,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
+            ATTENDANCE_STATUS_FIELD,
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -160,7 +160,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
+            ATTENDANCE_STATUS_FIELD,
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -189,7 +189,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
+            ATTENDANCE_STATUS_FIELD,
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -217,7 +217,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
+            ATTENDANCE_STATUS_FIELD,
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -243,7 +243,8 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
                 NumPresentServiceDeliveries__c,
                 NumAbsentServiceDeliveries__c,
                 LastServiceDate__c,
-                ConsecutiveAbsences__c
+                ConsecutiveAbsences__c,
+                LastModifiedDate
             FROM Contact
             LIMIT 1
         ];
@@ -389,6 +390,8 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
             serviceDeliveries[1].DeliveryDate__c,
             contactRecord.LastServiceDate__c
         );
+        requery();
+        DateTime contactModStamp = contactRecord.LastModifiedDate;
 
         Test.startTest();
         serviceDeliveries[1].AutonameOverride__c = true;
@@ -401,6 +404,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
             serviceDeliveries[1].DeliveryDate__c,
             contactRecord.LastServiceDate__c
         );
+        System.assertEquals(contactModStamp, contactRecord.LastModifiedDate);
     }
 
     @IsTest

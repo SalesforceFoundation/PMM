@@ -36,6 +36,12 @@ public with sharing class AttendanceService {
         ServiceDelivery__c.Contact__c => Contact.LastServiceDate__c,
         ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.LastServiceDate__c
     };
+    private static final Map<SObjectType, SObjectField> SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT = new Map<SObjectType, SObjectField>{
+        Contact.SObjectType => ServiceDelivery__c.Contact__c,
+        ProgramEngagement__c.SObjectType => ServiceDelivery__c.ProgramEngagement__c,
+        ServiceSession__c.SObjectType => ServiceDelivery__c.ServiceSession__c,
+        Service__c.SObjectType => ServiceDelivery__c.Service__c
+    };
     private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
     private Map<Id, SObject> rollupTargetObjectById = new Map<Id, SObject>();
 
@@ -75,6 +81,15 @@ public with sharing class AttendanceService {
             Database.rollback(savepoint);
             throw new ServiceDeliveryException(ex);
         }
+    }
+
+    public void doBatchRollups(List<SObject> parents) {
+        Map<SObjectField, Set<Id>> masterMap = new Map<SobjectField, Set<Id>>{
+            SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
+                parents[0].Id.getSObjectType()
+            ) => new Map<Id, SObject>(parents).keySet()
+        };
+        doRollups(masterMap, masterMap);
     }
 
     public void doRollups(
@@ -190,6 +205,10 @@ public with sharing class AttendanceService {
             SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD.get(
                 lookupFieldOnDelivery
             );
+
+            if (lastServiceDateField == null) {
+                continue;
+            }
 
             SObjectType parentObject = lookupFieldOnDelivery.getDescribe()
                 .getReferenceTo()[0];

@@ -13,6 +13,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
 
     private final SObjectField ATTENDANCE_STATUS = ServiceDelivery__c.AttendanceStatus__c;
     private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
+    private final SObjectField QUANTITY = ServiceDelivery__c.Quantity__c;
     private Map<SObjectField, Set<Id>> recordIdsByLookupFieldForAttendance = new Map<SObjectField, Set<Id>>{
         ServiceDelivery__c.Contact__c => new Set<Id>(),
         ServiceDelivery__c.Service__c => new Set<Id>(),
@@ -102,13 +103,13 @@ public with sharing class ServiceDeliveryTriggerHandler {
         extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            DELIVERY_DATE,
+            new List<SObjectField>{ DELIVERY_DATE, QUANTITY },
             recordIdsByLookupFieldForLastServiceDate
         );
         extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS,
+            new List<SObjectField>{ ATTENDANCE_STATUS },
             recordIdsByLookupFieldForAttendance
         );
     }
@@ -117,14 +118,16 @@ public with sharing class ServiceDeliveryTriggerHandler {
     private void extractRecordIdsToRecalculate(
         SObject oldRecord,
         SObject newRecord,
-        SObjectField fieldToInspect,
+        List<SObjectField> fieldsToInspect,
         Map<SObjectField, Set<Id>> recordIdsByLookupField
     ) {
-        Object oldValue = oldRecord == null ? null : oldRecord.get(fieldToInspect);
-        Object newValue = newRecord == null ? null : newRecord.get(fieldToInspect);
+        for (SObjectField fieldToInspect : fieldsToInspect) {
+            Object oldValue = oldRecord == null ? null : oldRecord.get(fieldToInspect);
+            Object newValue = newRecord == null ? null : newRecord.get(fieldToInspect);
 
-        if (oldValue == null && newValue == null) {
-            return;
+            if (oldValue == null && newValue == null) {
+                return;
+            }
         }
 
         for (SObjectField lookupField : lookupFields) {
@@ -135,8 +138,16 @@ public with sharing class ServiceDeliveryTriggerHandler {
             Id oldParentId = (Id) (oldRecord == null ? null : oldRecord.get(lookupField));
             Id newParentId = (Id) (newRecord == null ? null : newRecord.get(lookupField));
 
-            if (oldValue == newValue && oldParentId == newParentId) {
-                continue;
+            for (SObjectField fieldToInspect : fieldsToInspect) {
+                Object oldValue = oldRecord == null
+                    ? null
+                    : oldRecord.get(fieldToInspect);
+                Object newValue = newRecord == null
+                    ? null
+                    : newRecord.get(fieldToInspect);
+                if (oldValue == newValue && oldParentId == newParentId) {
+                    continue;
+                }
             }
 
             Set<Id> recordIds = recordIdsByLookupField.get(lookupField);

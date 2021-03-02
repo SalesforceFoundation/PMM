@@ -41,7 +41,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS_FIELD,
+            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -59,7 +59,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS_FIELD,
+            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -77,7 +77,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS_FIELD,
+            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -98,7 +98,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS_FIELD,
+            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -131,7 +131,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS_FIELD,
+            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -160,7 +160,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS_FIELD,
+            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -189,7 +189,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS_FIELD,
+            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -217,7 +217,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         handler.extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            ATTENDANCE_STATUS_FIELD,
+            new List<SObjectField>{ ATTENDANCE_STATUS_FIELD },
             recordIdsByLookupField
         );
         Test.stopTest();
@@ -350,6 +350,57 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
             programEngagement.LastServiceDate__c
         );
         System.assertEquals(0, programEngagement.ConsecutiveAbsences__c);
+    }
+
+    @IsTest
+    private static void shouldUpdateLastServiceDateOnQuantityUpdate() {
+        setupTest();
+
+        System.assertEquals(
+            serviceDeliveries[1].DeliveryDate__c,
+            contactRecord.LastServiceDate__c
+        );
+
+        List<ServiceDelivery__c> allServiceDeliveries = [
+            SELECT Id, Quantity__c, DeliveryDate__c
+            FROM ServiceDelivery__c
+            ORDER BY DeliveryDate__c DESC
+        ];
+
+        Test.startTest();
+        allServiceDeliveries[0].Quantity__c = 0;
+        allServiceDeliveries[1].Quantity__c = 0;
+        update allServiceDeliveries;
+        Test.stopTest();
+
+        requery();
+
+        System.assertEquals(
+            allServiceDeliveries[2].DeliveryDate__c,
+            contactRecord.LastServiceDate__c
+        );
+    }
+
+    @IsTest
+    private static void shouldNotUpdateLastServiceDateOnIrrelevantFieldUpdate() {
+        setupTest();
+
+        System.assertEquals(
+            serviceDeliveries[1].DeliveryDate__c,
+            contactRecord.LastServiceDate__c
+        );
+
+        Test.startTest();
+        serviceDeliveries[1].AutonameOverride__c = true;
+        update serviceDeliveries[1];
+        Test.stopTest();
+
+        requery();
+
+        System.assertEquals(
+            serviceDeliveries[1].DeliveryDate__c,
+            contactRecord.LastServiceDate__c
+        );
     }
 
     @IsTest

@@ -323,18 +323,6 @@ public with sharing class AttendanceService {
             SObjectType parentObject = lookupFieldOnDelivery.getDescribe()
                 .getReferenceTo()[0];
             String relationshipName = relationshipNameBySObjectType.get(parentObject);
-            if (parentObject == Contact.SObjectType) {
-                System.debug(
-                    JSON.serializePretty(
-                        systemAccess.getParentsWithServiceDeliveries(
-                            lookupFieldOnDelivery,
-                            idsByLookupFieldToTarget.get(lookupFieldOnDelivery),
-                            parentObject,
-                            relationshipName
-                        )
-                    )
-                );
-            }
             for (
                 SObject parentRecord : systemAccess.getParentsWithServiceDeliveries(
                     lookupFieldOnDelivery,
@@ -343,7 +331,6 @@ public with sharing class AttendanceService {
                     relationshipName
                 )
             ) {
-                System.debug(parentRecord);
                 calculateLastServiceDeliveryRollups(
                     parentRecord,
                     relationshipName,
@@ -363,16 +350,13 @@ public with sharing class AttendanceService {
             targetObject = parentRecord;
             rollupTargetObjectById.put(targetObject.Id, targetObject);
         }
-        System.debug(targetObject);
 
         List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) parentRecord.getSObjects(
             relationshipName
         );
-        System.debug(serviceDeliveries);
         if (serviceDeliveries == null || serviceDeliveries.isEmpty()) {
             targetObject.put(lastServiceDateField, null);
         } else {
-            System.debug((Date) serviceDeliveries[0].get(DELIVERY_DATE));
             targetObject.put(
                 lastServiceDateField,
                 (Date) serviceDeliveries[0].get(DELIVERY_DATE)

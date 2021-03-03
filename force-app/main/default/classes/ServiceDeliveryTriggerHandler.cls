@@ -10,8 +10,6 @@
 public with sharing class ServiceDeliveryTriggerHandler {
     @TestVisible
     private AttendanceService service = new AttendanceService();
-    @TestVisible
-    private FeatureGateSelector featureGateSelector = new FeatureGateSelector();
 
     private final SObjectField ATTENDANCE_STATUS = ServiceDelivery__c.AttendanceStatus__c;
     private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
@@ -178,7 +176,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
 
     private Set<SObjectField> getLookupFields() {
         Set<SObjectField> fields = new Set<SObjectField>();
-        List<FeatureGate__mdt> features = featureGateSelector.getAllFeatureGates();
+        List<FeatureGate__mdt> features = SystemAccess.getInstance().getAllFeatureGates();
 
         for (FeatureGate__mdt feature : features) {
             if (

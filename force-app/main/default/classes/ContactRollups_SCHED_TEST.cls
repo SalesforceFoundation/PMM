@@ -1,8 +1,6 @@
 @isTest
 private class ContactRollups_SCHED_TEST {
-    private static BasicStub featureGateSelectorStub = new BasicStub(
-        FeatureGateSelector.class
-    );
+    private static BasicStub systemAccessStub = new BasicStub(SystemAccess.class);
     private static ServiceDeliveryTriggerHandler handler = new ServiceDeliveryTriggerHandler();
 
     private static Contact contactRecord;
@@ -15,13 +13,8 @@ private class ContactRollups_SCHED_TEST {
 
     @testSetup
     static void setup() {
-        TestDataFactory.generateAttendanceData('Monthly');
-    }
-
-    @IsTest
-    private static void shouldIncrementOnBatch() {
         // Stub turned off Feature Gates so we can insert Service Deliveries without triggers running
-        featureGateSelectorStub.withReturnValue(
+        systemAccessStub.withReturnValue(
             'getAllFeatureGates',
             new List<FeatureGate__mdt>{
                 new FeatureGate__mdt(
@@ -42,16 +35,25 @@ private class ContactRollups_SCHED_TEST {
                 )
             }
         );
-        handler.featureGateSelector = (FeatureGateSelector) featureGateSelectorStub.createMock();
+        SystemAccess.instance = (SystemAccess) systemAccessStub.createMock();
+        SYstem.debug('hello');
+        System.debug(SystemAccess.getInstance().getAllFeatureGates());
+        // TestDataFactory.generateAttendanceData('Monthly');
+    }
 
-        setupTest();
-        requery();
+    @IsTest
+    private static void shouldIncrementOnBatch() {
+        // setupTest();
+        // requery();
+        System.debug(SystemAccess.getInstance().getAllFeatureGates());
+
+        SystemAccess.getInstance().getAllFeatureGates();
 
         // The attendance records were inserted in the setupTest method, but triggers were off
-        System.assertEquals(null, contactRecord.NumPresentServiceDeliveries__c);
-        System.assertEquals(null, contactRecord.NumAbsentServiceDeliveries__c);
-        System.assertEquals(null, contactRecord.LastServiceDate__c);
-        System.assertEquals(null, contactRecord.ConsecutiveAbsences__c);
+        // System.assertEquals(null, contactRecord.NumPresentServiceDeliveries__c);
+        // System.assertEquals(null, contactRecord.NumAbsentServiceDeliveries__c);
+        // System.assertEquals(null, contactRecord.LastServiceDate__c);
+        // System.assertEquals(null, contactRecord.ConsecutiveAbsences__c);
 
         // TODO: kick off batch, assert rollups
     }

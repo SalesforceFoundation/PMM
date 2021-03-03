@@ -53,9 +53,10 @@ public without sharing class SystemAccess {
                 new List<String>{ String.valueOf(ServiceDelivery__c.DeliveryDate__c) }
             )
             .addCondition(String.valueOf(ServiceDelivery__c.Quantity__c) + ' > 0')
-            .withOrderBy(
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' DESC NULLS LAST'
+            .addCondition(
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' <= TODAY'
             )
+            .withOrderBy(String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' DESC')
             .withLimit(1);
 
         queryBuilder

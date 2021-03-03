@@ -24,36 +24,27 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
      * @return database.Querylocator
      ********************************************************************************************************/
     public Database.Querylocator start(Database.BatchableContext bc) {
-        List<SObjectField> rollupFields = new List<SObjectField>{
-            Contact.LastServiceDate__c,
+        List<SObjectField> rollupIntegerFields = new List<SObjectField>{
             Contact.ConsecutiveAbsences__c,
             Contact.NumAbsentServiceDeliveries__c,
             Contact.NumPresentServiceDeliveries__c
         };
 
-        String soql = 'SELECT Id FROM Contact WHERE ';
+        List<String> attendanceStatuses = new AttendanceService().attendanceStatuses;
 
-        // Contact with any of our rollup fields populated
-        for (SobjectField field : rollupFields) {
-            soql += (String.valueOf(field) + ' != null OR ');
-        }
-
-        Set<Id> parentIds = new Set<Id>();
-        List<ServiceDelivery__c> relevantServiceDeliveries = [
-            SELECT Contact__c
-            FROM ServiceDelivery__c
-            WHERE
-                AttendanceStatus__c != NULL
-                OR (DeliveryDate__c != NULL
-                AND Quantity__c != NULL)
-        ];
-        for (ServiceDelivery__c child : relevantServiceDeliveries) {
-            parentIds.add(child.Contact__c);
-        }
+        String soql = 'SELECT Id, ';
 
         // Contact with any delivery records with attendance
-        // Contact with any delivery record with delivery date and qty
-        soql += ' Id IN :parentIds';
+        // Contact with any delivery records with delivery date and qty
+        soql +=
+            '(SELECT Contact, AttendanceStatus__c, DeliveryDate__c, Quantity__c ' +
+            'FROM ServiceDelivery__c ' +
+            'WHERE AttendanceStatus__c IN :attendanceStatuses OR (DeliveryDate__c <= TODAY AND Quantity__c > 0) ';
+
+        soql += 'FROM Contact';
+
+        // Contact with any of our rollup fields populated
+        // Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
 
         return Database.getQueryLocator(soql);
     }
@@ -64,7 +55,7 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
      * @param scope the list of Account objects to process
      * @return void
      ********************************************************************************************************/
-    public void execute(Database.BatchableContext bc, List<Account> scope) {
+    public void execute(Database.BatchableContext bc, List<Contact> scope) {
         new AttendanceService().doBatchRollups(scope);
     }
 

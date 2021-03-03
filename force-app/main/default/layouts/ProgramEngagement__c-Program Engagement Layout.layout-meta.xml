@@ -44,6 +44,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>ConsecutiveAbsences__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>LastServiceDate__c</field>
             </layoutItems>
             <layoutItems>

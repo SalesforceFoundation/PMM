@@ -69,34 +69,27 @@ public with sharing class AttendanceService {
 
     private List<String> presentStatuses {
         get {
-            if (presentStatuses == null) {
-                presentStatuses = statusBuckets.get('Present');
-            }
-            return presentStatuses;
+            return statusBuckets.get('Present');
         }
         set;
     }
 
     private List<String> absentStatuses {
         get {
-            if (absentStatuses == null) {
-                absentStatuses = statusBuckets.get('Absent');
-            }
-            return absentStatuses;
+            return statusBuckets.get('Absent');
         }
         set;
     }
 
-    public List<String> attendanceStatuses {
-        get {
-            if (attendanceStatuses == null) {
-                attendanceStatuses = new List<String>();
-                attendanceStatuses.addAll(presentStatuses);
-                attendanceStatuses.addAll(absentStatuses);
-            }
-            return attendanceStatuses;
+    private List<String> attendanceStatuses;
+
+    public List<String> getAttendanceStatuses() {
+        if (attendanceStatuses == null) {
+            attendanceStatuses = new List<String>();
+            attendanceStatuses.addAll(presentStatuses);
+            attendanceStatuses.addAll(absentStatuses);
         }
-        set;
+        return attendanceStatuses;
     }
 
     public Map<SObjectType, String> relationshipNameBySObjectType {
@@ -143,9 +136,10 @@ public with sharing class AttendanceService {
         }
     }
 
-    public void doBatchRollups(List<SObject> parents) {
-        rollupAttendanceFromSObjects(parents);
-        rollupLastServiceDateFromSObjects(parents);
+    public void doRollups(List<SObject> parents) {
+        rollupAttendance(parents);
+        rollupLastServiceDate(parents);
+        // TODO: iterate parents, key into rollupTargetObejctById with the id, compare the sObject to see if it needs update.
         systemAccess.updateRecords(rollupTargetObjectById.values());
     }
 
@@ -153,13 +147,13 @@ public with sharing class AttendanceService {
         Map<SObjectField, Set<Id>> attendanceMap,
         Map<SObjectField, Set<Id>> lastServiceDateMap
     ) {
-        rollupAttendanceFromIds(attendanceMap);
-        rollupLastServiceDateFromIds(lastServiceDateMap);
+        rollupAttendance(attendanceMap);
+        rollupLastServiceDate(lastServiceDateMap);
         systemAccess.updateRecords(rollupTargetObjectById.values());
     }
 
     @TestVisible
-    private void rollupAttendanceFromSObjects(List<SObject> parents) {
+    private void rollupAttendance(List<SObject> parents) {
         Set<Id> consecutiveAbsencesCountComplete = new Set<Id>();
         SObjectType objectType = parents[0].Id.getSObjectType();
         SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
@@ -184,9 +178,7 @@ public with sharing class AttendanceService {
     }
 
     @TestVisible
-    private void rollupAttendanceFromIds(
-        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget
-    ) {
+    private void rollupAttendance(Map<SObjectField, Set<Id>> idsByLookupFieldToTarget) {
         Set<Id> consecutiveAbsencesCountComplete = new Set<Id>();
         if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {
             return;
@@ -201,6 +193,8 @@ public with sharing class AttendanceService {
                 lookupFieldOnDelivery,
                 idsByLookupFieldToTarget.get(lookupFieldOnDelivery)
             );
+
+            List<String> attendanceStatuses = getAttendanceStatuses();
 
             for (
                 ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
@@ -275,7 +269,7 @@ public with sharing class AttendanceService {
     }
 
     @TestVisible
-    private void rollupLastServiceDateFromSObjects(List<SObject> parents) {
+    private void rollupLastServiceDate(List<SObject> parents) {
         SObjectType objectType = parents[0].Id.getSObjectType();
         SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
             objectType
@@ -300,7 +294,7 @@ public with sharing class AttendanceService {
     }
 
     @TestVisible
-    private void rollupLastServiceDateFromIds(
+    private void rollupLastServiceDate(
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget
     ) {
         if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {

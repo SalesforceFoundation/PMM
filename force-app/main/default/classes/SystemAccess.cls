@@ -11,23 +11,7 @@
  * We must bypass sharing in order to rollup all detail records to the parent entity.
  */
 public without sharing class SystemAccess {
-    @TestVisible
-    private static SystemAccess instance;
-
-    public static SystemAccess getInstance() {
-        if (instance == null) {
-            instance = new SystemAccess();
-        }
-        return instance;
-    }
-
     private QueryBuilder queryBuilder = new QueryBuilder();
-
-    public List<FeatureGate__mdt> getAllFeatureGates() {
-        System.debug('in sys access');
-        System.debug(FeatureGate__mdt.getAll().values());
-        return FeatureGate__mdt.getAll().values();
-    }
 
     public List<ServiceDelivery__c> getAttendanceRecords(
         SObjectField field,

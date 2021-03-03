@@ -1,5 +1,8 @@
 public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
+    private static AttendanceService attendanceService = new AttendanceService();
+
+    @TestVisible
     private final static Integer DEFAULT_BATCH_SIZE = 10;
 
     @TestVisible
@@ -24,27 +27,23 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
      * @return database.Querylocator
      ********************************************************************************************************/
     public Database.Querylocator start(Database.BatchableContext bc) {
-        List<SObjectField> rollupIntegerFields = new List<SObjectField>{
-            Contact.ConsecutiveAbsences__c,
-            Contact.NumAbsentServiceDeliveries__c,
-            Contact.NumPresentServiceDeliveries__c
-        };
-
-        List<String> attendanceStatuses = new AttendanceService().attendanceStatuses;
+        List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
 
         String soql = 'SELECT Id, ';
 
         // Contact with any delivery records with attendance
         // Contact with any delivery records with delivery date and qty
         soql +=
-            '(SELECT Contact, AttendanceStatus__c, DeliveryDate__c, Quantity__c ' +
-            'FROM ServiceDelivery__c ' +
-            'WHERE AttendanceStatus__c IN :attendanceStatuses OR (DeliveryDate__c <= TODAY AND Quantity__c > 0) ';
+            '(SELECT Contact__c, AttendanceStatus__c, DeliveryDate__c, Quantity__c ' +
+            'FROM Service_Deliveries__r ' +
+            'WHERE AttendanceStatus__c IN :attendanceStatuses OR (DeliveryDate__c <= TODAY AND Quantity__c > 0)) ';
 
         soql += 'FROM Contact';
 
+        // TODO: refactor this to use querybuilder and just send in the where as one giant clause
+
         // Contact with any of our rollup fields populated
-        // Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
+        // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
 
         return Database.getQueryLocator(soql);
     }
@@ -56,7 +55,7 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
      * @return void
      ********************************************************************************************************/
     public void execute(Database.BatchableContext bc, List<Contact> scope) {
-        new AttendanceService().doBatchRollups(scope);
+        attendanceService.doRollups(scope);
     }
 
     /*******************************************************************************************************

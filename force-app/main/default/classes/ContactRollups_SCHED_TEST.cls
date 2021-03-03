@@ -1,128 +1,63 @@
 @isTest
 private class ContactRollups_SCHED_TEST {
-    private static BasicStub systemAccessStub = new BasicStub(SystemAccess.class);
-    private static ServiceDeliveryTriggerHandler handler = new ServiceDeliveryTriggerHandler();
+    private static BasicStub attendanceServiceStub = new BasicStub(
+        AttendanceService.class
+    );
 
-    private static Contact contactRecord;
-    private static Service__c service;
-    private static List<ServiceSession__c> sessions;
-    private static ProgramEngagement__c programEngagement;
     private static List<ServiceDelivery__c> serviceDeliveries;
     private static final String PRESENT_STATUS = 'Present';
     private static final String ABSENCE_STATUS = 'Excused Absence';
 
     @testSetup
     static void setup() {
-        // Stub turned off Feature Gates so we can insert Service Deliveries without triggers running
-        systemAccessStub.withReturnValue(
-            'getAllFeatureGates',
-            new List<FeatureGate__mdt>{
-                new FeatureGate__mdt(
-                    DeveloperName = 'ServiceDeliveriesToContact',
-                    IsActive__c = false
-                ),
-                new FeatureGate__mdt(
-                    DeveloperName = 'ServiceDeliveriesToService',
-                    IsActive__c = false
-                ),
-                new FeatureGate__mdt(
-                    DeveloperName = 'ServiceDeliveriesToServiceSession',
-                    IsActive__c = false
-                ),
-                new FeatureGate__mdt(
-                    DeveloperName = 'ServiceDeliveriesToProgramEngagement',
-                    IsActive__c = false
-                )
-            }
-        );
-        SystemAccess.instance = (SystemAccess) systemAccessStub.createMock();
-        SYstem.debug('hello');
-        System.debug(SystemAccess.getInstance().getAllFeatureGates());
-        // TestDataFactory.generateAttendanceData('Monthly');
+        TestUtil.turnOffFeatureGates();
+        TestDataFactory.generateAttendanceData('Monthly');
     }
+
+    // TODO: maybe functional test scenarios
+    // contact w/ some, add more
+    // contact w/ some, delete some
+    // contact with none, insert some
+    // contact with some, delete all
 
     @IsTest
-    private static void shouldIncrementOnBatch() {
-        // setupTest();
-        // requery();
-        System.debug(SystemAccess.getInstance().getAllFeatureGates());
+    private static void shouldCallServiceWithContacts() {
+        List<String> attendanceStatuses = new AttendanceService().getAttendanceStatuses();
 
-        SystemAccess.getInstance().getAllFeatureGates();
-
-        // The attendance records were inserted in the setupTest method, but triggers were off
-        // System.assertEquals(null, contactRecord.NumPresentServiceDeliveries__c);
-        // System.assertEquals(null, contactRecord.NumAbsentServiceDeliveries__c);
-        // System.assertEquals(null, contactRecord.LastServiceDate__c);
-        // System.assertEquals(null, contactRecord.ConsecutiveAbsences__c);
-
-        // TODO: kick off batch, assert rollups
-    }
-
-    private static void requery() {
-        contactRecord = [
+        List<Contact> contactsWithServiceDeliveries = [
             SELECT
                 Id,
-                NumPresentServiceDeliveries__c,
-                NumAbsentServiceDeliveries__c,
-                LastServiceDate__c,
-                ConsecutiveAbsences__c,
-                LastModifiedDate
+                (
+                    SELECT Contact__c, AttendanceStatus__c, DeliveryDate__c, Quantity__c
+                    FROM Service_Deliveries__r
+                    WHERE
+                        AttendanceStatus__c IN :attendanceStatuses
+                        OR (DeliveryDate__c <= TODAY
+                        AND Quantity__c > 0)
+                )
             FROM Contact
-            LIMIT 1
         ];
-        service = [
-            SELECT Id, NumPresentServiceDeliveries__c, NumAbsentServiceDeliveries__c
-            FROM Service__c
-            LIMIT 1
-        ];
-        sessions = [
-            SELECT
-                Id,
-                NumPresentServiceDeliveries__c,
-                NumAbsentServiceDeliveries__c,
-                SessionStart__c
-            FROM ServiceSession__c
-            ORDER BY SessionStart__c DESC
-            LIMIT 2
-        ];
-        programEngagement = [
-            SELECT
-                Id,
-                NumPresentServiceDeliveries__c,
-                NumAbsentServiceDeliveries__c,
-                LastServiceDate__c,
-                ConsecutiveAbsences__c
-            FROM ProgramEngagement__c
-            LIMIT 1
-        ];
-    }
+        System.assert(
+            !contactsWithServiceDeliveries.isEmpty(),
+            'Expected test data to be queried.'
+        );
 
-    private static void setupTest() {
-        requery();
+        Test.startTest();
 
-        serviceDeliveries = new List<ServiceDelivery__c>{
-            new ServiceDelivery__c(
-                Name = 'test',
-                Service__c = service.Id,
-                Contact__c = contactRecord.Id,
-                ServiceSession__c = sessions[0].Id,
-                ProgramEngagement__c = programEngagement.Id,
-                Quantity__c = 1,
-                AttendanceStatus__c = PRESENT_STATUS,
-                DeliveryDate__c = System.today() - 1
-            ),
-            new ServiceDelivery__c(
-                Name = 'test2',
-                Service__c = service.Id,
-                Contact__c = contactRecord.Id,
-                ServiceSession__c = sessions[1].Id,
-                ProgramEngagement__c = programEngagement.Id,
-                Quantity__c = 1,
-                AttendanceStatus__c = ABSENCE_STATUS,
-                DeliveryDate__c = System.today()
-            )
-        };
+        ContactRollups_SCHED rollups = new ContactRollups_SCHED();
+        attendanceServiceStub.withReturnValue(
+            'getAttendanceStatuses',
+            attendanceStatuses
+        );
+        ContactRollups_SCHED.attendanceService = (AttendanceService) attendanceServiceStub.createMock();
+        Id batchId = Database.executeBatch(rollups);
 
-        insert serviceDeliveries;
+        Test.stopTest();
+
+        attendanceServiceStub.assertCalledWith(
+            'doRollups',
+            List<SObject>.class,
+            contactsWithServiceDeliveries
+        );
     }
 }

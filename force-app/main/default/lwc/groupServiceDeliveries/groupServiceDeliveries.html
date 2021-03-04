@@ -1,0 +1,76 @@
+<template>
+    <lightning-card class="slds-text-align_center" if:true={steps}>
+        <template if:true={isStep1}>
+            <lightning-button
+                value="temp1"
+                label="Does nothing yet"
+                onclick={handleOption1}
+            ></lightning-button>
+            <lightning-button
+                value="temp2"
+                label="Go to OG Tool"
+                onclick={handleOption2}
+            ></lightning-button>
+        </template>
+        <template if:true={isStep2}></template>
+        <template if:true={isStep3}></template>
+
+        <div slot="footer">
+            <lightning-layout horizontal-align="spread">
+                <lightning-layout-item
+                    padding="around-small"
+                    class="slds-text-align_left"
+                >
+                    <lightning-button
+                        if:true={currentStep.back}
+                        name="back"
+                        variant={currentStep.back.variant}
+                        label={currentStep.back.label}
+                        title={currentStep.back.label}
+                        onclick={handleBack}
+                    ></lightning-button>
+                </lightning-layout-item>
+
+                <lightning-layout-item
+                    padding="around-small"
+                    class="slds-text-align_center"
+                    size="4"
+                >
+                    <lightning-progress-indicator
+                        current-step={currentStep.value}
+                        type="base"
+                        variant="base"
+                    >
+                        <template for:each={steps} for:item="step">
+                            <lightning-progress-step
+                                key={step.value}
+                                label={step.label}
+                                value={step.value}
+                            ></lightning-progress-step>
+                        </template>
+                    </lightning-progress-indicator>
+                </lightning-layout-item>
+
+                <lightning-layout-item padding="around-small">
+                    <lightning-layout>
+                        <lightning-layout-item
+                            flexibility="no-flex"
+                            alignment-bump="left"
+                            if:true={currentStep.next}
+                        >
+                            <lightning-button
+                                name="next"
+                                variant={currentStep.next.variant}
+                                label={currentStep.next.label}
+                                title={currentStep.next.label}
+                                onclick={handleNext}
+                                class="slds-var-p-right_small"
+                                if:true={currentStep.next}
+                            ></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>

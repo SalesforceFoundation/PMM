@@ -41,17 +41,17 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @api defaultValues;
     @api hideFooter = false; // no longer used; can't remove because public
     @track serviceDeliveries = [{ index: 0 }];
-    @track isSaving = false;
-    @track saveMessage;
     @track fieldSet = [];
-    @track rowCount = this.serviceDeliveries.length;
     @track errors = {};
-    @track isAddEntryDisabled = false;
-    @track isDoneDisabled = false;
-    @track hasContactField = false;
-    @track hasProgramEngagementField = false;
-
+    saveMessage;
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
+    rowCount = this.serviceDeliveries.length;
+    isSaving = false;
+    isAddEntryDisabled = false;
+    isDoneDisabled = false;
+    hasContactField = false;
+    hasProgramEngagementField = false;
+    hideWizard = false;
 
     labels = {
         addEntry: addEntry,
@@ -224,6 +224,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.handleDeleteError(rowIndex);
 
         this.setDoneDisabled();
+    }
+
+    handleHideWizard() {
+        this.hideWizard = true;
     }
 
     setDoneDisabled() {

@@ -9,7 +9,14 @@
 
 <template>
     <div class="bsdt">
-        <lightning-card>
+        <div class="wizard" if:false={hideWizard}>
+            <c-group-service-deliveries
+                if:false={hideWizard}
+                onhide={handleHideWizard}
+            ></c-group-service-deliveries>
+        </div>
+
+        <lightning-card if:true={hideWizard}>
             <div class="slds-p-horizontal_medium">
                 <template if:true={serviceDeliveries}>
                     <template for:each={serviceDeliveries} for:item="delivery">

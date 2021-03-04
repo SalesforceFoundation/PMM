@@ -14,12 +14,6 @@ private class ContactRollups_SCHED_TEST {
         TestDataFactory.generateAttendanceData('Monthly');
     }
 
-    // TODO: maybe functional test scenarios
-    // contact w/ some, add more
-    // contact w/ some, delete some
-    // contact with none, insert some
-    // contact with some, delete all
-
     @IsTest
     private static void shouldCallServiceWithContacts() {
         List<String> attendanceStatuses = new AttendanceService().getAttendanceStatuses();
@@ -50,7 +44,7 @@ private class ContactRollups_SCHED_TEST {
             attendanceStatuses
         );
         ContactRollups_SCHED.attendanceService = (AttendanceService) attendanceServiceStub.createMock();
-        Id batchId = Database.executeBatch(rollups);
+        rollups.execute(null);
 
         Test.stopTest();
 

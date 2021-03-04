@@ -351,10 +351,17 @@ public with sharing class AttendanceService {
         if (serviceDeliveries == null || serviceDeliveries.isEmpty()) {
             targetObject.put(lastServiceDateField, null);
         } else {
-            targetObject.put(
-                lastServiceDateField,
-                (Date) serviceDeliveries[0].get(DELIVERY_DATE)
-            );
+            for (ServiceDelivery__c delivery : serviceDeliveries) {
+                // Check for quantity. This check is done in the selector for trigger-based calcs, but not for batch-based calcs.
+                if (delivery.Quantity__c > 0) {
+                    System.debug('gonna use this one!');
+                    targetObject.put(
+                        lastServiceDateField,
+                        (Date) delivery.get(DELIVERY_DATE)
+                    );
+                    break;
+                }
+            }
         }
     }
 

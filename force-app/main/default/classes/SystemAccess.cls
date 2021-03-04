@@ -52,6 +52,9 @@ public without sharing class SystemAccess {
             .withSelectFields(
                 new List<String>{ String.valueOf(ServiceDelivery__c.DeliveryDate__c) }
             )
+            .withSelectFields(
+                new List<String>{ String.valueOf(ServiceDelivery__c.Quantity__c) }
+            )
             .addCondition(String.valueOf(ServiceDelivery__c.Quantity__c) + ' > 0')
             .addCondition(
                 String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' <= TODAY'

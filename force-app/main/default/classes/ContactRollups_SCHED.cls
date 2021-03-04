@@ -14,18 +14,10 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
         set;
     }
 
-    /*******************************************************************************************************
-     * @description Schedulable execute method executes this batch job
-     ********************************************************************************************************/
     public void execute(SchedulableContext context) {
         Database.executeBatch(new ContactRollups_SCHED(), batchSize);
     }
 
-    /*******************************************************************************************************
-     * @description start Method for the Database.Batchable interface
-     * @param bc the BatchableContext
-     * @return database.Querylocator
-     ********************************************************************************************************/
     public Database.Querylocator start(Database.BatchableContext bc) {
         List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
 
@@ -48,21 +40,10 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
         return Database.getQueryLocator(soql);
     }
 
-    /*******************************************************************************************************
-     * @description execute Method for the Database.Batchable interface
-     * @param bc the BatchableContext
-     * @param scope the list of Account objects to process
-     * @return void
-     ********************************************************************************************************/
     public void execute(Database.BatchableContext bc, List<Contact> scope) {
         attendanceService.doRollups(scope);
     }
 
-    /*******************************************************************************************************
-     * @description finish Method for the Database.Batchable interface
-     * @param bc the BatchableContext
-     * @return void
-     ********************************************************************************************************/
     public void finish(Database.BatchableContext bc) {
     }
 }

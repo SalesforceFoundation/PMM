@@ -358,6 +358,30 @@ public with sharing class AttendanceService_TEST {
             new List<SObject>{ targetContactRecord }
         );
     }
+
+    @IsTest
+    private static void shouldResetRecordWhenNoServiceDeliveriesFoundForContact() {
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
+        Contact sourceContactRecord = new Contact(Id = contactId);
+
+        Contact targetContactRecord = new Contact(
+            Id = contactId,
+            NumPresentServiceDeliveries__c = null,
+            NumAbsentServiceDeliveries__c = null,
+            ConsecutiveAbsences__c = null,
+            LastServiceDate__c = null
+        );
+
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+        service.doRollups(new List<Contact>{ sourceContactRecord });
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ targetContactRecord }
+        );
+    }
+
     @IsTest
     private static void shouldCalculateWhenAbsentRecordFoundFromService() {
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);

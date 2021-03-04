@@ -92,32 +92,18 @@ public with sharing class AttendanceService {
         return attendanceStatuses;
     }
 
-    public Map<SObjectType, String> relationshipNameBySObjectType {
-        get {
-            if (relationshipNameBySObjectType == null) {
-                String relationshipName;
-                relationshipNameBySObjectType = new Map<SObjectType, String>();
-                for (
-                    SObjectType sObjectType : SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.keySet()
-                ) {
-                    SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
-                        sObjectType
-                    );
-                    for (
-                        ChildRelationship child : sObjectType.getDescribe()
-                            .getChildRelationships()
-                    ) {
-                        if (child.getField() == lookupFieldOnDelivery) {
-                            relationshipName = child.getRelationshipName();
-                            break;
-                        }
-                    }
-                    relationshipNameBySObjectType.put(sObjectType, relationshipName);
-                }
+    private String getServiceDeliveryRelationshipName(SObjectType sObjectType) {
+        SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
+            sObjectType
+        );
+        for (
+            ChildRelationship child : sObjectType.getDescribe().getChildRelationships()
+        ) {
+            if (child.getField() == lookupFieldOnDelivery) {
+                return child.getRelationshipName();
             }
-            return relationshipNameBySObjectType;
         }
-        set;
+        return null;
     }
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
@@ -159,15 +145,16 @@ public with sharing class AttendanceService {
         SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
             objectType
         );
-
         addDefaultTargetObjectsForAttendance(parents);
 
         for (SObject parent : parents) {
-            for (
-                ServiceDelivery__c delivery : (List<ServiceDelivery__c>) parent.getSObjects(
-                    relationshipNameBySObjectType.get(objectType)
-                )
-            ) {
+            List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) parent.getSObjects(
+                getServiceDeliveryRelationshipName(objectType)
+            );
+            if (serviceDeliveries == null) {
+                continue;
+            }
+            for (ServiceDelivery__c delivery : serviceDeliveries) {
                 calculateAttendanceRollups(
                     delivery,
                     lookupFieldOnDelivery,
@@ -282,7 +269,7 @@ public with sharing class AttendanceService {
             return;
         }
 
-        String relationshipName = relationshipNameBySObjectType.get(objectType);
+        String relationshipName = getServiceDeliveryRelationshipName(objectType);
 
         for (SObject parentRecord : parents) {
             calculateLastServiceDeliveryRollups(
@@ -316,7 +303,7 @@ public with sharing class AttendanceService {
 
             SObjectType parentObject = lookupFieldOnDelivery.getDescribe()
                 .getReferenceTo()[0];
-            String relationshipName = relationshipNameBySObjectType.get(parentObject);
+            String relationshipName = getServiceDeliveryRelationshipName(parentObject);
             for (
                 SObject parentRecord : systemAccess.getParentsWithServiceDeliveries(
                     lookupFieldOnDelivery,

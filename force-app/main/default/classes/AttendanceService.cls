@@ -93,6 +93,7 @@ public with sharing class AttendanceService {
     }
 
     private String getServiceDeliveryRelationshipName(SObjectType sObjectType) {
+        String relationshipName;
         SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
             sObjectType
         );
@@ -100,10 +101,10 @@ public with sharing class AttendanceService {
             ChildRelationship child : sObjectType.getDescribe().getChildRelationships()
         ) {
             if (child.getField() == lookupFieldOnDelivery) {
-                return child.getRelationshipName();
+                relationshipName = child.getRelationshipName();
             }
         }
-        return null;
+        return relationshipName;
     }
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
@@ -125,8 +126,37 @@ public with sharing class AttendanceService {
     public void doRollups(List<SObject> parents) {
         rollupAttendance(parents);
         rollupLastServiceDate(parents);
-        // TODO: iterate parents, key into rollupTargetObejctById with the id, compare the sObject to see if it needs update.
-        systemAccess.updateRecords(rollupTargetObjectById.values());
+        SObjectType objectType = parents[0].Id.getSObjectType();
+        SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
+            objectType
+        );
+        List<SObjectField> fields = new List<SObjectField>{
+            TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery),
+            TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery)
+        };
+        if (
+            CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery) != null
+        ) {
+            fields.add(
+                CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery)
+            );
+        }
+        if (LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery) != null) {
+            fields.add(
+                LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery)
+            );
+        }
+        List<SObject> parentsToUpdate = new List<SObject>();
+        for (SObject sourceRecord : parents) {
+            SObject targetRecord = rollupTargetObjectById.get(sourceRecord.Id);
+            for (SObjectField field : fields) {
+                if (targetRecord.get(field) != sourceRecord.get(field)) {
+                    parentsToUpdate.add(targetRecord);
+                    break;
+                }
+            }
+        }
+        systemAccess.updateRecords(parentsToUpdate);
     }
 
     public void doRollups(

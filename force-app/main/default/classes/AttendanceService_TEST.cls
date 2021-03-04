@@ -362,7 +362,13 @@ public with sharing class AttendanceService_TEST {
     @IsTest
     private static void shouldResetRecordWhenNoServiceDeliveriesFoundForContact() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);
-        Contact sourceContactRecord = new Contact(Id = contactId);
+        Contact sourceContactRecord = new Contact(
+            Id = contactId,
+            NumPresentServiceDeliveries__c = 1,
+            NumAbsentServiceDeliveries__c = 1,
+            ConsecutiveAbsences__c = 1,
+            LastServiceDate__c = null
+        );
 
         Contact targetContactRecord = new Contact(
             Id = contactId,

@@ -21,23 +21,45 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
     public Database.Querylocator start(Database.BatchableContext bc) {
         List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
 
-        String soql = 'SELECT Id, ';
+        QueryBuilder query = new QueryBuilder();
+        query.withSObjectType(Contact.SObjectType);
+        query.withSelectFields(
+            new List<String>{
+                String.valueOf(Contact.NumPresentServiceDeliveries__c),
+                String.valueOf(Contact.NumAbsentServiceDeliveries__c),
+                String.valueOf(Contact.ConsecutiveAbsences__c),
+                String.valueOf(Contact.LastServiceDate__c)
+            }
+        );
 
+        QueryBuilder subQuery = new QueryBuilder();
+        subQuery.withChildRelationshipName('Service_Deliveries__r');
+        subquery.withSelectFields(
+            new List<String>{
+                String.valueOf(ServiceDelivery__c.Contact__c),
+                String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c),
+                String.valueOf(ServiceDelivery__c.Quantity__c)
+            }
+        );
         // Contact with any delivery records with attendance
         // Contact with any delivery records with delivery date and qty
-        soql +=
-            '(SELECT Contact__c, AttendanceStatus__c, DeliveryDate__c, Quantity__c ' +
-            'FROM Service_Deliveries__r ' +
-            'WHERE AttendanceStatus__c IN :attendanceStatuses OR (DeliveryDate__c <= TODAY AND Quantity__c > 0)) ';
+        subQuery.addCondition(
+            'WHERE ' +
+            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
+            ' IN :attendanceStatuses OR (' +
+            String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+            ' <= TODAY AND ' +
+            String.valueOf(ServiceDelivery__c.Quantity__c) +
+            ' > 0)) '
+        );
 
-        soql += 'FROM Contact';
-
-        // TODO: refactor this to use querybuilder and just send in the where as one giant clause
+        query.addSubQuery(subQuery);
 
         // Contact with any of our rollup fields populated
         // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
 
-        return Database.getQueryLocator(soql);
+        return Database.getQueryLocator(query.buildSoqlQuery());
     }
 
     public void execute(Database.BatchableContext bc, List<Contact> scope) {

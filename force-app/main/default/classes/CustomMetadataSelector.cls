@@ -10,8 +10,6 @@ public with sharing class CustomMetadataSelector {
     }
 
     public List<FeatureGate__mdt> getAllFeatureGates() {
-        System.debug('in md selector');
-        System.debug(FeatureGate__mdt.getAll().values());
         return FeatureGate__mdt.getAll().values();
     }
 }

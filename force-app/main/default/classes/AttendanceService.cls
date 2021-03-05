@@ -371,7 +371,6 @@ public with sharing class AttendanceService {
             for (ServiceDelivery__c delivery : serviceDeliveries) {
                 // Check for quantity. This check is done in the selector for trigger-based calcs, but not for batch-based calcs.
                 if (delivery.Quantity__c > 0) {
-                    System.debug('gonna use this one!');
                     targetObject.put(
                         lastServiceDateField,
                         (Date) delivery.get(DELIVERY_DATE)

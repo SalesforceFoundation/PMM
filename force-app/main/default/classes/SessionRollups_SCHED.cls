@@ -1,4 +1,4 @@
-public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedulable {
+public class SessionRollups_SCHED implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
     private static AttendanceService attendanceService = new AttendanceService();
 
@@ -15,35 +15,33 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
     }
 
     public void execute(SchedulableContext context) {
-        Database.executeBatch(new ContactRollups_SCHED(), batchSize);
+        Database.executeBatch(new SessionRollups_SCHED(), batchSize);
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
         List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
 
         QueryBuilder query = new QueryBuilder();
-        query.withSObjectType(Contact.SObjectType);
+        query.withSObjectType(ServiceSession__c.SObjectType);
         query.withSelectFields(
             new List<String>{
-                String.valueOf(Contact.NumPresentServiceDeliveries__c),
-                String.valueOf(Contact.NumAbsentServiceDeliveries__c),
-                String.valueOf(Contact.ConsecutiveAbsences__c),
-                String.valueOf(Contact.LastServiceDate__c)
+                String.valueOf(ServiceSession__c.NumPresentServiceDeliveries__c),
+                String.valueOf(ServiceSession__c.NumAbsentServiceDeliveries__c)
             }
         );
 
         QueryBuilder subQuery = new QueryBuilder();
-        subQuery.withChildRelationshipName('Service_Deliveries__r');
+        subQuery.withChildRelationshipName('ServiceDeliveries__r');
         subquery.withSelectFields(
             new List<String>{
-                String.valueOf(ServiceDelivery__c.Contact__c),
+                String.valueOf(ServiceDelivery__c.ServiceSession__c),
                 String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
                 String.valueOf(ServiceDelivery__c.DeliveryDate__c),
                 String.valueOf(ServiceDelivery__c.Quantity__c)
             }
         );
-        // Contact with any delivery records with attendance
-        // Contact with any delivery records with delivery date and qty
+        // ServiceSession__c with any delivery records with attendance
+        // ServiceSession__c with any delivery records with delivery date and qty
         subQuery.addCondition(
             String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
             ' IN :attendanceStatuses OR (' +
@@ -55,13 +53,13 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
 
         query.addSubQuery(subQuery);
 
-        // Contact with any of our rollup fields populated
+        // ServiceSession__c with any of our rollup fields populated
         // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
 
         return Database.getQueryLocator(query.buildSoqlQuery());
     }
 
-    public void execute(Database.BatchableContext bc, List<Contact> scope) {
+    public void execute(Database.BatchableContext bc, List<ServiceSession__c> scope) {
         attendanceService.doRollups(scope);
     }
 

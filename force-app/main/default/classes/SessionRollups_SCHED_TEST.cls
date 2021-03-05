@@ -4,10 +4,6 @@ private class SessionRollups_SCHED_TEST {
         AttendanceService.class
     );
 
-    private static List<ServiceDelivery__c> serviceDeliveries;
-    private static final String PRESENT_STATUS = 'Present';
-    private static final String ABSENCE_STATUS = 'Excused Absence';
-
     @testSetup
     static void setup() {
         TestUtil.turnOffFeatureGates();

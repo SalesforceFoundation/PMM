@@ -367,7 +367,7 @@ public with sharing class AttendanceService_TEST {
             NumPresentServiceDeliveries__c = 1,
             NumAbsentServiceDeliveries__c = 1,
             ConsecutiveAbsences__c = 1,
-            LastServiceDate__c = null
+            LastServiceDate__c = System.today()
         );
 
         Contact targetContactRecord = new Contact(

@@ -108,4 +108,7 @@ pmm_lex_locators = {
         "dim_icon": "//c-attendance-row[{}]//button[contains(@class,'slds-button')]/lightning-primitive-icon",
         "details": "//c-attendance-row[{}]//*[self::div or self::lightning-output-field][contains(@class,'slds-form-element_stacked')][.//*[text()='{}']]//div[@class='slds-form-element__control']/*[self::lightning-formatted-text or self::lightning-formatted-number]",
     },
+    "homepage": {
+        "component_link": '//article[contains(@class,"forceBaseCard")][.//span[contains(@title,"{}")]]',
+    },
 }

@@ -6,7 +6,7 @@ Library        cumulusci.robotframework.PageObjects
 Suite Setup     Run Keywords
 ...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
-#Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Variables ***
 ${test_user}             UUser

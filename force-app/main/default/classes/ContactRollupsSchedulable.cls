@@ -7,24 +7,12 @@
  *
  */
 
-public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedulable {
+public class ContactRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
     private static AttendanceService attendanceService = new AttendanceService();
 
-    @TestVisible
-    private final static Integer DEFAULT_BATCH_SIZE = 10;
-
-    @TestVisible
-    private Integer batchSize {
-        get {
-            // Allowing for future customization of batch size.
-            return DEFAULT_BATCH_SIZE;
-        }
-        set;
-    }
-
     public void execute(SchedulableContext context) {
-        Database.executeBatch(new ContactRollups_SCHED(), batchSize);
+        Database.executeBatch(new ContactRollupsSchedulable());
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
@@ -71,7 +59,7 @@ public class ContactRollups_SCHED implements Database.Batchable<SObject>, Schedu
     }
 
     public void execute(Database.BatchableContext bc, List<Contact> scope) {
-        attendanceService.doRollups(scope);
+        attendanceService.doRollups(Contact.SObjectType, scope);
     }
 
     public void finish(Database.BatchableContext bc) {

@@ -8,7 +8,7 @@
  */
 
 @isTest
-private class ContactRollups_SCHED_TEST {
+private class ProgramEngagementRollupsSchedulable_TEST {
     private static BasicStub attendanceServiceStub = new BasicStub(
         AttendanceService.class
     );
@@ -20,43 +20,46 @@ private class ContactRollups_SCHED_TEST {
     }
 
     @IsTest
-    private static void shouldCallServiceWithContacts() {
+    private static void shouldCallServiceWithProgramEngagements() {
         List<String> attendanceStatuses = new AttendanceService().getAttendanceStatuses();
 
-        List<Contact> contactsWithServiceDeliveries = [
+        List<ProgramEngagement__c> programEngagementsWithServiceDeliveries = [
             SELECT
                 Id,
                 (
                     SELECT Contact__c, AttendanceStatus__c, DeliveryDate__c, Quantity__c
-                    FROM Service_Deliveries__r
+                    FROM ServiceDeliveries__r
                     WHERE
                         AttendanceStatus__c IN :attendanceStatuses
                         OR (DeliveryDate__c <= TODAY
                         AND Quantity__c > 0)
                 )
-            FROM Contact
+            FROM ProgramEngagement__c
         ];
         System.assert(
-            !contactsWithServiceDeliveries.isEmpty(),
+            !programEngagementsWithServiceDeliveries.isEmpty(),
             'Expected test data to be queried.'
         );
 
         Test.startTest();
 
-        ContactRollups_SCHED rollups = new ContactRollups_SCHED();
+        ProgramEngagementRollupsSchedulable rollups = new ProgramEngagementRollupsSchedulable();
         attendanceServiceStub.withReturnValue(
             'getAttendanceStatuses',
             attendanceStatuses
         );
-        ContactRollups_SCHED.attendanceService = (AttendanceService) attendanceServiceStub.createMock();
+        ProgramEngagementRollupsSchedulable.attendanceService = (AttendanceService) attendanceServiceStub.createMock();
         rollups.execute(null);
 
         Test.stopTest();
 
         attendanceServiceStub.assertCalledWith(
             'doRollups',
-            List<SObject>.class,
-            contactsWithServiceDeliveries
+            new List<Type>{ SObjectType.class, List<SObject>.class },
+            new List<Object>{
+                ProgramEngagement__c.SObjectType,
+                programEngagementsWithServiceDeliveries
+            }
         );
     }
 }

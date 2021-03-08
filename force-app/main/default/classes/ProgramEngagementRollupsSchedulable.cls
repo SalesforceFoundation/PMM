@@ -7,35 +7,25 @@
  *
  */
 
-public class SessionRollups_SCHED implements Database.Batchable<SObject>, Schedulable {
+public class ProgramEngagementRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
     private static AttendanceService attendanceService = new AttendanceService();
 
-    @TestVisible
-    private final static Integer DEFAULT_BATCH_SIZE = 10;
-
-    @TestVisible
-    private Integer batchSize {
-        get {
-            // Allowing for future customization of batch size.
-            return DEFAULT_BATCH_SIZE;
-        }
-        set;
-    }
-
     public void execute(SchedulableContext context) {
-        Database.executeBatch(new SessionRollups_SCHED(), batchSize);
+        Database.executeBatch(new ProgramEngagementRollupsSchedulable());
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
         List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
 
         QueryBuilder query = new QueryBuilder();
-        query.withSObjectType(ServiceSession__c.SObjectType);
+        query.withSObjectType(ProgramEngagement__c.SObjectType);
         query.withSelectFields(
             new List<String>{
-                String.valueOf(ServiceSession__c.NumPresentServiceDeliveries__c),
-                String.valueOf(ServiceSession__c.NumAbsentServiceDeliveries__c)
+                String.valueOf(ProgramEngagement__c.NumPresentServiceDeliveries__c),
+                String.valueOf(ProgramEngagement__c.NumAbsentServiceDeliveries__c),
+                String.valueOf(ProgramEngagement__c.ConsecutiveAbsences__c),
+                String.valueOf(ProgramEngagement__c.LastServiceDate__c)
             }
         );
 
@@ -43,14 +33,14 @@ public class SessionRollups_SCHED implements Database.Batchable<SObject>, Schedu
         subQuery.withChildRelationshipName('ServiceDeliveries__r');
         subquery.withSelectFields(
             new List<String>{
-                String.valueOf(ServiceDelivery__c.ServiceSession__c),
+                String.valueOf(ServiceDelivery__c.ProgramEngagement__c),
                 String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
                 String.valueOf(ServiceDelivery__c.DeliveryDate__c),
                 String.valueOf(ServiceDelivery__c.Quantity__c)
             }
         );
-        // ServiceSession__c with any delivery records with attendance
-        // ServiceSession__c with any delivery records with delivery date and qty
+        // ProgramEngagement__c with any delivery records with attendance
+        // ProgramEngagement__c with any delivery records with delivery date and qty
         subQuery.addCondition(
             String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
             ' IN :attendanceStatuses OR (' +
@@ -62,14 +52,14 @@ public class SessionRollups_SCHED implements Database.Batchable<SObject>, Schedu
 
         query.addSubQuery(subQuery);
 
-        // ServiceSession__c with any of our rollup fields populated
+        // ProgramEngagement__c with any of our rollup fields populated
         // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
 
         return Database.getQueryLocator(query.buildSoqlQuery());
     }
 
-    public void execute(Database.BatchableContext bc, List<ServiceSession__c> scope) {
-        attendanceService.doRollups(scope);
+    public void execute(Database.BatchableContext bc, List<ProgramEngagement__c> scope) {
+        attendanceService.doRollups(ProgramEngagement__c.SObjectType, scope);
     }
 
     public void finish(Database.BatchableContext bc) {

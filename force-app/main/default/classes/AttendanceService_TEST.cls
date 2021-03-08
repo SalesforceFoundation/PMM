@@ -41,6 +41,18 @@ public with sharing class AttendanceService_TEST {
     }
 
     @IsTest
+    private static void shouldNotContinueWithoutParents() {
+        List<SObject> parents = new List<SObject>();
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(Contact.SObjectType, parents);
+
+        systemAccessStub.assertNotCalled('getAttendanceRecords');
+        systemAccessStub.assertNotCalled('getParentsWithServiceDeliveries');
+        systemAccessStub.assertNotCalled('updateRecords');
+    }
+
+    @IsTest
     private static void shouldNotCallUpdateWithoutBucketedStatus() {
         String getAttendanceRecords = 'getAttendanceRecords';
         Id contactId = TestUtil.mockId(Contact.SObjectType);
@@ -350,7 +362,7 @@ public with sharing class AttendanceService_TEST {
         );
 
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
-        service.doRollups(new List<Contact>{ sourceContactRecord });
+        service.doRollups(Contact.SObjectType, new List<Contact>{ sourceContactRecord });
 
         systemAccessStub.assertCalledWith(
             'updateRecords',
@@ -379,7 +391,7 @@ public with sharing class AttendanceService_TEST {
         );
 
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
-        service.doRollups(new List<Contact>{ sourceContactRecord });
+        service.doRollups(Contact.SObjectType, new List<Contact>{ sourceContactRecord });
 
         systemAccessStub.assertCalledWith(
             'updateRecords',
@@ -424,7 +436,10 @@ public with sharing class AttendanceService_TEST {
         );
 
         service.systemAccess = (SystemAccess) systemAccessStub.createMock();
-        service.doRollups(new List<Service__c>{ sourceServiceRecord });
+        service.doRollups(
+            Service__c.SObjectType,
+            new List<Service__c>{ sourceServiceRecord }
+        );
 
         systemAccessStub.assertCalledWith(
             'updateRecords',

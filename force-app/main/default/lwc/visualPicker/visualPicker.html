@@ -1,0 +1,34 @@
+<template>
+    <div class="slds-box container">
+        <lightning-layout class="slds-var-p-top_large">
+            <lightning-layout-item size="1" class="slds-text-align_center">
+                <lightning-icon
+                    class="icon"
+                    icon-name={iconName}
+                    size="large"
+                ></lightning-icon>
+            </lightning-layout-item>
+            <lightning-layout-item size="10">
+                <h1 class="slds-truncate slds-text-heading_small" title={title}>
+                    {title}
+                </h1>
+                <p class="slds-var-m-top_small">
+                    {content}
+                </p>
+            </lightning-layout-item>
+            <lightning-layout-item
+                size="1"
+                class="slds-text-align_center slds-var-p-top_small"
+            >
+                <button
+                    name={buttonName}
+                    type="button"
+                    class="slds-button slds-button_brand slds-button_stretch"
+                    onclick={handleClick}
+                >
+                    {buttonLabel}
+                </button>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

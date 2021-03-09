@@ -128,6 +128,25 @@ tasks:
         options:
             path: unpackaged/config/customer_profiles
 
+    test_data_delete:
+        description: 'WARNING: Deletes all data in the objects specified in the objects option.'
+        class_path: cumulusci.tasks.bulkdata.DeleteData
+        group: "PMM: Config"
+        options:
+            objects:
+                - Entitlement
+                - ServiceDelivery__c
+                - ProgramEngagement__c
+                - Contact
+                - Account
+                - ServiceParticipant__c
+                - ServiceSession__c
+                - ServiceSchedule__c
+                - Service__c
+                - ProgramCohort__c
+                - Program__c
+
+
 flows:
     load_data:
         steps:
@@ -187,7 +206,36 @@ flows:
                         - Program__c
                         - Contact
                         - Account
-
+    #Run this before hard_delete_data, populate {orgalias} with your org name.
+    #cci task run create_permission_set --api_name BulkApiPerms --label "Bulk Api Permissions" --user_permissions PermissionsBulkApiHardDelete --org {orgalias}
+    hard_delete_data:
+        description: Hard Delete all PMM Data in org.
+        steps:
+            1:
+                task: delete_data
+                options:
+                    objects:
+                        - npe4__Relationship__c
+                when: "'npsp' in org_config.installed_packages"
+            2:
+                task: delete_data
+                options:
+                    objects:
+                        - Opportunity
+                        - Entitlement
+                        - ServiceDelivery__c
+                        - ProgramEngagement__c
+                        - ProgramCohort__c
+                        - ServiceParticipant__c
+                        - ServiceSession__c
+                        - ServiceSchedule__c
+                        - Service__c
+                        - Program__c
+                        - Contact
+                        - Account
+                    ignore_row_errors: true
+                    hardDelete: true
+                    
     config_unmanaged:
         steps:
             3:
@@ -289,7 +337,7 @@ flows:
                 ui_options:
                     reports:
                         name: "Deploy Folder of Unmanaged Reports"
-
+    
 plans:
     install:
         slug: install

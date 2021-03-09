@@ -32,20 +32,13 @@ public class ServiceRollupsSchedulable implements Database.Batchable<SObject>, S
         subquery.withSelectFields(
             new List<String>{
                 String.valueOf(ServiceDelivery__c.Service__c),
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c),
-                String.valueOf(ServiceDelivery__c.Quantity__c)
+                String.valueOf(ServiceDelivery__c.AttendanceStatus__c)
             }
         );
         // Service__c with any delivery records with attendance
-        // Service__c with any delivery records with delivery date and qty
         subQuery.addCondition(
             String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-            ' IN :attendanceStatuses OR (' +
-            String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-            ' <= TODAY AND ' +
-            String.valueOf(ServiceDelivery__c.Quantity__c) +
-            ' > 0) '
+            ' IN :attendanceStatuses'
         );
 
         query.addSubQuery(subQuery);

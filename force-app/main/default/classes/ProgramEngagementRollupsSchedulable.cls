@@ -49,6 +49,9 @@ public class ProgramEngagementRollupsSchedulable implements Database.Batchable<S
             String.valueOf(ServiceDelivery__c.Quantity__c) +
             ' > 0) '
         );
+        subQuery.withOrderBy(
+            String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' DESC'
+        );
 
         query.addSubQuery(subQuery);
 

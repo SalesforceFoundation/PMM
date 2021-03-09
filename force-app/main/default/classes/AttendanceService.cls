@@ -114,7 +114,7 @@ public with sharing class AttendanceService {
         }
 
         rollupAttendance(sObjectType, parents);
-        rollupLastServiceDate(parents);
+        rollupLastServiceDate(sObjectType, parents);
         List<SObject> parentsToUpdate = filterModifiedParentsForUpdate(
             sObjectType,
             parents
@@ -250,10 +250,9 @@ public with sharing class AttendanceService {
     }
 
     @TestVisible
-    private void rollupLastServiceDate(List<SObject> parents) {
-        SObjectType objectType = parents[0].Id.getSObjectType();
+    private void rollupLastServiceDate(SObjectType sObjectType, List<SObject> parents) {
         SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
-            objectType
+            sObjectType
         );
         SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD.get(
             lookupFieldOnDelivery
@@ -263,14 +262,10 @@ public with sharing class AttendanceService {
             return;
         }
 
-        String relationshipName = getServiceDeliveryRelationshipName(objectType);
+        String relationshipName = getServiceDeliveryRelationshipName(sObjectType);
 
         for (SObject parentRecord : parents) {
-            setLastServiceDeliveryDate(
-                parentRecord,
-                relationshipName,
-                lastServiceDateField
-            );
+            setLastServiceDate(parentRecord, relationshipName, lastServiceDateField);
         }
     }
 
@@ -306,16 +301,12 @@ public with sharing class AttendanceService {
                     relationshipName
                 )
             ) {
-                setLastServiceDeliveryDate(
-                    parentRecord,
-                    relationshipName,
-                    lastServiceDateField
-                );
+                setLastServiceDate(parentRecord, relationshipName, lastServiceDateField);
             }
         }
     }
 
-    private void setLastServiceDeliveryDate(
+    private void setLastServiceDate(
         SObject parentRecord,
         String relationshipName,
         SObjectField lastServiceDateField

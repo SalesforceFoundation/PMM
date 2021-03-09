@@ -30,6 +30,8 @@ public class ContactRollupsSchedulable implements Database.Batchable<SObject>, S
         );
 
         QueryBuilder subQuery = new QueryBuilder();
+        // TODO: make AttendanceService.getServiceDeliveryRelationshipName public and use it here
+        // to get the relationship name dynamically
         subQuery.withChildRelationshipName('Service_Deliveries__r');
         subquery.withSelectFields(
             new List<String>{
@@ -48,6 +50,9 @@ public class ContactRollupsSchedulable implements Database.Batchable<SObject>, S
             ' <= TODAY AND ' +
             String.valueOf(ServiceDelivery__c.Quantity__c) +
             ' > 0) '
+        );
+        subQuery.withOrderBy(
+            String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' DESC'
         );
 
         query.addSubQuery(subQuery);

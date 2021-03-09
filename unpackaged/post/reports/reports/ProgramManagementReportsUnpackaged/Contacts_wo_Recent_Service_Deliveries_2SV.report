@@ -4,7 +4,7 @@
         <field>Contact$Name</field>
     </columns>
     <columns>
-        <field>Contact$LastServiceDate__c</field>
+        <field>Contact$%%%NAMESPACE%%%LastServiceDate__c</field>
     </columns>
     <columns>
         <field>Contact$Account</field>
@@ -17,34 +17,34 @@
     </columns>
     <crossFilters>
         <criteriaItems>
-            <column>Stage__c</column>
+            <column>%%%NAMESPACE%%%Stage__c</column>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Enrolled,Active</value>
         </criteriaItems>
         <criteriaItems>
-            <column>StartDate__c</column>
+            <column>%%%NAMESPACE%%%StartDate__c</column>
             <isUnlocked>false</isUnlocked>
             <operator>lessThan</operator>
             <value>LAST_N_DAYS:14</value>
         </criteriaItems>
         <operation>with</operation>
         <primaryTableColumn>Contact$Id</primaryTableColumn>
-        <relatedTable>ProgramEngagement__c</relatedTable>
-        <relatedTableJoinColumn>Contact__c</relatedTableJoinColumn>
+        <relatedTable>%%%NAMESPACE%%%ProgramEngagement__c</relatedTable>
+        <relatedTableJoinColumn>%%%NAMESPACE%%%Contact__c</relatedTableJoinColumn>
     </crossFilters>
     <description>Who has not received a Service Delivery in over 2 weeks and might need additional support?</description>
     <filter>
         <booleanFilter>1 OR 2</booleanFilter>
         <criteriaItems>
-            <column>Contact$LastServiceDate__c</column>
+            <column>Contact$%%%NAMESPACE%%%LastServiceDate__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>lessThan</operator>
             <value>LAST_N_DAYS:14</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Contact$LastServiceDate__c</column>
+            <column>Contact$%%%NAMESPACE%%%LastServiceDate__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
@@ -58,13 +58,13 @@
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>Contacts_with_and_without_Program_Engagements__c</reportType>
+    <reportType>%%%NAMESPACE%%%Contacts_with_and_without_Program_Engagements__c</reportType>
     <scope>user</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Contact.Program_Engagements__r$LastServiceDate__c</dateColumn>
+        <dateColumn>Contact.%%%NAMESPACE%%%Program_Engagements__r$%%%NAMESPACE%%%LastServiceDate__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

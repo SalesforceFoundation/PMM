@@ -1,19 +1,29 @@
 <template>
-    <lightning-card class="slds-text-align_center" if:true={steps}>
-        <template if:true={isStep1}>
-            <lightning-button
-                value="temp1"
-                label="Does nothing yet"
-                onclick={handleOption1}
-            ></lightning-button>
-            <lightning-button
-                value="temp2"
-                label="Go to OG Tool"
-                onclick={handleOption2}
-            ></lightning-button>
+    <lightning-card>
+        <template if:true={isOptionSelection}>
+            <div class="slds-var-p-horizontal_medium slds-var-p-bottom_medium">
+                <c-visual-picker
+                    title={labels.groupTitle}
+                    content={labels.groupDesc}
+                    onselect={handleOption1}
+                    icon-name="standard:groups"
+                    button-name="group"
+                    button-label={labels.groupButton}
+                ></c-visual-picker>
+            </div>
+            <div class="slds-var-p-horizontal_medium">
+                <c-visual-picker
+                    title={labels.singleTitle}
+                    content={labels.singleDesc}
+                    onselect={handleOption2}
+                    icon-name="standard:user"
+                    button-name="individual"
+                    button-label={labels.singleButton}
+                ></c-visual-picker>
+            </div>
         </template>
-        <template if:true={isStep2}></template>
-        <template if:true={isStep3}></template>
+        <template if:true={isStep1}>{labels.serviceSelections}</template>
+        <template if:true={isStep2}>{labels.selectContacts}</template>
 
         <div slot="footer">
             <lightning-layout horizontal-align="spread">
@@ -40,6 +50,7 @@
                         current-step={currentStep.value}
                         type="base"
                         variant="base"
+                        if:false={isOptionSelection}
                     >
                         <template for:each={steps} for:item="step">
                             <lightning-progress-step
@@ -56,7 +67,6 @@
                         <lightning-layout-item
                             flexibility="no-flex"
                             alignment-bump="left"
-                            if:true={currentStep.next}
                         >
                             <lightning-button
                                 name="next"

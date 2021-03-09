@@ -67,6 +67,69 @@
         <value>Anonymous</value>
     </labels>
     <labels>
+        <fullName>BSDT_Group_Option_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Title for the Bulk Service Delivery Tool Group Data Entry Option</shortDescription>
+        <value>Create Service Deliveries for a Group of Contacts</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Group_Option_Description</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Description for the Bulk Service Delivery Tool Group Data Entry Option</shortDescription>
+        <value>Enter service deliveries for a group of contacts. For example a workshop or a class.</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Group_Option_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Button for the Bulk Service Delivery Tool Group Data Entry Option</shortDescription>
+        <value>Create by Group</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Single_Option_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Title for the Bulk Service Delivery Tool Single Data Entry Option</shortDescription>
+        <value>Create Service Deliveries Individually</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Single_Option_Description</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Description for the Bulk Service Delivery Tool Single Data Entry Option</shortDescription>
+        <value>Enter service deliveries individually.</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Single_Option_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Button for the Bulk Service Delivery Tool Single Data Entry Option</shortDescription>
+        <value>Create Individually</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Service_Selections</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service Selections Step of the Bulk Service Delivery Tool</shortDescription>
+        <value>Service Selections</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Select_Contacts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Contacts Step of the Bulk Service Delivery Tool</shortDescription>
+        <value>Select Contacts</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Review</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Review Step of the Bulk Service Delivery Tool</shortDescription>
+        <value>Review</value>
+    </labels>
+    <labels>
         <fullName>TrackAttendance</fullName>
         <language>en_US</language>
         <protected>false</protected>

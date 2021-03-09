@@ -9,9 +9,6 @@
         <members>ProgramManagementReportsUnpackaged/My_Service_Delivery_by_Client_Last_Month_nw5</members>
         <members>ProgramManagementReportsUnpackaged/Past_Sessions_in_Pending_Status_jZH</members>
         <members>ProgramManagementReportsUnpackaged/Unique_Contacts_Receiving_Service_Year_t_44q</members>
-        <members>ProgramManagementReportsUnpackaged/Contacts_Absent_for_Last_Svc_Delivery_qwd</members>
-        <members>ProgramManagementReportsUnpackaged/Contacts_with_3_Consecutive_Absences_p3K</members>
-        <members>ProgramManagementReportsUnpackaged/Contacts_wo_Recent_Service_Deliveries_2SV</members>
         <name>Report</name>
     </types>
     <version>48.0</version>

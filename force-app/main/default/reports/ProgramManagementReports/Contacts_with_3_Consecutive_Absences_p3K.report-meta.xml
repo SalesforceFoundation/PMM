@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Report xmlns="http://soap.sforce.com/2006/04/metadata">
     <columns>
-        <field>Contact.%%%NAMESPACE%%%Program_Engagements__r$Name</field>
+        <field>Contact.Program_Engagements__r$Name</field>
     </columns>
     <columns>
-        <field>Contact.%%%NAMESPACE%%%Program_Engagements__r$%%%NAMESPACE%%%ConsecutiveAbsences__c</field>
+        <field>Contact.Program_Engagements__r$ConsecutiveAbsences__c</field>
     </columns>
     <columns>
-        <field>Contact.%%%NAMESPACE%%%Program_Engagements__r$%%%NAMESPACE%%%LastServiceDate__c</field>
+        <field>Contact.Program_Engagements__r$LastServiceDate__c</field>
     </columns>
     <columns>
         <field>Contact$Account</field>
@@ -20,37 +20,37 @@
     </columns>
     <crossFilters>
         <criteriaItems>
-            <column>%%%NAMESPACE%%%ConsecutiveAbsences__c</column>
+            <column>ConsecutiveAbsences__c</column>
             <isUnlocked>false</isUnlocked>
             <operator>greaterOrEqual</operator>
-            <value>1</value>
+            <value>3</value>
         </criteriaItems>
         <operation>with</operation>
         <primaryTableColumn>Contact$Id</primaryTableColumn>
-        <relatedTable>%%%NAMESPACE%%%ProgramEngagement__c</relatedTable>
-        <relatedTableJoinColumn>%%%NAMESPACE%%%Contact__c</relatedTableJoinColumn>
+        <relatedTable>ProgramEngagement__c</relatedTable>
+        <relatedTableJoinColumn>Contact__c</relatedTableJoinColumn>
     </crossFilters>
-    <description>Who has 1 or more consecutive absences for any of their Program Engagements, and might need additional support?</description>
+    <description>Who has 3 or more consecutive absences for any of their Program Engagements, and might need additional support?</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
         <field>Contact$Name</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Contacts Absent for Last Svc Delivery</name>
+    <name>Contacts with 3 Consecutive Absences</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>%%%NAMESPACE%%%Contacts_with_and_without_Program_Engagements__c</reportType>
+    <reportType>Contacts_with_and_without_Program_Engagements__c</reportType>
     <scope>user</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
-    <sortColumn>Contact.%%%NAMESPACE%%%Program_Engagements__r$%%%NAMESPACE%%%ConsecutiveAbsences__c</sortColumn>
+    <sortColumn>Contact.Program_Engagements__r$ConsecutiveAbsences__c</sortColumn>
     <sortOrder>Desc</sortOrder>
     <timeFrameFilter>
-        <dateColumn>Contact.%%%NAMESPACE%%%Program_Engagements__r$%%%NAMESPACE%%%LastServiceDate__c</dateColumn>
+        <dateColumn>Contact.Program_Engagements__r$LastServiceDate__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

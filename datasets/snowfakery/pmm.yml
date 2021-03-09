@@ -1,7 +1,7 @@
 # cci task run generate_and_load_from_yaml --generator_yaml datasets/TestPMM.yml --num_records 1 --num_records_tablename Account --org bugtest
 - var: lnamevar
   value:
-    fake: last_name
+      fake: last_name
 
 # Program A
 - object: pmdm__Program__c
@@ -9,68 +9,68 @@
   nickname: ProgramA
   count: 1
   fields:
-    Name: ${{fake.word}} Program
-    pmdm__Description__c:
-      fake.sentence:
-        nb_words: 15  
-    pmdm__StartDate__c:
-      date_between:
-        start_date: -1y
-        end_date: -4m
-    pmdm__EndDate__c:
-      date_between:
-        start_date: +5d
-        end_date: +2y
-    pmdm__ProgramIssueArea__c:
-      random_choice:
-        - Housing
-        - Employment
-        - Education
-        - Legal
-        - Counseling
-        - Food and Nutrition
-        - Advocacy    
-    pmdm__Status__c:
-      random_choice:
-        - Planned
-        - Active
-        - Completed
-        - Canceled
-    pmdm__ShortSummary__c:
-      fake.sentence:
-        nb_words: 15
-    pmdm__TargetPopulation__c:
-      fake.sentence:
-        nb_words: 15
-  friends:
-  # Create Program Cohorts
-    - object: pmdm__ProgramCohort__c
-      count:
-        random_number:
-          min: 0
-          max: 4
-      nickname: Program Cohort
-      fields:
-        Name: ${{fake.word}} ${{count}} Cohort
-        pmdm__Description__c:        
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
           fake.sentence:
-            nb_words: 15
-        pmdm__StartDate__c:
+              nb_words: 15
+      pmdm__StartDate__c:
           date_between:
-            start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
-            end_date: -1d
-        pmdm__EndDate__c:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
           date_between:
-            start_date: +1d
-            end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
-        pmdm__Status__c: 
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
           random_choice:
-            - Planned
-            - Active
-            - Completed
-            - Canceled
-        pmdm__Program__c:
-          reference: pmdm__Program__c
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: Program Cohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
 
 # Program B
 - object: pmdm__Program__c
@@ -78,68 +78,68 @@
   nickname: ProgramB
   count: 1
   fields:
-    Name: ${{fake.word}} Program
-    pmdm__Description__c:
-      fake.sentence:
-        nb_words: 15  
-    pmdm__StartDate__c:
-      date_between:
-        start_date: -1y
-        end_date: -4m
-    pmdm__EndDate__c:
-      date_between:
-        start_date: +5d
-        end_date: +2y
-    pmdm__ProgramIssueArea__c:
-      random_choice:
-        - Housing
-        - Employment
-        - Education
-        - Legal
-        - Counseling
-        - Food and Nutrition
-        - Advocacy    
-    pmdm__Status__c:
-      random_choice:
-        - Planned
-        - Active
-        - Completed
-        - Canceled
-    pmdm__ShortSummary__c:
-      fake.sentence:
-        nb_words: 15
-    pmdm__TargetPopulation__c:
-      fake.sentence:
-        nb_words: 15
-  friends:
-  # Create Program Cohorts
-    - object: pmdm__ProgramCohort__c
-      count:
-        random_number:
-          min: 0
-          max: 4
-      nickname: Program Cohort
-      fields:
-        Name: ${{fake.word}} ${{count}} Cohort
-        pmdm__Description__c:        
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
           fake.sentence:
-            nb_words: 15
-        pmdm__StartDate__c:
+              nb_words: 15
+      pmdm__StartDate__c:
           date_between:
-            start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
-            end_date: -1d
-        pmdm__EndDate__c:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
           date_between:
-            start_date: +1d
-            end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
-        pmdm__Status__c: 
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
           random_choice:
-            - Planned
-            - Active
-            - Completed
-            - Canceled
-        pmdm__Program__c:
-          reference: pmdm__Program__c
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: Program Cohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
 
 # Program C
 - object: pmdm__Program__c
@@ -147,68 +147,68 @@
   nickname: ProgramC
   count: 1
   fields:
-    Name: ${{fake.word}} Program
-    pmdm__Description__c:
-      fake.sentence:
-        nb_words: 15  
-    pmdm__StartDate__c:
-      date_between:
-        start_date: -1y
-        end_date: -4m
-    pmdm__EndDate__c:
-      date_between:
-        start_date: +5d
-        end_date: +2y
-    pmdm__ProgramIssueArea__c:
-      random_choice:
-        - Housing
-        - Employment
-        - Education
-        - Legal
-        - Counseling
-        - Food and Nutrition
-        - Advocacy    
-    pmdm__Status__c:
-      random_choice:
-        - Planned
-        - Active
-        - Completed
-        - Canceled
-    pmdm__ShortSummary__c:
-      fake.sentence:
-        nb_words: 15
-    pmdm__TargetPopulation__c:
-      fake.sentence:
-        nb_words: 15
-  friends:
-  # Create Program Cohorts
-    - object: pmdm__ProgramCohort__c
-      count:
-        random_number:
-          min: 0
-          max: 4
-      nickname: Program Cohort
-      fields:
-        Name: ${{fake.word}} ${{count}} Cohort
-        pmdm__Description__c:        
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
           fake.sentence:
-            nb_words: 15
-        pmdm__StartDate__c:
+              nb_words: 15
+      pmdm__StartDate__c:
           date_between:
-            start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
-            end_date: -1d
-        pmdm__EndDate__c:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
           date_between:
-            start_date: +1d
-            end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
-        pmdm__Status__c: 
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
           random_choice:
-            - Planned
-            - Active
-            - Completed
-            - Canceled
-        pmdm__Program__c:
-          reference: pmdm__Program__c
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: Program Cohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
 
 # Program D
 - object: pmdm__Program__c
@@ -216,68 +216,68 @@
   nickname: ProgramD
   count: 1
   fields:
-    Name: ${{fake.word}} Program
-    pmdm__Description__c:
-      fake.sentence:
-        nb_words: 15  
-    pmdm__StartDate__c:
-      date_between:
-        start_date: -1y
-        end_date: -4m
-    pmdm__EndDate__c:
-      date_between:
-        start_date: +5d
-        end_date: +2y
-    pmdm__ProgramIssueArea__c:
-      random_choice:
-        - Housing
-        - Employment
-        - Education
-        - Legal
-        - Counseling
-        - Food and Nutrition
-        - Advocacy    
-    pmdm__Status__c:
-      random_choice:
-        - Planned
-        - Active
-        - Completed
-        - Canceled
-    pmdm__ShortSummary__c:
-      fake.sentence:
-        nb_words: 15
-    pmdm__TargetPopulation__c:
-      fake.sentence:
-        nb_words: 15
-  friends:
-  # Create Program Cohorts
-    - object: pmdm__ProgramCohort__c
-      count:
-        random_number:
-          min: 0
-          max: 4
-      nickname: Program Cohort
-      fields:
-        Name: ${{fake.word}} ${{count}} Cohort
-        pmdm__Description__c:        
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
           fake.sentence:
-            nb_words: 15
-        pmdm__StartDate__c:
+              nb_words: 15
+      pmdm__StartDate__c:
           date_between:
-            start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
-            end_date: -1d
-        pmdm__EndDate__c:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
           date_between:
-            start_date: +1d
-            end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
-        pmdm__Status__c: 
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
           random_choice:
-            - Planned
-            - Active
-            - Completed
-            - Canceled
-        pmdm__Program__c:
-          reference: pmdm__Program__c
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: Program Cohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
 
 # Program E
 - object: pmdm__Program__c
@@ -285,68 +285,68 @@
   nickname: ProgramE
   count: 1
   fields:
-    Name: ${{fake.word}} Program
-    pmdm__Description__c:
-      fake.sentence:
-        nb_words: 15  
-    pmdm__StartDate__c:
-      date_between:
-        start_date: -1y
-        end_date: -4m
-    pmdm__EndDate__c:
-      date_between:
-        start_date: +5d
-        end_date: +2y
-    pmdm__ProgramIssueArea__c:
-      random_choice:
-        - Housing
-        - Employment
-        - Education
-        - Legal
-        - Counseling
-        - Food and Nutrition
-        - Advocacy    
-    pmdm__Status__c:
-      random_choice:
-        - Planned
-        - Active
-        - Completed
-        - Canceled
-    pmdm__ShortSummary__c:
-      fake.sentence:
-        nb_words: 15
-    pmdm__TargetPopulation__c:
-      fake.sentence:
-        nb_words: 15
-  friends:
-  # Create Program Cohorts
-    - object: pmdm__ProgramCohort__c
-      count:
-        random_number:
-          min: 0
-          max: 4
-      nickname: Program Cohort
-      fields:
-        Name: ${{fake.word}} ${{count}} Cohort
-        pmdm__Description__c:        
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
           fake.sentence:
-            nb_words: 15
-        pmdm__StartDate__c:
+              nb_words: 15
+      pmdm__StartDate__c:
           date_between:
-            start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
-            end_date: -1d
-        pmdm__EndDate__c:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
           date_between:
-            start_date: +1d
-            end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
-        pmdm__Status__c: 
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
           random_choice:
-            - Planned
-            - Active
-            - Completed
-            - Canceled
-        pmdm__Program__c:
-          reference: pmdm__Program__c
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: Program Cohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
 
 # Program F
 - object: pmdm__Program__c
@@ -354,68 +354,68 @@
   nickname: ProgramF
   count: 1
   fields:
-    Name: ${{fake.word}} Program
-    pmdm__Description__c:
-      fake.sentence:
-        nb_words: 15  
-    pmdm__StartDate__c:
-      date_between:
-        start_date: -1y
-        end_date: -4m
-    pmdm__EndDate__c:
-      date_between:
-        start_date: +5d
-        end_date: +2y
-    pmdm__ProgramIssueArea__c:
-      random_choice:
-        - Housing
-        - Employment
-        - Education
-        - Legal
-        - Counseling
-        - Food and Nutrition
-        - Advocacy    
-    pmdm__Status__c:
-      random_choice:
-        - Planned
-        - Active
-        - Completed
-        - Canceled
-    pmdm__ShortSummary__c:
-      fake.sentence:
-        nb_words: 15
-    pmdm__TargetPopulation__c:
-      fake.sentence:
-        nb_words: 15
-  friends:
-  # Create Program Cohorts
-    - object: pmdm__ProgramCohort__c
-      count:
-        random_number:
-          min: 0
-          max: 4
-      nickname: Program Cohort
-      fields:
-        Name: ${{fake.word}} ${{count}} Cohort
-        pmdm__Description__c:        
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
           fake.sentence:
-            nb_words: 15
-        pmdm__StartDate__c:
+              nb_words: 15
+      pmdm__StartDate__c:
           date_between:
-            start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
-            end_date: -1d
-        pmdm__EndDate__c:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
           date_between:
-            start_date: +1d
-            end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
-        pmdm__Status__c: 
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
           random_choice:
-            - Planned
-            - Active
-            - Completed
-            - Canceled
-        pmdm__Program__c:
-          reference: pmdm__Program__c
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: Program Cohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
 
 # Program G
 - object: pmdm__Program__c
@@ -423,68 +423,68 @@
   nickname: ProgramG
   count: 1
   fields:
-    Name: ${{fake.word}} Program
-    pmdm__Description__c:
-      fake.sentence:
-        nb_words: 15  
-    pmdm__StartDate__c:
-      date_between:
-        start_date: -1y
-        end_date: -4m
-    pmdm__EndDate__c:
-      date_between:
-        start_date: +5d
-        end_date: +2y
-    pmdm__ProgramIssueArea__c:
-      random_choice:
-        - Housing
-        - Employment
-        - Education
-        - Legal
-        - Counseling
-        - Food and Nutrition
-        - Advocacy    
-    pmdm__Status__c:
-      random_choice:
-        - Planned
-        - Active
-        - Completed
-        - Canceled
-    pmdm__ShortSummary__c:
-      fake.sentence:
-        nb_words: 15
-    pmdm__TargetPopulation__c:
-      fake.sentence:
-        nb_words: 15
-  friends:
-  # Create Program Cohorts
-    - object: pmdm__ProgramCohort__c
-      count:
-        random_number:
-          min: 0
-          max: 4
-      nickname: Program Cohort
-      fields:
-        Name: ${{fake.word}} ${{count}} Cohort
-        pmdm__Description__c:        
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
           fake.sentence:
-            nb_words: 15
-        pmdm__StartDate__c:
+              nb_words: 15
+      pmdm__StartDate__c:
           date_between:
-            start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
-            end_date: -1d
-        pmdm__EndDate__c:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
           date_between:
-            start_date: +1d
-            end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
-        pmdm__Status__c: 
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
           random_choice:
-            - Planned
-            - Active
-            - Completed
-            - Canceled
-        pmdm__Program__c:
-          reference: pmdm__Program__c
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: Program Cohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
 
 # Program H
 - object: pmdm__Program__c
@@ -492,404 +492,404 @@
   nickname: ProgramH
   count: 1
   fields:
-    Name: ${{fake.word}} Program
-    pmdm__Description__c:
-      fake.sentence:
-        nb_words: 15  
-    pmdm__StartDate__c:
-      date_between:
-        start_date: -1y
-        end_date: -4m
-    pmdm__EndDate__c:
-      date_between:
-        start_date: +5d
-        end_date: +2y
-    pmdm__ProgramIssueArea__c:
-      random_choice:
-        - Housing
-        - Employment
-        - Education
-        - Legal
-        - Counseling
-        - Food and Nutrition
-        - Advocacy    
-    pmdm__Status__c:
-      random_choice:
-        - Planned
-        - Active
-        - Completed
-        - Canceled
-    pmdm__ShortSummary__c:
-      fake.sentence:
-        nb_words: 15
-    pmdm__TargetPopulation__c:
-      fake.sentence:
-        nb_words: 15
-  friends:
-  # Create Program Cohorts
-    - object: pmdm__ProgramCohort__c
-      count:
-        random_number:
-          min: 0
-          max: 4
-      nickname: Program Cohort
-      fields:
-        Name: ${{fake.word}} ${{count}} Cohort
-        pmdm__Description__c:        
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
           fake.sentence:
-            nb_words: 15
-        pmdm__StartDate__c:
+              nb_words: 15
+      pmdm__StartDate__c:
           date_between:
-            start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
-            end_date: -1d
-        pmdm__EndDate__c:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
           date_between:
-            start_date: +1d
-            end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
-        pmdm__Status__c: 
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
           random_choice:
-            - Planned
-            - Active
-            - Completed
-            - Canceled
-        pmdm__Program__c:
-          reference: pmdm__Program__c
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: Program Cohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
 
 # Create Organization Accounts
 - object: Account
   nickname: Orgs
   count: 1
   fields:
-    #RecordType: Master
-    Name: ${{fake.company}}
-    Description: ${{fake.catch_phrase}}
-    NumberOfEmployees:
-      random_number:
-        min: 1
-        max: 2000
-    # caseman__MaximumClientsServed__c:
-    #   random_number:
-    #     min: 1
-    #     max: 200
-    BillingStreet: ${{fake.street_address}}
-    BillingCity: ${{fake.city}}
-    BillingState: ${{fake.state_abbr}}
-    BillingPostalCode: ${{fake.postcode}}
-    BillingCountry: United States
-    Phone: ${{fake.phone_number}}
+      #RecordType: Master
+      Name: ${{fake.company}}
+      Description: ${{fake.catch_phrase}}
+      NumberOfEmployees:
+          random_number:
+              min: 1
+              max: 2000
+      # caseman__MaximumClientsServed__c:
+      #   random_number:
+      #     min: 1
+      #     max: 200
+      BillingStreet: ${{fake.street_address}}
+      BillingCity: ${{fake.city}}
+      BillingState: ${{fake.state_abbr}}
+      BillingPostalCode: ${{fake.postcode}}
+      BillingCountry: United States
+      Phone: ${{fake.phone_number}}
   friends:
-  # Create Organization Contacts
-    - object: Contact
-      nickname: OrgContact
-      count:
-        random_number:
-          min: 0
-          max: 5
-      fields:
-        AccountId:
-          reference: Account
-        # caseman__AgeCategory__c:
-        #   random_choice:
-        #     - Adult
-        #     - Senior
-        # Birthdate:
-        #   if:
-        #     - choice:
-        #         when: ${{caseman__AgeCategory__c=='Adult'}}
-        #         pick:
-        #           date_between:
-        #             start_date: -65y
-        #             end_date: -18y
-        #     - choice:
-        #         when: ${{caseman__AgeCategory__c=='Senior'}}
-        #         pick:
-        #           date_between:
-        #             start_date: -99y
-        #             end_date: -65y
-        # caseman__Pronouns__c:
-        #   random_choice:
-        #     - she/her/hers
-        #     - he/him/his
-        #     - they/them/theirs
-        #     - other/ask me            
-        # Salutation:
-        #   if:
-        #     - choice:
-        #         when: ${{caseman__Pronouns__c=='she/her/hers' and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
-        #         pick:
-        #           random_choice:
-        #             - Ms.
-        #             - Mrs.
-        #             - Dr.
-        #             - Prof.
-        #     - choice:
-        #         when: ${{caseman__Pronouns__c=='he/him/his' and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
-        #         pick:
-        #           random_choice:
-        #             - Mr.
-        #             - Dr.
-        #             - Prof.
-        #     - choice:
-        #         when: ${{(caseman__Pronouns__c=='other/ask me' or caseman__Pronouns__c=='they/them/theirs') and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
-        #         pick:
-        #           random_choice:
-        #             - Null
-        #             - Dr.
-        #             - Prof.
-        #     - choice:
-        #         when: ${{(caseman__AgeCategory__c=='Child' or caseman__AgeCategory__c=='Youth')}}
-        #         pick: Null
-        FirstName:
-          if:
-            # - choice:
-            #     when: ${{caseman__Pronouns__c=='he/him/his'}}
-            #     pick: ${{fake.first_name_male}}
-            # - choice:
-            #     when: ${{caseman__Pronouns__c=='she/her/hers'}}
-            #     pick: ${{fake.first_name_female}}
-            # - choice:
-            #     when: ${{caseman__Pronouns__c=='they/them/theirs' or caseman__Pronouns__c=='other/ask me'}}
-            #     pick: ${{fake.first_name_nonbinary}}
-            - choice:
-                when: ${{Salutation==Null}}
-                pick: ${{fake.first_name}}
-        LastName: ${{fake.last_name}}
-        pmdm__IsClient__c: False
-        # caseman__PreferredCommunicationMethod__c:
-        #   random_choice:
-        #     - Call
-        #     - Text
-        #     - Email
-        Email: ${{fake.email}}
-        # caseman__PreferredPhoneField__c:
-        #   random_choice:
-        #     - Phone
-        #     - Home Phone
-        #     - Mobile Phone
-        #     - Other Phone
-        Phone: ${{fake.phone_number}}
-        MobilePhone: ${{fake.phone_number}}
-        HomePhone: ${{fake.phone_number}}
-        OtherPhone: ${{fake.phone_number}}
-        # caseman__PreferredPhoneNumber__c:
-        #   if:
-        #     - choice:
-        #         when: ${{caseman__PreferredPhoneField__c=='Phone'}}
-        #         pick: ${{Phone}}   
-        #     - choice:
-        #         when: ${{caseman__PreferredPhoneField__c=='Home Phone'}}
-        #         pick: ${{HomePhone}}
-        #     - choice:
-        #         when: ${{caseman__PreferredPhoneField__c=='Mobile Phone'}}
-        #         pick: ${{MobilePhone}}
-        #     - choice:
-        #         when: ${{caseman__PreferredPhoneField__c=='Other Phone'}}
-        #         pick: ${{OtherPhone}}
-        MailingStreet: ${{BillingStreet}}
-        MailingCity: ${{BillingCity}}
-        MailingState: ${{BillingState}}
-        MailingPostalCode: ${{BillingPostalCode}}
-        MailingCountry: United States
-        Title: ${{fake.job}}
-        Department: ${{fake.word}}
+      # Create Organization Contacts
+      - object: Contact
+        nickname: OrgContact
+        count:
+            random_number:
+                min: 0
+                max: 5
+        fields:
+            AccountId:
+                reference: Account
+            # caseman__AgeCategory__c:
+            #   random_choice:
+            #     - Adult
+            #     - Senior
+            # Birthdate:
+            #   if:
+            #     - choice:
+            #         when: ${{caseman__AgeCategory__c=='Adult'}}
+            #         pick:
+            #           date_between:
+            #             start_date: -65y
+            #             end_date: -18y
+            #     - choice:
+            #         when: ${{caseman__AgeCategory__c=='Senior'}}
+            #         pick:
+            #           date_between:
+            #             start_date: -99y
+            #             end_date: -65y
+            # caseman__Pronouns__c:
+            #   random_choice:
+            #     - she/her/hers
+            #     - he/him/his
+            #     - they/them/theirs
+            #     - other/ask me
+            # Salutation:
+            #   if:
+            #     - choice:
+            #         when: ${{caseman__Pronouns__c=='she/her/hers' and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
+            #         pick:
+            #           random_choice:
+            #             - Ms.
+            #             - Mrs.
+            #             - Dr.
+            #             - Prof.
+            #     - choice:
+            #         when: ${{caseman__Pronouns__c=='he/him/his' and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
+            #         pick:
+            #           random_choice:
+            #             - Mr.
+            #             - Dr.
+            #             - Prof.
+            #     - choice:
+            #         when: ${{(caseman__Pronouns__c=='other/ask me' or caseman__Pronouns__c=='they/them/theirs') and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
+            #         pick:
+            #           random_choice:
+            #             - Null
+            #             - Dr.
+            #             - Prof.
+            #     - choice:
+            #         when: ${{(caseman__AgeCategory__c=='Child' or caseman__AgeCategory__c=='Youth')}}
+            #         pick: Null
+            FirstName:
+                if:
+                    # - choice:
+                    #     when: ${{caseman__Pronouns__c=='he/him/his'}}
+                    #     pick: ${{fake.first_name_male}}
+                    # - choice:
+                    #     when: ${{caseman__Pronouns__c=='she/her/hers'}}
+                    #     pick: ${{fake.first_name_female}}
+                    # - choice:
+                    #     when: ${{caseman__Pronouns__c=='they/them/theirs' or caseman__Pronouns__c=='other/ask me'}}
+                    #     pick: ${{fake.first_name_nonbinary}}
+                    - choice:
+                          when: ${{Salutation==Null}}
+                          pick: ${{fake.first_name}}
+            LastName: ${{fake.last_name}}
+            pmdm__IsClient__c: False
+            # caseman__PreferredCommunicationMethod__c:
+            #   random_choice:
+            #     - Call
+            #     - Text
+            #     - Email
+            Email: ${{fake.email}}
+            # caseman__PreferredPhoneField__c:
+            #   random_choice:
+            #     - Phone
+            #     - Home Phone
+            #     - Mobile Phone
+            #     - Other Phone
+            Phone: ${{fake.phone_number}}
+            MobilePhone: ${{fake.phone_number}}
+            HomePhone: ${{fake.phone_number}}
+            OtherPhone: ${{fake.phone_number}}
+            # caseman__PreferredPhoneNumber__c:
+            #   if:
+            #     - choice:
+            #         when: ${{caseman__PreferredPhoneField__c=='Phone'}}
+            #         pick: ${{Phone}}
+            #     - choice:
+            #         when: ${{caseman__PreferredPhoneField__c=='Home Phone'}}
+            #         pick: ${{HomePhone}}
+            #     - choice:
+            #         when: ${{caseman__PreferredPhoneField__c=='Mobile Phone'}}
+            #         pick: ${{MobilePhone}}
+            #     - choice:
+            #         when: ${{caseman__PreferredPhoneField__c=='Other Phone'}}
+            #         pick: ${{OtherPhone}}
+            MailingStreet: ${{BillingStreet}}
+            MailingCity: ${{BillingCity}}
+            MailingState: ${{BillingState}}
+            MailingPostalCode: ${{BillingPostalCode}}
+            MailingCountry: United States
+            Title: ${{fake.job}}
+            Department: ${{fake.word}}
 
 # Create Household Accounts
 
 - object: Account
-  nickname: HH  
+  nickname: HH
   count: 1
   fields:
-    #RecordType: Household_Account #this was manually created record type.
-    Name: ${{lnamevar}} Household
-    BillingStreet: ${{fake.street_address}}
-    BillingCity: ${{fake.city}}
-    BillingState: ${{fake.state_abbr}}
-    BillingPostalCode: ${{fake.postcode}}
-    BillingCountry: United States
-    Phone: ${{fake.phone_number}}
+      #RecordType: Household_Account #this was manually created record type.
+      Name: ${{lnamevar}} Household
+      BillingStreet: ${{fake.street_address}}
+      BillingCity: ${{fake.city}}
+      BillingState: ${{fake.state_abbr}}
+      BillingPostalCode: ${{fake.postcode}}
+      BillingCountry: United States
+      Phone: ${{fake.phone_number}}
   friends:
-  # Create Household Contacts
-    - object: Contact
-      nickname: HHContact
-      count: 
-        random_number:
-          min: 1
-          max: 5
-      fields:
-        AccountId:
-          reference: Account
-        # caseman__AgeCategory__c:
-        #   random_choice:
-        #     - Child
-        #     - Youth
-        #     - Adult
-        #     - Senior
-        # Birthdate:
-        #   if:
-        #     - choice:
-        #         when: ${{caseman__AgeCategory__c=='Child'}}
-        #         pick:
-        #           date_between:
-        #             start_date: -5y
-        #             end_date: today
-        #     - choice:
-        #         when: ${{caseman__AgeCategory__c=='Youth'}}
-        #         pick:
-        #           date_between:
-        #             start_date: -18y
-        #             end_date: -5y
-        #     - choice:
-        #         when: ${{caseman__AgeCategory__c=='Adult'}}
-        #         pick:
-        #           date_between:
-        #             start_date: -65y
-        #             end_date: -18y
-        #     - choice:
-        #         when: ${{caseman__AgeCategory__c=='Senior'}}
-        #         pick:
-        #           date_between:
-        #             start_date: -99y
-        #             end_date: -65y
-        # caseman__Pronouns__c:
-        #   random_choice:
-        #     - she/her/hers
-        #     - he/him/his
-        #     - they/them/theirs
-        #     - other/ask me            
-        # Salutation:
-        #   if:
-        #     - choice:
-        #         when: ${{caseman__Pronouns__c=='she/her/hers' and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
-        #         pick:
-        #           random_choice:
-        #             - Ms.
-        #             - Mrs.
-        #             - Dr.
-        #             - Prof.
-        #     - choice:
-        #         when: ${{caseman__Pronouns__c=='he/him/his' and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
-        #         pick:
-        #           random_choice:
-        #             - Mr.
-        #             - Dr.
-        #             - Prof.
-        #     - choice:
-        #         when: ${{(caseman__Pronouns__c=='other/ask me' or caseman__Pronouns__c=='they/them/theirs') and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
-        #         pick:
-        #           random_choice:
-        #             - Null
-        #             - Dr.
-        #             - Prof.
-        #     - choice:
-        #         when: ${{(caseman__AgeCategory__c=='Child' or caseman__AgeCategory__c=='Youth')}}
-        #         pick: Null
-        FirstName:
-          if:
-            # - choice:
-            #     when: ${{caseman__Pronouns__c=='he/him/his'}}
-            #     pick: ${{fake.first_name_male}}
-            # - choice:
-            #     when: ${{caseman__Pronouns__c=='she/her/hers'}}
-            #     pick: ${{fake.first_name_female}}
-            # - choice:
-            #     when: ${{caseman__Pronouns__c=='they/them/theirs' or caseman__Pronouns__c=='other/ask me'}}
-            #     pick: ${{fake.first_name_nonbinary}}
-            - choice:
-                when: ${{Salutation==Null}}
-                pick: ${{fake.first_name}}
-        LastName: ${{lnamevar}}
-        # caseman__LegalName__c: ${{FirstName}} ${{lnamevar}}
-        pmdm__IsClient__c:
-          random_choice:
-            - True
-            - False
-        # caseman__PreferredCommunicationMethod__c:
-        #   random_choice:
-        #     - Call
-        #     - Text
-        #     - Email
-        # Email: ${{fake.email}}
-        # caseman__PreferredPhoneField__c:
-        #   random_choice:
-        #     - Phone
-        #     - Home Phone
-        #     - Mobile Phone
-        #     - Other Phone
-        Phone: ${{fake.phone_number}}
-        MobilePhone: ${{fake.phone_number}}
-        HomePhone: ${{fake.phone_number}}
-        OtherPhone: ${{fake.phone_number}}
-        # caseman__PreferredPhoneNumber__c:
-        #   if:
-        #     - choice:
-        #         when: ${{caseman__PreferredPhoneField__c=='Phone'}}
-        #         pick: ${{Phone}}   
-        #     - choice:
-        #         when: ${{caseman__PreferredPhoneField__c=='Home Phone'}}
-        #         pick: ${{HomePhone}}
-        #     - choice:
-        #         when: ${{caseman__PreferredPhoneField__c=='Mobile Phone'}}
-        #         pick: ${{MobilePhone}}
-        #     - choice:
-        #         when: ${{caseman__PreferredPhoneField__c=='Other Phone'}}
-        #         pick: ${{OtherPhone}}
-        MailingStreet: ${{BillingStreet}}
-        MailingCity: ${{BillingCity}}
-        MailingState: ${{BillingState}}
-        MailingPostalCode: ${{BillingPostalCode}}
-        MailingCountry: United States
+      # Create Household Contacts
+      - object: Contact
+        nickname: HHContact
+        count:
+            random_number:
+                min: 1
+                max: 5
+        fields:
+            AccountId:
+                reference: Account
+            # caseman__AgeCategory__c:
+            #   random_choice:
+            #     - Child
+            #     - Youth
+            #     - Adult
+            #     - Senior
+            # Birthdate:
+            #   if:
+            #     - choice:
+            #         when: ${{caseman__AgeCategory__c=='Child'}}
+            #         pick:
+            #           date_between:
+            #             start_date: -5y
+            #             end_date: today
+            #     - choice:
+            #         when: ${{caseman__AgeCategory__c=='Youth'}}
+            #         pick:
+            #           date_between:
+            #             start_date: -18y
+            #             end_date: -5y
+            #     - choice:
+            #         when: ${{caseman__AgeCategory__c=='Adult'}}
+            #         pick:
+            #           date_between:
+            #             start_date: -65y
+            #             end_date: -18y
+            #     - choice:
+            #         when: ${{caseman__AgeCategory__c=='Senior'}}
+            #         pick:
+            #           date_between:
+            #             start_date: -99y
+            #             end_date: -65y
+            # caseman__Pronouns__c:
+            #   random_choice:
+            #     - she/her/hers
+            #     - he/him/his
+            #     - they/them/theirs
+            #     - other/ask me
+            # Salutation:
+            #   if:
+            #     - choice:
+            #         when: ${{caseman__Pronouns__c=='she/her/hers' and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
+            #         pick:
+            #           random_choice:
+            #             - Ms.
+            #             - Mrs.
+            #             - Dr.
+            #             - Prof.
+            #     - choice:
+            #         when: ${{caseman__Pronouns__c=='he/him/his' and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
+            #         pick:
+            #           random_choice:
+            #             - Mr.
+            #             - Dr.
+            #             - Prof.
+            #     - choice:
+            #         when: ${{(caseman__Pronouns__c=='other/ask me' or caseman__Pronouns__c=='they/them/theirs') and (caseman__AgeCategory__c=='Adult' or caseman__AgeCategory__c=='Senior')}}
+            #         pick:
+            #           random_choice:
+            #             - Null
+            #             - Dr.
+            #             - Prof.
+            #     - choice:
+            #         when: ${{(caseman__AgeCategory__c=='Child' or caseman__AgeCategory__c=='Youth')}}
+            #         pick: Null
+            FirstName:
+                if:
+                    # - choice:
+                    #     when: ${{caseman__Pronouns__c=='he/him/his'}}
+                    #     pick: ${{fake.first_name_male}}
+                    # - choice:
+                    #     when: ${{caseman__Pronouns__c=='she/her/hers'}}
+                    #     pick: ${{fake.first_name_female}}
+                    # - choice:
+                    #     when: ${{caseman__Pronouns__c=='they/them/theirs' or caseman__Pronouns__c=='other/ask me'}}
+                    #     pick: ${{fake.first_name_nonbinary}}
+                    - choice:
+                          when: ${{Salutation==Null}}
+                          pick: ${{fake.first_name}}
+            LastName: ${{lnamevar}}
+            # caseman__LegalName__c: ${{FirstName}} ${{lnamevar}}
+            pmdm__IsClient__c:
+                random_choice:
+                    - True
+                    - False
+            # caseman__PreferredCommunicationMethod__c:
+            #   random_choice:
+            #     - Call
+            #     - Text
+            #     - Email
+            # Email: ${{fake.email}}
+            # caseman__PreferredPhoneField__c:
+            #   random_choice:
+            #     - Phone
+            #     - Home Phone
+            #     - Mobile Phone
+            #     - Other Phone
+            Phone: ${{fake.phone_number}}
+            MobilePhone: ${{fake.phone_number}}
+            HomePhone: ${{fake.phone_number}}
+            OtherPhone: ${{fake.phone_number}}
+            # caseman__PreferredPhoneNumber__c:
+            #   if:
+            #     - choice:
+            #         when: ${{caseman__PreferredPhoneField__c=='Phone'}}
+            #         pick: ${{Phone}}
+            #     - choice:
+            #         when: ${{caseman__PreferredPhoneField__c=='Home Phone'}}
+            #         pick: ${{HomePhone}}
+            #     - choice:
+            #         when: ${{caseman__PreferredPhoneField__c=='Mobile Phone'}}
+            #         pick: ${{MobilePhone}}
+            #     - choice:
+            #         when: ${{caseman__PreferredPhoneField__c=='Other Phone'}}
+            #         pick: ${{OtherPhone}}
+            MailingStreet: ${{BillingStreet}}
+            MailingCity: ${{BillingCity}}
+            MailingState: ${{BillingState}}
+            MailingPostalCode: ${{BillingPostalCode}}
+            MailingCountry: United States
 # caseman__EmergencyContact__c:
 # caseman__EmergencyContactRole__c:
 
 # Program Engagement
 - object: pmdm__ProgramEngagement__c
-  count: 
-    random_number:
-      min: 1
-      max: 3
+  count:
+      random_number:
+          min: 1
+          max: 3
   nickname: ProgramEngagement
-  fields: 
-    pmdm__Program__c: 
-      random_choice:
-        - reference: ProgramA
-        - reference: ProgramB
-        - reference: ProgramC
-        - reference: ProgramD
-        - reference: ProgramE
-        - reference: ProgramF
-        - reference: ProgramG
-        - reference: ProgramH
-    pmdm__Contact__c:
-      random_reference: Contact
-    #pmdm__Account__c: ${{pmdm__Contact__c.AccountId}}
-    #pmdm__ProgramCohort__c:
-    #  random_reference: pmdm__ProgramCohort__c    
-    Name: Engagement
-    #pmdm__ApplicationDate__c:
-    #  date_between:
-    #    start_date: ${{date(pmdm__ProgramCohort__c.pmdm__StartDate__c) + relativedelta(weeks=+0)}}
-    #    end_date: today
-    pmdm__AutoName_Override__c: false          
-    #pmdm__StartDate__c:
-    #  date_between:
-    #    start_date: ${{date(pmdm__ApplicationDate__c) + relativedelta(weeks=+1)}}
-    #    end_date: today
-    #pmdm__EndDate__c:
-    #  date_between:
-    #    start_date: today
-    #    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}  
-    pmdm__Role__c:
-      random_choice:
-        - Client
-        - Volunteer
-        - Service Provider      
-    pmdm__Stage__c:
-      random_choice:
-        - Applied
-        - Application Denied
-        - Waitlisted
-        - Enrolled
-        - Active
-        - Completed
-        - Withdrawn      
+  fields:
+      pmdm__Program__c:
+          random_choice:
+              - reference: ProgramA
+              - reference: ProgramB
+              - reference: ProgramC
+              - reference: ProgramD
+              - reference: ProgramE
+              - reference: ProgramF
+              - reference: ProgramG
+              - reference: ProgramH
+      pmdm__Contact__c:
+          random_reference: Contact
+      #pmdm__Account__c: ${{pmdm__Contact__c.AccountId}}
+      #pmdm__ProgramCohort__c:
+      #  random_reference: pmdm__ProgramCohort__c
+      Name: Engagement
+      #pmdm__ApplicationDate__c:
+      #  date_between:
+      #    start_date: ${{date(pmdm__ProgramCohort__c.pmdm__StartDate__c) + relativedelta(weeks=+0)}}
+      #    end_date: today
+      pmdm__AutoName_Override__c: false
+      #pmdm__StartDate__c:
+      #  date_between:
+      #    start_date: ${{date(pmdm__ApplicationDate__c) + relativedelta(weeks=+1)}}
+      #    end_date: today
+      #pmdm__EndDate__c:
+      #  date_between:
+      #    start_date: today
+      #    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+      pmdm__Role__c:
+          random_choice:
+              - Client
+              - Volunteer
+              - Service Provider
+      pmdm__Stage__c:
+          random_choice:
+              - Applied
+              - Application Denied
+              - Waitlisted
+              - Enrolled
+              - Active
+              - Completed
+              - Withdrawn
 # caseman__Intake__c

@@ -22,7 +22,11 @@
                 ></c-visual-picker>
             </div>
         </template>
-        <template if:true={isStep1}>{labels.serviceSelections}</template>
+        <template if:true={isStep1}>
+            <div class="slds-var-p-horizontal_medium">
+                <c-group-service-delivery></c-group-service-delivery>
+            </div>
+        </template>
         <template if:true={isStep2}>{labels.selectContacts}</template>
 
         <div slot="footer">

@@ -9,7 +9,7 @@ import groupButton from "@salesforce/label/c.BSDT_Group_Option_Button";
 import singleTitle from "@salesforce/label/c.BSDT_Single_Option_Title";
 import singleDesc from "@salesforce/label/c.BSDT_Single_Option_Description";
 import singleButton from "@salesforce/label/c.BSDT_Single_Option_Button";
-import serviceSelections from "@salesforce/label/c.BSDT_Service_Selections";
+import selectService from "@salesforce/label/c.BSDT_Select_Service";
 import selectContacts from "@salesforce/label/c.BSDT_Select_Contacts";
 import review from "@salesforce/label/c.BSDT_Review";
 
@@ -17,6 +17,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     _steps;
     currentStep = {};
     isOptionSelection = true;
+    serviceDelivery;
 
     labels = {
         groupTitle,
@@ -25,7 +26,7 @@ export default class GroupServiceDeliveries extends LightningElement {
         singleTitle,
         singleDesc,
         singleButton,
-        serviceSelections,
+        selectService,
         selectContacts,
         review,
     };
@@ -42,18 +43,6 @@ export default class GroupServiceDeliveries extends LightningElement {
         return this.currentStep && this.currentStep.value === 1;
     }
 
-    createSteps() {
-        this._steps = new ProgressSteps();
-        this._steps
-            .addStep("", this.labels.serviceSelections, new NavigationItems().addNext())
-            .addStep(
-                "",
-                this.labels.selectContacts,
-                new NavigationItems().addNext().addBack()
-            )
-            .addStep("", this.labels.review);
-    }
-
     handleOption1() {
         this.createSteps();
         this.currentStep = this._steps.currentStep;
@@ -65,6 +54,10 @@ export default class GroupServiceDeliveries extends LightningElement {
     }
 
     handleNext() {
+        if (this.isStep1) {
+            this.getServiceDelivery();
+        }
+
         if (this.isStep2) {
             this.dispatchEvent(new CustomEvent("hide"));
             return;
@@ -77,5 +70,28 @@ export default class GroupServiceDeliveries extends LightningElement {
     handleBack() {
         this._steps.back();
         this.currentStep = this._steps.currentStep;
+    }
+
+    createSteps() {
+        this._steps = new ProgressSteps();
+        this._steps
+            .addStep("", this.labels.selectService, new NavigationItems().addNext())
+            .addStep(
+                "",
+                this.labels.selectContacts,
+                new NavigationItems().addNext().addBack()
+            )
+            .addStep("", this.labels.review);
+    }
+
+    getServiceDelivery() {
+        let serviceDelivery = this.template.querySelector("c-group-service-delivery");
+
+        if (!serviceDelivery) {
+            return;
+        }
+
+        this.serviceDelivery = serviceDelivery.getFields();
+        console.log(JSON.stringify(this.serviceDelivery));
     }
 }

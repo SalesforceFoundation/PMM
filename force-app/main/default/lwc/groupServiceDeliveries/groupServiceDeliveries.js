@@ -92,6 +92,5 @@ export default class GroupServiceDeliveries extends LightningElement {
         }
 
         this.serviceDelivery = serviceDelivery.getFields();
-        console.log(JSON.stringify(this.serviceDelivery));
     }
 }

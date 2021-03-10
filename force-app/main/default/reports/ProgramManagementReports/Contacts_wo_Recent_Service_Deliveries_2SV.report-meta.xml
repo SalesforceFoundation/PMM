@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Report xmlns="http://soap.sforce.com/2006/04/metadata">
     <columns>
-        <field>Contact$Name</field>
-    </columns>
-    <columns>
         <field>Contact$LastServiceDate__c</field>
     </columns>
     <columns>
@@ -52,7 +49,12 @@
         </criteriaItems>
         <language>en_US</language>
     </filter>
-    <format>Tabular</format>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Contact$Name</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
     <name>Contacts w/o Recent Service Deliveries</name>
     <params>
         <name>co</name>
@@ -62,7 +64,7 @@
     <scope>user</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
-    <showSubTotals>true</showSubTotals>
+    <showSubTotals>false</showSubTotals>
     <timeFrameFilter>
         <dateColumn>Contact.Program_Engagements__r$LastServiceDate__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>

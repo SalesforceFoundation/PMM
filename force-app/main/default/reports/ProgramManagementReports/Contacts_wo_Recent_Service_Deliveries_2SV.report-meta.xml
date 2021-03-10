@@ -25,6 +25,12 @@
             <operator>lessThan</operator>
             <value>LAST_N_DAYS:14</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>CurrentUserOwner__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>1</value>
+        </criteriaItems>
         <operation>with</operation>
         <primaryTableColumn>Contact$Id</primaryTableColumn>
         <relatedTable>ProgramEngagement__c</relatedTable>
@@ -47,7 +53,6 @@
             <operator>equals</operator>
             <value/>
         </criteriaItems>
-        <language>en_US</language>
     </filter>
     <format>Summary</format>
     <groupingsDown>
@@ -61,7 +66,7 @@
         <value>1</value>
     </params>
     <reportType>Contacts_with_and_without_Program_Engagements__c</reportType>
-    <scope>user</scope>
+    <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>false</showSubTotals>

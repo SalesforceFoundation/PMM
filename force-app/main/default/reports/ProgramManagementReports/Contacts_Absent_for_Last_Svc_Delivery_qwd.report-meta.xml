@@ -25,12 +25,36 @@
             <operator>greaterOrEqual</operator>
             <value>1</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Stage__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Enrolled,Active</value>
+        </criteriaItems>
         <operation>with</operation>
         <primaryTableColumn>Contact$Id</primaryTableColumn>
         <relatedTable>ProgramEngagement__c</relatedTable>
         <relatedTableJoinColumn>Contact__c</relatedTableJoinColumn>
     </crossFilters>
-    <description>Who has 1 or more consecutive absences for any of their Program Engagements, and might need additional support?</description>
+    <crossFilters>
+        <criteriaItems>
+            <column>CurrentUserOwner__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>1</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Stage__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Enrolled,Active</value>
+        </criteriaItems>
+        <operation>with</operation>
+        <primaryTableColumn>Contact$Id</primaryTableColumn>
+        <relatedTable>ProgramEngagement__c</relatedTable>
+        <relatedTableJoinColumn>Contact__c</relatedTableJoinColumn>
+    </crossFilters>
+    <description>Who has 1 or more consecutive absences for at least one of their Program Engagements, and might need additional support?</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
@@ -43,7 +67,7 @@
         <value>1</value>
     </params>
     <reportType>Contacts_with_and_without_Program_Engagements__c</reportType>
-    <scope>user</scope>
+    <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>

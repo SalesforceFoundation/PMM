@@ -27,7 +27,9 @@
                 <c-group-service-delivery></c-group-service-delivery>
             </div>
         </template>
-        <template if:true={isStep2}>{labels.selectContacts}</template>
+        <template if:true={isStep2}>
+            <c-participant-selector service-id={serviceId}></c-participant-selector>
+        </template>
 
         <div slot="footer">
             <lightning-layout horizontal-align="spread">

@@ -115,6 +115,11 @@
     <platformActionList>
         <actionListContext>Record</actionListContext>
         <platformActionListItems>
+            <actionName>Edit</actionName>
+            <actionType>StandardButton</actionType>
+            <sortOrder>0</sortOrder>
+        </platformActionListItems>
+        <platformActionListItems>
             <actionName>ProgramEngagement__c.CreateServiceDelivery</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>1</sortOrder>
@@ -128,11 +133,6 @@
             <actionName>Delete</actionName>
             <actionType>StandardButton</actionType>
             <sortOrder>3</sortOrder>
-        </platformActionListItems>
-        <platformActionListItems>
-            <actionName>Edit</actionName>
-            <actionType>StandardButton</actionType>
-            <sortOrder>0</sortOrder>
         </platformActionListItems>
     </platformActionList>
     <quickActionList>
@@ -161,6 +161,7 @@
         <fields>DeliveryDate__c</fields>
         <fields>Quantity__c</fields>
         <fields>UnitOfMeasurement__c</fields>
+        <fields>AttendanceStatus__c</fields>
         <fields>HouseholdBenefit__c</fields>
         <relatedList>ServiceDelivery__c.ProgramEngagement__c</relatedList>
     </relatedLists>
@@ -184,7 +185,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h21000001j3mB</masterLabel>
+        <masterLabel>00h1D000003LydK</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

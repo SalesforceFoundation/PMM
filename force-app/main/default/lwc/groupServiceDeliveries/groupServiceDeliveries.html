@@ -2,34 +2,42 @@
     <lightning-card>
         <template if:true={isOptionSelection}>
             <div class="slds-var-p-horizontal_medium slds-var-p-bottom_medium">
-                <c-visual-picker
-                    title={labels.groupTitle}
-                    content={labels.groupDesc}
-                    onselect={handleOption1}
-                    icon-name="standard:groups"
-                    button-name="group"
-                    button-label={labels.groupButton}
-                ></c-visual-picker>
+                <div class="slds-box">
+                    <c-visual-picker
+                        title={labels.groupTitle}
+                        content={labels.groupDesc}
+                        onselect={handleOption1}
+                        icon-name="standard:groups"
+                        button-name="group"
+                        button-label={labels.groupButton}
+                    ></c-visual-picker>
+                </div>
             </div>
             <div class="slds-var-p-horizontal_medium">
-                <c-visual-picker
-                    title={labels.singleTitle}
-                    content={labels.singleDesc}
-                    onselect={handleOption2}
-                    icon-name="standard:user"
-                    button-name="individual"
-                    button-label={labels.singleButton}
-                ></c-visual-picker>
+                <div class="slds-box">
+                    <c-visual-picker
+                        title={labels.singleTitle}
+                        content={labels.singleDesc}
+                        onselect={handleOption2}
+                        icon-name="standard:user"
+                        button-name="individual"
+                        button-label={labels.singleButton}
+                    ></c-visual-picker>
+                </div>
             </div>
         </template>
-        <template if:true={isStep1}>
-            <div class="slds-var-p-horizontal_medium">
-                <c-group-service-delivery></c-group-service-delivery>
+        <div class="slds-var-p-horizontal_medium" if:true={isStep1}>
+            <div class="slds-box">
+                <c-group-service-delivery
+                    service-delivery={serviceDelivery}
+                ></c-group-service-delivery>
             </div>
-        </template>
-        <template if:true={isStep2}>
-            <c-participant-selector service-id={serviceId}></c-participant-selector>
-        </template>
+        </div>
+        <div class="slds-var-p-horizontal_medium" if:true={isStep2}>
+            <div class="slds-box">
+                <c-participant-selector service-id={serviceId}></c-participant-selector>
+            </div>
+        </div>
 
         <div slot="footer">
             <lightning-layout horizontal-align="spread">

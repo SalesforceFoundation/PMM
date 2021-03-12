@@ -67,24 +67,31 @@
         <value>Anonymous</value>
     </labels>
     <labels>
+        <fullName>BSDT_Selected_Contacts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Title for the Selected Contacts for the Bulk Service Delivery Tool Group Option</shortDescription>
+        <value>Selected Contacts</value>
+    </labels>
+    <labels>
         <fullName>BSDT_Group_Option_Title</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Title for the Bulk Service Delivery Tool Group Data Entry Option</shortDescription>
+        <shortDescription>Title for the Bulk Service Delivery Tool Group Option</shortDescription>
         <value>Create Service Deliveries for a Group of Contacts</value>
     </labels>
     <labels>
         <fullName>BSDT_Group_Option_Description</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Description for the Bulk Service Delivery Tool Group Data Entry Option</shortDescription>
+        <shortDescription>Description for the Bulk Service Delivery Tool Group Option</shortDescription>
         <value>Enter service deliveries for a group of contacts. For example a workshop or a class.</value>
     </labels>
     <labels>
         <fullName>BSDT_Group_Option_Button</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Button for the Bulk Service Delivery Tool Group Data Entry Option</shortDescription>
+        <shortDescription>Button for the Bulk Service Delivery Tool Group Option</shortDescription>
         <value>Create by Group</value>
     </labels>
     <labels>

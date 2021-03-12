@@ -12,8 +12,10 @@ import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import selectService from "@salesforce/label/c.BSDT_Select_Service";
 
 const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
+const ERROR_MESSAGE = "Error on Page"; // Not displayed on screen, does not require a label.
 
 export default class GroupServiceDelivery extends LightningElement {
+    _serviceDelivery;
     objectApiName = SERVICE_DELIVERY_OBJECT.objectApiName;
     fieldSetName = DEFAULT_FIELD_SET;
     serviceId;
@@ -54,14 +56,32 @@ export default class GroupServiceDelivery extends LightningElement {
 
     @api
     getFields() {
-        let fields = [];
+        let fields = {};
+        let valid = true;
         this.template.querySelectorAll("lightning-input-field").forEach(inputField => {
-            let field = {};
-            field[inputField.fieldName] = inputField.value;
-            fields.push(field);
+            valid = valid && inputField.reportValidity();
+            fields[inputField.fieldName] = inputField.value;
         });
 
+        if (!valid) {
+            throw new Error(ERROR_MESSAGE);
+        }
+
         return fields;
+    }
+
+    @api
+    get serviceDelivery() {
+        return this._serviceDelivery;
+    }
+
+    set serviceDelivery(value) {
+        if (!value) {
+            return;
+        }
+
+        this._serviceDelivery = value;
+        this.serviceId = value[SERVICE_FIELD.fieldApiName];
     }
 
     handleServiceId(event) {
@@ -69,10 +89,15 @@ export default class GroupServiceDelivery extends LightningElement {
         this.serviceId = event.target.value;
     }
 
-    configureFieldSet(fieldSet) {
+    configureFieldSet(fieldSetMembers) {
         this.fieldSet = [];
-        fieldSet.forEach(field => {
-            if (!this.fieldsToExclude.includes(field.apiName)) {
+
+        fieldSetMembers.forEach(member => {
+            let field = { ...member };
+            if (!this.fieldsToExclude.includes(member.apiName)) {
+                field.value = this.serviceDelivery
+                    ? this.serviceDelivery[member.apiName]
+                    : null;
                 this.fieldSet.push(field);
             }
         });

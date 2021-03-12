@@ -42,7 +42,7 @@ public with sharing class AttendanceService {
         ServiceSession__c.SObjectType => ServiceDelivery__c.ServiceSession__c,
         Service__c.SObjectType => ServiceDelivery__c.Service__c
     };
-    private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
+    private static final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
     private Map<Id, SObject> rollupTargetObjectById = new Map<Id, SObject>();
 
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
@@ -69,62 +69,27 @@ public with sharing class AttendanceService {
 
     private List<String> presentStatuses {
         get {
-            if (presentStatuses == null) {
-                presentStatuses = statusBuckets.get('Present');
-            }
-            return presentStatuses;
+            return statusBuckets.get('Present');
         }
         set;
     }
 
     private List<String> absentStatuses {
         get {
-            if (absentStatuses == null) {
-                absentStatuses = statusBuckets.get('Absent');
-            }
-            return absentStatuses;
+            return statusBuckets.get('Absent');
         }
         set;
     }
 
-    public List<String> attendanceStatuses {
-        get {
-            if (attendanceStatuses == null) {
-                attendanceStatuses = new List<String>();
-                attendanceStatuses.addAll(presentStatuses);
-                attendanceStatuses.addAll(absentStatuses);
-            }
-            return attendanceStatuses;
-        }
-        set;
-    }
+    private List<String> attendanceStatuses;
 
-    public Map<SObjectType, String> relationshipNameBySObjectType {
-        get {
-            if (relationshipNameBySObjectType == null) {
-                String relationshipName;
-                relationshipNameBySObjectType = new Map<SObjectType, String>();
-                for (
-                    SObjectType sObjectType : SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.keySet()
-                ) {
-                    SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
-                        sObjectType
-                    );
-                    for (
-                        ChildRelationship child : sObjectType.getDescribe()
-                            .getChildRelationships()
-                    ) {
-                        if (child.getField() == lookupFieldOnDelivery) {
-                            relationshipName = child.getRelationshipName();
-                            break;
-                        }
-                    }
-                    relationshipNameBySObjectType.put(sObjectType, relationshipName);
-                }
-            }
-            return relationshipNameBySObjectType;
+    public List<String> getAttendanceStatuses() {
+        if (attendanceStatuses == null) {
+            attendanceStatuses = new List<String>();
+            attendanceStatuses.addAll(presentStatuses);
+            attendanceStatuses.addAll(absentStatuses);
         }
-        set;
+        return attendanceStatuses;
     }
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
@@ -143,38 +108,48 @@ public with sharing class AttendanceService {
         }
     }
 
-    public void doBatchRollups(List<SObject> parents) {
-        rollupAttendanceFromSObjects(parents);
-        rollupLastServiceDateFromSObjects(parents);
-        systemAccess.updateRecords(rollupTargetObjectById.values());
+    public void doRollups(SObjectType sObjectType, List<SObject> parents) {
+        if (parents == null || parents.isEmpty()) {
+            return;
+        }
+
+        rollupAttendance(sObjectType, parents);
+        rollupLastServiceDate(sObjectType, parents);
+        List<SObject> parentsToUpdate = filterModifiedParentsForUpdate(
+            sObjectType,
+            parents
+        );
+        systemAccess.updateRecords(parentsToUpdate);
     }
 
     public void doRollups(
         Map<SObjectField, Set<Id>> attendanceMap,
         Map<SObjectField, Set<Id>> lastServiceDateMap
     ) {
-        rollupAttendanceFromIds(attendanceMap);
-        rollupLastServiceDateFromIds(lastServiceDateMap);
+        rollupAttendance(attendanceMap);
+        rollupLastServiceDate(lastServiceDateMap);
         systemAccess.updateRecords(rollupTargetObjectById.values());
     }
 
     @TestVisible
-    private void rollupAttendanceFromSObjects(List<SObject> parents) {
+    private void rollupAttendance(SObjectType sObjectType, List<SObject> parents) {
         Set<Id> consecutiveAbsencesCountComplete = new Set<Id>();
-        SObjectType objectType = parents[0].Id.getSObjectType();
         SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
-            objectType
+            sObjectType
         );
-
         addDefaultTargetObjectsForAttendance(parents);
 
+        String relationshipName = getServiceDeliveryRelationshipName(sObjectType);
+
         for (SObject parent : parents) {
-            for (
-                ServiceDelivery__c delivery : (List<ServiceDelivery__c>) parent.getSObjects(
-                    relationshipNameBySObjectType.get(objectType)
-                )
-            ) {
-                calculateAttendanceRollups(
+            List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) parent.getSObjects(
+                relationshipName
+            );
+            if (serviceDeliveries == null) {
+                continue;
+            }
+            for (ServiceDelivery__c delivery : serviceDeliveries) {
+                setAttendanceFields(
                     delivery,
                     lookupFieldOnDelivery,
                     consecutiveAbsencesCountComplete
@@ -184,9 +159,7 @@ public with sharing class AttendanceService {
     }
 
     @TestVisible
-    private void rollupAttendanceFromIds(
-        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget
-    ) {
+    private void rollupAttendance(Map<SObjectField, Set<Id>> idsByLookupFieldToTarget) {
         Set<Id> consecutiveAbsencesCountComplete = new Set<Id>();
         if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {
             return;
@@ -202,6 +175,8 @@ public with sharing class AttendanceService {
                 idsByLookupFieldToTarget.get(lookupFieldOnDelivery)
             );
 
+            List<String> attendanceStatuses = getAttendanceStatuses();
+
             for (
                 ServiceDelivery__c delivery : systemAccess.getAttendanceRecords(
                     lookupFieldOnDelivery,
@@ -209,7 +184,7 @@ public with sharing class AttendanceService {
                     attendanceStatuses
                 )
             ) {
-                calculateAttendanceRollups(
+                setAttendanceFields(
                     delivery,
                     lookupFieldOnDelivery,
                     consecutiveAbsencesCountComplete
@@ -218,7 +193,7 @@ public with sharing class AttendanceService {
         }
     }
 
-    private void calculateAttendanceRollups(
+    private void setAttendanceFields(
         ServiceDelivery__c delivery,
         SObjectField lookupFieldOnDelivery,
         Set<Id> consecutiveAbsencesCountComplete
@@ -275,10 +250,9 @@ public with sharing class AttendanceService {
     }
 
     @TestVisible
-    private void rollupLastServiceDateFromSObjects(List<SObject> parents) {
-        SObjectType objectType = parents[0].Id.getSObjectType();
+    private void rollupLastServiceDate(SObjectType sObjectType, List<SObject> parents) {
         SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
-            objectType
+            sObjectType
         );
         SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD.get(
             lookupFieldOnDelivery
@@ -288,19 +262,15 @@ public with sharing class AttendanceService {
             return;
         }
 
-        String relationshipName = relationshipNameBySObjectType.get(objectType);
+        String relationshipName = getServiceDeliveryRelationshipName(sObjectType);
 
         for (SObject parentRecord : parents) {
-            calculateLastServiceDeliveryRollups(
-                parentRecord,
-                relationshipName,
-                lastServiceDateField
-            );
+            setLastServiceDate(parentRecord, relationshipName, lastServiceDateField);
         }
     }
 
     @TestVisible
-    private void rollupLastServiceDateFromIds(
+    private void rollupLastServiceDate(
         Map<SObjectField, Set<Id>> idsByLookupFieldToTarget
     ) {
         if (idsByLookupFieldToTarget == null || idsByLookupFieldToTarget.isEmpty()) {
@@ -322,19 +292,7 @@ public with sharing class AttendanceService {
 
             SObjectType parentObject = lookupFieldOnDelivery.getDescribe()
                 .getReferenceTo()[0];
-            String relationshipName = relationshipNameBySObjectType.get(parentObject);
-            if (parentObject == Contact.SObjectType) {
-                System.debug(
-                    JSON.serializePretty(
-                        systemAccess.getParentsWithServiceDeliveries(
-                            lookupFieldOnDelivery,
-                            idsByLookupFieldToTarget.get(lookupFieldOnDelivery),
-                            parentObject,
-                            relationshipName
-                        )
-                    )
-                );
-            }
+            String relationshipName = getServiceDeliveryRelationshipName(parentObject);
             for (
                 SObject parentRecord : systemAccess.getParentsWithServiceDeliveries(
                     lookupFieldOnDelivery,
@@ -343,17 +301,12 @@ public with sharing class AttendanceService {
                     relationshipName
                 )
             ) {
-                System.debug(parentRecord);
-                calculateLastServiceDeliveryRollups(
-                    parentRecord,
-                    relationshipName,
-                    lastServiceDateField
-                );
+                setLastServiceDate(parentRecord, relationshipName, lastServiceDateField);
             }
         }
     }
 
-    private void calculateLastServiceDeliveryRollups(
+    private void setLastServiceDate(
         SObject parentRecord,
         String relationshipName,
         SObjectField lastServiceDateField
@@ -363,21 +316,78 @@ public with sharing class AttendanceService {
             targetObject = parentRecord;
             rollupTargetObjectById.put(targetObject.Id, targetObject);
         }
-        System.debug(targetObject);
 
         List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) parentRecord.getSObjects(
             relationshipName
         );
-        System.debug(serviceDeliveries);
         if (serviceDeliveries == null || serviceDeliveries.isEmpty()) {
             targetObject.put(lastServiceDateField, null);
         } else {
-            System.debug((Date) serviceDeliveries[0].get(DELIVERY_DATE));
-            targetObject.put(
-                lastServiceDateField,
-                (Date) serviceDeliveries[0].get(DELIVERY_DATE)
+            for (ServiceDelivery__c delivery : serviceDeliveries) {
+                // Check for quantity. This check is done in the selector for trigger-based calcs, but not for batch-based calcs.
+                if (delivery.Quantity__c > 0) {
+                    targetObject.put(
+                        lastServiceDateField,
+                        (Date) delivery.get(DELIVERY_DATE)
+                    );
+                    break;
+                }
+            }
+        }
+    }
+
+    private String getServiceDeliveryRelationshipName(SObjectType sObjectType) {
+        String relationshipName;
+        SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
+            sObjectType
+        );
+        for (
+            ChildRelationship child : sObjectType.getDescribe().getChildRelationships()
+        ) {
+            if (child.getField() == lookupFieldOnDelivery) {
+                relationshipName = child.getRelationshipName();
+                break;
+            }
+        }
+        return relationshipName;
+    }
+
+    private List<SObject> filterModifiedParentsForUpdate(
+        SObjectType sObjectType,
+        List<SObject> parents
+    ) {
+        List<SObject> parentsToUpdate = new List<SObject>();
+
+        SObjectField lookupFieldOnDelivery = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
+            sObjectType
+        );
+        List<SObjectField> fields = new List<SObjectField>{
+            TOTAL_PRESENT_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery),
+            TOTAL_ABSENT_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery)
+        };
+        if (
+            CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD.containsKey(lookupFieldOnDelivery)
+        ) {
+            fields.add(
+                CONSECUTIVE_ABSENCES_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery)
             );
         }
+        if (LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD.containsKey(lookupFieldOnDelivery)) {
+            fields.add(
+                LAST_SERVICE_DATE_FIELD_BY_LOOKUP_FIELD.get(lookupFieldOnDelivery)
+            );
+        }
+        for (SObject sourceRecord : parents) {
+            SObject targetRecord = rollupTargetObjectById.get(sourceRecord.Id);
+            for (SObjectField field : fields) {
+                if (targetRecord.get(field) != sourceRecord.get(field)) {
+                    parentsToUpdate.add(targetRecord);
+                    break;
+                }
+            }
+        }
+
+        return parentsToUpdate;
     }
 
     public Map<String, Boolean> checkFieldPermissions() {

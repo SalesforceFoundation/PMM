@@ -8,7 +8,7 @@
   -->
 
 <template>
-    <c-section title={labels.addServiceParticipants} if:true={isLoaded}></c-section>
+    <c-section title={title} if:true={isLoaded}></c-section>
     <lightning-layout if:true={isLoaded} multiple-rows="true" horizontal-align="center">
         <lightning-layout-item
             if:true={showCapacityWarning}
@@ -92,7 +92,7 @@
                                             >
                                                 <lightning-button
                                                     variant="brand"
-                                                    label={labels.addServiceParticipants}
+                                                    label={title}
                                                     class="slds-var-p-around_medium"
                                                     onclick={handleSelectParticipants}
                                                 ></lightning-button>
@@ -119,7 +119,7 @@
                         <div
                             class="slds-text-align_left slds-text-heading_small slds-var-p-around_small"
                         >
-                            {scheduleHeader}
+                            {selectedHeader}
                         </div>
                         <div
                             if:false={noRecordsSelected}

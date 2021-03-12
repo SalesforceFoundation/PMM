@@ -8,26 +8,41 @@
  */
 
 import { LightningElement, track, api, wire } from "lwc";
-import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
-import PE_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
+import { format } from "c/util";
 
+import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
+
+import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
+
+import addRecord from "@salesforce/label/c.Add_Record";
+import selectContacts from "@salesforce/label/c.BSDT_Select_Contacts";
+import selectedContacts from "@salesforce/label/c.BSDT_Selected_Contacts";
+import capacityWarning from "@salesforce/label/c.Participant_Capacity_Warning";
+import selectedRecords from "@salesforce/label/c.Selected_Records";
+import searchThisList from "@salesforce/label/c.Search_this_list";
+import none from "@salesforce/label/c.None";
+import noRecordsFound from "@salesforce/label/c.No_Records_Found";
+import noRecordsSelected from "@salesforce/label/c.No_Records_Selected";
+import filterByRecord from "@salesforce/label/c.Filter_By_Record";
+import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
 export default class ParticipantSelector extends LightningElement {
+    @api serviceId;
+    @api serviceSchedule;
+    @api existingContactIds = [];
+    @api selectedParticipants = [];
+    @api columns;
+    @api selectedRows;
+
     @track availableEngagements;
     @track filteredEngagements;
     @track engagements;
     @track cohorts;
-    @api serviceId;
-    @api serviceScheduleModel;
-    @api selectedParticipants = [];
-    @api existingContactIds = [];
-    @api columns;
 
     selectedRowCount = 0;
     searchValue;
     noRecordsFound = false;
     cohortId;
     programName;
-    selectedRows;
     addToServiceButtonLabel;
     selectedColumns;
     fields;
@@ -36,22 +51,28 @@ export default class ParticipantSelector extends LightningElement {
     isLoaded = false;
     rendered = false;
 
+    labels = {
+        selectContacts,
+        selectedContacts,
+        capacityWarning,
+        selectedRecords,
+        searchThisList,
+        none,
+        noRecordsFound,
+        noRecordsSelected,
+        noContactsSelected,
+    };
+
     @api
     get newParticipantsProgramEngagements() {
         let result = [];
         this.selectedParticipants.forEach(row => {
-            let contactId = row[PE_CONTACT_FIELD.fieldApiName];
+            let contactId = row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName];
             if (!this.existingContactIds.includes(contactId)) {
                 result.push(row);
             }
         });
         return result;
-    }
-
-    get labels() {
-        return this.serviceScheduleModel.labels.serviceParticipant
-            ? this.serviceScheduleModel.labels.serviceParticipant
-            : {};
     }
 
     get showCapacityWarning() {
@@ -75,17 +96,31 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     get capacity() {
-        return this.serviceScheduleModel.serviceSchedule[this.fields.capacity.apiName];
+        return this.serviceSchedule
+            ? this.serviceSchedule[this.fields.capacity.apiName]
+            : undefined;
+    }
+
+    get selectedHeader() {
+        if (this.serviceSchedule) {
+            return this.scheduleHeader;
+        }
+
+        return this.labels.selectedContacts;
+    }
+
+    get title() {
+        if (this.serviceSchedule) {
+            return this.labels.addServiceParticipants;
+        }
+
+        return this.labels.selectContacts;
     }
 
     get scheduleHeader() {
-        let capacity = this.serviceScheduleModel.serviceSchedule[
-            this.fields.capacity.apiName
-        ];
+        let name = this.serviceSchedule[this.fields.name.apiName];
 
-        let name = this.serviceScheduleModel.serviceSchedule[this.fields.name.apiName];
-
-        if (capacity === undefined) {
+        if (this.capacity === undefined) {
             return name;
         }
 
@@ -106,6 +141,7 @@ export default class ParticipantSelector extends LightningElement {
             this.cohorts = result.data.programCohorts.slice(0);
             this.programName = result.data.program ? result.data.program.Name : "";
 
+            this.formatLabels();
             this.setDataTableColumns();
             this.setSelectedColumns();
             this.loadDataTable();
@@ -119,6 +155,15 @@ export default class ParticipantSelector extends LightningElement {
 
         this.isLoaded = true;
         this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
+    }
+
+    formatLabels() {
+        this.labels.addServiceParticipants = format(addRecord, [
+            this.objectLabels.serviceParticipant.objectPluralLabel,
+        ]);
+        this.labels.filterByCohort = format(filterByRecord, [
+            this.objectLabels.programCohort.objectLabel,
+        ]);
     }
 
     loadDataTable() {
@@ -154,12 +199,16 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     loadPreviousSelections() {
-        if (this.serviceScheduleModel.selectedParticipants === undefined) {
+        if (this.selectedRows === undefined) {
             return;
         }
-        this.selectedRows = [...this.serviceScheduleModel.selectedParticipants];
+        this.selectedRows = [...this.selectedRows];
         this.availableEngagements.forEach(eng => {
-            if (this.existingContactIds.includes(eng[PE_CONTACT_FIELD.fieldApiName])) {
+            if (
+                this.existingContactIds.includes(
+                    eng[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
+                )
+            ) {
                 eng.disableDeselect = true;
                 this.selectedRows.push(eng);
             }
@@ -233,6 +282,8 @@ export default class ParticipantSelector extends LightningElement {
 
         this.selectedParticipants = [...this.selectedParticipants];
         this.availableEngagements = tempContacts;
+        this.selectedRows = undefined;
+        this.selectedRowCount = 0;
         this.applyFilters();
         this.sortData(this.selectedParticipants);
     }

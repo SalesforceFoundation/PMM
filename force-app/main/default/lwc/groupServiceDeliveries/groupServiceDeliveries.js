@@ -3,6 +3,8 @@ import { LightningElement } from "lwc";
 import { ProgressSteps } from "c/progressSteps";
 import { NavigationItems } from "c/navigationItems";
 
+import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
+
 import groupTitle from "@salesforce/label/c.BSDT_Group_Option_Title";
 import groupDesc from "@salesforce/label/c.BSDT_Group_Option_Description";
 import groupButton from "@salesforce/label/c.BSDT_Group_Option_Button";
@@ -18,6 +20,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     currentStep = {};
     isOptionSelection = true;
     serviceDelivery;
+    selectedParticipants;
 
     labels = {
         groupTitle,
@@ -43,6 +46,12 @@ export default class GroupServiceDeliveries extends LightningElement {
         return this.currentStep && this.currentStep.value === 1;
     }
 
+    get serviceId() {
+        return this.serviceDelivery
+            ? this.serviceDelivery[SERVICE_FIELD.fieldApiName]
+            : undefined;
+    }
+
     handleOption1() {
         this.createSteps();
         this.currentStep = this._steps.currentStep;
@@ -55,10 +64,15 @@ export default class GroupServiceDeliveries extends LightningElement {
 
     handleNext() {
         if (this.isStep1) {
-            this.getServiceDelivery();
+            try {
+                this.getServiceDelivery();
+            } catch (error) {
+                return;
+            }
         }
 
         if (this.isStep2) {
+            this.getSelectedParticipants();
             this.dispatchEvent(new CustomEvent("hide"));
             return;
         }
@@ -92,5 +106,15 @@ export default class GroupServiceDeliveries extends LightningElement {
         }
 
         this.serviceDelivery = serviceDelivery.getFields();
+    }
+
+    getSelectedParticipants() {
+        let participantSelector = this.template.querySelector("c-participant-selector");
+
+        if (!participantSelector) {
+            return;
+        }
+
+        this.selectedParticipants = participantSelector.selectedParticipants;
     }
 }

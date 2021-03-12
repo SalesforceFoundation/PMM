@@ -282,6 +282,8 @@ export default class ParticipantSelector extends LightningElement {
 
         this.selectedParticipants = [...this.selectedParticipants];
         this.availableEngagements = tempContacts;
+        this.selectedRows = undefined;
+        this.selectedRowCount = 0;
         this.applyFilters();
         this.sortData(this.selectedParticipants);
     }

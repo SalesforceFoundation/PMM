@@ -11,16 +11,9 @@
     min-height: 350px;
 }
 
-.bsdt .wizard .slds-card {
-    height: 72vh;
-}
-
-.bsdt .wizard .slds-card__body {
-    height: 90%;
-}
-
 .bsdt .slds-card__footer {
     background-color: rgb(240, 240, 240);
+    height: 75px;
 }
 
 .bsdt .sd-input .slds-form-element__help {

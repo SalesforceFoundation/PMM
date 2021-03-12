@@ -1,6 +1,6 @@
 <template>
     <div class="slds-box container">
-        <lightning-layout class="slds-var-p-top_large">
+        <lightning-layout class="slds-var-p-top_x-large">
             <lightning-layout-item size="1" class="slds-text-align_center">
                 <lightning-icon
                     class="icon"
@@ -8,22 +8,22 @@
                     size="large"
                 ></lightning-icon>
             </lightning-layout-item>
-            <lightning-layout-item size="10">
+            <lightning-layout-item size="9">
                 <h1 class="slds-truncate slds-text-heading_small" title={title}>
                     {title}
                 </h1>
-                <p class="slds-var-m-top_small">
+                <p class="slds-var-m-top_x-small">
                     {content}
                 </p>
             </lightning-layout-item>
             <lightning-layout-item
-                size="1"
-                class="slds-text-align_center slds-var-p-top_small"
+                size="2"
+                class="slds-text-align_center slds-var-p-top_x-small"
             >
                 <button
                     name={buttonName}
                     type="button"
-                    class="slds-button slds-button_brand slds-button_stretch"
+                    class="slds-button slds-button_brand button_stretch"
                     onclick={handleClick}
                 >
                     {buttonLabel}

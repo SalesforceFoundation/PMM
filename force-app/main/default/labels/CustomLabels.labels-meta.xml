@@ -109,10 +109,10 @@
         <value>Create Individually</value>
     </labels>
     <labels>
-        <fullName>BSDT_Service_Selections</fullName>
+        <fullName>BSDT_Select_Service</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Service Selections Step of the Bulk Service Delivery Tool</shortDescription>
+        <shortDescription>Service Selection Step of the Bulk Service Delivery Tool</shortDescription>
         <value>Service Selections</value>
     </labels>
     <labels>

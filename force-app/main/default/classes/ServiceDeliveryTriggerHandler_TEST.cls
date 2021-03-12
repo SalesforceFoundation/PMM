@@ -206,8 +206,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         );
     }
 
-    private static void shouldNotCallRollupWhenServiceChangesWithoutStatus() {
-        // TODO: update method name? it says should not call but we are asserting the call?
+    private static void shouldCallRollupWhenServiceChangesWithoutStatus() {
         handler.service = (AttendanceService) serviceStub.createMock();
 
         oldRecord.Service__c = TestUtil.mockId(Service__c.SObjectType);

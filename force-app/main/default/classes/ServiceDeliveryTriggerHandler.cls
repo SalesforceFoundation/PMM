@@ -176,7 +176,8 @@ public with sharing class ServiceDeliveryTriggerHandler {
 
     private Set<SObjectField> getLookupFields() {
         Set<SObjectField> fields = new Set<SObjectField>();
-        List<FeatureGate__mdt> features = FeatureGate__mdt.getAll().values();
+        List<FeatureGate__mdt> features = CustomMetadataSelector.getInstance()
+            .getAllFeatureGates();
 
         for (FeatureGate__mdt feature : features) {
             if (

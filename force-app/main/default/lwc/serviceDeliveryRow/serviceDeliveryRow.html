@@ -119,12 +119,9 @@
                         </lightning-layout-item>
                     </lightning-layout>
                 </lightning-layout-item>
-                <lightning-layout-item size="2">
+                <lightning-layout-item size="2" class="slds-var-p-left_small">
                     <lightning-layout>
-                        <lightning-layout-item
-                            size="8"
-                            class="slds-p-top_xx-small slds-text-align_right"
-                        >
+                        <lightning-layout-item size="8" class="slds-p-top_xx-small">
                             <template if:true={isSaving}>
                                 <div
                                     class="slds-is-relative slds-p-top_large slds-text-align_right slds-m-left_x-large"
@@ -136,7 +133,7 @@
                                     ></lightning-spinner>
                                 </div>
                             </template>
-                            <template if:true={isSaved} role="alert">
+                            <template if:true={showSavedIcon} role="alert">
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:success"
@@ -147,10 +144,21 @@
                                 ></lightning-icon>
                                 <span class="slds-p-left_small">{labels.saved}</span>
                             </template>
-                            <template if:true={isError} role="alert">
+                            <template if:true={showModifiedIcon} role="alert">
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:warning"
+                                    alternative-text="Edited"
+                                    size="x-small"
+                                    variant="warning"
+                                    title="Edited"
+                                ></lightning-icon>
+                                <span class="slds-p-left_small">Edited</span>
+                            </template>
+                            <template if:true={isError} role="alert">
+                                <lightning-icon
+                                    tabindex="0"
+                                    icon-name="utility:error"
                                     alternative-text={labels.error}
                                     size="x-small"
                                     variant="error"

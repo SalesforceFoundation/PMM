@@ -10,11 +10,10 @@
 import { LightningElement, api, track, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { handleError } from "c/util";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { loadStyle } from "lightning/platformResourceLoader";
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
-import done from "@salesforce/label/c.Done";
 import addEntry from "@salesforce/label/c.Add_Entry";
+import save from "@salesforce/label/c.Save";
 import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
 import success from "@salesforce/label/c.Success";
@@ -39,30 +38,29 @@ const LONG_DATA_TYPES = ["TEXTAREA"];
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
-    @api hideFooter = false; // no longer used; can't remove because public
+    @api hideFooter = false; // no longer used; can't remove because public - mar 2021: respurposed to detect modal
     @track serviceDeliveries = [{ index: 0 }];
     @track isSaving = false;
     @track saveMessage;
     @track fieldSet = [];
     @track rowCount = this.serviceDeliveries.length;
-    @track errors = {};
-    @track isAddEntryDisabled = false;
-    @track isDoneDisabled = false;
     @track hasContactField = false;
     @track hasProgramEngagementField = false;
+    savedCount;
+    targetSaveCount;
 
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
 
     labels = {
         addEntry: addEntry,
         addServiceDelivery: addServiceDelivery,
-        done: done,
         saved: saved,
         saving: saving,
         required: Label_Required,
         success: success,
         serviceDeliveriesAdded: serviceDeliveriesAdded,
         rowsWithErrors: rowsWithErrors,
+        save: save,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -87,7 +85,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     @api
     resetUI() {
-        this.showRowCountToast();
         this.defaultValues = {};
         this.serviceDeliveries = [];
         this.addDelivery();
@@ -107,6 +104,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this[NavigationMixin.GenerateUrl](this.serviceDeliveryPage).then(
             url => (this.url = url)
         );
+    }
+
+    get isModal() {
+        return this.hideFooter; // reusing old api property name
     }
 
     checkFieldsExists(fieldSet) {
@@ -178,7 +179,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.rowCount = this.serviceDeliveries.length;
     }
 
-    handleDelete(event) {
+    handleRowDelete(event) {
         this.serviceDeliveries = this.serviceDeliveries.filter(function(obj) {
             return obj.index !== event.detail;
         });
@@ -188,94 +189,28 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.handleDeleteError(event.detail);
     }
 
-    handleDone() {
-        this.resetUI();
-        this.dispatchEvent(new CustomEvent("done"));
-    }
+    handleSave() {
+        let rows = this.template.querySelectorAll("c-service-delivery-row");
 
-    handleRowError(event) {
-        let errorIndex = event.detail.index;
-        this.errors[errorIndex] = "error";
-        this.isAddEntryDisabled = false;
-        this.renderErrors();
-    }
+        this.savedCount = 0;
+        this.targetSaveCount = 0;
 
-    handleDeleteError(index) {
-        if (this.errors[index]) {
-            delete this.errors[index];
-            this.renderErrors();
-            this.setDoneDisabled();
-        }
-    }
-
-    handleSubmit() {
-        this.isAddEntryDisabled = true;
-        this.isDoneDisabled = true;
-    }
-
-    handleSuccess(event) {
-        this.isAddEntryDisabled = false;
-
-        let rowIndex = event.target.index;
-        let serviceDelivery = this.serviceDeliveries.find(
-            ({ index }) => index === rowIndex
-        );
-        serviceDelivery.hasSaved = true;
-        this.handleDeleteError(rowIndex);
-
-        this.setDoneDisabled();
-    }
-
-    setDoneDisabled() {
-        if (Object.keys(this.errors).length > 0) {
-            this.isDoneDisabled = true;
-        } else {
-            this.isDoneDisabled = false;
-        }
-    }
-
-    renderErrors() {
-        this.errors = Object.assign({}, this.errors);
-    }
-
-    showRowCountToast() {
-        let count = 0;
-        this.serviceDeliveries.forEach(element => {
-            if (element.hasSaved) {
-                count++;
+        rows.forEach(row => {
+            if (row.isDirty) {
+                this.targetSaveCount++;
             }
+            row.saveRow();
         });
-        if (count > 0) {
-            let toastMessage = count + " " + this.labels.serviceDeliveriesAdded;
-
-            this[NavigationMixin.GenerateUrl]({
-                type: "standard__objectPage",
-                attributes: {
-                    objectApiName: this.serviceDeliveryObject.objectApiName,
-                    actionName: "home",
-                },
-            }).then(url => {
-                const event = new ShowToastEvent({
-                    title: this.labels.success,
-                    variant: "success",
-                    mode: "sticky",
-                    message: "{0}",
-                    messageData: [
-                        {
-                            url,
-                            label: toastMessage,
-                        },
-                    ],
-                });
-                this.dispatchEvent(event);
-            });
-        }
     }
 
-    get doneTitleLabel() {
-        if (this.isDoneDisabled) {
-            return this.labels.rowsWithErrors;
+    // eslint-disable-next-line no-unused-vars
+    handleRowSuccess(event) {
+        if (!this.isModal) {
+            return;
         }
-        return this.labels.done;
+        this.savedCount++;
+        if (this.savedCount === this.targetSaveCount) {
+            this.dispatchEvent(new CustomEvent("done"));
+        }
     }
 }

@@ -49,8 +49,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
     serviceDeliveryFieldSets;
     isSaving = false;
-    isAddEntryDisabled = false;
-    isDoneDisabled = false;
     hasContactField = false;
     hasProgramEngagementField = false;
     hideWizard = false;

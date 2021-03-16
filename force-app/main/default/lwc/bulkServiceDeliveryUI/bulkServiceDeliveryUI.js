@@ -12,6 +12,9 @@ import { NavigationMixin } from "lightning/navigation";
 import { handleError } from "c/util";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { loadStyle } from "lightning/platformResourceLoader";
+
+import { ServiceDeliveryFieldSets } from "./serviceDeliveryFieldSets";
+
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
 import done from "@salesforce/label/c.Done";
 import addEntry from "@salesforce/label/c.Add_Entry";
@@ -29,13 +32,11 @@ import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.Prog
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
-import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
+import getFieldSets from "@salesforce/apex/FieldSetController.getFieldSetByName";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Bulk_Service_Deliveries";
-const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
-const LONG_DATA_TYPES = ["TEXTAREA"];
 
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
@@ -43,6 +44,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @track serviceDeliveries = [{ index: 0 }];
     @track fieldSet = [];
     @track errors = {};
+    serviceDeliveryFieldSets;
     saveMessage;
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
     rowCount = this.serviceDeliveries.length;
@@ -73,13 +75,19 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     };
     _deliveryIndex = 1;
 
-    @wire(getFieldSet, {
+    @wire(getFieldSets, {
         objectName: SERVICEDELIVERY_OBJECT.objectApiName,
-        fieldSetName: FIELD_SET_NAME,
     })
     wiredFields({ error, data }) {
         if (data) {
-            this.configureFieldSet(data.map(a => ({ ...a })));
+            this.serviceDeliveryFieldSets = new ServiceDeliveryFieldSets(data);
+            this.fieldSet = this.serviceDeliveryFieldSets.getFieldSet(FIELD_SET_NAME);
+            this.hasContactField = this.serviceDeliveryFieldSets.hasContactField(
+                FIELD_SET_NAME
+            );
+            this.hasProgramEngagementField = this.serviceDeliveryFieldSets.hasProgramEngagementField(
+                FIELD_SET_NAME
+            );
         } else if (error) {
             handleError(error);
         }
@@ -107,69 +115,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this[NavigationMixin.GenerateUrl](this.serviceDeliveryPage).then(
             url => (this.url = url)
         );
-    }
-
-    checkFieldsExists(fieldSet) {
-        if (fieldSet) {
-            fieldSet.forEach(element => {
-                if (element.apiName === this.fields.contact.fieldApiName) {
-                    this.hasContactField = true;
-                }
-                if (element.apiName === this.fields.programEngagement.fieldApiName) {
-                    this.hasProgramEngagementField = true;
-                }
-            });
-        }
-    }
-
-    configureFieldSet(fieldSet) {
-        this.checkFieldsExists(fieldSet);
-        fieldSet.forEach(field => {
-            field.disabled = true;
-            field.isQuantityField = false;
-            // Number fields are size 1
-            // Program Engagment lookup is size 4
-            // Client lookup is size 3
-            // Everything else is size 2
-            // This means that the field set we ship with is exactly 12 wide
-            if (SHORT_DATA_TYPES.includes(field.type)) {
-                field.size = 1;
-            } else if (field.apiName === this.fields.programEngagement.fieldApiName) {
-                field.size = 4;
-            } else if (
-                field.apiName === this.fields.contact.fieldApiName ||
-                LONG_DATA_TYPES.includes(field.type)
-            ) {
-                field.size = 3;
-            } else {
-                field.size = 2;
-            }
-
-            if (
-                this.hasContactField &&
-                field.apiName === this.fields.contact.fieldApiName
-            ) {
-                field.disabled = false;
-                field.isRequired = true;
-            } else if (
-                !this.hasContactField &&
-                this.hasProgramEngagementField &&
-                field.apiName === this.fields.programEngagement.fieldApiName
-            ) {
-                field.disabled = false;
-                field.isRequired = true;
-            } else if (
-                !this.hasContactField &&
-                !this.hasProgramEngagementField &&
-                field.apiName === this.fields.service.fieldApiName
-            ) {
-                field.disabled = false;
-                field.isRequired = true;
-            } else if (field.apiName === this.fields.quantity.fieldApiName) {
-                field.isQuantityField = true;
-            }
-            this.fieldSet.push(field);
-        });
     }
 
     addDelivery() {

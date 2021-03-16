@@ -331,7 +331,9 @@ public with sharing class AttendanceService_TEST {
             JSON.serialize(
                 new Map<String, Object>{
                     'Id' => contactId,
-                    'Service_Deliveries__r' => new Map<String, Object>{
+                    Util.prefixNamespace(
+                        'Service_Deliveries__r'
+                    ) => new Map<String, Object>{
                         'totalSize' => 2,
                         'done' => true,
                         'records' => new List<ServiceDelivery__c>{
@@ -407,7 +409,9 @@ public with sharing class AttendanceService_TEST {
             JSON.serialize(
                 new Map<String, Object>{
                     'Id' => serviceId,
-                    'ServiceDeliveries__r' => new Map<String, Object>{
+                    Util.prefixNamespace(
+                        'ServiceDeliveries__r'
+                    ) => new Map<String, Object>{
                         'totalSize' => 2,
                         'done' => true,
                         'records' => new List<ServiceDelivery__c>{

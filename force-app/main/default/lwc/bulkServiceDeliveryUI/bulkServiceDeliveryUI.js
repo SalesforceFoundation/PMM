@@ -186,7 +186,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         if (this.serviceDeliveries.length <= 0) {
             this.addDelivery();
         }
-        this.handleDeleteError(event.detail);
     }
 
     handleSave() {

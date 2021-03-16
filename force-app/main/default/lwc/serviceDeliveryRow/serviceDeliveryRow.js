@@ -148,6 +148,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         ) {
             this.unitOfMeasureValue =
                 result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value;
+        } else {
+            this.resetQuantityLabel();
         }
     }
 
@@ -209,7 +211,15 @@ export default class ServiceDeliveryRow extends LightningElement {
             event.target.fieldName === this.fields.programEngagement.fieldApiName
         ) {
             this.handleProgramEngagementInputChange(event);
+        } else if (event.target.fieldName === this.fields.service.fieldApiName) {
+            this.handleServiceInputChange(event.target.fieldName, event.target.value);
         }
+    }
+
+    handleServiceInputChange(fieldName, fieldVal) {
+        this.serviceId = fieldVal;
+        this.handleEnableFieldOnInputChange(fieldName);
+        this.enableDisableFieldsOnSaveAndInputChange();
     }
 
     handleContactInputChange(event) {
@@ -281,8 +291,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         if (fieldName === this.fields.service.fieldApiName) {
-            this.serviceId = fieldVal;
-            this.enableDisableFieldsOnSaveAndInputChange();
+            this.handleServiceInputChange(fieldName, fieldVal);
         }
     }
 

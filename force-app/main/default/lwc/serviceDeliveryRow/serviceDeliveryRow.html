@@ -148,12 +148,12 @@
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:warning"
-                                    alternative-text="Edited"
+                                    alternative-text={labels.edited}
                                     size="x-small"
                                     variant="warning"
-                                    title="Edited"
+                                    title={labels.edited}
                                 ></lightning-icon>
-                                <span class="slds-p-left_small">Edited</span>
+                                <span class="slds-p-left_small">{labels.edited}</span>
                             </template>
                             <template if:true={isError} role="alert">
                                 <lightning-icon

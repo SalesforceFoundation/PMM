@@ -34,6 +34,7 @@ import noServiceWarning from "@salesforce/label/c.No_Services_For_Program_Engage
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import quantity from "@salesforce/label/c.Quantity";
 import fieldAccessError from "@salesforce/label/c.Util_UnsupportedField";
+import edited from "@salesforce/label/c.Edited";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
@@ -114,6 +115,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         error,
         quantity,
         fieldAccessError,
+        edited,
     };
     fields = {
         contact: CONTACT_FIELD,

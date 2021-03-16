@@ -244,7 +244,7 @@ public with sharing class FieldSetService_TEST {
         );
 
         Map<String, Object> fieldSetByName = fieldSetService.getFieldSetByName(
-            ServiceDelivery__c.SObjectType
+            String.valueOf(ServiceDelivery__c.SObjectType)
         );
 
         for (Schema.FieldSet fieldSet : fieldSets) {
@@ -257,6 +257,29 @@ public with sharing class FieldSetService_TEST {
             String.valueOf(fieldsResult),
             String.valueOf(fieldSetByName.get(fieldSets[0].getName())),
             'Expected the field set object to be returned.'
+        );
+    }
+
+    @IsTest
+    private static void shouldThrowErrorForInvalidFieldSet() {
+        String actualException;
+        String objectName = String.valueOf(Contact.SObjectType);
+        String fieldSetName = 'FakeFieldSet';
+        String expectedException = String.format(
+            System.Label.NoFieldSetFound,
+            new List<String>{ fieldSetName, objectName }
+        );
+
+        try {
+            new FieldSetService().getFieldDescribes(objectName, fieldSetName, false);
+        } catch (Exception ex) {
+            actualException = ex.getMessage();
+        }
+
+        System.assertEquals(
+            expectedException,
+            actualException,
+            'The exception message was not as expected.'
         );
     }
 }

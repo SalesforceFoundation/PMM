@@ -10,7 +10,30 @@
 public with sharing class FieldSetService {
     @TestVisible
     private Set<String> unsupportedFieldTypes = new Set<String>{ 'TIME' };
-    public FieldSetService() {
+
+    public Map<String, Object> getFieldSetByName(SObjectType sObjectType) {
+        Map<String, FieldSet> fieldSets = sObjectType.getDescribe().fieldSets.getMap();
+        Map<String, Object> fieldSetsByName = new Map<String, Object>();
+
+        for (FieldSet fieldSet : fieldSets.values()) {
+            Map<String, Map<String, Object>> fieldByApiName = new Map<String, Map<String, Object>>();
+            for (
+                DescribeFieldResult fieldDescribe : getFieldDescribes(
+                    sObjectType.getDescribe(),
+                    fieldSet,
+                    false
+                )
+            ) {
+                fieldByApiName.put(
+                    fieldDescribe.getName(),
+                    getFieldForLWC(fieldDescribe)
+                );
+            }
+
+            fieldSetsByName.put(fieldSet.getName(), fieldByApiName.values());
+        }
+
+        return fieldSetsByName;
     }
 
     public Map<String, Map<String, Object>> getFieldByFieldPath(
@@ -48,10 +71,61 @@ public with sharing class FieldSetService {
         Boolean allowRelationshipFields
     ) {
         Map<String, Map<String, Object>> fieldByApiName = new Map<String, Map<String, Object>>();
+        for (
+            DescribeFieldResult fieldDescribe : getFieldDescribes(
+                objectName,
+                fieldSetName,
+                allowRelationshipFields
+            )
+        ) {
+            fieldByApiName.put(fieldDescribe.getName(), getFieldForLWC(fieldDescribe));
+        }
+
+        return fieldByApiName.values();
+    }
+
+    /**
+     * @description "Casts" a FieldSet into a List<DescribeFieldResult>.
+     * @param string objectName
+     * @param string fieldSetName
+     * @return      List<DescribeFieldResult> Set of fields describes
+     */
+    public List<DescribeFieldResult> getFieldDescribes(
+        String objectName,
+        String fieldSetName,
+        Boolean allowRelationshipFields
+    ) {
+        Schema.FieldSet fieldSet;
         DescribeSObjectResult objectDescribe = Schema.describeSObjects(
             new List<String>{ objectName }
         )[0];
-        Schema.FieldSet fieldSet = getFieldSet(objectDescribe, fieldSetName);
+
+        Map<String, FieldSet> fieldSetMap = objectDescribe.fieldSets.getMap();
+        for (String key : fieldSetMap.keySet()) {
+            if (key.containsIgnoreCase(fieldSetName)) {
+                // temporary workaround for namespacing until design parameter definition is implemented
+                fieldSet = fieldSetMap.get(key);
+            }
+        }
+
+        if (fieldSet == null) {
+            throw new FieldSetException(
+                String.format(
+                    System.Label.NoFieldSetFound,
+                    new List<String>{ fieldSetName, objectName }
+                )
+            );
+        }
+
+        return getFieldDescribes(objectDescribe, fieldSet, allowRelationshipFields);
+    }
+
+    private List<DescribeFieldResult> getFieldDescribes(
+        DescribeSObjectResult objectDescribe,
+        FieldSet fieldSet,
+        Boolean allowRelationshipFields
+    ) {
+        List<DescribeFieldResult> fieldDescribes = new List<DescribeFieldResult>();
 
         for (Schema.FieldSetMember field : fieldSet.fields) {
             if (
@@ -70,10 +144,11 @@ public with sharing class FieldSetService {
                 fieldDescribe,
                 field.getFieldPath()
             );
-            fieldByApiName.put(fieldDescribe.getName(), getFieldForLWC(fieldDescribe));
+
+            fieldDescribes.add(fieldDescribe);
         }
 
-        return fieldByApiName.values();
+        return fieldDescribes;
     }
 
     /**
@@ -248,5 +323,8 @@ public with sharing class FieldSetService {
         ];
 
         return fieldDefinitions.isEmpty() ? null : fieldDefinitions[0].QualifiedApiName;
+    }
+
+    private class FieldSetException extends Exception {
     }
 }

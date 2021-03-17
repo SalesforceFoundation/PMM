@@ -8,6 +8,7 @@ project:
         install_class: InstallScript
     source_format: sfdx
     git:
+        default_branch: main
         repo_url: https://github.com/SalesforceFoundation/PMM
         prefix_beta: uat/
         prefix_release: release/

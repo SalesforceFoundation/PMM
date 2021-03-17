@@ -28,7 +28,6 @@ import success from "@salesforce/label/c.Success";
 import recordDeleted from "@salesforce/label/c.Record_Deleted";
 import selectService from "@salesforce/label/c.Select_Service";
 import selectEngagement from "@salesforce/label/c.Select_Program_Engagement";
-import selectedContactWarning from "@salesforce/label/c.Service_Delivery_Contact_Without_Programs";
 import noServiceWarning from "@salesforce/label/c.No_Services_For_Program_Engagement";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import quantity from "@salesforce/label/c.Quantity";
@@ -78,7 +77,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         deleteLabel,
         noServiceWarning,
         recordDeleted,
-        selectedContactWarning,
         selectEngagement,
         selectService,
         newProgramEngagement,
@@ -91,10 +89,11 @@ export default class ServiceDeliveryRow extends LightningElement {
         edited,
     };
     fields = {
-        contact: CONTACT_FIELD,
-        service: SERVICE_FIELD,
-        programEngagement: PROGRAMENGAGEMENT_FIELD,
-        unitOfMeasurement: UNIT_OF_MEASUREMENT_FIELD,
+        contact: CONTACT_FIELD.fieldApiName,
+        service: SERVICE_FIELD.fieldApiName,
+        programEngagement: PROGRAMENGAGEMENT_FIELD.fieldApiName,
+        unitOfMeasurement: UNIT_OF_MEASUREMENT_FIELD.fieldApiName,
+        fieldSet: SERVICE_FIELD_SET_FIELD.fieldApiName,
     };
 
     _defaultsSet = false;
@@ -215,13 +214,11 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     handleInputChange(event) {
         this.isDirty = true;
-        if (event.target.fieldName === this.fields.contact.fieldApiName) {
+        if (event.target.fieldName === this.fields.contact) {
             this.handleContactInputChange(event);
-        } else if (
-            event.target.fieldName === this.fields.programEngagement.fieldApiName
-        ) {
+        } else if (event.target.fieldName === this.fields.programEngagement) {
             this.handleProgramEngagementInputChange(event);
-        } else if (event.target.fieldName === this.fields.service.fieldApiName) {
+        } else if (event.target.fieldName === this.fields.service) {
             this.handleServiceInputChange(event.target.fieldName, event.target.value);
         }
     }
@@ -286,7 +283,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     updateComboBoxValues(fieldName, fieldVal) {
-        if (fieldName === this.fields.programEngagement.fieldApiName) {
+        if (fieldName === this.fields.programEngagement) {
             this._valuesToSave = []; //If the engagement changes, wipe stored values.
             this._filteredValues[ENGAGEMENTS].forEach(element => {
                 if (element.value === fieldVal) {
@@ -301,7 +298,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             this._valuesToSave[fieldName] = fieldVal;
         }
 
-        if (fieldName === this.fields.service.fieldApiName) {
+        if (fieldName === this.fields.service) {
             this.handleServiceInputChange(fieldName, fieldVal);
         }
     }
@@ -312,7 +309,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.fieldSet.forEach(element => {
             if (
                 this.hasProgramEngagementField &&
-                element.apiName === this.fields.service.fieldApiName
+                element.apiName === this.fields.service
             ) {
                 element.showFilteredInput = true;
                 element.isService = true;
@@ -331,7 +328,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 element.placeholder = this.labels.selectService;
             } else if (
                 this.hasContactField &&
-                element.apiName === this.fields.programEngagement.fieldApiName
+                element.apiName === this.fields.programEngagement
             ) {
                 element.showFilteredInput = true;
                 element.isEngagement = true;
@@ -354,7 +351,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 }
 
                 element.disabled = false;
-            } else if (element.apiName !== this.fields.contact.fieldApiName) {
+            } else if (element.apiName !== this.fields.contact) {
                 element.disabled = true;
             }
 
@@ -441,28 +438,22 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     enableDisableFieldsOnSaveAndInputChange() {
         this.fieldSet.forEach(element => {
-            if (
-                this.hasContactField &&
-                element.apiName !== this.fields.contact.fieldApiName
-            ) {
+            if (this.hasContactField && element.apiName !== this.fields.contact) {
                 element.disabled = false;
-            } else if (
-                this.hasContactField &
-                (element.apiName === this.fields.contact.fieldApiName)
-            ) {
+            } else if (this.hasContactField & (element.apiName === this.fields.contact)) {
                 element.disabled = true;
             }
 
             if (
                 !this.hasContactField &&
                 this.hasProgramEngagementField &&
-                element.apiName !== this.fields.programEngagement.fieldApiName
+                element.apiName !== this.fields.programEngagement
             ) {
                 element.disabled = false;
             } else if (
                 !this.hasContactField &&
                 this.hasProgramEngagementField &&
-                element.apiName === this.fields.programEngagement.fieldApiName
+                element.apiName === this.fields.programEngagement
             ) {
                 element.disabled = true;
             }
@@ -470,13 +461,13 @@ export default class ServiceDeliveryRow extends LightningElement {
             if (
                 !this.hasContactField &&
                 !this.hasProgramEngagementField &&
-                element.apiName !== this.fields.service.fieldApiName
+                element.apiName !== this.fields.service
             ) {
                 element.disabled = false;
             } else if (
                 !this.hasContactField &&
                 !this.hasProgramEngagementField &&
-                element.apiName === this.fields.service.fieldApiName
+                element.apiName === this.fields.service
             ) {
                 element.disabled = true;
             }
@@ -504,7 +495,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         this.fieldSet.forEach(element => {
             if (
-                element.apiName === this.fields.service.fieldApiName &&
+                element.apiName === this.fields.service &&
                 this.hasProgramEngagementField
             ) {
                 this.isError = false;
@@ -521,8 +512,8 @@ export default class ServiceDeliveryRow extends LightningElement {
                     this.handleCustomError();
                 }
             } else if (
-                element.apiName !== this.fields.contact.fieldApiName &&
-                element.apiName !== this.fields.programEngagement.fieldApiName
+                element.apiName !== this.fields.contact &&
+                element.apiName !== this.fields.programEngagement
             ) {
                 element.disabled = true;
             }
@@ -537,7 +528,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     lockContactField() {
         this.fieldSet.forEach(element => {
-            if (element.apiName === this.fields.contact.fieldApiName) {
+            if (element.apiName === this.fields.contact) {
                 element.disabled = true;
             }
         });
@@ -558,12 +549,10 @@ export default class ServiceDeliveryRow extends LightningElement {
                 for (let [key, value] of Object.entries(this._defaultValues)) {
                     if (element.apiName === key && value != null) {
                         element.value = this._defaultValues[key];
-                        if (element.apiName === this.fields.contact.fieldApiName) {
+                        if (element.apiName === this.fields.contact) {
                             contactId = value;
                         }
-                        if (
-                            element.apiName === this.fields.programEngagement.fieldApiName
-                        ) {
+                        if (element.apiName === this.fields.programEngagement) {
                             this.programEngagementId = value;
                         }
                     }
@@ -585,7 +574,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             }
 
             if (this.hasContactField && !this.hasProgramEngagementField && contactId) {
-                this.handleEnableFieldOnInputChange(this.fields.contact.fieldApiName);
+                this.handleEnableFieldOnInputChange(this.fields.contact);
             }
         }
     }
@@ -630,17 +619,16 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     setUnitOfMeasurement(fields) {
         this.unitOfMeasureValue =
-            fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName] &&
-            fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value
-                ? fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value
+            fields[this.fields.unitOfMeasurement] &&
+            fields[this.fields.unitOfMeasurement].value
+                ? fields[this.fields.unitOfMeasurement].value
                 : quantity;
     }
 
     setFieldSet(fields) {
         let serviceDeliveryFieldSet =
-            fields[SERVICE_FIELD_SET_FIELD.fieldApiName] &&
-            fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
-                ? fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
+            fields[this.fields.fieldSet] && fields[this.fields.fieldSet].value
+                ? fields[this.fields.fieldSet].value
                 : DEFAULT_FIELD_SET;
 
         if (this.fieldSetApiName === serviceDeliveryFieldSet) {

@@ -238,6 +238,10 @@ export default class ParticipantSelector extends LightningElement {
         this.selectedRowCount = event.detail.selectedRows.length;
     }
 
+    handleSelectAll() {
+        this.handleSelect([...this.availableEngagements]);
+    }
+
     handleSelectParticipant(event) {
         this.handleSelect([event.detail.row]);
     }

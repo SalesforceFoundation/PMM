@@ -5,7 +5,7 @@ import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
-import BULK_SERVICE_DELIVERY_FIELD_SET_FIELD from "@salesforce/schema/Service__c.BulkServiceDeliveryFieldSet__c";
+import SERVICE_DELIVERY_FIELD_SET_FIELD from "@salesforce/schema/Service__c.ServiceDeliveryFieldSet__c";
 
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 
@@ -22,7 +22,7 @@ export default class GroupServiceDelivery extends LightningElement {
     fieldSet;
 
     serviceField = SERVICE_FIELD.fieldApiName;
-    fieldSetField = BULK_SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName;
+    fieldSetField = SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName;
     fieldsToExclude = [
         CONTACT_FIELD.fieldApiName,
         PROGRAM_ENGAGEMENT_FIELD.fieldApiName,
@@ -32,7 +32,7 @@ export default class GroupServiceDelivery extends LightningElement {
 
     @wire(getRecord, {
         recordId: "$serviceId",
-        fields: [BULK_SERVICE_DELIVERY_FIELD_SET_FIELD],
+        fields: [SERVICE_DELIVERY_FIELD_SET_FIELD],
     })
     wiredSession(result) {
         if (result.data && result.data.fields && result.data.fields[this.fieldSetField]) {

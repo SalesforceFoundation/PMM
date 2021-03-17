@@ -19,7 +19,6 @@ import getServicesByProgramEngagementId from "@salesforce/apex/ServiceDeliveryCo
 import deleteLabel from "@salesforce/label/c.Delete";
 import cancel from "@salesforce/label/c.Cancel";
 import error from "@salesforce/label/c.Error";
-import warning from "@salesforce/label/c.Warning";
 import saving from "@salesforce/label/c.Saving";
 import saved from "@salesforce/label/c.Saved";
 
@@ -41,63 +40,37 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 import UNIT_OF_MEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 import SERVICE_UNIT_OF_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
-import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
+import SERVICE_FIELD_SET_FIELD from "@salesforce/schema/Service__c.ServiceDeliveryFieldSet__c";
+import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
 const ENGAGEMENTS = "engagements";
 const SERVICES = "services";
+const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 
 export default class ServiceDeliveryRow extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
-    @api selectedContact;
     @api recordId;
-    @api index;
+    @api selectedContact;
     @api programEngagementId;
+    @api index;
     @api rowCount;
-    @api hasContactField;
-    @api hasProgramEngagementField;
-    @track isSaving;
-    @track isError;
-    @track isSaved;
-    @track rowError;
-    @track unitOfMeasureValue = quantity;
-    @track localDefaultValues;
-    @track localFieldSet;
-    @track saveMessage;
-    @track isServiceFiltered = false;
     @api isDirty = false;
 
-    _defaultsSet = false;
-    _filteredValues;
-    _valuesToSave = [];
-    _targetProgram;
-    _filteredServices;
+    @track rowError;
+    @track unitOfMeasureValue = quantity;
+    @track saveMessage;
+    @track fieldSet;
+
     serviceId;
+    fieldSetApiName = DEFAULT_FIELD_SET;
+    hasContactField;
+    hasProgramEngagementField;
+    isServiceFiltered = false;
+    isSaving;
+    isError;
+    isSaved;
 
-    @api
-    get defaultValues() {
-        return this.localDefaultValues;
-    }
-    set defaultValues(value) {
-        this.localDefaultValues = value;
-        this.processDefaults();
-    }
-    @api
-    get fieldSet() {
-        return this.localFieldSet;
-    }
-    set fieldSet(value) {
-        this.localFieldSet = value;
-    }
-
-    ERROR = error;
-    WARNING = warning;
-
-    serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
-
-    get isDeleteDisabled() {
-        return this.rowCount === 1 && this.recordId == null ? true : false;
-    }
     labels = {
         cancel,
         confirmDelete,
@@ -124,6 +97,47 @@ export default class ServiceDeliveryRow extends LightningElement {
         unitOfMeasurement: UNIT_OF_MEASUREMENT_FIELD,
     };
 
+    _defaultsSet = false;
+    _defaultValues;
+    _filteredValues;
+    _valuesToSave = [];
+    _targetProgram;
+    _filteredServices;
+    _fieldSets;
+
+    @api
+    get defaultValues() {
+        return this._defaultValues;
+    }
+    set defaultValues(value) {
+        this._defaultValues = value;
+        this.processDefaults();
+    }
+
+    @api
+    get serviceDeliveryFieldSets() {
+        return this._fieldSets;
+    }
+
+    set serviceDeliveryFieldSets(value) {
+        if (!value) {
+            return;
+        }
+
+        this._fieldSets = value;
+        this.fieldSet = value
+            .getFieldSet(this.fieldSetApiName)
+            .map(field => ({ ...field }));
+
+        this.trackSpecialFields();
+    }
+
+    get isDeleteDisabled() {
+        return this.rowCount === 1 && this.recordId == null ? true : false;
+    }
+
+    serviceDeliveryObject = SERVICE_DELIVERY_OBJECT;
+
     @api
     saveRow() {
         if (!this.isDirty) {
@@ -135,21 +149,17 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
+    // switched to optional fields here, getRecord will error if the user does not have access
     @wire(getRecord, {
         recordId: "$serviceId",
-        fields: [SERVICE_UNIT_OF_MEASUREMENT_FIELD],
+        optionalFields: [SERVICE_UNIT_OF_MEASUREMENT_FIELD, SERVICE_FIELD_SET_FIELD],
     })
     wiredSession(result) {
-        if (
-            result.data &&
-            result.data.fields &&
-            result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName] &&
-            result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value
-        ) {
-            this.unitOfMeasureValue =
-                result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value;
-        } else {
-            this.resetQuantityLabel();
+        if (result.data && result.data.fields) {
+            this.setUnitOfMeasurement(result.data.fields);
+            this.setFieldSet(result.data.fields);
+        } else if (result.error) {
+            console.log(JSON.stringify(result.error));
         }
     }
 
@@ -218,6 +228,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     handleServiceInputChange(fieldName, fieldVal) {
         this.serviceId = fieldVal;
+        console.log(this.serviceId);
         this.handleEnableFieldOnInputChange(fieldName);
         this.enableDisableFieldsOnSaveAndInputChange();
     }
@@ -246,8 +257,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         //Getting this error Uncaught TypeError: 'set' on proxy: when trying to enable an element
         //on Input field change and we suspect that since the record edit form is updating the values on the same array and
         //that is the reason why we are cloning the object here
-        this.localFieldSet = JSON.parse(JSON.stringify(this.localFieldSet));
-        this.localFieldSet.forEach(element => {
+        this.fieldSet = JSON.parse(JSON.stringify(this.fieldSet));
+        this.fieldSet.forEach(element => {
             if (fieldApiName !== element.apiName) {
                 element.disabled = false;
             }
@@ -255,7 +266,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleResetContact() {
-        this.localFieldSet.forEach(element => {
+        this.fieldSet.forEach(element => {
             element.showFilteredInput = false;
         });
         this._filteredValues = [];
@@ -297,8 +308,8 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     handleContactChange() {
         //Make our fieldset mutable the first time it's manipulated.
-        this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
-        this.localFieldSet.forEach(element => {
+        this.fieldSet = this.fieldSet.map(a => ({ ...a }));
+        this.fieldSet.forEach(element => {
             if (
                 this.hasProgramEngagementField &&
                 element.apiName === this.fields.service.fieldApiName
@@ -429,7 +440,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     enableDisableFieldsOnSaveAndInputChange() {
-        this.localFieldSet.forEach(element => {
+        this.fieldSet.forEach(element => {
             if (
                 this.hasContactField &&
                 element.apiName !== this.fields.contact.fieldApiName
@@ -488,10 +499,10 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         if (this.isServiceFiltered) {
-            this.localFieldSet = JSON.parse(JSON.stringify(this.localFieldSet));
+            this.fieldSet = JSON.parse(JSON.stringify(this.fieldSet));
         }
 
-        this.localFieldSet.forEach(element => {
+        this.fieldSet.forEach(element => {
             if (
                 element.apiName === this.fields.service.fieldApiName &&
                 this.hasProgramEngagementField
@@ -525,7 +536,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     lockContactField() {
-        this.localFieldSet.forEach(element => {
+        this.fieldSet.forEach(element => {
             if (element.apiName === this.fields.contact.fieldApiName) {
                 element.disabled = true;
             }
@@ -534,21 +545,19 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     processDefaults() {
         if (
-            this.localDefaultValues &&
-            Object.keys(this.localDefaultValues).length > 0 &&
-            this.localFieldSet &&
-            this.localFieldSet.length &&
+            this._defaultValues &&
+            Object.keys(this._defaultValues).length > 0 &&
+            this.fieldSet &&
+            this.fieldSet.length &&
             !this._defaultsSet
         ) {
             this._defaultsSet = true;
             let contactId = "";
 
-            this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
-
-            this.localFieldSet.forEach(element => {
-                for (let [key, value] of Object.entries(this.localDefaultValues)) {
+            this.fieldSet.forEach(element => {
+                for (let [key, value] of Object.entries(this._defaultValues)) {
                     if (element.apiName === key && value != null) {
-                        element.value = this.localDefaultValues[key];
+                        element.value = this._defaultValues[key];
                         if (element.apiName === this.fields.contact.fieldApiName) {
                             contactId = value;
                         }
@@ -608,5 +617,42 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.template.querySelectorAll("lightning-combobox").forEach(element => {
             element.value = null;
         });
+    }
+
+    trackSpecialFields() {
+        this.hasContactField = this.serviceDeliveryFieldSets.hasContactField(
+            this.fieldSet
+        );
+        this.hasProgramEngagementField = this.serviceDeliveryFieldSets.hasProgramEngagementField(
+            this.fieldSet
+        );
+    }
+
+    setUnitOfMeasurement(fields) {
+        this.unitOfMeasureValue =
+            fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName] &&
+            fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value
+                ? fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value
+                : quantity;
+    }
+
+    setFieldSet(fields) {
+        let serviceDeliveryFieldSet =
+            fields[SERVICE_FIELD_SET_FIELD.fieldApiName] &&
+            fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
+                ? fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
+                : DEFAULT_FIELD_SET;
+
+        if (this.fieldSetApiName === serviceDeliveryFieldSet) {
+            return;
+        }
+
+        this.fieldSet = this.serviceDeliveryFieldSets
+            .getFieldSet(this.fieldSetApiName)
+            .map(field => ({
+                ...field,
+            }));
+
+        this.trackSpecialFields();
     }
 }

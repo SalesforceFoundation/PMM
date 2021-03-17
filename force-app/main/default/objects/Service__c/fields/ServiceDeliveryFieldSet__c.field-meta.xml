@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>BulkServiceDeliveryFieldSet__c</fullName>
+    <fullName>ServiceDeliveryFieldSet__c</fullName>
     <externalId>false</externalId>
-    <label>Bulk Service Delivery Field Set</label>
+    <label>Service Delivery Field Set</label>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
@@ -11,9 +11,9 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Bulk_Service_Deliveries</fullName>
+                <fullName>Service_Deliveries</fullName>
                 <default>true</default>
-                <label>Bulk Service Deliveries</label>
+                <label>Service Deliveries</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -34,14 +34,10 @@ import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import getFieldSets from "@salesforce/apex/FieldSetController.getFieldSetByName";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
-
-const FIELD_SET_NAME = "Bulk_Service_Deliveries";
-
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
     @api defaultValues;
     @api hideFooter = false; // no longer used; can't remove because public - mar 2021: respurposed to detect modal
     @track serviceDeliveries = [{ index: 0 }];
-    @track fieldSet = [];
     @track rowCount = this.serviceDeliveries.length;
     savedCount;
     targetSaveCount;
@@ -49,8 +45,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
     serviceDeliveryFieldSets;
     isSaving = false;
-    hasContactField = false;
-    hasProgramEngagementField = false;
     hideWizard = false;
 
     labels = {
@@ -79,13 +73,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     wiredFields({ error, data }) {
         if (data) {
             this.serviceDeliveryFieldSets = new ServiceDeliveryFieldSets(data);
-            this.fieldSet = this.serviceDeliveryFieldSets.getFieldSet(FIELD_SET_NAME);
-            this.hasContactField = this.serviceDeliveryFieldSets.hasContactField(
-                FIELD_SET_NAME
-            );
-            this.hasProgramEngagementField = this.serviceDeliveryFieldSets.hasProgramEngagementField(
-                FIELD_SET_NAME
-            );
         } else if (error) {
             handleError(error);
         }
@@ -156,5 +143,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         if (this.savedCount === this.targetSaveCount) {
             this.dispatchEvent(new CustomEvent("done"));
         }
+    }
+
+    handleHideWizard() {
+        this.hideWizard = true;
     }
 }

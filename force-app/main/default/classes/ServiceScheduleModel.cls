@@ -175,6 +175,7 @@ public with sharing class ServiceScheduleModel {
         'selectedRecords' => System.Label.Selected_Records,
         'searchThisList' => System.Label.Search_this_list,
         'none' => System.Label.None,
+        'add' => System.Label.Add,
         'noRecordsFound' => System.Label.No_Records_Found,
         'noRecordsSelected' => System.Label.No_Records_Selected,
         'filterByCohort' => String.format(

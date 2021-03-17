@@ -21,6 +21,7 @@ export default class ParticipantSelector extends LightningElement {
     @api selectedParticipants = [];
     @api existingContactIds = [];
     @api columns;
+    selectorColumns;
 
     selectedRowCount = 0;
     searchValue;
@@ -192,6 +193,21 @@ export default class ParticipantSelector extends LightningElement {
             };
             this.columns.push(column);
         }
+
+        this.selectorColumns = [...this.columns];
+
+        this.selectorColumns.push({
+            fieldName: "",
+            type: "button",
+            hideDefaultActions: true,
+            typeAttributes: {
+                name: "add",
+                label: this.labels.add,
+                title: this.labels.add,
+                variant: "neutral",
+                iconPosition: "left",
+            },
+        });
     }
 
     setSelectedColumns() {
@@ -222,9 +238,17 @@ export default class ParticipantSelector extends LightningElement {
         this.selectedRowCount = event.detail.selectedRows.length;
     }
 
+    handleSelectParticipant(event) {
+        this.handleSelect([event.detail.row]);
+    }
+
     handleSelectParticipants() {
+        this.handleSelect(this.selectedRows);
+    }
+
+    handleSelect(programEngagements) {
         let tempContacts = [...this.availableEngagements];
-        this.selectedRows.forEach(row => {
+        programEngagements.forEach(row => {
             let index = tempContacts.findIndex(element => element.Id === row.Id);
             tempContacts.splice(index, 1);
 

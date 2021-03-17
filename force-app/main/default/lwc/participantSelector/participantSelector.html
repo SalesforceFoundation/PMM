@@ -81,11 +81,12 @@
                                             <lightning-datatable
                                                 data={filteredEngagements}
                                                 key-field="Id"
-                                                columns={columns}
+                                                columns={selectorColumns}
                                                 column-widths-mode="auto"
                                                 show-row-number-column
                                                 resize-column-disabled
-                                                onrowselection={handleRowSelected}
+                                                hide-checkbox-column
+                                                onrowaction={handleSelectParticipant}
                                             ></lightning-datatable>
                                             <div
                                                 class="slds-theme_shade slds-align_absolute-center slds-border_top"

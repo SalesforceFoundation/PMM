@@ -62,6 +62,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track fieldSet;
 
     serviceId;
+    serviceDeliveryObject = SERVICE_DELIVERY_OBJECT;
     fieldSetApiName = DEFAULT_FIELD_SET;
     hasContactField;
     hasProgramEngagementField;
@@ -98,8 +99,8 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     _defaultsSet = false;
     _defaultValues;
-    _filteredValues;
-    _valuesToSave = [];
+    _servicesAndEngagements;
+    _valuesToSave = []; // stores combobox field values
     _targetProgram;
     _filteredServices;
     _fieldSets;
@@ -135,8 +136,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         return this.rowCount === 1 && this.recordId == null ? true : false;
     }
 
-    serviceDeliveryObject = SERVICE_DELIVERY_OBJECT;
-
     @api
     saveRow() {
         if (!this.isDirty) {
@@ -148,7 +147,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-    // switched to optional fields here, getRecord will error if the user does not have access
+    // switched to optional fields here, getRecord will error
+    // when the user does not have access
     @wire(getRecord, {
         recordId: "$serviceId",
         optionalFields: [SERVICE_UNIT_OF_MEASUREMENT_FIELD, SERVICE_FIELD_SET_FIELD],
@@ -156,7 +156,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     wiredSession(result) {
         if (result.data && result.data.fields) {
             this.setUnitOfMeasurement(result.data.fields);
-            this.setFieldSet(result.data.fields);
+            this.extractFieldSet(result.data.fields);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
@@ -174,20 +174,8 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isError = false;
         getServicesAndEngagements({ contactId: contactId })
             .then(result => {
-                let engagements = result[ENGAGEMENTS].slice(0);
-                engagements.push({
-                    label: "\u254B   " + newProgramEngagement,
-                    value: newProgramEngagement,
-                    program: "",
-                });
-                let tempResult = { ...result, engagements };
-
-                if (tempResult && !tempResult[SERVICES]) {
-                    this.isError = true;
-                }
-
-                this._filteredValues = tempResult;
-                this.handleContactChange();
+                this.setServicesAndEngagements(result);
+                this.updateFieldAttributes();
             })
             .catch(err => {
                 this.rowError = handleError(err, false);
@@ -217,15 +205,16 @@ export default class ServiceDeliveryRow extends LightningElement {
         if (event.target.fieldName === this.fields.contact) {
             this.handleContactInputChange(event);
         } else if (event.target.fieldName === this.fields.programEngagement) {
+            // program engagement is only an input field when the contact is not present
             this.handleProgramEngagementInputChange(event);
         } else if (event.target.fieldName === this.fields.service) {
+            // service is only an input field when the contact is not present
             this.handleServiceInputChange(event.target.fieldName, event.target.value);
         }
     }
 
     handleServiceInputChange(fieldName, fieldVal) {
         this.serviceId = fieldVal;
-        console.log(this.serviceId);
         this.handleEnableFieldOnInputChange(fieldName);
         this.enableDisableFieldsOnSaveAndInputChange();
     }
@@ -264,9 +253,9 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     handleResetContact() {
         this.fieldSet.forEach(element => {
-            element.showFilteredInput = false;
+            element.isComboBox = false;
         });
-        this._filteredValues = [];
+        this._servicesAndEngagements = [];
         this._valuesToSave = [];
     }
 
@@ -285,11 +274,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     updateComboBoxValues(fieldName, fieldVal) {
         if (fieldName === this.fields.programEngagement) {
             this._valuesToSave = []; //If the engagement changes, wipe stored values.
-            this._filteredValues[ENGAGEMENTS].forEach(element => {
-                if (element.value === fieldVal) {
-                    this._targetProgram = element.program;
-                }
-            });
+            this.extractTargetProgram(fieldVal);
             this.enableServiceInputWithOptions();
             this.resetQuantityLabel();
         }
@@ -303,60 +288,29 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-    handleContactChange() {
-        //Make our fieldset mutable the first time it's manipulated.
-        this.fieldSet = this.fieldSet.map(a => ({ ...a }));
-        this.fieldSet.forEach(element => {
+    updateFieldAttributes() {
+        this.fieldSet.forEach(member => {
             if (
                 this.hasProgramEngagementField &&
-                element.apiName === this.fields.service
+                member.apiName === this.fields.service
             ) {
-                element.showFilteredInput = true;
-                element.isService = true;
-                if (!this.programEngagementId) {
-                    element.options = this._filteredValues[SERVICES].slice(0);
-                } else {
-                    let result = [];
-                    this._filteredValues[SERVICES].forEach(filteredVal => {
-                        if (filteredVal.program === this._targetProgram) {
-                            result.push(filteredVal);
-                        }
-                    });
-                    element.options = result.slice(0);
-                }
-
-                element.placeholder = this.labels.selectService;
+                this.updateServiceAttributes(member);
             } else if (
                 this.hasContactField &&
-                element.apiName === this.fields.programEngagement
+                member.apiName === this.fields.programEngagement
             ) {
-                element.showFilteredInput = true;
-                element.isEngagement = true;
-                element.options = this._filteredValues[ENGAGEMENTS].slice(0);
-                element.placeholder = this.labels.selectEngagement;
-                element.disabled = false;
-
-                if (this.programEngagementId) {
-                    element.value = this.programEngagementId;
-                }
-
-                this._filteredValues[ENGAGEMENTS].forEach(filteredVal => {
-                    if (this.programEngagementId === filteredVal.value) {
-                        this._targetProgram = filteredVal.program;
-                    }
-                });
+                this.updateProgramEngagementAttributes(member);
+                this.extractTargetProgram(this.programEngagementId);
 
                 if (this._targetProgram) {
                     this.enableServiceInputWithOptions();
                 }
-
-                element.disabled = false;
-            } else if (element.apiName !== this.fields.contact) {
-                element.disabled = true;
+            } else if (member.apiName !== this.fields.contact) {
+                member.disabled = true;
             }
 
-            if (element.value && element.showFilteredInput) {
-                this.updateComboBoxValues(element.apiName, element.value);
+            if (member.value && member.isComboBox) {
+                this.updateComboBoxValues(member.apiName, member.value);
             }
         });
     }
@@ -477,8 +431,8 @@ export default class ServiceDeliveryRow extends LightningElement {
     enableServiceInputWithOptions() {
         let result = [];
 
-        if (this._filteredValues) {
-            this._filteredValues[SERVICES].forEach(element => {
+        if (this._servicesAndEngagements) {
+            this._servicesAndEngagements[SERVICES].forEach(element => {
                 if (element.program === this._targetProgram) {
                     result.push(element);
                 }
@@ -500,7 +454,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             ) {
                 this.isError = false;
                 if (this.isServiceFiltered) {
-                    element.showFilteredInput = true;
+                    element.isComboBox = true;
                 }
 
                 element.disabled = false;
@@ -545,17 +499,18 @@ export default class ServiceDeliveryRow extends LightningElement {
             this._defaultsSet = true;
             let contactId = "";
 
-            this.fieldSet.forEach(element => {
-                for (let [key, value] of Object.entries(this._defaultValues)) {
-                    if (element.apiName === key && value != null) {
-                        element.value = this._defaultValues[key];
-                        if (element.apiName === this.fields.contact) {
-                            contactId = value;
+            this.fieldSet.forEach(member => {
+                for (let [fieldName, fieldValue] of Object.entries(this._defaultValues)) {
+                    if (member.apiName === fieldName && fieldValue != null) {
+                        member.value = this._defaultValues[fieldName];
+                        if (member.apiName === this.fields.contact) {
+                            contactId = fieldValue;
                         }
-                        if (element.apiName === this.fields.programEngagement) {
-                            this.programEngagementId = value;
+                        if (member.apiName === this.fields.programEngagement) {
+                            this.programEngagementId = fieldValue;
                         }
                     }
+                    continue;
                 }
             });
 
@@ -593,7 +548,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.enableDisableFieldsOnSaveAndInputChange();
     }
 
-    onSave(event) {
+    handleSaveNewPE(event) {
         if (event.detail) {
             this.programEngagementId = event.detail;
             if (this.selectedContact && this.programEngagementId) {
@@ -602,7 +557,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-    onCancel() {
+    handleCancelNewPE() {
         this.template.querySelectorAll("lightning-combobox").forEach(element => {
             element.value = null;
         });
@@ -625,7 +580,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 : quantity;
     }
 
-    setFieldSet(fields) {
+    extractFieldSet(fields) {
         let serviceDeliveryFieldSet =
             fields[this.fields.fieldSet] && fields[this.fields.fieldSet].value
                 ? fields[this.fields.fieldSet].value
@@ -642,5 +597,51 @@ export default class ServiceDeliveryRow extends LightningElement {
             }));
 
         this.trackSpecialFields();
+    }
+
+    extractTargetProgram(engagementId) {
+        this._servicesAndEngagements[ENGAGEMENTS].forEach(engagement => {
+            if (engagement.value === engagementId) {
+                this._targetProgram = engagement.program;
+            }
+        });
+    }
+
+    setServicesAndEngagements(result) {
+        let engagements = result[ENGAGEMENTS].slice(0);
+        engagements.push({
+            label: "\u254B   " + newProgramEngagement,
+            value: newProgramEngagement,
+            program: "",
+        });
+        this._servicesAndEngagements = { ...result, engagements };
+    }
+
+    updateServiceAttributes(member) {
+        member.isComboBox = true;
+        if (!this.programEngagementId) {
+            member.options = this._servicesAndEngagements[SERVICES].slice(0);
+        } else {
+            let result = [];
+            this._servicesAndEngagements[SERVICES].forEach(filteredVal => {
+                if (filteredVal.program === this._targetProgram) {
+                    result.push(filteredVal);
+                }
+            });
+            member.options = result.slice(0);
+        }
+
+        member.placeholder = this.labels.selectService;
+    }
+
+    updateProgramEngagementAttributes(member) {
+        member.isComboBox = true;
+        member.options = this._servicesAndEngagements[ENGAGEMENTS].slice(0);
+        member.placeholder = this.labels.selectEngagement;
+        member.disabled = false;
+
+        if (this.programEngagementId) {
+            member.value = this.programEngagementId;
+        }
     }
 }

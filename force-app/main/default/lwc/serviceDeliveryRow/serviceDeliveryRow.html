@@ -34,7 +34,7 @@
                                         class="slds-m-bottom_medium"
                                     >
                                         <div class="sd-input" data-field={field.apiName}>
-                                            <template if:true={field.showFilteredInput}>
+                                            <template if:true={field.isComboBox}>
                                                 <div
                                                     class="slds-form-element__label slds-truncate"
                                                     title={field.label}
@@ -53,7 +53,7 @@
                                                 >
                                                 </lightning-combobox>
                                             </template>
-                                            <template if:false={field.showFilteredInput}>
+                                            <template if:false={field.isComboBox}>
                                                 <template if:true={field.isQuantityField}>
                                                     <div
                                                         class="slds-form-element__label slds-truncate"
@@ -209,8 +209,8 @@
     <template if:true={selectedContact}>
         <c-new-program-engagement
             contact-id={selectedContact}
-            onsave={onSave}
-            oncancel={onCancel}
+            onsave={handleSaveNewPE}
+            oncancel={handleCancelNewPE}
         ></c-new-program-engagement>
     </template>
 </template>

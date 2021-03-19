@@ -25,6 +25,8 @@ import noRecordsFound from "@salesforce/label/c.No_Records_Found";
 import noRecordsSelected from "@salesforce/label/c.No_Records_Selected";
 import filterByRecord from "@salesforce/label/c.Filter_By_Record";
 import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
+import add from "@salesforce/label/c.Add";
+import addAll from "@salesforce/label/c.Add_All";
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
     @api serviceSchedule;
@@ -32,13 +34,13 @@ export default class ParticipantSelector extends LightningElement {
     @api selectedParticipants = [];
     @api columns;
     @api selectedRows;
+    selectorColumns;
 
     @track availableEngagements;
     @track filteredEngagements;
     @track engagements;
     @track cohorts;
 
-    selectedRowCount = 0;
     searchValue;
     noRecordsFound = false;
     cohortId;
@@ -61,6 +63,8 @@ export default class ParticipantSelector extends LightningElement {
         noRecordsFound,
         noRecordsSelected,
         noContactsSelected,
+        add,
+        addAll,
     };
 
     @api
@@ -85,10 +89,6 @@ export default class ParticipantSelector extends LightningElement {
 
     get noRecordsSelected() {
         return this.selectedParticipants && this.selectedParticipants.length === 0;
-    }
-
-    get selectedRecordCountMessage() {
-        return this.labels.selectedRecords + ": " + this.selectedRowCount;
     }
 
     get participantCount() {
@@ -240,6 +240,21 @@ export default class ParticipantSelector extends LightningElement {
                 hideDefaultActions: true,
             };
             this.columns.push(column);
+
+            this.selectorColumns = [...this.columns];
+
+            this.selectorColumns.push({
+                fieldName: "",
+                type: "button",
+                hideDefaultActions: true,
+                typeAttributes: {
+                    name: "add",
+                    label: this.labels.add,
+                    title: this.labels.add,
+                    variant: "neutral",
+                    iconPosition: "left",
+                },
+            });
         }
     }
 
@@ -266,24 +281,28 @@ export default class ParticipantSelector extends LightningElement {
         this.applyFilters();
     }
 
-    handleRowSelected(event) {
-        this.selectedRows = event.detail.selectedRows;
-        this.selectedRowCount = event.detail.selectedRows.length;
+    handleSelectAll() {
+        this.handleSelect([...this.availableEngagements]);
+    }
+
+    handleSelectParticipant(event) {
+        this.handleSelect([event.detail.row]);
     }
 
     handleSelectParticipants() {
-        let tempContacts = [...this.availableEngagements];
-        this.selectedRows.forEach(row => {
-            let index = tempContacts.findIndex(element => element.Id === row.Id);
-            tempContacts.splice(index, 1);
+        this.handleSelect(this.selectedRows);
+    }
 
+    handleSelect(programEngagements) {
+        programEngagements.forEach(row => {
+            let index = this.availableEngagements.findIndex(
+                element => element.Id === row.Id
+            );
+            this.availableEngagements.splice(index, 1);
             this.selectedParticipants.push(row);
         });
 
         this.selectedParticipants = [...this.selectedParticipants];
-        this.availableEngagements = tempContacts;
-        this.selectedRows = undefined;
-        this.selectedRowCount = 0;
         this.applyFilters();
         this.sortData(this.selectedParticipants);
     }

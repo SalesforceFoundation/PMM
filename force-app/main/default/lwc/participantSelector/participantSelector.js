@@ -282,7 +282,7 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleSelectAll() {
-        this.handleSelect([...this.availableEngagements]);
+        this.handleSelect([...this.filteredEngagements]);
     }
 
     handleSelectParticipant(event) {

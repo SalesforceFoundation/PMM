@@ -57,7 +57,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api hasContactField;
     @api hasProgramEngagementField;
     @track isSaving;
-    @track isError;
+    @api isError;
     @track isSaved;
     @track rowError;
     @track unitOfMeasureValue = quantity;

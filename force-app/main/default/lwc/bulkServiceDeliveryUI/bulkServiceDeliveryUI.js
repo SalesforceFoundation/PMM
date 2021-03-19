@@ -195,11 +195,15 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.targetSaveCount = 0;
 
         rows.forEach(row => {
-            if (row.isDirty) {
+            if (row.isDirty || row.isError) {
                 this.targetSaveCount++;
             }
             row.saveRow();
         });
+
+        if (this.targetSaveCount === 0) {
+            this.dispatchEvent(new CustomEvent("done"));
+        }
     }
 
     // eslint-disable-next-line no-unused-vars

@@ -513,6 +513,13 @@
         <value>Update</value>
     </labels>
     <labels>
+        <fullName>Edited</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Edited</shortDescription>
+        <value>Edited</value>
+    </labels>
+    <labels>
         <fullName>Save</fullName>
         <language>en_US</language>
         <protected>true</protected>

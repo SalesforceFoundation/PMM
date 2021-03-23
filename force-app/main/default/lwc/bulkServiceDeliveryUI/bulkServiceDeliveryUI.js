@@ -38,12 +38,14 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     @api defaultValues;
     @api hideFooter = false; // no longer used; can't remove because public - mar 2021: respurposed to detect modal
     @track serviceDeliveries = [{ index: 0 }];
-    @track rowCount = this.serviceDeliveries.length;
-    savedCount;
-    targetSaveCount;
+    @track fieldSet = [];
 
+    saveMessage;
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
     serviceDeliveryFieldSets;
+    rowCount = this.serviceDeliveries.length;
+    savedCount;
+    targetSaveCount;
     isSaving = false;
     hideWizard = false;
 
@@ -127,11 +129,15 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.targetSaveCount = 0;
 
         rows.forEach(row => {
-            if (row.isDirty) {
+            if (row.isDirty || row.isError) {
                 this.targetSaveCount++;
             }
             row.saveRow();
         });
+
+        if (this.targetSaveCount === 0) {
+            this.dispatchEvent(new CustomEvent("done"));
+        }
     }
 
     // eslint-disable-next-line no-unused-vars

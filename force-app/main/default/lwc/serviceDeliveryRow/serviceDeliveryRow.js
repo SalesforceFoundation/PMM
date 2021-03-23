@@ -52,6 +52,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api index;
     @api rowCount;
     @api isDirty = false;
+    @api isError;
 
     @track fieldSet;
 
@@ -66,7 +67,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     hasContactField;
     hasProgramEngagementField;
     isSaving;
-    isError;
     isSaved;
 
     labels = {

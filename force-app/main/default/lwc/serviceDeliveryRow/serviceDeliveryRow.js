@@ -8,8 +8,8 @@
  */
 
 import { LightningElement, wire, track, api } from "lwc";
-import { showToast, handleError, debouncify } from "c/util";
-import { deleteRecord } from "lightning/uiRecordApi";
+import { showToast, handleError } from "c/util";
+import { deleteRecord, getRecord } from "lightning/uiRecordApi";
 import { fireEvent } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
 
@@ -34,14 +34,15 @@ import noServiceWarning from "@salesforce/label/c.No_Services_For_Program_Engage
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import quantity from "@salesforce/label/c.Quantity";
 import fieldAccessError from "@salesforce/label/c.Util_UnsupportedField";
+import edited from "@salesforce/label/c.Edited";
 
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import PROGRAMENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 import UNIT_OF_MEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
+import SERVICE_UNIT_OF_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
-const DELAY = 1000;
 const ENGAGEMENTS = "engagements";
 const SERVICES = "services";
 
@@ -56,7 +57,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api hasContactField;
     @api hasProgramEngagementField;
     @track isSaving;
-    @track isError;
+    @api isError;
     @track isSaved;
     @track rowError;
     @track unitOfMeasureValue = quantity;
@@ -64,12 +65,14 @@ export default class ServiceDeliveryRow extends LightningElement {
     @track localFieldSet;
     @track saveMessage;
     @track isServiceFiltered = false;
+    @api isDirty = false;
 
     _defaultsSet = false;
     _filteredValues;
     _valuesToSave = [];
     _targetProgram;
     _filteredServices;
+    serviceId;
 
     @api
     get defaultValues() {
@@ -112,6 +115,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         error,
         quantity,
         fieldAccessError,
+        edited,
     };
     fields = {
         contact: CONTACT_FIELD,
@@ -120,13 +124,41 @@ export default class ServiceDeliveryRow extends LightningElement {
         unitOfMeasurement: UNIT_OF_MEASUREMENT_FIELD,
     };
 
-    autoSaveAfterDebounce = debouncify(this.autoSave.bind(this), DELAY);
-
-    autoSave() {
+    @api
+    saveRow() {
+        if (!this.isDirty) {
+            return;
+        }
         let deliverySubmit = this.template.querySelector(".sd-submit");
         if (deliverySubmit) {
             deliverySubmit.click();
         }
+    }
+
+    @wire(getRecord, {
+        recordId: "$serviceId",
+        fields: [SERVICE_UNIT_OF_MEASUREMENT_FIELD],
+    })
+    wiredSession(result) {
+        if (
+            result.data &&
+            result.data.fields &&
+            result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName] &&
+            result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value
+        ) {
+            this.unitOfMeasureValue =
+                result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName].value;
+        } else {
+            this.resetQuantityLabel();
+        }
+    }
+
+    get showSavedIcon() {
+        return this.isSaved && !this.isDirty;
+    }
+
+    get showModifiedIcon() {
+        return this.isSaved && this.isDirty;
     }
 
     handleGetServicesEngagements(contactId) {
@@ -172,6 +204,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleInputChange(event) {
+        this.isDirty = true;
         if (event.target.fieldName === this.fields.contact.fieldApiName) {
             this.handleContactInputChange(event);
         } else if (
@@ -179,10 +212,14 @@ export default class ServiceDeliveryRow extends LightningElement {
         ) {
             this.handleProgramEngagementInputChange(event);
         } else if (event.target.fieldName === this.fields.service.fieldApiName) {
-            this.handleServiceInputChange(event.target.fieldName);
-        } else {
-            this.autoSaveAfterDebounce();
+            this.handleServiceInputChange(event.target.fieldName, event.target.value);
         }
+    }
+
+    handleServiceInputChange(fieldName, fieldVal) {
+        this.serviceId = fieldVal;
+        this.handleEnableFieldOnInputChange(fieldName);
+        this.enableDisableFieldsOnSaveAndInputChange();
     }
 
     handleContactInputChange(event) {
@@ -203,12 +240,6 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.isServiceFiltered = true;
             this.handleGetServicesForProgramEngagement(event.detail.value[0]);
         }
-    }
-
-    handleServiceInputChange(fieldName) {
-        this.handleEnableFieldOnInputChange(fieldName);
-        this.enableDisableFieldsOnSaveAndInputChange();
-        this.autoSaveAfterDebounce();
     }
 
     handleEnableFieldOnInputChange(fieldApiName) {
@@ -232,6 +263,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleComboChange(event) {
+        this.isDirty = true;
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
 
@@ -251,16 +283,15 @@ export default class ServiceDeliveryRow extends LightningElement {
                 }
             });
             this.enableServiceInputWithOptions();
+            this.resetQuantityLabel();
         }
 
         if (fieldName && fieldVal) {
             this._valuesToSave[fieldName] = fieldVal;
         }
 
-        //If the service value changes, attempt to save the record.
         if (fieldName === this.fields.service.fieldApiName) {
-            this.enableDisableFieldsOnSaveAndInputChange();
-            this.autoSaveAfterDebounce();
+            this.handleServiceInputChange(fieldName, fieldVal);
         }
     }
 
@@ -327,10 +358,10 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleSaveError(event) {
+        this.isDirty = false;
         this.isSaving = false;
         this.isSaved = false;
         this.isError = true;
-        // TODO: show this in a tooltip on the lightning:icon on hover and keyboard focus; probably slds-tooltip
         this.rowError = handleError(event, false, "dismissible", true);
         event.detail.index = this.index;
         this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
@@ -346,15 +377,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.handleSaveEnd();
         this.lockContactField();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
-        if (
-            event.detail.fields[this.fields.unitOfMeasurement.fieldApiName] &&
-            event.detail.fields[this.fields.unitOfMeasurement.fieldApiName].value !== null
-        ) {
-            this.unitOfMeasureValue =
-                event.detail.fields[this.fields.unitOfMeasurement.fieldApiName].value;
-        } else if (this.unitOfMeasureValue !== this.labels.quantity) {
-            this.unitOfMeasureValue = this.labels.quantity;
-        }
     }
 
     handleSubmit(event) {
@@ -496,6 +518,12 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
     }
 
+    resetQuantityLabel() {
+        if (this.unitOfMeasureValue !== this.labels.quantity) {
+            this.unitOfMeasureValue = this.labels.quantity;
+        }
+    }
+
     lockContactField() {
         this.localFieldSet.forEach(element => {
             if (element.apiName === this.fields.contact.fieldApiName) {
@@ -563,6 +591,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleSaveEnd() {
         this.isSaving = false;
         this.isSaved = true;
+        this.isDirty = false;
         this.enableDisableFieldsOnSaveAndInputChange();
     }
 

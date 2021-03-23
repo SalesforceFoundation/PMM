@@ -54,13 +54,8 @@
                                 >
                                     <lightning-layout-item
                                         size="3"
-                                        class="slds-var-p-left_small slds-var-p-bottom_medium"
-                                    >
-                                        {selectedRecordCountMessage}
-                                    </lightning-layout-item>
-                                    <lightning-layout-item
-                                        size="3"
                                         class="slds-var-p-right_small slds-var-p-bottom_small"
+                                        alignment-bump="left"
                                     >
                                         <lightning-input
                                             name="enter-search"
@@ -71,32 +66,33 @@
                                         ></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item
+                                        class="slds-var-p-right_small slds-var-p-bottom_small"
+                                    >
+                                        <lightning-button
+                                            label={labels.addAll}
+                                            title={labels.addAll}
+                                            variant="neutral"
+                                            onclick={handleSelectAll}
+                                        ></lightning-button>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item
                                         size="12"
                                         if:false={noRecordsFound}
                                     >
                                         <div
-                                            style="height: 266px"
+                                            style="height: 331px"
                                             class="slds-border_top slds-var-m-top_xx-small"
                                         >
                                             <lightning-datatable
                                                 data={filteredEngagements}
                                                 key-field="Id"
-                                                columns={columns}
+                                                columns={selectorColumns}
                                                 column-widths-mode="auto"
                                                 show-row-number-column
                                                 resize-column-disabled
-                                                onrowselection={handleRowSelected}
+                                                hide-checkbox-column
+                                                onrowaction={handleSelectParticipant}
                                             ></lightning-datatable>
-                                            <div
-                                                class="slds-theme_shade slds-align_absolute-center slds-border_top"
-                                            >
-                                                <lightning-button
-                                                    variant="brand"
-                                                    label={title}
-                                                    class="slds-var-p-around_medium"
-                                                    onclick={handleSelectParticipants}
-                                                ></lightning-button>
-                                            </div>
                                         </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item

@@ -28,10 +28,8 @@
                                 default-values={defaultValues}
                                 field-set={fieldSet}
                                 index={delivery.index}
-                                onsubmit={handleSubmit}
-                                onsuccess={handleSuccess}
-                                ondelete={handleDelete}
-                                onerror={handleRowError}
+                                onsuccess={handleRowSuccess}
+                                ondelete={handleRowDelete}
                                 row-count={rowCount}
                                 has-contact-field={hasContactField}
                                 has-program-engagement-field={hasProgramEngagementField}
@@ -51,11 +49,11 @@
                     disabled={isAddEntryDisabled}
                 ></lightning-button>
                 <lightning-button
-                    onclick={handleDone}
+                    onclick={handleSave}
                     variant="brand"
-                    label={labels.done}
-                    disabled={isDoneDisabled}
-                    title={doneTitleLabel}
+                    label={labels.save}
+                    disabled={isSaveDisabled}
+                    title={labels.save}
                 ></lightning-button>
             </div>
         </lightning-card>

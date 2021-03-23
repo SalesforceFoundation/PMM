@@ -11,9 +11,9 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Service_Deliveries</fullName>
+                <fullName>Bulk_Service_Deliveries</fullName>
                 <default>true</default>
-                <label>Service Deliveries</label>
+                <label>Bulk Service Deliveries</label>
             </value>
         </valueSetDefinition>
     </valueSet>

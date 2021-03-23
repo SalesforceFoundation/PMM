@@ -611,6 +611,20 @@
         <value>Add All</value>
     </labels>
     <labels>
+        <fullName>Available_Participants_List</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Available Participants List</shortDescription>
+        <value>Available Participants List</value>
+    </labels>
+    <labels>
+        <fullName>Selected_Participants_List</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Selected Participants List</shortDescription>
+        <value>Selected Participants List</value>
+    </labels>
+    <labels>
         <fullName>Save_New</fullName>
         <language>en_US</language>
         <protected>true</protected>

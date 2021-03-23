@@ -27,6 +27,8 @@ import filterByRecord from "@salesforce/label/c.Filter_By_Record";
 import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
 import add from "@salesforce/label/c.Add";
 import addAll from "@salesforce/label/c.Add_All";
+import availableParticipantsList from "@salesforce/label/c.Available_Participants_List";
+import selectedParticipantsList from "@salesforce/label/c.Selected_Participants_List";
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
     @api serviceSchedule;
@@ -52,6 +54,7 @@ export default class ParticipantSelector extends LightningElement {
     objectLabels;
     isLoaded = false;
     rendered = false;
+    ariaLiveAssertive = " ";
 
     labels = {
         selectContacts,
@@ -65,6 +68,8 @@ export default class ParticipantSelector extends LightningElement {
         noContactsSelected,
         add,
         addAll,
+        availableParticipantsList,
+        selectedParticipantsList,
     };
 
     @api
@@ -287,6 +292,7 @@ export default class ParticipantSelector extends LightningElement {
 
     handleSelectParticipant(event) {
         this.handleSelect([event.detail.row]);
+        this.ariaLiveAssertive = "moved jonny to selected";
     }
 
     handleSelectParticipants() {
@@ -294,6 +300,7 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleSelect(programEngagements) {
+        this.ariaLiveAssertive = "";
         programEngagements.forEach(row => {
             let index = this.availableEngagements.findIndex(
                 element => element.Id === row.Id
@@ -301,7 +308,6 @@ export default class ParticipantSelector extends LightningElement {
             this.availableEngagements.splice(index, 1);
             this.selectedParticipants.push(row);
         });
-
         this.selectedParticipants = [...this.selectedParticipants];
         this.applyFilters();
         this.sortData(this.selectedParticipants);
@@ -335,7 +341,7 @@ export default class ParticipantSelector extends LightningElement {
     applyFilters() {
         let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
 
-        this.filteredEngagements = this.availableEngagements.filter(
+        this.filteredEngagements = [...this.availableEngagements].filter(
             row =>
                 JSON.stringify(row)
                     .toLowerCase()

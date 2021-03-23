@@ -10,6 +10,9 @@
 <template>
     <c-section title={title} if:true={isLoaded}></c-section>
     <lightning-layout if:true={isLoaded} multiple-rows="true" horizontal-align="center">
+        <div class="slds-assistive-text" aria-live="assertive" aria-atomic="true">
+            {ariaLiveAssertive}
+        </div>
         <lightning-layout-item
             if:true={showCapacityWarning}
             size="10"
@@ -92,6 +95,7 @@
                                                 resize-column-disabled
                                                 hide-checkbox-column
                                                 onrowaction={handleSelectParticipant}
+                                                aria-label={labels.availableParticipantsListLabel}
                                             ></lightning-datatable>
                                         </div>
                                     </lightning-layout-item>
@@ -130,6 +134,7 @@
                                 data={selectedParticipants}
                                 column-widths-mode="auto"
                                 resize-column-disabled
+                                aria-label={labels.selectedParticipantsListLabel}
                             ></lightning-datatable>
                         </div>
                         <template if:true={noRecordsSelected}>

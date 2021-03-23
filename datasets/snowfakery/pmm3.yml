@@ -1,0 +1,104 @@
+# cci task run generate_and_load_from_yaml --generator_yaml datasets/snowfakery/pmm3.yml --num_records 1 --num_records_tablename Account
+
+# Program A
+- object: pmdm__Program__c
+  count: 10
+  fields:
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__StartDate__c:
+          date_between:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
+          date_between:
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
+          random_choice:
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: ProgramCohort
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__Program__c:
+                reference: pmdm__Program__c
+      # Service
+      - object: pmdm__Service__c
+        count:
+            random_number:
+                min: 1
+                max: 5
+        fields:
+            pmdm__Program__c:
+                random_reference: pmdm__Program__c
+            Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+            pmdm__Description__c:
+                fake.sentence:
+                    nb_words: 15
+            pmdm__Status__c:
+                random_choice:
+                    - Planned
+                    - Active
+                    - Completed
+                    - Canceled
+            pmdm__UnitOfMeasurement__c:
+                random_choice:
+                    - Hours
+                    - Meals
+                    - Sessions
+                    - Deliveries
+                    - Kits
+
+- object: pmdm__ServiceDelivery__c
+  count:
+      random_number:
+          min: 1
+          max: 5
+  fields:
+      pmdm__Service__c:
+          random_reference: pmdm__Service__c
+      Name: Test Service Delivery

@@ -1,0 +1,117 @@
+# cci task run generate_and_load_from_yaml --generator_yaml datasets/snowfakery/pmm2.yml --num_records 1 --num_records_tablename Account
+# Program A
+- object: pmdm__Program__c
+  nickname: Program
+  fields:
+      Name: ${{fake.word}} Program
+      pmdm__Status__c: Active
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count: 1
+        fields:
+            Name: ${{fake.word}} ${{count}} Cohort
+            pmdm__Program__c:
+                reference: pmdm__Program__c
+            pmdm__Status__c: Active
+        friends:
+            # Service
+            - object: pmdm__Service__c
+              nickname: Service
+              count: 1
+              fields:
+                  pmdm__Program__c:
+                      reference: pmdm__Program__c
+                  Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+              friends:
+                  # Account
+                  - object: Account
+                    nickname: HH
+                    count: 1
+                    fields:
+                        #RecordType: Household_Account #this was manually created record type.
+                        Name: ${{fake.last_name}} Household
+                        BillingStreet: ${{fake.street_address}}
+                        BillingCity: ${{fake.city}}
+                        BillingState: ${{fake.state_abbr}}
+                        BillingPostalCode: ${{fake.postcode}}
+                        BillingCountry: United States
+                        Phone: ${{fake.phone_number}}
+                    friends:
+                        # Create Household Contacts
+                        - object: Contact
+                          nickname: HHContact
+                          count:
+                              random_number:
+                                  min: 1
+                                  max: 5
+                          fields:
+                              AccountId:
+                                  reference: Account
+                              FirstName: ${{fake.first_name}}
+                              LastName: ${{fake.last_name}}
+                              pmdm__IsClient__c:
+                                  random_choice:
+                                      - True
+                                      - False
+                              Phone: ${{fake.phone_number}}
+                              MobilePhone: ${{fake.phone_number}}
+                              HomePhone: ${{fake.phone_number}}
+                              OtherPhone: ${{fake.phone_number}}
+                              MailingStreet: ${{BillingStreet}}
+                              MailingCity: ${{BillingCity}}
+                              MailingState: ${{BillingState}}
+                              MailingPostalCode: ${{BillingPostalCode}}
+                              MailingCountry: United States
+                          friends:
+                              # Program Engagement
+                              - object: pmdm__ProgramEngagement__c
+                                count: 1
+                                nickname: ProgramEngagement
+                                fields:
+                                    pmdm__Program__c:
+                                        reference: Program
+                                    pmdm__Contact__c:
+                                        reference: Contact
+                                    name: Engagement
+                                    pmdm__AutoName_Override__c: false
+                                    pmdm__Role__c:
+                                        random_choice:
+                                            - Client
+                                            - Volunteer
+                                            - Service Provider
+                                    pmdm__Stage__c:
+                                        random_choice:
+                                            - Applied
+                                            - Application Denied
+                                            - Waitlisted
+                                            - Enrolled
+                                            - Active
+                                            - Completed
+                                            - Withdrawn
+                                friends:
+                                    # Service Delivery
+                                    - object: pmdm__ServiceDelivery__c
+                                      count:
+                                          random_number:
+                                              min: 25
+                                              max: 365
+                                      nickname: ServiceDelivery
+                                      fields:
+                                          pmdm__Contact__c:
+                                              reference: Contact
+                                          Name: ServiceDelivery
+                                          pmdm__ProgramEngagement__c:
+                                              reference: ProgramEngagement
+                                          pmdm__Service__c:
+                                              reference: Service
+                                          pmdm__Quantity__c:
+                                              random_number:
+                                                  min: 1
+                                                  max: 5
+                                          pmdm__AttendanceStatus__c:
+                                              random_choice:
+                                                  - Present
+                                                  - Unexcused Absence
+                                                  - Excused Absence
+                                                  - Null

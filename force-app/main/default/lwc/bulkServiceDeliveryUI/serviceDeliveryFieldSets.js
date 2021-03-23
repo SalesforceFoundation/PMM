@@ -3,11 +3,15 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
 
+import selectService from "@salesforce/label/c.Select_Service";
+import selectEngagement from "@salesforce/label/c.Select_Program_Engagement";
+
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 const LONG_DATA_TYPES = ["TEXTAREA"];
 
 export class ServiceDeliveryFieldSets {
     fieldSets = {};
+    currentFieldSetName;
 
     constructor(data) {
         this.setFieldSets(data);
@@ -19,8 +23,18 @@ export class ServiceDeliveryFieldSets {
         }
     }
 
-    getFieldSet(apiName) {
-        return this.fieldSets[apiName];
+    getCurrentFieldSet() {
+        return this.fieldSets[this.currentFieldSetName];
+    }
+
+    isFieldInCurrentFieldSet(fieldApiName) {
+        return this.isFieldInFieldSet(this.getCurrentFieldSet(), fieldApiName);
+    }
+
+    isFieldInFieldSet(fieldSet, fieldApiName) {
+        let field = fieldSet.find(member => member.apiName === fieldApiName);
+
+        return field !== undefined;
     }
 
     hasContactField(fieldSet) {
@@ -50,7 +64,7 @@ export class ServiceDeliveryFieldSets {
             // Everything else is size 2
             // This means that the field set we ship with is exactly 12 wide
             this.setSize(field);
-            this.setAttributes(fieldSet, field);
+            this.setDefaultAttributes(fieldSet, field);
             configuredFieldSet.push(field);
         });
         this.fieldSets[apiName] = configuredFieldSet;
@@ -71,29 +85,32 @@ export class ServiceDeliveryFieldSets {
         }
     }
 
-    setAttributes(fieldSet, field) {
-        let hasContactField = this.hasContactField(fieldSet);
-        let hasProgramEngagementField = this.hasProgramEngagementField(fieldSet);
+    setDefaultAttributes(fieldSet, field) {
+        let hasContactField = this.isFieldInFieldSet(
+            fieldSet,
+            CONTACT_FIELD.fieldApiName
+        );
+        let hasProgramEngagementField = this.isFieldInFieldSet(
+            fieldSet,
+            PROGRAM_ENGAGEMENT_FIELD.fieldApiName
+        );
 
         field.disabled = true;
         field.isQuantityField = false;
 
-        if (field.apiName === CONTACT_FIELD.fieldApiName) {
-            field.disabled = false;
+        if (field.apiName === SERVICE_FIELD.fieldApiName) {
+            field.required = true;
+            field.disabled = hasProgramEngagementField;
+            field.isCombobox = hasProgramEngagementField;
+            field.placeholder = selectService;
+        } else if (field.apiName === CONTACT_FIELD.fieldApiName) {
             field.isRequired = true;
-        } else if (
-            field.apiName === PROGRAM_ENGAGEMENT_FIELD.fieldApiName &&
-            !hasContactField
-        ) {
             field.disabled = false;
+        } else if (field.apiName === PROGRAM_ENGAGEMENT_FIELD.fieldApiName) {
             field.isRequired = true;
-        } else if (
-            field.apiName === SERVICE_FIELD.fieldApiName &&
-            !hasContactField &&
-            !hasProgramEngagementField
-        ) {
-            field.disabled = false;
-            field.isRequired = true;
+            field.disabled = hasContactField;
+            field.isCombobox = hasContactField;
+            field.placeholder = selectEngagement;
         } else if (field.apiName === QUANTITY_FIELD.fieldApiName) {
             field.isQuantityField = true;
         }

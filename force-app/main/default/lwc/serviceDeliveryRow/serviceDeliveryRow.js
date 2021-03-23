@@ -49,24 +49,22 @@ const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 export default class ServiceDeliveryRow extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
-    @api recordId;
-    @api selectedContact;
-    @api programEngagementId;
     @api index;
     @api rowCount;
     @api isDirty = false;
 
-    @track rowError;
-    @track unitOfMeasureValue = quantity;
-    @track saveMessage;
     @track fieldSet;
 
+    recordId;
+    contactId;
+    programEngagementId;
     serviceId;
     serviceDeliveryObject = SERVICE_DELIVERY_OBJECT;
-    fieldSetApiName = DEFAULT_FIELD_SET;
+    unitOfMeasureValue = quantity;
+    saveMessage;
+    errorMessage;
     hasContactField;
     hasProgramEngagementField;
-    isServiceFiltered = false;
     isSaving;
     isError;
     isSaved;
@@ -99,10 +97,9 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     _defaultsSet = false;
     _defaultValues;
-    _servicesFromProgramEngagement;
-    _servicesAndEngagementsFromContact;
+    _services;
+    _programEngagements;
     _comboboxValues = [];
-    _targetProgram;
     _fieldSets;
 
     // switched to optional fields here, getRecord will error
@@ -111,12 +108,54 @@ export default class ServiceDeliveryRow extends LightningElement {
         recordId: "$serviceId",
         optionalFields: [SERVICE_UNIT_OF_MEASUREMENT_FIELD, SERVICE_FIELD_SET_FIELD],
     })
-    wiredSession(result) {
+    wiredService(result) {
         if (result.data && result.data.fields) {
             this.setUnitOfMeasurement(result.data.fields);
-            this.updateFieldSet(result.data.fields);
+            this.setCurrentFieldSetName(result.data.fields);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
+        }
+    }
+
+    // We display combobox options based on different fields found in the field set
+    // when contact and program engagement are present we will filter both
+    // program engagements and services related to the contact.
+    getRelatedRecordsFromContact() {
+        getServicesAndEngagements({ contactId: this.contactId })
+            .then(result => {
+                this._programEngagements = result[ENGAGEMENTS];
+                this._services = result[SERVICES];
+                this.setProgramEngagementOptions();
+            })
+            .catch(err => {
+                this.errorMessage = handleError(err, false);
+            });
+    }
+
+    // We display combobox options based on different fields found in the field set
+    // when contact is not present we will filter services
+    // related to the program engagement.
+    getRelatedRecordsFromProgramEngagement() {
+        getServicesByProgramEngagementId({
+            programEngagementId: this.programEngagementId,
+        })
+            .then(result => {
+                this._services = [...result];
+                this.setServiceOptions();
+            })
+            .catch(err => {
+                this.errorMessage = handleError(err, false);
+            });
+    }
+
+    @api
+    saveRow() {
+        if (!this.isDirty) {
+            return;
+        }
+        let deliverySubmit = this.template.querySelector(".sd-submit");
+        if (deliverySubmit) {
+            deliverySubmit.click();
         }
     }
 
@@ -126,25 +165,22 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
     set defaultValues(value) {
         this._defaultValues = value;
-        this.processDefaults();
+        this.setDefaults();
     }
 
     @api
     get serviceDeliveryFieldSets() {
         return this._fieldSets;
     }
-
     set serviceDeliveryFieldSets(value) {
         if (!value) {
             return;
         }
 
         this._fieldSets = value;
-        this.fieldSet = value
-            .getFieldSet(this.fieldSetApiName)
-            .map(field => ({ ...field }));
+        this._fieldSets.currentFieldSetName = DEFAULT_FIELD_SET;
 
-        this.trackSpecialFields();
+        this.setCurrentFieldSet();
     }
 
     get isDeleteDisabled() {
@@ -159,175 +195,63 @@ export default class ServiceDeliveryRow extends LightningElement {
         return this.isSaved && this.isDirty;
     }
 
-    @api
-    saveRow() {
-        if (!this.isDirty) {
-            return;
-        }
-        let deliverySubmit = this.template.querySelector(".sd-submit");
-        if (deliverySubmit) {
-            deliverySubmit.click();
-        }
-    }
-
-    // We display combobox options based on different fields found in the field set
-    // when contact is present we will filter both program engagements and services
-    // related to the contact.
-    updateContactsRelatedRecords(contactId) {
-        this.isError = false;
-        getServicesAndEngagements({ contactId: contactId })
-            .then(result => {
-                this.setServicesAndEngagements(result);
-                this.updateFieldAttributes();
-            })
-            .catch(err => {
-                this.rowError = handleError(err, false);
-            });
-    }
-
-    // We display combobox options based on different fields found in the field set
-    // when contact is not present we will filter services
-    // related to the program engagement.
-    updateProgramEngagementRelatedRecords(programEngagementId) {
-        // TODO: Why do we clear the error here?
-        this.isError = false;
-
-        getServicesByProgramEngagementId({ programEngagementId: programEngagementId })
-            .then(result => {
-                this._servicesFromProgramEngagement = result;
-
-                this.enableServiceInputWithOptions(result);
-            })
-            .catch(err => {
-                this.rowError = handleError(err, false);
-            });
-    }
-
     // Called by lightning input field; when selections are filtered they
     // will use the lightning combobox and not the lignting input
     handleInputChange(event) {
+        let fieldName = event.target.fieldName;
+        let fieldValue =
+            event.detail.value && event.detail.value.length
+                ? event.detail.value[0]
+                : undefined;
+
         this.isDirty = true;
-        if (event.target.fieldName === this.fields.contact) {
-            this.changeContact(event);
-        } else if (event.target.fieldName === this.fields.programEngagement) {
-            // assumes contact field is not present and options should be
+        this.resetError();
+
+        if (fieldName === this.fields.contact) {
+            this.contactId = fieldValue;
+            // When the program engagement field is not present
+            // we do not have comboboxes
+            if (!this.hasProgramEngagementField) {
+                return;
+            }
+
+            this.resetProgramEngagements();
+            this.resetServices();
+            this.getRelatedRecordsFromContact();
+        } else if (fieldName === this.fields.programEngagement) {
+            // Since this is an input field and not a comboxbox
+            // we assume the contact field is not present and options should be
             // related to the selected program engagement
-            this.changeProgramEngagement(event);
-        } else if (event.target.fieldName === this.fields.service) {
-            // assumes contact field and program engagement fields are not present
-            this.changeService(event.target.fieldName, event.target.value);
+            this.programEngagementId = fieldValue;
+            this.resetServices();
+            this.getRelatedRecordsFromProgramEngagement();
+        } else if (fieldName === this.fields.service) {
+            // Service is an input field when the program engagement field is not
+            // present to provide a list of service options for a combobox
+            this.serviceId = fieldValue;
         }
-    }
 
-    // the service id drives the label for the quanity field,
-    // updates which fields are displayed and enables all
-    // other fields for input
-    changeService(fieldName, fieldVal) {
-        this.serviceId = fieldVal;
-        this.handleEnableFieldOnInputChange(fieldName);
-        this.enableDisableFieldsOnSaveAndInputChange();
-    }
-
-    // TODO: What happens when program engagement field is not present
-    // and the contact is cleared?
-    changeContact(event) {
-        if (this.hasProgramEngagementField) {
-            if (event.detail.value && event.detail.value.length) {
-                this.selectedContact = event.detail.value[0];
-                this.updateContactsRelatedRecords(event.detail.value[0]);
-            } else {
-                this.resetContact();
-            }
-        } else {
-            this.handleEnableFieldOnInputChange(event.target.fieldName);
-        }
-    }
-
-    changeProgramEngagement(event) {
-        if (event.detail.value && event.detail.value.length) {
-            this.isServiceFiltered = true;
-            this.updateProgramEngagementRelatedRecords(event.detail.value[0]);
-        }
-    }
-
-    handleEnableFieldOnInputChange(fieldApiName) {
-        //Getting this error Uncaught TypeError: 'set' on proxy: when trying to enable an element
-        //on Input field change and we suspect that since the record edit form is updating the values on the same array and
-        //that is the reason why we are cloning the object here
-        this.fieldSet = JSON.parse(JSON.stringify(this.fieldSet));
-        this.fieldSet.forEach(member => {
-            if (fieldApiName !== member.apiName) {
-                member.disabled = false;
-            }
-        });
-    }
-
-    resetContact() {
-        this.fieldSet.forEach(member => {
-            member.isCombobox = false;
-        });
-        this._servicesAndEngagementsFromContact = [];
-        this._comboboxValues = [];
+        this.setDisabledAttribute();
     }
 
     handleComboChange(event) {
-        this.isDirty = true;
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
 
+        this.isDirty = true;
+        this.resetError();
+
         if (fieldVal !== newProgramEngagement) {
-            this.updateComboboxValues(fieldName, fieldVal);
+            this.setComboboxValues(fieldName, fieldVal);
         } else {
             this.template.querySelector("c-new-program-engagement").showModal();
         }
-    }
 
-    updateComboboxValues(fieldName, fieldVal) {
-        if (fieldName === this.fields.programEngagement) {
-            this._comboboxValues = []; //If the engagement changes, wipe stored values.
-            this.extractTargetProgram(fieldVal);
-            this.enableServiceInputWithOptions();
-            this.resetQuantityLabel();
-        }
-
-        if (fieldName && fieldVal) {
-            this._comboboxValues[fieldName] = fieldVal;
-        }
-
-        if (fieldName === this.fields.service) {
-            this.changeService(fieldName, fieldVal);
-        }
-    }
-
-    updateFieldAttributes() {
-        this.fieldSet.forEach(member => {
-            if (
-                this.hasProgramEngagementField &&
-                member.apiName === this.fields.service
-            ) {
-                this.updateServiceAttributes(member);
-            } else if (
-                this.hasContactField &&
-                member.apiName === this.fields.programEngagement
-            ) {
-                this.updateProgramEngagementAttributes(member);
-                this.extractTargetProgram(this.programEngagementId);
-
-                if (this._targetProgram) {
-                    this.enableServiceInputWithOptions();
-                }
-            } else if (member.apiName !== this.fields.contact) {
-                member.disabled = true;
-            }
-
-            if (member.value && member.isCombobox) {
-                this.updateComboboxValues(member.apiName, member.value);
-            }
-        });
+        this.setDisabledAttribute();
     }
 
     handleLoad() {
-        this.processDefaults();
+        this.setDefaults();
     }
 
     handleSaveError(event) {
@@ -335,20 +259,15 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.isSaving = false;
         this.isSaved = false;
         this.isError = true;
-        this.rowError = handleError(event, false, "dismissible", true);
+        this.errorMessage = handleError(event, false, "dismissible", true);
         event.detail.index = this.index;
         this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
     }
 
-    handleCustomError() {
-        let eventDetail = { index: this.index };
-        this.dispatchEvent(new CustomEvent("error", { detail: eventDetail }));
-    }
-
     handleSuccess(event) {
         this.recordId = event.detail.id;
-        this.handleSaveEnd();
-        this.lockContactField();
+        this.setSaved();
+        this.setDisabledAttribute();
         fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
     }
 
@@ -365,7 +284,23 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         this.template.querySelector("lightning-record-edit-form").submit(fields);
 
-        this.handleSaveStart();
+        this.setSaving();
+    }
+
+    handleSaveNewPE(event) {
+        if (event.detail) {
+            this.programEngagementId = event.detail;
+            if (this.contactId && this.programEngagementId) {
+                this.getRelatedRecordsFromContact(this.contactId);
+                this.setServiceOptions();
+            }
+        }
+    }
+
+    handleCancelNewPE() {
+        this.template.querySelectorAll("lightning-combobox").forEach(combobox => {
+            combobox.value = null;
+        });
     }
 
     handleDelete() {
@@ -401,88 +336,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         modal.hide();
     }
 
-    enableDisableFieldsOnSaveAndInputChange() {
-        this.fieldSet.forEach(member => {
-            if (this.hasContactField && member.apiName !== this.fields.contact) {
-                member.disabled = false;
-            } else if (this.hasContactField & (member.apiName === this.fields.contact)) {
-                member.disabled = true;
-            }
-
-            if (
-                !this.hasContactField &&
-                this.hasProgramEngagementField &&
-                member.apiName !== this.fields.programEngagement
-            ) {
-                member.disabled = false;
-            } else if (
-                !this.hasContactField &&
-                this.hasProgramEngagementField &&
-                member.apiName === this.fields.programEngagement
-            ) {
-                member.disabled = true;
-            }
-
-            if (
-                !this.hasContactField &&
-                !this.hasProgramEngagementField &&
-                member.apiName !== this.fields.service
-            ) {
-                member.disabled = false;
-            } else if (
-                !this.hasContactField &&
-                !this.hasProgramEngagementField &&
-                member.apiName === this.fields.service
-            ) {
-                member.disabled = true;
-            }
-        });
-    }
-
-    enableServiceInputWithOptions() {
-        let result = [];
-
-        if (this._servicesAndEngagementsFromContact) {
-            this._servicesAndEngagementsFromContact[SERVICES].forEach(service => {
-                if (service.program === this._targetProgram) {
-                    result.push(service);
-                }
-            });
-        }
-
-        if (this._servicesFromProgramEngagement) {
-            result = this._servicesFromProgramEngagement;
-        }
-
-        if (this.isServiceFiltered) {
-            this.fieldSet = JSON.parse(JSON.stringify(this.fieldSet));
-        }
-
-        this.fieldSet.forEach(member => {
-            if (
-                member.apiName === this.fields.service &&
-                this.hasProgramEngagementField
-            ) {
-                this.isError = false;
-                if (this.isServiceFiltered) {
-                    member.isCombobox = true;
-                }
-
-                member.disabled = false;
-                member.options = result;
-                if (!result.length) {
-                    this.isError = true;
-                    this.rowError = [this.labels.noServiceWarning];
-                    member.disabled = true;
-                    this.handleCustomError();
-                }
-            } else if (
-                member.apiName !== this.fields.contact &&
-                member.apiName !== this.fields.programEngagement
-            ) {
-                member.disabled = true;
-            }
-        });
+    resetError() {
+        this.isError = false;
+        this.errorMessage = "";
     }
 
     resetQuantityLabel() {
@@ -491,16 +347,72 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-    lockContactField() {
+    resetProgramEngagements() {
+        this.programEngagementId = undefined;
+        this._programEngagements = undefined;
+        this._comboboxValues[this.fields.programEngagement] = undefined;
+        this.template.querySelectorAll("lightning-combobox").forEach(box => {
+            if (box.name === this.fields.programEngagement) {
+                box.value = undefined;
+            }
+        });
+    }
+
+    resetServices() {
+        this.serviceId = undefined;
+        this.services = undefined;
+        this._comboboxValues[this.fields.service] = undefined;
+        this.resetQuantityLabel();
+        this.template.querySelectorAll("lightning-combobox").forEach(box => {
+            if (box.name === this.fields.service) {
+                box.value = undefined;
+            }
+        });
+    }
+
+    setComboboxValues(fieldName, fieldVal) {
+        if (fieldName === this.fields.programEngagement) {
+            this.programEngagementId = fieldVal;
+            this.resetServices();
+            this.setServiceOptions();
+        } else if (fieldName === this.fields.service) {
+            this.serviceId = fieldVal;
+        }
+
+        if (fieldName && fieldVal) {
+            this._comboboxValues[fieldName] = fieldVal;
+        }
+    }
+
+    setDisabledAttribute() {
+        let isContactDisabled = this.hasContactField && this.contactId && this.isSaved;
+        let isProgramEngagementDisabled =
+            (this.hasContactField && !this.contactId) ||
+            (!this.hasContactField && this.programEngagementId && this.isSaved);
+        let isServiceDisabled =
+            (this.hasContactField && !this.contactId) ||
+            (this.hasProgramEngagementField && !this.programEngagementId) ||
+            (!this.hasContactField &&
+                !this.hasProgramEngagementField &&
+                this.serviceId &&
+                this.isSaved);
+        let isInputDisabled = !this.serviceId;
+
         this.fieldSet.forEach(member => {
             if (member.apiName === this.fields.contact) {
-                member.disabled = true;
+                member.disabled = isContactDisabled;
+            } else if (member.apiName === this.fields.programEngagement) {
+                member.disabled = isProgramEngagementDisabled;
+            } else if (member.apiName === this.fields.service) {
+                member.disabled = isServiceDisabled;
+            } else {
+                member.disabled = isInputDisabled;
             }
         });
     }
 
     // TODO: This is called 2x but can only run once?
-    processDefaults() {
+    setDefaults() {
         if (
             this._defaultValues &&
             Object.keys(this._defaultValues).length > 0 &&
@@ -509,26 +421,25 @@ export default class ServiceDeliveryRow extends LightningElement {
             !this._defaultsSet
         ) {
             this._defaultsSet = true;
-            let contactId = "";
 
             this.fieldSet.forEach(member => {
                 for (let [fieldName, fieldValue] of Object.entries(this._defaultValues)) {
                     if (member.apiName === fieldName && fieldValue != null) {
                         member.value = this._defaultValues[fieldName];
                         if (member.apiName === this.fields.contact) {
-                            contactId = fieldValue;
-                        }
-                        if (member.apiName === this.fields.programEngagement) {
+                            this.contactId = fieldValue;
+                        } else if (member.apiName === this.fields.programEngagement) {
                             this.programEngagementId = fieldValue;
+                        } else if (member.apiName === this.fields.service) {
+                            this.serviceId = fieldValue;
                         }
                     }
                     continue;
                 }
             });
 
-            if (this.hasContactField && this.hasProgramEngagementField && contactId) {
-                this.updateContactsRelatedRecords(contactId);
-                this.selectedContact = contactId;
+            if (this.hasContactField && this.contactId) {
+                this.getRelatedRecordsFromContact(this.contactId);
             }
 
             if (
@@ -536,46 +447,38 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this.hasProgramEngagementField &&
                 this.programEngagementId
             ) {
-                this.isServiceFiltered = true;
-                this.updateProgramEngagementRelatedRecords(this.programEngagementId);
+                this.getRelatedRecordsFromProgramEngagement();
             }
 
-            if (this.hasContactField && !this.hasProgramEngagementField && contactId) {
-                this.handleEnableFieldOnInputChange(this.fields.contact);
-            }
+            this.setDisabledAttribute();
         }
     }
 
-    handleSaveStart() {
+    setSaving() {
         this.saveMessage = "...";
         this.isSaving = true;
         this.isSaved = false;
-        this.isError = false;
     }
 
-    handleSaveEnd() {
+    setSaved() {
         this.isSaving = false;
         this.isSaved = true;
         this.isDirty = false;
-        this.enableDisableFieldsOnSaveAndInputChange();
     }
 
-    handleSaveNewPE(event) {
-        if (event.detail) {
-            this.programEngagementId = event.detail;
-            if (this.selectedContact && this.programEngagementId) {
-                this.updateContactsRelatedRecords(this.selectedContact);
-            }
-        }
+    setUnitOfMeasurement(fields) {
+        this.unitOfMeasureValue =
+            fields[this.fields.unitOfMeasurement] &&
+            fields[this.fields.unitOfMeasurement].value
+                ? fields[this.fields.unitOfMeasurement].value
+                : this.labels.quantity;
     }
 
-    handleCancelNewPE() {
-        this.template.querySelectorAll("lightning-combobox").forEach(combobox => {
-            combobox.value = null;
-        });
-    }
+    setCurrentFieldSet() {
+        this.fieldSet = this.serviceDeliveryFieldSets.getCurrentFieldSet().map(field => ({
+            ...field,
+        }));
 
-    trackSpecialFields() {
         this.hasContactField = this.serviceDeliveryFieldSets.hasContactField(
             this.fieldSet
         );
@@ -584,76 +487,74 @@ export default class ServiceDeliveryRow extends LightningElement {
         );
     }
 
-    setUnitOfMeasurement(fields) {
-        this.unitOfMeasureValue =
-            fields[this.fields.unitOfMeasurement] &&
-            fields[this.fields.unitOfMeasurement].value
-                ? fields[this.fields.unitOfMeasurement].value
-                : quantity;
-    }
-
-    updateFieldSet(fields) {
+    setCurrentFieldSetName(fields) {
         let serviceDeliveryFieldSet =
             fields[this.fields.fieldSet] && fields[this.fields.fieldSet].value
                 ? fields[this.fields.fieldSet].value
                 : DEFAULT_FIELD_SET;
 
-        if (this.fieldSetApiName === serviceDeliveryFieldSet) {
+        if (
+            this.serviceDeliveryFieldSets.currentFieldSetName === serviceDeliveryFieldSet
+        ) {
             return;
         }
 
-        this.fieldSet = this.serviceDeliveryFieldSets
-            .getFieldSet(this.fieldSetApiName)
-            .map(field => ({
-                ...field,
-            }));
+        this.serviceDeliveryFieldSets.currentFieldSetName = serviceDeliveryFieldSet;
 
-        this.trackSpecialFields();
+        this.setCurrentFieldSet();
     }
 
-    extractTargetProgram(engagementId) {
-        this._servicesAndEngagementsFromContact[ENGAGEMENTS].forEach(engagement => {
-            if (engagement.value === engagementId) {
-                this._targetProgram = engagement.program;
-            }
-        });
-    }
+    setProgramEngagementOptions() {
+        let programEngagementField = this.fieldSet.find(
+            member => member.apiName === this.fields.programEngagement
+        );
 
-    setServicesAndEngagements(result) {
-        let engagements = result[ENGAGEMENTS].slice(0);
+        let engagements = [...this._programEngagements];
+
         engagements.push({
             label: "\u254B   " + newProgramEngagement,
             value: newProgramEngagement,
             program: "",
         });
-        this._servicesAndEngagementsFromContact = { ...result, engagements };
+
+        programEngagementField.options = engagements;
     }
 
-    updateServiceAttributes(member) {
-        member.isCombobox = true;
-        if (!this.programEngagementId) {
-            member.options = this._servicesAndEngagementsFromContact[SERVICES].slice(0);
-        } else {
-            let result = [];
-            this._servicesAndEngagementsFromContact[SERVICES].forEach(filteredVal => {
-                if (filteredVal.program === this._targetProgram) {
-                    result.push(filteredVal);
+    setServiceOptions() {
+        if (!this.hasProgramEngagementField || !this.programEngagementId) {
+            return;
+        }
+
+        let serviceField = this.fieldSet.find(
+            member => member.apiName === this.fields.service
+        );
+        let services = [];
+
+        if (this.hasContactField && this.hasProgramEngagementField) {
+            let targetProgram = this.getTargetProgram();
+
+            this._services.forEach(service => {
+                if (service.program === targetProgram) {
+                    services.push({ ...service });
                 }
             });
-            member.options = result.slice(0);
+        } else if (!this.hasContactField && this.hasProgramEngagementField) {
+            services = [...this._services];
         }
 
-        member.placeholder = this.labels.selectService;
+        serviceField.options = services;
+
+        if (!services.length) {
+            this.isError = true;
+            this.errorMessage = [this.labels.noServiceWarning];
+        }
     }
 
-    updateProgramEngagementAttributes(member) {
-        member.isCombobox = true;
-        member.options = this._servicesAndEngagementsFromContact[ENGAGEMENTS].slice(0);
-        member.placeholder = this.labels.selectEngagement;
-        member.disabled = false;
+    getTargetProgram() {
+        let currentEngagement = this._programEngagements.find(
+            engagement => engagement.value === this.programEngagementId
+        );
 
-        if (this.programEngagementId) {
-            member.value = this.programEngagementId;
-        }
+        return currentEngagement ? currentEngagement.program : undefined;
     }
 }

@@ -612,6 +612,20 @@
         <value>New Program Engagement record created.</value>
     </labels>
     <labels>
+        <fullName>Add</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add</shortDescription>
+        <value>Add</value>
+    </labels>
+    <labels>
+        <fullName>Add_All</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add All</shortDescription>
+        <value>Add All</value>
+    </labels>
+    <labels>
         <fullName>Save_New</fullName>
         <language>en_US</language>
         <protected>true</protected>

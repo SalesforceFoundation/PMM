@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Field whose values can be bucketed into logical groupings, similar to Case.Status values have &quot;Open&quot; and &quot;Closed&quot; groupings.</description>
+    <label>Bucketed Field</label>
+    <pluralLabel>Bucketed Fields</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -328,7 +328,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Missing SObject Type</shortDescription>
-        <value>Your query must include an object.</value>
+        <value>Your query must include an object or child relationship.</value>
     </labels>
     <labels>
         <fullName>Monthly_On_Day</fullName>
@@ -511,6 +511,13 @@
         <protected>true</protected>
         <shortDescription>Update</shortDescription>
         <value>Update</value>
+    </labels>
+    <labels>
+        <fullName>Edited</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Edited</shortDescription>
+        <value>Edited</value>
     </labels>
     <labels>
         <fullName>Save</fullName>

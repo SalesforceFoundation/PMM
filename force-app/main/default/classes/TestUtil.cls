@@ -12,6 +12,10 @@
  * Utility methods for test classes
  */
 public with sharing class TestUtil {
+    private static BasicStub customMetadataSelectorStub = new BasicStub(
+        CustomMetadataSelector.class
+    );
+
     public static final String TEST_USER_EMAIL = 'temptestuser@caseplan.example.com';
 
     public static Integer counter {
@@ -61,5 +65,31 @@ public with sharing class TestUtil {
             UserName = TEST_USER_EMAIL
         );
         return user;
+    }
+
+    public static void turnOffFeatureGates() {
+        // Stub turned off Feature Gates so we can insert Service Deliveries without triggers running
+        customMetadataSelectorStub.withReturnValue(
+            'getAllFeatureGates',
+            new List<FeatureGate__mdt>{
+                new FeatureGate__mdt(
+                    DeveloperName = 'ServiceDeliveriesToContact',
+                    IsActive__c = false
+                ),
+                new FeatureGate__mdt(
+                    DeveloperName = 'ServiceDeliveriesToService',
+                    IsActive__c = false
+                ),
+                new FeatureGate__mdt(
+                    DeveloperName = 'ServiceDeliveriesToServiceSession',
+                    IsActive__c = false
+                ),
+                new FeatureGate__mdt(
+                    DeveloperName = 'ServiceDeliveriesToProgramEngagement',
+                    IsActive__c = false
+                )
+            }
+        );
+        CustomMetadataSelector.instance = (CustomMetadataSelector) customMetadataSelectorStub.createMock();
     }
 }

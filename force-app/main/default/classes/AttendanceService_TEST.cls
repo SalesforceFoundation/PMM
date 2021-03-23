@@ -14,8 +14,443 @@ public with sharing class AttendanceService_TEST {
     );
     private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
     private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
+    private static BasicStub systemAccessStub = new BasicStub(SystemAccess.class);
 
     private static AttendanceService service = new AttendanceService();
+
+    @IsTest
+    private static void shouldNotCallUpdateWithoutIdsForAttendance() {
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>();
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(idsByLookupFieldToTarget, null);
+
+        systemAccessStub.assertNotCalled('getAttendanceRecords');
+        systemAccessStub.assertNotCalled('updateRecords');
+    }
+
+    @IsTest
+    private static void shouldNotCallUpdateWithoutIdsForLastServiceDate() {
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>();
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(null, idsByLookupFieldToTarget);
+
+        systemAccessStub.assertNotCalled('getParentsWithServiceDeliveries');
+        systemAccessStub.assertNotCalled('updateRecords');
+    }
+
+    @IsTest
+    private static void shouldNotContinueWithoutParents() {
+        List<SObject> parents = new List<SObject>();
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(Contact.SObjectType, parents);
+
+        systemAccessStub.assertNotCalled('getAttendanceRecords');
+        systemAccessStub.assertNotCalled('getParentsWithServiceDeliveries');
+        systemAccessStub.assertNotCalled('updateRecords');
+    }
+
+    @IsTest
+    private static void shouldNotCallUpdateWithoutBucketedStatus() {
+        String getAttendanceRecords = 'getAttendanceRecords';
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Contact__c => new Set<Id>{ contactId }
+        };
+        systemAccessStub.withReturnValue(
+            getAttendanceRecords,
+            new List<Type>{ SObjectField.class, Set<Id>.class, List<String>.class },
+            new List<ServiceDelivery__c>{
+                new ServiceDelivery__c(
+                    Contact__c = contactId,
+                    AttendanceStatus__c = 'Wasn\'t Me'
+                )
+            }
+        );
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(idsByLookupFieldToTarget, null);
+
+        systemAccessStub.assertNotCalled('updateRecords');
+    }
+
+    @IsTest
+    private static void shouldGetBuckets() {
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>();
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        System.assertNotEquals(
+            null,
+            service.statusBuckets,
+            'Expected the buckets to have been found'
+        );
+    }
+
+    @IsTest
+    private static void shouldSetAbsentAndPresentCountsToNullWhenNoRecordsFound() {
+        String getAttendanceRecords = 'getAttendanceRecords';
+        Contact contactRecord = new Contact(
+            Id = TestUtil.mockId(Contact.SObjectType),
+            NumPresentServiceDeliveries__c = null,
+            NumAbsentServiceDeliveries__c = null,
+            ConsecutiveAbsences__c = null
+        );
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
+        };
+        systemAccessStub.withReturnValue(
+            getAttendanceRecords,
+            new List<Type>{ SObjectField.class, Set<Id>.class, List<String>.class },
+            new List<ServiceDelivery__c>()
+        );
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(idsByLookupFieldToTarget, null);
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ contactRecord }
+        );
+    }
+
+    @IsTest
+    private static void shouldSetLastServiceDateToNullWhenNoRecordsFound() {
+        String getParentsWithServiceDeliveries = 'getParentsWithServiceDeliveries';
+        Map<String, Object> contactFields = new Map<String, Object>{
+            'Id' => TestUtil.mockId(Contact.SObjectType),
+            String.valueOf(Contact.LastServiceDate__c) => null,
+            ServiceDelivery__c.Contact__c.getDescribe()
+                .getRelationshipName() => new List<ServiceDelivery__c>()
+        };
+        Contact contactRecord = (Contact) JSON.deserialize(
+            JSON.serialize(contactFields),
+            Contact.class
+        );
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
+        };
+        systemAccessStub.withReturnValue(
+            getParentsWithServiceDeliveries,
+            new List<Type>{
+                SObjectField.class,
+                Set<Id>.class,
+                SObjectType.class,
+                String.class
+            },
+            new List<Contact>{ contactRecord }
+        );
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(null, idsByLookupFieldToTarget);
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ contactRecord }
+        );
+    }
+
+    @IsTest
+    private static void shouldReturnFromLastServiceDateOnIrrelevantObjects() {
+        String getParentsWithServiceDeliveries = 'getParentsWithServiceDeliveries';
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
+        Service__c serviceRecord = new Service__c(Id = serviceId);
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Service__c => new Set<Id>{ serviceId }
+        };
+        systemAccessStub.withReturnValue(
+            getParentsWithServiceDeliveries,
+            new List<Type>{
+                SObjectField.class,
+                Set<Id>.class,
+                SObjectType.class,
+                String.class
+            },
+            new List<Service__c>{ serviceRecord }
+        );
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(null, idsByLookupFieldToTarget);
+
+        systemAccessStub.assertNotCalled('updateRecords');
+    }
+
+    @IsTest
+    private static void shouldNotCountWhenIdIsNull() {
+        String getAttendanceRecords = 'getAttendanceRecords';
+        Contact contactRecord = new Contact(
+            Id = TestUtil.mockId(Contact.SObjectType),
+            NumPresentServiceDeliveries__c = null,
+            NumAbsentServiceDeliveries__c = null,
+            ConsecutiveAbsences__c = null
+        );
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
+        };
+        systemAccessStub.withReturnValue(
+            getAttendanceRecords,
+            new List<Type>{ SObjectField.class, Set<Id>.class, List<String>.class },
+            new List<ServiceDelivery__c>{
+                new ServiceDelivery__c(Contact__c = null, AttendanceStatus__c = 'Present')
+            }
+        );
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(idsByLookupFieldToTarget, null);
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ contactRecord }
+        );
+    }
+
+    @IsTest
+    private static void shouldIncrementAbsentCountWhenAbsentRecordFound() {
+        String getAttendanceRecords = 'getAttendanceRecords';
+        Contact contactRecord = new Contact(
+            Id = TestUtil.mockId(Contact.SObjectType),
+            NumPresentServiceDeliveries__c = null,
+            NumAbsentServiceDeliveries__c = 1,
+            ConsecutiveAbsences__c = 1
+        );
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
+        };
+        systemAccessStub.withReturnValue(
+            getAttendanceRecords,
+            new List<Type>{ SObjectField.class, Set<Id>.class, List<String>.class },
+            new List<ServiceDelivery__c>{
+                new ServiceDelivery__c(
+                    Contact__c = contactRecord.Id,
+                    AttendanceStatus__c = 'Excused Absence'
+                )
+            }
+        );
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(idsByLookupFieldToTarget, null);
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ contactRecord }
+        );
+    }
+
+    @IsTest
+    private static void shouldIncrementPresentCountWhenPresentRecordFound() {
+        String getAttendanceRecords = 'getAttendanceRecords';
+        Contact contactRecord = new Contact(
+            Id = TestUtil.mockId(Contact.SObjectType),
+            NumPresentServiceDeliveries__c = 1,
+            NumAbsentServiceDeliveries__c = null,
+            ConsecutiveAbsences__c = 0
+        );
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
+        };
+        systemAccessStub.withReturnValue(
+            getAttendanceRecords,
+            new List<Type>{ SObjectField.class, Set<Id>.class, List<String>.class },
+            new List<ServiceDelivery__c>{
+                new ServiceDelivery__c(
+                    Contact__c = contactRecord.Id,
+                    AttendanceStatus__c = 'Present',
+                    DeliveryDate__c = System.today()
+                )
+            }
+        );
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(idsByLookupFieldToTarget, null);
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ contactRecord }
+        );
+    }
+
+    @IsTest
+    private static void shouldIncrementAbsentAndPresentCountWhenBothRecordsFound() {
+        String getAttendanceRecords = 'getAttendanceRecords';
+        Contact contactRecord = new Contact(
+            Id = TestUtil.mockId(Contact.SObjectType),
+            NumPresentServiceDeliveries__c = 1,
+            NumAbsentServiceDeliveries__c = 3,
+            ConsecutiveAbsences__c = 2
+        );
+        Map<SObjectField, Set<Id>> idsByLookupFieldToTarget = new Map<SObjectField, Set<Id>>{
+            ServiceDelivery__c.Contact__c => new Set<Id>{ contactRecord.Id }
+        };
+        systemAccessStub.withReturnValue(
+            getAttendanceRecords,
+            new List<Type>{ SObjectField.class, Set<Id>.class, List<String>.class },
+            new List<ServiceDelivery__c>{
+                new ServiceDelivery__c(
+                    Contact__c = contactRecord.Id,
+                    AttendanceStatus__c = 'Excused Absence',
+                    DeliveryDate__c = System.today()
+                ),
+                new ServiceDelivery__c(
+                    Contact__c = contactRecord.Id,
+                    AttendanceStatus__c = 'Unexcused Absence',
+                    DeliveryDate__c = System.today() - 1
+                ),
+                new ServiceDelivery__c(
+                    Contact__c = contactRecord.Id,
+                    AttendanceStatus__c = 'Present',
+                    DeliveryDate__c = System.today() - 2
+                ),
+                new ServiceDelivery__c(
+                    Contact__c = contactRecord.Id,
+                    AttendanceStatus__c = 'Unexcused Absence',
+                    DeliveryDate__c = System.today() - 3
+                )
+            }
+        );
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+
+        service.doRollups(idsByLookupFieldToTarget, null);
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ contactRecord }
+        );
+    }
+
+    @IsTest
+    private static void shouldCalculateWhenAbsentRecordFoundFromContact() {
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
+        Contact sourceContactRecord = (Contact) JSON.deserialize(
+            JSON.serialize(
+                new Map<String, Object>{
+                    'Id' => contactId,
+                    Util.prefixNamespace(
+                        'Service_Deliveries__r'
+                    ) => new Map<String, Object>{
+                        'totalSize' => 2,
+                        'done' => true,
+                        'records' => new List<ServiceDelivery__c>{
+                            new ServiceDelivery__c(
+                                Contact__c = contactId,
+                                AttendanceStatus__c = 'Excused Absence',
+                                DeliveryDate__c = System.today()
+                            ),
+                            new ServiceDelivery__c(
+                                Contact__c = contactId,
+                                AttendanceStatus__c = 'Present',
+                                Quantity__c = 5,
+                                DeliveryDate__c = System.today() - 1
+                            )
+                        }
+                    }
+                }
+            ),
+            Contact.class
+        );
+
+        Contact targetContactRecord = new Contact(
+            Id = contactId,
+            NumPresentServiceDeliveries__c = 1,
+            NumAbsentServiceDeliveries__c = 1,
+            ConsecutiveAbsences__c = 1,
+            LastServiceDate__c = System.today() - 1
+        );
+
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+        service.doRollups(Contact.SObjectType, new List<Contact>{ sourceContactRecord });
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ targetContactRecord }
+        );
+    }
+
+    @IsTest
+    private static void shouldResetRecordWhenNoServiceDeliveriesFoundForContact() {
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
+        Contact sourceContactRecord = new Contact(
+            Id = contactId,
+            NumPresentServiceDeliveries__c = 1,
+            NumAbsentServiceDeliveries__c = 1,
+            ConsecutiveAbsences__c = 1,
+            LastServiceDate__c = System.today()
+        );
+
+        Contact targetContactRecord = new Contact(
+            Id = contactId,
+            NumPresentServiceDeliveries__c = null,
+            NumAbsentServiceDeliveries__c = null,
+            ConsecutiveAbsences__c = null,
+            LastServiceDate__c = null
+        );
+
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+        service.doRollups(Contact.SObjectType, new List<Contact>{ sourceContactRecord });
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ targetContactRecord }
+        );
+    }
+
+    @IsTest
+    private static void shouldCalculateWhenAbsentRecordFoundFromService() {
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
+        Service__c sourceServiceRecord = (Service__c) JSON.deserialize(
+            JSON.serialize(
+                new Map<String, Object>{
+                    'Id' => serviceId,
+                    Util.prefixNamespace(
+                        'ServiceDeliveries__r'
+                    ) => new Map<String, Object>{
+                        'totalSize' => 2,
+                        'done' => true,
+                        'records' => new List<ServiceDelivery__c>{
+                            new ServiceDelivery__c(
+                                Service__c = serviceId,
+                                AttendanceStatus__c = 'Excused Absence',
+                                DeliveryDate__c = System.today()
+                            ),
+                            new ServiceDelivery__c(
+                                Service__c = serviceId,
+                                AttendanceStatus__c = 'Present',
+                                Quantity__c = 5,
+                                DeliveryDate__c = System.today() - 1
+                            )
+                        }
+                    }
+                }
+            ),
+            Service__c.class
+        );
+
+        Service__c targetServiceRecord = new Service__c(
+            Id = serviceId,
+            NumPresentServiceDeliveries__c = 1,
+            NumAbsentServiceDeliveries__c = 1
+        );
+
+        service.systemAccess = (SystemAccess) systemAccessStub.createMock();
+        service.doRollups(
+            Service__c.SObjectType,
+            new List<Service__c>{ sourceServiceRecord }
+        );
+
+        systemAccessStub.assertCalledWith(
+            'updateRecords',
+            List<SObject>.class,
+            new List<SObject>{ targetServiceRecord }
+        );
+    }
 
     @IsTest
     private static void getRosterShouldCallSelector() {

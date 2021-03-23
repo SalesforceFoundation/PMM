@@ -5,11 +5,16 @@
 
 import glob
 from pathlib import Path
+import datetime
 
 
-STAR_COPYRIGHT = """/*
+THIS_YEAR = str(datetime.datetime.now().year)
+PAST_YEARS = ["2020"]
+
+
+STAR_COPYRIGHT = f"""/*
  *
- *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * Copyright (c) {THIS_YEAR}, salesforce.com, inc.
  *  * All rights reserved.
  *  * SPDX-License-Identifier: BSD-3-Clause
  *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
@@ -18,9 +23,9 @@ STAR_COPYRIGHT = """/*
 
 """
 
-POINTY_COPYRIGHT = """<!--
+POINTY_COPYRIGHT = f"""<!--
   - /*
-  -  * Copyright (c) 2020, salesforce.com, inc.
+  -  * Copyright (c) {THIS_YEAR}, salesforce.com, inc.
   -  * All rights reserved.
   -  * SPDX-License-Identifier: BSD-3-Clause
   -  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
@@ -39,12 +44,17 @@ def apply_copyright(paths, copyright):
     for path in paths:
         text = Path(path).read_text()
         top_lines = text.splitlines()[:9]
-        for actual, expected in zip(top_lines, copyright.splitlines()):
-            if not actual == expected:
-                text = copyright + text
-                Path(path).write_text(text)
-                total += 1
-                break
+        year_star = top_lines[2][21:25]
+        year_pointy = top_lines[2][20:24]
+        if year_star in PAST_YEARS or year_pointy in PAST_YEARS:
+            continue
+        else:
+            for actual, expected in zip(top_lines, copyright.splitlines()):
+                if not actual == expected:
+                    text = copyright + text
+                    Path(path).write_text(text)
+                    total += 1
+                    break
     return total
 
 

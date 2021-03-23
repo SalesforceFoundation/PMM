@@ -110,8 +110,17 @@ export default class ServiceDeliveryRow extends LightningElement {
     })
     wiredService(result) {
         if (result.data && result.data.fields) {
+            let hadContactField = this.hasContactField;
+            let hadProgramEngagementField = this.hasProgramEngagementField;
+
             this.setUnitOfMeasurement(result.data.fields);
-            this.setCurrentFieldSetName(result.data.fields);
+            let isChanged = this.setCurrentFieldSetName(result.data.fields);
+            if (!isChanged) {
+                return;
+            }
+
+            this.setCurrentFieldSet();
+            this.resetFields(hadContactField, hadProgramEngagementField);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
@@ -347,10 +356,49 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
+    setInputField(fieldName, id) {
+        let inputField = this.fieldSet.find(member => member.apiName === fieldName);
+        inputField.value = id;
+    }
+
+    resetFields(hadContactField, hadProgramEngagementField) {
+        if (hadContactField && !this.hasContactField) {
+            this.resetContact();
+            if (this.hasProgramEngagementField) {
+                let programEngagementId = this.programEngagementId;
+                this.resetProgramEngagements();
+                this.programEngagementId = programEngagementId;
+                this.setInputField(this.fields.programEngagement, programEngagementId);
+                this.setServiceOptions();
+            }
+        }
+
+        if (hadProgramEngagementField && !this.hasProgramEngagementField) {
+            this.resetProgramEngagements();
+            let serviceId = this.serviceId;
+            this.resetServices();
+            this.serviceId = serviceId;
+            this.setInputField(this.fields.service, serviceId);
+        }
+
+        if (!hadProgramEngagementField && this.hasProgramEngagementField) {
+            if (this.hasContactField) {
+                this.getRelatedRecordsFromContact();
+            } else {
+                this.getRelatedRecordsFromProgramEngagement();
+            }
+        }
+        this.setDisabledAttribute();
+    }
+
+    resetContact() {
+        this.contactId = undefined;
+    }
+
     resetProgramEngagements() {
         this.programEngagementId = undefined;
         this._programEngagements = undefined;
-        this._comboboxValues[this.fields.programEngagement] = undefined;
+        delete this._comboboxValues[this.fields.programEngagement];
         this.template.querySelectorAll("lightning-combobox").forEach(box => {
             if (box.name === this.fields.programEngagement) {
                 box.value = undefined;
@@ -359,15 +407,17 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     resetServices() {
-        this.serviceId = undefined;
         this.services = undefined;
-        this._comboboxValues[this.fields.service] = undefined;
-        this.resetQuantityLabel();
+        delete this._comboboxValues[this.fields.service];
+
         this.template.querySelectorAll("lightning-combobox").forEach(box => {
             if (box.name === this.fields.service) {
                 box.value = undefined;
             }
         });
+
+        this.serviceId = undefined;
+        this.resetQuantityLabel();
     }
 
     setComboboxValues(fieldName, fieldVal) {
@@ -390,7 +440,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             (this.hasContactField && !this.contactId) ||
             (!this.hasContactField && this.programEngagementId && this.isSaved);
         let isServiceDisabled =
-            (this.hasContactField && !this.contactId) ||
+            (this.hasContactField && !this.contactId && !this.serviceId) ||
             (this.hasProgramEngagementField && !this.programEngagementId) ||
             (!this.hasContactField &&
                 !this.hasProgramEngagementField &&
@@ -496,12 +546,11 @@ export default class ServiceDeliveryRow extends LightningElement {
         if (
             this.serviceDeliveryFieldSets.currentFieldSetName === serviceDeliveryFieldSet
         ) {
-            return;
+            return false;
         }
 
         this.serviceDeliveryFieldSets.currentFieldSetName = serviceDeliveryFieldSet;
-
-        this.setCurrentFieldSet();
+        return true;
     }
 
     setProgramEngagementOptions() {

@@ -24,7 +24,8 @@ import serviceDeliveriesAdded from "@salesforce/label/c.Service_Deliveries_Added
 import Label_Required from "@salesforce/label/c.Required";
 import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 
-import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
+import SERVICE_DELIVERY_CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
+import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
@@ -61,7 +62,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         save: save,
     };
     fields = {
-        contact: CONTACT_FIELD,
+        contact: SERVICE_DELIVERY_CONTACT_FIELD,
         unitMeasurement: UNITMEASUREMENT_FIELD,
         quantity: QUANTITY_FIELD,
         programEngagement: PROGRAM_ENGAGEMENT_FIELD,
@@ -152,6 +153,20 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     handleHideWizard() {
+        this.setServiceDeliveries();
         this.hideWizard = true;
+    }
+
+    setServiceDeliveries() {
+        let wizard = this.template.querySelector("c-group-service-deliveries");
+        let selectedParticipants = wizard.selectedParticipants;
+        let defaultServiceDelivery = wizard.serviceDelivery;
+        this.serviceDeliveries = [];
+        selectedParticipants.forEach(programEngagement => {
+            let newServiceDelivery = Object.assign({}, defaultServiceDelivery);
+            newServiceDelivery[this.fields.contact.fieldApiName] =
+                programEngagement[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName];
+            this.serviceDeliveries.push(newServiceDelivery);
+        });
     }
 }

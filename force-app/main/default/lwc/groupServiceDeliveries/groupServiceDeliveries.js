@@ -1,4 +1,4 @@
-import { LightningElement } from "lwc";
+import { api, LightningElement } from "lwc";
 
 import { ProgressSteps } from "c/progressSteps";
 import { NavigationItems } from "c/navigationItems";
@@ -20,7 +20,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     currentStep = {};
     isOptionSelection = true;
     serviceDelivery;
-    selectedParticipants;
+    @api selectedParticipants;
 
     labels = {
         groupTitle,

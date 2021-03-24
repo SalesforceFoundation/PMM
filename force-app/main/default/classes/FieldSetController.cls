@@ -40,4 +40,13 @@ public with sharing class FieldSetController {
             throw Util.getAuraHandledException(e);
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Object> getFieldSetByName(String objectName) {
+        try {
+            return fieldSetService.getFieldSetByName(objectName);
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+    }
 }

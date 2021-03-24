@@ -42,11 +42,7 @@ export class ServiceDeliveryFieldSets {
     }
 
     hasProgramEngagementField(fieldSet) {
-        let programEngagementField = fieldSet.find(
-            member => member.apiName === PROGRAM_ENGAGEMENT_FIELD.fieldApiName
-        );
-
-        return programEngagementField !== undefined;
+        return this.isFieldInFieldSet(fieldSet, PROGRAM_ENGAGEMENT_FIELD.fieldApiName);
     }
 
     configureFieldSet(apiName, fieldSet) {

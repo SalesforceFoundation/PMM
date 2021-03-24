@@ -14,7 +14,7 @@ import selectService from "@salesforce/label/c.BSDT_Select_Service";
 const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 const ERROR_MESSAGE = "Error on Page"; // Not displayed on screen, does not require a label.
 
-export default class GroupServiceDelivery extends LightningElement {
+export default class ServiceDeliveryDefaults extends LightningElement {
     _serviceDelivery;
     objectApiName = SERVICE_DELIVERY_OBJECT.objectApiName;
     fieldSetName = DEFAULT_FIELD_SET;

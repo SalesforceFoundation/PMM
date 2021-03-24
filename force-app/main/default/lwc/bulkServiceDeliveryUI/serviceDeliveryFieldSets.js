@@ -38,11 +38,7 @@ export class ServiceDeliveryFieldSets {
     }
 
     hasContactField(fieldSet) {
-        let contactField = fieldSet.find(
-            member => member.apiName === CONTACT_FIELD.fieldApiName
-        );
-
-        return contactField !== undefined;
+        return this.isFieldInFieldSet(fieldSet, CONTACT_FIELD.fieldApiName);
     }
 
     hasProgramEngagementField(fieldSet) {
@@ -58,11 +54,6 @@ export class ServiceDeliveryFieldSets {
 
         fieldSet.forEach(member => {
             let field = { ...member };
-            // Number fields are size 1
-            // Program Engagment lookup is size 4
-            // Client lookup is size 3
-            // Everything else is size 2
-            // This means that the field set we ship with is exactly 12 wide
             this.setSize(field);
             this.setDefaultAttributes(fieldSet, field);
             configuredFieldSet.push(field);
@@ -71,6 +62,11 @@ export class ServiceDeliveryFieldSets {
     }
 
     setSize(field) {
+        // Number fields are size 1
+        // Program Engagment lookup is size 4
+        // Client lookup is size 3
+        // Everything else is size 2
+        // This means that the field set we ship with is exactly 12 wide
         if (SHORT_DATA_TYPES.includes(field.type)) {
             field.size = 1;
         } else if (field.apiName === PROGRAM_ENGAGEMENT_FIELD.fieldApiName) {

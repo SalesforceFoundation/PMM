@@ -19,7 +19,7 @@ public with sharing class FieldSetService {
 
     private Map<String, Object> getFieldSetByName(SObjectType sObjectType) {
         Map<String, FieldSet> fieldSets = sObjectType.getDescribe().fieldSets.getMap();
-        Map<String, Object> fieldSetsByName = new Map<String, Object>();
+        Map<String, Object> fieldSetByName = new Map<String, Object>();
 
         for (FieldSet fieldSet : fieldSets.values()) {
             Map<String, Map<String, Object>> fieldByApiName = new Map<String, Map<String, Object>>();
@@ -36,10 +36,10 @@ public with sharing class FieldSetService {
                 );
             }
 
-            fieldSetsByName.put(fieldSet.getName(), fieldByApiName.values());
+            fieldSetByName.put(fieldSet.getName(), fieldByApiName.values());
         }
 
-        return fieldSetsByName;
+        return fieldSetByName;
     }
 
     public Map<String, Map<String, Object>> getFieldByFieldPath(

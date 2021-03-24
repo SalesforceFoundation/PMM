@@ -187,7 +187,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         this._fieldSets = value;
-        this._fieldSets.currentFieldSetName = DEFAULT_FIELD_SET;
+        this._fieldSets.currentFieldSetName = value.currentFieldSetName
+            ? value.currentFieldSetName
+            : DEFAULT_FIELD_SET;
 
         this.setCurrentFieldSet();
     }
@@ -388,6 +390,20 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this.getRelatedRecordsFromProgramEngagement();
             }
         }
+
+        if (
+            hadContactField &&
+            this.hasContactField &&
+            hadProgramEngagementField &&
+            this.hasProgramEngagementField
+        ) {
+            this.setProgramEngagementOptions();
+        }
+
+        if (hadProgramEngagementField && this.hasProgramEngagementField) {
+            this.setServiceOptions();
+        }
+
         this.setDisabledAttribute();
     }
 
@@ -567,6 +583,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
 
         programEngagementField.options = engagements;
+        programEngagementField.value = this._comboboxValues[
+            this.fields.programEngagementField
+        ];
     }
 
     setServiceOptions() {
@@ -592,6 +611,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         serviceField.options = services;
+        serviceField.value = this._comboboxValues[this.fields.service];
 
         if (!services.length) {
             this.isError = true;

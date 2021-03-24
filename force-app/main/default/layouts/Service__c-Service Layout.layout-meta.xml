@@ -42,7 +42,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>BulkServiceDeliveryFieldSet__c</field>
+                <field>ServiceDeliveryFieldSet__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

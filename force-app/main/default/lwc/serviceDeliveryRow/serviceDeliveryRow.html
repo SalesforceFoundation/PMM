@@ -9,7 +9,7 @@
 
 <template>
     <div class="style-target"></div>
-    <div class="slds-p-top_small hideHelpText">
+    <div class="slds-var-p-top_small hideHelpText">
         <lightning-record-edit-form
             onload={handleLoad}
             onsuccess={handleSuccess}
@@ -23,7 +23,7 @@
                     <lightning-layout multiple-rows="true">
                         <lightning-layout-item size="12">
                             <lightning-layout multiple-rows="true">
-                                <template for:each={localFieldSet} for:item="field">
+                                <template for:each={fieldSet} for:item="field">
                                     <lightning-layout-item
                                         key={field.apiName}
                                         padding="horizontal-small"
@@ -31,10 +31,10 @@
                                         small-device-size="6"
                                         medium-device-size="4"
                                         large-device-size={field.size}
-                                        class="slds-m-bottom_medium"
+                                        class="slds-var-m-bottom_medium"
                                     >
                                         <div class="sd-input" data-field={field.apiName}>
-                                            <template if:true={field.showFilteredInput}>
+                                            <template if:true={field.isCombobox}>
                                                 <div
                                                     class="slds-form-element__label slds-truncate"
                                                     title={field.label}
@@ -53,7 +53,7 @@
                                                 >
                                                 </lightning-combobox>
                                             </template>
-                                            <template if:false={field.showFilteredInput}>
+                                            <template if:false={field.isCombobox}>
                                                 <template if:true={field.isQuantityField}>
                                                     <div
                                                         class="slds-form-element__label slds-truncate"
@@ -111,7 +111,7 @@
                                         padding="around-small"
                                     >
                                         <div class="slds-text-color_error" key={error}>
-                                            {rowError}
+                                            {errorMessage}
                                         </div>
                                     </lightning-layout-item>
                                 </template>
@@ -121,10 +121,10 @@
                 </lightning-layout-item>
                 <lightning-layout-item size="2" class="slds-var-p-left_small">
                     <lightning-layout>
-                        <lightning-layout-item size="8" class="slds-p-top_xx-small">
+                        <lightning-layout-item size="8" class="slds-var-p-top_xx-small">
                             <template if:true={isSaving}>
                                 <div
-                                    class="slds-is-relative slds-p-top_large slds-text-align_right slds-m-left_x-large"
+                                    class="slds-is-relative slds-var-p-top_large slds-text-align_right slds-var-m-left_x-large"
                                     role="alert"
                                 >
                                     <lightning-spinner
@@ -142,7 +142,7 @@
                                     variant="success"
                                     title={labels.saved}
                                 ></lightning-icon>
-                                <span class="slds-p-left_small">{labels.saved}</span>
+                                <span class="slds-var-p-left_small">{labels.saved}</span>
                             </template>
                             <template if:true={showModifiedIcon} role="alert">
                                 <lightning-icon
@@ -153,7 +153,7 @@
                                     variant="warning"
                                     title={labels.edited}
                                 ></lightning-icon>
-                                <span class="slds-p-left_small">{labels.edited}</span>
+                                <span class="slds-var-p-left_small">{labels.edited}</span>
                             </template>
                             <template if:true={isError} role="alert">
                                 <lightning-icon
@@ -162,9 +162,9 @@
                                     alternative-text={labels.error}
                                     size="x-small"
                                     variant="error"
-                                    title={rowError}
+                                    title={errorMessage}
                                 ></lightning-icon>
-                                <span class="slds-p-left_small">{labels.error}</span>
+                                <span class="slds-var-p-left_small">{labels.error}</span>
                             </template>
                         </lightning-layout-item>
                         <lightning-layout-item class="slds-text-align_right" size="4">
@@ -182,7 +182,7 @@
             </lightning-layout>
 
             <lightning-button
-                class="slds-p-left_medium sd-submit slds-hide"
+                class="slds-var-p-left_medium sd-submit slds-hide"
                 variant="neutral"
                 type="submit"
                 name="save"
@@ -202,15 +202,15 @@
                 label={labels.deleteLabel}
                 variant="brand"
                 onclick={handleDelete}
-                class="slds-p-left_medium"
+                class="slds-var-p-left_medium"
             ></lightning-button>
         </div>
     </c-modal>
-    <template if:true={selectedContact}>
+    <template if:true={contactId}>
         <c-new-program-engagement
-            contact-id={selectedContact}
-            onsave={onSave}
-            oncancel={onCancel}
+            contact-id={contactId}
+            onsave={handleSaveNewPE}
+            oncancel={handleCancelNewPE}
         ></c-new-program-engagement>
     </template>
 </template>

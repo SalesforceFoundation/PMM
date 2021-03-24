@@ -166,4 +166,59 @@ public with sharing class FieldSetController_TEST {
             new List<Object>{ objectName, fieldSetName }
         );
     }
+
+    @IsTest
+    private static void whenGetFieldSetByNameSuccessfully() {
+        String objectName = 'ServiceDelivery__c';
+
+        Test.startTest();
+
+        FieldSetController.fieldSetService = (FieldSetService) fieldSetServiceStub.createMock();
+        FieldSetController.getFieldSetByName(objectName);
+
+        Test.stopTest();
+
+        fieldSetServiceStub.assertCalledWith(
+            'getFieldSetByName',
+            String.class,
+            objectName
+        );
+    }
+
+    @IsTest
+    private static void whenGetFieldSetByNameThrowsException() {
+        String objectName = 'ServiceDelivery__c';
+
+        fieldSetServiceStub.withThrowException('getFieldSetByName', String.class);
+
+        Test.startTest();
+
+        FieldSetController.fieldSetService = (FieldSetService) fieldSetServiceStub.createMock();
+
+        Exception actualException;
+
+        try {
+            FieldSetController.getFieldSetByName(objectName);
+        } catch (Exception e) {
+            actualException = e;
+        }
+
+        Test.stopTest();
+
+        System.assertEquals(
+            true,
+            actualException instanceof AuraHandledException,
+            actualException
+        );
+        System.assertEquals(
+            fieldSetServiceStub.testExceptionMessage,
+            actualException.getMessage()
+        );
+
+        fieldSetServiceStub.assertCalledWith(
+            'getFieldSetByName',
+            String.class,
+            objectName
+        );
+    }
 }

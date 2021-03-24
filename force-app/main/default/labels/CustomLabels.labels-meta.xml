@@ -485,6 +485,14 @@
         <value>No records found</value>
     </labels>
     <labels>
+        <fullName>NoFieldSetFound</fullName>
+        <categories>Field Set Service</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No field set found</shortDescription>
+        <value>{0} field set on the {1} object doesn't exist. Verify the field set name and try again.</value>
+    </labels>
+    <labels>
         <fullName>No_Records_Selected</fullName>
         <language>en_US</language>
         <protected>true</protected>

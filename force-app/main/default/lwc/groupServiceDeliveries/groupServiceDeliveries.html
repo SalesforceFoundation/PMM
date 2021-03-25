@@ -35,7 +35,10 @@
         </div>
         <div class="slds-var-p-horizontal_medium" if:true={isStep2}>
             <div class="slds-box">
-                <c-participant-selector service-id={serviceId}></c-participant-selector>
+                <c-participant-selector
+                    service-id={serviceId}
+                    onselect={handleParticipantSelected}
+                ></c-participant-selector>
             </div>
         </div>
 
@@ -82,15 +85,27 @@
                             flexibility="no-flex"
                             alignment-bump="left"
                         >
-                            <lightning-button
-                                name="next"
-                                variant={currentStep.next.variant}
-                                label={currentStep.next.label}
-                                title={currentStep.next.label}
-                                onclick={handleNext}
-                                class="slds-var-p-right_small"
-                                if:true={currentStep.next}
-                            ></lightning-button>
+                            <template if:false={isNextDisabled}>
+                                <lightning-button
+                                    name="next"
+                                    variant={currentStep.next.variant}
+                                    label={currentStep.next.label}
+                                    title={nextTitle}
+                                    onclick={handleNext}
+                                    class="slds-var-p-right_small"
+                                    style="pointer-events: auto;"
+                                    if:true={currentStep.next}
+                                ></lightning-button>
+                            </template>
+                            <template if:true={isNextDisabled}>
+                                <button
+                                    class="slds-button slds-button_brand"
+                                    disabled
+                                    title={nextTitle}
+                                >
+                                    {currentStep.next.label}
+                                </button>
+                            </template>
                         </lightning-layout-item>
                     </lightning-layout>
                 </lightning-layout-item>

@@ -97,6 +97,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     @api
     resetUI() {
+        this._defaultValues = {};
         this.serviceDeliveries = [];
         this._nextIndex = 0;
         this.addDelivery();
@@ -127,7 +128,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     addDelivery() {
-        let serviceDelivery = { index: this._nextIndex };
+        let serviceDelivery = { index: this._nextIndex, isDirty: false };
         if (this.applyDefaults) {
             Object.assign(serviceDelivery, this.defaultValues);
         }
@@ -185,12 +186,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.defaultValues = event.detail.serviceDelivery;
         this.applyDefaults = true;
         this.serviceDeliveries = [];
-        // Service__c.ServiceDeliveryFieldSet__c is stored in the object,
-        // get it and delete it since it is not a service delivery field
         this.serviceDeliveryFieldSets.currentFieldSetName = this.defaultValues[
             this.fields.fieldSet.fieldApiName
         ];
-        delete this.defaultValues[this.fields.fieldSet.fieldApiName];
 
         let index;
         for (index = 0; index < selectedParticipants.length; index++) {

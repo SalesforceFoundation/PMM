@@ -14,6 +14,7 @@ import singleButton from "@salesforce/label/c.BSDT_Single_Option_Button";
 import selectService from "@salesforce/label/c.BSDT_Select_Service";
 import selectContacts from "@salesforce/label/c.BSDT_Select_Contacts";
 import review from "@salesforce/label/c.BSDT_Review";
+import noContactWarning from "@salesforce/label/c.BSDT_Warning_No_Contacts";
 
 export default class GroupServiceDeliveries extends LightningElement {
     _steps;
@@ -21,6 +22,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     isOptionSelection = true;
     serviceDelivery;
     selectedParticipants;
+    hasSelectedParticipants = false;
 
     labels = {
         groupTitle,
@@ -32,6 +34,7 @@ export default class GroupServiceDeliveries extends LightningElement {
         selectService,
         selectContacts,
         review,
+        noContactWarning,
     };
 
     get steps() {
@@ -44,6 +47,16 @@ export default class GroupServiceDeliveries extends LightningElement {
 
     get isStep2() {
         return this.currentStep && this.currentStep.value === 1;
+    }
+
+    get isNextDisabled() {
+        return this.isStep2 && !this.hasSelectedParticipants;
+    }
+
+    get nextTitle() {
+        return this.isNextDisabled
+            ? this.labels.noContactWarning
+            : this.currentStep.next.label;
     }
 
     get serviceId() {
@@ -86,6 +99,10 @@ export default class GroupServiceDeliveries extends LightningElement {
         this.currentStep = this._steps.currentStep;
     }
 
+    handleParticipantSelected(event) {
+        this.hasSelectedParticipants = event.detail.totalSelected > 0;
+    }
+
     createSteps() {
         this._steps = new ProgressSteps();
         this._steps
@@ -99,7 +116,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     }
 
     getServiceDelivery() {
-        let serviceDelivery = this.template.querySelector("c-group-service-delivery");
+        let serviceDelivery = this.template.querySelector("c-service-delivery-defaults");
 
         if (!serviceDelivery) {
             return;

@@ -6,15 +6,28 @@
             </lightning-layout-item>
             <lightning-layout-item size="6">
                 <lightning-input-field
-                    field-name={serviceField}
+                    field-name={fields.serviceField}
                     value={serviceId}
                     onchange={handleServiceId}
                 ></lightning-input-field>
             </lightning-layout-item>
             <template for:each={fieldSet} for:item="field">
-                <lightning-layout-item key={field.apiName} size="6">
+                <lightning-layout-item
+                    key={field.apiName}
+                    class="slds-form-element slds-form-element_stacked"
+                    size="6"
+                >
+                    <label
+                        for={field.apiName}
+                        class="slds-form-element__label slds-no-flex"
+                    >
+                        {field.label}
+                    </label>
                     <lightning-input-field
+                        id={field.apiName}
+                        class="hideHelpText"
                         field-name={field.apiName}
+                        variant="label-hidden"
                         value={field.value}
                         required={field.isRequired}
                     ></lightning-input-field>

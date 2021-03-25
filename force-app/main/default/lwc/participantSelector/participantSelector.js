@@ -311,6 +311,7 @@ export default class ParticipantSelector extends LightningElement {
         this.selectedParticipants = [...this.selectedParticipants];
         this.applyFilters();
         this.sortData(this.selectedParticipants);
+        this.dispatchSelectEvent();
     }
 
     handleDeselectParticipant(event) {
@@ -330,6 +331,7 @@ export default class ParticipantSelector extends LightningElement {
 
             //if filters exist apply the filters
             this.applyFilters();
+            this.dispatchSelectEvent();
         }
     }
 
@@ -353,5 +355,15 @@ export default class ParticipantSelector extends LightningElement {
 
         this.noRecordsFound =
             this.filteredEngagements && this.filteredEngagements.length === 0;
+    }
+
+    dispatchSelectEvent() {
+        this.dispatchEvent(
+            new CustomEvent("select", {
+                detail: {
+                    totalSelected: this.selectedParticipants.length,
+                },
+            })
+        );
     }
 }

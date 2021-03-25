@@ -1,10 +1,12 @@
-import { api, LightningElement, wire } from "lwc";
+import { api, LightningElement, track, wire } from "lwc";
 import { getRecord } from "lightning/uiRecordApi";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
+import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
+import SERVICE_UNIT_OF_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
 import SERVICE_DELIVERY_FIELD_SET_FIELD from "@salesforce/schema/Service__c.ServiceDeliveryFieldSet__c";
 
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
@@ -14,32 +16,60 @@ import selectService from "@salesforce/label/c.BSDT_Select_Service";
 const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 const ERROR_MESSAGE = "Error on Page"; // Not displayed on screen, does not require a label.
 
-export default class GroupServiceDelivery extends LightningElement {
-    _serviceDelivery;
+export default class ServiceDeliveryDefaults extends LightningElement {
+    @track fieldSet;
+
+    serviceId;
     objectApiName = SERVICE_DELIVERY_OBJECT.objectApiName;
     fieldSetName = DEFAULT_FIELD_SET;
-    serviceId;
-    fieldSet;
 
-    serviceField = SERVICE_FIELD.fieldApiName;
-    fieldSetField = SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName;
+    fields = {
+        serviceField: SERVICE_FIELD.fieldApiName,
+        fieldSetField: SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName,
+        quantityField: QUANTITY_FIELD.fieldApiName,
+        serviceUnitOfMeasurementField: SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName,
+    };
+
     fieldsToExclude = [
         CONTACT_FIELD.fieldApiName,
         PROGRAM_ENGAGEMENT_FIELD.fieldApiName,
-        this.serviceField,
+        SERVICE_FIELD.fieldApiName,
     ];
     labels = { selectService };
+    _serviceDelivery;
 
     @wire(getRecord, {
         recordId: "$serviceId",
-        fields: [SERVICE_DELIVERY_FIELD_SET_FIELD],
+        fields: [SERVICE_DELIVERY_FIELD_SET_FIELD, SERVICE_UNIT_OF_MEASUREMENT_FIELD],
     })
-    wiredSession(result) {
-        if (result.data && result.data.fields && result.data.fields[this.fieldSetField]) {
-            this.fieldSetName = result.data.fields[this.fieldSetField].value
-                ? result.data.fields[this.fieldSetField].value
-                : DEFAULT_FIELD_SET;
+    wiredService(result) {
+        if (result.data && result.data.fields) {
+            this.fieldSetName =
+                result.data.fields[this.fields.fieldSetField] &&
+                result.data.fields[this.fields.fieldSetField].value
+                    ? result.data.fields[this.fields.fieldSetField].value
+                    : DEFAULT_FIELD_SET;
+
+            this.setUnitOfMeasurement(
+                result.data.fields[this.fields.serviceUnitOfMeasurementField]
+            );
         }
+    }
+
+    setUnitOfMeasurement(field) {
+        if (!field || !field.value) {
+            return;
+        }
+
+        let quantityField = this.fieldSet.find(
+            member => member.apiName === this.fields.quantityField
+        );
+
+        if (!quantityField) {
+            return;
+        }
+
+        quantityField.label = field.value;
     }
 
     @wire(getFieldSet, {
@@ -105,7 +135,7 @@ export default class GroupServiceDelivery extends LightningElement {
 
     resetFields() {
         this.template.querySelectorAll("lightning-input-field").forEach(field => {
-            if (field.fieldName !== this.serviceField) {
+            if (field.fieldName !== this.fields.serviceField) {
                 field.reset();
             }
         });

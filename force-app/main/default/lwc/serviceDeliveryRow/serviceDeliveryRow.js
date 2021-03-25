@@ -66,6 +66,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     unitOfMeasureValue = quantity;
     saveMessage;
     errorMessage;
+    // TODO: Store these with the field set so we do not have to continue to check
     hasContactField;
     hasProgramEngagementField;
     isSaving;
@@ -547,6 +548,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         let engagements = [...this._programEngagements];
 
         engagements.push({
+            // TODO: move this into the label object like our normal pattern
             label: "\u254B   " + newProgramEngagement,
             value: newProgramEngagement,
             program: "",

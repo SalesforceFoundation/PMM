@@ -11,13 +11,13 @@ public with sharing class FieldSetService {
     @TestVisible
     private Set<String> unsupportedFieldTypes = new Set<String>{ 'TIME' };
 
-    public Map<String, Object> getFieldSetByName(String objectName) {
+    public Map<String, Object> getFieldSetsByName(String objectName) {
         SObjectType sObjectType = Schema.getGlobalDescribe().get(objectName);
 
-        return getFieldSetByName(sObjectType);
+        return getFieldSetsByName(sObjectType);
     }
 
-    private Map<String, Object> getFieldSetByName(SObjectType sObjectType) {
+    private Map<String, Object> getFieldSetsByName(SObjectType sObjectType) {
         Map<String, FieldSet> fieldSets = sObjectType.getDescribe().fieldSets.getMap();
         Map<String, Object> fieldSetByName = new Map<String, Object>();
 

@@ -168,28 +168,28 @@ public with sharing class FieldSetController_TEST {
     }
 
     @IsTest
-    private static void whenGetFieldSetByNameSuccessfully() {
+    private static void whenGetFieldSetsByNameSuccessfully() {
         String objectName = 'ServiceDelivery__c';
 
         Test.startTest();
 
         FieldSetController.fieldSetService = (FieldSetService) fieldSetServiceStub.createMock();
-        FieldSetController.getFieldSetByName(objectName);
+        FieldSetController.getFieldSetsByName(objectName);
 
         Test.stopTest();
 
         fieldSetServiceStub.assertCalledWith(
-            'getFieldSetByName',
+            'getFieldSetsByName',
             String.class,
             objectName
         );
     }
 
     @IsTest
-    private static void whenGetFieldSetByNameThrowsException() {
+    private static void whenGetFieldSetsByNameThrowsException() {
         String objectName = 'ServiceDelivery__c';
 
-        fieldSetServiceStub.withThrowException('getFieldSetByName', String.class);
+        fieldSetServiceStub.withThrowException('getFieldSetsByName', String.class);
 
         Test.startTest();
 
@@ -198,7 +198,7 @@ public with sharing class FieldSetController_TEST {
         Exception actualException;
 
         try {
-            FieldSetController.getFieldSetByName(objectName);
+            FieldSetController.getFieldSetsByName(objectName);
         } catch (Exception e) {
             actualException = e;
         }
@@ -216,7 +216,7 @@ public with sharing class FieldSetController_TEST {
         );
 
         fieldSetServiceStub.assertCalledWith(
-            'getFieldSetByName',
+            'getFieldSetsByName',
             String.class,
             objectName
         );

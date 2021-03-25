@@ -29,6 +29,7 @@ import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngageme
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
+import SERVICE_DELIVERY_FIELD_SET_FIELD from "@salesforce/schema/Service__c.ServiceDeliveryFieldSet__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
@@ -67,6 +68,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         programEngagement: PROGRAM_ENGAGEMENT_FIELD,
         programEngagementContact: PROGRAM_ENGAGEMENT_CONTACT_FIELD,
         service: SERVICE_FIELD,
+        fieldSet: SERVICE_DELIVERY_FIELD_SET_FIELD,
     };
     _nextIndex = 1;
     _defaultValues = {};
@@ -183,6 +185,12 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.defaultValues = event.detail.serviceDelivery;
         this.applyDefaults = true;
         this.serviceDeliveries = [];
+        // Service__c.ServiceDeliveryFieldSet__c is stored in the object,
+        // get it and delete it since it is not a service delivery field
+        this.serviceDeliveryFieldSets.currentFieldSetName = this.defaultValues[
+            this.fields.fieldSet.fieldApiName
+        ];
+        delete this.defaultValues[this.fields.fieldSet.fieldApiName];
 
         let index;
         for (index = 0; index < selectedParticipants.length; index++) {

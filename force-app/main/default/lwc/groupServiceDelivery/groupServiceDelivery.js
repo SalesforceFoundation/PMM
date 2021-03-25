@@ -67,6 +67,8 @@ export default class GroupServiceDelivery extends LightningElement {
             throw new Error(ERROR_MESSAGE);
         }
 
+        fields[this.fieldSetField] = this.fieldSetName;
+
         return fields;
     }
 

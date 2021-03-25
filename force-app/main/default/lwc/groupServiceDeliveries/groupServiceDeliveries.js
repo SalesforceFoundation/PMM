@@ -72,7 +72,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     }
 
     handleOption2() {
-        this.dispatchEvent(new CustomEvent("hide"));
+        this.fireFinishEvent();
     }
 
     handleNext() {
@@ -86,12 +86,23 @@ export default class GroupServiceDeliveries extends LightningElement {
 
         if (this.isStep2) {
             this.getSelectedParticipants();
-            this.dispatchEvent(new CustomEvent("hide"));
+            this.fireFinishEvent();
             return;
         }
 
         this._steps.next();
         this.currentStep = this._steps.currentStep;
+    }
+
+    fireFinishEvent() {
+        this.dispatchEvent(
+            new CustomEvent("finish", {
+                detail: {
+                    selectedParticipants: this.selectedParticipants,
+                    serviceDelivery: this.serviceDelivery,
+                },
+            })
+        );
     }
 
     handleBack() {

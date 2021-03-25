@@ -22,13 +22,7 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     serviceId;
     objectApiName = SERVICE_DELIVERY_OBJECT.objectApiName;
     fieldSetName = DEFAULT_FIELD_SET;
-
-    fields = {
-        serviceField: SERVICE_FIELD.fieldApiName,
-        fieldSetField: SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName,
-        quantityField: QUANTITY_FIELD.fieldApiName,
-        serviceUnitOfMeasurementField: SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName,
-    };
+    serviceFieldName = SERVICE_FIELD.fieldApiName;
 
     fieldsToExclude = [
         CONTACT_FIELD.fieldApiName,
@@ -45,13 +39,14 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     wiredService(result) {
         if (result.data && result.data.fields) {
             this.fieldSetName =
-                result.data.fields[this.fields.fieldSetField] &&
-                result.data.fields[this.fields.fieldSetField].value
-                    ? result.data.fields[this.fields.fieldSetField].value
+                result.data.fields[SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName] &&
+                result.data.fields[SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName].value
+                    ? result.data.fields[SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName]
+                          .value
                     : DEFAULT_FIELD_SET;
 
             this.setUnitOfMeasurement(
-                result.data.fields[this.fields.serviceUnitOfMeasurementField]
+                result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName]
             );
         }
     }
@@ -62,7 +57,7 @@ export default class ServiceDeliveryDefaults extends LightningElement {
         }
 
         let quantityField = this.fieldSet.find(
-            member => member.apiName === this.fields.quantityField
+            member => member.apiName === QUANTITY_FIELD.fieldApiName
         );
 
         if (!quantityField) {
@@ -96,6 +91,8 @@ export default class ServiceDeliveryDefaults extends LightningElement {
         if (!valid) {
             throw new Error(ERROR_MESSAGE);
         }
+
+        fields[SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName] = this.fieldSetName;
 
         return fields;
     }
@@ -135,7 +132,7 @@ export default class ServiceDeliveryDefaults extends LightningElement {
 
     resetFields() {
         this.template.querySelectorAll("lightning-input-field").forEach(field => {
-            if (field.fieldName !== this.fields.serviceField) {
+            if (field.fieldName !== SERVICE_FIELD.fieldApiName) {
                 field.reset();
             }
         });

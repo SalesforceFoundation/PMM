@@ -8,6 +8,7 @@ import selectEngagement from "@salesforce/label/c.Select_Program_Engagement";
 
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 const LONG_DATA_TYPES = ["TEXTAREA"];
+const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 
 export class ServiceDeliveryFieldSets {
     fieldSets = {};
@@ -24,7 +25,9 @@ export class ServiceDeliveryFieldSets {
     }
 
     getCurrentFieldSet() {
-        return this.fieldSets[this.currentFieldSetName];
+        return this.fieldSets[this.currentFieldSetName]
+            ? this.fieldSets[this.currentFieldSetName]
+            : this.fieldSets[DEFAULT_FIELD_SET];
     }
 
     isFieldInCurrentFieldSet(fieldApiName) {

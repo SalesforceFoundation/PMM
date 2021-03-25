@@ -11,7 +11,7 @@
     <div class="bsdt">
         <div class="wizard" if:true={showWizard}>
             <c-group-service-deliveries
-                onhide={handleHideWizard}
+                onfinish={handleFinishWizard}
             ></c-group-service-deliveries>
         </div>
 
@@ -24,7 +24,7 @@
                             class="slds-box small-box slds-var-m-bottom_medium bsdt-shadow"
                         >
                             <c-service-delivery-row
-                                default-values={defaultValues}
+                                default-values={delivery}
                                 service-delivery-field-sets={serviceDeliveryFieldSets}
                                 index={delivery.index}
                                 onsuccess={handleRowSuccess}

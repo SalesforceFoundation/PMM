@@ -450,6 +450,9 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     setDefaults() {
+        console.log(JSON.stringify(this.defaultValues));
+        console.log(JSON.stringify(this.fieldSet));
+        console.log(JSON.stringify(this._defaultsSet));
         if (
             this.defaultValues &&
             Object.keys(this.defaultValues).length > 0 &&
@@ -461,17 +464,21 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.isDirty = this.defaultValues.isDirty ? true : false;
 
             this.fieldSet.forEach(member => {
+                console.log(JSON.stringify(member));
                 for (let [fieldName, fieldValue] of Object.entries(this.defaultValues)) {
                     if (member.apiName === fieldName && fieldValue != null) {
                         member.value = this.defaultValues[fieldName];
 
                         if (member.apiName === CONTACT_FIELD.fieldApiName) {
+                            console.log("found contact field");
                             this.contactId = fieldValue;
                         } else if (
                             member.apiName === PROGRAMENGAGEMENT_FIELD.fieldApiName
                         ) {
+                            console.log("found pe field");
                             this.programEngagementId = fieldValue;
                         } else if (member.apiName === SERVICE_FIELD.fieldApiName) {
+                            console.log("found service field");
                             this.serviceId = fieldValue;
                         }
                     }

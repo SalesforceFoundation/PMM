@@ -107,6 +107,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         return this.hideFooter; // reusing old api property name
     }
 
+    get showWizard() {
+        return !this.isModal && !this.hideWizard;
+    }
+
     addDelivery() {
         this.serviceDeliveries.push({ index: this._deliveryIndex });
         this._deliveryIndex++;

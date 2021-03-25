@@ -152,21 +152,18 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         }
     }
 
-    handleHideWizard() {
-        this.setServiceDeliveries();
-        this.hideWizard = true;
-    }
-
-    setServiceDeliveries() {
-        let wizard = this.template.querySelector("c-group-service-deliveries");
-        let selectedParticipants = wizard.selectedParticipants;
-        let defaultServiceDelivery = wizard.serviceDelivery;
+    handleFinishWizard(event) {
+        let selectedParticipants = event.detail.selectedParticipants;
+        let defaultServiceDelivery = event.detail.serviceDelivery;
         this.serviceDeliveries = [];
         selectedParticipants.forEach(programEngagement => {
             let newServiceDelivery = Object.assign({}, defaultServiceDelivery);
             newServiceDelivery[this.fields.contact.fieldApiName] =
                 programEngagement[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName];
+            newServiceDelivery[this.fields.programEngagement.fieldApiName] =
+                programEngagement.Id;
             this.serviceDeliveries.push(newServiceDelivery);
         });
+        this.hideWizard = true;
     }
 }

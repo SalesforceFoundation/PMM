@@ -135,6 +135,7 @@ export default class ServiceDeliveryRow extends LightningElement {
                 this._programEngagements = result[ENGAGEMENTS];
                 this._services = result[SERVICES];
                 this.setProgramEngagementOptions();
+                this.setServiceOptions();
             })
             .catch(err => {
                 this.errorMessage = handleError(err, false);
@@ -486,12 +487,17 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.fieldSet.length &&
             !this._defaultsSet
         ) {
+            this.isDirty = true;
             this._defaultsSet = true;
 
             this.fieldSet.forEach(member => {
                 for (let [fieldName, fieldValue] of Object.entries(this._defaultValues)) {
                     if (member.apiName === fieldName && fieldValue != null) {
                         member.value = this._defaultValues[fieldName];
+                        if (member.isCombobox) {
+                            this._comboboxValues[fieldName] = fieldValue;
+                        }
+
                         if (member.apiName === this.fields.contact) {
                             this.contactId = fieldValue;
                         } else if (member.apiName === this.fields.programEngagement) {
@@ -583,9 +589,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         });
 
         programEngagementField.options = engagements;
-        programEngagementField.value = this._comboboxValues[
-            this.fields.programEngagementField
-        ];
+        programEngagementField.value = this.programEngagementId;
     }
 
     setServiceOptions() {
@@ -611,7 +615,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         serviceField.options = services;
-        serviceField.value = this._comboboxValues[this.fields.service];
+        serviceField.value = this.serviceId;
 
         if (!services.length) {
             this.isError = true;

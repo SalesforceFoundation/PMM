@@ -1,4 +1,4 @@
-import { api, LightningElement } from "lwc";
+import { LightningElement } from "lwc";
 
 import { ProgressSteps } from "c/progressSteps";
 import { NavigationItems } from "c/navigationItems";
@@ -20,7 +20,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     currentStep = {};
     isOptionSelection = true;
     serviceDelivery;
-    @api selectedParticipants;
+    selectedParticipants;
 
     labels = {
         groupTitle,
@@ -59,7 +59,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     }
 
     handleOption2() {
-        this.dispatchEvent(new CustomEvent("hide"));
+        this.fireFinishEvent();
     }
 
     handleNext() {
@@ -73,12 +73,23 @@ export default class GroupServiceDeliveries extends LightningElement {
 
         if (this.isStep2) {
             this.getSelectedParticipants();
-            this.dispatchEvent(new CustomEvent("hide"));
+            this.fireFinishEvent();
             return;
         }
 
         this._steps.next();
         this.currentStep = this._steps.currentStep;
+    }
+
+    fireFinishEvent() {
+        this.dispatchEvent(
+            new CustomEvent("finish", {
+                detail: {
+                    selectedParticipants: this.selectedParticipants,
+                    serviceDelivery: this.serviceDelivery,
+                },
+            })
+        );
     }
 
     handleBack() {

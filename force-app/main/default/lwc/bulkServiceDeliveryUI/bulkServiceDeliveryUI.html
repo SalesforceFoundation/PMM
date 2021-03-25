@@ -17,7 +17,7 @@
 
         <lightning-card if:false={showWizard}>
             <div class="slds-var-p-horizontal_medium">
-                <template if:true={serviceDeliveries}>
+                <template if:true={serviceDeliveryFieldSets}>
                     <template for:each={serviceDeliveries} for:item="delivery">
                         <div
                             key={delivery.index}

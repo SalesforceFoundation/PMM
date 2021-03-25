@@ -186,9 +186,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.defaultValues = event.detail.serviceDelivery;
         this.applyDefaults = true;
         this.serviceDeliveries = [];
-        this.serviceDeliveryFieldSets.currentFieldSetName = this.defaultValues[
-            this.fields.fieldSet.fieldApiName
-        ];
 
         let index;
         for (index = 0; index < selectedParticipants.length; index++) {

@@ -49,7 +49,8 @@ const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 export default class ServiceDeliveryRow extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
-    @api serviceDelivery;
+    @api defaultValues;
+    @api serviceDeliveryFieldSets;
     @api index;
     @api rowCount;
     @api isDirty = false;
@@ -92,7 +93,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     _defaultsSet = false;
     _services;
     _programEngagements;
-    _fieldSets;
 
     // switched to optional fields here, getRecord will error
     // when the user does not have access
@@ -106,12 +106,11 @@ export default class ServiceDeliveryRow extends LightningElement {
             let hadProgramEngagementField = this.hasProgramEngagementField;
 
             this.setUnitOfMeasurement(result.data.fields);
-            let isChanged = this.setCurrentFieldSetName(result.data.fields);
-            if (!isChanged) {
-                return;
-            }
-
-            this.setCurrentFieldSet();
+            this.defaultValues = { ...this.defaultValues };
+            let fieldSetName = result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName]
+                ? result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
+                : DEFAULT_FIELD_SET;
+            this.setCurrentFieldSet(fieldSetName);
             this.resetFields(hadContactField, hadProgramEngagementField);
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
@@ -161,23 +160,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
-    @api
-    get serviceDeliveryFieldSets() {
-        return this._fieldSets;
-    }
-    set serviceDeliveryFieldSets(value) {
-        if (!value) {
-            return;
-        }
-
-        this._fieldSets = value;
-        this._fieldSets.currentFieldSetName = value.currentFieldSetName
-            ? value.currentFieldSetName
-            : DEFAULT_FIELD_SET;
-
-        this.setCurrentFieldSet();
-    }
-
     get isDeleteDisabled() {
         return this.rowCount === 1 && this.recordId == null ? true : false;
     }
@@ -188,6 +170,14 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     get showModifiedIcon() {
         return this.isSaved && this.isDirty;
+    }
+
+    connectedCallback() {
+        let fieldSetName = this.defaultValues[SERVICE_FIELD_SET_FIELD.fieldApiName]
+            ? this.defaultValues[SERVICE_FIELD_SET_FIELD.fieldApiName]
+            : this.serviceDeliveryFieldSets.currentFieldSetName;
+        this.setCurrentFieldSet(fieldSetName);
+        this.setDefaults();
     }
 
     // Called by lightning input field; when selections are filtered they
@@ -243,10 +233,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
 
         this.setDisabledAttribute();
-    }
-
-    handleLoad() {
-        this.setDefaults();
     }
 
     handleSaveError(event) {
@@ -460,23 +446,20 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     setDefaults() {
         if (
-            this.serviceDelivery &&
-            Object.keys(this.serviceDelivery).length > 0 &&
+            this.defaultValues &&
+            Object.keys(this.defaultValues).length > 0 &&
             this.fieldSet &&
             this.fieldSet.length &&
             !this._defaultsSet
         ) {
             // Default to true unless explicitly set to false by Add New Button
-            this.isDirty = this.serviceDelivery.isDirty === false ? false : true;
-
+            this.isDirty = this.defaultValues.isDirty === false ? false : true;
             this._defaultsSet = true;
 
             this.fieldSet.forEach(member => {
-                for (let [fieldName, fieldValue] of Object.entries(
-                    this.serviceDelivery
-                )) {
+                for (let [fieldName, fieldValue] of Object.entries(this.defaultValues)) {
                     if (member.apiName === fieldName && fieldValue != null) {
-                        member.value = this.serviceDelivery[fieldName];
+                        member.value = this.defaultValues[fieldName];
 
                         if (member.apiName === CONTACT_FIELD.fieldApiName) {
                             this.contactId = fieldValue;
@@ -542,34 +525,18 @@ export default class ServiceDeliveryRow extends LightningElement {
                 : this.labels.quantity;
     }
 
-    setCurrentFieldSet() {
+    setCurrentFieldSet(fieldSetName) {
+        let serviceDeliveryFieldSetName = fieldSetName ? fieldSetName : DEFAULT_FIELD_SET;
+        this.serviceDeliveryFieldSets.currentFieldSetName = serviceDeliveryFieldSetName;
         this.fieldSet = this.serviceDeliveryFieldSets.getCurrentFieldSet().map(field => ({
             ...field,
         }));
-
         this.hasContactField = this.serviceDeliveryFieldSets.hasContactField(
             this.fieldSet
         );
         this.hasProgramEngagementField = this.serviceDeliveryFieldSets.hasProgramEngagementField(
             this.fieldSet
         );
-    }
-
-    setCurrentFieldSetName(fields) {
-        let serviceDeliveryFieldSet =
-            fields[SERVICE_FIELD_SET_FIELD.fieldApiName] &&
-            fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
-                ? fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
-                : DEFAULT_FIELD_SET;
-
-        if (
-            this.serviceDeliveryFieldSets.currentFieldSetName === serviceDeliveryFieldSet
-        ) {
-            return false;
-        }
-
-        this.serviceDeliveryFieldSets.currentFieldSetName = serviceDeliveryFieldSet;
-        return true;
     }
 
     setProgramEngagementOptions() {

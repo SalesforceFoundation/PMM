@@ -111,6 +111,10 @@ export default class ServiceDeliveryRow extends LightningElement {
             let fieldSetName = result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName]
                 ? result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
                 : DEFAULT_FIELD_SET;
+            if (fieldSetName === this.serviceDeliveryFieldSets.currentFieldSetName) {
+                return;
+            }
+
             this.setCurrentFieldSet(fieldSetName);
             this.resetFields(hadContactField, hadProgramEngagementField);
         } else if (result.error) {
@@ -273,7 +277,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         if (event.detail) {
             this.programEngagementId = event.detail;
             if (this.contactId && this.programEngagementId) {
-                this.getRelatedRecordsFromContact(this.contactId);
+                this.getRelatedRecordsFromContact();
                 this.setServiceOptions();
             }
         }
@@ -490,7 +494,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             });
 
             if (this.hasContactField && this.contactId) {
-                this.getRelatedRecordsFromContact(this.contactId);
+                this.getRelatedRecordsFromContact();
             }
 
             if (

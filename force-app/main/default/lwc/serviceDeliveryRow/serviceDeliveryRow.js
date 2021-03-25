@@ -453,9 +453,8 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.fieldSet.length &&
             !this._defaultsSet
         ) {
-            // Default to true unless explicitly set to false by Add New Button
-            this.isDirty = this.defaultValues.isDirty === false ? false : true;
             this._defaultsSet = true;
+            this.isDirty = this.defaultValues.isDirty ? true : false;
 
             this.fieldSet.forEach(member => {
                 for (let [fieldName, fieldValue] of Object.entries(this.defaultValues)) {

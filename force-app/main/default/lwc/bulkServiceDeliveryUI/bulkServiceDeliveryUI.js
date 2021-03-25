@@ -193,7 +193,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
         let index;
         for (index = 0; index < selectedParticipants.length; index++) {
-            let newServiceDelivery = Object.assign({ index }, this.defaultValues);
+            let newServiceDelivery = Object.assign(
+                { index: index, isDirty: true },
+                this.defaultValues
+            );
             newServiceDelivery[this.fields.contact.fieldApiName] =
                 selectedParticipants[index][
                     this.fields.programEngagementContact.fieldApiName

@@ -78,14 +78,8 @@ export class ServiceDeliveryFieldSets {
     }
 
     setDefaultAttributes(fieldSet, field) {
-        let hasContactField = this.isFieldInFieldSet(
-            fieldSet,
-            CONTACT_FIELD.fieldApiName
-        );
-        let hasProgramEngagementField = this.isFieldInFieldSet(
-            fieldSet,
-            PROGRAM_ENGAGEMENT_FIELD.fieldApiName
-        );
+        let hasContactField = this.hasContactField(fieldSet);
+        let hasProgramEngagementField = this.hasProgramEngagementField(fieldSet);
 
         field.disabled = true;
         field.isQuantityField = false;

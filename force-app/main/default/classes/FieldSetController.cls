@@ -42,9 +42,9 @@ public with sharing class FieldSetController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Map<String, Object> getFieldSetByName(String objectName) {
+    public static Map<String, Object> getFieldSetsByName(String objectName) {
         try {
-            return fieldSetService.getFieldSetByName(objectName);
+            return fieldSetService.getFieldSetsByName(objectName);
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }

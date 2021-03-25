@@ -243,7 +243,7 @@ public with sharing class FieldSetService_TEST {
             false
         );
 
-        Map<String, Object> fieldSetByName = fieldSetService.getFieldSetByName(
+        Map<String, Object> fieldSetByName = fieldSetService.getFieldSetsByName(
             String.valueOf(ServiceDelivery__c.SObjectType)
         );
 

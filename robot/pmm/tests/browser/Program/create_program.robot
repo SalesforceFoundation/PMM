@@ -45,11 +45,19 @@ Create a Program via UI
     ...                                     Program Issue Area=Education
     Click Dialog button                            Save
     Wait Until Modal Is Closed  
-    verify details                         Program Name    contains    ${program_name}
-    verify page contains related list      Services
-    verify page contains related list      Program Engagements
-    verify page contains related list      Program Cohorts
-    verify page contains related list      Files
+    Verify Details                         Program Name    contains    ${program_name}
+    Verify Page Contains Related List      Services
+    Verify Page Contains Related List      Program Engagements
+    Verify Page Contains Related List      Program Cohorts
+    Verify Page Contains Related List      Files
+
+Verify Programs listview
+    [Documentation]                        This test opens the programs listview and verifies that it contains 
+    ...                                    the program name and short summary fields
+    [tags]                                 W-9056626    perm:admin   perm:manage   perm:deliver   perm:view   feature:Program
+    Go To Page                             Listing                               ${ns}Program__c
+    Page Should Contain                    Program Name
+    Page Should Contain                    Short Summary
 
 Date validation on new program dialog
     [Documentation]                        This test opens the new program dialog and enters a end date earlier than start date
@@ -57,10 +65,10 @@ Date validation on new program dialog
     [tags]                                 W-041962    perm:admin   perm:manage    feature:Program
     Go To Page                             Listing                               ${ns}Program__c
     Click Object Button                    New
-    verify current page title              New Program
-    Populate modal Form                    Program Name=${program_name}
+    Verify Current Page Title              New Program
+    Populate Modal Form                    Program Name=${program_name}
     Populate Lightning Fields              Status=Active
     ...                                    Start Date=25
     ...                                    End Date=10
     Click Dialog button                     Save
-    verify modal error                     Start Date must be before End Date
+    Verify Modal Error                     Start Date must be before End Date

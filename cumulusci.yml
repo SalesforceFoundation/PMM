@@ -192,14 +192,14 @@ flows:
     config_unmanaged:
         steps:
             3:
-                flow: load_data
+                flow: None
             4:
                 flow: create_users_and_assign_permission_sets
 
     config_managed:
         steps:
             3:
-                flow: load_data
+                flow: None
             4:
                 task: deploy_customer_profiles
             5:

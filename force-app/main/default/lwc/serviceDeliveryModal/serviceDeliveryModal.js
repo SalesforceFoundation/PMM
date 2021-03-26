@@ -17,7 +17,11 @@ export default class ServiceDeliveryModal extends LightningElement {
 
     @api hideFooter; // no longer used; can't remove because public
 
-    @track defaultValues;
+    @track defaultValues = {
+        Contact__c: "0033F00000WUnKOQA1",
+        DeliveryDate__c: "2019-09-05",
+        ProgramEngagement__c: "a013F000007QQ4xQAG",
+    };
 
     labels = {
         serviceDeliveries,

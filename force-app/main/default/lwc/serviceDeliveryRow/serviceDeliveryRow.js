@@ -182,7 +182,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             ? this.defaultValues[SERVICE_FIELD_SET_FIELD.fieldApiName]
             : this.serviceDeliveryFieldSets.currentFieldSetName;
         this.setCurrentFieldSet(fieldSetName);
-        this.setDefaults();
+        this.setDefaults(); // from caseman, this is getting called on client notes load, not on button click
     }
 
     // Called by lightning input field; when selections are filtered they
@@ -453,6 +453,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         console.log(JSON.stringify(this.defaultValues));
         console.log(JSON.stringify(this.fieldSet));
         console.log(JSON.stringify(this._defaultsSet));
+        console.log(JSON.stringify(CONTACT_FIELD));
         if (
             this.defaultValues &&
             Object.keys(this.defaultValues).length > 0 &&

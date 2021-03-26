@@ -13,6 +13,7 @@
 
 .bsdt .slds-card__footer {
     background-color: rgb(240, 240, 240);
+    height: 75px;
 }
 
 .bsdt .sd-input .slds-form-element__help {

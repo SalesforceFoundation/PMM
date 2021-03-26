@@ -24,12 +24,16 @@
         </template>
 
         <template if:true={hasPermissions}>
-            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <div
+                class="slds-modal__content slds-var-p-around_medium"
+                id="modal-content-id-1"
+            >
                 <c-participant-selector
                     service-id={serviceId}
                     schedule-id={recordId}
                     existing-contact-ids={existingParticipants.data}
-                    service-schedule-model={serviceScheduleModel}
+                    service-schedule={serviceScheduleModel.serviceSchedule}
+                    selected-rows={serviceScheduleModel.selectedParticipants}
                 ></c-participant-selector>
                 <template if:true={errorMessage}>
                     <c-scoped-notification
@@ -53,7 +57,7 @@
             title={labels.save}
             variant="brand"
             onclick={handleSave}
-            class="slds-m-left_x-small"
+            class="slds-var-m-left_x-small"
             disabled={isSaveDisabled}
         >
         </lightning-button>

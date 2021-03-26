@@ -9,23 +9,27 @@
 
 <template>
     <div class="bsdt">
-        <lightning-card>
-            <div class="slds-p-horizontal_medium">
-                <template if:true={serviceDeliveries}>
+        <div class="wizard" if:true={showWizard}>
+            <c-group-service-deliveries
+                onfinish={handleFinishWizard}
+            ></c-group-service-deliveries>
+        </div>
+
+        <lightning-card if:false={showWizard}>
+            <div class="slds-var-p-horizontal_medium">
+                <template if:true={serviceDeliveryFieldSets}>
                     <template for:each={serviceDeliveries} for:item="delivery">
                         <div
                             key={delivery.index}
-                            class="slds-box small-box slds-m-bottom_medium bsdt-shadow"
+                            class="slds-box small-box slds-var-m-bottom_medium bsdt-shadow"
                         >
                             <c-service-delivery-row
-                                default-values={defaultValues}
-                                field-set={fieldSet}
+                                default-values={delivery}
+                                service-delivery-field-sets={serviceDeliveryFieldSets}
                                 index={delivery.index}
                                 onsuccess={handleRowSuccess}
                                 ondelete={handleRowDelete}
                                 row-count={rowCount}
-                                has-contact-field={hasContactField}
-                                has-program-engagement-field={hasProgramEngagementField}
                             ></c-service-delivery-row>
                         </div>
                     </template>
@@ -38,7 +42,7 @@
                     icon-name="utility:add"
                     label={labels.addEntry}
                     onclick={addDelivery}
-                    class="slds-p-right_medium"
+                    class="slds-var-p-right_medium"
                     disabled={isAddEntryDisabled}
                 ></lightning-button>
                 <lightning-button

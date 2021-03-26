@@ -78,7 +78,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Title for the Bulk Service Delivery Tool Group Option</shortDescription>
-        <value>Create Service Deliveries from a Group</value>
+        <value>Create Service Deliveries for a Group</value>
     </labels>
     <labels>
         <fullName>BSDT_Group_Option_Description</fullName>

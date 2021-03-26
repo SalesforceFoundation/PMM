@@ -37,7 +37,7 @@ Setup Test Data
     Set suite variable          ${quantity}
 
 *** Test Cases ***
-Create a new service delivery on service using quick action
+Create a new service delivery on service delivery using quick action
     [Documentation]                This test loads the service delivery record, clicks on the new service delivery quick action
     ...                            and creates a new service delivery record.
     [tags]                         W-9057513      perm:admin   perm:manage    perm:deliver    feature:Service Delivery

@@ -228,4 +228,58 @@ public with sharing class FieldSetService_TEST {
             actualPicklistField.get('picklistValues')
         );
     }
+
+    @IsTest
+    private static void shouldReturnFieldSetByNameOnServiceDelivery() {
+        FieldSetService fieldSetService = new FieldSetService();
+        List<Schema.FieldSet> fieldSets = new List<Schema.FieldSet>{
+            Schema.SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries,
+            Schema.SObjectType.ServiceDelivery__c.FieldSets.Bulk_Service_Deliveries
+        };
+
+        List<Map<String, Object>> fieldsResult = fieldSetService.getFieldSetForLWC(
+            String.valueOf(ServiceDelivery__c.SObjectType),
+            fieldSets[0].getName(),
+            false
+        );
+
+        Map<String, Object> fieldSetByName = fieldSetService.getFieldSetsByName(
+            String.valueOf(ServiceDelivery__c.SObjectType)
+        );
+
+        for (Schema.FieldSet fieldSet : fieldSets) {
+            System.assert(
+                fieldSetByName.containsKey(fieldSet.getName()),
+                'Expected the map to return both field sets from Service Delivery.'
+            );
+        }
+        System.assertEquals(
+            String.valueOf(fieldsResult),
+            String.valueOf(fieldSetByName.get(fieldSets[0].getName())),
+            'Expected the field set object to be returned.'
+        );
+    }
+
+    @IsTest
+    private static void shouldThrowErrorForInvalidFieldSet() {
+        String actualException;
+        String objectName = String.valueOf(Contact.SObjectType);
+        String fieldSetName = 'FakeFieldSet';
+        String expectedException = String.format(
+            System.Label.NoFieldSetFound,
+            new List<String>{ fieldSetName, objectName }
+        );
+
+        try {
+            new FieldSetService().getFieldDescribes(objectName, fieldSetName, false);
+        } catch (Exception ex) {
+            actualException = ex.getMessage();
+        }
+
+        System.assertEquals(
+            expectedException,
+            actualException,
+            'The exception message was not as expected.'
+        );
+    }
 }

@@ -268,6 +268,7 @@ class pmm(object):
             locator = pmm_lex_locators["new_record"]["dropdown_field"].format(dropdown)
             popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
             value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
+        self.salesforce.scroll_element_into_view(locator)
         self.selenium.get_webelement(locator).click()
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="Status field dropdown did not open"

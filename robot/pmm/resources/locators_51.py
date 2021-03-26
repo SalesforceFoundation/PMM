@@ -32,7 +32,7 @@ pmm_lex_locators = {
         "quick_dropdown_popup": "//div[@class='select-options' and @role='menu']",
         "quick_dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
         "dropdown_popup": "//div[contains(@class,'slds-listbox') and @role='listbox']",
-        "dropdown_value": "//lightning-base-combobox-item[contains(@class,'slds-media')]/span/following-sibling::span[@class='slds-media__body']/span[@title='{}']",
+        "dropdown_value": "//lightning-base-combobox-item[contains(@class,'slds-media')]//span[@class='slds-media__body']/span[@title='{}']",
         "button": "//lightning-button/button[text()='{}']",
         "lookup_field": "//div[contains(@class, 'autocompleteWrapper')]//input[@title='{}']",
         "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']",
@@ -107,5 +107,8 @@ pmm_lex_locators = {
         "dropdown_value": "//c-attendance-row[{}]//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(text(),'{}')]",
         "dim_icon": "//c-attendance-row[{}]//button[contains(@class,'slds-button')]/lightning-primitive-icon",
         "details": "//c-attendance-row[{}]//*[self::div or self::lightning-output-field][contains(@class,'slds-form-element_stacked')][.//*[text()='{}']]//div[@class='slds-form-element__control']/*[self::lightning-formatted-text or self::lightning-formatted-number]",
+    },
+    "homepage": {
+        "component_link": '//article[contains(@class,"forceBaseCard")][.//span[contains(@title,"{}")]]',
     },
 }

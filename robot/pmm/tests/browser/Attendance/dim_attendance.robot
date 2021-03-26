@@ -19,7 +19,7 @@ Setup Test Data
     Set suite variable              ${ns}
     ${contact1}                     API Create Contact
     Set suite variable              ${contact1}
-    ${contact2}                     API Create Contact      FirstName=test robot contact
+    ${contact2}                     API Create Contact      FirstName=ztest robot contact
     Set suite variable              ${contact2}
     ${program} =                    API Create Program
     Set suite variable              ${program}
@@ -61,8 +61,10 @@ Validate Dim attendance icon is displayed only for newly added rows
     Populate Attendance Dropdown        1      Attendance Status    Present
     Sleep                               2s
     Click Dialog Button             Submit
+    Verify Toast Message            Saved 1 Service Delivery records.
     API Create Service Participant  ${contact2}[Id]   ${service_schedule}[Id]  ${service}[Id]
     Reload Page
+    Page Should Contain             Service Session Name
     Click Dialog Button             Update
     Dim Attendance Row              1       Is not displayed
     Dim Attendance Row              2       Is displayed

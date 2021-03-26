@@ -44,7 +44,7 @@ Setup Test Data
 Create a New Service Schedule
     [Documentation]                        Navigates to service schedule listing page, clicks 'New' on the listing page and
     ...                                    creates a new record using the wizard, validates the details on the service schedule record
-    [tags]                                 W-8294332     perm:admin   perm:manage         feature:Service Schedule
+    [tags]                                 unstable    W-8294332     perm:admin   perm:manage       feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c

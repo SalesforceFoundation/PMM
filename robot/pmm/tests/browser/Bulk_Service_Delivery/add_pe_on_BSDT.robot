@@ -41,7 +41,7 @@ Setup Test Data
 Create program engagement from BSDT
     [Documentation]                         This test adds service deliveries on bulk service delivery by creating
     ...                                     a new PE on bsdt page
-    [tags]                                  W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                                  unstable    W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To Page                              Custom                              Bulk_Service_Deliveries
     Populate Bsdt Lookup                    1           Client                  ${contact}[FirstName] ${contact}[LastName]
     Page Should Contain                     ${contact}[FirstName] ${contact}[LastName]

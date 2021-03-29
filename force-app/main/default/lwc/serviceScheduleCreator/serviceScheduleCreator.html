@@ -41,7 +41,8 @@
             <template if:true={isStep3}>
                 <c-participant-selector
                     service-id={serviceId}
-                    service-schedule-model={serviceScheduleModel}
+                    service-schedule={serviceScheduleModel.serviceSchedule}
+                    selected-rows={serviceScheduleModel.selectedParticipants}
                     onloaded={handleLoaded}
                 ></c-participant-selector>
             </template>

@@ -10,86 +10,96 @@
 import { LightningElement, api, track, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { handleError } from "c/util";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { loadStyle } from "lightning/platformResourceLoader";
+
+import { ServiceDeliveryFieldSets } from "./serviceDeliveryFieldSets";
+
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
-import done from "@salesforce/label/c.Done";
 import addEntry from "@salesforce/label/c.Add_Entry";
+import save from "@salesforce/label/c.Save";
 import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
 import success from "@salesforce/label/c.Success";
 import serviceDeliveriesAdded from "@salesforce/label/c.Service_Deliveries_Added";
-import Label_Required from "@salesforce/label/c.Required";
+import required from "@salesforce/label/c.Required";
 import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 
-import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
+import SERVICE_DELIVERY_CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
+import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNITMEASUREMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.UnitOfMeasurement__c";
 import PROGRAM_ENGAGEMENT_FIELD from "@salesforce/schema/ServiceDelivery__c.ProgramEngagement__c";
+import SERVICE_DELIVERY_FIELD_SET_FIELD from "@salesforce/schema/Service__c.ServiceDeliveryFieldSet__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
-import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
+import getFieldSets from "@salesforce/apex/FieldSetController.getFieldSetsByName";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
-
-const FIELD_SET_NAME = "Bulk_Service_Deliveries";
-const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
-const LONG_DATA_TYPES = ["TEXTAREA"];
-
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
-    @api defaultValues;
-    @api hideFooter = false; // no longer used; can't remove because public
+    @api hideFooter = false; // no longer used; can't remove because public - mar 2021: respurposed to detect modal
     @track serviceDeliveries = [{ index: 0 }];
-    @track isSaving = false;
-    @track saveMessage;
     @track fieldSet = [];
-    @track rowCount = this.serviceDeliveries.length;
-    @track errors = {};
-    @track isAddEntryDisabled = false;
-    @track isDoneDisabled = false;
-    @track hasContactField = false;
-    @track hasProgramEngagementField = false;
 
+    saveMessage;
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
+    serviceDeliveryFieldSets;
+    savedCount;
+    targetSaveCount;
+    isSaving = false;
+    hideWizard = false;
+    applyDefaults = false;
 
     labels = {
-        addEntry: addEntry,
-        addServiceDelivery: addServiceDelivery,
-        done: done,
-        saved: saved,
-        saving: saving,
-        required: Label_Required,
-        success: success,
-        serviceDeliveriesAdded: serviceDeliveriesAdded,
-        rowsWithErrors: rowsWithErrors,
+        addEntry,
+        addServiceDelivery,
+        saved,
+        saving,
+        required,
+        success,
+        serviceDeliveriesAdded,
+        rowsWithErrors,
+        save,
     };
     fields = {
-        contact: CONTACT_FIELD,
+        contact: SERVICE_DELIVERY_CONTACT_FIELD,
         unitMeasurement: UNITMEASUREMENT_FIELD,
         quantity: QUANTITY_FIELD,
         programEngagement: PROGRAM_ENGAGEMENT_FIELD,
+        programEngagementContact: PROGRAM_ENGAGEMENT_CONTACT_FIELD,
         service: SERVICE_FIELD,
+        fieldSet: SERVICE_DELIVERY_FIELD_SET_FIELD,
     };
-    _deliveryIndex = 1;
+    _nextIndex = 1;
+    _defaultValues = {};
 
-    @wire(getFieldSet, {
+    @wire(getFieldSets, {
         objectName: SERVICEDELIVERY_OBJECT.objectApiName,
-        fieldSetName: FIELD_SET_NAME,
     })
     wiredFields({ error, data }) {
         if (data) {
-            this.configureFieldSet(data.map(a => ({ ...a })));
+            this.serviceDeliveryFieldSets = new ServiceDeliveryFieldSets(data);
         } else if (error) {
             handleError(error);
         }
     }
 
     @api
+    get defaultValues() {
+        return this._defaultValues;
+    }
+
+    set defaultValues(value) {
+        let serviceDelivery = this.serviceDeliveries[0];
+        this._defaultValues = value;
+        Object.assign(serviceDelivery, this._defaultValues);
+    }
+
+    @api
     resetUI() {
-        this.showRowCountToast();
-        this.defaultValues = {};
+        this._defaultValues = {};
         this.serviceDeliveries = [];
+        this._nextIndex = 0;
         this.addDelivery();
     }
 
@@ -109,173 +119,93 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         );
     }
 
-    checkFieldsExists(fieldSet) {
-        if (fieldSet) {
-            fieldSet.forEach(element => {
-                if (element.apiName === this.fields.contact.fieldApiName) {
-                    this.hasContactField = true;
-                }
-                if (element.apiName === this.fields.programEngagement.fieldApiName) {
-                    this.hasProgramEngagementField = true;
-                }
-            });
-        }
+    get isModal() {
+        return this.hideFooter; // reusing old api property name
     }
 
-    configureFieldSet(fieldSet) {
-        this.checkFieldsExists(fieldSet);
-        fieldSet.forEach(field => {
-            field.disabled = true;
-            field.isQuantityField = false;
-            // Number fields are size 1
-            // Program Engagment lookup is size 4
-            // Client lookup is size 3
-            // Everything else is size 2
-            // This means that the field set we ship with is exactly 12 wide
-            if (SHORT_DATA_TYPES.includes(field.type)) {
-                field.size = 1;
-            } else if (field.apiName === this.fields.programEngagement.fieldApiName) {
-                field.size = 4;
-            } else if (
-                field.apiName === this.fields.contact.fieldApiName ||
-                LONG_DATA_TYPES.includes(field.type)
-            ) {
-                field.size = 3;
-            } else {
-                field.size = 2;
-            }
+    get rowCount() {
+        return this.serviceDeliveries.length;
+    }
 
-            if (
-                this.hasContactField &&
-                field.apiName === this.fields.contact.fieldApiName
-            ) {
-                field.disabled = false;
-                field.isRequired = true;
-            } else if (
-                !this.hasContactField &&
-                this.hasProgramEngagementField &&
-                field.apiName === this.fields.programEngagement.fieldApiName
-            ) {
-                field.disabled = false;
-                field.isRequired = true;
-            } else if (
-                !this.hasContactField &&
-                !this.hasProgramEngagementField &&
-                field.apiName === this.fields.service.fieldApiName
-            ) {
-                field.disabled = false;
-                field.isRequired = true;
-            } else if (field.apiName === this.fields.quantity.fieldApiName) {
-                field.isQuantityField = true;
-            }
-            this.fieldSet.push(field);
-        });
+    get showWizard() {
+        return !this.isModal && !this.hideWizard;
     }
 
     addDelivery() {
-        this.serviceDeliveries.push({ index: this._deliveryIndex });
-        this._deliveryIndex++;
-        this.rowCount = this.serviceDeliveries.length;
+        let serviceDelivery = { index: this._nextIndex, isDirty: false };
+        if (this.applyDefaults) {
+            Object.assign(serviceDelivery, this.defaultValues);
+        }
+
+        this.serviceDeliveries.push(serviceDelivery);
+        this._nextIndex++;
     }
 
-    handleDelete(event) {
+    handleRowDelete(event) {
         this.serviceDeliveries = this.serviceDeliveries.filter(function(obj) {
             return obj.index !== event.detail;
         });
         if (this.serviceDeliveries.length <= 0) {
             this.addDelivery();
         }
-        this.handleDeleteError(event.detail);
     }
 
-    handleDone() {
-        this.resetUI();
-        this.dispatchEvent(new CustomEvent("done"));
-    }
+    handleSave() {
+        let rows = this.template.querySelectorAll("c-service-delivery-row");
 
-    handleRowError(event) {
-        let errorIndex = event.detail.index;
-        this.errors[errorIndex] = "error";
-        this.isAddEntryDisabled = false;
-        this.renderErrors();
-    }
+        this.savedCount = 0;
+        this.targetSaveCount = 0;
 
-    handleDeleteError(index) {
-        if (this.errors[index]) {
-            delete this.errors[index];
-            this.renderErrors();
-            this.setDoneDisabled();
-        }
-    }
-
-    handleSubmit() {
-        this.isAddEntryDisabled = true;
-        this.isDoneDisabled = true;
-    }
-
-    handleSuccess(event) {
-        this.isAddEntryDisabled = false;
-
-        let rowIndex = event.target.index;
-        let serviceDelivery = this.serviceDeliveries.find(
-            ({ index }) => index === rowIndex
-        );
-        serviceDelivery.hasSaved = true;
-        this.handleDeleteError(rowIndex);
-
-        this.setDoneDisabled();
-    }
-
-    setDoneDisabled() {
-        if (Object.keys(this.errors).length > 0) {
-            this.isDoneDisabled = true;
-        } else {
-            this.isDoneDisabled = false;
-        }
-    }
-
-    renderErrors() {
-        this.errors = Object.assign({}, this.errors);
-    }
-
-    showRowCountToast() {
-        let count = 0;
-        this.serviceDeliveries.forEach(element => {
-            if (element.hasSaved) {
-                count++;
+        rows.forEach(row => {
+            if (row.isDirty || row.isError) {
+                this.targetSaveCount++;
             }
+            row.saveRow();
         });
-        if (count > 0) {
-            let toastMessage = count + " " + this.labels.serviceDeliveriesAdded;
 
-            this[NavigationMixin.GenerateUrl]({
-                type: "standard__objectPage",
-                attributes: {
-                    objectApiName: this.serviceDeliveryObject.objectApiName,
-                    actionName: "home",
-                },
-            }).then(url => {
-                const event = new ShowToastEvent({
-                    title: this.labels.success,
-                    variant: "success",
-                    mode: "sticky",
-                    message: "{0}",
-                    messageData: [
-                        {
-                            url,
-                            label: toastMessage,
-                        },
-                    ],
-                });
-                this.dispatchEvent(event);
-            });
+        if (this.targetSaveCount === 0) {
+            this.dispatchEvent(new CustomEvent("done"));
         }
     }
 
-    get doneTitleLabel() {
-        if (this.isDoneDisabled) {
-            return this.labels.rowsWithErrors;
+    // eslint-disable-next-line no-unused-vars
+    handleRowSuccess(event) {
+        if (!this.isModal) {
+            return;
         }
-        return this.labels.done;
+        this.savedCount++;
+        if (this.savedCount === this.targetSaveCount) {
+            this.dispatchEvent(new CustomEvent("done"));
+        }
+    }
+
+    handleFinishWizard(event) {
+        this.hideWizard = true;
+        let selectedParticipants = event.detail.selectedParticipants;
+
+        if (!selectedParticipants) {
+            return;
+        }
+
+        this.defaultValues = event.detail.serviceDelivery;
+        this.applyDefaults = true;
+        this.serviceDeliveries = [];
+
+        let index;
+        for (index = 0; index < selectedParticipants.length; index++) {
+            let newServiceDelivery = Object.assign(
+                { index: index, isDirty: true },
+                this.defaultValues
+            );
+            newServiceDelivery[this.fields.contact.fieldApiName] =
+                selectedParticipants[index][
+                    this.fields.programEngagementContact.fieldApiName
+                ];
+            newServiceDelivery[this.fields.programEngagement.fieldApiName] =
+                selectedParticipants[index].Id;
+            this.serviceDeliveries.push(newServiceDelivery);
+        }
+
+        this._nextIndex = index + 1;
     }
 }

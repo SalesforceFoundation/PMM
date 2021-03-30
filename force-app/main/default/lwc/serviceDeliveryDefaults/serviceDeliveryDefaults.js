@@ -45,10 +45,11 @@ export default class ServiceDeliveryDefaults extends LightningElement {
                     ? result.data.fields[SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName]
                           .value
                     : DEFAULT_FIELD_SET;
-
-            this.setUnitOfMeasurement(
-                result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName]
-            );
+            // store wired unit of measurement field so it can be reset again
+            // after the fieldset wire if the field set changes
+            this.wiredServiceUnitOfMeasurement =
+                result.data.fields[SERVICE_UNIT_OF_MEASUREMENT_FIELD.fieldApiName];
+            this.setUnitOfMeasurement(this.wiredServiceUnitOfMeasurement);
         }
     }
 
@@ -78,6 +79,7 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     wiredFields({ error, data }) {
         if (data) {
             this.configureFieldSet(data);
+            this.setUnitOfMeasurement(this.wiredServiceUnitOfMeasurement);
         } else if (error) {
             console.log(JSON.stringify(error));
         }

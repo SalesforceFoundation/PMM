@@ -199,12 +199,6 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         if (fieldName === CONTACT_FIELD.fieldApiName) {
             this.contactId = fieldValue;
-            // When the program engagement field is not present
-            // we do not have comboboxes
-            if (!this.hasProgramEngagementField) {
-                return;
-            }
-
             this.resetProgramEngagements();
             this.resetServices();
             this.getRelatedRecordsFromContact();
@@ -378,9 +372,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.setProgramEngagementOptions();
         }
 
-        if (hadProgramEngagementField && this.hasProgramEngagementField) {
-            this.setServiceOptions();
-        }
+        this.setServiceOptions();
 
         this.setDisabledAttribute();
     }
@@ -544,6 +536,9 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     setProgramEngagementOptions() {
+        if (!this.hasProgramEngagementField) {
+            return;
+        }
         let programEngagementField = this.fieldSet.find(
             member => member.apiName === PROGRAMENGAGEMENT_FIELD.fieldApiName
         );

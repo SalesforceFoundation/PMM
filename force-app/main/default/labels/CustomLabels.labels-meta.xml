@@ -140,8 +140,8 @@
         <fullName>BSDT_Warning_No_Contacts</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Warning when no contacts are selected for the BSDT Group Option</shortDescription>
-        <value>Please select at least one contact to continue.</value>
+        <shortDescription>Warning when no Contacts are selected for the BSDT Group Option</shortDescription>
+        <value>Select at least one Contact to continue.</value>
     </labels>
     <labels>
         <fullName>TrackAttendance</fullName>
@@ -488,8 +488,8 @@
         <fullName>No_Records_Found</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>No records found</shortDescription>
-        <value>No records found</value>
+        <shortDescription>No records found.</shortDescription>
+        <value>No records found.</value>
     </labels>
     <labels>
         <fullName>NoFieldSetFound</fullName>

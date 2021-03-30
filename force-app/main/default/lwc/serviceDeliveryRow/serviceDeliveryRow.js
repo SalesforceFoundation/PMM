@@ -273,6 +273,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             if (this.contactId && this.programEngagementId) {
                 this.getRelatedRecordsFromContact();
                 this.setServiceOptions();
+                this.setDisabledAttribute();
             }
         }
     }
@@ -569,6 +570,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         if (this.hasContactField && this.hasProgramEngagementField) {
             let targetProgram = this.getTargetProgram();
 
+            if (!targetProgram) {
+                return;
+            }
             this._services.forEach(service => {
                 if (service.program === targetProgram) {
                     services.push({ ...service });

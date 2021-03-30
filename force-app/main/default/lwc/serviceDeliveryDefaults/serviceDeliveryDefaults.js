@@ -12,6 +12,7 @@ import SERVICE_DELIVERY_FIELD_SET_FIELD from "@salesforce/schema/Service__c.Serv
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 
 import selectService from "@salesforce/label/c.BSDT_Select_Service";
+import quantity from "@salesforce/label/c.Quantity";
 
 const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 const ERROR_MESSAGE = "Error on Page"; // Not displayed on screen, does not require a label.
@@ -29,7 +30,7 @@ export default class ServiceDeliveryDefaults extends LightningElement {
         PROGRAM_ENGAGEMENT_FIELD.fieldApiName,
         SERVICE_FIELD.fieldApiName,
     ];
-    labels = { selectService };
+    labels = { selectService, quantity };
     _serviceDelivery;
 
     @wire(getRecord, {
@@ -52,8 +53,11 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     }
 
     setUnitOfMeasurement(field) {
+        let label;
         if (!field || !field.value) {
-            return;
+            label = this.labels.quantity;
+        } else {
+            label = field.value;
         }
 
         let quantityField = this.fieldSet.find(
@@ -64,7 +68,7 @@ export default class ServiceDeliveryDefaults extends LightningElement {
             return;
         }
 
-        quantityField.label = field.value;
+        quantityField.label = label;
     }
 
     @wire(getFieldSet, {
@@ -114,6 +118,9 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     handleServiceId(event) {
         this.resetFields();
         this.serviceId = event.target.value;
+        if (!this.serviceId) {
+            this.setUnitOfMeasurement();
+        }
     }
 
     configureFieldSet(fieldSetMembers) {

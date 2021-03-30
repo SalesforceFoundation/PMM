@@ -93,7 +93,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     _defaultsSet = false;
     _services;
-    _programEngagements;
+    _programEngagements = [];
 
     // switched to optional fields here, getRecord will error
     // when the user does not have access
@@ -111,9 +111,6 @@ export default class ServiceDeliveryRow extends LightningElement {
             let fieldSetName = result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName]
                 ? result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
                 : DEFAULT_FIELD_SET;
-            if (fieldSetName === this.serviceDeliveryFieldSets.currentFieldSetName) {
-                return;
-            }
 
             this.setCurrentFieldSet(fieldSetName);
             this.resetFields(hadContactField, hadProgramEngagementField);

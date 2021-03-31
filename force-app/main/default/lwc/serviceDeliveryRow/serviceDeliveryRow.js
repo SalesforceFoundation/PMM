@@ -49,7 +49,18 @@ const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 export default class ServiceDeliveryRow extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
-    @api defaultValues;
+    @track _defaultValues = {};
+
+    @api
+    get defaultValues() {
+        return this._defaultValues;
+    }
+    set defaultValues(value) {
+        this._defaultValues = Object.assign(this._defaultValues, value);
+        this._defaultsSet = false;
+        this.setDefaults();
+    }
+
     @api serviceDeliveryFieldSets;
     @api index;
     @api rowCount;
@@ -190,7 +201,6 @@ export default class ServiceDeliveryRow extends LightningElement {
             event.detail.value && event.detail.value.length
                 ? event.detail.value[0]
                 : undefined;
-
         this.isDirty = true;
         this.resetError();
 
@@ -218,7 +228,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleComboChange(event) {
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
-
         this.isDirty = true;
         this.resetError();
 
@@ -448,7 +457,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             !this._defaultsSet
         ) {
             this._defaultsSet = true;
-            this.isDirty = this.defaultValues.isDirty ? true : false;
+            this.isDirty = this.isDirty || this.defaultValues.isDirty ? true : false;
 
             this.fieldSet.forEach(member => {
                 for (let [fieldName, fieldValue] of Object.entries(this.defaultValues)) {

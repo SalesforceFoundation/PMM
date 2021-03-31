@@ -97,10 +97,11 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     @api
     resetUI() {
-        this._defaultValues = {};
-        this.serviceDeliveries = [];
-        this._nextIndex = 0;
-        this.addDelivery();
+        if (this.serviceDeliveries.length === 1) {
+            this.serviceDeliveries = [];
+            this._nextIndex = 0;
+            this.addDelivery();
+        }
     }
 
     connectedCallback() {
@@ -133,7 +134,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     addDelivery() {
         let serviceDelivery = { index: this._nextIndex, isDirty: false };
-        if (this.applyDefaults) {
+        if (this.applyDefaults || this.isModal) {
             Object.assign(serviceDelivery, this.defaultValues);
         }
 

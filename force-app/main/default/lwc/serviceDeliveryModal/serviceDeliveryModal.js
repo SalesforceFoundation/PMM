@@ -53,9 +53,9 @@ export default class ServiceDeliveryModal extends LightningElement {
 
     @api
     showNewModal(value) {
-        this.defaultValues = value;
         const bulkUI = this.template.querySelector("c-bulk-service-delivery-u-i");
         bulkUI.resetUI();
+        this.defaultValues = value;
         this.template.querySelector("c-modal").show();
     }
 

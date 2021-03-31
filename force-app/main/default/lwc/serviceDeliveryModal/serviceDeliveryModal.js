@@ -18,6 +18,7 @@ export default class ServiceDeliveryModal extends LightningElement {
     @api hideFooter; // no longer used; can't remove because public
 
     @track defaultValues;
+    @track existingRecords;
 
     labels = {
         serviceDeliveries,
@@ -52,10 +53,11 @@ export default class ServiceDeliveryModal extends LightningElement {
     }
 
     @api
-    showNewModal(value) {
+    showNewModal(defaultValues, existingRecords) {
         const bulkUI = this.template.querySelector("c-bulk-service-delivery-u-i");
         bulkUI.resetUI();
-        this.defaultValues = value;
+        this.existingRecords = existingRecords;
+        this.defaultValues = defaultValues;
         this.template.querySelector("c-modal").show();
     }
 

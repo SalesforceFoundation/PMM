@@ -95,8 +95,31 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         Object.assign(serviceDelivery, this._defaultValues);
     }
 
+    _existingRecords;
+    @api
+    get existingRecords() {
+        return this._existingRecords;
+    }
+    set existingRecords(value) {
+        this._existingRecords = value;
+        if (!this._existingRecords) {
+            return;
+        }
+        this.serviceDeliveries = [];
+        this._nextIndex = 0;
+        this._existingRecords.forEach(record => {
+            let serviceDelivery = Object.assign(
+                { index: this._nextIndex, isDirty: false },
+                record
+            );
+            this.serviceDeliveries.push(serviceDelivery);
+            this._nextIndex++;
+        });
+    }
+
     @api
     resetUI() {
+        // if only the seed record exists
         if (this.serviceDeliveries.length === 1) {
             this.serviceDeliveries = [];
             this._nextIndex = 0;

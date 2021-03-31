@@ -59,6 +59,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         this._defaultValues = Object.assign(this._defaultValues, value);
         this._defaultsSet = false;
         this.setDefaults();
+        if (value.Id) {
+            this.recordId = value.Id;
+        }
     }
 
     @api serviceDeliveryFieldSets;
@@ -182,7 +185,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     get showModifiedIcon() {
-        return this.isSaved && this.isDirty;
+        return (this.isSaved || this.recordId) && this.isDirty && !this.isSaving;
     }
 
     connectedCallback() {
@@ -457,7 +460,10 @@ export default class ServiceDeliveryRow extends LightningElement {
             !this._defaultsSet
         ) {
             this._defaultsSet = true;
-            this.isDirty = this.isDirty || this.defaultValues.isDirty ? true : false;
+            this.isDirty =
+                (this.isDirty || this.defaultValues.isDirty) && !this.isSaved
+                    ? true
+                    : false;
 
             this.fieldSet.forEach(member => {
                 for (let [fieldName, fieldValue] of Object.entries(this.defaultValues)) {

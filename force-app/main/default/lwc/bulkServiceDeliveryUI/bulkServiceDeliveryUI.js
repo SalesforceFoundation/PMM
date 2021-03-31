@@ -122,12 +122,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     @api
     resetUI() {
-        // if only the seed record exists
-        if (this.serviceDeliveries.length === 1) {
-            this.serviceDeliveries = [];
-            this._nextIndex = 0;
-            this.addDelivery();
-        }
+        this.serviceDeliveries = [];
+        this._nextIndex = 0;
+        this.addDelivery();
     }
 
     connectedCallback() {
@@ -162,6 +159,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         let serviceDelivery = { index: this._nextIndex, isDirty: false };
         if (this.applyDefaults || this.isModal) {
             Object.assign(serviceDelivery, this.defaultValues);
+            serviceDelivery.Id = null;
         }
 
         this.serviceDeliveries.push(serviceDelivery);

@@ -56,11 +56,17 @@ export default class ServiceDeliveryRow extends LightningElement {
         return this._defaultValues;
     }
     set defaultValues(value) {
-        this._defaultValues = Object.assign(this._defaultValues, value);
+        this._defaultValues = Object.assign(this.defaultValues, value);
         this._defaultsSet = false;
         this.setDefaults();
-        if (value.Id) {
+        if (value.Id === null) {
+            // this allows full clear of the first row when the modal reopens in caseman
+            this.isSaved = false;
             this.recordId = value.Id;
+            if (!value[PROGRAMENGAGEMENT_FIELD.fieldApiName]) {
+                this.setComboboxValues(PROGRAMENGAGEMENT_FIELD.fieldApiName, null);
+            }
+            this.setComboboxValues(SERVICE_FIELD.fieldApiName, null);
         }
     }
 
@@ -121,7 +127,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             let hadProgramEngagementField = this.hasProgramEngagementField;
 
             this.setUnitOfMeasurement(result.data.fields);
-            this.defaultValues = { ...this.defaultValues };
+            this._defaultValues = { ...this.defaultValues };
             let fieldSetName = result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName]
                 ? result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
                 : DEFAULT_FIELD_SET;

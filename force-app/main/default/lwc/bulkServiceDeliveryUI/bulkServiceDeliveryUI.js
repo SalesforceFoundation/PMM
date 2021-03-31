@@ -102,7 +102,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
     set existingRecords(value) {
         this._existingRecords = value;
-        if (!this._existingRecords) {
+        if (
+            !this._existingRecords ||
+            (this._existingRecords && this._existingRecords.length === 0)
+        ) {
             return;
         }
         this.serviceDeliveries = [];

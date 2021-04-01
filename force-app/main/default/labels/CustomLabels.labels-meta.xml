@@ -836,7 +836,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Service Deliveries</shortDescription>
-        <value>Service Deliveries</value>
+        <value>Add Service Deliveries</value>
     </labels>
     <labels>
         <fullName>Service_Deliveries_Added</fullName>

@@ -60,7 +60,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this._defaultsSet = false;
         this.setDefaults();
         if (value.Id === null) {
-            // this allows full clear of the first row when the modal reopens in caseman
+            // this allows full clear of the first row when the modal reopens
             this.isSaved = false;
             this.recordId = value.Id;
             if (!value[PROGRAMENGAGEMENT_FIELD.fieldApiName]) {

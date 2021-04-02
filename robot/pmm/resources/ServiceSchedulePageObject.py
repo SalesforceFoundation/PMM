@@ -35,11 +35,19 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         )
 
     def select_service_participant(self, participant):
-        """ Selects a service participant, by clicking on the radio button given the name of the participant """
+        """ Selects a service participant, by clicking on the Add button in the row of the participant """
         locator_button = pmm_lex_locators["service_schedule"][
-            "select_participants"
+            "add_participants"
         ].format(participant)
         self.selenium.scroll_element_into_view(locator_button)
+        self.selenium.set_focus_to_element(locator_button)
+        self.salesforce._jsclick(locator_button)
+
+    def click_add_all_button(self):
+        """ Selects all participants, by clicking on the Add All button above the participant list """
+        locator_button = pmm_lex_locators["service_schedule"][
+            "add_all"
+        ].format(self)
         self.selenium.set_focus_to_element(locator_button)
         self.salesforce._jsclick(locator_button)
 
@@ -94,7 +102,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.set_focus_to_element(locator)
         self.salesforce._jsclick(locator)
         locator_participant = pmm_lex_locators["service_schedule"][
-            "select_participants"
+            "add_participants"
         ].format(participant)
         self.selenium.wait_until_page_contains_element(
             locator_participant,

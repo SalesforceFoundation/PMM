@@ -50,8 +50,7 @@ Add Service Participant quick action
     Load Page Object                        New             ServiceSchedule__c
     Verify Wizard Screen Title              Add Service Participants
     Select Service Participant              ${contact2}[Name]
-    Select Service Participant              ${contact3}[Name]
-    Click Dialog Button                     Add Service Participants    
+    Select Service Participant              ${contact3}[Name]   
     Validate Participant Is Added           ${contact1}[Name]
     Validate Participant Is Added           ${contact2}[Name]
     Validate Participant Is Added           ${contact3}[Name]

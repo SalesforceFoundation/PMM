@@ -45,9 +45,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
 
     def click_add_all_button(self):
         """ Selects all participants, by clicking on the Add All button above the participant list """
-        locator_button = pmm_lex_locators["service_schedule"][
-            "add_all"
-        ].format(self)
+        locator_button = pmm_lex_locators["service_schedule"]["add_all"].format(self)
         self.selenium.set_focus_to_element(locator_button)
         self.salesforce._jsclick(locator_button)
 

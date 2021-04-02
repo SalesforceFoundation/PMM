@@ -183,7 +183,16 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     connectedCallback() {
+        this.syncDefaultServiceQuantity();
         loadStyle(this, pmmFolder + "/hideHelpIcons.css");
+    }
+
+    syncDefaultServiceQuantity() {
+        this.fieldSet.forEach(field => {
+            if (field.apiName === DEFAULT_SERVICE_QUANTITY.fieldApiName && field.value) {
+                this.defaultServiceQuantity = field.value;
+            }
+        });
     }
 
     processFields() {

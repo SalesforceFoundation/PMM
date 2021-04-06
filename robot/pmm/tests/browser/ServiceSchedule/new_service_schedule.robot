@@ -57,10 +57,7 @@ Create a New Service Schedule
     Verify Wizard Screen Title              Review Service Sessions
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Add Service Participants
-    Select Service Participant              ${contact1}[Name]
-    Select Service Participant              ${contact2}[Name]
-    Select Service Participant              ${contact3}[Name]
-    Click Dialog Button                     Add Service Participants
+    Click Add All Button
     Click Dialog Button                     Next 
     Verify Wizard Screen Title              Review Service Schedule
     Verify Wizard Review Screen             Service Schedule Name        contains       ${service_schedule_name}      

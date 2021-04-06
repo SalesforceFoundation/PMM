@@ -90,6 +90,8 @@ pmm_lex_locators = {
     "service_schedule": {
         "wizard_title": "//h3[contains(@class,'slds-section__title') and text()='{}']",
         "select_participants": "//tr[@class='slds-hint-parent']/th[.//*[text()='{}']]/preceding-sibling::td//span[@class='slds-checkbox_faux']",
+        "add_participants": "//lightning-layout[contains(@class,'slds-grid')]//tr[.//lightning-base-formatted-text[text()='{}']]//button[@title='Add']",
+        "add_all": "//lightning-layout[contains(@class,'slds-grid')]//button[text()='Add All']",
         "accordion": "//section[contains(@class,'slds-accordion')][.//span[contains(@title,'{}')]]//*[text()='{}']",
         "review_wizard": "//div[contains(@class,'slds-form-element')][./span[text()='{}']]/div",
         "participant_selector": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::*[text()='{}']",

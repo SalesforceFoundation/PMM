@@ -49,7 +49,27 @@ const DEFAULT_FIELD_SET = "Bulk_Service_Deliveries";
 export default class ServiceDeliveryRow extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
-    @api defaultValues;
+    @track _defaultValues = {};
+
+    @api
+    get defaultValues() {
+        return this._defaultValues;
+    }
+    set defaultValues(value) {
+        this._defaultValues = Object.assign(this.defaultValues, value);
+        this._defaultsSet = false;
+        this.setDefaults();
+        if (value.Id === null) {
+            // this allows full clear of the first row when the modal reopens
+            this.isSaved = false;
+            this.recordId = value.Id;
+            if (!value[PROGRAMENGAGEMENT_FIELD.fieldApiName]) {
+                this.setComboboxValues(PROGRAMENGAGEMENT_FIELD.fieldApiName, null);
+            }
+            this.setComboboxValues(SERVICE_FIELD.fieldApiName, null);
+        }
+    }
+
     @api serviceDeliveryFieldSets;
     @api index;
     @api rowCount;
@@ -93,7 +113,7 @@ export default class ServiceDeliveryRow extends LightningElement {
 
     _defaultsSet = false;
     _services;
-    _programEngagements;
+    _programEngagements = [];
 
     // switched to optional fields here, getRecord will error
     // when the user does not have access
@@ -107,13 +127,10 @@ export default class ServiceDeliveryRow extends LightningElement {
             let hadProgramEngagementField = this.hasProgramEngagementField;
 
             this.setUnitOfMeasurement(result.data.fields);
-            this.defaultValues = { ...this.defaultValues };
+            this._defaultValues = { ...this.defaultValues };
             let fieldSetName = result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName]
                 ? result.data.fields[SERVICE_FIELD_SET_FIELD.fieldApiName].value
                 : DEFAULT_FIELD_SET;
-            if (fieldSetName === this.serviceDeliveryFieldSets.currentFieldSetName) {
-                return;
-            }
 
             this.setCurrentFieldSet(fieldSetName);
             this.resetFields(hadContactField, hadProgramEngagementField);
@@ -174,7 +191,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     get showModifiedIcon() {
-        return this.isSaved && this.isDirty;
+        return (this.isSaved || this.recordId) && this.isDirty && !this.isSaving;
     }
 
     connectedCallback() {
@@ -193,18 +210,11 @@ export default class ServiceDeliveryRow extends LightningElement {
             event.detail.value && event.detail.value.length
                 ? event.detail.value[0]
                 : undefined;
-
         this.isDirty = true;
         this.resetError();
 
         if (fieldName === CONTACT_FIELD.fieldApiName) {
             this.contactId = fieldValue;
-            // When the program engagement field is not present
-            // we do not have comboboxes
-            if (!this.hasProgramEngagementField) {
-                return;
-            }
-
             this.resetProgramEngagements();
             this.resetServices();
             this.getRelatedRecordsFromContact();
@@ -227,7 +237,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleComboChange(event) {
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
-
         this.isDirty = true;
         this.resetError();
 
@@ -279,6 +288,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             if (this.contactId && this.programEngagementId) {
                 this.getRelatedRecordsFromContact();
                 this.setServiceOptions();
+                this.setDisabledAttribute();
             }
         }
     }
@@ -378,9 +388,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             this.setProgramEngagementOptions();
         }
 
-        if (hadProgramEngagementField && this.hasProgramEngagementField) {
-            this.setServiceOptions();
-        }
+        this.setServiceOptions();
 
         this.setDisabledAttribute();
     }
@@ -458,7 +466,10 @@ export default class ServiceDeliveryRow extends LightningElement {
             !this._defaultsSet
         ) {
             this._defaultsSet = true;
-            this.isDirty = this.defaultValues.isDirty ? true : false;
+            this.isDirty =
+                (this.isDirty || this.defaultValues.isDirty) && !this.isSaved
+                    ? true
+                    : false;
 
             this.fieldSet.forEach(member => {
                 for (let [fieldName, fieldValue] of Object.entries(this.defaultValues)) {
@@ -544,6 +555,9 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     setProgramEngagementOptions() {
+        if (!this.hasProgramEngagementField) {
+            return;
+        }
         let programEngagementField = this.fieldSet.find(
             member => member.apiName === PROGRAMENGAGEMENT_FIELD.fieldApiName
         );
@@ -574,6 +588,9 @@ export default class ServiceDeliveryRow extends LightningElement {
         if (this.hasContactField && this.hasProgramEngagementField) {
             let targetProgram = this.getTargetProgram();
 
+            if (!targetProgram) {
+                return;
+            }
             this._services.forEach(service => {
                 if (service.program === targetProgram) {
                     services.push({ ...service });

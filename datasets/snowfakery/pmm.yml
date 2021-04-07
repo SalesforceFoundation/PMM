@@ -1,6 +1,6 @@
 # This recipe loads Accounts, Contacts, Programs, Program Engagements, Services, Cohorts and Service Deliveries.
 
-# cci task run generate_and_load_from_yaml --generator_yaml datasets/pmm.yml --num_records 1 --num_records_tablename Contact --org [orgname]
+# cci task run generate_and_load_from_yaml --generator_yaml datasets/snowfakery/pmm.yml --num_records 1 --num_records_tablename Contact --org [orgname]
 
 - var: lnamevar
   value:

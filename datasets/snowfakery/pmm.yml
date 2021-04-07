@@ -1,0 +1,330 @@
+# This recipe loads Accounts, Contacts, Programs, Program Engagements, Services, Cohorts and Service Deliveries.
+
+# cci task run generate_and_load_from_yaml --generator_yaml datasets/pmm.yml --num_records 1 --num_records_tablename Contact --org [orgname]
+
+- var: lnamevar
+  value:
+      fake: last_name
+
+#Program Macro  - add these fields to every Program record
+- macro: AllProgram
+  fields:
+      Name: ${{fake.word}} Program
+      pmdm__Description__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__StartDate__c:
+          date_between:
+              start_date: -1y
+              end_date: -4m
+      pmdm__EndDate__c:
+          date_between:
+              start_date: +5d
+              end_date: +2y
+      pmdm__ProgramIssueArea__c:
+          random_choice:
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      pmdm__ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+
+#Program Cohort Macro  - add these fields to every Program Cohort record
+- macro: AllCohort
+  fields:
+      Name: ${{fake.word}} ${{count}} Cohort
+      pmdm__Description__c:
+          fake.sentence:
+              nb_words: 15
+      pmdm__Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+
+# Program A
+- object: pmdm__Program__c
+  just_once: TRUE
+  nickname: ProgramA
+  count: 1
+  include: AllProgram
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: ProgramCohort
+        include: AllCohort
+        fields:
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Program__c:
+                reference: pmdm__Program__c
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceA1
+  fields:
+      pmdm__Program__c:
+          reference: ProgramA
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceA2
+  fields:
+      pmdm__Program__c:
+          reference: ProgramA
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceA3
+  fields:
+      pmdm__Program__c:
+          reference: ProgramA
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+# Program B
+- object: pmdm__Program__c
+  just_once: TRUE
+  nickname: ProgramB
+  count: 1
+  include: AllProgram
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: ProgramCohort
+        include: AllCohort
+        fields:
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Program__c:
+                reference: pmdm__Program__c
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceB1
+  fields:
+      pmdm__Program__c:
+          reference: ProgramB
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceB2
+  fields:
+      pmdm__Program__c:
+          reference: ProgramB
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceB3
+  fields:
+      pmdm__Program__c:
+          reference: ProgramB
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+# Program C
+- object: pmdm__Program__c
+  just_once: TRUE
+  nickname: ProgramC
+  count: 1
+  include: AllProgram
+  friends:
+      # Create Program Cohorts
+      - object: pmdm__ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: ProgramCohort
+        include: AllCohort
+        fields:
+            pmdm__StartDate__c:
+                date_between:
+                    start_date: ${{pmdm__Program__c.pmdm__StartDate__c}}
+                    end_date: -1d
+            pmdm__EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{pmdm__Program__c.pmdm__EndDate__c}}
+            pmdm__Program__c:
+                reference: pmdm__Program__c
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceC1
+  fields:
+      pmdm__Program__c:
+          reference: ProgramC
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceC2
+  fields:
+      pmdm__Program__c:
+          reference: ProgramC
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+- object: pmdm__Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceC3
+  fields:
+      pmdm__Program__c:
+          reference: ProgramC
+      Name: ${{pmdm__Program__c.Name}} ${{fake.word}} Service
+
+# Create Household Contacts
+- object: Contact
+  nickname: HHContact
+  count: 1
+  fields:
+      AccountId:
+          - object: Account
+            nickname: HH
+            count: 1
+            fields:
+                RecordType: Household_Account #this was manually created record type.
+                Name: ${{lnamevar}} Household
+                BillingStreet: ${{fake.street_address}}
+                BillingCity: ${{fake.city}}
+                BillingState: ${{fake.state_abbr}}
+                BillingPostalCode: ${{fake.postcode}}
+                BillingCountry: United States
+                Phone: ${{fake.phone_number}}
+      FirstName: ${{fake.first_name}}
+      LastName: ${{lnamevar}}
+      pmdm__IsClient__c:
+          random_choice:
+              - True
+              - False
+      Email: ${{fake.email}}
+      Phone: ${{fake.phone_number}}
+      MobilePhone: ${{fake.phone_number}}
+      HomePhone: ${{fake.phone_number}}
+      OtherPhone: ${{fake.phone_number}}
+      MailingStreet: ${{BillingStreet}}
+      MailingCity: ${{BillingCity}}
+      MailingState: ${{BillingState}}
+      MailingPostalCode: ${{BillingPostalCode}}
+      MailingCountry: United States
+  friends:
+      - object: pmdm__ProgramEngagement__c
+        count:
+            random_number:
+                min: 1
+                max: 3
+        fields:
+            Name: Test PE
+            pmdm__Program__c:
+                random_choice:
+                    - reference: ProgramA
+                    - reference: ProgramB
+                    - reference: ProgramC
+            pmdm__Contact__c:
+                reference: HHContact
+            pmdm__Stage__c:
+                random_choice:
+                    - Applied
+                    - Application Denied
+                    - Waitlisted
+                    - Enrolled
+                    - Active
+                    - Completed
+                    - Withdrawn
+            pmdm__Role__c:
+                random_choice:
+                    - Client
+                    - Volunteer
+                    - Service Provider
+        friends:
+            # Create Service Deliveries
+            - object: pmdm__ServiceDelivery__c
+              count:
+                  random_number:
+                      min: 1
+                      max: 10
+              fields:
+                  Name: Test Service Delivery
+                  pmdm__AttendanceStatus__c:
+                      random_choice:
+                          - Present
+                          - Unexcused Absence
+                          - Excused Absence
+                  pmdm__Contact__c:
+                      reference: HHContact
+                  pmdm__DeliveryDate__c:
+                      date_between:
+                          start_date: -1y
+                          end_date: today
+                  pmdm__ProgramEngagement__c:
+                      reference: pmdm__ProgramEngagement__c
+                  pmdm__Quantity__c: 1
+                  pmdm__Service__c:
+                      if:
+                          - choice:
+                                when: ${{pmdm__ProgramEngagement__c.pmdm__Program__c == ProgramA}}
+                                pick:
+                                    random_choice:
+                                        - reference: ServiceA1
+                                        - reference: ServiceA2
+                                        - reference: ServiceA3
+                          - choice:
+                                when: ${{pmdm__ProgramEngagement__c.pmdm__Program__c == ProgramB}}
+                                pick:
+                                    random_choice:
+                                        - reference: ServiceB1
+                                        - reference: ServiceB2
+                                        - reference: ServiceB3
+                          - choice:
+                                when: ${{pmdm__ProgramEngagement__c.pmdm__Program__c == ProgramC}}
+                                pick:
+                                    random_choice:
+                                        - reference: ServiceC1
+                                        - reference: ServiceC2
+                                        - reference: ServiceC3

@@ -1,0 +1,330 @@
+# This recipe loads Accounts, Contacts, Programs, Program Engagements, Services, Cohorts and Service Deliveries.
+
+# cci task run generate_and_load_from_yaml --generator_yaml datasets/snowfakery/pmm-unmanaged.recipe.yml --num_records 1 --num_records_tablename Contact --org [orgname]
+
+- var: lnamevar
+  value:
+      fake: last_name
+
+#Program Macro  - add these fields to every Program record
+- macro: AllProgram
+  fields:
+      Name: ${{fake.word}} Program
+      Description__c:
+          fake.sentence:
+              nb_words: 15
+      StartDate__c:
+          date_between:
+              start_date: -1y
+              end_date: -4m
+      EndDate__c:
+          date_between:
+              start_date: +5d
+              end_date: +2y
+      ProgramIssueArea__c:
+          random_choice:
+              - Housing
+              - Employment
+              - Education
+              - Legal
+              - Counseling
+              - Food and Nutrition
+              - Advocacy
+      Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+      ShortSummary__c:
+          fake.sentence:
+              nb_words: 15
+      TargetPopulation__c:
+          fake.sentence:
+              nb_words: 15
+
+#Program Cohort Macro  - add these fields to every Program Cohort record
+- macro: AllCohort
+  fields:
+      Name: ${{fake.word}} ${{count}} Cohort
+      Description__c:
+          fake.sentence:
+              nb_words: 15
+      Status__c:
+          random_choice:
+              - Planned
+              - Active
+              - Completed
+              - Canceled
+
+# Program A
+- object: Program__c
+  just_once: TRUE
+  nickname: ProgramA
+  count: 1
+  include: AllProgram
+  friends:
+      # Create Program Cohorts
+      - object: ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: ProgramCohort
+        include: AllCohort
+        fields:
+            StartDate__c:
+                date_between:
+                    start_date: ${{Program__c.StartDate__c}}
+                    end_date: -1d
+            EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{Program__c.EndDate__c}}
+            Program__c:
+                reference: Program__c
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceA1
+  fields:
+      Program__c:
+          reference: ProgramA
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceA2
+  fields:
+      Program__c:
+          reference: ProgramA
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceA3
+  fields:
+      Program__c:
+          reference: ProgramA
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+# Program B
+- object: Program__c
+  just_once: TRUE
+  nickname: ProgramB
+  count: 1
+  include: AllProgram
+  friends:
+      # Create Program Cohorts
+      - object: ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: ProgramCohort
+        include: AllCohort
+        fields:
+            StartDate__c:
+                date_between:
+                    start_date: ${{Program__c.StartDate__c}}
+                    end_date: -1d
+            EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{Program__c.EndDate__c}}
+            Program__c:
+                reference: Program__c
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceB1
+  fields:
+      Program__c:
+          reference: ProgramB
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceB2
+  fields:
+      Program__c:
+          reference: ProgramB
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceB3
+  fields:
+      Program__c:
+          reference: ProgramB
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+# Program C
+- object: Program__c
+  just_once: TRUE
+  nickname: ProgramC
+  count: 1
+  include: AllProgram
+  friends:
+      # Create Program Cohorts
+      - object: ProgramCohort__c
+        count:
+            random_number:
+                min: 0
+                max: 4
+        nickname: ProgramCohort
+        include: AllCohort
+        fields:
+            StartDate__c:
+                date_between:
+                    start_date: ${{Program__c.StartDate__c}}
+                    end_date: -1d
+            EndDate__c:
+                date_between:
+                    start_date: +1d
+                    end_date: ${{Program__c.EndDate__c}}
+            Program__c:
+                reference: Program__c
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceC1
+  fields:
+      Program__c:
+          reference: ProgramC
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceC2
+  fields:
+      Program__c:
+          reference: ProgramC
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+- object: Service__c
+  just_once: TRUE
+  count: 1
+  nickname: ServiceC3
+  fields:
+      Program__c:
+          reference: ProgramC
+      Name: ${{Program__c.Name}} ${{fake.word}} Service
+
+# Create Household Contacts
+- object: Contact
+  nickname: HHContact
+  count: 1
+  fields:
+      AccountId:
+          - object: Account
+            nickname: HH
+            count: 1
+            fields:
+                #RecordType: Household_Account #this was manually created record type.
+                Name: ${{lnamevar}} Household
+                BillingStreet: ${{fake.street_address}}
+                BillingCity: ${{fake.city}}
+                BillingState: ${{fake.state_abbr}}
+                BillingPostalCode: ${{fake.postcode}}
+                BillingCountry: United States
+                Phone: ${{fake.phone_number}}
+      FirstName: ${{fake.first_name}}
+      LastName: ${{lnamevar}}
+      IsClient__c:
+          random_choice:
+              - True
+              - False
+      Email: ${{fake.email}}
+      Phone: ${{fake.phone_number}}
+      MobilePhone: ${{fake.phone_number}}
+      HomePhone: ${{fake.phone_number}}
+      OtherPhone: ${{fake.phone_number}}
+      MailingStreet: ${{BillingStreet}}
+      MailingCity: ${{BillingCity}}
+      MailingState: ${{BillingState}}
+      MailingPostalCode: ${{BillingPostalCode}}
+      MailingCountry: United States
+  friends:
+      - object: ProgramEngagement__c
+        count:
+            random_number:
+                min: 1
+                max: 3
+        fields:
+            Name: Test PE
+            Program__c:
+                random_choice:
+                    - reference: ProgramA
+                    - reference: ProgramB
+                    - reference: ProgramC
+            Contact__c:
+                reference: HHContact
+            Stage__c:
+                random_choice:
+                    - Applied
+                    - Application Denied
+                    - Waitlisted
+                    - Enrolled
+                    - Active
+                    - Completed
+                    - Withdrawn
+            Role__c:
+                random_choice:
+                    - Client
+                    - Volunteer
+                    - Service Provider
+        friends:
+            # Create Service Deliveries
+            - object: ServiceDelivery__c
+              count:
+                  random_number:
+                      min: 1
+                      max: 10
+              fields:
+                  Name: Test Service Delivery
+                  AttendanceStatus__c:
+                      random_choice:
+                          - Present
+                          - Unexcused Absence
+                          - Excused Absence
+                  Contact__c:
+                      reference: HHContact
+                  DeliveryDate__c:
+                      date_between:
+                          start_date: -1y
+                          end_date: today
+                  ProgramEngagement__c:
+                      reference: ProgramEngagement__c
+                  Quantity__c: 1
+                  Service__c:
+                      if:
+                          - choice:
+                                when: ${{ProgramEngagement__c.Program__c == ProgramA}}
+                                pick:
+                                    random_choice:
+                                        - reference: ServiceA1
+                                        - reference: ServiceA2
+                                        - reference: ServiceA3
+                          - choice:
+                                when: ${{ProgramEngagement__c.Program__c == ProgramB}}
+                                pick:
+                                    random_choice:
+                                        - reference: ServiceB1
+                                        - reference: ServiceB2
+                                        - reference: ServiceB3
+                          - choice:
+                                when: ${{ProgramEngagement__c.Program__c == ProgramC}}
+                                pick:
+                                    random_choice:
+                                        - reference: ServiceC1
+                                        - reference: ServiceC2
+                                        - reference: ServiceC3

@@ -24,7 +24,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         )
         self.selenium.go_to(url)
         self.salesforce.wait_until_loading_is_complete()
-        self.selenium.wait_until_page_contains("Delivery Date")
+        self.selenium.wait_until_page_contains("Create Service Deliveries for a Group")
 
     def verify_error_message(self, message):
         """Verify error message on bsdt"""

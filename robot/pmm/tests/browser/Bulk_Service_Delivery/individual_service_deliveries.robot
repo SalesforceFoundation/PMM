@@ -59,18 +59,19 @@ Add service delivery on bulk service delivery
     ...                         records are displayed
     [tags]                      unstable    W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
+    Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
     Populate Bsdt Dropdown      1           Service                 ${service1}[Name]
     Populate Bsdt Field         1           Quantity                ${quantity1}
-    Verify Persist Save Icon    1           Saved
     Click Button                Add Entry
     Populate Bsdt Lookup        2           Client                  ${contact2}[FirstName] ${contact2}[LastName]
     Populate Bsdt Dropdown      2           Program Engagement      ${program_engagement2}[Name]
     Populate Bsdt Dropdown      2           Service                 ${service2}[Name]
     Populate Bsdt Field         2           Quantity                ${quantity2}
+    Click Button         Save
+    Verify Persist Save Icon    1           Saved
     Verify Persist Save Icon    2           Saved
-    Click Button                Done
     Go To Page                  Listing                             ${ns}ServiceDelivery__c
     Page Should Contain         ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
     Page Should Contain         ${contact2}[FirstName] ${contact2}[LastName] ${today}: ${service2}[Name]

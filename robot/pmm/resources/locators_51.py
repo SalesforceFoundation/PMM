@@ -74,6 +74,8 @@ pmm_lex_locators = {
         "error_message": "//div[@class='slds-text-color_error' and text()='{}']",
         "persist_save": "//div[{}][contains(@class,'slds-box')]/descendant::lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
         "persist_warning": "//div[{}][contains(@class,'slds-box')]/descendant::lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
+        "bsdt-button": "//c-bulk-service-delivery-u-i/div[@class='bsdt']//div[@class='slds-card__footer']//lightning-button/button[contains(@class,'slds-button') and text()='{}']",
+        "bsdt_wizard_lookup": "//lightning-grouped-combobox[.//*[text()='{}']]//input[contains(@class,'slds-input')]",
         "new_prog_engagement": {
             "title": "//h2[contains(@class,'slds-text-heading_medium') and text()='{}']",
             "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']]//input[contains(@class,'slds-input')]",

@@ -43,6 +43,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         self.selenium.wait_until_page_contains_element(
             locator, error=" Incorrect icon displayed "
         )
+        time.sleep(0.5)
 
     def verify_persist_warning_icon(self, row, message):
         """Verify warning icon when service delivery record is not saved"""
@@ -125,3 +126,30 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
             locator, error="Icon is not enabled"
         )
         self.selenium.click_element(locator)
+
+    def click_bsdt_button(self, title):
+        """ Click on a button on new PE dialog and delete dialog """
+        locator = pmm_lex_locators["bulk_service_delivery_locators"][
+            "bsdt-button"
+        ].format(title)
+        self.selenium.wait_until_element_is_enabled(
+            locator, error="button is not enabled"
+        )
+        self.selenium.click_element(locator)
+
+    def populate_bsdt_wizard_lookup(self, title, value):
+        """populate the lookup field on bulk service delivery"""
+        locator = pmm_lex_locators["bulk_service_delivery_locators"][
+            "bsdt_wizard_lookup"
+        ].format(title)
+        self.selenium.click_element(locator)
+        self.selenium.get_webelement(locator).send_keys(value)
+        locator_val = pmm_lex_locators["bulk_service_delivery_locators"][
+            "select_lookup_value"
+        ].format(value)
+        self.selenium.wait_until_page_contains_element(
+            locator_val, error="value is not available"
+        )
+        time.sleep(1)
+        self.salesforce._jsclick(locator_val)
+        time.sleep(0.5)

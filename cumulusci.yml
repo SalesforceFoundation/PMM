@@ -15,6 +15,9 @@ project:
     dependencies:
         - namespace: sfdobase
           version: 1.0
+    dependency_resolutions:
+        preproduction: include_beta
+
 orgs:
     scratch:
         dev_namespaced:

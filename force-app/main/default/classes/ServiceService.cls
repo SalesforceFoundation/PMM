@@ -69,16 +69,16 @@ public with sharing class ServiceService {
     }
 
     public Map<String, Object> getServiceDeliveryFieldSets() {
-        Integer indexToInsertServiceField;
-        String objectName = Schema.SObjectType.ServiceDelivery__c.getName();
-        Map<String, Object> fieldSets = fieldSetService.getFieldSetsByName(objectName);
+        Map<String, Object> fieldSets = fieldSetService.getFieldSetsByName(
+            Schema.SObjectType.ServiceDelivery__c.getName()
+        );
         Map<String, Object> serviceField = fieldSetService.getFieldForLWC(
             ServiceDelivery__c.Service__c.getDescribe()
         );
         Map<String, Object> contactField = fieldSetService.getFieldForLWC(
             ServiceDelivery__c.Contact__c.getDescribe()
         );
-        Map<String, Object> peField = fieldSetService.getFieldForLWC(
+        Map<String, Object> engagementField = fieldSetService.getFieldForLWC(
             ServiceDelivery__c.ProgramEngagement__c.getDescribe()
         );
 
@@ -92,7 +92,8 @@ public with sharing class ServiceService {
                 continue;
             }
 
-            indexToInsertServiceField = fieldSetValues.indexOf(peField) + 1;
+            Integer indexToInsertServiceField =
+                fieldSetValues.indexOf(engagementField) + 1;
             indexToInsertServiceField = indexToInsertServiceField > 0
                 ? indexToInsertServiceField
                 : fieldSetValues.indexOf(contactField) + 1;

@@ -33,10 +33,9 @@ public with sharing class ServiceDeliveryController {
     @AuraEnabled(cacheable=true)
     public static Map<String, Object> getServiceDeliveryFieldSets() {
         try {
-            Map<String, Object> fieldSets = service.getServiceDeliveryFieldSets();
+            return service.getServiceDeliveryFieldSets();
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }
-        return service.getServiceDeliveryFieldSets();
     }
 }

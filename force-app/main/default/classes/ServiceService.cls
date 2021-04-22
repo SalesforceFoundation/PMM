@@ -12,6 +12,9 @@ public with sharing class ServiceService {
     }
 
     @TestVisible
+    private static FieldSetService fieldSetService = new FieldSetService();
+
+    @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();
 
     @TestVisible
@@ -63,5 +66,43 @@ public with sharing class ServiceService {
             allServices.add(convertObjectToOption(service, serviceProgram));
         }
         return allServices;
+    }
+
+    public Map<String, Object> getFieldSetsByName(String objectName) {
+        Integer indexToInsertServiceField;
+        Boolean fieldSetContainsServiceField = true;
+        Map<String, Object> serviceField = new Map<String, Object>();
+
+        Map<String, Object> fieldSets = fieldSetService.getFieldSetsByName(objectName);
+
+        for (String key : fieldSets.keySet()) {
+            indexToInsertServiceField = 0;
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) fieldSets.get(
+                key
+            );
+
+            for (Map<String, Object> field : fieldSetValues) {
+                String fieldApiName = (String) field.get('apiName');
+
+                if (fieldApiName == 'Contact__c') {
+                    indexToInsertServiceField = fieldSetValues.indexOf(field) + 1;
+                }
+                if (fieldApiName == 'ProgramEngagement__c') {
+                    indexToInsertServiceField = fieldSetValues.indexOf(field) + 1;
+                }
+
+                if (fieldApiName != 'Service__c') {
+                    fieldSetContainsServiceField = false;
+                }
+            }
+
+            if (!fieldSetContainsServiceField) {
+                DescribeFieldResult serviceFieldDescribe = ServiceDelivery__c.Service__c.getDescribe();
+                serviceField = fieldSetService.getFieldForLWC(serviceFieldDescribe);
+                fieldSetValues.add(indexToInsertServiceField, serviceField);
+            }
+        }
+
+        return fieldSets;
     }
 }

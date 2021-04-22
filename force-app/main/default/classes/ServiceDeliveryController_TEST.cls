@@ -148,4 +148,51 @@ public with sharing class ServiceDeliveryController_TEST {
             programEngagementId
         );
     }
+
+    @IsTest
+    private static void testGetFieldSetsByName() {
+        String objectName = 'ServiceDelivery__c';
+
+        Test.startTest();
+
+        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
+        ServiceDeliveryController.getFieldSetsByName(objectName);
+
+        Test.stopTest();
+
+        serviceStub.assertCalledWith('getFieldSetsByName', String.class, objectName);
+    }
+
+    @IsTest
+    private static void whenGetFieldSetsByNameThrowsException() {
+        String objectName = 'ServiceDelivery__c';
+
+        serviceStub.withThrowException('getFieldSetsByName', String.class);
+
+        Test.startTest();
+
+        ServiceDeliveryController.service = (serviceService) serviceStub.createMock();
+
+        Exception actualException;
+
+        try {
+            ServiceDeliveryController.getFieldSetsByName(objectName);
+        } catch (Exception e) {
+            actualException = e;
+        }
+
+        Test.stopTest();
+
+        System.assertEquals(
+            true,
+            actualException instanceof AuraHandledException,
+            actualException
+        );
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage()
+        );
+
+        serviceStub.assertCalledWith('getFieldSetsByName', String.class, objectName);
+    }
 }

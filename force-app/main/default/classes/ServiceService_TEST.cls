@@ -13,6 +13,7 @@ public with sharing class ServiceService_TEST {
         ProgramEngagementSelector.class
     );
     private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
+    private static BasicStub fieldSetServiceStub = new BasicStub(FieldSetService.class);
 
     @IsTest
     private static void testGetServicesEngagementsByContactId() {

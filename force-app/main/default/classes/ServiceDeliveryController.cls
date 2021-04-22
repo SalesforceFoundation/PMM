@@ -31,12 +31,12 @@ public with sharing class ServiceDeliveryController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Map<String, Object> getFieldSetsByName(String objectName) {
+    public static Map<String, Object> getServiceDeliveryFieldSets() {
         try {
-            Map<String, Object> fieldSets = service.getFieldSetsByName(objectName);
+            Map<String, Object> fieldSets = service.getServiceDeliveryFieldSets();
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }
-        return service.getFieldSetsByName(objectName);
+        return service.getServiceDeliveryFieldSets();
     }
 }

@@ -150,24 +150,20 @@ public with sharing class ServiceDeliveryController_TEST {
     }
 
     @IsTest
-    private static void testGetFieldSetsByName() {
-        String objectName = 'ServiceDelivery__c';
-
+    private static void testGetServiceDeliveryFieldSets() {
         Test.startTest();
 
         ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
-        ServiceDeliveryController.getFieldSetsByName(objectName);
+        ServiceDeliveryController.getServiceDeliveryFieldSets();
 
         Test.stopTest();
 
-        serviceStub.assertCalledWith('getFieldSetsByName', String.class, objectName);
+        serviceStub.assertCalled('getServiceDeliveryFieldSets');
     }
 
     @IsTest
-    private static void whenGetFieldSetsByNameThrowsException() {
-        String objectName = 'ServiceDelivery__c';
-
-        serviceStub.withThrowException('getFieldSetsByName', String.class);
+    private static void whenGetServiceDeliveryFieldSetsThrowsException() {
+        serviceStub.withThrowException('getServiceDeliveryFieldSets');
 
         Test.startTest();
 
@@ -176,7 +172,7 @@ public with sharing class ServiceDeliveryController_TEST {
         Exception actualException;
 
         try {
-            ServiceDeliveryController.getFieldSetsByName(objectName);
+            ServiceDeliveryController.getServiceDeliveryFieldSets();
         } catch (Exception e) {
             actualException = e;
         }
@@ -193,6 +189,6 @@ public with sharing class ServiceDeliveryController_TEST {
             actualException.getMessage()
         );
 
-        serviceStub.assertCalledWith('getFieldSetsByName', String.class, objectName);
+        serviceStub.assertCalled('getServiceDeliveryFieldSets');
     }
 }

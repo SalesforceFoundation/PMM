@@ -68,7 +68,8 @@ public with sharing class ServiceService {
         return allServices;
     }
 
-    public Map<String, Object> getFieldSetsByName(String objectName) {
+    public Map<String, Object> getServiceDeliveryFieldSets() {
+        String objectName = Schema.SObjectType.ServiceDelivery__c.getName();
         Integer indexToInsertServiceField;
         Boolean fieldSetContainsServiceField = true;
         Map<String, Object> serviceField = new Map<String, Object>();
@@ -84,14 +85,23 @@ public with sharing class ServiceService {
             for (Map<String, Object> field : fieldSetValues) {
                 String fieldApiName = (String) field.get('apiName');
 
-                if (fieldApiName == 'Contact__c') {
+                if (
+                    fieldApiName ==
+                    Schema.SObjectType.ServiceDelivery__c.Fields.Contact__c.getName()
+                ) {
                     indexToInsertServiceField = fieldSetValues.indexOf(field) + 1;
                 }
-                if (fieldApiName == 'ProgramEngagement__c') {
+                if (
+                    fieldApiName ==
+                    Schema.SObjectType.ServiceDelivery__c.Fields.ProgramEngagement__c.getName()
+                ) {
                     indexToInsertServiceField = fieldSetValues.indexOf(field) + 1;
                 }
 
-                if (fieldApiName != 'Service__c') {
+                if (
+                    fieldApiName !=
+                    Schema.SObjectType.ServiceDelivery__c.Fields.Service__c.getName()
+                ) {
                     fieldSetContainsServiceField = false;
                 }
             }

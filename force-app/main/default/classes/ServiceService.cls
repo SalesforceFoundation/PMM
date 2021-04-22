@@ -69,48 +69,34 @@ public with sharing class ServiceService {
     }
 
     public Map<String, Object> getServiceDeliveryFieldSets() {
-        String objectName = Schema.SObjectType.ServiceDelivery__c.getName();
         Integer indexToInsertServiceField;
-        Boolean fieldSetContainsServiceField = true;
-        Map<String, Object> serviceField = new Map<String, Object>();
-
+        String objectName = Schema.SObjectType.ServiceDelivery__c.getName();
         Map<String, Object> fieldSets = fieldSetService.getFieldSetsByName(objectName);
+        Map<String, Object> serviceField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Service__c.getDescribe()
+        );
+        Map<String, Object> contactField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Contact__c.getDescribe()
+        );
+        Map<String, Object> peField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.ProgramEngagement__c.getDescribe()
+        );
 
         for (String key : fieldSets.keySet()) {
-            indexToInsertServiceField = 0;
             List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) fieldSets.get(
                 key
             );
 
-            for (Map<String, Object> field : fieldSetValues) {
-                String fieldApiName = (String) field.get('apiName');
-
-                if (
-                    fieldApiName ==
-                    Schema.SObjectType.ServiceDelivery__c.Fields.Contact__c.getName()
-                ) {
-                    indexToInsertServiceField = fieldSetValues.indexOf(field) + 1;
-                }
-                if (
-                    fieldApiName ==
-                    Schema.SObjectType.ServiceDelivery__c.Fields.ProgramEngagement__c.getName()
-                ) {
-                    indexToInsertServiceField = fieldSetValues.indexOf(field) + 1;
-                }
-
-                if (
-                    fieldApiName !=
-                    Schema.SObjectType.ServiceDelivery__c.Fields.Service__c.getName()
-                ) {
-                    fieldSetContainsServiceField = false;
-                }
+            Boolean fieldSetContainsServiceField = fieldSetValues.contains(serviceField);
+            if (fieldSetContainsServiceField) {
+                continue;
             }
 
-            if (!fieldSetContainsServiceField) {
-                DescribeFieldResult serviceFieldDescribe = ServiceDelivery__c.Service__c.getDescribe();
-                serviceField = fieldSetService.getFieldForLWC(serviceFieldDescribe);
-                fieldSetValues.add(indexToInsertServiceField, serviceField);
-            }
+            indexToInsertServiceField = fieldSetValues.indexOf(peField) + 1;
+            indexToInsertServiceField = indexToInsertServiceField > 0
+                ? indexToInsertServiceField
+                : fieldSetValues.indexOf(contactField) + 1;
+            fieldSetValues.add(indexToInsertServiceField, serviceField);
         }
 
         return fieldSets;

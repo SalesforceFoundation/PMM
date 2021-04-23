@@ -13,7 +13,6 @@ public with sharing class ServiceService_TEST {
         ProgramEngagementSelector.class
     );
     private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
-    private static BasicStub fieldSetServiceStub = new BasicStub(FieldSetService.class);
 
     @IsTest
     private static void testGetServicesEngagementsByContactId() {
@@ -157,31 +156,26 @@ public with sharing class ServiceService_TEST {
     //Removing the service field from the fieldset
     @IsTest
     private static void testGetServiceDeliveryFieldSetsWithoutService() {
-        String methodName = 'getFieldSetsByName';
-        String getLWCMethodName = 'getFieldForLWC';
         Map<String, Object> removedServiceField;
         FieldSetService fieldSetService = new FieldSetService();
         Integer serviceFieldIndex;
 
-        Map<String, Object> expectedFieldSets = fieldSetService.getFieldSetsByName(
+        Map<String, Object> fieldSetsToReturn = fieldSetService.getFieldSetsByName(
             Schema.SObjectType.ServiceDelivery__c.getName()
         );
-
         Map<String, Object> serviceField = fieldSetService.getFieldForLWC(
             ServiceDelivery__c.Service__c.getDescribe()
         );
-
         Map<String, Object> contactField = fieldSetService.getFieldForLWC(
             ServiceDelivery__c.Contact__c.getDescribe()
         );
-
         Map<String, Object> engagementField = fieldSetService.getFieldForLWC(
             ServiceDelivery__c.ProgramEngagement__c.getDescribe()
         );
 
         //Remove the service field from the fieldset that we got back
-        for (String key : expectedFieldSets.keySet()) {
-            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) expectedFieldSets.get(
+        for (String key : fieldSetsToReturn.keySet()) {
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) fieldSetsToReturn.get(
                 key
             );
 
@@ -193,7 +187,7 @@ public with sharing class ServiceService_TEST {
                 System.assertEquals(
                     removedServiceField,
                     serviceField,
-                    'Service field was not removed from the fieldset'
+                    'Service field was not removed from the fieldset as expected'
                 );
                 System.assertEquals(
                     false,
@@ -203,29 +197,26 @@ public with sharing class ServiceService_TEST {
             }
         }
 
-        fieldSetServiceStub.withReturnValue(methodName, String.class, expectedFieldSets);
-        fieldSetServiceStub.withReturnValue(
-            getLWCMethodName,
-            DescribeFieldResult.class,
-            serviceField
-        );
-        fieldSetServiceStub.withReturnValue(
-            getLWCMethodName,
-            DescribeFieldResult.class,
-            contactField
-        );
-        fieldSetServiceStub.withReturnValue(
-            getLWCMethodName,
-            DescribeFieldResult.class,
-            engagementField
-        );
+        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+            .when('getFieldSetsByName', String.class)
+            .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
+            .thenReturn(fieldSetsToReturn)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Service__c.getDescribe())
+            .thenReturn(serviceField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Contact__c.getDescribe())
+            .thenReturn(contactField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.ProgramEngagement__c.getDescribe())
+            .thenReturn(engagementField)
+            .build();
+
+        ServiceService service = new ServiceService();
+        service.fieldSetService = (FieldSetService) fieldSetServiceStub.create();
 
         Test.startTest();
-
-        final ServiceService service = new ServiceService();
-        service.fieldSetService = (fieldSetService) fieldSetServiceStub.createMock();
         Map<String, Object> actualFieldSets = service.getServiceDeliveryFieldSets();
-
         Test.stopTest();
 
         for (String key : actualFieldSets.keySet()) {
@@ -233,31 +224,14 @@ public with sharing class ServiceService_TEST {
                 key
             );
 
-            for (Map<String, Object> obj : fieldSetValues) {
-                System.debug('obj : ' + obj);
-            }
+            serviceFieldIndex = fieldSetValues.indexOf(serviceField);
 
-            //serviceFieldIndex = fieldSetValues.indexOf(serviceField);
-
-            //System.assertEquals(2, serviceFieldIndex);
+            System.assert(
+                serviceFieldIndex > 0,
+                'Expected the service field to be after the contact or the program engagement field.'
+            );
         }
 
-        System.assertEquals(
-            expectedFieldSets.keySet(),
-            actualFieldSets.keySet(),
-            'Expected that both expected and actual have the same values'
-        );
-
-        fieldSetServiceStub.assertCalledWith(
-            methodName,
-            String.class,
-            Schema.SObjectType.ServiceDelivery__c.getName()
-        );
-
-        fieldSetServiceStub.assertCalledWith(
-            getLWCMethodName,
-            DescribeFieldResult.class,
-            ServiceDelivery__c.Service__c.getDescribe()
-        );
+        fieldSetServiceStub.expectedMethodsCalled();
     }
 }

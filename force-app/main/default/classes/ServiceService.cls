@@ -12,7 +12,7 @@ public with sharing class ServiceService {
     }
 
     @TestVisible
-    private static FieldSetService fieldSetService = new FieldSetService();
+    private FieldSetService fieldSetService = new FieldSetService();
 
     @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();

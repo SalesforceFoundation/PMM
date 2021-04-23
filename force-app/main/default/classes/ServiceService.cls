@@ -97,7 +97,12 @@ public with sharing class ServiceService {
             indexToInsertServiceField = indexToInsertServiceField > 0
                 ? indexToInsertServiceField
                 : fieldSetValues.indexOf(contactField) + 1;
-            fieldSetValues.add(indexToInsertServiceField, serviceField);
+
+            if (fieldSetValues.size() <= indexToInsertServiceField) {
+                fieldSetValues.add(serviceField);
+            } else {
+                fieldSetValues.add(indexToInsertServiceField, serviceField);
+            }
         }
 
         return fieldSets;

@@ -7,66 +7,59 @@
  *
  */
 
-public class ContactRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
+//Stuff to do
+//1. See if we can pass this universe of IDs to the next batch.
+//2.
+
+public class ContactRollupsSchedulable implements Database.Batchable<SObject>, Schedulable, Database.Stateful {
     @TestVisible
-    private static AttendanceService attendanceService = new AttendanceService();
+    private SystemAccess systemAccess = new SystemAccess();
+
+    @TestVisible
+    private Set<Id> contactIds = new Set<Id>();
 
     public void execute(SchedulableContext context) {
         Database.executeBatch(new ContactRollupsSchedulable());
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
-        List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
-
-        QueryBuilder query = new QueryBuilder();
-        query.withSObjectType(Contact.SObjectType);
-        query.withSelectFields(
-            new List<String>{
-                String.valueOf(Contact.NumPresentServiceDeliveries__c),
-                String.valueOf(Contact.NumAbsentServiceDeliveries__c),
-                String.valueOf(Contact.ConsecutiveAbsences__c),
-                String.valueOf(Contact.LastServiceDate__c)
-            }
-        );
-
-        QueryBuilder subQuery = new QueryBuilder();
-        // TODO: make AttendanceService.getServiceDeliveryRelationshipName public and use it here
-        // to get the relationship name dynamically
-        subQuery.withChildRelationshipName('Service_Deliveries__r');
-        subquery.withSelectFields(
-            new List<String>{
-                String.valueOf(ServiceDelivery__c.Contact__c),
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c),
-                String.valueOf(ServiceDelivery__c.Quantity__c)
-            }
-        );
-        // Contact with any delivery records with attendance
-        // Contact with any delivery records with delivery date and qty
-        subQuery.addCondition(
-            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-            ' IN :attendanceStatuses OR (' +
-            String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-            ' <= TODAY AND ' +
-            String.valueOf(ServiceDelivery__c.Quantity__c) +
-            ' > 0) '
-        );
-        subQuery.withOrderBy(
-            String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' DESC'
-        );
-
-        query.addSubQuery(subQuery);
-
-        // Contact with any of our rollup fields populated
-        // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
-
+        QueryBuilder query = constructQuery();
         return Database.getQueryLocator(query.buildSoqlQuery());
     }
 
     public void execute(Database.BatchableContext bc, List<Contact> scope) {
-        attendanceService.doRollups(Contact.SObjectType, scope);
+        handleExecute(scope);
     }
 
     public void finish(Database.BatchableContext bc) {
+        Database.executeBatch(new ContactRollupsBatchCalc(contactIds), 2000);
+    }
+
+    private QueryBuilder constructQuery() {
+        QueryBuilder query = new QueryBuilder();
+        query.withSObjectType(Contact.SObjectType);
+        query.withSelectFields(new List<String>{ String.valueOf(Contact.Id) });
+        query.addCondition(
+            String.valueOf(Contact.NumPresentServiceDeliveries__c) +
+            ' != null OR ' +
+            String.valueOf(Contact.NumAbsentServiceDeliveries__c) +
+            ' != null OR ' +
+            String.valueOf(Contact.LastServiceDate__c) +
+            ' != null OR ' +
+            String.valueOf(Contact.ConsecutiveAbsences__c) +
+            ' != null '
+        );
+        return query;
+    }
+
+    private void handleExecute(List<Contact> contacts) {
+        for (Contact con : contacts) {
+            contactIds.add(con.Id);
+            // con.NumAbsentServiceDeliveries__c = null;
+            // con.NumPresentServiceDeliveries__c = null;
+            // con.LastServiceDate__c = null;
+            // con.ConsecutiveAbsences__c = null;
+        }
+        //systemAccess.updateRecords(contacts);
     }
 }

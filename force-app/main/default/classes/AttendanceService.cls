@@ -67,14 +67,14 @@ public with sharing class AttendanceService {
         set;
     }
 
-    private List<String> presentStatuses {
+    public List<String> presentStatuses {
         get {
             return statusBuckets.get('Present');
         }
         set;
     }
 
-    private List<String> absentStatuses {
+    public List<String> absentStatuses {
         get {
             return statusBuckets.get('Absent');
         }

@@ -41,7 +41,7 @@ public class ContactRollup_Tarren_Part2 implements Database.Batchable<SObject>, 
         AttendanceService attendanceService = new AttendanceService();
         attendanceStatuses = attendanceService.getAttendanceStatuses();
         String query = 'SELECT Contact__c, AttendanceStatus__c, DeliveryDate__c, Quantity__c FROM ServiceDelivery__c ';
-        query += 'WHERE AttendanceStatus__c IN :attendanceStatuses AND Contact__c != null Order By Contact__c DESC';
+        query += 'WHERE AttendanceStatus__c IN :attendanceStatuses AND Contact__c != null Order By Contact__c, DeliveryDate__c ASC';
 
         return Database.getQueryLocator(query);
     }
@@ -58,7 +58,9 @@ public class ContactRollup_Tarren_Part2 implements Database.Batchable<SObject>, 
                     new Contact(
                         Id = del.Contact__c,
                         NumAbsentServiceDeliveries__c = 0,
-                        NumPresentServiceDeliveries__c = 0
+                        NumPresentServiceDeliveries__c = 0,
+                        LastServiceDate__c = null,
+                        ConsecutiveAbsences__c = 0
                     )
                 );
             }
@@ -68,11 +70,21 @@ public class ContactRollup_Tarren_Part2 implements Database.Batchable<SObject>, 
             //So not in present by default means absent
             if (presentStatuses.contains(del.AttendanceStatus__c)) {
                 thisContact.NumPresentServiceDeliveries__c += 1;
+                thisContact.ConsecutiveAbsences__c = 0;
+                //Update the last service date on Contact
+                if (
+                    thisContact.LastServiceDate__c == null ||
+                    del.DeliveryDate__c > thisContact.LastServiceDate__c
+                ) {
+                    thisContact.LastServiceDate__c = del.DeliveryDate__c;
+                }
             } else {
                 thisContact.NumAbsentServiceDeliveries__c += 1;
+                thisContact.ConsecutiveAbsences__c += 1;
             }
 
-            //Next, we're only querying mapped attendance status SDs
+            //Here we find out which contacts have been fully processed and update them
+            //If they are no longer in the batch, they have been processed
             List<Contact> contactsToUpdate = new List<Contact>();
             for (Contact con : contactMap.values()) {
                 if (!batchContactIds.contains(con.Id)) {

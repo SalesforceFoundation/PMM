@@ -33,7 +33,7 @@ import SERVICE_DELIVERY_FIELD_SET_FIELD from "@salesforce/schema/Service__c.Serv
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
-import getFieldSets from "@salesforce/apex/FieldSetController.getFieldSetsByName";
+import getFieldSets from "@salesforce/apex/ServiceDeliveryController.getServiceDeliveryFieldSets";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {

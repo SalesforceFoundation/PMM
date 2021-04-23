@@ -31,7 +31,7 @@ public with sharing class Stub implements System.StubProvider {
         return null;
     }
 
-    public void expectedMethodsCalled() {
+    public void assertMethodsCalled() {
         for (MethodCall methodCall : methodCalls) {
             methodCall.expectedToHaveBeenCalled();
         }

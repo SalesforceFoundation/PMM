@@ -9,106 +9,100 @@
 
 @isTest
 public with sharing class ServiceService_TEST {
-    private static BasicStub engagementSelectorStub = new BasicStub(
-        ProgramEngagementSelector.class
-    );
-    private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
-
     @IsTest
     private static void testGetServicesEngagementsByContactId() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);
 
-        Program__c program1 = new Program__c();
-        program1.Id = TestUtil.mockId(Program__c.SObjectType);
-        program1.Name = 'Program 1';
-        program1.Status__c = 'Active';
-        program1.StartDate__c = Date.today();
-        program1.EndDate__c = Date.today().addDays(30);
+        Program__c program1 = new Program__c(
+            Id = TestUtil.mockId(Program__c.SObjectType),
+            Name = 'Program 1',
+            Status__c = 'Active',
+            StartDate__c = Date.today(),
+            EndDate__c = Date.today().addDays(30)
+        );
 
-        ProgramEngagement__c engagement1 = new ProgramEngagement__c();
-        engagement1.Name = 'Engagement 1';
-        engagement1.Stage__c = 'Enrolled';
-        engagement1.Contact__c = contactId;
-        engagement1.Program__c = program1.Id;
-        engagement1.Role__c = 'Client';
+        ProgramEngagement__c engagement1 = new ProgramEngagement__c(
+            Name = 'Engagement 1',
+            Stage__c = 'Enrolled',
+            Contact__c = contactId,
+            Program__c = program1.Id,
+            Role__c = 'Client'
+        );
 
-        Service__c service1 = new Service__c();
-        service1.Id = TestUtil.mockId(Service__c.SObjectType);
-        service1.Name = 'Service 1';
-        service1.Program__c = program1.Id;
-        service1.Status__c = 'Active';
-        service1.UnitOfMeasurement__c = 'Hours';
+        Service__c service1 = new Service__c(
+            Id = TestUtil.mockId(Service__c.SObjectType),
+            Name = 'Service 1',
+            Program__c = program1.Id,
+            Status__c = 'Active',
+            UnitOfMeasurement__c = 'Hours'
+        );
 
         List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>{
             engagement1
         };
         List<Service__c> services = new List<Service__c>{ service1 };
-        engagementSelectorStub.withReturnValue(
-            'getProgramEngagementsByContactId',
-            Id.class,
-            engagements
-        );
-        serviceSelectorStub.withReturnValue(
-            'getServicesByProgramIds',
-            Set<Id>.class,
-            services
-        );
+        Stub engagementSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
+            .when('getProgramEngagementsByContactId', Id.class)
+            .calledWith(contactId)
+            .thenReturn(engagements)
+            .build();
+        Stub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
+            .when('getServicesByProgramIds', Set<Id>.class)
+            .calledWith(new Set<Id>{ program1.Id })
+            .thenReturn(services)
+            .build();
+
+        ServiceService service = new ServiceService();
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.create();
+        service.engagementSelector = (ProgramEngagementSelector) engagementSelectorStub.create();
 
         Test.startTest();
-
-        final ServiceService service = new ServiceService();
-        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
-        service.engagementSelector = (ProgramEngagementSelector) engagementSelectorStub.createMock();
-
-        final Map<String, List<Object>> actual = service.getServicesEngagementsByContactId(
+        Map<String, List<Object>> actual = service.getServicesEngagementsByContactId(
             contactId
         );
-
         Test.stopTest();
 
         Set<String> expectedKeySet = new Set<String>{ 'engagements', 'services' };
-
-        System.assertEquals(expectedKeySet, actual.keySet());
+        System.assertEquals(
+            expectedKeySet,
+            actual.keySet(),
+            'Expected both keys to be returned.'
+        );
 
         for (List<Object> objList : actual.values()) {
             System.assert(!objList.isEmpty());
         }
 
-        serviceSelectorStub.assertCalledWith(
-            'getServicesByProgramIds',
-            Set<Id>.class,
-            new Set<Id>{ program1.Id }
-        );
-        engagementSelectorStub.assertCalledWith(
-            'getProgramEngagementsByContactId',
-            Id.class,
-            contactId
-        );
+        engagementSelectorStub.assertMethodsCalled();
+        serviceSelectorStub.assertMethodsCalled();
     }
 
     @IsTest
     private static void testGetServicesByProgramEngagementId() {
         Id programEngagementId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
 
-        Program__c program1 = new Program__c();
-        program1.Id = TestUtil.mockId(Program__c.SObjectType);
-        program1.Name = 'Program 1';
-        program1.Status__c = 'Active';
-        program1.StartDate__c = Date.today();
-        program1.EndDate__c = Date.today().addDays(30);
+        Program__c program1 = new Program__c(
+            Id = TestUtil.mockId(Program__c.SObjectType),
+            Name = 'Program 1',
+            Status__c = 'Active',
+            StartDate__c = Date.today(),
+            EndDate__c = Date.today().addDays(30)
+        );
 
-        ProgramEngagement__c engagement1 = new ProgramEngagement__c();
-        engagement1.Name = 'Engagement 1';
-        engagement1.Stage__c = 'Enrolled';
-        engagement1.Program__c = program1.Id;
-        engagement1.Role__c = 'Client';
+        ProgramEngagement__c engagement1 = new ProgramEngagement__c(
+            Name = 'Engagement 1',
+            Stage__c = 'Enrolled',
+            Program__c = program1.Id,
+            Role__c = 'Client'
+        );
 
-        Service__c service1 = new Service__c();
-        service1.Id = TestUtil.mockId(Service__c.SObjectType);
-        service1.Name = 'Service 1';
-        service1.Program__c = program1.Id;
-        service1.Status__c = 'Active';
-        service1.UnitOfMeasurement__c = 'Hours';
+        Service__c service1 = new Service__c(
+            Id = TestUtil.mockId(Service__c.SObjectType),
+            Name = 'Service 1',
+            Program__c = program1.Id,
+            Status__c = 'Active',
+            UnitOfMeasurement__c = 'Hours'
+        );
 
         List<Service__c> services = new List<Service__c>{ service1 };
         Map<String, String> expectedValues = new Map<String, String>();
@@ -118,16 +112,16 @@ public with sharing class ServiceService_TEST {
 
         final List<object> expected = new List<Object>{ expectedValues };
 
-        serviceSelectorStub.withReturnValue(
-            'getServicesByProgramEngagementId',
-            Id.class,
-            services
-        );
+        Stub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
+            .when('getServicesByProgramEngagementId', Id.class)
+            .calledWith(programEngagementId)
+            .thenReturn(services)
+            .build();
 
         Test.startTest();
 
         final ServiceService service = new ServiceService();
-        service.serviceSelector = (ServiceSelector) serviceSelectorStub.createMock();
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.create();
 
         final List<Object> actual = service.getServicesByProgramEngagementId(
             programEngagementId
@@ -146,11 +140,7 @@ public with sharing class ServiceService_TEST {
             'Expected the size of both expected and actual are the same'
         );
 
-        serviceSelectorStub.assertCalledWith(
-            'getServicesByProgramEngagementId',
-            Id.class,
-            programEngagementId
-        );
+        serviceSelectorStub.assertMethodsCalled();
     }
 
     //Removing the service field from the fieldset
@@ -232,6 +222,6 @@ public with sharing class ServiceService_TEST {
             );
         }
 
-        fieldSetServiceStub.expectedMethodsCalled();
+        fieldSetServiceStub.assertMethodsCalled();
     }
 }

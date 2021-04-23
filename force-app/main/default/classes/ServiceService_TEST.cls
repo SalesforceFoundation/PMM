@@ -224,4 +224,62 @@ public with sharing class ServiceService_TEST {
 
         fieldSetServiceStub.assertMethodsCalled();
     }
+
+    //Do not remove any fields from the fieldset
+    @IsTest
+    private static void testGetServiceDeliveryFieldSetsWithAllFields() {
+        Map<String, Object> removedServiceField;
+        FieldSetService fieldSetService = new FieldSetService();
+        Integer serviceFieldIndex;
+
+        Map<String, Object> fieldSetsToReturn = fieldSetService.getFieldSetsByName(
+            Schema.SObjectType.ServiceDelivery__c.getName()
+        );
+        Map<String, Object> serviceField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Service__c.getDescribe()
+        );
+        Map<String, Object> contactField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Contact__c.getDescribe()
+        );
+        Map<String, Object> engagementField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.ProgramEngagement__c.getDescribe()
+        );
+
+        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+            .when('getFieldSetsByName', String.class)
+            .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
+            .thenReturn(fieldSetsToReturn)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Service__c.getDescribe())
+            .thenReturn(serviceField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Contact__c.getDescribe())
+            .thenReturn(contactField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.ProgramEngagement__c.getDescribe())
+            .thenReturn(engagementField)
+            .build();
+
+        ServiceService service = new ServiceService();
+        service.fieldSetService = (FieldSetService) fieldSetServiceStub.create();
+
+        Test.startTest();
+        Map<String, Object> actualFieldSets = service.getServiceDeliveryFieldSets();
+        Test.stopTest();
+
+        for (String key : actualFieldSets.keySet()) {
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) actualFieldSets.get(
+                key
+            );
+
+            serviceFieldIndex = fieldSetValues.indexOf(serviceField);
+
+            System.assert(
+                serviceFieldIndex > 0,
+                'Expected the service field to be after the contact or the program engagement field.'
+            );
+        }
+
+        fieldSetServiceStub.assertMethodsCalled();
+    }
 }

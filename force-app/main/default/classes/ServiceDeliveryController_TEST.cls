@@ -151,6 +151,7 @@ public with sharing class ServiceDeliveryController_TEST {
 
     @IsTest
     private static void testGetServiceDeliveryFieldSets() {
+        String methodName = 'getServiceDeliveryFieldSets';
         Test.startTest();
 
         ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
@@ -158,12 +159,14 @@ public with sharing class ServiceDeliveryController_TEST {
 
         Test.stopTest();
 
-        serviceStub.assertCalled('getServiceDeliveryFieldSets');
+        serviceStub.assertCalled(methodName);
     }
 
     @IsTest
     private static void whenGetServiceDeliveryFieldSetsThrowsException() {
-        serviceStub.withThrowException('getServiceDeliveryFieldSets');
+        String methodName = 'getServiceDeliveryFieldSets';
+
+        serviceStub.withThrowException(methodName);
 
         Test.startTest();
 
@@ -189,6 +192,6 @@ public with sharing class ServiceDeliveryController_TEST {
             actualException.getMessage()
         );
 
-        serviceStub.assertCalled('getServiceDeliveryFieldSets');
+        serviceStub.assertCalled(methodName);
     }
 }

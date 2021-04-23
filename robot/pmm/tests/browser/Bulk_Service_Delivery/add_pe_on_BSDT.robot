@@ -41,8 +41,9 @@ Setup Test Data
 Create program engagement from BSDT
     [Documentation]                         This test adds service deliveries on bulk service delivery by creating
     ...                                     a new PE on bsdt page
-    [tags]                                  unstable    W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                                  W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To Page                              Custom                              Bulk_Service_Deliveries
+    Click Dialog Button                     Create by Individual
     Populate Bsdt Lookup                    1           Client                  ${contact}[FirstName] ${contact}[LastName]
     Page Should Contain                     ${contact}[FirstName] ${contact}[LastName]
     Sleep                                   2s
@@ -58,9 +59,9 @@ Create program engagement from BSDT
     Wait Until Modal Is Closed
     Populate Bsdt Dropdown                  1           Service                 ${service}[Name]
     Populate Bsdt Field                     1           Quantity                ${quantity}
+    Click Bsdt Button                       Save
     Verify Persist Save Icon                1           Saved
-    Click Button                            Done
-    Click Toast Message                     1 Service Deliveries
+    Go To Page                              Listing                             ${ns}ServiceDelivery__c
     Click Listview Link                     ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
     Verify Details                          Service Delivery Name           contains        ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
     Save Current Record ID For Deletion     ${ns}ServiceDelivery__c

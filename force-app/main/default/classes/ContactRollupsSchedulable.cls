@@ -11,55 +11,51 @@
 //1. See if we can pass this universe of IDs to the next batch.
 //2.
 
-public class ContactRollupsSchedulable implements Database.Batchable<SObject>, Schedulable, Database.Stateful {
+public class ContactRollupsSchedulable implements Database.Batchable<SObject>, System.Schedulable, Database.Stateful {
     @TestVisible
     private SystemAccess systemAccess = new SystemAccess();
-
+    @TestVisible
+    private QueryBuilder queryBuilder = new QueryBuilder();
     @TestVisible
     private Set<Id> contactIds = new Set<Id>();
 
+    // This kicks off this scheduable / batch class as the batch job
+    // Leaving the default of 200 because the Service Delivery Batch
+    // will need to find all child records and maintain the state of the
+    // contacts.
     public void execute(SchedulableContext context) {
         Database.executeBatch(new ContactRollupsSchedulable());
     }
 
+    // Find all of the contacts that have
     public Database.Querylocator start(Database.BatchableContext bc) {
-        QueryBuilder query = constructQuery();
-        return Database.getQueryLocator(query.buildSoqlQuery());
+        String query = contactWithRollupDataQuery();
+        return Database.getQueryLocator(query);
     }
 
-    public void execute(Database.BatchableContext bc, List<Contact> scope) {
-        handleExecute(scope);
-    }
-
-    public void finish(Database.BatchableContext bc) {
-        Database.executeBatch(new ContactRollupsBatchCalc(contactIds), 2000);
-    }
-
-    private QueryBuilder constructQuery() {
-        QueryBuilder query = new QueryBuilder();
-        query.withSObjectType(Contact.SObjectType);
-        query.withSelectFields(new List<String>{ String.valueOf(Contact.Id) });
-        query.addCondition(
-            String.valueOf(Contact.NumPresentServiceDeliveries__c) +
-            ' != null OR ' +
-            String.valueOf(Contact.NumAbsentServiceDeliveries__c) +
-            ' != null OR ' +
-            String.valueOf(Contact.LastServiceDate__c) +
-            ' != null OR ' +
-            String.valueOf(Contact.ConsecutiveAbsences__c) +
-            ' != null '
-        );
-        return query;
-    }
-
-    private void handleExecute(List<Contact> contacts) {
-        for (Contact con : contacts) {
-            contactIds.add(con.Id);
-            // con.NumAbsentServiceDeliveries__c = null;
-            // con.NumPresentServiceDeliveries__c = null;
-            // con.LastServiceDate__c = null;
-            // con.ConsecutiveAbsences__c = null;
+    // The batch job will iterate all of the contacts and only add them to the
+    // set of Ids. Note that we need stateful in order to maintain all Ids across
+    // each batch iteration.
+    public void execute(Database.BatchableContext bc, List<Contact> contacts) {
+        for (Contact contactRecord : contacts) {
+            contactIds.add(contactRecord.Id);
         }
-        //systemAccess.updateRecords(contacts);
+    }
+
+    // Once all of the contact Ids have been added we will pass them off to the next batch
+    public void finish(Database.BatchableContext bc) {
+        if (contactIds.isEmpty()) {
+            return;
+        }
+
+        Database.executeBatch(new ServiceDeliveryRollups(contactIds), 2000);
+    }
+
+    private String contactWithRollupDataQuery() {
+        // TODO: figure out this criteria because if the contact doesn't have rollups to begin with
+        // they will not be processed
+        queryBuilder.withSObjectType(Contact.SObjectType)
+            .withSelectFields(new List<String>{ String.valueOf(Contact.Id) });
+        return queryBuilder.buildSoqlQuery();
     }
 }

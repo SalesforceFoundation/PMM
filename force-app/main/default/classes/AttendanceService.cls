@@ -36,6 +36,26 @@ public with sharing class AttendanceService {
         ServiceDelivery__c.Contact__c => Contact.LastServiceDate__c,
         ServiceDelivery__c.ProgramEngagement__c => ProgramEngagement__c.LastServiceDate__c
     };
+    private static final Map<SObjectType, SObjectField> NUM_PRESENT_FIELD_BY_SOBJECT_TYPE = new Map<SObjectType, SObjectField>{
+        Service__c.SObjectType => Service__c.NumPresentServiceDeliveries__c,
+        Contact.SObjectType => Contact.NumPresentServiceDeliveries__c,
+        ServiceSession__c.SObjectType => ServiceSession__c.NumPresentServiceDeliveries__c,
+        ProgramEngagement__c.SObjectType => ProgramEngagement__c.NumPresentServiceDeliveries__c
+    };
+    private static final Map<SObjectType, SObjectField> NUM_ABSENT_FIELD_BY_SOBJECT_TYPE = new Map<SObjectType, SObjectField>{
+        Service__c.SObjectType => Service__c.NumAbsentServiceDeliveries__c,
+        Contact.SObjectType => Contact.NumAbsentServiceDeliveries__c,
+        ServiceSession__c.SObjectType => ServiceSession__c.NumAbsentServiceDeliveries__c,
+        ProgramEngagement__c.SObjectType => ProgramEngagement__c.NumAbsentServiceDeliveries__c
+    };
+    private static final Map<SObjectType, SObjectField> CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE = new Map<SObjectType, SObjectField>{
+        Contact.SObjectType => Contact.ConsecutiveAbsences__c,
+        ProgramEngagement__c.SObjectType => ProgramEngagement__c.ConsecutiveAbsences__c
+    };
+    private static final Map<SObjectType, SObjectField> LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE = new Map<SObjectType, SObjectField>{
+        Contact.SObjectType => Contact.LastServiceDate__c,
+        ProgramEngagement__c.SObjectType => ProgramEngagement__c.LastServiceDate__c
+    };
     private static final Map<SObjectType, SObjectField> SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT = new Map<SObjectType, SObjectField>{
         Contact.SObjectType => ServiceDelivery__c.Contact__c,
         ProgramEngagement__c.SObjectType => ServiceDelivery__c.ProgramEngagement__c,
@@ -82,6 +102,187 @@ public with sharing class AttendanceService {
     }
 
     private List<String> attendanceStatuses;
+
+    //Here we update the record based on information from the delivery in the iteration
+    public SObject processRecord(
+        SObjectType sObjectType,
+        ServiceDelivery__c delivery,
+        SObject record
+    ) {
+        SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
+        SObjectField numAbsentField = NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
+        SObjectField consecutiveAbsencesField = CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(
+            sObjectType
+        );
+        SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(
+            SObjectType
+        );
+
+        if (
+            numPresentField != null &&
+            presentStatuses.contains(delivery.AttendanceStatus__c)
+        ) {
+            Integer presentCount = (Integer) record.get(numPresentField);
+            record.put(numPresentField, presentCount == null ? 1 : presentCount++);
+            if (consecutiveAbsencesField != null) {
+                record.put(consecutiveAbsencesField, 0);
+            }
+        } else if (
+            numAbsentField != null &&
+            absentStatuses.contains(delivery.AttendanceStatus__c)
+        ) {
+            Integer absentCount = (Integer) record.get(numAbsentField);
+            record.put(numAbsentField, absentCount == null ? 1 : absentCount++);
+            if (consecutiveAbsencesField != null) {
+                Integer consecutiveCount = (Integer) record.get(consecutiveAbsencesField);
+                record.put(
+                    consecutiveAbsencesField,
+                    consecutiveCount == null ? 1 : consecutiveCount++
+                );
+            }
+        }
+        //Last Service Date
+        if (
+            lastServiceDateField != null &&
+            (delivery.Quantity__c > 0 &&
+            delivery.DeliveryDate__c != null)
+        ) {
+            Date lastServiceDate = (Date) record.get(lastServiceDateField);
+            if (lastServiceDate != null && delivery.DeliveryDate__c > lastServiceDate) {
+                record.put(lastServiceDateField, delivery.DeliveryDate__c);
+            }
+        }
+        return record;
+    }
+
+    //New method that checks if records need to be updated
+    public void checkUpdateStatus(SObjectType sObjectType, Map<Id, SObject> recordById) {
+        List<SObject> recordsToUpdate = new List<SObject>();
+        Set<Id> recordIds = recordById.keySet();
+        SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
+        SObjectField numAbsentField = NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
+        SObjectField consecutiveAbsencesField = CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(
+            sObjectType
+        );
+        SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(
+            SObjectType
+        );
+        List<String> selectFields = new List<String>();
+        if (numPresentField != null) {
+            selectFields.add(String.valueOf(numPresentField));
+        }
+        if (numAbsentField != null) {
+            selectFields.add(String.valueOf(numAbsentField));
+        }
+        if (consecutiveAbsencesField != null) {
+            selectFields.add(String.valueOf(consecutiveAbsencesField));
+        }
+        if (lastServiceDateField != null) {
+            selectFields.add(String.valueOf(lastServiceDateField));
+        }
+
+        QueryBuilder queryBuilder = new QueryBuilder()
+            .withSObjectType(sObjectType)
+            .withSelectFields(selectFields)
+            .addCondition('Id IN :recordIds');
+        for (SObject originalRecord : Database.query(queryBuilder.buildSoqlQuery())) {
+            Boolean shouldUpdateRecord = false;
+            SObject currentRecord = recordById.get(originalRecord.Id);
+
+            if (
+                numPresentField != null &&
+                originalRecord.get(numPresentField) != currentRecord.get(numPresentField)
+            ) {
+                shouldUpdateRecord = true;
+            }
+            if (
+                numAbsentField != null &&
+                originalRecord.get(numAbsentField) != currentRecord.get(numAbsentField)
+            ) {
+                shouldUpdateRecord = true;
+            }
+
+            if (
+                consecutiveAbsencesField != null &&
+                originalRecord.get(consecutiveAbsencesField) !=
+                currentRecord.get(consecutiveAbsencesField)
+            ) {
+                shouldUpdateRecord = true;
+            }
+
+            if (
+                lastServiceDateField != null &&
+                originalRecord.get(lastServiceDateField) !=
+                currentRecord.get(lastServiceDateField)
+            ) {
+                shouldUpdateRecord = true;
+            }
+
+            if (shouldUpdateRecord) {
+                recordsToUpdate.add(currentRecord);
+            }
+        }
+        System.debug('recordsToUpdate: ' + recordsToUpdate);
+        System.debug('recordsById: ' + recordById);
+        systemAccess.updateRecords(recordsToUpdate);
+    }
+
+    public SObject constructNewRecord(SObjectType sObjectType, Id recordId) {
+        SObject record = sObjectType.newSObject(recordId);
+
+        if (NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.containsKey(sObjectType)) {
+            record.put(NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType), null);
+        }
+
+        if (NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.containsKey(sObjectType)) {
+            record.put(NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType), null);
+        }
+
+        if (CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.containsKey(sObjectType)) {
+            record.put(CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(sObjectType), null);
+        }
+
+        if (LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.containsKey(SObjectType)) {
+            record.put(LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(SObjectType), null);
+        }
+
+        return record;
+    }
+
+    public String getParentLookupField(SObjectType sObjectType) {
+        return String.valueOf(SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(sObjectType));
+    }
+
+    public String getServiceDeliveryWithRollupDataQuery(SObjectType sObjectType) {
+        String parentLookupField = getParentLookupField(sObjectType);
+        QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
+            .withSObjectType(ServiceDelivery__c.SObjectType)
+            .withSelectFields(
+                new List<String>{
+                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
+                    String.valueOf(ServiceDelivery__c.DeliveryDate__c),
+                    parentLookupField,
+                    String.valueOf(ServiceDelivery__c.Quantity__c)
+                }
+            )
+            .addCondition(
+                parentLookupField +
+                ' != null AND (' +
+                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
+                ' IN :attendanceStatuses OR ( ' +
+                String.valueOF(ServiceDelivery__c.Quantity__c) +
+                ' > 0 AND ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' != null ))'
+            )
+            .withOrderBy(
+                parentLookupField +
+                ', ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' ASC '
+            );
+        return serviceDeliveryQueryBuilder.buildSoqlQuery();
+    }
 
     public List<String> getAttendanceStatuses() {
         if (attendanceStatuses == null) {

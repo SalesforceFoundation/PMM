@@ -30,17 +30,9 @@ public with sharing class Rollups {
     private SystemAccess systemAccess = new SystemAccess();
     private Set<Id> unprocessedIds;
     Set<Id> idsInCurrentScope = new Set<Id>();
-    private Map<Id, SObject> uncommittedRecordsById = new Map<Id, SObject>();
+    private Map<Id, RollupRecord> uncommittedRecordsById = new Map<Id, RollupRecord>();
     private SObjectType sObjectType;
-    SObjectField lookupField;
-    SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
-    SObjectField numAbsentField = NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
-    SObjectField consecutiveAbsencesField = CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(
-        sObjectType
-    );
-    SObjectField lastServiceDateField = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
-        sObjectType
-    );
+    private SObjectField lookupField;
     private List<String> presentStatuses = attendanceService.presentStatuses;
     private List<String> absentStatuses = attendanceService.absentStatuses;
     public List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
@@ -80,7 +72,14 @@ public with sharing class Rollups {
         for (Id recordId : unprocessedIds) {
             // TODO: Investigate whether or not we need to recreate these records every batch run
             // TODO: Total number of batches 250,000 per 24 hours -> is this a namespace limit?
-            recordsToClearRollups.add(constructNewRecord(recordId));
+            RollupRecord record = new RollupRecord(recordId);
+            record.rollupFields(
+                NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+                NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+                CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+                LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(sObjectType)
+            );
+            recordsToClearRollups.add(record.getSObject());
         }
         update recordsToClearRollups;
     }
@@ -88,12 +87,12 @@ public with sharing class Rollups {
     //Here we find out which records have been fully processed and update them
     //If they are no longer in the batch, they are ready to be updated
     private void commitPreviousScope(Set<Id> idsInCurrentScope) {
-        Map<Id, SObject> recordsToUpdateMap = new Map<Id, SObject>();
-        for (SObject record : uncommittedRecordsById.values()) {
-            if (!idsInCurrentScope.contains(record.Id)) {
-                recordsToUpdateMap.put(record.Id, record);
-                uncommittedRecordsById.remove(record.Id);
-                unprocessedIds.remove(record.Id);
+        Map<Id, RollupRecord> recordsToUpdateMap = new Map<Id, RollupRecord>();
+        for (RollupRecord record : uncommittedRecordsById.values()) {
+            if (!idsInCurrentScope.contains(record.recordId)) {
+                recordsToUpdateMap.put(record.recordId, record);
+                uncommittedRecordsById.remove(record.recordId);
+                unprocessedIds.remove(record.recordId);
             }
         }
         commitUpdatedRecords(recordsToUpdateMap);
@@ -101,77 +100,33 @@ public with sharing class Rollups {
 
     private void processParentRecord(ServiceDelivery__c delivery, Id parentLookupId) {
         if (!uncommittedRecordsById.containsKey(parentLookupId)) {
-            uncommittedRecordsById.put(
-                parentLookupId,
-                constructNewRecord(parentLookupId)
+            RollupRecord record = new RollupRecord(parentLookupId);
+            record.rollupFields(
+                NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+                NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+                CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+                LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(sObjectType)
             );
+            uncommittedRecordsById.put(parentLookupId, record);
         }
 
-        SObject parentRecord = uncommittedRecordsById.get(parentLookupId);
-        parentRecord = processRecord(delivery, parentRecord);
+        RollupRecord parentRecord = uncommittedRecordsById.get(parentLookupId);
+        processRecord(delivery, parentRecord);
     }
 
-    private SObject processRecord(ServiceDelivery__c delivery, SObject record) {
-        if (
-            numPresentField != null &&
-            presentStatuses.contains(delivery.AttendanceStatus__c)
-        ) {
-            Integer presentCount = (Integer) record.get(numPresentField);
-            presentCount = (presentCount == null ? 1 : presentCount + 1);
-            record.put(numPresentField, presentCount);
-            record.put(consecutiveAbsencesField, 0);
-        } else if (
-            numAbsentField != null &&
-            absentStatuses.contains(delivery.AttendanceStatus__c)
-        ) {
-            Integer absentCount = (Integer) record.get(numAbsentField);
-            absentCount = (absentCount == null ? 1 : absentCount + 1);
-            record.put(numAbsentField, absentCount);
-            if (consecutiveAbsencesField != null) {
-                Integer consecutiveCount = (Integer) record.get(consecutiveAbsencesField);
-                record.put(
-                    consecutiveAbsencesField,
-                    (consecutiveCount == null ? 1 : consecutiveCount + 1)
-                );
-            }
+    private void processRecord(ServiceDelivery__c delivery, RollupRecord record) {
+        if (presentStatuses.contains(delivery.AttendanceStatus__c)) {
+            record.incrementPresentCount();
+        } else if (absentStatuses.contains(delivery.AttendanceStatus__c)) {
+            record.incrementAbsentCount();
         }
         //Last Service Date
-        if (
-            lastServiceDateField != null &&
-            (delivery.Quantity__c > 0 &&
-            delivery.DeliveryDate__c != null)
-        ) {
-            Date lastServiceDate = (Date) record.get(lastServiceDateField);
-            if (lastServiceDate == null || delivery.DeliveryDate__c > lastServiceDate) {
-                record.put(lastServiceDateField, delivery.DeliveryDate__c);
-            }
+        if ((delivery.Quantity__c > 0 && delivery.DeliveryDate__c != null)) {
+            record.updateLastServiceDate(delivery.DeliveryDate__c);
         }
-        return record;
     }
 
-    public SObject constructNewRecord(Id recordId) {
-        SObject record = sObjectType.newSObject(recordId);
-
-        if (numPresentField != null) {
-            record.put(numPresentField, null);
-        }
-
-        if (numAbsentField != null) {
-            record.put(numAbsentField, null);
-        }
-
-        if (consecutiveAbsencesField != null) {
-            record.put(consecutiveAbsencesField, null);
-        }
-
-        if (lastServiceDateField != null) {
-            record.put(lastServiceDateField, null);
-        }
-
-        return record;
-    }
-
-    private void commitUpdatedRecords(Map<Id, SObject> recordById) {
+    private void commitUpdatedRecords(Map<Id, RollupRecord> recordById) {
         List<SObject> recordsToUpdate = new List<SObject>();
         Set<Id> recordIds = recordById.keySet();
         String query = buildOriginalRecordsQuery();
@@ -179,48 +134,15 @@ public with sharing class Rollups {
         List<SObject> originalRecords = Database.query(query);
 
         for (SObject originalRecord : originalRecords) {
-            SObject currentRecord = recordById.get(originalRecord.Id);
+            RollupRecord record = recordById.get(originalRecord.Id);
 
-            if (hasRecordChanged(originalRecord, currentRecord)) {
-                recordsToUpdate.add(currentRecord);
+            if (record.isModified(originalRecord)) {
+                SObject currentRecord = record.getSObject();
+                recordsToUpdate.add(record.getSObject());
             }
         }
+
         systemAccess.updateRecords(recordsToUpdate);
-    }
-
-    private Boolean hasRecordChanged(SObject originalRecord, SObject currentRecord) {
-        Boolean shouldUpdateRecord = false;
-        if (
-            numPresentField != null &&
-            originalRecord.get(numPresentField) != currentRecord.get(numPresentField)
-        ) {
-            shouldUpdateRecord = true;
-        }
-
-        if (
-            numAbsentField != null &&
-            originalRecord.get(numAbsentField) != currentRecord.get(numAbsentField)
-        ) {
-            shouldUpdateRecord = true;
-        }
-
-        if (
-            consecutiveAbsencesField != null &&
-            originalRecord.get(consecutiveAbsencesField) !=
-            currentRecord.get(consecutiveAbsencesField)
-        ) {
-            shouldUpdateRecord = true;
-        }
-
-        if (
-            lastServiceDateField != null &&
-            originalRecord.get(lastServiceDateField) !=
-            currentRecord.get(lastServiceDateField)
-        ) {
-            shouldUpdateRecord = true;
-        }
-
-        return shouldUpdateRecord;
     }
 
     public String buildDeliveryRollupsQuery() {
@@ -255,6 +177,15 @@ public with sharing class Rollups {
 
     private String buildOriginalRecordsQuery() {
         List<String> selectFields = new List<String>();
+        SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
+        SObjectField numAbsentField = NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
+        SObjectField consecutiveAbsencesField = CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(
+            sObjectType
+        );
+        SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(
+            sObjectType
+        );
+
         if (numPresentField != null) {
             selectFields.add(String.valueOf(numPresentField));
         }

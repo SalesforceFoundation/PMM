@@ -52,10 +52,23 @@ public class ContactRollupsSchedulable implements Database.Batchable<SObject>, S
     }
 
     private String contactWithRollupDataQuery() {
-        // TODO: figure out this criteria because if the contact doesn't have rollups to begin with
-        // they will not be processed
+        // Find contacts that have had previous rollups and send them to the service delivery
+        // batch in order to null the field values when contacts no longer have rollup data.
+        // For example: all service delivery records were reparented to a different contact.
+        // If the contact has updated rollup values we expect the service delivery batch to update them.
+        // When contacts do not have a change to rollup values we expect them not to be touched.
         queryBuilder.withSObjectType(Contact.SObjectType)
-            .withSelectFields(new List<String>{ String.valueOf(Contact.Id) });
+            .withSelectFields(new List<String>{ String.valueOf(Contact.Id) })
+            .addCondition(
+                String.valueOf(Contact.NumPresentServiceDeliveries__c) +
+                ' >= 0 OR ' +
+                String.valueOf(Contact.NumAbsentServiceDeliveries__c) +
+                ' >= 0 OR ' +
+                String.valueOf(Contact.LastServiceDate__c) +
+                ' != null OR ' +
+                String.valueOf(Contact.ConsecutiveAbsences__c) +
+                ' >= 0 '
+            );
         return queryBuilder.buildSoqlQuery();
     }
 }

@@ -123,21 +123,21 @@ public with sharing class AttendanceService {
             presentStatuses.contains(delivery.AttendanceStatus__c)
         ) {
             Integer presentCount = (Integer) record.get(numPresentField);
-            record.put(numPresentField, presentCount == null ? 1 : presentCount++);
-            if (consecutiveAbsencesField != null) {
-                record.put(consecutiveAbsencesField, 0);
-            }
+            presentCount = (presentCount == null ? 1 : presentCount + 1);
+            record.put(numPresentField, presentCount);
+            record.put(consecutiveAbsencesField, 0);
         } else if (
             numAbsentField != null &&
             absentStatuses.contains(delivery.AttendanceStatus__c)
         ) {
             Integer absentCount = (Integer) record.get(numAbsentField);
-            record.put(numAbsentField, absentCount == null ? 1 : absentCount++);
+            absentCount = (absentCount == null ? 1 : absentCount + 1);
+            record.put(numAbsentField, absentCount);
             if (consecutiveAbsencesField != null) {
                 Integer consecutiveCount = (Integer) record.get(consecutiveAbsencesField);
                 record.put(
                     consecutiveAbsencesField,
-                    consecutiveCount == null ? 1 : consecutiveCount++
+                    (consecutiveCount == null ? 1 : consecutiveCount + 1)
                 );
             }
         }
@@ -148,7 +148,7 @@ public with sharing class AttendanceService {
             delivery.DeliveryDate__c != null)
         ) {
             Date lastServiceDate = (Date) record.get(lastServiceDateField);
-            if (lastServiceDate != null && delivery.DeliveryDate__c > lastServiceDate) {
+            if (lastServiceDate == null || delivery.DeliveryDate__c > lastServiceDate) {
                 record.put(lastServiceDateField, delivery.DeliveryDate__c);
             }
         }
@@ -156,7 +156,7 @@ public with sharing class AttendanceService {
     }
 
     //New method that checks if records need to be updated
-    public void checkUpdateStatus(SObjectType sObjectType, Map<Id, SObject> recordById) {
+    public void processUpdates(SObjectType sObjectType, Map<Id, SObject> recordById) {
         List<SObject> recordsToUpdate = new List<SObject>();
         Set<Id> recordIds = recordById.keySet();
         SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
@@ -181,11 +181,15 @@ public with sharing class AttendanceService {
             selectFields.add(String.valueOf(lastServiceDateField));
         }
 
-        QueryBuilder queryBuilder = new QueryBuilder()
+        String query = new QueryBuilder()
             .withSObjectType(sObjectType)
             .withSelectFields(selectFields)
-            .addCondition('Id IN :recordIds');
-        for (SObject originalRecord : Database.query(queryBuilder.buildSoqlQuery())) {
+            .addCondition('Id IN :recordIds')
+            .buildSoqlQuery();
+
+        List<SObject> originalRecords = Database.query(query);
+
+        for (SObject originalRecord : originalRecords) {
             Boolean shouldUpdateRecord = false;
             SObject currentRecord = recordById.get(originalRecord.Id);
 
@@ -222,8 +226,6 @@ public with sharing class AttendanceService {
                 recordsToUpdate.add(currentRecord);
             }
         }
-        System.debug('recordsToUpdate: ' + recordsToUpdate);
-        System.debug('recordsById: ' + recordById);
         systemAccess.updateRecords(recordsToUpdate);
     }
 

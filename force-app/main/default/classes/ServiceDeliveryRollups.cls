@@ -39,7 +39,6 @@ public class ServiceDeliveryRollups implements Database.Batchable<SObject>, Data
         String query = attendanceService.getServiceDeliveryWithRollupDataQuery(
             sObjectType
         );
-        System.debug('query: ' + query);
         return Database.getQueryLocator(query);
     }
 
@@ -49,7 +48,7 @@ public class ServiceDeliveryRollups implements Database.Batchable<SObject>, Data
 
     public void finish(Database.BatchableContext bc) {
         //Update the records processed by the last batch
-        attendanceService.checkUpdateStatus(sObjectType, recordById);
+        attendanceService.processUpdates(sObjectType, recordById);
 
         //Remove ids processed in the last batch
         recordIds.removeAll(recordById.keySet());
@@ -69,15 +68,13 @@ public class ServiceDeliveryRollups implements Database.Batchable<SObject>, Data
 
     //Here we iterate the deliveries that are a part of the batch
     private void processBatch(List<ServiceDelivery__c> deliveries) {
-        Set<Id> batchRecordIds = new Set<Id>();
-        System.debug('deliveries: ' + deliveries);
+        Set<Id> parentIdsInCurrentScope = new Set<Id>();
         for (ServiceDelivery__c delivery : deliveries) {
             Id parentLookupId = (Id) delivery.get(
                 attendanceService.getParentLookupField(sObjectType)
             );
-            System.debug('parentLookupId: ' + parentLookupId);
             //Add the parentLookupId to the universe of ids for the batch, we'll need this at the end of the method
-            batchRecordIds.add(parentLookupId);
+            parentIdsInCurrentScope.add(parentLookupId);
             //Add the parent record to the map, if it doesn't exist already
             if (!recordById.containsKey(parentLookupId)) {
                 recordById.put(
@@ -87,27 +84,27 @@ public class ServiceDeliveryRollups implements Database.Batchable<SObject>, Data
             }
 
             //Update parent record attributes based on current ServiceDelivery__c
-            SObject thisRecord = recordById.get(parentLookupId);
-            thisRecord = attendanceService.processRecord(
+            SObject currentRecord = recordById.get(parentLookupId);
+            currentRecord = attendanceService.processRecord(
                 sObjectType,
                 delivery,
-                thisRecord
+                currentRecord
             );
         }
-        handleUpdates(batchRecordIds);
+        processUpdatesFromPreviousScope(parentIdsInCurrentScope);
     }
 
     //Here we find out which records have been fully processed and update them
     //If they are no longer in the batch, they are ready to be updated
-    private void handleUpdates(Set<Id> batchRecordIds) {
+    private void processUpdatesFromPreviousScope(Set<Id> parentIdsInCurrentScope) {
         Map<Id, SObject> recordsToUpdateMap = new Map<Id, SObject>();
         for (SObject record : recordById.values()) {
-            if (!batchRecordIds.contains(record.Id)) {
+            if (!parentIdsInCurrentScope.contains(record.Id)) {
                 recordsToUpdateMap.put(record.Id, record);
                 recordById.remove(record.Id);
                 recordIds.remove(record.Id);
             }
         }
-        attendanceService.checkUpdateStatus(sObjectType, recordsToUpdateMap);
+        attendanceService.processUpdates(sObjectType, recordsToUpdateMap);
     }
 }

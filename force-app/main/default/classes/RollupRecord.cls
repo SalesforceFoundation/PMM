@@ -58,16 +58,17 @@ public with sharing class RollupRecord {
 
     public Boolean isModified(SObject originalRecord) {
         Boolean isModified = false;
+        System.debug(originalRecord.get(numPresentField));
 
         isModified =
             (numPresentField != null &&
-            (Integer) originalRecord.get(numPresentField) != presentCount) ||
+            originalRecord.get(numPresentField) != presentCount) ||
             (numAbsentField != null &&
-            (Integer) originalRecord.get(numAbsentField) != absentCount) ||
+            originalRecord.get(numAbsentField) != absentCount) ||
             (consecutiveAbsencesField != null &&
-            (Integer) originalRecord.get(consecutiveAbsencesField) != consecutiveCount) ||
+            originalRecord.get(consecutiveAbsencesField) != consecutiveCount) ||
             (lastServiceDateField != null &&
-            (Date) originalRecord.get(lastServiceDateField) != lastServiceDate);
+            originalRecord.get(lastServiceDateField) != lastServiceDate);
 
         return isModified;
     }

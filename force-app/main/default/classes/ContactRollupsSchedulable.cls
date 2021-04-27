@@ -48,7 +48,14 @@ public class ContactRollupsSchedulable implements Database.Batchable<SObject>, S
             return;
         }
 
-        Database.executeBatch(new ServiceDeliveryRollups(contactIds), 2000);
+        Database.executeBatch(
+            new ServiceDeliveryRollups(
+                Contact.SObjectType,
+                ServiceDelivery__c.Contact__c,
+                contactIds
+            ),
+            2000
+        );
     }
 
     private String contactWithRollupDataQuery() {

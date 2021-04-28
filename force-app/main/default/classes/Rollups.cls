@@ -28,124 +28,50 @@ public with sharing class Rollups {
 
     private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
     private SystemAccess systemAccess = new SystemAccess();
-    private Set<Id> unprocessedIds;
-    Set<Id> idsInCurrentScope = new Set<Id>();
-    private Map<Id, RollupRecord> uncommittedRecordsById = new Map<Id, RollupRecord>();
+    private Map<Id, RollupRecord> rollupRecordById = new Map<Id, RollupRecord>();
     private SObjectType sObjectType;
     private SObjectField lookupField;
-    private List<String> presentStatuses = deliveryService.presentStatuses;
-    private List<String> absentStatuses = deliveryService.absentStatuses;
 
-    public List<String> attendanceStatuses {
-        get {
-            if (attendanceStatuses == null) {
-                attendanceStatuses = new List<String>();
-                attendanceStatuses.addAll(presentStatuses);
-                attendanceStatuses.addAll(absentStatuses);
-            }
-            return attendanceStatuses;
-        }
-        set;
-    }
-
-    public Rollups(
-        SObjectType sObjectType,
-        SObjectField lookupField,
-        Set<Id> unprocessedIds
-    ) {
+    public Rollups(SObjectType sObjectType, SObjectField lookupField) {
         this.sObjectType = sObjectType;
         this.lookupField = lookupField;
-        this.unprocessedIds = unprocessedIds;
     }
 
-    public void rollupDeliveryRecords(List<ServiceDelivery__c> deliveries) {
+    public Set<Id> getRollupRecordIds() {
+        return rollupRecordById.keySet();
+    }
+
+    public Set<Id> rollupDeliveryRecords(List<ServiceDelivery__c> deliveries) {
+        Set<Id> parentLookupIds = new Set<Id>();
+
         for (ServiceDelivery__c delivery : deliveries) {
             Id parentLookupId = (Id) delivery.get(lookupField);
-            idsInCurrentScope.add(parentLookupId);
-            processParentRecord(delivery, parentLookupId);
-        }
+            parentLookupIds.add(parentLookupId);
 
-        commitPreviousScope(idsInCurrentScope);
-    }
-
-    public void commitFinalRecords() {
-        //Update the records processed by the last batch
-        commitUpdatedRecords(uncommittedRecordsById);
-
-        //Remove ids processed in the last batch
-        unprocessedIds.removeAll(uncommittedRecordsById.keySet());
-    }
-
-    public void resetUnprocessedRecords() {
-        // What remains in unprocessedIds are records that need to be reset.
-        // They once had rollup data but no longer do.
-        List<SObject> recordsToClearRollups = new List<SObject>();
-        for (Id recordId : unprocessedIds) {
-            // TODO: Investigate whether or not we need to recreate these records every batch run
-            // TODO: Total number of batches 250,000 per 24 hours -> is this a namespace limit?
-            RollupRecord record = new RollupRecord(recordId);
-            record.rollupFields(
-                NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
-                NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
-                CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
-                LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(sObjectType)
-            );
-            recordsToClearRollups.add(record.getSObject());
-        }
-        update recordsToClearRollups;
-    }
-
-    //Here we find out which records have been fully processed and update them
-    //If they are no longer in the batch, they are ready to be updated
-    private void commitPreviousScope(Set<Id> idsInCurrentScope) {
-        Map<Id, RollupRecord> recordsToUpdateMap = new Map<Id, RollupRecord>();
-        for (RollupRecord record : uncommittedRecordsById.values()) {
-            if (!idsInCurrentScope.contains(record.recordId)) {
-                recordsToUpdateMap.put(record.recordId, record);
-                uncommittedRecordsById.remove(record.recordId);
-                unprocessedIds.remove(record.recordId);
+            if (!rollupRecordById.containsKey(parentLookupId)) {
+                RollupRecord record = createRollupRecord(parentLookupId);
+                rollupRecordById.put(parentLookupId, record);
             }
+
+            RollupRecord parentRecord = rollupRecordById.get(parentLookupId);
+            incrementRollup(delivery, parentRecord);
         }
-        commitUpdatedRecords(recordsToUpdateMap);
+
+        return parentLookupIds;
     }
 
-    private void processParentRecord(ServiceDelivery__c delivery, Id parentLookupId) {
-        if (!uncommittedRecordsById.containsKey(parentLookupId)) {
-            RollupRecord record = new RollupRecord(parentLookupId);
-            record.rollupFields(
-                NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
-                NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
-                CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
-                LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(sObjectType)
-            );
-            uncommittedRecordsById.put(parentLookupId, record);
-        }
-
-        RollupRecord parentRecord = uncommittedRecordsById.get(parentLookupId);
-        processRecord(delivery, parentRecord);
+    public void commitRollups() {
+        commitRollups(rollupRecordById.keySet());
     }
 
-    private void processRecord(ServiceDelivery__c delivery, RollupRecord record) {
-        if (presentStatuses.contains(delivery.AttendanceStatus__c)) {
-            record.incrementPresentCount();
-        } else if (absentStatuses.contains(delivery.AttendanceStatus__c)) {
-            record.incrementAbsentCount();
-        }
-        //Last Service Date
-        if ((delivery.Quantity__c > 0 && delivery.DeliveryDate__c != null)) {
-            record.updateLastServiceDate(delivery.DeliveryDate__c);
-        }
-    }
-
-    private void commitUpdatedRecords(Map<Id, RollupRecord> recordById) {
+    public void commitRollups(Set<Id> recordIds) {
         List<SObject> recordsToUpdate = new List<SObject>();
-        Set<Id> recordIds = recordById.keySet();
-        String query = buildOriginalRecordsQuery();
+        String query = buildOriginalRecordsQuery('Id IN: recordIds');
 
         List<SObject> originalRecords = Database.query(query);
 
         for (SObject originalRecord : originalRecords) {
-            RollupRecord record = recordById.get(originalRecord.Id);
+            RollupRecord record = rollupRecordById.remove(originalRecord.Id);
 
             if (record.isModified(originalRecord)) {
                 SObject currentRecord = record.getSObject();
@@ -156,7 +82,49 @@ public with sharing class Rollups {
         systemAccess.updateRecords(recordsToUpdate);
     }
 
-    private String buildOriginalRecordsQuery() {
+    public void resetRollupFields(Set<Id> recordsIdsToReset) {
+        if (recordsIdsToReset.isEmpty()) {
+            return;
+        }
+        // What remains in recordsIdsToReset are records that need to be reset.
+        // They once had rollup data but no longer do.
+        List<SObject> recordsToClearRollups = new List<SObject>();
+        for (Id recordId : recordsIdsToReset) {
+            // TODO: Investigate whether or not we need to recreate these records every batch run
+            // TODO: Total number of batches 250,000 per 24 hours -> is this a namespace limit?
+            RollupRecord record = createRollupRecord(recordId);
+            recordsToClearRollups.add(record.getSObject());
+        }
+        systemAccess.updateRecords(recordsToClearRollups);
+    }
+
+    private RollupRecord createRollupRecord(Id recordId) {
+        RollupRecord record = new RollupRecord(recordId);
+        record.rollupFields(
+            NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+            NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+            CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
+            LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(sObjectType)
+        );
+
+        return record;
+    }
+
+    private void incrementRollup(ServiceDelivery__c delivery, RollupRecord record) {
+        if (deliveryService.presentStatuses.contains(delivery.AttendanceStatus__c)) {
+            record.incrementPresentCount();
+        } else if (
+            deliveryService.absentStatuses.contains(delivery.AttendanceStatus__c)
+        ) {
+            record.incrementAbsentCount();
+        }
+        //Last Service Date
+        if ((delivery.Quantity__c > 0 && delivery.DeliveryDate__c != null)) {
+            record.updateLastServiceDate(delivery.DeliveryDate__c);
+        }
+    }
+
+    private String buildOriginalRecordsQuery(String condition) {
         List<String> selectFields = new List<String>();
         SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
         SObjectField numAbsentField = NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
@@ -183,45 +151,7 @@ public with sharing class Rollups {
         return new QueryBuilder()
             .withSObjectType(sObjectType)
             .withSelectFields(selectFields)
-            .addCondition('Id IN :recordIds')
+            .addCondition(condition)
             .buildSoqlQuery();
-    }
-
-    public String buildDeliveryRollupsQuery() {
-        return buildDeliveryRollupsQuery(null);
-    }
-
-    public String buildDeliveryRollupsQuery(Set<Id> recordIds) {
-        String lookupCondition = recordIds == null
-            ? lookupField + ' != null AND ('
-            : lookupField + ' IN :recordIds AND (';
-
-        QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
-            .withSObjectType(ServiceDelivery__c.SObjectType)
-            .withSelectFields(
-                new List<String>{
-                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
-                    String.valueOf(ServiceDelivery__c.DeliveryDate__c),
-                    String.valueOf(lookupField),
-                    String.valueOf(ServiceDelivery__c.Quantity__c)
-                }
-            )
-            .addCondition(
-                lookupCondition +
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-                ' IN :attendanceStatuses OR ( ' +
-                String.valueOF(ServiceDelivery__c.Quantity__c) +
-                ' > 0 AND ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' != null ))'
-            )
-            .withOrderBy(
-                lookupField +
-                ', ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' ASC '
-            );
-
-        return serviceDeliveryQueryBuilder.buildSoqlQuery();
     }
 }

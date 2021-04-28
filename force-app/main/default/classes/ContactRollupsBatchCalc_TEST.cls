@@ -42,8 +42,6 @@ private class ContactRollupsBatchCalc_TEST {
             LIMIT 1
         ];
 
-        System.debug('Service 1 : ' + service1);
-
         Date today = Date.today();
         Date yesterday = Date.today().addDays(-1);
         Date lastWeek = Date.today().addDays(-7);
@@ -135,9 +133,7 @@ private class ContactRollupsBatchCalc_TEST {
     //functional test
     @IsTest
     private static void functionalEndToEnd() {
-        // System.debug('ContactIds : ' + contactIds);
         // Test.startTest();
-        // System.debug('ContactIds : ' + contactIds);
         // Contact con0 = [
         //     SELECT
         //         Id,
@@ -160,8 +156,6 @@ private class ContactRollupsBatchCalc_TEST {
         // Contact con2 = new Contact();
         // Contact con3 = new Contact();
 
-        // System.debug('ContactIds : ' + contactIds);
-
         // for (Contact con : [
         //     SELECT
         //         Id,
@@ -180,7 +174,6 @@ private class ContactRollupsBatchCalc_TEST {
         //     } else if (con.LastName == 'Test Con 3') {
         //         con3 = con;
         //     }
-        //     System.debug(con);
         // }
 
         // System.assertNotEquals(null, con1);

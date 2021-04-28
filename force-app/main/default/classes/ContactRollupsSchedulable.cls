@@ -13,8 +13,6 @@
 
 public class ContactRollupsSchedulable implements Database.Batchable<SObject>, System.Schedulable, Database.Stateful {
     @TestVisible
-    private SystemAccess systemAccess = new SystemAccess();
-    @TestVisible
     private QueryBuilder queryBuilder = new QueryBuilder();
     @TestVisible
     private Set<Id> contactIds = new Set<Id>();

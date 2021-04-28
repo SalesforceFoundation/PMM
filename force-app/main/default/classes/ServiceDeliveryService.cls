@@ -12,13 +12,10 @@ public with sharing class ServiceDeliveryService {
     private AttendanceSelector attendanceSelector = new AttendanceSelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
-    @TestVisible
-    private SystemAccess systemAccess = new SystemAccess();
-    Rollups rollups;
-    private SObjectField lookupField;
-
+    private Rollups rollups;
+    public List<String> presentStatuses = attendanceSelector.presentStatuses;
+    public List<String> absentStatuses = attendanceSelector.absentStatuses;
     private static final String DEFAULT_STATUS = 'Present';
-
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
     // Service Deliveries that appear in the Attendance UI is hard-coded here.
@@ -29,43 +26,6 @@ public with sharing class ServiceDeliveryService {
         ServiceParticipant__c.Contact__c => ServiceDelivery__c.Contact__c,
         ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c
     };
-
-    @TestVisible
-    private Map<String, List<String>> statusBuckets {
-        get {
-            if (statusBuckets == null) {
-                statusBuckets = getStatusBuckets();
-            }
-            return statusBuckets;
-        }
-        set;
-    }
-
-    public List<String> presentStatuses {
-        get {
-            return statusBuckets.get('Present');
-        }
-        set;
-    }
-
-    public List<String> absentStatuses {
-        get {
-            return statusBuckets.get('Absent');
-        }
-        set;
-    }
-
-    public List<String> attendanceStatuses {
-        get {
-            if (attendanceStatuses == null) {
-                attendanceStatuses = new List<String>();
-                attendanceStatuses.addAll(presentStatuses);
-                attendanceStatuses.addAll(absentStatuses);
-            }
-            return attendanceStatuses;
-        }
-        set;
-    }
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
         return createRows(sessionId);
@@ -91,16 +51,22 @@ public with sharing class ServiceDeliveryService {
             }
 
             SObjectType sObjectType = new List<Id>(recordIds)[0].getSObjectType();
-            rollups = new Rollups(sObjectType, lookupField, recordIds);
+            rollups = new Rollups(sObjectType, lookupField);
 
-            String query = rollups.buildDeliveryRollupsQuery(recordIds);
+            List<ServiceDelivery__c> deliveries = attendanceSelector.getDeliveryRecordsToRollup(
+                String.valueOf(lookupField),
+                recordIds
+            );
 
-            List<ServiceDelivery__c> serviceDeliveryRecords = Database.query(query);
-
-            rollups.rollupDeliveryRecords(serviceDeliveryRecords);
-            rollups.commitFinalRecords();
-            rollups.resetUnprocessedRecords();
+            Set<Id> rollupRecordIds = rollups.rollupDeliveryRecords(deliveries);
+            recordIds.removeAll(rollupRecordIds);
+            rollups.commitRollups();
+            rollups.resetRollupFields(recordIds);
         }
+    }
+
+    public String getDeliveryRollupsQuery(String lookupField) {
+        return attendanceSelector.buildDeliveryRollupsQuery(lookupField);
     }
 
     public Map<String, Boolean> checkFieldPermissions() {
@@ -224,19 +190,6 @@ public with sharing class ServiceDeliveryService {
         }
 
         return (ServiceDelivery__c) deliveryRecord;
-    }
-
-    private Map<String, List<String>> getStatusBuckets() {
-        Map<String, List<String>> buckets = new Map<String, List<String>>();
-
-        for (Bucket__mdt bucket : attendanceSelector.getAttendanceBuckets()) {
-            buckets.put(bucket.DeveloperName, new List<String>());
-            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
-                buckets.get(bucket.DeveloperName).add(value.Value__c);
-            }
-        }
-
-        return buckets;
     }
 
     public class ServiceDeliveryException extends Exception {

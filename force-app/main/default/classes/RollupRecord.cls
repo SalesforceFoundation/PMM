@@ -58,7 +58,6 @@ public with sharing class RollupRecord {
 
     public Boolean isModified(SObject originalRecord) {
         Boolean isModified = false;
-        System.debug(originalRecord.get(numPresentField));
 
         isModified =
             (numPresentField != null &&

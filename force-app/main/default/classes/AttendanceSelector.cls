@@ -9,11 +9,47 @@
 
 public with sharing class AttendanceSelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
-
     @TestVisible
     private static final String ABSENT = 'Absent';
     @TestVisible
     private static final String PRESENT = 'Present';
+
+    public List<String> presentStatuses {
+        get {
+            return statusBuckets.get(PRESENT);
+        }
+        set;
+    }
+
+    public List<String> absentStatuses {
+        get {
+            return statusBuckets.get(ABSENT);
+        }
+        set;
+    }
+
+    private List<String> attendanceStatuses {
+        get {
+            if (attendanceStatuses == null) {
+                attendanceStatuses = new List<String>();
+                attendanceStatuses.addAll(presentStatuses);
+                attendanceStatuses.addAll(absentStatuses);
+            }
+            return attendanceStatuses;
+        }
+        set;
+    }
+
+    @TestVisible
+    private Map<String, List<String>> statusBuckets {
+        get {
+            if (statusBuckets == null) {
+                statusBuckets = getStatusBuckets();
+            }
+            return statusBuckets;
+        }
+        set;
+    }
 
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
         if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
@@ -95,7 +131,20 @@ public with sharing class AttendanceSelector {
             .getRecords()[0];
     }
 
-    public List<Bucket__mdt> getAttendanceBuckets() {
+    public Map<String, List<String>> getStatusBuckets() {
+        Map<String, List<String>> buckets = new Map<String, List<String>>();
+
+        for (Bucket__mdt bucket : getAttendanceBuckets()) {
+            buckets.put(bucket.DeveloperName, new List<String>());
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                buckets.get(bucket.DeveloperName).add(value.Value__c);
+            }
+        }
+
+        return buckets;
+    }
+
+    private List<Bucket__mdt> getAttendanceBuckets() {
         List<String> bucketNames = new List<String>{
             Util.prefixNamespace(ABSENT),
             Util.prefixNamespace(PRESENT)
@@ -114,5 +163,58 @@ public with sharing class AttendanceSelector {
             WHERE QualifiedApiName IN :bucketNames
             ORDER BY QualifiedApiName
         ];
+    }
+
+    public List<ServiceDelivery__c> getDeliveryRecordsToRollup(
+        String lookupField,
+        Set<Id> recordIds
+    ) {
+        String query = buildDeliveryRollupsQuery(
+            String.valueOf(lookupField),
+            ' IN: recordIds'
+        );
+        return Database.query(query);
+    }
+
+    public String buildDeliveryRollupsQuery(String lookupField) {
+        return buildDeliveryRollupsQuery(lookupField, ' != null');
+    }
+
+    private String buildDeliveryRollupsQuery(
+        String lookupField,
+        String lookupFieldCondition
+    ) {
+        String condition = lookupField + lookupFieldCondition + ' AND (';
+        System.debug(condition);
+
+        QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
+            .withSObjectType(ServiceDelivery__c.SObjectType)
+            .withSelectFields(
+                new List<String>{
+                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
+                    String.valueOf(ServiceDelivery__c.DeliveryDate__c),
+                    String.valueOf(lookupField),
+                    String.valueOf(ServiceDelivery__c.Quantity__c)
+                }
+            )
+            .addCondition(
+                condition +
+                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
+                ' IN (\'' +
+                String.join(attendanceStatuses, '\',\'') +
+                '\') OR ( ' +
+                String.valueOF(ServiceDelivery__c.Quantity__c) +
+                ' > 0 AND ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' != null ))'
+            )
+            .withOrderBy(
+                lookupField +
+                ', ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' ASC '
+            );
+
+        return serviceDeliveryQueryBuilder.buildSoqlQuery();
     }
 }

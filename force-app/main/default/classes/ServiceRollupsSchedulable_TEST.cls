@@ -10,7 +10,7 @@
 @isTest
 private class ServiceRollupsSchedulable_TEST {
     private static BasicStub attendanceServiceStub = new BasicStub(
-        AttendanceService.class
+        ServiceDeliveryService.class
     );
 
     @testSetup
@@ -21,7 +21,7 @@ private class ServiceRollupsSchedulable_TEST {
 
     @IsTest
     private static void shouldCallServiceWithServices() {
-        List<String> attendanceStatuses = new AttendanceService().getAttendanceStatuses();
+        List<String> attendanceStatuses = new ServiceDeliveryService().attendanceStatuses;
 
         List<Service__c> servicesWithServiceDeliveries = [
             SELECT
@@ -48,7 +48,7 @@ private class ServiceRollupsSchedulable_TEST {
             'getAttendanceStatuses',
             attendanceStatuses
         );
-        ServiceRollupsSchedulable.attendanceService = (AttendanceService) attendanceServiceStub.createMock();
+        ServiceRollupsSchedulable.deliveryService = (ServiceDeliveryService) attendanceServiceStub.createMock();
         rollups.execute(null);
 
         Test.stopTest();

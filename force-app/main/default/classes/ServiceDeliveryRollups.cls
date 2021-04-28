@@ -8,6 +8,8 @@
  */
 
 public class ServiceDeliveryRollups implements Database.Batchable<SObject>, Database.Stateful {
+    @TestVisible
+    private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
     Rollups rollups;
 
     public ServiceDeliveryRollups(

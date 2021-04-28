@@ -26,16 +26,27 @@ public with sharing class Rollups {
         Service__c.SObjectType => ServiceDelivery__c.Service__c
     };
 
-    private AttendanceService attendanceService = new AttendanceService();
+    private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
     private SystemAccess systemAccess = new SystemAccess();
     private Set<Id> unprocessedIds;
     Set<Id> idsInCurrentScope = new Set<Id>();
     private Map<Id, RollupRecord> uncommittedRecordsById = new Map<Id, RollupRecord>();
     private SObjectType sObjectType;
     private SObjectField lookupField;
-    private List<String> presentStatuses = attendanceService.presentStatuses;
-    private List<String> absentStatuses = attendanceService.absentStatuses;
-    public List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
+    private List<String> presentStatuses = deliveryService.presentStatuses;
+    private List<String> absentStatuses = deliveryService.absentStatuses;
+
+    public List<String> attendanceStatuses {
+        get {
+            if (attendanceStatuses == null) {
+                attendanceStatuses = new List<String>();
+                attendanceStatuses.addAll(presentStatuses);
+                attendanceStatuses.addAll(absentStatuses);
+            }
+            return attendanceStatuses;
+        }
+        set;
+    }
 
     public Rollups(
         SObjectType sObjectType,
@@ -145,36 +156,6 @@ public with sharing class Rollups {
         systemAccess.updateRecords(recordsToUpdate);
     }
 
-    public String buildDeliveryRollupsQuery() {
-        QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
-            .withSObjectType(ServiceDelivery__c.SObjectType)
-            .withSelectFields(
-                new List<String>{
-                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
-                    String.valueOf(ServiceDelivery__c.DeliveryDate__c),
-                    String.valueOf(lookupField),
-                    String.valueOf(ServiceDelivery__c.Quantity__c)
-                }
-            )
-            .addCondition(
-                lookupField +
-                ' != null AND (' +
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-                ' IN :attendanceStatuses OR ( ' +
-                String.valueOF(ServiceDelivery__c.Quantity__c) +
-                ' > 0 AND ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' != null ))'
-            )
-            .withOrderBy(
-                lookupField +
-                ', ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' ASC '
-            );
-        return serviceDeliveryQueryBuilder.buildSoqlQuery();
-    }
-
     private String buildOriginalRecordsQuery() {
         List<String> selectFields = new List<String>();
         SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
@@ -204,5 +185,43 @@ public with sharing class Rollups {
             .withSelectFields(selectFields)
             .addCondition('Id IN :recordIds')
             .buildSoqlQuery();
+    }
+
+    public String buildDeliveryRollupsQuery() {
+        return buildDeliveryRollupsQuery(null);
+    }
+
+    public String buildDeliveryRollupsQuery(Set<Id> recordIds) {
+        String lookupCondition = recordIds == null
+            ? lookupField + ' != null AND ('
+            : lookupField + ' IN :recordIds AND (';
+
+        QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
+            .withSObjectType(ServiceDelivery__c.SObjectType)
+            .withSelectFields(
+                new List<String>{
+                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
+                    String.valueOf(ServiceDelivery__c.DeliveryDate__c),
+                    String.valueOf(lookupField),
+                    String.valueOf(ServiceDelivery__c.Quantity__c)
+                }
+            )
+            .addCondition(
+                lookupCondition +
+                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
+                ' IN :attendanceStatuses OR ( ' +
+                String.valueOF(ServiceDelivery__c.Quantity__c) +
+                ' > 0 AND ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' != null ))'
+            )
+            .withOrderBy(
+                lookupField +
+                ', ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' ASC '
+            );
+
+        return serviceDeliveryQueryBuilder.buildSoqlQuery();
     }
 }

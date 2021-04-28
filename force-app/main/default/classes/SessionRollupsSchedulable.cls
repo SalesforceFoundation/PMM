@@ -9,14 +9,14 @@
 
 public class SessionRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
-    private static AttendanceService attendanceService = new AttendanceService();
+    private static ServiceDeliveryService deliveryService = new ServiceDeliveryService();
 
     public void execute(SchedulableContext context) {
         Database.executeBatch(new SessionRollupsSchedulable());
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
-        List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
+        List<String> attendanceStatuses = deliveryService.attendanceStatuses;
 
         QueryBuilder query = new QueryBuilder();
         query.withSObjectType(ServiceSession__c.SObjectType);
@@ -50,7 +50,7 @@ public class SessionRollupsSchedulable implements Database.Batchable<SObject>, S
     }
 
     public void execute(Database.BatchableContext bc, List<ServiceSession__c> scope) {
-        attendanceService.doRollups(ServiceSession__c.SObjectType, scope);
+        // deliveryService.doRollups(ServiceSession__c.SObjectType, scope);
     }
 
     public void finish(Database.BatchableContext bc) {

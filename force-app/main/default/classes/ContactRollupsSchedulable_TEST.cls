@@ -10,7 +10,7 @@
 @isTest
 private class ContactRollupsSchedulable_TEST {
     private static BasicStub attendanceServiceStub = new BasicStub(
-        AttendanceService.class
+        ServiceDeliveryService.class
     );
 
     @testSetup
@@ -21,7 +21,7 @@ private class ContactRollupsSchedulable_TEST {
 
     // @IsTest
     // private static void shouldCallServiceWithContacts() {
-    //     List<String> attendanceStatuses = new AttendanceService().getAttendanceStatuses();
+    //     List<String> attendanceStatuses = new ServiceDeliveryService().attendanceStatuses;
 
     //     List<Contact> contactsWithServiceDeliveries = [
     //         SELECT
@@ -48,7 +48,7 @@ private class ContactRollupsSchedulable_TEST {
     //         'getAttendanceStatuses',
     //         attendanceStatuses
     //     );
-    //     ContactRollupsSchedulable.attendanceService = (AttendanceService) attendanceServiceStub.createMock();
+    //     ContactRollupsSchedulable.deliveryService = (ServiceDeliveryService) attendanceServiceStub.createMock();
     //     rollups.execute(null);
 
     //     Test.stopTest();

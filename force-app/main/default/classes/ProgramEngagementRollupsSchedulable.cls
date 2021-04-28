@@ -9,14 +9,14 @@
 
 public class ProgramEngagementRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
-    private static AttendanceService attendanceService = new AttendanceService();
+    private static ServiceDeliveryService deliveryService = new ServiceDeliveryService();
 
     public void execute(SchedulableContext context) {
         Database.executeBatch(new ProgramEngagementRollupsSchedulable());
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
-        List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
+        List<String> attendanceStatuses = deliveryService.attendanceStatuses;
 
         QueryBuilder query = new QueryBuilder();
         query.withSObjectType(ProgramEngagement__c.SObjectType);
@@ -62,7 +62,7 @@ public class ProgramEngagementRollupsSchedulable implements Database.Batchable<S
     }
 
     public void execute(Database.BatchableContext bc, List<ProgramEngagement__c> scope) {
-        attendanceService.doRollups(ProgramEngagement__c.SObjectType, scope);
+        // deliveryService.doRollups(ProgramEngagement__c.SObjectType, scope);
     }
 
     public void finish(Database.BatchableContext bc) {

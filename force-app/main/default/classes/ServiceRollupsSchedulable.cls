@@ -9,14 +9,14 @@
 
 public class ServiceRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
-    private static AttendanceService attendanceService = new AttendanceService();
+    private static ServiceDeliveryService deliveryService = new ServiceDeliveryService();
 
     public void execute(SchedulableContext context) {
         Database.executeBatch(new ServiceRollupsSchedulable());
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
-        List<String> attendanceStatuses = attendanceService.getAttendanceStatuses();
+        List<String> attendanceStatuses = deliveryService.attendanceStatuses;
 
         QueryBuilder query = new QueryBuilder();
         query.withSObjectType(Service__c.SObjectType);
@@ -43,14 +43,14 @@ public class ServiceRollupsSchedulable implements Database.Batchable<SObject>, S
 
         query.addSubQuery(subQuery);
 
-        // Service__c with any of our rollup fields populated
-        // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
+        // // Service__c with any of our rollup fields populated
+        // // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
 
         return Database.getQueryLocator(query.buildSoqlQuery());
     }
 
     public void execute(Database.BatchableContext bc, List<Service__c> scope) {
-        attendanceService.doRollups(Service__c.SObjectType, scope);
+        // deliveryService.doRollups(Service__c.SObjectType, scope);
     }
 
     public void finish(Database.BatchableContext bc) {

@@ -22,7 +22,7 @@ public class ContactRollupsSchedulable implements Database.Batchable<SObject>, S
     // will need to find all child records and maintain the state of the
     // contacts.
     public void execute(SchedulableContext context) {
-        Database.executeBatch(new ContactRollupsSchedulable());
+        Database.executeBatch(new ContactRollupsSchedulable(), 2000);
     }
 
     // Find all of the contacts that have
@@ -42,10 +42,6 @@ public class ContactRollupsSchedulable implements Database.Batchable<SObject>, S
 
     // Once all of the contact Ids have been added we will pass them off to the next batch
     public void finish(Database.BatchableContext bc) {
-        if (contactIds.isEmpty()) {
-            return;
-        }
-
         Database.executeBatch(
             new ServiceDeliveryRollups(
                 Contact.SObjectType,

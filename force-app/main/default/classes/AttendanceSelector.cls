@@ -144,7 +144,7 @@ public with sharing class AttendanceSelector {
         return buckets;
     }
 
-    private List<Bucket__mdt> getAttendanceBuckets() {
+    public List<Bucket__mdt> getAttendanceBuckets() {
         List<String> bucketNames = new List<String>{
             Util.prefixNamespace(ABSENT),
             Util.prefixNamespace(PRESENT)
@@ -185,7 +185,6 @@ public with sharing class AttendanceSelector {
         String lookupFieldCondition
     ) {
         String condition = lookupField + lookupFieldCondition + ' AND (';
-        System.debug(condition);
 
         QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
             .withSObjectType(ServiceDelivery__c.SObjectType)

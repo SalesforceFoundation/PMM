@@ -43,6 +43,15 @@ public with sharing class Rollups {
     }
 
     public void rollupDeliveryRecords(List<ServiceDelivery__c> deliveries) {
+        if (deliveries.isEmpty()) {
+            return;
+        }
+
+        if (System.isBatch()) {
+            setTotalRecordCount(deliveries[0]);
+            setTotalRecordCount(deliveries[deliveries.size() - 1]);
+        }
+
         for (ServiceDelivery__c delivery : deliveries) {
             Id parentLookupId = (Id) delivery.get(lookupField);
 
@@ -53,13 +62,33 @@ public with sharing class Rollups {
 
             RollupRecord parentRecord = rollupRecordById.get(parentLookupId);
             incrementRollup(delivery, parentRecord);
-            if (parentRecord.getIsProcessed()) {
+        }
+
+        for (Id rollupRecordId : rollupRecordById.keySet()) {
+            if (rollupRecordById.get(rollupRecordId).getIsProcessed()) {
                 processedRecordsById.put(
-                    parentLookupId,
-                    rollupRecordById.remove(parentLookupId)
+                    rollupRecordId,
+                    rollupRecordById.remove(rollupRecordId)
                 );
             }
         }
+    }
+
+    private void setTotalRecordCount(ServiceDelivery__c delivery) {
+        Id recordId = (Id) delivery.get(lookupField);
+        if (rollupRecordById.containsKey(recordId)) {
+            return;
+        }
+
+        RollupRecord record = createRollupRecord(recordId);
+        Integer totalRecords = Database.countQuery(
+            deliveryService.getDeliveryRollupsCountQuery(
+                String.valueOf(lookupField),
+                recordId
+            )
+        );
+        record.setTotalRecords(totalRecords);
+        rollupRecordById.put(recordId, record);
     }
 
     public void commitRollups() {
@@ -85,7 +114,6 @@ public with sharing class Rollups {
         if (recordsIdsToReset.isEmpty()) {
             return;
         }
-        System.debug(rollupRecordById.size() + processedRecordsById.size());
         // What remains in recordsIdsToReset are records that need to be reset.
         // They once had rollup data but no longer do.
         List<SObject> recordsToClearRollups = new List<SObject>();
@@ -99,13 +127,7 @@ public with sharing class Rollups {
     }
 
     private RollupRecord createRollupRecord(Id recordId) {
-        Integer totalRecords = Database.countQuery(
-            deliveryService.getDeliveryRollupsCountQuery(
-                String.valueOf(lookupField),
-                recordId
-            )
-        );
-        RollupRecord record = new RollupRecord(recordId, totalRecords);
+        RollupRecord record = new RollupRecord(recordId);
         record.rollupFields(
             NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
             NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),

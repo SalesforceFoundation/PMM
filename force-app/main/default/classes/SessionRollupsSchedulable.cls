@@ -9,50 +9,50 @@
 
 public class SessionRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
-    private static ServiceDeliveryService deliveryService = new ServiceDeliveryService();
+    private QueryBuilder queryBuilder = new QueryBuilder();
+    @TestVisible
+    private Set<Id> sessionIds = new Set<Id>();
 
     public void execute(SchedulableContext context) {
-        Database.executeBatch(new SessionRollupsSchedulable());
+        Database.executeBatch(new SessionRollupsSchedulable(), 2000);
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
-        List<String> attendanceStatuses = deliveryService.attendanceStatuses;
-
-        QueryBuilder query = new QueryBuilder();
-        query.withSObjectType(ServiceSession__c.SObjectType);
-        query.withSelectFields(
-            new List<String>{
-                String.valueOf(ServiceSession__c.NumPresentServiceDeliveries__c),
-                String.valueOf(ServiceSession__c.NumAbsentServiceDeliveries__c)
-            }
-        );
-
-        QueryBuilder subQuery = new QueryBuilder();
-        subQuery.withChildRelationshipName('ServiceDeliveries__r');
-        subquery.withSelectFields(
-            new List<String>{
-                String.valueOf(ServiceDelivery__c.ServiceSession__c),
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c)
-            }
-        );
-        // ServiceSession__c with any delivery records with attendance
-        subQuery.addCondition(
-            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-            ' IN :attendanceStatuses'
-        );
-
-        query.addSubQuery(subQuery);
-
-        // ServiceSession__c with any of our rollup fields populated
-        // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
-
-        return Database.getQueryLocator(query.buildSoqlQuery());
+        String query = sessionWithRollupDataQuery();
+        return Database.getQueryLocator(query);
     }
 
-    public void execute(Database.BatchableContext bc, List<ServiceSession__c> scope) {
-        // deliveryService.doRollups(ServiceSession__c.SObjectType, scope);
+    public void execute(Database.BatchableContext bc, List<ServiceSession__c> sessions) {
+        for (ServiceSession__c sessionRecord : sessions) {
+            sessionIds.add(sessionRecord.Id);
+        }
     }
 
     public void finish(Database.BatchableContext bc) {
+        Database.executeBatch(
+            new ServiceDeliveryRollups(
+                ServiceSession__c.SObjectType,
+                ServiceDelivery__c.ServiceSession__c,
+                sessionIds
+            ),
+            2000
+        );
+    }
+
+    private String sessionWithRollupDataQuery() {
+        // Find sessions that have had previous rollups and send them to the session delivery
+        // batch in order to null the field values when sessions no longer have rollup data.
+        // For example: all session delivery records were reparented to a different session.
+        // If the session has updated rollup values we expect the session delivery batch to update them.
+        // When sessions do not have a change to rollup values we expect them not to be touched.
+        queryBuilder.withSObjectType(ServiceSession__c.SObjectType)
+            .withSelectFields(new List<String>{ String.valueOf(ServiceSession__c.Id) })
+            .addCondition(
+                String.valueOf(ServiceSession__c.NumPresentServiceDeliveries__c) +
+                ' >= 0 OR ' +
+                String.valueOf(ServiceSession__c.NumAbsentServiceDeliveries__c) +
+                ' >= 0'
+            );
+        return queryBuilder.buildSoqlQuery();
     }
 }

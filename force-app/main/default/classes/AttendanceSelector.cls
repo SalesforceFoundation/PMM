@@ -198,7 +198,7 @@ public with sharing class AttendanceSelector {
                 ' != null ))'
             );
 
-        return queryBuilder.buildCountQuery();
+        return serviceDeliveryQueryBuilder.buildCountQuery();
     }
 
     private String buildDeliveryRollupsQuery(

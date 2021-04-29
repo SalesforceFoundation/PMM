@@ -11,14 +11,17 @@ public with sharing class RollupRecord {
     SObjectField consecutiveAbsencesField;
     SObjectField lastServiceDateField;
 
-    public RollupRecord(Id recordId, Integer totalRecords) {
+    public RollupRecord(Id recordId) {
         this.recordId = recordId;
-        this.totalRecords = totalRecords;
         this.totalProcessed = 0;
     }
 
     public Boolean getIsProcessed() {
-        return totalProcessed == totalRecords;
+        return totalRecords == null || totalProcessed >= totalRecords;
+    }
+
+    public void setTotalRecords(Integer totalRecords) {
+        this.totalRecords = totalRecords;
     }
 
     public void rollupFields(

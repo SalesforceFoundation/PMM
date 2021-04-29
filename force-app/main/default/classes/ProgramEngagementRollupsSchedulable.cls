@@ -7,64 +7,72 @@
  *
  */
 
-public class ProgramEngagementRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
+//Stuff to do
+//1. See if we can pass this universe of IDs to the next batch.
+//2.
+
+public class ProgramEngagementRollupsSchedulable implements Database.Batchable<SObject>, System.Schedulable, Database.Stateful {
     @TestVisible
-    private static ServiceDeliveryService deliveryService = new ServiceDeliveryService();
+    private QueryBuilder queryBuilder = new QueryBuilder();
+    @TestVisible
+    private Set<Id> programEngagementIds = new Set<Id>();
 
+    // This kicks off this scheduable / batch class as the batch job
+    // Leaving the default of 200 because the Service Delivery Batch
+    // will need to find all child records and maintain the state of the
+    // programEngagements.
     public void execute(SchedulableContext context) {
-        Database.executeBatch(new ProgramEngagementRollupsSchedulable());
+        Database.executeBatch(new ProgramEngagementRollupsSchedulable(), 2000);
     }
 
+    // Find all of the programEngagements that have
     public Database.Querylocator start(Database.BatchableContext bc) {
-        List<String> attendanceStatuses = deliveryService.attendanceStatuses;
-
-        QueryBuilder query = new QueryBuilder();
-        query.withSObjectType(ProgramEngagement__c.SObjectType);
-        query.withSelectFields(
-            new List<String>{
-                String.valueOf(ProgramEngagement__c.NumPresentServiceDeliveries__c),
-                String.valueOf(ProgramEngagement__c.NumAbsentServiceDeliveries__c),
-                String.valueOf(ProgramEngagement__c.ConsecutiveAbsences__c),
-                String.valueOf(ProgramEngagement__c.LastServiceDate__c)
-            }
-        );
-
-        QueryBuilder subQuery = new QueryBuilder();
-        subQuery.withChildRelationshipName('ServiceDeliveries__r');
-        subquery.withSelectFields(
-            new List<String>{
-                String.valueOf(ServiceDelivery__c.ProgramEngagement__c),
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c),
-                String.valueOf(ServiceDelivery__c.Quantity__c)
-            }
-        );
-        // ProgramEngagement__c with any delivery records with attendance
-        // ProgramEngagement__c with any delivery records with delivery date and qty
-        subQuery.addCondition(
-            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-            ' IN :attendanceStatuses OR (' +
-            String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-            ' <= TODAY AND ' +
-            String.valueOf(ServiceDelivery__c.Quantity__c) +
-            ' > 0) '
-        );
-        subQuery.withOrderBy(
-            String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' DESC'
-        );
-
-        query.addSubQuery(subQuery);
-
-        // ProgramEngagement__c with any of our rollup fields populated
-        // Note: Can't filter for this since we need to use subquery above since ORs aren't allowed in joins
-
-        return Database.getQueryLocator(query.buildSoqlQuery());
+        String query = engagementWithRollupDataQuery();
+        return Database.getQueryLocator(query);
     }
 
-    public void execute(Database.BatchableContext bc, List<ProgramEngagement__c> scope) {
-        // deliveryService.doRollups(ProgramEngagement__c.SObjectType, scope);
+    // The batch job will iterate all of the programEngagements and only add them to the
+    // set of Ids. Note that we need stateful in order to maintain all Ids across
+    // each batch iteration.
+    public void execute(
+        Database.BatchableContext bc,
+        List<ProgramEngagement__c> programEngagements
+    ) {
+        for (ProgramEngagement__c programEngagementRecord : programEngagements) {
+            programEngagementIds.add(programEngagementRecord.Id);
+        }
     }
 
+    // Once all of the programEngagement Ids have been added we will pass them off to the next batch
     public void finish(Database.BatchableContext bc) {
+        Database.executeBatch(
+            new ServiceDeliveryRollups(
+                ProgramEngagement__c.SObjectType,
+                ServiceDelivery__c.ProgramEngagement__c,
+                programEngagementIds
+            ),
+            2000
+        );
+    }
+
+    private String engagementWithRollupDataQuery() {
+        // Find programEngagements that have had previous rollups and send them to the service delivery
+        // batch in order to null the field values when programEngagements no longer have rollup data.
+        // For example: all service delivery records were reparented to a different programEngagement.
+        // If the programEngagement has updated rollup values we expect the service delivery batch to update them.
+        // When programEngagements do not have a change to rollup values we expect them not to be touched.
+        queryBuilder.withSObjectType(ProgramEngagement__c.SObjectType)
+            .withSelectFields(new List<String>{ String.valueOf(ProgramEngagement__c.Id) })
+            .addCondition(
+                String.valueOf(ProgramEngagement__c.NumPresentServiceDeliveries__c) +
+                ' >= 0 OR ' +
+                String.valueOf(ProgramEngagement__c.NumAbsentServiceDeliveries__c) +
+                ' >= 0 OR ' +
+                String.valueOf(ProgramEngagement__c.LastServiceDate__c) +
+                ' != null OR ' +
+                String.valueOf(ProgramEngagement__c.ConsecutiveAbsences__c) +
+                ' >= 0 '
+            );
+        return queryBuilder.buildSoqlQuery();
     }
 }

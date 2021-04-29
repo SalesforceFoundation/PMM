@@ -3,14 +3,22 @@ public with sharing class RollupRecord {
     private Integer presentCount;
     private Integer absentCount;
     private Integer consecutiveCount;
+    private Integer totalRecords;
+    private Integer totalProcessed;
     private Date lastServiceDate;
     SObjectField numAbsentField;
     SObjectField numPresentField;
     SObjectField consecutiveAbsencesField;
     SObjectField lastServiceDateField;
 
-    public RollupRecord(Id recordId) {
+    public RollupRecord(Id recordId, Integer totalRecords) {
         this.recordId = recordId;
+        this.totalRecords = totalRecords;
+        this.totalProcessed = 0;
+    }
+
+    public Boolean getIsProcessed() {
+        return totalProcessed == totalRecords;
     }
 
     public void rollupFields(
@@ -23,6 +31,10 @@ public with sharing class RollupRecord {
         this.numPresentField = numPresentField;
         this.consecutiveAbsencesField = consecutiveAbsencesField;
         this.lastServiceDateField = lastServiceDateField;
+    }
+
+    public void incrementProcessed() {
+        totalProcessed++;
     }
 
     public void incrementPresentCount() {

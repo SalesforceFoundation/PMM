@@ -29,6 +29,7 @@ public with sharing class Rollups {
     private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
     private SystemAccess systemAccess = new SystemAccess();
     private Map<Id, RollupRecord> rollupRecordById = new Map<Id, RollupRecord>();
+    private Map<Id, RollupRecord> processedRecordsById = new Map<Id, RollupRecord>();
     private SObjectType sObjectType;
     private SObjectField lookupField;
 
@@ -37,16 +38,13 @@ public with sharing class Rollups {
         this.lookupField = lookupField;
     }
 
-    public Set<Id> getRollupRecordIds() {
-        return rollupRecordById.keySet();
+    public Set<Id> getProcessedRecordIds() {
+        return processedRecordsById.keySet();
     }
 
-    public Set<Id> rollupDeliveryRecords(List<ServiceDelivery__c> deliveries) {
-        Set<Id> parentLookupIds = new Set<Id>();
-
+    public void rollupDeliveryRecords(List<ServiceDelivery__c> deliveries) {
         for (ServiceDelivery__c delivery : deliveries) {
             Id parentLookupId = (Id) delivery.get(lookupField);
-            parentLookupIds.add(parentLookupId);
 
             if (!rollupRecordById.containsKey(parentLookupId)) {
                 RollupRecord record = createRollupRecord(parentLookupId);
@@ -55,23 +53,24 @@ public with sharing class Rollups {
 
             RollupRecord parentRecord = rollupRecordById.get(parentLookupId);
             incrementRollup(delivery, parentRecord);
+            if (parentRecord.getIsProcessed()) {
+                processedRecordsById.put(
+                    parentLookupId,
+                    rollupRecordById.remove(parentLookupId)
+                );
+            }
         }
-
-        return parentLookupIds;
     }
 
     public void commitRollups() {
-        commitRollups(rollupRecordById.keySet());
-    }
-
-    public void commitRollups(Set<Id> recordIds) {
         List<SObject> recordsToUpdate = new List<SObject>();
+        Set<Id> recordIds = processedRecordsById.keySet();
         String query = buildOriginalRecordsQuery('Id IN: recordIds');
 
         List<SObject> originalRecords = Database.query(query);
 
         for (SObject originalRecord : originalRecords) {
-            RollupRecord record = rollupRecordById.remove(originalRecord.Id);
+            RollupRecord record = processedRecordsById.remove(originalRecord.Id);
 
             if (record.isModified(originalRecord)) {
                 SObject currentRecord = record.getSObject();
@@ -86,6 +85,7 @@ public with sharing class Rollups {
         if (recordsIdsToReset.isEmpty()) {
             return;
         }
+        System.debug(rollupRecordById.size() + processedRecordsById.size());
         // What remains in recordsIdsToReset are records that need to be reset.
         // They once had rollup data but no longer do.
         List<SObject> recordsToClearRollups = new List<SObject>();
@@ -99,7 +99,13 @@ public with sharing class Rollups {
     }
 
     private RollupRecord createRollupRecord(Id recordId) {
-        RollupRecord record = new RollupRecord(recordId);
+        Integer totalRecords = Database.countQuery(
+            deliveryService.getDeliveryRollupsQuery(
+                String.valueOf(lookupField),
+                new Set<Id>{ recordId }
+            )
+        );
+        RollupRecord record = new RollupRecord(recordId, totalRecords);
         record.rollupFields(
             NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
             NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType),
@@ -111,6 +117,8 @@ public with sharing class Rollups {
     }
 
     private void incrementRollup(ServiceDelivery__c delivery, RollupRecord record) {
+        record.incrementProcessed();
+
         if (deliveryService.presentStatuses.contains(delivery.AttendanceStatus__c)) {
             record.incrementPresentCount();
         } else if (

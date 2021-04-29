@@ -169,15 +169,16 @@ public with sharing class AttendanceSelector {
         String lookupField,
         Set<Id> recordIds
     ) {
-        String query = buildDeliveryRollupsQuery(
-            String.valueOf(lookupField),
-            ' IN: recordIds'
-        );
+        String query = buildDeliveryRollupsQuery(String.valueOf(lookupField), recordIds);
         return Database.query(query);
     }
 
     public String buildDeliveryRollupsQuery(String lookupField) {
         return buildDeliveryRollupsQuery(lookupField, ' != null');
+    }
+
+    public String buildDeliveryRollupsQuery(String lookupField, Set<Id> recordIds) {
+        return buildDeliveryRollupsQuery(lookupField, ' IN: recordIds');
     }
 
     private String buildDeliveryRollupsQuery(

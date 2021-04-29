@@ -32,21 +32,17 @@ public class ServiceDeliveryRollups implements Database.Batchable<SObject>, Data
     }
 
     public void execute(Database.BatchableContext bc, List<ServiceDelivery__c> scope) {
-        Set<Id> idsInCurrentScope = rollups.rollupDeliveryRecords(scope);
+        rollups.rollupDeliveryRecords(scope);
         Set<Id> idsToUpdate = new Set<Id>();
 
-        for (Id rollupId : rollups.getRollupRecordIds()) {
-            if (!idsInCurrentScope.contains(rollupId)) {
-                idsToUpdate.add(rollupId);
-                unprocessedIds.remove(rollupId);
-            }
+        for (Id rollupId : rollups.getProcessedRecordIds()) {
+            unprocessedIds.remove(rollupId);
         }
-        rollups.commitRollups(idsToUpdate);
+
+        rollups.commitRollups();
     }
 
     public void finish(Database.BatchableContext bc) {
-        unprocessedIds.removeAll(rollups.getRollupRecordIds());
-        rollups.commitRollups();
         rollups.resetRollupFields(unprocessedIds);
     }
 }

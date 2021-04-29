@@ -58,8 +58,8 @@ public with sharing class ServiceDeliveryService {
                 recordIds
             );
 
-            Set<Id> rollupRecordIds = rollups.rollupDeliveryRecords(deliveries);
-            recordIds.removeAll(rollupRecordIds);
+            rollups.rollupDeliveryRecords(deliveries);
+            recordIds.removeAll(rollups.getProcessedRecordIds());
             rollups.commitRollups();
             rollups.resetRollupFields(recordIds);
         }
@@ -67,6 +67,10 @@ public with sharing class ServiceDeliveryService {
 
     public String getDeliveryRollupsQuery(String lookupField) {
         return attendanceSelector.buildDeliveryRollupsQuery(lookupField);
+    }
+
+    public String getDeliveryRollupsQuery(String lookupField, Set<Id> recordIds) {
+        return attendanceSelector.buildDeliveryRollupsQuery(lookupField, recordIds);
     }
 
     public Map<String, Boolean> checkFieldPermissions() {

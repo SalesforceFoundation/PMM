@@ -69,8 +69,8 @@ public with sharing class ServiceDeliveryService {
         return attendanceSelector.buildDeliveryRollupsQuery(lookupField);
     }
 
-    public String getDeliveryRollupsQuery(String lookupField, Set<Id> recordIds) {
-        return attendanceSelector.buildDeliveryRollupsQuery(lookupField, recordIds);
+    public String getDeliveryRollupsCountQuery(String lookupField, Id recordId) {
+        return attendanceSelector.buildDeliveryRollupsCountQuery(lookupField, recordId);
     }
 
     public Map<String, Boolean> checkFieldPermissions() {

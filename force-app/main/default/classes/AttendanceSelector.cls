@@ -181,6 +181,26 @@ public with sharing class AttendanceSelector {
         return buildDeliveryRollupsQuery(lookupField, ' IN: recordIds');
     }
 
+    public String buildDeliveryRollupsCountQuery(String lookupField, Id recordId) {
+        String condition = lookupField + ' = :recordId AND (';
+        QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
+            .withSObjectType(ServiceDelivery__c.SObjectType)
+            .withSelectFields(new List<String>{ String.valueOf(ServiceDelivery__c.Id) })
+            .addCondition(
+                condition +
+                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
+                ' IN (\'' +
+                String.join(attendanceStatuses, '\',\'') +
+                '\') OR ( ' +
+                String.valueOF(ServiceDelivery__c.Quantity__c) +
+                ' > 0 AND ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' != null ))'
+            );
+
+        return queryBuilder.buildCountQuery();
+    }
+
     private String buildDeliveryRollupsQuery(
         String lookupField,
         String lookupFieldCondition

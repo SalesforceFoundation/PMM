@@ -100,9 +100,9 @@ public with sharing class Rollups {
 
     private RollupRecord createRollupRecord(Id recordId) {
         Integer totalRecords = Database.countQuery(
-            deliveryService.getDeliveryRollupsQuery(
+            deliveryService.getDeliveryRollupsCountQuery(
                 String.valueOf(lookupField),
-                new Set<Id>{ recordId }
+                recordId
             )
         );
         RollupRecord record = new RollupRecord(recordId, totalRecords);

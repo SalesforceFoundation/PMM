@@ -6,28 +6,43 @@
  *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  *
  */
-
 public class ServiceRollupsSchedulable implements Database.Batchable<SObject>, Schedulable {
     @TestVisible
     private QueryBuilder queryBuilder = new QueryBuilder();
     @TestVisible
     private Set<Id> serviceIds = new Set<Id>();
 
+    /*
+     * Both the Schedulable and Batch jobs are within this class, the schedule
+     * will call execute batch on a new Instance of this class
+     */
     public void execute(SchedulableContext context) {
         Database.executeBatch(new ServiceRollupsSchedulable(), 2000);
     }
 
+    /*
+     * Find all of the records that have had any rollups in the past
+     */
     public Database.Querylocator start(Database.BatchableContext bc) {
         String query = serviceWithRollupDataQuery();
         return Database.getQueryLocator(query);
     }
 
+    /*
+     * The batch job will iterate all of the records and only add them to the
+     * set of Ids. Note that we need stateful in order to maintain all Ids across
+     * each batch iteration.
+     */
     public void execute(Database.BatchableContext bc, List<Service__c> services) {
         for (Service__c serviceRecord : services) {
             serviceIds.add(serviceRecord.Id);
         }
     }
 
+    /*
+     * Once all of the record Ids have been added we will pass them off to the
+     * Service Delivery Rollups Batch
+     */
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
             new ServiceDeliveryRollupsBatch(
@@ -40,11 +55,6 @@ public class ServiceRollupsSchedulable implements Database.Batchable<SObject>, S
     }
 
     private String serviceWithRollupDataQuery() {
-        // Find services that have had previous rollups and send them to the service delivery
-        // batch in order to null the field values when services no longer have rollup data.
-        // For example: all service delivery records were reparented to a different service.
-        // If the service has updated rollup values we expect the service delivery batch to update them.
-        // When services do not have a change to rollup values we expect them not to be touched.
         queryBuilder.withSObjectType(Service__c.SObjectType)
             .withSelectFields(new List<String>{ String.valueOf(Service__c.Id) })
             .addCondition(

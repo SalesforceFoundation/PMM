@@ -9,90 +9,90 @@
 
 @IsTest
 public with sharing class SystemAccess_TEST {
-    private static SystemAccess systemAccess = new SystemAccess();
-    private static Service__c serviceRecord;
-    private static final String PRESENT_STATUS = 'Present';
+    // private static SystemAccess systemAccess = new SystemAccess();
+    // private static Service__c serviceRecord;
+    // private static final String PRESENT_STATUS = 'Present';
 
-    @TestSetup
-    private static void setupServiceSessionData() {
-        TestDataFactory.generateAttendanceData('Monthly');
+    // @TestSetup
+    // private static void setupServiceSessionData() {
+    //     TestDataFactory.generateAttendanceData('Monthly');
 
-        serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
+    //     serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
 
-        insert new ServiceDelivery__c(
-            Name = 'test',
-            Service__c = serviceRecord.Id,
-            AttendanceStatus__c = PRESENT_STATUS
-        );
-    }
+    //     insert new ServiceDelivery__c(
+    //         Name = 'test',
+    //         Service__c = serviceRecord.Id,
+    //         AttendanceStatus__c = PRESENT_STATUS
+    //     );
+    // }
 
-    @IsTest
-    private static void shouldGetAllAttendanceRecordsForStandardUser() {
-        serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
+    // @IsTest
+    // private static void shouldGetAllAttendanceRecordsForStandardUser() {
+    //     serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
 
-        User standardUser = TestUtil.getTestUser();
-        List<ServiceDelivery__c> recordsWithAccess;
+    //     User standardUser = TestUtil.getTestUser();
+    //     List<ServiceDelivery__c> recordsWithAccess;
 
-        System.runAs(standardUser) {
-            recordsWithAccess = systemAccess.getAttendanceRecords(
-                ServiceDelivery__c.Service__c,
-                new Set<Id>{ serviceRecord.Id },
-                new List<String>{ PRESENT_STATUS }
-            );
-        }
+    //     System.runAs(standardUser) {
+    //         recordsWithAccess = systemAccess.getAttendanceRecords(
+    //             ServiceDelivery__c.Service__c,
+    //             new Set<Id>{ serviceRecord.Id },
+    //             new List<String>{ PRESENT_STATUS }
+    //         );
+    //     }
 
-        System.assertEquals(
-            1,
-            recordsWithAccess.size(),
-            'Expected the user to be able to bypass sharing.'
-        );
-    }
+    //     System.assertEquals(
+    //         1,
+    //         recordsWithAccess.size(),
+    //         'Expected the user to be able to bypass sharing.'
+    //     );
+    // }
 
-    @IsTest
-    private static void shouldGetAllParentRecordsForStandardUser() {
-        serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
+    // @IsTest
+    // private static void shouldGetAllParentRecordsForStandardUser() {
+    //     serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
 
-        User standardUser = TestUtil.getTestUser();
-        List<Service__c> recordsWithAccess;
+    //     User standardUser = TestUtil.getTestUser();
+    //     List<Service__c> recordsWithAccess;
 
-        System.runAs(standardUser) {
-            recordsWithAccess = systemAccess.getParentsWithServiceDeliveries(
-                ServiceDelivery__c.Service__c,
-                new Set<Id>{ serviceRecord.Id },
-                Service__c.SObjectType,
-                'ServiceDeliveries__r'
-            );
-        }
+    //     System.runAs(standardUser) {
+    //         recordsWithAccess = systemAccess.getParentsWithServiceDeliveries(
+    //             ServiceDelivery__c.Service__c,
+    //             new Set<Id>{ serviceRecord.Id },
+    //             Service__c.SObjectType,
+    //             'ServiceDeliveries__r'
+    //         );
+    //     }
 
-        System.assertEquals(
-            1,
-            recordsWithAccess.size(),
-            'Expected the user to be able to bypass sharing.'
-        );
-    }
+    //     System.assertEquals(
+    //         1,
+    //         recordsWithAccess.size(),
+    //         'Expected the user to be able to bypass sharing.'
+    //     );
+    // }
 
-    @IsTest
-    private static void shouldUpdateUnsharedRecordByStandardUser() {
-        String updatedName = 'Services R Us';
-        serviceRecord = [SELECT Id, Name FROM Service__c LIMIT 1];
-        System.assertNotEquals(
-            updatedName,
-            serviceRecord.Name,
-            'The service record name was not as expected.'
-        );
-        serviceRecord.Name = updatedName;
+    // @IsTest
+    // private static void shouldUpdateUnsharedRecordByStandardUser() {
+    //     String updatedName = 'Services R Us';
+    //     serviceRecord = [SELECT Id, Name FROM Service__c LIMIT 1];
+    //     System.assertNotEquals(
+    //         updatedName,
+    //         serviceRecord.Name,
+    //         'The service record name was not as expected.'
+    //     );
+    //     serviceRecord.Name = updatedName;
 
-        User standardUser = TestUtil.getTestUser();
+    //     User standardUser = TestUtil.getTestUser();
 
-        System.runAs(standardUser) {
-            systemAccess.updateRecords(new List<SObject>{ serviceRecord });
-        }
+    //     System.runAs(standardUser) {
+    //         systemAccess.updateRecords(new List<SObject>{ serviceRecord });
+    //     }
 
-        serviceRecord = [SELECT Id, Name FROM Service__c LIMIT 1];
-        System.assertEquals(
-            updatedName,
-            serviceRecord.Name,
-            'The service record name was not as expected.'
-        );
-    }
+    //     serviceRecord = [SELECT Id, Name FROM Service__c LIMIT 1];
+    //     System.assertEquals(
+    //         updatedName,
+    //         serviceRecord.Name,
+    //         'The service record name was not as expected.'
+    //     );
+    // }
 }

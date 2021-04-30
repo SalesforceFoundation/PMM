@@ -9,7 +9,7 @@
 
 public with sharing class ServiceDeliveryTriggerHandler {
     @TestVisible
-    private ServiceDeliveryService service = new ServiceDeliveryService();
+    private ServiceDeliveryRollupsService rollupsService;
 
     private final SObjectField ATTENDANCE_STATUS = ServiceDelivery__c.AttendanceStatus__c;
     private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
@@ -60,7 +60,23 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
 
         delegate(Trigger.operationType);
-        service.doRollups(recordIdsByLookupField);
+        doRollups(recordIdsByLookupField);
+    }
+
+    public void doRollups(Map<SObjectField, Set<Id>> recordIdsByLookupField) {
+        for (SObjectField lookupField : recordIdsByLookupField.keySet()) {
+            Set<Id> recordIds = recordIdsByLookupField.get(lookupField);
+            if (recordIds.isEmpty()) {
+                continue;
+            }
+
+            SObjectType sObjectType = new List<Id>(recordIds)[0].getSObjectType();
+            rollupsService = new ServiceDeliveryRollupsService(sObjectType, lookupField);
+            rollupsService.rollupDeliveryRecords(recordIds);
+            recordIds.removeAll(rollupsService.getProcessedRecordIds());
+            rollupsService.commitRollups();
+            rollupsService.resetRollupFields(recordIds);
+        }
     }
 
     @TestVisible

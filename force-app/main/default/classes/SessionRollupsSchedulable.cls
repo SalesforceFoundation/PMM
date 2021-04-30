@@ -30,7 +30,7 @@ public class SessionRollupsSchedulable implements Database.Batchable<SObject>, S
 
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
-            new ServiceDeliveryRollups(
+            new ServiceDeliveryRollupsBatch(
                 ServiceSession__c.SObjectType,
                 ServiceDelivery__c.ServiceSession__c,
                 sessionIds

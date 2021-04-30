@@ -1,4 +1,4 @@
-public with sharing class Rollups {
+public with sharing class ServiceDeliveryRollupsService {
     private static final Map<SObjectType, SObjectField> NUM_PRESENT_FIELD_BY_SOBJECT_TYPE = new Map<SObjectType, SObjectField>{
         Service__c.SObjectType => Service__c.NumPresentServiceDeliveries__c,
         Contact.SObjectType => Contact.NumPresentServiceDeliveries__c,
@@ -33,13 +33,33 @@ public with sharing class Rollups {
     private SObjectType sObjectType;
     private SObjectField lookupField;
 
-    public Rollups(SObjectType sObjectType, SObjectField lookupField) {
+    public ServiceDeliveryRollupsService(
+        SObjectType sObjectType,
+        SObjectField lookupField
+    ) {
         this.sObjectType = sObjectType;
         this.lookupField = lookupField;
     }
 
     public Set<Id> getProcessedRecordIds() {
         return processedRecordsById.keySet();
+    }
+
+    public String getDeliveryRollupsQuery() {
+        return systemAccess.getDeliveryRollupsQuery(
+            String.valueOf(lookupField),
+            deliveryService.attendanceStatuses
+        );
+    }
+
+    public void rollupDeliveryRecords(Set<Id> recordIds) {
+        List<ServiceDelivery__c> deliveries = systemAccess.getDeliveryRecordsToRollup(
+            String.valueOf(lookupField),
+            recordIds,
+            deliveryService.attendanceStatuses
+        );
+
+        rollupDeliveryRecords(deliveries);
     }
 
     public void rollupDeliveryRecords(List<ServiceDelivery__c> deliveries) {
@@ -81,13 +101,10 @@ public with sharing class Rollups {
         }
 
         RollupRecord record = createRollupRecord(recordId);
-
-        Integer totalRecords = Database.countQuery(
-            deliveryService.getDeliveryRollupsCountQuery(
-                String.valueOf(lookupField),
-                recordId,
-                true
-            )
+        Integer totalRecords = systemAccess.getDeliveryRollupsCount(
+            String.valueOf(lookupField),
+            recordId,
+            deliveryService.attendanceStatuses
         );
         record.setTotalRecords(totalRecords);
         rollupRecordById.put(recordId, record);
@@ -97,13 +114,11 @@ public with sharing class Rollups {
         List<SObject> recordsToUpdate = new List<SObject>();
         Set<Id> recordIds = processedRecordsById.keySet();
         List<String> selectFields = buildSelectFieldsForOriginalQuery();
-        String query = deliveryService.buildOriginalRecordsQuery(
-            'Id IN: recordIds',
-            selectFields,
-            sObjectType
+        List<SObject> originalRecords = systemAccess.getRecordsById(
+            sObjectType,
+            recordIds,
+            selectFields
         );
-
-        List<SObject> originalRecords = Database.query(query);
 
         for (SObject originalRecord : originalRecords) {
             RollupRecord record = processedRecordsById.remove(originalRecord.Id);

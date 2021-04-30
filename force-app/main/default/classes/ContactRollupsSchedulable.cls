@@ -43,7 +43,7 @@ public class ContactRollupsSchedulable implements Database.Batchable<SObject>, S
     // Once all of the contact Ids have been added we will pass them off to the next batch
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
-            new ServiceDeliveryRollups(
+            new ServiceDeliveryRollupsBatch(
                 Contact.SObjectType,
                 ServiceDelivery__c.Contact__c,
                 contactIds

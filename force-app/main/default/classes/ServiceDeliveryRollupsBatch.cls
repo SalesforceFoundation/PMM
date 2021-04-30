@@ -7,44 +7,39 @@
  *
  */
 
-public class ServiceDeliveryRollups implements Database.Batchable<SObject>, Database.Stateful {
-    @TestVisible
-    private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
-    private Rollups rollups;
+public class ServiceDeliveryRollupsBatch implements Database.Batchable<SObject>, Database.Stateful {
+    private ServiceDeliveryRollupsService rollupsService;
     private Set<Id> unprocessedIds;
     private SObjectField lookupField;
 
-    public ServiceDeliveryRollups(
+    public ServiceDeliveryRollupsBatch(
         SObjectType sObjectType,
         SObjectField lookupField,
         Set<Id> unprocessedIds
     ) {
         this.lookupField = lookupField;
         this.unprocessedIds = unprocessedIds;
-        this.rollups = new Rollups(sObjectType, lookupField);
+        this.rollupsService = new ServiceDeliveryRollupsService(sObjectType, lookupField);
     }
 
     public Database.Querylocator start(Database.BatchableContext bc) {
-        String query = deliveryService.getDeliveryRollupsQuery(
-            String.valueOf(lookupField),
-            false
-        );
+        String query = rollupsService.getDeliveryRollupsQuery();
 
         return Database.getQueryLocator(query);
     }
 
     public void execute(Database.BatchableContext bc, List<ServiceDelivery__c> scope) {
-        rollups.rollupDeliveryRecords(scope);
+        rollupsService.rollupDeliveryRecords(scope);
         Set<Id> idsToUpdate = new Set<Id>();
 
-        for (Id rollupId : rollups.getProcessedRecordIds()) {
+        for (Id rollupId : rollupsService.getProcessedRecordIds()) {
             unprocessedIds.remove(rollupId);
         }
 
-        rollups.commitRollups();
+        rollupsService.commitRollups();
     }
 
     public void finish(Database.BatchableContext bc) {
-        rollups.resetRollupFields(unprocessedIds);
+        rollupsService.resetRollupFields(unprocessedIds);
     }
 }

@@ -30,7 +30,7 @@ public class ServiceRollupsSchedulable implements Database.Batchable<SObject>, S
 
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
-            new ServiceDeliveryRollups(
+            new ServiceDeliveryRollupsBatch(
                 Service__c.SObjectType,
                 ServiceDelivery__c.Service__c,
                 serviceIds

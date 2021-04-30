@@ -9,61 +9,61 @@
 
 @isTest
 private class SessionRollupsSchedulable_TEST {
-    private static BasicStub attendanceServiceStub = new BasicStub(
-        ServiceDeliveryService.class
-    );
+    // private static BasicStub attendanceServiceStub = new BasicStub(
+    //     ServiceDeliveryService.class
+    // );
 
-    @testSetup
-    static void setup() {
-        TestUtil.turnOffFeatureGates();
-        TestDataFactory.generateAttendanceData('Monthly');
-    }
+    // @testSetup
+    // static void setup() {
+    //     TestUtil.turnOffFeatureGates();
+    //     TestDataFactory.generateAttendanceData('Monthly');
+    // }
 
-    @IsTest
-    private static void shouldCallServiceWithSessions() {
-        List<String> attendanceStatuses = new ServiceDeliveryService().attendanceStatuses;
+    // @IsTest
+    // private static void shouldCallServiceWithSessions() {
+    //     List<String> attendanceStatuses = new ServiceDeliveryService().attendanceStatuses;
 
-        List<ServiceSession__c> sessionsWithServiceDeliveries = [
-            SELECT
-                Id,
-                (
-                    SELECT
-                        ServiceSession__c,
-                        AttendanceStatus__c,
-                        DeliveryDate__c,
-                        Quantity__c
-                    FROM ServiceDeliveries__r
-                    WHERE
-                        AttendanceStatus__c IN :attendanceStatuses
-                        OR (DeliveryDate__c <= TODAY
-                        AND Quantity__c > 0)
-                )
-            FROM ServiceSession__c
-        ];
-        System.assert(
-            !sessionsWithServiceDeliveries.isEmpty(),
-            'Expected test data to be queried.'
-        );
+    //     List<ServiceSession__c> sessionsWithServiceDeliveries = [
+    //         SELECT
+    //             Id,
+    //             (
+    //                 SELECT
+    //                     ServiceSession__c,
+    //                     AttendanceStatus__c,
+    //                     DeliveryDate__c,
+    //                     Quantity__c
+    //                 FROM ServiceDeliveries__r
+    //                 WHERE
+    //                     AttendanceStatus__c IN :attendanceStatuses
+    //                     OR (DeliveryDate__c <= TODAY
+    //                     AND Quantity__c > 0)
+    //             )
+    //         FROM ServiceSession__c
+    //     ];
+    //     System.assert(
+    //         !sessionsWithServiceDeliveries.isEmpty(),
+    //         'Expected test data to be queried.'
+    //     );
 
-        Test.startTest();
+    //     Test.startTest();
 
-        SessionRollupsSchedulable rollups = new SessionRollupsSchedulable();
-        attendanceServiceStub.withReturnValue(
-            'getAttendanceStatuses',
-            attendanceStatuses
-        );
-        SessionRollupsSchedulable.deliveryService = (ServiceDeliveryService) attendanceServiceStub.createMock();
-        rollups.execute(null);
+    //     SessionRollupsSchedulable rollups = new SessionRollupsSchedulable();
+    //     attendanceServiceStub.withReturnValue(
+    //         'getAttendanceStatuses',
+    //         attendanceStatuses
+    //     );
+    //     SessionRollupsSchedulable.deliveryService = (ServiceDeliveryService) attendanceServiceStub.createMock();
+    //     rollups.execute(null);
 
-        Test.stopTest();
+    //     Test.stopTest();
 
-        attendanceServiceStub.assertCalledWith(
-            'doRollups',
-            new List<Type>{ SObjectType.class, List<SObject>.class },
-            new List<Object>{
-                ServiceSession__c.SObjectType,
-                sessionsWithServiceDeliveries
-            }
-        );
-    }
+    //     attendanceServiceStub.assertCalledWith(
+    //         'doRollups',
+    //         new List<Type>{ SObjectType.class, List<SObject>.class },
+    //         new List<Object>{
+    //             ServiceSession__c.SObjectType,
+    //             sessionsWithServiceDeliveries
+    //         }
+    //     );
+    // }
 }

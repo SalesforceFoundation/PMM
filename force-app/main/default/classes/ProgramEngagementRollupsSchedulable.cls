@@ -46,7 +46,7 @@ public class ProgramEngagementRollupsSchedulable implements Database.Batchable<S
     // Once all of the programEngagement Ids have been added we will pass them off to the next batch
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
-            new ServiceDeliveryRollups(
+            new ServiceDeliveryRollupsBatch(
                 ProgramEngagement__c.SObjectType,
                 ServiceDelivery__c.ProgramEngagement__c,
                 programEngagementIds

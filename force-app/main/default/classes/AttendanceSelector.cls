@@ -9,47 +9,6 @@
 
 public with sharing class AttendanceSelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
-    @TestVisible
-    private static final String ABSENT = 'Absent';
-    @TestVisible
-    private static final String PRESENT = 'Present';
-
-    public List<String> presentStatuses {
-        get {
-            return statusBuckets.get(PRESENT);
-        }
-        set;
-    }
-
-    public List<String> absentStatuses {
-        get {
-            return statusBuckets.get(ABSENT);
-        }
-        set;
-    }
-
-    private List<String> attendanceStatuses {
-        get {
-            if (attendanceStatuses == null) {
-                attendanceStatuses = new List<String>();
-                attendanceStatuses.addAll(presentStatuses);
-                attendanceStatuses.addAll(absentStatuses);
-            }
-            return attendanceStatuses;
-        }
-        set;
-    }
-
-    @TestVisible
-    private Map<String, List<String>> statusBuckets {
-        get {
-            if (statusBuckets == null) {
-                statusBuckets = getStatusBuckets();
-            }
-            return statusBuckets;
-        }
-        set;
-    }
 
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
         if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
@@ -131,25 +90,7 @@ public with sharing class AttendanceSelector {
             .getRecords()[0];
     }
 
-    public Map<String, List<String>> getStatusBuckets() {
-        Map<String, List<String>> buckets = new Map<String, List<String>>();
-
-        for (Bucket__mdt bucket : getAttendanceBuckets()) {
-            buckets.put(bucket.DeveloperName, new List<String>());
-            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
-                buckets.get(bucket.DeveloperName).add(value.Value__c);
-            }
-        }
-
-        return buckets;
-    }
-
-    public List<Bucket__mdt> getAttendanceBuckets() {
-        List<String> bucketNames = new List<String>{
-            Util.prefixNamespace(ABSENT),
-            Util.prefixNamespace(PRESENT)
-        };
-
+    public List<Bucket__mdt> getBuckets(List<String> bucketNames) {
         // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
         // with SOQL for this layer.
         return [
@@ -163,106 +104,5 @@ public with sharing class AttendanceSelector {
             WHERE QualifiedApiName IN :bucketNames
             ORDER BY QualifiedApiName
         ];
-    }
-
-    public List<ServiceDelivery__c> getDeliveryRecordsToRollup(
-        String lookupField,
-        Set<Id> recordIds,
-        Boolean isCountQuery
-    ) {
-        String query = buildDeliveryRollupsQuery(
-            String.valueOf(lookupField),
-            recordIds,
-            isCountQuery
-        );
-        return Database.query(query);
-    }
-
-    public String buildDeliveryRollupsQuery(String lookupField, Boolean isCountQuery) {
-        return buildDeliveryRollupsQuery(lookupField, ' != null', isCountQuery);
-    }
-
-    public String buildDeliveryRollupsQuery(
-        String lookupField,
-        Set<Id> recordIds,
-        Boolean isCountQuery
-    ) {
-        return buildDeliveryRollupsQuery(lookupField, ' IN: recordIds', isCountQuery);
-    }
-
-    public String buildDeliveryRollupsQuery(
-        String lookupField,
-        Id recordId,
-        Boolean isCountQuery
-    ) {
-        return buildDeliveryRollupsQuery(lookupField, '  = :recordId', isCountQuery);
-    }
-
-    private String buildDeliveryRollupsQuery(
-        String lookupField,
-        String lookupFieldCondition,
-        Boolean isCountQuery
-    ) {
-        String deliveryRollupQuery;
-        String condition = lookupField + lookupFieldCondition + ' AND (';
-
-        QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
-            .withSObjectType(ServiceDelivery__c.SObjectType);
-
-        if (!isCountQuery) {
-            serviceDeliveryQueryBuilder.withSelectFields(
-                new List<String>{
-                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
-                    String.valueOf(ServiceDelivery__c.DeliveryDate__c),
-                    String.valueOf(lookupField),
-                    String.valueOf(ServiceDelivery__c.Quantity__c)
-                }
-            );
-        } else {
-            serviceDeliveryQueryBuilder.withSelectFields(
-                new List<String>{ String.valueOf(ServiceDelivery__c.Id) }
-            );
-        }
-
-        serviceDeliveryQueryBuilder.addCondition(
-            condition +
-            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-            ' IN (\'' +
-            String.join(attendanceStatuses, '\',\'') +
-            '\') OR ( ' +
-            String.valueOF(ServiceDelivery__c.Quantity__c) +
-            ' > 0 AND ' +
-            String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-            ' != null ))'
-        );
-
-        if (!isCountQuery) {
-            serviceDeliveryQueryBuilder.withOrderBy(
-                lookupField +
-                ', ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' ASC '
-            );
-        }
-
-        if (!isCountQuery) {
-            deliveryRollupQuery = serviceDeliveryQueryBuilder.buildSoqlQuery();
-        } else {
-            deliveryRollupQuery = serviceDeliveryQueryBuilder.buildCountQuery();
-        }
-
-        return deliveryRollupQuery;
-    }
-
-    public String buildOriginalRecordsQuery(
-        String condition,
-        List<String> selectFields,
-        sObjectType sObjectType
-    ) {
-        return new QueryBuilder()
-            .withSObjectType(sObjectType)
-            .withSelectFields(selectFields)
-            .addCondition(condition)
-            .buildSoqlQuery();
     }
 }

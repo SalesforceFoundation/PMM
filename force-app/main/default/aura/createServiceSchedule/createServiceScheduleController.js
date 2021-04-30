@@ -9,6 +9,11 @@
 
 ({
     doInit: function(component, event, helper) {
+        if ($A.get("$Site")) {
+            component.set("v.isCommunity", true);
+        } else {
+            component.set("v.isCommunity", false);
+        }
         helper.extractUrlParams(component, event, helper);
     },
 

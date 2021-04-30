@@ -58,6 +58,10 @@ public without sharing class SystemAccess {
         );
     }
 
+    public void updateRecords(List<SObject> sObjects) {
+        update sObjects;
+    }
+
     private String buildDeliveryRollupsQuery(
         String lookupField,
         String lookupFieldCondition,
@@ -110,9 +114,5 @@ public without sharing class SystemAccess {
             );
 
         return queryBuilder;
-    }
-
-    public void updateRecords(List<SObject> sObjects) {
-        update sObjects;
     }
 }

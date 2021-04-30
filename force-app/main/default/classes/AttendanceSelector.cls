@@ -167,74 +167,102 @@ public with sharing class AttendanceSelector {
 
     public List<ServiceDelivery__c> getDeliveryRecordsToRollup(
         String lookupField,
-        Set<Id> recordIds
+        Set<Id> recordIds,
+        Boolean isCountQuery
     ) {
-        String query = buildDeliveryRollupsQuery(String.valueOf(lookupField), recordIds);
+        String query = buildDeliveryRollupsQuery(
+            String.valueOf(lookupField),
+            recordIds,
+            isCountQuery
+        );
         return Database.query(query);
     }
 
-    public String buildDeliveryRollupsQuery(String lookupField) {
-        return buildDeliveryRollupsQuery(lookupField, ' != null');
+    public String buildDeliveryRollupsQuery(String lookupField, Boolean isCountQuery) {
+        return buildDeliveryRollupsQuery(lookupField, ' != null', isCountQuery);
     }
 
-    public String buildDeliveryRollupsQuery(String lookupField, Set<Id> recordIds) {
-        return buildDeliveryRollupsQuery(lookupField, ' IN: recordIds');
+    public String buildDeliveryRollupsQuery(
+        String lookupField,
+        Set<Id> recordIds,
+        Boolean isCountQuery
+    ) {
+        return buildDeliveryRollupsQuery(lookupField, ' IN: recordIds', isCountQuery);
     }
 
-    public String buildDeliveryRollupsCountQuery(String lookupField, Id recordId) {
-        String condition = lookupField + ' = :recordId AND (';
-        QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
-            .withSObjectType(ServiceDelivery__c.SObjectType)
-            .withSelectFields(new List<String>{ String.valueOf(ServiceDelivery__c.Id) })
-            .addCondition(
-                condition +
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-                ' IN (\'' +
-                String.join(attendanceStatuses, '\',\'') +
-                '\') OR ( ' +
-                String.valueOF(ServiceDelivery__c.Quantity__c) +
-                ' > 0 AND ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' != null ))'
-            );
-
-        return serviceDeliveryQueryBuilder.buildCountQuery();
+    public String buildDeliveryRollupsQuery(
+        String lookupField,
+        Id recordId,
+        Boolean isCountQuery
+    ) {
+        return buildDeliveryRollupsQuery(lookupField, '  = :recordId', isCountQuery);
     }
 
     private String buildDeliveryRollupsQuery(
         String lookupField,
-        String lookupFieldCondition
+        String lookupFieldCondition,
+        Boolean isCountQuery
     ) {
+        String deliveryRollupQuery;
         String condition = lookupField + lookupFieldCondition + ' AND (';
 
         QueryBuilder serviceDeliveryQueryBuilder = new QueryBuilder()
-            .withSObjectType(ServiceDelivery__c.SObjectType)
-            .withSelectFields(
+            .withSObjectType(ServiceDelivery__c.SObjectType);
+
+        if (!isCountQuery) {
+            serviceDeliveryQueryBuilder.withSelectFields(
                 new List<String>{
                     String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
                     String.valueOf(ServiceDelivery__c.DeliveryDate__c),
                     String.valueOf(lookupField),
                     String.valueOf(ServiceDelivery__c.Quantity__c)
                 }
-            )
-            .addCondition(
-                condition +
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-                ' IN (\'' +
-                String.join(attendanceStatuses, '\',\'') +
-                '\') OR ( ' +
-                String.valueOF(ServiceDelivery__c.Quantity__c) +
-                ' > 0 AND ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' != null ))'
-            )
-            .withOrderBy(
+            );
+        } else {
+            serviceDeliveryQueryBuilder.withSelectFields(
+                new List<String>{ String.valueOf(ServiceDelivery__c.Id) }
+            );
+        }
+
+        serviceDeliveryQueryBuilder.addCondition(
+            condition +
+            String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
+            ' IN (\'' +
+            String.join(attendanceStatuses, '\',\'') +
+            '\') OR ( ' +
+            String.valueOF(ServiceDelivery__c.Quantity__c) +
+            ' > 0 AND ' +
+            String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+            ' != null ))'
+        );
+
+        if (!isCountQuery) {
+            serviceDeliveryQueryBuilder.withOrderBy(
                 lookupField +
                 ', ' +
                 String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
                 ' ASC '
             );
+        }
 
-        return serviceDeliveryQueryBuilder.buildSoqlQuery();
+        if (!isCountQuery) {
+            deliveryRollupQuery = serviceDeliveryQueryBuilder.buildSoqlQuery();
+        } else {
+            deliveryRollupQuery = serviceDeliveryQueryBuilder.buildCountQuery();
+        }
+
+        return deliveryRollupQuery;
+    }
+
+    public String buildOriginalRecordsQuery(
+        String condition,
+        List<String> selectFields,
+        sObjectType sObjectType
+    ) {
+        return new QueryBuilder()
+            .withSObjectType(sObjectType)
+            .withSelectFields(selectFields)
+            .addCondition(condition)
+            .buildSoqlQuery();
     }
 }

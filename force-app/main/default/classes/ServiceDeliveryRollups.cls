@@ -26,7 +26,8 @@ public class ServiceDeliveryRollups implements Database.Batchable<SObject>, Data
 
     public Database.Querylocator start(Database.BatchableContext bc) {
         String query = deliveryService.getDeliveryRollupsQuery(
-            String.valueOf(lookupField)
+            String.valueOf(lookupField),
+            false
         );
 
         return Database.getQueryLocator(query);

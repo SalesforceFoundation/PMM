@@ -55,7 +55,8 @@ public with sharing class ServiceDeliveryService {
 
             List<ServiceDelivery__c> deliveries = attendanceSelector.getDeliveryRecordsToRollup(
                 String.valueOf(lookupField),
-                recordIds
+                recordIds,
+                false
             );
 
             rollups.rollupDeliveryRecords(deliveries);
@@ -65,12 +66,28 @@ public with sharing class ServiceDeliveryService {
         }
     }
 
-    public String getDeliveryRollupsQuery(String lookupField) {
-        return attendanceSelector.buildDeliveryRollupsQuery(lookupField);
+    public String getDeliveryRollupsQuery(String lookupField, Boolean isCountQuery) {
+        return attendanceSelector.buildDeliveryRollupsQuery(lookupField, isCountQuery);
     }
 
-    public String getDeliveryRollupsCountQuery(String lookupField, Id recordId) {
-        return attendanceSelector.buildDeliveryRollupsCountQuery(lookupField, recordId);
+    public String getDeliveryRollupsCountQuery(
+        String lookupField,
+        Id recordId,
+        Boolean isCountQuery
+    ) {
+        return attendanceSelector.buildDeliveryRollupsQuery(lookupField, recordId, true);
+    }
+
+    public String buildOriginalRecordsQuery(
+        String condition,
+        List<String> selectFields,
+        sObjectType sObjectType
+    ) {
+        return attendanceSelector.buildOriginalRecordsQuery(
+            condition,
+            selectFields,
+            sObjectType
+        );
     }
 
     public Map<String, Boolean> checkFieldPermissions() {

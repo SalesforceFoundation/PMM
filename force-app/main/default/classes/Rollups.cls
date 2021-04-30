@@ -81,10 +81,12 @@ public with sharing class Rollups {
         }
 
         RollupRecord record = createRollupRecord(recordId);
+
         Integer totalRecords = Database.countQuery(
             deliveryService.getDeliveryRollupsCountQuery(
                 String.valueOf(lookupField),
-                recordId
+                recordId,
+                true
             )
         );
         record.setTotalRecords(totalRecords);
@@ -94,7 +96,12 @@ public with sharing class Rollups {
     public void commitRollups() {
         List<SObject> recordsToUpdate = new List<SObject>();
         Set<Id> recordIds = processedRecordsById.keySet();
-        String query = buildOriginalRecordsQuery('Id IN: recordIds');
+        List<String> selectFields = buildSelectFieldsForOriginalQuery();
+        String query = deliveryService.buildOriginalRecordsQuery(
+            'Id IN: recordIds',
+            selectFields,
+            sObjectType
+        );
 
         List<SObject> originalRecords = Database.query(query);
 
@@ -108,6 +115,33 @@ public with sharing class Rollups {
         }
 
         systemAccess.updateRecords(recordsToUpdate);
+    }
+
+    public List<String> buildSelectFieldsForOriginalQuery() {
+        List<String> selectFields = new List<String>();
+        SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
+        SObjectField numAbsentField = NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
+        SObjectField consecutiveAbsencesField = CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(
+            sObjectType
+        );
+        SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(
+            sObjectType
+        );
+
+        if (numPresentField != null) {
+            selectFields.add(String.valueOf(numPresentField));
+        }
+        if (numAbsentField != null) {
+            selectFields.add(String.valueOf(numAbsentField));
+        }
+        if (consecutiveAbsencesField != null) {
+            selectFields.add(String.valueOf(consecutiveAbsencesField));
+        }
+        if (lastServiceDateField != null) {
+            selectFields.add(String.valueOf(lastServiceDateField));
+        }
+
+        return selectFields;
     }
 
     public void resetRollupFields(Set<Id> recordsIdsToReset) {
@@ -152,36 +186,5 @@ public with sharing class Rollups {
         if ((delivery.Quantity__c > 0 && delivery.DeliveryDate__c != null)) {
             record.updateLastServiceDate(delivery.DeliveryDate__c);
         }
-    }
-
-    private String buildOriginalRecordsQuery(String condition) {
-        List<String> selectFields = new List<String>();
-        SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
-        SObjectField numAbsentField = NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
-        SObjectField consecutiveAbsencesField = CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.get(
-            sObjectType
-        );
-        SObjectField lastServiceDateField = LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.get(
-            sObjectType
-        );
-
-        if (numPresentField != null) {
-            selectFields.add(String.valueOf(numPresentField));
-        }
-        if (numAbsentField != null) {
-            selectFields.add(String.valueOf(numAbsentField));
-        }
-        if (consecutiveAbsencesField != null) {
-            selectFields.add(String.valueOf(consecutiveAbsencesField));
-        }
-        if (lastServiceDateField != null) {
-            selectFields.add(String.valueOf(lastServiceDateField));
-        }
-
-        return new QueryBuilder()
-            .withSObjectType(sObjectType)
-            .withSelectFields(selectFields)
-            .addCondition(condition)
-            .buildSoqlQuery();
     }
 }

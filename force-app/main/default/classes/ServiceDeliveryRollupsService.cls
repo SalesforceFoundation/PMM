@@ -41,10 +41,6 @@ public with sharing class ServiceDeliveryRollupsService {
         this.lookupField = lookupField;
     }
 
-    public Set<Id> getProcessedRecordIds() {
-        return processedRecordsById.keySet();
-    }
-
     public String getDeliveryRollupsQuery() {
         return systemAccess.getDeliveryRollupsQuery(
             String.valueOf(lookupField),
@@ -52,10 +48,10 @@ public with sharing class ServiceDeliveryRollupsService {
         );
     }
 
-    public void rollupDeliveryRecords(Set<Id> recordIds) {
+    public void rollupDeliveryRecords(Set<Id> parentLookupIds) {
         List<ServiceDelivery__c> deliveries = systemAccess.getDeliveryRecordsToRollup(
             String.valueOf(lookupField),
-            recordIds,
+            parentLookupIds,
             deliveryService.attendanceStatuses
         );
 
@@ -94,20 +90,8 @@ public with sharing class ServiceDeliveryRollupsService {
         }
     }
 
-    private void setTotalRecordCount(ServiceDelivery__c delivery) {
-        Id recordId = (Id) delivery.get(lookupField);
-        if (rollupRecordById.containsKey(recordId)) {
-            return;
-        }
-
-        RollupRecord record = createRollupRecord(recordId);
-        Integer totalRecords = systemAccess.getDeliveryRollupsCount(
-            String.valueOf(lookupField),
-            recordId,
-            deliveryService.attendanceStatuses
-        );
-        record.setTotalRecords(totalRecords);
-        rollupRecordById.put(recordId, record);
+    public Set<Id> getProcessedRecordIds() {
+        return processedRecordsById.keySet();
     }
 
     public void commitRollups() {
@@ -132,7 +116,19 @@ public with sharing class ServiceDeliveryRollupsService {
         systemAccess.updateRecords(recordsToUpdate);
     }
 
-    public List<String> buildSelectFieldsForOriginalQuery() {
+    public void resetRollupFields(Set<Id> recordsIdsToReset) {
+        if (recordsIdsToReset.isEmpty()) {
+            return;
+        }
+        List<SObject> recordsToClearRollups = new List<SObject>();
+        for (Id recordId : recordsIdsToReset) {
+            RollupRecord record = createRollupRecord(recordId);
+            recordsToClearRollups.add(record.getSObject());
+        }
+        systemAccess.updateRecords(recordsToClearRollups);
+    }
+
+    private List<String> buildSelectFieldsForOriginalQuery() {
         List<String> selectFields = new List<String>();
         SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
         SObjectField numAbsentField = NUM_ABSENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
@@ -157,22 +153,6 @@ public with sharing class ServiceDeliveryRollupsService {
         }
 
         return selectFields;
-    }
-
-    public void resetRollupFields(Set<Id> recordsIdsToReset) {
-        if (recordsIdsToReset.isEmpty()) {
-            return;
-        }
-        // What remains in recordsIdsToReset are records that need to be reset.
-        // They once had rollup data but no longer do.
-        List<SObject> recordsToClearRollups = new List<SObject>();
-        for (Id recordId : recordsIdsToReset) {
-            // TODO: Investigate whether or not we need to recreate these records every batch run
-            // TODO: Total number of batches 250,000 per 24 hours -> is this a namespace limit?
-            RollupRecord record = createRollupRecord(recordId);
-            recordsToClearRollups.add(record.getSObject());
-        }
-        systemAccess.updateRecords(recordsToClearRollups);
     }
 
     private RollupRecord createRollupRecord(Id recordId) {
@@ -201,5 +181,21 @@ public with sharing class ServiceDeliveryRollupsService {
         if ((delivery.Quantity__c > 0 && delivery.DeliveryDate__c != null)) {
             record.updateLastServiceDate(delivery.DeliveryDate__c);
         }
+    }
+
+    private void setTotalRecordCount(ServiceDelivery__c delivery) {
+        Id recordId = (Id) delivery.get(lookupField);
+        if (rollupRecordById.containsKey(recordId)) {
+            return;
+        }
+
+        RollupRecord record = createRollupRecord(recordId);
+        Integer totalRecords = systemAccess.getDeliveryRollupsCount(
+            String.valueOf(lookupField),
+            recordId,
+            deliveryService.attendanceStatuses
+        );
+        record.setTotalRecords(totalRecords);
+        rollupRecordById.put(recordId, record);
     }
 }

@@ -30,12 +30,7 @@ public class ServiceDeliveryRollupsBatch implements Database.Batchable<SObject>,
 
     public void execute(Database.BatchableContext bc, List<ServiceDelivery__c> scope) {
         rollupsService.rollupDeliveryRecords(scope);
-        Set<Id> idsToUpdate = new Set<Id>();
-
-        for (Id rollupId : rollupsService.getProcessedRecordIds()) {
-            unprocessedIds.remove(rollupId);
-        }
-
+        unprocessedIds.removeAll(rollupsService.getProcessedRecordIds());
         rollupsService.commitRollups();
     }
 

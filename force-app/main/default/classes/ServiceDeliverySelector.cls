@@ -7,7 +7,7 @@
  *
  */
 
-public with sharing class AttendanceSelector {
+public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {

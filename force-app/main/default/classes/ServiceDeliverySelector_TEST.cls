@@ -8,8 +8,8 @@
  */
 
 @IsTest
-public with sharing class AttendanceSelector_TEST {
-    private static AttendanceSelector selector = new AttendanceSelector();
+public with sharing class ServiceDeliverySelector_TEST {
+    private static ServiceDeliverySelector selector = new ServiceDeliverySelector();
     private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
 
     @TestSetup

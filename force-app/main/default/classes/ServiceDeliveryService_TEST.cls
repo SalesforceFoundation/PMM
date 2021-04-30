@@ -8,9 +8,9 @@
  */
 
 @IsTest
-public with sharing class AttendanceService_TEST {
-    private static BasicStub attendanceSelectorStub = new BasicStub(
-        AttendanceSelector.class
+public with sharing class ServiceDeliveryService_TEST {
+    private static BasicStub deliverySelectorStub = new BasicStub(
+        ServiceDeliverySelector.class
     );
     private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
     private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
@@ -459,18 +459,18 @@ public with sharing class AttendanceService_TEST {
     //     String getSession = 'getSession';
     //     Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
     //     Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
-    //     service.attendanceSelector = (AttendanceSelector) attendanceSelectorStub.createMock();
-    //     attendanceSelectorStub.withReturnValue(
+    //     service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.createMock();
+    //     deliverySelectorStub.withReturnValue(
     //         getServiceDeliveriesBySessionId,
     //         Id.class,
     //         new List<ServiceDelivery__c>()
     //     );
-    //     attendanceSelectorStub.withReturnValue(
+    //     deliverySelectorStub.withReturnValue(
     //         getServiceParticipantsByScheduleId,
     //         new List<Type>{ Id.class, Set<Id>.class },
     //         new List<ServiceParticipant__c>()
     //     );
-    //     attendanceSelectorStub.withReturnValue(
+    //     deliverySelectorStub.withReturnValue(
     //         getSession,
     //         Id.class,
     //         new ServiceSession__c(ServiceSchedule__c = scheduleId)
@@ -480,13 +480,13 @@ public with sharing class AttendanceService_TEST {
     //     service.generateRoster(sessionId);
     //     Test.stopTest();
 
-    //     attendanceSelectorStub.assertCalledWith(
+    //     deliverySelectorStub.assertCalledWith(
     //         getServiceDeliveriesBySessionId,
     //         Id.class,
     //         sessionId
     //     );
 
-    //     attendanceSelectorStub.assertCalledWith(
+    //     deliverySelectorStub.assertCalledWith(
     //         getServiceParticipantsByScheduleId,
     //         new List<Type>{ Id.class, Set<Id>.class },
     //         new List<Object>{ scheduleId, new Set<Id>() }
@@ -503,18 +503,18 @@ public with sharing class AttendanceService_TEST {
     //     };
     //     Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
 
-    //     service.attendanceSelector = (AttendanceSelector) attendanceSelectorStub.createMock();
-    //     attendanceSelectorStub.withReturnValue(
+    //     service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.createMock();
+    //     deliverySelectorStub.withReturnValue(
     //         getServiceDeliveriesBySessionId,
     //         Id.class,
     //         deliveriesToReturn
     //     );
-    //     attendanceSelectorStub.withReturnValue(
+    //     deliverySelectorStub.withReturnValue(
     //         getServiceParticipantsByScheduleId,
     //         new List<Type>{ Id.class, Set<Id>.class },
     //         new List<ServiceParticipant__c>()
     //     );
-    //     attendanceSelectorStub.withReturnValue(
+    //     deliverySelectorStub.withReturnValue(
     //         getSession,
     //         Id.class,
     //         new ServiceSession__c(ServiceSchedule__c = scheduleId)
@@ -528,7 +528,7 @@ public with sharing class AttendanceService_TEST {
     //     );
     //     Test.stopTest();
 
-    //     attendanceSelectorStub.assertCalledWith(
+    //     deliverySelectorStub.assertCalledWith(
     //         getServiceParticipantsByScheduleId,
     //         new List<Type>{ Id.class, Set<Id>.class },
     //         new List<Object>{
@@ -552,18 +552,18 @@ public with sharing class AttendanceService_TEST {
     //     };
     //     List<ServiceDelivery__c> actualDeliveries;
 
-    //     service.attendanceSelector = (AttendanceSelector) attendanceSelectorStub.createMock();
-    //     attendanceSelectorStub.withReturnValue(
+    //     service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.createMock();
+    //     deliverySelectorStub.withReturnValue(
     //         getServiceDeliveriesBySessionId,
     //         Id.class,
     //         new List<ServiceDelivery__c>()
     //     );
-    //     attendanceSelectorStub.withReturnValue(
+    //     deliverySelectorStub.withReturnValue(
     //         getServiceParticipantsByScheduleId,
     //         new List<Type>{ Id.class, Set<Id>.class },
     //         participantsToReturn
     //     );
-    //     attendanceSelectorStub.withReturnValue(
+    //     deliverySelectorStub.withReturnValue(
     //         getSession,
     //         Id.class,
     //         new ServiceSession__c(
@@ -606,7 +606,7 @@ public with sharing class AttendanceService_TEST {
     //         );
     //     }
 
-    //     attendanceSelectorStub.assertCalledWith(
+    //     deliverySelectorStub.assertCalledWith(
     //         getServiceParticipantsByScheduleId,
     //         new List<Type>{ Id.class, Set<Id>.class },
     //         new List<Object>{ scheduleId, new Set<Id>{} }
@@ -629,18 +629,18 @@ public with sharing class AttendanceService_TEST {
     //     };
     //     List<ServiceDelivery__c> actualDeliveries;
 
-    //     service.attendanceSelector = (AttendanceSelector) attendanceSelectorStub.createMock();
-    //     attendanceSelectorStub.withReturnValue(
+    //     service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.createMock();
+    //     deliverySelectorStub.withReturnValue(
     //         getServiceDeliveriesBySessionId,
     //         Id.class,
     //         deliveriesToReturn
     //     );
-    //     attendanceSelectorStub.withReturnValue(
+    //     deliverySelectorStub.withReturnValue(
     //         getServiceParticipantsByScheduleId,
     //         new List<Type>{ Id.class, Set<Id>.class },
     //         participantsToReturn
     //     );
-    //     attendanceSelectorStub.withReturnValue(
+    //     deliverySelectorStub.withReturnValue(
     //         getSession,
     //         Id.class,
     //         new ServiceSession__c(ServiceSchedule__c = scheduleId)

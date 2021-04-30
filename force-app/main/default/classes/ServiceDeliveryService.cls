@@ -9,7 +9,7 @@
 
 public with sharing class ServiceDeliveryService {
     @TestVisible
-    private AttendanceSelector attendanceSelector = new AttendanceSelector();
+    private ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
     public static final String ABSENT = 'Absent';
@@ -154,18 +154,18 @@ public with sharing class ServiceDeliveryService {
     private List<ServiceDelivery__c> createRows(Id sessionId) {
         Set<Id> existingClients = new Set<Id>();
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
-            attendanceSelector.getServiceDeliveriesBySessionId(sessionId)
+            deliverySelector.getServiceDeliveriesBySessionId(sessionId)
         );
 
         for (ServiceDelivery__c delivery : deliveries) {
             existingClients.add(delivery.Contact__c);
         }
 
-        ServiceSession__c session = attendanceSelector.getSession(sessionId);
+        ServiceSession__c session = deliverySelector.getSession(sessionId);
         Id scheduleId = session.ServiceSchedule__c;
 
         for (
-            ServiceParticipant__c participant : attendanceSelector.getServiceParticipantsByScheduleId(
+            ServiceParticipant__c participant : deliverySelector.getServiceParticipantsByScheduleId(
                 scheduleId,
                 existingClients
             )
@@ -209,7 +209,7 @@ public with sharing class ServiceDeliveryService {
         };
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
-        for (Bucket__mdt bucket : attendanceSelector.getBuckets(bucketNames)) {
+        for (Bucket__mdt bucket : deliverySelector.getBuckets(bucketNames)) {
             buckets.put(bucket.DeveloperName, new List<String>());
             for (BucketedValue__mdt value : bucket.BucketedValues__r) {
                 buckets.get(bucket.DeveloperName).add(value.Value__c);

@@ -15,12 +15,5 @@
 
     refresh: function(component, event, helper) {
         helper.refresh();
-    },
-
-    handleClose: function(component, event, helper) {
-        component
-            .find("wizard")
-            .getElement()
-            .handleClose();
     }
 });

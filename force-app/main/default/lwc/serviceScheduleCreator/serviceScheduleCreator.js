@@ -306,7 +306,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     handleClose() {
         this.hideModal();
         this.navigate();
-        this.dispatchEvent(new CustomEvent("close"));
+        this.dispatchEvent(new CustomEvent("close", { bubbles: true }));
     }
 
     init() {

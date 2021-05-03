@@ -9,15 +9,18 @@
 
 ({
     doInit: function(component, event, helper) {
-        if ($A.get("$Site")) {
-            component.set("v.isCommunity", true);
-        } else {
-            component.set("v.isCommunity", false);
-        }
+        component.set("v.isCommunity", $A.get("$Site") ? true : false);
         helper.extractUrlParams(component, event, helper);
     },
 
     refresh: function(component, event, helper) {
         helper.refresh();
+    },
+
+    handleClose: function(component, event, helper) {
+        component
+            .find("wizard")
+            .getElement()
+            .handleClose();
     }
 });

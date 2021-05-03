@@ -55,16 +55,12 @@ private class ServiceRollupsSchedulable_TEST {
 
         Test.startTest();
 
-        String hour = String.valueOf(Datetime.now().hour());
-        String min = String.valueOf(Datetime.now().minute() + 1);
-        String ss = String.valueOf(Datetime.now().second());
-
         //parse to cron expression
-        String scheduledTime = ss + ' ' + min + ' ' + hour + ' * * ?';
+        String scheduledTime = '0 0 12 * * ?';
 
         ServiceRollupsSchedulable serviceRollups = new ServiceRollupsSchedulable();
         String jobId = System.schedule(
-            'Job Started At ' + String.valueOf(Datetime.now()),
+            'Job Started At ' + scheduledTime,
             scheduledTime,
             serviceRollups
         );

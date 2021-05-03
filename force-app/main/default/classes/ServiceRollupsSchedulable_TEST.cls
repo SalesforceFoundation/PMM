@@ -9,54 +9,75 @@
 
 @isTest
 private class ServiceRollupsSchedulable_TEST {
-    // private static BasicStub attendanceServiceStub = new BasicStub(
-    //     ServiceDeliveryService.class
-    // );
+    @testSetup
+    static void setup() {
+        TestUtil.turnOffFeatureGates();
+        TestDataFactory.generateAttendanceData('Monthly');
+    }
 
-    // @testSetup
-    // static void setup() {
-    //     TestUtil.turnOffFeatureGates();
-    //     TestDataFactory.generateAttendanceData('Monthly');
-    // }
+    @IsTest
+    private static void shouldQueryServicesAndExecuteBatch() {
+        List<Service__c> servicesWithRollupData = [
+            SELECT Id
+            FROM Service__c
+            WHERE
+                NumPresentServiceDeliveries__c >= 0
+                OR NumAbsentServiceDeliveries__c >= 0
+        ];
 
-    // @IsTest
-    // private static void shouldCallServiceWithServices() {
-    //     List<String> attendanceStatuses = new ServiceDeliveryService().attendanceStatuses;
+        System.assert(
+            !servicesWithRollupData.isEmpty(),
+            'Expected test data to be queried.'
+        );
 
-    //     List<Service__c> servicesWithServiceDeliveries = [
-    //         SELECT
-    //             Id,
-    //             (
-    //                 SELECT Service__c, AttendanceStatus__c, DeliveryDate__c, Quantity__c
-    //                 FROM ServiceDeliveries__r
-    //                 WHERE
-    //                     AttendanceStatus__c IN :attendanceStatuses
-    //                     OR (DeliveryDate__c <= TODAY
-    //                     AND Quantity__c > 0)
-    //             )
-    //         FROM Service__c
-    //     ];
-    //     System.assert(
-    //         !servicesWithServiceDeliveries.isEmpty(),
-    //         'Expected test data to be queried.'
-    //     );
+        Test.startTest();
 
-    //     Test.startTest();
+        ServiceRollupsSchedulable serviceRollups = new ServiceRollupsSchedulable();
+        Database.executeBatch(serviceRollups);
 
-    //     ServiceRollupsSchedulable rollups = new ServiceRollupsSchedulable();
-    //     attendanceServiceStub.withReturnValue(
-    //         'getAttendanceStatuses',
-    //         attendanceStatuses
-    //     );
-    //     ServiceRollupsSchedulable.deliveryService = (ServiceDeliveryService) attendanceServiceStub.createMock();
-    //     rollups.execute(null);
+        Test.stopTest();
+    }
 
-    //     Test.stopTest();
+    @IsTest
+    private static void shouldScheduleServiceRollupsBatch() {
+        List<Service__c> servicesWithRollupData = [
+            SELECT Id
+            FROM Service__c
+            WHERE
+                NumPresentServiceDeliveries__c >= 0
+                OR NumAbsentServiceDeliveries__c >= 0
+        ];
 
-    //     attendanceServiceStub.assertCalledWith(
-    //         'doRollups',
-    //         new List<Type>{ SObjectType.class, List<SObject>.class },
-    //         new List<Object>{ Service__c.SObjectType, servicesWithServiceDeliveries }
-    //     );
-    // }
+        System.assert(
+            !servicesWithRollupData.isEmpty(),
+            'Expected test data to be queried.'
+        );
+
+        Test.startTest();
+
+        String hour = String.valueOf(Datetime.now().hour());
+        String min = String.valueOf(Datetime.now().minute() + 1);
+        String ss = String.valueOf(Datetime.now().second());
+
+        //parse to cron expression
+        String scheduledTime = ss + ' ' + min + ' ' + hour + ' * * ?';
+
+        ServiceRollupsSchedulable serviceRollups = new ServiceRollupsSchedulable();
+        String jobId = System.schedule(
+            'Job Started At ' + String.valueOf(Datetime.now()),
+            scheduledTime,
+            serviceRollups
+        );
+
+        CronTrigger cronTrigger = [
+            SELECT Id, CronExpression, TimesTriggered
+            FROM CronTrigger
+            WHERE Id = :jobId
+        ];
+
+        //Assert the job has not run yet
+        System.assertEquals(0, cronTrigger.TimesTriggered);
+
+        Test.stopTest();
+    }
 }

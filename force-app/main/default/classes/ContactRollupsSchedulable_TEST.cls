@@ -9,54 +9,77 @@
 
 @isTest
 private class ContactRollupsSchedulable_TEST {
-    private static BasicStub attendanceServiceStub = new BasicStub(
-        ServiceDeliveryService.class
-    );
-
     @testSetup
     static void setup() {
         TestUtil.turnOffFeatureGates();
         TestDataFactory.generateAttendanceData('Monthly');
     }
 
-    // @IsTest
-    // private static void shouldCallServiceWithContacts() {
-    //     List<String> attendanceStatuses = new ServiceDeliveryService().attendanceStatuses;
+    @IsTest
+    private static void shouldQueryContactsAndExecuteBatch() {
+        List<Contact> contactsWithRollupData = [
+            SELECT Id
+            FROM Contact
+            WHERE
+                NumPresentServiceDeliveries__c >= 0
+                OR NumAbsentServiceDeliveries__c >= 0
+                OR LastServiceDate__c != NULL
+                OR ConsecutiveAbsences__c >= 0
+        ];
+        System.assert(
+            !contactsWithRollupData.isEmpty(),
+            'Expected test data to be queried.'
+        );
 
-    //     List<Contact> contactsWithServiceDeliveries = [
-    //         SELECT
-    //             Id,
-    //             (
-    //                 SELECT Contact__c, AttendanceStatus__c, DeliveryDate__c, Quantity__c
-    //                 FROM Service_Deliveries__r
-    //                 WHERE
-    //                     AttendanceStatus__c IN :attendanceStatuses
-    //                     OR (DeliveryDate__c <= TODAY
-    //                     AND Quantity__c > 0)
-    //             )
-    //         FROM Contact
-    //     ];
-    //     System.assert(
-    //         !contactsWithServiceDeliveries.isEmpty(),
-    //         'Expected test data to be queried.'
-    //     );
+        Test.startTest();
 
-    //     Test.startTest();
+        ContactRollupsSchedulable contactRollups = new ContactRollupsSchedulable();
+        Database.executeBatch(contactRollups);
 
-    //     ContactRollupsSchedulable rollups = new ContactRollupsSchedulable();
-    //     attendanceServiceStub.withReturnValue(
-    //         'getAttendanceStatuses',
-    //         attendanceStatuses
-    //     );
-    //     ContactRollupsSchedulable.deliveryService = (ServiceDeliveryService) attendanceServiceStub.createMock();
-    //     rollups.execute(null);
+        Test.stopTest();
+    }
 
-    //     Test.stopTest();
+    @IsTest
+    private static void shouldScheduleContactRollupsBatch() {
+        List<Contact> contactsWithRollupData = [
+            SELECT Id
+            FROM Contact
+            WHERE
+                NumPresentServiceDeliveries__c >= 0
+                OR NumAbsentServiceDeliveries__c >= 0
+                OR LastServiceDate__c != NULL
+                OR ConsecutiveAbsences__c >= 0
+        ];
+        System.assert(
+            !contactsWithRollupData.isEmpty(),
+            'Expected test data to be queried.'
+        );
 
-    //     attendanceServiceStub.assertCalledWith(
-    //         'doRollups',
-    //         new List<Type>{ SObjectType.class, List<SObject>.class },
-    //         new List<Object>{ Contact.SObjectType, contactsWithServiceDeliveries }
-    //     );
-    // }
+        Test.startTest();
+
+        String hour = String.valueOf(Datetime.now().hour());
+        String min = String.valueOf(Datetime.now().minute() + 1);
+        String ss = String.valueOf(Datetime.now().second());
+
+        //parse to cron expression
+        String scheduledTime = ss + ' ' + min + ' ' + hour + ' * * ?';
+
+        ContactRollupsSchedulable contactRollups = new ContactRollupsSchedulable();
+        String jobId = System.schedule(
+            'Job Started At ' + String.valueOf(Datetime.now()),
+            scheduledTime,
+            contactRollups
+        );
+
+        CronTrigger cronTrigger = [
+            SELECT Id, CronExpression, TimesTriggered
+            FROM CronTrigger
+            WHERE Id = :jobId
+        ];
+
+        //Assert the job has not run yet
+        System.assertEquals(0, cronTrigger.TimesTriggered);
+
+        Test.stopTest();
+    }
 }

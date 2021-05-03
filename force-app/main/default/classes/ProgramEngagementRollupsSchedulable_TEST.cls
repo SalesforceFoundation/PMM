@@ -9,10 +9,6 @@
 
 @isTest
 private class ProgramEngagementRollupsSchedulable_TEST {
-    private static BasicStub attendanceServiceStub = new BasicStub(
-        ServiceDeliveryService.class
-    );
-
     @testSetup
     static void setup() {
         TestUtil.turnOffFeatureGates();
@@ -20,46 +16,72 @@ private class ProgramEngagementRollupsSchedulable_TEST {
     }
 
     @IsTest
-    private static void shouldCallServiceWithProgramEngagements() {
-        // List<String> attendanceStatuses = new ServiceDeliveryService().attendanceStatuses;
+    private static void shouldQueryProgramEngagementsAndExecuteBatch() {
+        List<ProgramEngagement__c> programEngagementsWithRollupData = [
+            SELECT Id
+            FROM ProgramEngagement__c
+            WHERE
+                NumPresentServiceDeliveries__c >= 0
+                OR NumAbsentServiceDeliveries__c >= 0
+                OR LastServiceDate__c != NULL
+                OR ConsecutiveAbsences__c >= 0
+        ];
 
-        // List<ProgramEngagement__c> programEngagementsWithServiceDeliveries = [
-        //     SELECT
-        //         Id,
-        //         (
-        //             SELECT Contact__c, AttendanceStatus__c, DeliveryDate__c, Quantity__c
-        //             FROM ServiceDeliveries__r
-        //             WHERE
-        //                 AttendanceStatus__c IN :attendanceStatuses
-        //                 OR (DeliveryDate__c <= TODAY
-        //                 AND Quantity__c > 0)
-        //         )
-        //     FROM ProgramEngagement__c
-        // ];
-        // System.assert(
-        //     !programEngagementsWithServiceDeliveries.isEmpty(),
-        //     'Expected test data to be queried.'
-        // );
+        System.assert(
+            !programEngagementsWithRollupData.isEmpty(),
+            'Expected test data to be queried.'
+        );
 
-        // Test.startTest();
+        Test.startTest();
 
-        // ProgramEngagementRollupsSchedulable rollups = new ProgramEngagementRollupsSchedulable();
-        // attendanceServiceStub.withReturnValue(
-        //     'getAttendanceStatuses',
-        //     attendanceStatuses
-        // );
-        // ProgramEngagementRollupsSchedulable.deliveryService = (ServiceDeliveryService) attendanceServiceStub.createMock();
-        // rollups.execute(null);
+        ProgramEngagementRollupsSchedulable programEngagementRollups = new ProgramEngagementRollupsSchedulable();
+        Database.executeBatch(programEngagementRollups);
 
-        // Test.stopTest();
+        Test.stopTest();
+    }
 
-        // attendanceServiceStub.assertCalledWith(
-        //     'doRollups',
-        //     new List<Type>{ SObjectType.class, List<SObject>.class },
-        //     new List<Object>{
-        //         ProgramEngagement__c.SObjectType,
-        //         programEngagementsWithServiceDeliveries
-        //     }
-        // );
+    @IsTest
+    private static void shouldScheduleProgramEngagementRollupsBatch() {
+        List<ProgramEngagement__c> programEngagementsWithRollupData = [
+            SELECT Id
+            FROM ProgramEngagement__c
+            WHERE
+                NumPresentServiceDeliveries__c >= 0
+                OR NumAbsentServiceDeliveries__c >= 0
+                OR LastServiceDate__c != NULL
+                OR ConsecutiveAbsences__c >= 0
+        ];
+
+        System.assert(
+            !programEngagementsWithRollupData.isEmpty(),
+            'Expected test data to be queried.'
+        );
+
+        Test.startTest();
+
+        String hour = String.valueOf(Datetime.now().hour());
+        String min = String.valueOf(Datetime.now().minute() + 1);
+        String ss = String.valueOf(Datetime.now().second());
+
+        //parse to cron expression
+        String scheduledTime = ss + ' ' + min + ' ' + hour + ' * * ?';
+
+        ProgramEngagementRollupsSchedulable programEngagementRollups = new ProgramEngagementRollupsSchedulable();
+        String jobId = System.schedule(
+            'Job Started At ' + String.valueOf(Datetime.now()),
+            scheduledTime,
+            programEngagementRollups
+        );
+
+        CronTrigger cronTrigger = [
+            SELECT Id, CronExpression, TimesTriggered
+            FROM CronTrigger
+            WHERE Id = :jobId
+        ];
+
+        //Assert the job has not run yet
+        System.assertEquals(0, cronTrigger.TimesTriggered);
+
+        Test.stopTest();
     }
 }

@@ -68,11 +68,15 @@ public with sharing class TestDataFactory {
         Contact contact1 = new Contact();
         contact1.LastName = 'Test Contact';
         contact1.AccountId = accountRecord.Id;
+        contact1.NumPresentServiceDeliveries__c = 0;
+        contact1.NumAbsentServiceDeliveries__c = 0;
         contacts.add(contact1);
 
         Contact contact2 = new Contact();
         contact2.LastName = 'Test Contact';
         contact2.AccountId = accountRecord.Id;
+        contact2.NumPresentServiceDeliveries__c = 0;
+        contact2.NumAbsentServiceDeliveries__c = 0;
         contacts.add(contact2);
         insert contacts;
 
@@ -119,6 +123,8 @@ public with sharing class TestDataFactory {
         engagement1.Program__c = program1.Id;
         engagement1.Role__c = 'Client';
         engagement1.ProgramCohort__c = cohort1.Id;
+        engagement1.NumPresentServiceDeliveries__c = 0;
+        engagement1.NumAbsentServiceDeliveries__c = 0;
         engagements.add(engagement1);
 
         ProgramEngagement__c engagement2 = new ProgramEngagement__c();
@@ -127,6 +133,8 @@ public with sharing class TestDataFactory {
         engagement2.Contact__c = contact1.Id;
         engagement2.Program__c = program2.Id;
         engagement2.Role__c = 'Client';
+        engagement2.NumPresentServiceDeliveries__c = 0;
+        engagement2.NumAbsentServiceDeliveries__c = 0;
         engagements.add(engagement2);
 
         insert engagements;
@@ -141,6 +149,8 @@ public with sharing class TestDataFactory {
         service1.Program__c = programs[0].Id;
         service1.Status__c = 'Active';
         service1.UnitOfMeasurement__c = 'Hours';
+        service1.NumPresentServiceDeliveries__c = 0;
+        service1.NumAbsentServiceDeliveries__c = 0;
         services.add(service1);
 
         Service__c service2 = new Service__c();
@@ -148,6 +158,8 @@ public with sharing class TestDataFactory {
         service2.Program__c = programs[1].Id;
         service2.Status__c = 'Active';
         service2.UnitOfMeasurement__c = 'Days';
+        service2.NumPresentServiceDeliveries__c = 0;
+        service2.NumAbsentServiceDeliveries__c = 0;
         services.add(service2);
 
         insert services;

@@ -151,6 +151,14 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.clear_element_text(locator)
         self.selenium.get_webelement(locator).send_keys(value)
 
+    def filter_participants(self, filter_value):
+        """ Filter participants on service schedule wizard based on filter criteria """
+        locator = pmm_lex_locators["service_schedule"]["filter"].format(filter_value)
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).click()
+        self.selenium.get_webelement(locator).send_keys(filter_value)
+        self.selenium.wait_until_page_contains(filter_value)
+
 
 @pageobject("Details", "ServiceSchedule__c")
 class ServiceScheduleDetailPage(BasePMMPage, DetailPage):

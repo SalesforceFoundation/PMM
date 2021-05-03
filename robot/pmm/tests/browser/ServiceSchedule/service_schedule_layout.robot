@@ -40,7 +40,7 @@ Add Service Participant quick action
     [Documentation]                        Navigates to service schedule details page, creates two PE using API and clicks on Add service
     ...                                    Participants quick action, add more participants and Save. Validates that the contact name is 
     ...                                    displayed on the service schedule page
-    [tags]                                 unstable    W-8720124     perm:admin   perm:manage     perm:deliver    feature:Service Schedule 
+    [tags]                                 W-8720124     perm:admin   perm:manage     perm:deliver    feature:Service Schedule 
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
     API Create Program Engagement   ${Program}[Id]  ${contact2}[Id]
     API Create Program Engagement   ${Program}[Id]  ${contact3}[Id]

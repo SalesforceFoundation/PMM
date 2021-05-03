@@ -74,6 +74,8 @@ pmm_lex_locators = {
         "error_message": "//div[@class='slds-text-color_error' and text()='{}']",
         "persist_save": "//div[{}][contains(@class,'slds-box')]/descendant::lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
         "persist_warning": "//div[{}][contains(@class,'slds-box')]/descendant::lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
+        "bsdt-button": "//div[@class='bsdt']//div[@class='slds-card__footer']//lightning-button/button[contains(@class,'slds-button') and text()='{}']",
+        "bsdt_wizard_lookup": "//lightning-grouped-combobox[.//*[text()='{}']]//input[contains(@class,'slds-input')]",
         "new_prog_engagement": {
             "title": "//h2[contains(@class,'slds-text-heading_medium') and text()='{}']",
             "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']]//input[contains(@class,'slds-input')]",
@@ -101,6 +103,7 @@ pmm_lex_locators = {
         "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
         "first_session_end": "//lightning-input[contains(@class,'slds-form-element')][./descendant::*[text()='{}']]/descendant::div//input[@class='slds-input']",
         "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
+        "filter": "//div[contains(@class,'slds-form-element__control')]/input[@placeholder='Search this list']",
     },
     "attendance": {
         "attendance_text": "//c-attendance-row[{}]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",

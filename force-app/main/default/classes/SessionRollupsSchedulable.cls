@@ -13,24 +13,40 @@ public class SessionRollupsSchedulable implements Database.Batchable<SObject>, S
     @TestVisible
     private Set<Id> sessionIds = new Set<Id>();
 
+    /*
+     * Both the Schedulable and Batch jobs are within this class, the schedule
+     * will call execute batch on a new Instance of this class
+     */
     public void execute(SchedulableContext context) {
         Database.executeBatch(new SessionRollupsSchedulable(), 2000);
     }
 
+    /*
+     * Find all of the records that have had any rollups in the past
+     */
     public Database.Querylocator start(Database.BatchableContext bc) {
         String query = sessionWithRollupDataQuery();
         return Database.getQueryLocator(query);
     }
 
+    /*
+     * The batch job will iterate all of the records and only add them to the
+     * set of Ids. Note that we need stateful in order to maintain all Ids across
+     * each batch iteration.
+     */
     public void execute(Database.BatchableContext bc, List<ServiceSession__c> sessions) {
         for (ServiceSession__c sessionRecord : sessions) {
             sessionIds.add(sessionRecord.Id);
         }
     }
 
+    /*
+     * Once all of the record Ids have been added we will pass them off to the
+     * Service Delivery Rollups Batch
+     */
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
-            new ServiceDeliveryRollups(
+            new ServiceDeliveryRollupsBatch(
                 ServiceSession__c.SObjectType,
                 ServiceDelivery__c.ServiceSession__c,
                 sessionIds
@@ -40,11 +56,6 @@ public class SessionRollupsSchedulable implements Database.Batchable<SObject>, S
     }
 
     private String sessionWithRollupDataQuery() {
-        // Find sessions that have had previous rollups and send them to the session delivery
-        // batch in order to null the field values when sessions no longer have rollup data.
-        // For example: all session delivery records were reparented to a different session.
-        // If the session has updated rollup values we expect the session delivery batch to update them.
-        // When sessions do not have a change to rollup values we expect them not to be touched.
         queryBuilder.withSObjectType(ServiceSession__c.SObjectType)
             .withSelectFields(new List<String>{ String.valueOf(ServiceSession__c.Id) })
             .addCondition(

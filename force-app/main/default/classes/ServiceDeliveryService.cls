@@ -9,13 +9,12 @@
 
 public with sharing class ServiceDeliveryService {
     @TestVisible
-    private AttendanceSelector attendanceSelector = new AttendanceSelector();
+    private ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
-    private Rollups rollups;
-    public List<String> presentStatuses = attendanceSelector.presentStatuses;
-    public List<String> absentStatuses = attendanceSelector.absentStatuses;
-    private static final String DEFAULT_STATUS = 'Present';
+    public static final String ABSENT = 'Absent';
+    public static final String PRESENT = 'Present';
+    private static final String DEFAULT_STATUS = PRESENT;
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
     // Service Deliveries that appear in the Attendance UI is hard-coded here.
@@ -26,6 +25,43 @@ public with sharing class ServiceDeliveryService {
         ServiceParticipant__c.Contact__c => ServiceDelivery__c.Contact__c,
         ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c
     };
+
+    public List<String> presentStatuses {
+        get {
+            return statusBuckets.get(PRESENT);
+        }
+        set;
+    }
+
+    public List<String> absentStatuses {
+        get {
+            return statusBuckets.get(ABSENT);
+        }
+        set;
+    }
+
+    public List<String> attendanceStatuses {
+        get {
+            if (attendanceStatuses == null) {
+                attendanceStatuses = new List<String>();
+                attendanceStatuses.addAll(presentStatuses);
+                attendanceStatuses.addAll(absentStatuses);
+            }
+            return attendanceStatuses;
+        }
+        set;
+    }
+
+    @TestVisible
+    private Map<String, List<String>> statusBuckets {
+        get {
+            if (statusBuckets == null) {
+                statusBuckets = getStatusBuckets();
+            }
+            return statusBuckets;
+        }
+        set;
+    }
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
         return createRows(sessionId);
@@ -41,53 +77,6 @@ public with sharing class ServiceDeliveryService {
             Database.rollback(savepoint);
             throw new ServiceDeliveryException(ex);
         }
-    }
-
-    public void doRollups(Map<SObjectField, Set<Id>> recordIdsByLookupField) {
-        for (SObjectField lookupField : recordIdsByLookupField.keySet()) {
-            Set<Id> recordIds = recordIdsByLookupField.get(lookupField);
-            if (recordIds.isEmpty()) {
-                continue;
-            }
-
-            SObjectType sObjectType = new List<Id>(recordIds)[0].getSObjectType();
-            rollups = new Rollups(sObjectType, lookupField);
-
-            List<ServiceDelivery__c> deliveries = attendanceSelector.getDeliveryRecordsToRollup(
-                String.valueOf(lookupField),
-                recordIds,
-                false
-            );
-
-            rollups.rollupDeliveryRecords(deliveries);
-            recordIds.removeAll(rollups.getProcessedRecordIds());
-            rollups.commitRollups();
-            rollups.resetRollupFields(recordIds);
-        }
-    }
-
-    public String getDeliveryRollupsQuery(String lookupField, Boolean isCountQuery) {
-        return attendanceSelector.buildDeliveryRollupsQuery(lookupField, isCountQuery);
-    }
-
-    public String getDeliveryRollupsCountQuery(
-        String lookupField,
-        Id recordId,
-        Boolean isCountQuery
-    ) {
-        return attendanceSelector.buildDeliveryRollupsQuery(lookupField, recordId, true);
-    }
-
-    public String buildOriginalRecordsQuery(
-        String condition,
-        List<String> selectFields,
-        sObjectType sObjectType
-    ) {
-        return attendanceSelector.buildOriginalRecordsQuery(
-            condition,
-            selectFields,
-            sObjectType
-        );
     }
 
     public Map<String, Boolean> checkFieldPermissions() {
@@ -165,18 +154,18 @@ public with sharing class ServiceDeliveryService {
     private List<ServiceDelivery__c> createRows(Id sessionId) {
         Set<Id> existingClients = new Set<Id>();
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
-            attendanceSelector.getServiceDeliveriesBySessionId(sessionId)
+            deliverySelector.getServiceDeliveriesBySessionId(sessionId)
         );
 
         for (ServiceDelivery__c delivery : deliveries) {
             existingClients.add(delivery.Contact__c);
         }
 
-        ServiceSession__c session = attendanceSelector.getSession(sessionId);
+        ServiceSession__c session = deliverySelector.getSession(sessionId);
         Id scheduleId = session.ServiceSchedule__c;
 
         for (
-            ServiceParticipant__c participant : attendanceSelector.getServiceParticipantsByScheduleId(
+            ServiceParticipant__c participant : deliverySelector.getServiceParticipantsByScheduleId(
                 scheduleId,
                 existingClients
             )
@@ -211,6 +200,23 @@ public with sharing class ServiceDeliveryService {
         }
 
         return (ServiceDelivery__c) deliveryRecord;
+    }
+
+    private Map<String, List<String>> getStatusBuckets() {
+        List<String> bucketNames = new List<String>{
+            Util.prefixNamespace(ABSENT),
+            Util.prefixNamespace(PRESENT)
+        };
+        Map<String, List<String>> buckets = new Map<String, List<String>>();
+
+        for (Bucket__mdt bucket : deliverySelector.getBuckets(bucketNames)) {
+            buckets.put(bucket.DeveloperName, new List<String>());
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                buckets.get(bucket.DeveloperName).add(value.Value__c);
+            }
+        }
+
+        return buckets;
     }
 
     public class ServiceDeliveryException extends Exception {

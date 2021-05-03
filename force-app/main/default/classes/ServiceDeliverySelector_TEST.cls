@@ -8,8 +8,8 @@
  */
 
 @IsTest
-public with sharing class AttendanceSelector_TEST {
-    private static AttendanceSelector selector = new AttendanceSelector();
+public with sharing class ServiceDeliverySelector_TEST {
+    private static ServiceDeliverySelector selector = new ServiceDeliverySelector();
     private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
 
     @TestSetup
@@ -115,7 +115,8 @@ public with sharing class AttendanceSelector_TEST {
 
     @IsTest
     private static void getAttendanceBucketsReturnsPackagedBuckets() {
-        List<Bucket__mdt> buckets = selector.getAttendanceBuckets();
+        List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
+        List<Bucket__mdt> buckets = selector.getBuckets(bucketNames);
 
         System.assertEquals(
             2,
@@ -123,12 +124,12 @@ public with sharing class AttendanceSelector_TEST {
             'Expected the 2 packaged attendance records to be returned.'
         );
         System.assertEquals(
-            AttendanceSelector.ABSENT,
+            bucketNames[0],
             buckets[0].DeveloperName,
             'Expected the Absent bucket to be returned first.'
         );
         System.assertEquals(
-            AttendanceSelector.PRESENT,
+            bucketNames[1],
             buckets[1].DeveloperName,
             'Expected the Present bucket to be returned second.'
         );

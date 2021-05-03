@@ -17,44 +17,25 @@ private class ContactRollupsSchedulable_TEST {
 
     @IsTest
     private static void shouldQueryContactsAndExecuteBatch() {
-        List<Contact> contactsWithRollupData = [
-            SELECT Id
-            FROM Contact
-            WHERE
-                NumPresentServiceDeliveries__c >= 0
-                OR NumAbsentServiceDeliveries__c >= 0
-                OR LastServiceDate__c != NULL
-                OR ConsecutiveAbsences__c >= 0
-        ];
-        System.assert(
-            !contactsWithRollupData.isEmpty(),
-            'Expected test data to be queried.'
-        );
-
         Test.startTest();
 
         ContactRollupsSchedulable contactRollups = new ContactRollupsSchedulable();
         Database.executeBatch(contactRollups);
 
         Test.stopTest();
+        List<Contact> contacts = [
+            SELECT Id, NumAbsentServiceDeliveries__c, NumPresentServiceDeliveries__c
+            FROM Contact
+        ];
+
+        System.assertEquals(1, contacts[2].NumPresentServiceDeliveries__c);
+        System.assertEquals(1, contacts[2].NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, contacts[3].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, contacts[3].NumAbsentServiceDeliveries__c);
     }
 
     @IsTest
     private static void shouldScheduleContactRollupsBatch() {
-        List<Contact> contactsWithRollupData = [
-            SELECT Id
-            FROM Contact
-            WHERE
-                NumPresentServiceDeliveries__c >= 0
-                OR NumAbsentServiceDeliveries__c >= 0
-                OR LastServiceDate__c != NULL
-                OR ConsecutiveAbsences__c >= 0
-        ];
-        System.assert(
-            !contactsWithRollupData.isEmpty(),
-            'Expected test data to be queried.'
-        );
-
         Test.startTest();
 
         //parse to cron expression

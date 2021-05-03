@@ -68,16 +68,25 @@ public with sharing class TestDataFactory {
         Contact contact1 = new Contact();
         contact1.LastName = 'Test Contact';
         contact1.AccountId = accountRecord.Id;
-        contact1.NumPresentServiceDeliveries__c = 0;
-        contact1.NumAbsentServiceDeliveries__c = 0;
         contacts.add(contact1);
 
         Contact contact2 = new Contact();
         contact2.LastName = 'Test Contact';
         contact2.AccountId = accountRecord.Id;
-        contact2.NumPresentServiceDeliveries__c = 0;
-        contact2.NumAbsentServiceDeliveries__c = 0;
         contacts.add(contact2);
+
+        Contact contact3 = new Contact();
+        contact3.LastName = 'Test Contact 3';
+        contact3.AccountId = accountRecord.Id;
+        contacts.add(contact3);
+
+        Contact contact4 = new Contact();
+        contact4.LastName = 'Test Contact 4';
+        contact4.AccountId = accountRecord.Id;
+        contact4.NumPresentServiceDeliveries__c = 0;
+        contact4.NumAbsentServiceDeliveries__c = 0;
+        contacts.add(contact4);
+
         insert contacts;
 
         programs = new List<Program__c>();
@@ -137,6 +146,26 @@ public with sharing class TestDataFactory {
         engagement2.NumAbsentServiceDeliveries__c = 0;
         engagements.add(engagement2);
 
+        ProgramEngagement__c engagement3 = new ProgramEngagement__c();
+        engagement3.Name = 'Engagement 3';
+        engagement3.Stage__c = 'Enrolled';
+        engagement3.Contact__c = contact3.Id;
+        engagement3.Program__c = program1.Id;
+        engagement3.Role__c = 'Client';
+        engagement3.NumPresentServiceDeliveries__c = 0;
+        engagement3.NumAbsentServiceDeliveries__c = 0;
+        engagements.add(engagement3);
+
+        ProgramEngagement__c engagement4 = new ProgramEngagement__c();
+        engagement4.Name = 'Engagement 4';
+        engagement4.Stage__c = 'Enrolled';
+        engagement4.Contact__c = contact4.Id;
+        engagement4.Program__c = program2.Id;
+        engagement4.Role__c = 'Client';
+        engagement4.NumPresentServiceDeliveries__c = 0;
+        engagement4.NumAbsentServiceDeliveries__c = 0;
+        engagements.add(engagement4);
+
         insert engagements;
     }
 
@@ -177,10 +206,37 @@ public with sharing class TestDataFactory {
         serviceDelivery2.ProgramEngagement__c = engagements[1].Id;
         serviceDelivery2.Contact__c = contacts[0].Id;
         serviceDelivery2.DeliveryDate__c = System.today() - 2;
-        ServiceDelivery2.AttendanceStatus__c = 'Present';
+        serviceDelivery2.AttendanceStatus__c = 'Present';
         serviceDelivery2.Quantity__c = 3;
         serviceDelivery2.Service__c = service2.Id;
         serviceDeliveries.add(serviceDelivery2);
+
+        ServiceDelivery__c serviceDelivery3 = new ServiceDelivery__c();
+        serviceDelivery3.ProgramEngagement__c = engagements[2].Id;
+        serviceDelivery3.Contact__c = contacts[2].Id;
+        serviceDelivery3.DeliveryDate__c = System.today() - 2;
+        ServiceDelivery3.AttendanceStatus__c = 'Present';
+        serviceDelivery3.Quantity__c = 3;
+        serviceDelivery3.Service__c = service1.Id;
+        serviceDeliveries.add(serviceDelivery3);
+
+        ServiceDelivery__c serviceDelivery4 = new ServiceDelivery__c();
+        serviceDelivery4.ProgramEngagement__c = engagements[2].Id;
+        serviceDelivery4.Contact__c = contacts[2].Id;
+        serviceDelivery4.DeliveryDate__c = System.today() - 4;
+        ServiceDelivery4.AttendanceStatus__c = 'Unexcused Absence';
+        serviceDelivery4.Quantity__c = 0;
+        serviceDelivery4.Service__c = service1.Id;
+        serviceDeliveries.add(serviceDelivery4);
+
+        ServiceDelivery__c serviceDelivery5 = new ServiceDelivery__c();
+        serviceDelivery5.ProgramEngagement__c = engagements[3].Id;
+        serviceDelivery5.Contact__c = contacts[3].Id;
+        serviceDelivery5.DeliveryDate__c = System.today() - 2;
+        serviceDelivery5.AttendanceStatus__c = 'Present';
+        serviceDelivery5.Quantity__c = 3;
+        serviceDelivery5.Service__c = service2.Id;
+        serviceDeliveries.add(serviceDelivery5);
 
         insert serviceDeliveries;
     }

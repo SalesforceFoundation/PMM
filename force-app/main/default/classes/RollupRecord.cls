@@ -1,15 +1,25 @@
 public with sharing class RollupRecord {
     public Id recordId;
+    @TestVisible
     private Integer presentCount;
+    @TestVisible
     private Integer absentCount;
+    @TestVisible
     private Integer consecutiveCount;
-    private Integer totalRecords;
-    private Integer totalProcessed;
+    @TestVisible
     private Date lastServiceDate;
-    SObjectField numAbsentField;
-    SObjectField numPresentField;
-    SObjectField consecutiveAbsencesField;
-    SObjectField lastServiceDateField;
+    @TestVisible
+    private Integer totalRecords;
+    @TestVisible
+    private Integer totalProcessed;
+    @TestVisible
+    private SObjectField numAbsentField;
+    @TestVisible
+    private SObjectField numPresentField;
+    @TestVisible
+    private SObjectField consecutiveAbsencesField;
+    @TestVisible
+    private SObjectField lastServiceDateField;
 
     public RollupRecord(Id recordId) {
         this.recordId = recordId;

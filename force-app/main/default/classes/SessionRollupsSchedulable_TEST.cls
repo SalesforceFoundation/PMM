@@ -9,61 +9,57 @@
 
 @isTest
 private class SessionRollupsSchedulable_TEST {
-    // private static BasicStub attendanceServiceStub = new BasicStub(
-    //     ServiceDeliveryService.class
-    // );
+    @testSetup
+    static void setup() {
+        TestUtil.turnOffFeatureGates();
+        TestDataFactory.generateRollupData();
+    }
 
-    // @testSetup
-    // static void setup() {
-    //     TestUtil.turnOffFeatureGates();
-    //     TestDataFactory.generateAttendanceData('Monthly');
-    // }
+    @IsTest
+    private static void shouldQuerySessionsAndExecuteBatch() {
+        Test.startTest();
 
-    // @IsTest
-    // private static void shouldCallServiceWithSessions() {
-    //     List<String> attendanceStatuses = new ServiceDeliveryService().attendanceStatuses;
+        SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
+        Database.executeBatch(sessionRollups);
 
-    //     List<ServiceSession__c> sessionsWithServiceDeliveries = [
-    //         SELECT
-    //             Id,
-    //             (
-    //                 SELECT
-    //                     ServiceSession__c,
-    //                     AttendanceStatus__c,
-    //                     DeliveryDate__c,
-    //                     Quantity__c
-    //                 FROM ServiceDeliveries__r
-    //                 WHERE
-    //                     AttendanceStatus__c IN :attendanceStatuses
-    //                     OR (DeliveryDate__c <= TODAY
-    //                     AND Quantity__c > 0)
-    //             )
-    //         FROM ServiceSession__c
-    //     ];
-    //     System.assert(
-    //         !sessionsWithServiceDeliveries.isEmpty(),
-    //         'Expected test data to be queried.'
-    //     );
+        Test.stopTest();
 
-    //     Test.startTest();
+        List<ServiceSession__c> sessions = [
+            SELECT Id, NumPresentServiceDeliveries__c, NumAbsentServiceDeliveries__c
+            FROM ServiceSession__c
+        ];
 
-    //     SessionRollupsSchedulable rollups = new SessionRollupsSchedulable();
-    //     attendanceServiceStub.withReturnValue(
-    //         'getAttendanceStatuses',
-    //         attendanceStatuses
-    //     );
-    //     SessionRollupsSchedulable.deliveryService = (ServiceDeliveryService) attendanceServiceStub.createMock();
-    //     rollups.execute(null);
+        System.assertEquals(null, sessions[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, sessions[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(3, sessions[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, sessions[1].NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, sessions[2].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, sessions[2].NumAbsentServiceDeliveries__c);
+    }
 
-    //     Test.stopTest();
+    @IsTest
+    private static void shouldScheduleSessionRollupsBatch() {
+        Test.startTest();
 
-    //     attendanceServiceStub.assertCalledWith(
-    //         'doRollups',
-    //         new List<Type>{ SObjectType.class, List<SObject>.class },
-    //         new List<Object>{
-    //             ServiceSession__c.SObjectType,
-    //             sessionsWithServiceDeliveries
-    //         }
-    //     );
-    // }
+        //parse to cron expression
+        String scheduledTime = '0 0 12 * * ?';
+
+        SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
+        String jobId = System.schedule(
+            'Job Started At ' + scheduledTime,
+            scheduledTime,
+            sessionRollups
+        );
+
+        CronTrigger cronTrigger = [
+            SELECT Id, CronExpression, TimesTriggered
+            FROM CronTrigger
+            WHERE Id = :jobId
+        ];
+
+        //Assert the job has not run yet
+        System.assertEquals(0, cronTrigger.TimesTriggered);
+
+        Test.stopTest();
+    }
 }

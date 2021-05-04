@@ -12,51 +12,44 @@ private class ProgramEngagementRollupsSchedulable_TEST {
     @testSetup
     static void setup() {
         TestUtil.turnOffFeatureGates();
-        TestDataFactory.generateAttendanceData('Monthly');
+        TestDataFactory.generateRollupData();
     }
 
     @IsTest
     private static void shouldQueryProgramEngagementsAndExecuteBatch() {
-        List<ProgramEngagement__c> programEngagementsWithRollupData = [
-            SELECT Id
-            FROM ProgramEngagement__c
-            WHERE
-                NumPresentServiceDeliveries__c >= 0
-                OR NumAbsentServiceDeliveries__c >= 0
-                OR LastServiceDate__c != NULL
-                OR ConsecutiveAbsences__c >= 0
-        ];
-
-        System.assert(
-            !programEngagementsWithRollupData.isEmpty(),
-            'Expected test data to be queried.'
-        );
-
         Test.startTest();
 
         ProgramEngagementRollupsSchedulable programEngagementRollups = new ProgramEngagementRollupsSchedulable();
         Database.executeBatch(programEngagementRollups);
 
         Test.stopTest();
+
+        List<ProgramEngagement__c> programEngagements = [
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                ConsecutiveAbsences__c,
+                LastServiceDate__c
+            FROM ProgramEngagement__c
+        ];
+
+        System.assertEquals(1, programEngagements[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(1, programEngagements[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, programEngagements[0].ConsecutiveAbsences__c);
+        System.assertEquals(System.today() - 2, programEngagements[0].LastServiceDate__c);
+        System.assertEquals(1, programEngagements[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, programEngagements[1].NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, programEngagements[1].ConsecutiveAbsences__c);
+        System.assertEquals(System.today() - 2, programEngagements[1].LastServiceDate__c);
+        System.assertEquals(2, programEngagements[2].NumPresentServiceDeliveries__c);
+        System.assertEquals(2, programEngagements[2].NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, programEngagements[2].ConsecutiveAbsences__c);
+        System.assertEquals(System.today() - 7, programEngagements[2].LastServiceDate__c);
     }
 
     @IsTest
     private static void shouldScheduleProgramEngagementRollupsBatch() {
-        List<ProgramEngagement__c> programEngagementsWithRollupData = [
-            SELECT Id
-            FROM ProgramEngagement__c
-            WHERE
-                NumPresentServiceDeliveries__c >= 0
-                OR NumAbsentServiceDeliveries__c >= 0
-                OR LastServiceDate__c != NULL
-                OR ConsecutiveAbsences__c >= 0
-        ];
-
-        System.assert(
-            !programEngagementsWithRollupData.isEmpty(),
-            'Expected test data to be queried.'
-        );
-
         Test.startTest();
 
         //parse to cron expression

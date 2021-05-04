@@ -12,7 +12,7 @@ private class ContactRollupsSchedulable_TEST {
     @testSetup
     static void setup() {
         TestUtil.turnOffFeatureGates();
-        TestDataFactory.generateAttendanceData('Monthly');
+        TestDataFactory.generateRollupData();
     }
 
     @IsTest
@@ -24,14 +24,27 @@ private class ContactRollupsSchedulable_TEST {
 
         Test.stopTest();
         List<Contact> contacts = [
-            SELECT Id, NumAbsentServiceDeliveries__c, NumPresentServiceDeliveries__c
+            SELECT
+                Id,
+                NumAbsentServiceDeliveries__c,
+                NumPresentServiceDeliveries__c,
+                LastServiceDate__c,
+                ConsecutiveAbsences__c
             FROM Contact
         ];
 
-        System.assertEquals(1, contacts[2].NumPresentServiceDeliveries__c);
-        System.assertEquals(1, contacts[2].NumAbsentServiceDeliveries__c);
-        System.assertEquals(1, contacts[3].NumPresentServiceDeliveries__c);
-        System.assertEquals(0, contacts[3].NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, contacts[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(1, contacts[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, contacts[0].ConsecutiveAbsences__c);
+        System.assertEquals(System.today() - 2, contacts[0].LastServiceDate__c);
+        System.assertEquals(1, contacts[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, contacts[1].NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, contacts[1].ConsecutiveAbsences__c);
+        System.assertEquals(System.today() - 2, contacts[1].LastServiceDate__c);
+        System.assertEquals(5, contacts[2].NumPresentServiceDeliveries__c);
+        System.assertEquals(2, contacts[2].NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, contacts[2].ConsecutiveAbsences__c);
+        System.assertEquals(System.today() - 2, contacts[2].LastServiceDate__c);
     }
 
     @IsTest

@@ -75,18 +75,6 @@ public with sharing class TestDataFactory {
         contact2.AccountId = accountRecord.Id;
         contacts.add(contact2);
 
-        Contact contact3 = new Contact();
-        contact3.LastName = 'Test Contact 3';
-        contact3.AccountId = accountRecord.Id;
-        contacts.add(contact3);
-
-        Contact contact4 = new Contact();
-        contact4.LastName = 'Test Contact 4';
-        contact4.AccountId = accountRecord.Id;
-        contact4.NumPresentServiceDeliveries__c = 0;
-        contact4.NumAbsentServiceDeliveries__c = 0;
-        contacts.add(contact4);
-
         insert contacts;
 
         programs = new List<Program__c>();
@@ -132,8 +120,6 @@ public with sharing class TestDataFactory {
         engagement1.Program__c = program1.Id;
         engagement1.Role__c = 'Client';
         engagement1.ProgramCohort__c = cohort1.Id;
-        engagement1.NumPresentServiceDeliveries__c = 0;
-        engagement1.NumAbsentServiceDeliveries__c = 0;
         engagements.add(engagement1);
 
         ProgramEngagement__c engagement2 = new ProgramEngagement__c();
@@ -142,29 +128,7 @@ public with sharing class TestDataFactory {
         engagement2.Contact__c = contact1.Id;
         engagement2.Program__c = program2.Id;
         engagement2.Role__c = 'Client';
-        engagement2.NumPresentServiceDeliveries__c = 0;
-        engagement2.NumAbsentServiceDeliveries__c = 0;
         engagements.add(engagement2);
-
-        ProgramEngagement__c engagement3 = new ProgramEngagement__c();
-        engagement3.Name = 'Engagement 3';
-        engagement3.Stage__c = 'Enrolled';
-        engagement3.Contact__c = contact3.Id;
-        engagement3.Program__c = program1.Id;
-        engagement3.Role__c = 'Client';
-        engagement3.NumPresentServiceDeliveries__c = 0;
-        engagement3.NumAbsentServiceDeliveries__c = 0;
-        engagements.add(engagement3);
-
-        ProgramEngagement__c engagement4 = new ProgramEngagement__c();
-        engagement4.Name = 'Engagement 4';
-        engagement4.Stage__c = 'Enrolled';
-        engagement4.Contact__c = contact4.Id;
-        engagement4.Program__c = program2.Id;
-        engagement4.Role__c = 'Client';
-        engagement4.NumPresentServiceDeliveries__c = 0;
-        engagement4.NumAbsentServiceDeliveries__c = 0;
-        engagements.add(engagement4);
 
         insert engagements;
     }
@@ -178,8 +142,6 @@ public with sharing class TestDataFactory {
         service1.Program__c = programs[0].Id;
         service1.Status__c = 'Active';
         service1.UnitOfMeasurement__c = 'Hours';
-        service1.NumPresentServiceDeliveries__c = 0;
-        service1.NumAbsentServiceDeliveries__c = 0;
         services.add(service1);
 
         Service__c service2 = new Service__c();
@@ -187,8 +149,6 @@ public with sharing class TestDataFactory {
         service2.Program__c = programs[1].Id;
         service2.Status__c = 'Active';
         service2.UnitOfMeasurement__c = 'Days';
-        service2.NumPresentServiceDeliveries__c = 0;
-        service2.NumAbsentServiceDeliveries__c = 0;
         services.add(service2);
 
         insert services;
@@ -210,33 +170,6 @@ public with sharing class TestDataFactory {
         serviceDelivery2.Quantity__c = 3;
         serviceDelivery2.Service__c = service2.Id;
         serviceDeliveries.add(serviceDelivery2);
-
-        ServiceDelivery__c serviceDelivery3 = new ServiceDelivery__c();
-        serviceDelivery3.ProgramEngagement__c = engagements[2].Id;
-        serviceDelivery3.Contact__c = contacts[2].Id;
-        serviceDelivery3.DeliveryDate__c = System.today() - 2;
-        ServiceDelivery3.AttendanceStatus__c = 'Present';
-        serviceDelivery3.Quantity__c = 3;
-        serviceDelivery3.Service__c = service1.Id;
-        serviceDeliveries.add(serviceDelivery3);
-
-        ServiceDelivery__c serviceDelivery4 = new ServiceDelivery__c();
-        serviceDelivery4.ProgramEngagement__c = engagements[2].Id;
-        serviceDelivery4.Contact__c = contacts[2].Id;
-        serviceDelivery4.DeliveryDate__c = System.today() - 4;
-        ServiceDelivery4.AttendanceStatus__c = 'Unexcused Absence';
-        serviceDelivery4.Quantity__c = 0;
-        serviceDelivery4.Service__c = service1.Id;
-        serviceDeliveries.add(serviceDelivery4);
-
-        ServiceDelivery__c serviceDelivery5 = new ServiceDelivery__c();
-        serviceDelivery5.ProgramEngagement__c = engagements[3].Id;
-        serviceDelivery5.Contact__c = contacts[3].Id;
-        serviceDelivery5.DeliveryDate__c = System.today() - 2;
-        serviceDelivery5.AttendanceStatus__c = 'Present';
-        serviceDelivery5.Quantity__c = 3;
-        serviceDelivery5.Service__c = service2.Id;
-        serviceDeliveries.add(serviceDelivery5);
 
         insert serviceDeliveries;
     }
@@ -342,6 +275,215 @@ public with sharing class TestDataFactory {
                 SignUpDate__c = System.today()
             )
         );
+
         insert serviceParticipants;
+    }
+
+    public static void generateRollupData() {
+        generateRollupPrograms();
+
+        //Generate service schedule and service session data here
+        DateTime nextMonth = DateTime.newInstance(
+            System.today().year(),
+            System.today().month() + 1,
+            1
+        );
+
+        requery();
+
+        generateServiceScheduleData('Monthly', nextMonth);
+        generateServiceSessionData();
+
+        serviceSessions[1].NumPresentServiceDeliveries__c = 0;
+        serviceSessions[1].NumAbsentServiceDeliveries__c = 0;
+        update serviceSessions[1];
+
+        generateRollupServiceDeliveries();
+    }
+
+    public static void generateRollupPrograms() {
+        accountRecord = new Account();
+        accountRecord.Name = 'Test Account';
+        insert accountRecord;
+
+        List<Contact> contacts = new List<Contact>();
+        Contact contact1 = new Contact();
+        contact1.LastName = 'Test Contact 1';
+        contact1.AccountId = accountRecord.Id;
+        contacts.add(contact1);
+
+        Contact contact2 = new Contact();
+        contact2.LastName = 'Test Contact 2';
+        contact2.AccountId = accountRecord.Id;
+        contact2.NumPresentServiceDeliveries__c = 0;
+        contact2.NumAbsentServiceDeliveries__c = 0;
+        contacts.add(contact2);
+
+        Contact contact3 = new Contact();
+        contact3.LastName = 'Test Contact 3';
+        contact3.AccountId = accountRecord.Id;
+        contacts.add(contact3);
+
+        insert contacts;
+
+        programs = new List<Program__c>();
+        Program__c program1 = new Program__c();
+        program1.Name = 'Program 1';
+        program1.Status__c = 'Active';
+        program1.StartDate__c = Date.today();
+        program1.EndDate__c = Date.today().addDays(30);
+        programs.add(program1);
+
+        Program__c program2 = new Program__c();
+        program2.Name = 'Program 2';
+        program2.Status__c = 'Active';
+        program2.StartDate__c = Date.today();
+        program2.EndDate__c = Date.today().addDays(90);
+        programs.add(program2);
+
+        insert programs;
+
+        services = new List<Service__c>();
+        Service__c service1 = new Service__c();
+        service1.Name = 'Service 1';
+        service1.Program__c = programs[0].Id;
+        service1.Status__c = 'Active';
+        service1.UnitOfMeasurement__c = 'Hours';
+        service1.NumAbsentServiceDeliveries__c = 0;
+        service1.NumPresentServiceDeliveries__c = 0;
+        services.add(service1);
+
+        Service__c service2 = new Service__c();
+        service2.Name = 'Service 2';
+        service2.Program__c = programs[1].Id;
+        service2.Status__c = 'Active';
+        service2.UnitOfMeasurement__c = 'Days';
+        services.add(service2);
+
+        insert services;
+
+        engagements = new List<ProgramEngagement__c>();
+        ProgramEngagement__c engagement1 = new ProgramEngagement__c();
+        engagement1.Name = 'Engagement 1';
+        engagement1.Stage__c = 'Enrolled';
+        engagement1.Contact__c = contact1.Id;
+        engagement1.Program__c = program1.Id;
+        engagement1.Role__c = 'Client';
+        engagements.add(engagement1);
+
+        ProgramEngagement__c engagement2 = new ProgramEngagement__c();
+        engagement2.Name = 'Engagement 2';
+        engagement2.Stage__c = 'Enrolled';
+        engagement2.Contact__c = contact2.Id;
+        engagement2.Program__c = program2.Id;
+        engagement2.Role__c = 'Client';
+        engagement2.NumPresentServiceDeliveries__c = 0;
+        engagement2.NumAbsentServiceDeliveries__c = 0;
+        engagements.add(engagement2);
+
+        ProgramEngagement__c engagement3 = new ProgramEngagement__c();
+        engagement3.Name = 'Engagement 3';
+        engagement3.Stage__c = 'Enrolled';
+        engagement3.Contact__c = contact3.Id;
+        engagement3.Program__c = program2.Id;
+        engagement3.Role__c = 'Client';
+        engagements.add(engagement3);
+
+        insert engagements;
+    }
+
+    public static void generateRollupServiceDeliveries() {
+        serviceDeliveries = new List<ServiceDelivery__c>();
+        ServiceDelivery__c serviceDelivery1 = new ServiceDelivery__c();
+        serviceDelivery1.ProgramEngagement__c = engagements[0].Id;
+        serviceDelivery1.Contact__c = contacts[0].Id;
+        serviceDelivery1.DeliveryDate__c = System.today() - 2;
+        serviceDelivery1.AttendanceStatus__c = 'Present';
+        serviceDelivery1.Quantity__c = 3;
+        serviceDelivery1.Service__c = services[0].Id;
+        serviceDeliveries.add(serviceDelivery1);
+
+        ServiceDelivery__c serviceDelivery2 = new ServiceDelivery__c();
+        serviceDelivery2.ProgramEngagement__c = engagements[0].Id;
+        serviceDelivery2.Contact__c = contacts[0].Id;
+        serviceDelivery2.DeliveryDate__c = System.today() - 4;
+        serviceDelivery2.AttendanceStatus__c = 'Unexcused Absence';
+        serviceDelivery2.Quantity__c = 0;
+        serviceDelivery2.Service__c = services[0].Id;
+        serviceDeliveries.add(serviceDelivery2);
+
+        ServiceDelivery__c serviceDelivery3 = new ServiceDelivery__c();
+        serviceDelivery3.ProgramEngagement__c = engagements[1].Id;
+        serviceDelivery3.Contact__c = contacts[1].Id;
+        serviceDelivery3.DeliveryDate__c = System.today() - 2;
+        serviceDelivery3.AttendanceStatus__c = 'Present';
+        serviceDelivery3.Quantity__c = 3;
+        serviceDelivery3.Service__c = services[1].Id;
+        serviceDeliveries.add(serviceDelivery3);
+
+        ServiceDelivery__c serviceDelivery4 = new ServiceDelivery__c();
+        serviceDelivery4.ProgramEngagement__c = engagements[2].Id;
+        serviceDelivery4.Contact__c = contacts[2].Id;
+        serviceDelivery4.DeliveryDate__c = System.today() - 17;
+        serviceDelivery4.AttendanceStatus__c = 'Present';
+        serviceDelivery4.Quantity__c = 3;
+        serviceDelivery4.Service__c = services[1].Id;
+        serviceDeliveries.add(serviceDelivery4);
+
+        ServiceDelivery__c serviceDelivery5 = new ServiceDelivery__c();
+        serviceDelivery5.ProgramEngagement__c = engagements[2].Id;
+        serviceDelivery5.Contact__c = contacts[2].Id;
+        serviceDelivery5.DeliveryDate__c = System.today() - 15;
+        serviceDelivery5.AttendanceStatus__c = 'Unexcused Absence';
+        serviceDelivery5.Quantity__c = 0;
+        serviceDelivery5.Service__c = services[1].Id;
+        serviceDeliveries.add(serviceDelivery5);
+
+        ServiceDelivery__c serviceDelivery6 = new ServiceDelivery__c();
+        serviceDelivery6.ProgramEngagement__c = engagements[2].Id;
+        serviceDelivery6.Contact__c = contacts[2].Id;
+        serviceDelivery6.DeliveryDate__c = System.today() - 14;
+        serviceDelivery6.AttendanceStatus__c = 'Excused Absence';
+        serviceDelivery6.Quantity__c = 0;
+        serviceDelivery6.Service__c = services[1].Id;
+        serviceDeliveries.add(serviceDelivery6);
+
+        ServiceDelivery__c serviceDelivery7 = new ServiceDelivery__c();
+        serviceDelivery7.ProgramEngagement__c = engagements[2].Id;
+        serviceDelivery7.Contact__c = contacts[2].Id;
+        serviceDelivery7.DeliveryDate__c = System.today() - 7;
+        serviceDelivery7.AttendanceStatus__c = 'Present';
+        serviceDelivery7.Quantity__c = 2;
+        serviceDelivery7.Service__c = services[1].Id;
+        serviceDeliveries.add(serviceDelivery7);
+
+        ServiceDelivery__c serviceDelivery8 = new ServiceDelivery__c();
+        serviceDelivery8.Contact__c = contacts[2].Id;
+        serviceDelivery8.DeliveryDate__c = System.today() - 6;
+        serviceDelivery8.AttendanceStatus__c = 'Present';
+        serviceDelivery8.Quantity__c = 2;
+        serviceDelivery8.ServiceSession__c = serviceSessions[1].Id;
+        serviceDelivery8.Service__c = services[1].Id;
+        serviceDeliveries.add(serviceDelivery8);
+
+        ServiceDelivery__c serviceDelivery9 = new ServiceDelivery__c();
+        serviceDelivery9.Contact__c = contacts[2].Id;
+        serviceDelivery9.DeliveryDate__c = System.today() - 5;
+        serviceDelivery9.AttendanceStatus__c = 'Present';
+        serviceDelivery9.Quantity__c = 2;
+        serviceDelivery9.ServiceSession__c = serviceSessions[1].Id;
+        serviceDelivery9.Service__c = services[1].Id;
+        serviceDeliveries.add(serviceDelivery9);
+
+        ServiceDelivery__c serviceDelivery10 = new ServiceDelivery__c();
+        serviceDelivery10.Contact__c = contacts[2].Id;
+        serviceDelivery10.DeliveryDate__c = System.today() - 2;
+        serviceDelivery10.AttendanceStatus__c = 'Present';
+        serviceDelivery10.Quantity__c = 2;
+        serviceDelivery10.ServiceSession__c = serviceSessions[1].Id;
+        serviceDelivery10.Service__c = services[1].Id;
+        serviceDeliveries.add(serviceDelivery10);
+
+        insert serviceDeliveries;
     }
 }

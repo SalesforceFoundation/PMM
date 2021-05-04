@@ -12,47 +12,31 @@ private class ServiceRollupsSchedulable_TEST {
     @testSetup
     static void setup() {
         TestUtil.turnOffFeatureGates();
-        TestDataFactory.generateAttendanceData('Monthly');
+        TestDataFactory.generateRollupData();
     }
 
     @IsTest
     private static void shouldQueryServicesAndExecuteBatch() {
-        List<Service__c> servicesWithRollupData = [
-            SELECT Id
-            FROM Service__c
-            WHERE
-                NumPresentServiceDeliveries__c >= 0
-                OR NumAbsentServiceDeliveries__c >= 0
-        ];
-
-        System.assert(
-            !servicesWithRollupData.isEmpty(),
-            'Expected test data to be queried.'
-        );
-
         Test.startTest();
 
         ServiceRollupsSchedulable serviceRollups = new ServiceRollupsSchedulable();
         Database.executeBatch(serviceRollups);
 
         Test.stopTest();
+
+        List<Service__c> services = [
+            SELECT Id, NumPresentServiceDeliveries__c, NumAbsentServiceDeliveries__c
+            FROM Service__c
+        ];
+
+        System.assertEquals(1, services[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(1, services[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(6, services[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(2, services[1].NumAbsentServiceDeliveries__c);
     }
 
     @IsTest
     private static void shouldScheduleServiceRollupsBatch() {
-        List<Service__c> servicesWithRollupData = [
-            SELECT Id
-            FROM Service__c
-            WHERE
-                NumPresentServiceDeliveries__c >= 0
-                OR NumAbsentServiceDeliveries__c >= 0
-        ];
-
-        System.assert(
-            !servicesWithRollupData.isEmpty(),
-            'Expected test data to be queried.'
-        );
-
         Test.startTest();
 
         //parse to cron expression

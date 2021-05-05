@@ -114,6 +114,19 @@ public with sharing class ServiceDeliverySelector_TEST {
     }
 
     @IsTest
+    private static void shouldReturnSession() {
+        Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+
+        Test.startTest();
+        System.assertEquals(
+            sessionId,
+            selector.getSession(sessionId).Id,
+            'Expected the service session record to be returned.'
+        );
+        Test.stopTest();
+    }
+
+    @IsTest
     private static void getAttendanceBucketsReturnsPackagedBuckets() {
         List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
         List<Bucket__mdt> buckets = selector.getBuckets(bucketNames);

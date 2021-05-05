@@ -73,8 +73,8 @@ public with sharing class ServiceService_TEST {
             System.assert(!objList.isEmpty());
         }
 
-        engagementSelectorStub.assertMethodsCalled();
-        serviceSelectorStub.assertMethodsCalled();
+        engagementSelectorStub.assertCalledAsExpected();
+        serviceSelectorStub.assertCalledAsExpected();
     }
 
     @IsTest
@@ -140,7 +140,7 @@ public with sharing class ServiceService_TEST {
             'Expected the size of both expected and actual are the same'
         );
 
-        serviceSelectorStub.assertMethodsCalled();
+        serviceSelectorStub.assertCalledAsExpected();
     }
 
     //Removing the service field from the fieldset
@@ -222,7 +222,7 @@ public with sharing class ServiceService_TEST {
             );
         }
 
-        fieldSetServiceStub.assertMethodsCalled();
+        fieldSetServiceStub.assertCalledAsExpected();
     }
 
     //Do not remove any fields from the fieldset
@@ -280,7 +280,7 @@ public with sharing class ServiceService_TEST {
             );
         }
 
-        fieldSetServiceStub.assertMethodsCalled();
+        fieldSetServiceStub.assertCalledAsExpected();
     }
 
     //Removing the contact and service field from the fieldset
@@ -382,7 +382,7 @@ public with sharing class ServiceService_TEST {
             );
         }
 
-        fieldSetServiceStub.assertMethodsCalled();
+        fieldSetServiceStub.assertCalledAsExpected();
     }
 
     // TODO: Write more tests for the following scenarios :

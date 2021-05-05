@@ -27,8 +27,10 @@ public with sharing class ServiceDeliveryRollupsService {
     };
 
     private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
+    @TestVisible
     private SystemAccess systemAccess = new SystemAccess();
     private Map<Id, RollupRecord> rollupRecordById = new Map<Id, RollupRecord>();
+    @TestVisible
     private Map<Id, RollupRecord> processedRecordsById = new Map<Id, RollupRecord>();
     private SObjectType sObjectType;
     private SObjectField lookupField;
@@ -128,6 +130,7 @@ public with sharing class ServiceDeliveryRollupsService {
         systemAccess.updateRecords(recordsToClearRollups);
     }
 
+    @TestVisible
     private List<String> buildSelectFieldsForOriginalQuery() {
         List<String> selectFields = new List<String>();
         SObjectField numPresentField = NUM_PRESENT_FIELD_BY_SOBJECT_TYPE.get(sObjectType);
@@ -155,6 +158,7 @@ public with sharing class ServiceDeliveryRollupsService {
         return selectFields;
     }
 
+    @TestVisible
     private RollupRecord createRollupRecord(Id recordId) {
         RollupRecord record = new RollupRecord(recordId);
         record.rollupFields(

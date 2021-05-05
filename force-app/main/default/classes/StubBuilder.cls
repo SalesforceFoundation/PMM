@@ -72,25 +72,25 @@ public with sharing class StubBuilder {
         }
 
         public MethodBuilder called() {
-            return calledWith(new List<Object>());
+            return calledWithList(new List<Object>());
         }
 
-        public MethodBuilder calledWith(List<Object> args) {
+        private MethodBuilder calledWithList(List<Object> args) {
             MethodBuilder mb = new MethodBuilder(this, args);
             methodBuilders.add(mb);
             return mb;
         }
 
         public MethodBuilder calledWith(Object arg) {
-            return calledWith(new List<Object>{ arg });
+            return calledWithList(new List<Object>{ arg });
         }
 
         public MethodBuilder calledWith(Object arg, Object arg2) {
-            return calledWith(new List<Object>{ arg, arg2 });
+            return calledWithList(new List<Object>{ arg, arg2 });
         }
 
         public MethodBuilder calledWith(Object arg, Object arg2, Object arg3) {
-            return calledWith(new List<Object>{ arg, arg2, arg3 });
+            return calledWithList(new List<Object>{ arg, arg2, arg3 });
         }
 
         public MethodBuilder calledWith(
@@ -99,7 +99,7 @@ public with sharing class StubBuilder {
             Object arg3,
             Object arg4
         ) {
-            return calledWith(new List<Object>{ arg, arg2, arg3, arg4 });
+            return calledWithList(new List<Object>{ arg, arg2, arg3, arg4 });
         }
 
         private StubBuilder endSignature() {
@@ -123,6 +123,7 @@ public with sharing class StubBuilder {
         private List<Id> ids;
         private Boolean throwException = false;
         private Object returnValue;
+        private Integer expectedCalls;
 
         public MethodBuilder(SignatureBuilder signatureBuilder, List<Object> args) {
             this.args = args;
@@ -132,6 +133,16 @@ public with sharing class StubBuilder {
         public MethodBuilder setIds(List<Id> ids) {
             this.ids = ids;
             return this;
+        }
+
+        public MethodBuilder expectedToBeCalled(Integer n) {
+            this.expectedCalls = n;
+            return this;
+        }
+
+        public StubBuilder expectedNotToBeCalled() {
+            this.expectedCalls = 0;
+            return signatureBuilder.endSignature();
         }
 
         public StubBuilder thenReturn(Object returnValue) {
@@ -152,6 +163,9 @@ public with sharing class StubBuilder {
             Stub.MethodCall methodCall = new Stub.MethodCall(signature).calledWith(args);
             if (ids != null) {
                 methodCall.setIds(ids);
+            }
+            if (expectedCalls != null) {
+                methodCall.setExpectedCalls(expectedCalls);
             }
             if (throwException) {
                 methodCall.thenThrowException();

@@ -21,7 +21,6 @@ public with sharing class Stub implements System.StubProvider {
         List<Object> args
     ) {
         Signature signature = new Signature(methodName, paramTypes);
-
         for (MethodCall methodCall : methodCalls) {
             if (methodCall.matches(signature, args)) {
                 return methodCall.handleCall();
@@ -31,7 +30,7 @@ public with sharing class Stub implements System.StubProvider {
         return null;
     }
 
-    public void assertMethodsCalled() {
+    public void assertCalledAsExpected() {
         for (MethodCall methodCall : methodCalls) {
             methodCall.expectedToHaveBeenCalled();
         }
@@ -48,6 +47,7 @@ public with sharing class Stub implements System.StubProvider {
         private Boolean throwException = false;
         private List<Id> ids;
         private Integer callCount = 0;
+        private Integer expectedCalls;
         private String testExceptionMessage = 'Exception thrown by Stub.';
 
         public MethodCall(Signature signature) {
@@ -72,11 +72,22 @@ public with sharing class Stub implements System.StubProvider {
         }
 
         public void expectedToHaveBeenCalled() {
-            if (callCount < 1) {
-                System.assert(
-                    false,
-                    'This bound method was not called as expected: ' + this.toString()
-                );
+            String message =
+                'This bound method was called ' +
+                callCount +
+                'x and was expected to be called ';
+            if (expectedCalls != null) {
+                message += expectedCalls + 'x. ';
+            } else {
+                message += 'at least 1x. ';
+            }
+
+            if (
+                (expectedCalls != null && expectedCalls != callCount) ||
+                (expectedCalls == null &&
+                callCount < 1)
+            ) {
+                System.assert(false, message + this.toString());
             }
         }
 
@@ -92,6 +103,11 @@ public with sharing class Stub implements System.StubProvider {
 
         public MethodCall setIds(List<Id> ids) {
             this.ids = ids;
+            return this;
+        }
+
+        public MethodCall setExpectedCalls(Integer expectedCalls) {
+            this.expectedCalls = expectedCalls;
             return this;
         }
 

@@ -20,8 +20,8 @@ private class SessionRollupsSchedulable_TEST {
     private static final String PRESENT_STATUS = 'Present';
     private static final String ABSENCE_STATUS = 'Excused Absence';
 
-    @testSetup
-    static void setup() {
+    @TestSetup
+    static void setupTestData() {
         TestUtil.turnOffFeatureGates();
         TestDataFactory.generateAttendanceData('Monthly');
     }

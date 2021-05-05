@@ -26,6 +26,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
         'ServiceDeliveriesToServiceSession' => ServiceDelivery__c.ServiceSession__c,
         'ServiceDeliveriesToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
     };
+    @TestVisible
     private Set<SObjectField> lookupFields {
         get {
             if (lookupFields == null) {
@@ -116,7 +117,6 @@ public with sharing class ServiceDeliveryTriggerHandler {
         );
     }
 
-    @TestVisible
     private void extractRecordIdsToRecalculate(
         SObject oldRecord,
         SObject newRecord,

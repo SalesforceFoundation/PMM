@@ -10,7 +10,7 @@
 @isTest
 private class ContactRollupsSchedulable_TEST {
     private static Id accountRecordId;
-    private static Contact contactRecord;
+    private static List<Contact> contacts;
     private static Service__c service;
     private static List<ServiceSession__c> sessions;
     private static ProgramEngagement__c programEngagement;
@@ -73,10 +73,13 @@ private class ContactRollupsSchedulable_TEST {
         Test.stopTest();
         requery();
 
-        System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
-        System.assertEquals(2, contactRecord.NumAbsentServiceDeliveries__c);
-        System.assertEquals(2, contactRecord.ConsecutiveAbsences__c);
-        System.assertEquals(System.today(), contactRecord.LastServiceDate__c);
+        System.assertEquals(1, contacts[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(2, contacts[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(2, contacts[0].ConsecutiveAbsences__c);
+        System.assertEquals(System.today(), contacts[0].LastServiceDate__c);
+        System.assertEquals(null, contacts[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, contacts[1].NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, contacts[1].ConsecutiveAbsences__c);
     }
 
     @IsTest
@@ -92,10 +95,10 @@ private class ContactRollupsSchedulable_TEST {
         Test.stopTest();
         requery();
 
-        System.assertEquals(2, contactRecord.NumPresentServiceDeliveries__c);
-        System.assertEquals(0, contactRecord.NumAbsentServiceDeliveries__c);
-        System.assertEquals(0, contactRecord.ConsecutiveAbsences__c);
-        System.assertEquals(System.today(), contactRecord.LastServiceDate__c);
+        System.assertEquals(2, contacts[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, contacts[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, contacts[0].ConsecutiveAbsences__c);
+        System.assertEquals(System.today(), contacts[0].LastServiceDate__c);
     }
 
     @IsTest
@@ -127,8 +130,10 @@ private class ContactRollupsSchedulable_TEST {
     private static void testDataSetup() {
         requery();
 
-        System.assertEquals(null, contactRecord.NumPresentServiceDeliveries__c);
-        System.assertEquals(null, contactRecord.NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, contacts[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, contacts[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, contacts[0].ConsecutiveAbsences__c);
+        System.assertEquals(null, contacts[0].LastServiceDate__c);
 
         Contact newContact = new Contact();
         newContact.LastName = 'Test Batch Contact';
@@ -152,7 +157,7 @@ private class ContactRollupsSchedulable_TEST {
             new ServiceDelivery__c(
                 Name = 'test',
                 Service__c = service.Id,
-                Contact__c = contactRecord.Id,
+                Contact__c = contacts[0].Id,
                 ServiceSession__c = sessions[0].Id,
                 ProgramEngagement__c = programEngagement.Id,
                 Quantity__c = 0,
@@ -162,7 +167,7 @@ private class ContactRollupsSchedulable_TEST {
             new ServiceDelivery__c(
                 Name = 'test2',
                 Service__c = service.Id,
-                Contact__c = contactRecord.Id,
+                Contact__c = contacts[0].Id,
                 ServiceSession__c = sessions[1].Id,
                 ProgramEngagement__c = programEngagement.Id,
                 Quantity__c = 1,
@@ -185,7 +190,7 @@ private class ContactRollupsSchedulable_TEST {
 
     private static void requery() {
         accountRecordId = [SELECT Id FROM Account LIMIT 1].Id;
-        contactRecord = [
+        contacts = [
             SELECT
                 Id,
                 NumPresentServiceDeliveries__c,
@@ -194,7 +199,7 @@ private class ContactRollupsSchedulable_TEST {
                 ConsecutiveAbsences__c,
                 LastModifiedDate
             FROM Contact
-            LIMIT 1
+            LIMIT 2
         ];
 
         service = [

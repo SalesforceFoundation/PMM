@@ -123,6 +123,7 @@ public with sharing class Stub implements System.StubProvider {
         }
 
         private Boolean argsMatch(List<Object> compareTo) {
+            // TODO: Make this smarter: args will only be null when we request to check on signature alone
             if (args == null) {
                 return true;
             }

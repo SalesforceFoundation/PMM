@@ -117,6 +117,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
         );
     }
 
+    @TestVisible
     private void extractRecordIdsToRecalculate(
         SObject oldRecord,
         SObject newRecord,

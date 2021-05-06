@@ -281,15 +281,21 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
     private static void shouldPassInvalidLookupField() {
         setupTest();
 
-        Test.startTest();
-
         ServiceDeliveryTriggerHandler deliveryTriggerHandler = new ServiceDeliveryTriggerHandler();
-        deliveryTriggerHandler.lookupFields = new Set<SObjectField>{
-            ServiceDelivery__c.DeliveryDate__c
-        };
 
-        serviceDeliveries[1].AutonameOverride__c = true;
-        update serviceDeliveries[1];
+        Test.startTest();
+        ServiceDelivery__c oldRecord = new ServiceDelivery__c(Name = 'Test');
+        ServiceDelivery__c newRecord = new ServiceDelivery__c(Name = 'Test');
+        List<SObjectField> fields = new List<SObjectField>();
+
+        Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>();
+        deliveryTriggerHandler.extractRecordIdsToRecalculate(
+            oldRecord,
+            newRecord,
+            fields,
+            recordIdsByLookupField
+        );
+
         Test.stopTest();
 
         requery();

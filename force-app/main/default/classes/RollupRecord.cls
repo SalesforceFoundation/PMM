@@ -9,6 +9,10 @@ public with sharing class RollupRecord {
     @TestVisible
     private Date lastServiceDate;
     @TestVisible
+    private Date lastPresentDate;
+    @TestVisible
+    private List<Date> consecutiveAbsenceDates;
+    @TestVisible
     private Integer totalRecords;
     @TestVisible
     private Integer totalProcessed;
@@ -20,12 +24,11 @@ public with sharing class RollupRecord {
     private SObjectField consecutiveAbsencesField;
     @TestVisible
     private SObjectField lastServiceDateField;
-    @TestVisible
-    private List<Date> absentDates;
 
     public RollupRecord(Id recordId) {
         this.recordId = recordId;
         this.totalProcessed = 0;
+        this.consecutiveAbsenceDates = new List<Date>();
     }
 
     public Boolean getIsProcessed() {
@@ -52,26 +55,49 @@ public with sharing class RollupRecord {
         totalProcessed++;
     }
 
-    public void processPresent() {
+    public void processPresent(Date presentDate) {
         if (numPresentField == null) {
             return;
         }
 
         presentCount = presentCount == null ? 1 : presentCount + 1;
         absentCount = absentCount == null ? 0 : absentCount;
+
+        if (lastPresentDate == null || presentDate > lastPresentDate) {
+            lastPresentDate = presentDate;
+            updateConsecutiveAbsences();
+        }
+
+        consecutiveCount = consecutiveAbsenceDates.size();
     }
 
-    public void processAbsent(Date deliveryDate) {
+    private void updateConsecutiveAbsences() {
+        if (consecutiveAbsenceDates.isEmpty()) {
+            return;
+        }
+
+        for (Integer i = consecutiveAbsenceDates.size() - 1; i >= 0; i--) {
+            if (consecutiveAbsenceDates[i] <= lastPresentDate) {
+                consecutiveAbsenceDates.remove(i);
+            }
+        }
+    }
+
+    public void processAbsent(Date absentDate) {
         if (numAbsentField == null) {
             return;
         }
 
         presentCount = presentCount == null ? 0 : presentCount;
         absentCount = absentCount == null ? 1 : absentCount + 1;
-        absentDates.add(deliveryDate);
+
+        if (lastPresentDate == null || lastPresentDate <= absentDate) {
+            consecutiveAbsenceDates.add(absentDate);
+            consecutiveCount = consecutiveAbsenceDates.size();
+        }
     }
 
-    public void updateLastServiceDate(Date deliveryDate) {
+    public void processLastServiceDate(Date deliveryDate) {
         if (lastServiceDateField == null) {
             return;
         }
@@ -108,12 +134,6 @@ public with sharing class RollupRecord {
         }
 
         if (consecutiveAbsencesField != null) {
-            consecutiveCount = 0;
-            for (Date absentDate : absentDates) {
-                if (absentDate > lastServiceDate) {
-                    consecutiveCount++;
-                }
-            }
             sObj.put(consecutiveAbsencesField, consecutiveCount);
         }
 

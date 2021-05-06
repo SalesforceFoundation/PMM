@@ -75,7 +75,7 @@ public with sharing class RollupRecord_TEST {
         );
 
         Test.startTest();
-        record.processPresent();
+        record.processPresent(System.today());
         Test.stopTest();
 
         System.assertEquals(
@@ -94,7 +94,7 @@ public with sharing class RollupRecord_TEST {
         );
 
         Test.startTest();
-        record.processPresent();
+        record.processPresent(System.today());
         Test.stopTest();
 
         System.assertEquals(
@@ -150,7 +150,7 @@ public with sharing class RollupRecord_TEST {
         );
 
         Test.startTest();
-        record.updateLastServiceDate(dateToday);
+        record.processLastServiceDate(dateToday);
         Test.stopTest();
 
         System.assertEquals(
@@ -168,7 +168,7 @@ public with sharing class RollupRecord_TEST {
         record.lastServiceDate = yesterday;
 
         Test.startTest();
-        record.updateLastServiceDate(dateToday);
+        record.processLastServiceDate(dateToday);
         Test.stopTest();
 
         System.assertEquals(
@@ -185,7 +185,7 @@ public with sharing class RollupRecord_TEST {
         record.lastServiceDate = tomorrow;
 
         Test.startTest();
-        record.updateLastServiceDate(dateToday);
+        record.processLastServiceDate(dateToday);
         Test.stopTest();
 
         System.assertEquals(
@@ -205,7 +205,7 @@ public with sharing class RollupRecord_TEST {
         );
 
         Test.startTest();
-        record.updateLastServiceDate(dateToday);
+        record.processLastServiceDate(dateToday);
         Test.stopTest();
 
         System.assertEquals(

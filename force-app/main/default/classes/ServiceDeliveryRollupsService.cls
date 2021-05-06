@@ -175,7 +175,7 @@ public with sharing class ServiceDeliveryRollupsService {
         record.incrementProcessed();
 
         if (deliveryService.presentStatuses.contains(delivery.AttendanceStatus__c)) {
-            record.processPresent();
+            record.processPresent(delivery.DeliveryDate__c);
         } else if (
             deliveryService.absentStatuses.contains(delivery.AttendanceStatus__c)
         ) {
@@ -183,7 +183,7 @@ public with sharing class ServiceDeliveryRollupsService {
         }
         //Last Service Date
         if ((delivery.Quantity__c > 0 && delivery.DeliveryDate__c != null)) {
-            record.updateLastServiceDate(delivery.DeliveryDate__c);
+            record.processLastServiceDate(delivery.DeliveryDate__c);
         }
     }
 

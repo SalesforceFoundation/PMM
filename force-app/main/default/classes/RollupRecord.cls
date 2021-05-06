@@ -116,6 +116,8 @@ public with sharing class RollupRecord {
             originalRecord.get(numPresentField) != presentCount) ||
             (numAbsentField != null &&
             originalRecord.get(numAbsentField) != absentCount) ||
+            (consecutiveAbsencesField != null &&
+            originalRecord.get(consecutiveAbsencesField) != consecutiveCount) ||
             (lastServiceDateField != null &&
             originalRecord.get(lastServiceDateField) != lastServiceDate);
 

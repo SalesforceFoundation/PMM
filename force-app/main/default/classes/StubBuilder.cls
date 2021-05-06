@@ -1,3 +1,4 @@
+@IsTest
 public with sharing class StubBuilder {
     private Type objType;
     List<SignatureBuilder> signatureBuilders = new List<SignatureBuilder>();
@@ -69,6 +70,10 @@ public with sharing class StubBuilder {
             this.builder = builder;
             this.methodName = methodName;
             this.paramTypes = paramTypes;
+        }
+
+        public MethodBuilder signatureMatches() {
+            return calledWithList(null);
         }
 
         public MethodBuilder called() {

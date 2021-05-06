@@ -123,6 +123,10 @@ public with sharing class Stub implements System.StubProvider {
         }
 
         private Boolean argsMatch(List<Object> compareTo) {
+            if (args == null) {
+                return true;
+            }
+
             Boolean matchesSoFar = args.size() == compareTo.size();
 
             for (Integer i = 0; i < compareTo.size(); i++) {

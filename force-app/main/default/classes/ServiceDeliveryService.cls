@@ -12,8 +12,8 @@ public with sharing class ServiceDeliveryService {
     private ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
-    public static final String ABSENT = 'Absent';
-    public static final String PRESENT = 'Present';
+    private static final String ABSENT = 'Absent';
+    private static final String PRESENT = 'Present';
     private static final String DEFAULT_STATUS = PRESENT;
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded

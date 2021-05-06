@@ -75,7 +75,7 @@ public with sharing class RollupRecord_TEST {
         );
 
         Test.startTest();
-        record.incrementPresentCount();
+        record.processPresent();
         Test.stopTest();
 
         System.assertEquals(
@@ -94,7 +94,7 @@ public with sharing class RollupRecord_TEST {
         );
 
         Test.startTest();
-        record.incrementPresentCount();
+        record.processPresent();
         Test.stopTest();
 
         System.assertEquals(
@@ -114,7 +114,7 @@ public with sharing class RollupRecord_TEST {
         );
 
         Test.startTest();
-        record.incrementAbsentCount();
+        record.processAbsent(System.today());
         Test.stopTest();
 
         System.assertEquals(1, record.absentCount, 'Expected the number absent to be 1.');
@@ -129,7 +129,7 @@ public with sharing class RollupRecord_TEST {
         );
 
         Test.startTest();
-        record.incrementAbsentCount();
+        record.processAbsent(System.today());
         Test.stopTest();
 
         System.assertEquals(

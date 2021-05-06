@@ -175,11 +175,11 @@ public with sharing class ServiceDeliveryRollupsService {
         record.incrementProcessed();
 
         if (deliveryService.presentStatuses.contains(delivery.AttendanceStatus__c)) {
-            record.incrementPresentCount();
+            record.processPresent();
         } else if (
             deliveryService.absentStatuses.contains(delivery.AttendanceStatus__c)
         ) {
-            record.incrementAbsentCount();
+            record.processAbsent(delivery.DeliveryDate__c);
         }
         //Last Service Date
         if ((delivery.Quantity__c > 0 && delivery.DeliveryDate__c != null)) {

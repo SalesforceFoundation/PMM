@@ -20,6 +20,8 @@ public with sharing class RollupRecord {
     private SObjectField consecutiveAbsencesField;
     @TestVisible
     private SObjectField lastServiceDateField;
+    @TestVisible
+    private List<Date> absentDates;
 
     public RollupRecord(Id recordId) {
         this.recordId = recordId;
@@ -50,24 +52,23 @@ public with sharing class RollupRecord {
         totalProcessed++;
     }
 
-    public void incrementPresentCount() {
+    public void processPresent() {
         if (numPresentField == null) {
             return;
         }
 
         presentCount = presentCount == null ? 1 : presentCount + 1;
         absentCount = absentCount == null ? 0 : absentCount;
-        consecutiveCount = 0;
     }
 
-    public void incrementAbsentCount() {
+    public void processAbsent(Date deliveryDate) {
         if (numAbsentField == null) {
             return;
         }
 
         presentCount = presentCount == null ? 0 : presentCount;
         absentCount = absentCount == null ? 1 : absentCount + 1;
-        consecutiveCount = consecutiveCount == null ? 1 : consecutiveCount + 1;
+        absentDates.add(deliveryDate);
     }
 
     public void updateLastServiceDate(Date deliveryDate) {
@@ -89,8 +90,6 @@ public with sharing class RollupRecord {
             originalRecord.get(numPresentField) != presentCount) ||
             (numAbsentField != null &&
             originalRecord.get(numAbsentField) != absentCount) ||
-            (consecutiveAbsencesField != null &&
-            originalRecord.get(consecutiveAbsencesField) != consecutiveCount) ||
             (lastServiceDateField != null &&
             originalRecord.get(lastServiceDateField) != lastServiceDate);
 
@@ -109,6 +108,12 @@ public with sharing class RollupRecord {
         }
 
         if (consecutiveAbsencesField != null) {
+            consecutiveCount = 0;
+            for (Date absentDate : absentDates) {
+                if (absentDate > lastServiceDate) {
+                    consecutiveCount++;
+                }
+            }
             sObj.put(consecutiveAbsencesField, consecutiveCount);
         }
 

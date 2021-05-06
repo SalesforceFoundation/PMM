@@ -212,4 +212,48 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
 
         systemAccessStub.assertCalledAsExpected();
     }
+
+    @IsTest
+    private static void shouldSetTotalRecordCountWhenBatchIsRunning() {
+        systemAccessStub = new StubBuilder(SystemAccess.class)
+            .when('getDeliveryRollupsCount', String.class, Id.class, List<String>.class)
+            .calledWith(
+                String.valueOf(ServiceDelivery__c.Contact__c),
+                mockContactId,
+                attendanceStatuses
+            )
+            .thenReturn(5)
+            .build();
+        rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
+        rollupsService.isBatchRunning = true;
+
+        Test.startTest();
+        rollupsService.trackCrossBatchRecordTotals(mockDeliveries);
+        Test.stopTest();
+
+        System.assertEquals(
+            5,
+            rollupsService.rollupRecordById.get(mockContactId).totalRecords,
+            'Expected the total record count to be set on the contacts rollup record.'
+        );
+
+        systemAccessStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void shouldNotSetTotalRecordCountWhenBatchIsNotRunning() {
+        systemAccessStub = new StubBuilder(SystemAccess.class)
+            .when('getDeliveryRollupsCount', String.class, Id.class, List<String>.class)
+            .signatureMatches()
+            .expectedNotToBeCalled()
+            .build();
+        rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
+        rollupsService.isBatchRunning = false;
+
+        Test.startTest();
+        rollupsService.trackCrossBatchRecordTotals(mockDeliveries);
+        Test.stopTest();
+
+        systemAccessStub.assertCalledAsExpected();
+    }
 }

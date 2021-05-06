@@ -29,11 +29,23 @@ public with sharing class ServiceDeliveryRollupsService {
     private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
     @TestVisible
     private SystemAccess systemAccess = new SystemAccess();
+    @TestVisible
     private Map<Id, RollupRecord> rollupRecordById = new Map<Id, RollupRecord>();
     @TestVisible
     private Map<Id, RollupRecord> processedRecordsById = new Map<Id, RollupRecord>();
     private SObjectType sObjectType;
     private SObjectField lookupField;
+    @TestVisible
+    private Boolean isBatchRunning {
+        get {
+            if (isBatchRunning == null) {
+                isBatchRunning = System.isBatch();
+            }
+
+            return isBatchRunning;
+        }
+        set;
+    }
 
     public ServiceDeliveryRollupsService(
         SObjectType sObjectType,
@@ -65,10 +77,7 @@ public with sharing class ServiceDeliveryRollupsService {
             return;
         }
 
-        if (System.isBatch()) {
-            setTotalRecordCount(deliveries[0]);
-            setTotalRecordCount(deliveries[deliveries.size() - 1]);
-        }
+        trackCrossBatchRecordTotals(deliveries);
 
         for (ServiceDelivery__c delivery : deliveries) {
             Id parentLookupId = (Id) delivery.get(lookupField);
@@ -187,7 +196,27 @@ public with sharing class ServiceDeliveryRollupsService {
         }
     }
 
-    private void setTotalRecordCount(ServiceDelivery__c delivery) {
+    /**
+     * A single parent record can span multiple batches and the batches
+     * are not guaranteed to run sequentially. We use the total record count on records that could
+     * span multiple batches to ensure all records are processed before we commit.
+     *
+     * "Batches of records tend to execute in the order in
+     * which they’re received from the start method. However, the order in which batches of records
+     * execute depends on various factors. The order of execution isn’t guaranteed."
+     * https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_batch_interface.htm
+     */
+    @TestVisible
+    private void trackCrossBatchRecordTotals(List<ServiceDelivery__c> deliveries) {
+        if (!isBatchRunning) {
+            return;
+        }
+
+        trackTotalRecords(deliveries[0]); // Track total of the first parent record
+        trackTotalRecords(deliveries[deliveries.size() - 1]); // Track total of the last parent record
+    }
+
+    private void trackTotalRecords(ServiceDelivery__c delivery) {
         Id recordId = (Id) delivery.get(lookupField);
         if (rollupRecordById.containsKey(recordId)) {
             return;

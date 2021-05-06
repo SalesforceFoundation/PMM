@@ -91,7 +91,7 @@ public with sharing class RollupRecord {
         presentCount = presentCount == null ? 0 : presentCount;
         absentCount = absentCount == null ? 1 : absentCount + 1;
 
-        if (lastPresentDate == null || lastPresentDate <= absentDate) {
+        if (lastPresentDate == null || lastPresentDate < absentDate) {
             consecutiveAbsenceDates.add(absentDate);
             consecutiveCount = consecutiveAbsenceDates.size();
         }

@@ -684,7 +684,6 @@ public with sharing class ServiceService_TEST {
             );
 
             serviceFieldIndex = fieldSetValues.indexOf(serviceField);
-            contactFieldIndex = fieldSetValues.indexOf(contactField);
             engagementFieldIndex = fieldSetValues.indexOf(engagementField);
 
             System.assertNotEquals(

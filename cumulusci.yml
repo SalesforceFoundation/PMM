@@ -36,6 +36,21 @@ sources:
         github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
+    create_client_community:
+        description: "Creates a community with the 'Ember' template"
+        class_path: cumulusci.tasks.salesforce.CreateCommunity
+        options:
+            template: Build Your Own (LWR)
+            name: PMM Client Community
+            url_path_prefix: pmmclients
+            timeout: 60000
+
+    publish_client_community:
+        description: Publishes the "PMM Client Community" Community in the target org using the Connect API
+        class_path: cumulusci.tasks.salesforce.PublishCommunity
+        options:
+            name: PMM Client Community
+
     robot:
         options:
             suites: robot/pmm/tests
@@ -133,6 +148,13 @@ tasks:
             path: unpackaged/config/customer_profiles
 
 flows:
+    make_community:
+        steps:
+            1:
+                task: create_client_community
+            2:
+                task: publish_client_community
+
     load_data:
         steps:
             1:

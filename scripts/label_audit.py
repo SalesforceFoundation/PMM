@@ -11,6 +11,7 @@ import json
 import os
 import click
 from pathlib import Path
+from cumulusci.utils.xml import metadata_tree
 
 
 def check_js(paths, strings_dict):
@@ -101,6 +102,30 @@ def check_html(paths, strings_dict):
     return html_offenses
 
 
+def check_xml(paths, strings_dict):
+    """Return the count of user-exposed hard-coded strings in HTML files."""
+    xml_offenses = 0
+
+    for path in paths:
+        short_path = path.replace(os.path.join("force-app", "main", "default", ""), "")
+
+        tree = metadata_tree.parse(path)
+        for element in tree.findall("flexiPageRegions"):
+            for comp in element.findall("componentInstances"):
+                if comp.componentName.text == "flexipage:tab":
+                    for prop in comp.findall("componentInstanceProperties"):
+                        if prop.name.text == "title":
+                            if not prop.value.text.startswith(
+                                "{!$Label."
+                            ) and not prop.value.text.startswith("Standard.Tab"):
+                                print(
+                                    f"Flexipage XML attribute: {short_path} -- {prop.value.text}"
+                                )
+                                xml_offenses += 1
+
+    return xml_offenses
+
+
 def get_all_paths(path):
     return glob.glob(path, recursive=True)
 
@@ -128,9 +153,13 @@ def main(filenames):
         html_paths = [
             filename for filename in filenames if Path(filename).suffix == ".html"
         ]
+        xml_paths = [
+            filename for filename in filenames if Path(filename).suffix == ".xml"
+        ]
     else:
         js_paths = get_all_paths("force-app/**/*.js")
         html_paths = get_all_paths("force-app/**/*.html")
+        xml_paths = get_all_paths("force-app/main/default/flexipages/*.xml")
 
     js_offenses = 0
     js_offenses += check_js(js_paths, strings_dict)
@@ -138,7 +167,10 @@ def main(filenames):
     html_offenses = 0
     html_offenses += check_html(html_paths, strings_dict)
 
-    total_offenses = js_offenses + html_offenses
+    xml_offenses = 0
+    xml_offenses += check_xml(xml_paths, strings_dict)
+
+    total_offenses = js_offenses + html_offenses + xml_offenses
 
     if total_offenses == 0:
         print("No strings found. Well done! \U0001F389 \U0001F600")

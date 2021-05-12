@@ -36,13 +36,13 @@ sources:
         github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
-    create_client_community:
-        description: "Creates a community with the 'Ember' template"
+    create_community:
+        description: "Creates a community with the 'Customer Service' template"
         class_path: cumulusci.tasks.salesforce.CreateCommunity
         options:
-            template: Build Your Own (LWR)
-            name: PMM Client Community
-            url_path_prefix: pmmclients
+            template: Customer Service
+            name: PMM Volunteer Community
+            url_path_prefix: pmmvolunteers
             timeout: 60000
 
     publish_client_community:

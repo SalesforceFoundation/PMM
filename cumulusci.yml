@@ -170,6 +170,8 @@ flows:
             2:
                 task: deploy_experience_cloud
             3:
+                task: create_community_user
+            4:
                 task: publish_community
 
     load_data:

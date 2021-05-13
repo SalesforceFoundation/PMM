@@ -3,7 +3,7 @@
     "compositeRequest": [
         {
             "method": "GET",
-            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+Profile+WHERE+Name+IN+('Customer+Community+User')+ORDER+BY+Name",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+Profile+WHERE+Name+IN+('Customer+Community+Plus+User')+ORDER+BY+Name",
             "referenceId": "profiles"
         },
         {
@@ -57,6 +57,20 @@
                 "Street": "1 Market Street",
                 "TimeZoneSidKey": "America/Los_Angeles",
                 "Username": "mayalambert@example.com"
+            }
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+PermissionSet+WHERE+Name+IN+('PMDM_Community_Manage')+ORDER+BY+Name",
+            "referenceId": "permissionSets"
+        },
+        {
+            "method": "POST",
+            "url": "/services/data/v46.0/sobjects/PermissionSetAssignment",
+            "referenceId": "mayaManagePSA",
+            "body": {
+                "PermissionSetId": "@{permissionSets.records[0].Id}",
+                "AssigneeId": "@{mayaUser.id}"
             }
         }
     ]

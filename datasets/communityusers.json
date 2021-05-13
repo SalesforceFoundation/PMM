@@ -1,0 +1,63 @@
+{
+    "allOrNone": true,
+    "compositeRequest": [
+        {
+            "method": "GET",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+Profile+WHERE+Name+IN+('Customer+Community+User')+ORDER+BY+Name",
+            "referenceId": "profiles"
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+UserRole+WHERE+DeveloperName+IN+('CEO')+ORDER+BY+DeveloperName",
+            "referenceId": "ceorole"
+        },
+        {
+            "method": "POST",
+            "url": "/services/data/v46.0/sobjects/UserRole",
+            "referenceId": "role",
+            "body": {
+                "DeveloperName": "CommunityOwner",
+                "Name": "Community Owner",
+                "ParentRoleId": "@{ceorole.records[0].Id}"
+            }
+        },
+        {
+            "method": "PATCH",
+            "url": "/services/data/v46.0/sobjects/User/%%%USERID%%%",
+            "referenceId": "currentUser",
+            "body": {
+                "UserRoleId": "@{role.id}"
+            }
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+Contact+WHERE+Email+=+'mayalambert@example.com'",
+            "referenceId": "volunteer"
+        },
+        {
+            "method": "POST",
+            "url": "/services/data/v46.0/sobjects/User",
+            "referenceId": "mayaUser",
+            "body": {
+                "FirstName": "Maya",
+                "LastName": "Lambert",
+                "Alias": "maya",
+                "City": "San Francisco",
+                "ContactId": "@{volunteer.records[0].Id}",
+                "Country": "USA",
+                "Email": "mayalambert@example.com",
+                "EmailEncodingKey": "utf-8",
+                "LanguageLocaleKey": "en_US",
+                "LocaleSidKey": "en_US",
+                "MobilePhone": "(650) 555-1212",
+                "Phone": "(650) 555-1212",
+                "PostalCode": "94105",
+                "ProfileId": "@{profiles.records[0].Id}",
+                "State": "CA",
+                "Street": "1 Market Street",
+                "TimeZoneSidKey": "America/Los_Angeles",
+                "Username": "mayalambert@example.com"
+            }
+        }
+    ]
+}

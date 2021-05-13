@@ -44,12 +44,13 @@ tasks:
             name: PMM Volunteer Community
             url_path_prefix: pmmvolunteers
             timeout: 60000
+            skip_existing: true
 
-    publish_client_community:
+    publish_community:
         description: Publishes the "PMM Client Community" Community in the target org using the Connect API
         class_path: cumulusci.tasks.salesforce.PublishCommunity
         options:
-            name: PMM Client Community
+            name: PMM Volunteer Community
 
     robot:
         options:
@@ -140,6 +141,13 @@ tasks:
         options:
             path: unpackaged/config/dev
 
+    deploy_experience_cloud:
+        group: "PMM: Config"
+        description: Deploys the post-install configuration for an unmanaged DE org
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/experience_cloud
+
     deploy_customer_profiles:
         group: "PMM: Config"
         description: Deploys the post-install configuration for an unmanaged DE org
@@ -151,9 +159,11 @@ flows:
     make_community:
         steps:
             1:
-                task: create_client_community
+                task: create_community
             2:
-                task: publish_client_community
+                task: deploy_experience_cloud
+            3:
+                task: publish_community
 
     load_data:
         steps:

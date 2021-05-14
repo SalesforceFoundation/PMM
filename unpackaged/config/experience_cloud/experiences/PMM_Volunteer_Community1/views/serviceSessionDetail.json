@@ -28,7 +28,7 @@
             "locked" : false,
             "seedComponents" : [ ],
             "tabKey" : "1",
-            "tabName" : "Attendancez"
+            "tabName" : "Attendance"
           }, {
             "UUID" : "6129b581-63ed-4649-8c4e-bf2a2df67003",
             "allowGuestUser" : false,
@@ -60,7 +60,7 @@
           "type" : "component"
         } ],
         "id" : "399ec98d-11c3-4ec6-a72d-a6be9470e0df",
-        "regionLabel" : "Attendancez",
+        "regionLabel" : "Attendance",
         "regionName" : "1",
         "renditionMap" : { },
         "type" : "region"

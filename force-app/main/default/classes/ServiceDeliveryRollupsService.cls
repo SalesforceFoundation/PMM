@@ -52,21 +52,18 @@ public with sharing class ServiceDeliveryRollupsService {
         SObjectField lookupField
     ) {
         this.sObjectType = sObjectType;
+        // TODO: Future iteration, it really isn't necessary to pass in the lookupField we can grab it from our map
         this.lookupField = lookupField;
     }
 
     public String getDeliveryRollupsQuery() {
-        return systemAccess.getDeliveryRollupsQuery(
-            String.valueOf(lookupField),
-            deliveryService.attendanceStatuses
-        );
+        return systemAccess.getDeliveryRollupsQuery(String.valueOf(lookupField));
     }
 
     public void rollupDeliveryRecords(Set<Id> parentLookupIds) {
         List<ServiceDelivery__c> deliveries = systemAccess.getDeliveryRecordsToRollup(
             String.valueOf(lookupField),
-            parentLookupIds,
-            deliveryService.attendanceStatuses
+            parentLookupIds
         );
 
         rollupDeliveryRecords(deliveries);
@@ -125,6 +122,27 @@ public with sharing class ServiceDeliveryRollupsService {
         }
 
         systemAccess.updateRecords(recordsToUpdate);
+    }
+
+    public void resetParentsWithoutDeliveries(List<SObject> records) {
+        Set<Id> recordIdsWithoutDeliveries = new Set<Id>();
+        List<SObject> recordsWithDeliveries = systemAccess.getParentsWithDeliveries(
+            sObjectType,
+            String.valueOf(lookupField),
+            records
+        );
+        Set<Id> recordIdsWithDeliveries = new Map<Id, SObject>(recordsWithDeliveries)
+            .keySet();
+
+        for (SObject record : records) {
+            if (recordIdsWithDeliveries.contains(record.Id)) {
+                continue;
+            }
+
+            recordIdsWithoutDeliveries.add(record.Id);
+        }
+
+        resetRollupFields(recordIdsWithoutDeliveries);
     }
 
     public void resetRollupFields(Set<Id> recordsIdsToReset) {
@@ -225,8 +243,7 @@ public with sharing class ServiceDeliveryRollupsService {
         RollupRecord record = createRollupRecord(recordId);
         Integer totalRecords = systemAccess.getDeliveryRollupsCount(
             String.valueOf(lookupField),
-            recordId,
-            deliveryService.attendanceStatuses
+            recordId
         );
         record.setTotalRecords(totalRecords);
         rollupRecordById.put(recordId, record);

@@ -55,8 +55,7 @@ public with sharing class SystemAccess_TEST {
         System.runAs(standardUser) {
             recordsWithAccess = systemAccess.getDeliveryRecordsToRollup(
                 String.valueOf(ServiceDelivery__c.Service__c),
-                new Set<Id>{ serviceRecord.Id },
-                new List<String>{ PRESENT_STATUS }
+                new Set<Id>{ serviceRecord.Id }
             );
         }
 
@@ -77,8 +76,7 @@ public with sharing class SystemAccess_TEST {
         System.runAs(standardUser) {
             rollupCount = systemAccess.getDeliveryRollupsCount(
                 'Service__c',
-                serviceRecord.Id,
-                new List<String>{ PRESENT_STATUS }
+                serviceRecord.Id
             );
         }
 
@@ -144,10 +142,7 @@ public with sharing class SystemAccess_TEST {
         String rollupQuery;
 
         System.runAs(standardUser) {
-            rollupQuery = systemAccess.getDeliveryRollupsQuery(
-                'Service__c',
-                new List<String>{ PRESENT_STATUS }
-            );
+            rollupQuery = systemAccess.getDeliveryRollupsQuery('Service__c');
         }
 
         System.assertNotEquals(null, rollupQuery, 'Expected the query to be returned.');

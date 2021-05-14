@@ -13,32 +13,49 @@
 public without sharing class SystemAccess {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
-    public String getDeliveryRollupsQuery(
-        String lookupField,
-        List<String> attendanceStatuses
-    ) {
-        return buildDeliveryRollupsQuery(lookupField, ' != null', attendanceStatuses);
+    public String getDeliveryRollupsQuery(String lookupField) {
+        return buildDeliveryRollupsQuery(lookupField, ' != null');
     }
 
-    public Integer getDeliveryRollupsCount(
-        String lookupField,
-        Id recordId,
-        List<String> attendanceStatuses
-    ) {
-        setDeliveryRollupQueryBuilder(lookupField, ' = :recordId', attendanceStatuses);
+    public Integer getDeliveryRollupsCount(String lookupField, Id recordId) {
+        setDeliveryRollupQueryBuilder(lookupField, ' = :recordId');
 
         return Database.countQuery(queryBuilder.buildCountQuery());
     }
 
+    public List<SObject> getParentsWithDeliveries(
+        SObjectType sObjectType,
+        String lookupField,
+        List<SObject> records
+    ) {
+        // Find all records that have service delivery child records e.g.
+        // SELECT Id FROM Contact where Id in (SELECT Contact FROM ServiceDelivery__c
+        // WHERE Contact IN :records)
+        String query = queryBuilder
+            .reset()
+            .withSObjectType(sObjectType)
+            .withSelectFields(new List<String>{ 'Id' })
+            .addCondition(
+                'Id IN (SELECT ' +
+                lookupField +
+                ' FROM ' +
+                String.valueOf(ServiceDelivery__c.SObjectType) +
+                ' WHERE ' +
+                lookupField +
+                ' IN :records)'
+            )
+            .buildSoqlQuery();
+
+        return Database.query(query);
+    }
+
     public List<ServiceDelivery__c> getDeliveryRecordsToRollup(
         String lookupField,
-        Set<Id> recordIds,
-        List<String> attendanceStatuses
+        Set<Id> recordIds
     ) {
         String query = buildDeliveryRollupsQuery(
             String.valueOf(lookupField),
-            ' IN: recordIds',
-            attendanceStatuses
+            ' IN: recordIds'
         );
         return Database.query(query);
     }
@@ -64,14 +81,9 @@ public without sharing class SystemAccess {
 
     private String buildDeliveryRollupsQuery(
         String lookupField,
-        String lookupFieldCondition,
-        List<String> attendanceStatuses
+        String lookupFieldCondition
     ) {
-        setDeliveryRollupQueryBuilder(
-            lookupField,
-            lookupFieldCondition,
-            attendanceStatuses
-        );
+        setDeliveryRollupQueryBuilder(lookupField, lookupFieldCondition);
         queryBuilder
             .withSelectFields(
                 new List<String>{
@@ -87,25 +99,14 @@ public without sharing class SystemAccess {
 
     private QueryBuilder setDeliveryRollupQueryBuilder(
         String lookupField,
-        String lookupFieldCondition,
-        List<String> attendanceStatuses
+        String lookupFieldCondition
     ) {
-        String condition = lookupField + lookupFieldCondition + ' AND (';
+        String condition = lookupField + lookupFieldCondition;
 
         queryBuilder
             .reset()
             .withSObjectType(ServiceDelivery__c.SObjectType)
-            .addCondition(
-                condition +
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) +
-                ' IN (\'' +
-                String.join(attendanceStatuses, '\',\'') +
-                '\') OR ( ' +
-                String.valueOF(ServiceDelivery__c.Quantity__c) +
-                ' > 0 AND ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' != null ))'
-            )
+            .addCondition(lookupField + lookupFieldCondition)
             .withOrderBy(
                 lookupField +
                 ', ' +

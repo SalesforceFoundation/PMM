@@ -9,16 +9,13 @@
 
 public class ServiceDeliveryRollupsBatch implements Database.Batchable<SObject>, Database.Stateful {
     private ServiceDeliveryRollupsService rollupsService;
-    private Set<Id> unprocessedIds;
     private SObjectField lookupField;
 
     public ServiceDeliveryRollupsBatch(
         SObjectType sObjectType,
-        SObjectField lookupField,
-        Set<Id> unprocessedIds
+        SObjectField lookupField
     ) {
         this.lookupField = lookupField;
-        this.unprocessedIds = unprocessedIds;
         this.rollupsService = new ServiceDeliveryRollupsService(sObjectType, lookupField);
     }
 
@@ -30,11 +27,9 @@ public class ServiceDeliveryRollupsBatch implements Database.Batchable<SObject>,
 
     public void execute(Database.BatchableContext bc, List<ServiceDelivery__c> scope) {
         rollupsService.rollupDeliveryRecords(scope);
-        unprocessedIds.removeAll(rollupsService.getProcessedRecordIds());
         rollupsService.commitRollups();
     }
 
     public void finish(Database.BatchableContext bc) {
-        rollupsService.resetRollupFields(unprocessedIds);
     }
 }

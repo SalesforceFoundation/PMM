@@ -11,7 +11,10 @@ public class SessionRollupsSchedulable implements Database.Batchable<SObject>, S
     @TestVisible
     private QueryBuilder queryBuilder = new QueryBuilder();
     @TestVisible
-    private Set<Id> sessionIds = new Set<Id>();
+    private ServiceDeliveryRollupsService rollupsService = new ServiceDeliveryRollupsService(
+        ServiceSession__c.SObjectType,
+        ServiceDelivery__c.ServiceSession__c
+    );
 
     /*
      * Both the Schedulable and Batch jobs are within this class, the schedule
@@ -31,25 +34,23 @@ public class SessionRollupsSchedulable implements Database.Batchable<SObject>, S
 
     /*
      * The batch job will iterate all of the records and only add them to the
-     * set of Ids. Note that we need stateful in order to maintain all Ids across
-     * each batch iteration.
+     * set of Ids if they do not have related service deliveries. Note that we
+     * need stateful in order to maintain all Ids across each batch iteration.
      */
     public void execute(Database.BatchableContext bc, List<ServiceSession__c> sessions) {
-        for (ServiceSession__c sessionRecord : sessions) {
-            sessionIds.add(sessionRecord.Id);
-        }
+        rollupsService.resetParentsWithoutDeliveries(sessions);
     }
 
     /*
-     * Once all of the record Ids have been added we will pass them off to the
-     * Service Delivery Rollups Batch
+     * Once all of the records that no longer have service delivery records
+     * have been reset we kick off the batch job to rollup all service delivery
+     * records for this sObjectType
      */
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
             new ServiceDeliveryRollupsBatch(
                 ServiceSession__c.SObjectType,
-                ServiceDelivery__c.ServiceSession__c,
-                sessionIds
+                ServiceDelivery__c.ServiceSession__c
             ),
             2000
         );

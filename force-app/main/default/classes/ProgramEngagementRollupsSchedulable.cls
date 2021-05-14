@@ -10,7 +10,10 @@ public class ProgramEngagementRollupsSchedulable implements Database.Batchable<S
     @TestVisible
     private QueryBuilder queryBuilder = new QueryBuilder();
     @TestVisible
-    private Set<Id> programEngagementIds = new Set<Id>();
+    private ServiceDeliveryRollupsService rollupsService = new ServiceDeliveryRollupsService(
+        ProgramEngagement__c.SObjectType,
+        ServiceDelivery__c.ProgramEngagement__c
+    );
 
     /*
      * Both the Schedulable and Batch jobs are within this class, the schedule
@@ -30,28 +33,26 @@ public class ProgramEngagementRollupsSchedulable implements Database.Batchable<S
 
     /*
      * The batch job will iterate all of the records and only add them to the
-     * set of Ids. Note that we need stateful in order to maintain all Ids across
-     * each batch iteration.
+     * set of Ids if they do not have related service deliveries. Note that we
+     * need stateful in order to maintain all Ids across each batch iteration.
      */
     public void execute(
         Database.BatchableContext bc,
         List<ProgramEngagement__c> programEngagements
     ) {
-        for (ProgramEngagement__c programEngagementRecord : programEngagements) {
-            programEngagementIds.add(programEngagementRecord.Id);
-        }
+        rollupsService.resetParentsWithoutDeliveries(programEngagements);
     }
 
     /*
-     * Once all of the record Ids have been added we will pass them off to the
-     * Service Delivery Rollups Batch
+     * Once all of the records that no longer have service delivery records
+     * have been reset we kick off the batch job to rollup all service delivery
+     * records for this sObjectType
      */
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
             new ServiceDeliveryRollupsBatch(
                 ProgramEngagement__c.SObjectType,
-                ServiceDelivery__c.ProgramEngagement__c,
-                programEngagementIds
+                ServiceDelivery__c.ProgramEngagement__c
             ),
             2000
         );

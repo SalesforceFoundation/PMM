@@ -65,6 +65,7 @@ private class ProgramEngagementRollupsSchedulable_TEST {
         testDataSetup();
 
         Test.startTest();
+        TestUtil.turnOffFeatureGates();
         serviceDeliveries[0].AttendanceStatus__c = PRESENT_STATUS;
         serviceDeliveries[0].Quantity__c = 1;
         update serviceDeliveries[0];
@@ -91,6 +92,7 @@ private class ProgramEngagementRollupsSchedulable_TEST {
         testDataSetup();
 
         Test.startTest();
+        TestUtil.turnOffFeatureGates();
         delete serviceDeliveries[0];
 
         ProgramEngagementRollupsSchedulable programEngagementRollups = new ProgramEngagementRollupsSchedulable();
@@ -104,6 +106,31 @@ private class ProgramEngagementRollupsSchedulable_TEST {
         System.assertEquals(0, programEngagements[0].NumAbsentServiceDeliveries__c);
         System.assertEquals(0, programEngagements[0].ConsecutiveAbsences__c);
         System.assertEquals(System.today(), programEngagements[0].LastServiceDate__c);
+    }
+
+    @IsTest
+    private static void shouldResetParentsWithoutDeliveries() {
+        testDataSetup();
+
+        Test.startTest();
+        TestUtil.turnOffFeatureGates();
+
+        List<ServiceDelivery__c> deliveries = [
+            SELECT Id
+            FROM ServiceDelivery__c
+            WHERE ProgramEngagement__c = :programEngagements[0].Id
+        ];
+        delete deliveries;
+
+        ProgramEngagementRollupsSchedulable programEngagementRollups = new ProgramEngagementRollupsSchedulable();
+        Database.executeBatch(programEngagementRollups);
+        Test.stopTest();
+        requery();
+
+        System.assertEquals(null, programEngagements[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, programEngagements[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, programEngagements[0].ConsecutiveAbsences__c);
+        System.assertEquals(null, programEngagements[0].LastServiceDate__c);
     }
 
     @IsTest

@@ -35,8 +35,8 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
             String.valueOf(ServiceDelivery__c.SObjectType);
 
         systemAccessStub = new StubBuilder(SystemAccess.class)
-            .when('getDeliveryRollupsQuery', String.class, List<String>.class)
-            .calledWith(String.valueOf(ServiceDelivery__c.Contact__c), attendanceStatuses)
+            .when('getDeliveryRollupsQuery', String.class)
+            .calledWith(String.valueOf(ServiceDelivery__c.Contact__c))
             .thenReturn(rollupQueryToReturn)
             .build();
 
@@ -56,16 +56,10 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
     @IsTest
     private static void shouldRollupChildDeliveryRecords() {
         systemAccessStub = new StubBuilder(SystemAccess.class)
-            .when(
-                'getDeliveryRecordsToRollup',
-                String.class,
-                Set<Id>.class,
-                List<String>.class
-            )
+            .when('getDeliveryRecordsToRollup', String.class, Set<Id>.class)
             .calledWith(
                 String.valueOf(ServiceDelivery__c.Contact__c),
-                new Set<Id>{ mockContactId },
-                attendanceStatuses
+                new Set<Id>{ mockContactId }
             )
             .thenReturn(mockDeliveries)
             .build();
@@ -216,12 +210,8 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
     @IsTest
     private static void shouldSetTotalRecordCountWhenBatchIsRunning() {
         systemAccessStub = new StubBuilder(SystemAccess.class)
-            .when('getDeliveryRollupsCount', String.class, Id.class, List<String>.class)
-            .calledWith(
-                String.valueOf(ServiceDelivery__c.Contact__c),
-                mockContactId,
-                attendanceStatuses
-            )
+            .when('getDeliveryRollupsCount', String.class, Id.class)
+            .calledWith(String.valueOf(ServiceDelivery__c.Contact__c), mockContactId)
             .thenReturn(5)
             .build();
         rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();

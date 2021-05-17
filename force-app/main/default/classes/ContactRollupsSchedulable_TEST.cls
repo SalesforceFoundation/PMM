@@ -63,6 +63,7 @@ private class ContactRollupsSchedulable_TEST {
         testDataSetup();
 
         Test.startTest();
+        TestUtil.turnOffFeatureGates();
         serviceDeliveries[1].AttendanceStatus__c = ABSENCE_STATUS;
         serviceDeliveries[1].Quantity__c = 0;
         update serviceDeliveries[1];
@@ -87,6 +88,7 @@ private class ContactRollupsSchedulable_TEST {
         testDataSetup();
 
         Test.startTest();
+        TestUtil.turnOffFeatureGates();
         delete serviceDeliveries[0];
 
         ContactRollupsSchedulable contactRollups = new ContactRollupsSchedulable();
@@ -99,6 +101,31 @@ private class ContactRollupsSchedulable_TEST {
         System.assertEquals(0, contacts[0].NumAbsentServiceDeliveries__c);
         System.assertEquals(0, contacts[0].ConsecutiveAbsences__c);
         System.assertEquals(System.today(), contacts[0].LastServiceDate__c);
+    }
+
+    @IsTest
+    private static void shouldResetParentsWithoutDeliveries() {
+        testDataSetup();
+
+        Test.startTest();
+        TestUtil.turnOffFeatureGates();
+
+        List<ServiceDelivery__c> deliveries = [
+            SELECT Id
+            FROM ServiceDelivery__c
+            WHERE Contact__c = :contacts[0].Id
+        ];
+        delete deliveries;
+
+        ContactRollupsSchedulable contactRollups = new ContactRollupsSchedulable();
+        Database.executeBatch(contactRollups);
+        Test.stopTest();
+        requery();
+
+        System.assertEquals(null, contacts[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, contacts[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(null, contacts[0].ConsecutiveAbsences__c);
+        System.assertEquals(null, contacts[0].LastServiceDate__c);
     }
 
     @IsTest

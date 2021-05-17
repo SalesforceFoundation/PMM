@@ -60,7 +60,7 @@ public with sharing class SystemAccess_TEST {
         }
 
         System.assertEquals(
-            2,
+            3,
             recordsWithAccess.size(),
             'Expected the user to be able to bypass sharing.'
         );
@@ -81,7 +81,7 @@ public with sharing class SystemAccess_TEST {
         }
 
         System.assertEquals(
-            2,
+            3,
             rollupCount,
             'Expected the user to be able to bypass sharing.'
         );

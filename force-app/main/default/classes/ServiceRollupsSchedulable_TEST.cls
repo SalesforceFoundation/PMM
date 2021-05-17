@@ -54,6 +54,7 @@ private class ServiceRollupsSchedulable_TEST {
         testDataSetup();
 
         Test.startTest();
+        TestUtil.turnOffFeatureGates();
         serviceDeliveries[1].AttendanceStatus__c = PRESENT_STATUS;
         serviceDeliveries[1].Quantity__c = 3;
         update serviceDeliveries[1];
@@ -75,6 +76,7 @@ private class ServiceRollupsSchedulable_TEST {
         testDataSetup();
 
         Test.startTest();
+        TestUtil.turnOffFeatureGates();
         delete serviceDeliveries[0];
 
         ServiceRollupsSchedulable serviceRollups = new ServiceRollupsSchedulable();
@@ -85,6 +87,29 @@ private class ServiceRollupsSchedulable_TEST {
 
         System.assertEquals(0, services[0].NumPresentServiceDeliveries__c);
         System.assertEquals(1, services[0].NumAbsentServiceDeliveries__c);
+    }
+
+    @IsTest
+    private static void shouldResetParentsWithoutDeliveries() {
+        testDataSetup();
+
+        Test.startTest();
+        TestUtil.turnOffFeatureGates();
+
+        List<ServiceDelivery__c> deliveries = [
+            SELECT Id
+            FROM ServiceDelivery__c
+            WHERE Service__c = :services[0].Id
+        ];
+        delete deliveries;
+
+        ServiceRollupsSchedulable serviceRollups = new ServiceRollupsSchedulable();
+        Database.executeBatch(serviceRollups);
+        Test.stopTest();
+        requery();
+
+        System.assertEquals(null, services[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, services[0].NumAbsentServiceDeliveries__c);
     }
 
     @IsTest

@@ -103,6 +103,7 @@ pmm_lex_locators = {
         "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
         "first_session_end": "//lightning-input[contains(@class,'slds-form-element')][./descendant::*[text()='{}']]/descendant::div//input[@class='slds-input']",
         "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
+        "filter": "//div[contains(@class,'slds-form-element__control')]/input[@placeholder='Search this list']",
     },
     "attendance": {
         "attendance_text": "//c-attendance-row[{}]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",

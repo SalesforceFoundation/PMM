@@ -148,4 +148,50 @@ public with sharing class ServiceDeliveryController_TEST {
             programEngagementId
         );
     }
+
+    @IsTest
+    private static void testGetServiceDeliveryFieldSets() {
+        String methodName = 'getServiceDeliveryFieldSets';
+        Test.startTest();
+
+        ServiceDeliveryController.service = (ServiceService) serviceStub.createMock();
+        ServiceDeliveryController.getServiceDeliveryFieldSets();
+
+        Test.stopTest();
+
+        serviceStub.assertCalled(methodName);
+    }
+
+    @IsTest
+    private static void whenGetServiceDeliveryFieldSetsThrowsException() {
+        String methodName = 'getServiceDeliveryFieldSets';
+
+        serviceStub.withThrowException(methodName);
+
+        Test.startTest();
+
+        ServiceDeliveryController.service = (serviceService) serviceStub.createMock();
+
+        Exception actualException;
+
+        try {
+            ServiceDeliveryController.getServiceDeliveryFieldSets();
+        } catch (Exception e) {
+            actualException = e;
+        }
+
+        Test.stopTest();
+
+        System.assertEquals(
+            true,
+            actualException instanceof AuraHandledException,
+            actualException
+        );
+        System.assertEquals(
+            serviceStub.testExceptionMessage,
+            actualException.getMessage()
+        );
+
+        serviceStub.assertCalled(methodName);
+    }
 }

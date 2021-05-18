@@ -9,7 +9,7 @@
 
 @IsTest
 public with sharing class AttendanceController_TEST {
-    private static BasicStub serviceStub = new BasicStub(AttendanceService.class);
+    private static BasicStub serviceStub = new BasicStub(ServiceDeliveryService.class);
 
     @IsTest
     private static void shouldReturnServiceDeliveriesFromService() {
@@ -17,7 +17,7 @@ public with sharing class AttendanceController_TEST {
         List<ServiceDelivery__c> serviceDeliveriesToReturn = new List<ServiceDelivery__c>();
         serviceStub.withReturnValue(generateRoster, Id.class, serviceDeliveriesToReturn);
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
-        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
 
         Test.startTest();
         System.assert(
@@ -34,7 +34,7 @@ public with sharing class AttendanceController_TEST {
         String generateRoster = 'generateRoster';
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         serviceStub.withThrowException(generateRoster, Id.class);
-        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
         Exception actualException;
 
         Test.startTest();
@@ -59,7 +59,7 @@ public with sharing class AttendanceController_TEST {
         String methodName = 'upsertServiceDeliveries';
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>();
 
-        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
 
         Test.startTest();
         AttendanceController.upsertServiceDeliveries(deliveries);
@@ -78,7 +78,7 @@ public with sharing class AttendanceController_TEST {
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>();
 
         serviceStub.withThrowException(methodName, List<ServiceDelivery__c>.class);
-        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
         Exception actualException;
 
         Test.startTest();
@@ -107,7 +107,7 @@ public with sharing class AttendanceController_TEST {
         String methodName = 'checkFieldPermissions';
         Map<String, Boolean> expected = new Map<String, Boolean>();
         serviceStub.withReturnValue(methodName, expected);
-        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
 
         Test.startTest();
         Map<String, Boolean> actual = AttendanceController.checkFieldPermissions();
@@ -126,7 +126,7 @@ public with sharing class AttendanceController_TEST {
         String methodName = 'checkFieldPermissions';
 
         serviceStub.withThrowException(methodName);
-        AttendanceController.service = (AttendanceService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
         Exception actualException;
         Map<String, Boolean> actual;
         Test.startTest();

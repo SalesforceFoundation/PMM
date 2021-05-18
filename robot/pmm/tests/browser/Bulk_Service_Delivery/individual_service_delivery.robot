@@ -19,9 +19,9 @@ Setup Test Data
     [Documentation]             Creates Service and PE using API and sets the fields required to add service deliveries on BSDT.
     ${ns} =                     Get PMM Namespace Prefix
     Set suite variable          ${ns}
-    ${quantity1} =              Generate Random String          2     [NUMBERS]
+    ${quantity1} =              Generate Random String          2     123456789
     Set suite variable          ${quantity1}
-    ${quantity2} =              Generate Random String          2     [NUMBERS]
+    ${quantity2} =              Generate Random String          2     123456789
     Set suite variable          ${quantity2}
     ${today} =                  Get Current Date                result_format=%Y-%m-%d
     Set suite variable          ${today}
@@ -108,3 +108,23 @@ Delete service delivery on bsdt
     Page Should Not Contain     ${contact1}[FirstName] ${contact1}[LastName]
     Page Should Not Contain     ${program_engagement1}[Name]
     Page Should Not Contain     ${service1}[Name]
+
+Edit Service delivery on BSDT
+    [Documentation]             Edits a service delivery row and validates that 'Edited' message is displayed
+    ...                         and service delivery record is created when saved
+    [tags]                      W-9219421   perm:admin   perm:manage   perm:deliver   feature:Service Delivery
+    Go To Page                  Custom                              Bulk_Service_Deliveries
+    Click Dialog Button         Create by Individual
+    Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
+    Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
+    Populate Bsdt Dropdown      1           Service                 ${service1}[Name]
+    Populate Bsdt Field         1           Quantity                ${quantity1}
+    Click Bsdt Button           Save
+    Verify Persist Save Icon    1           Saved
+    Populate Bsdt Field         1           Quantity                ${quantity2}
+    Verify Persist Warning Icon    1           Edited
+    Click Bsdt Button           Save
+    Verify Persist Save Icon    1           Saved
+    Go To Page                  Listing                             ${ns}ServiceDelivery__c
+    Click Listview Link         ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
+    Verify Details              Quantity          contains          ${quantity2}.00

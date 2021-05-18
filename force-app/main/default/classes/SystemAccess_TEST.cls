@@ -12,61 +12,77 @@ public with sharing class SystemAccess_TEST {
     private static SystemAccess systemAccess = new SystemAccess();
     private static Service__c serviceRecord;
     private static final String PRESENT_STATUS = 'Present';
+    private static final String ABSENT_STATUS = 'UnExcused Absence';
+    private static final String PRESENT_FIELD = 'NumPresentServiceDeliveries__c';
+    private static final String ABSENT_FIELD = 'NumAbsentServiceDeliveries__c';
 
     @TestSetup
     private static void setupServiceSessionData() {
+        TestUtil.turnOffFeatureGates();
         TestDataFactory.generateAttendanceData('Monthly');
 
         serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
 
-        insert new ServiceDelivery__c(
-            Name = 'test',
-            Service__c = serviceRecord.Id,
-            AttendanceStatus__c = PRESENT_STATUS
+        List<ServiceDelivery__c> serviceDeliveries = new List<ServiceDelivery__c>();
+        serviceDeliveries.add(
+            new ServiceDelivery__c(
+                Name = 'test',
+                Service__c = serviceRecord.Id,
+                Quantity__c = 10,
+                AttendanceStatus__c = PRESENT_STATUS
+            )
         );
+
+        serviceDeliveries.add(
+            new ServiceDelivery__c(
+                Name = 'test Absent',
+                Service__c = serviceRecord.Id,
+                Quantity__c = 0,
+                AttendanceStatus__c = ABSENT_STATUS
+            )
+        );
+
+        insert serviceDeliveries;
     }
 
     @IsTest
-    private static void shouldGetAllAttendanceRecordsForStandardUser() {
+    private static void shouldGetAllDeliveryRollupRecordsForStandardUser() {
         serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
 
         User standardUser = TestUtil.getTestUser();
         List<ServiceDelivery__c> recordsWithAccess;
 
         System.runAs(standardUser) {
-            recordsWithAccess = systemAccess.getAttendanceRecords(
-                ServiceDelivery__c.Service__c,
-                new Set<Id>{ serviceRecord.Id },
-                new List<String>{ PRESENT_STATUS }
+            recordsWithAccess = systemAccess.getDeliveryRecordsToRollup(
+                String.valueOf(ServiceDelivery__c.Service__c),
+                new Set<Id>{ serviceRecord.Id }
             );
         }
 
         System.assertEquals(
-            1,
+            3,
             recordsWithAccess.size(),
             'Expected the user to be able to bypass sharing.'
         );
     }
 
     @IsTest
-    private static void shouldGetAllParentRecordsForStandardUser() {
+    private static void shouldGetAllDeliveryRollupsCountsForStandardUser() {
         serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
 
         User standardUser = TestUtil.getTestUser();
-        List<Service__c> recordsWithAccess;
+        Integer rollupCount;
 
         System.runAs(standardUser) {
-            recordsWithAccess = systemAccess.getParentsWithServiceDeliveries(
-                ServiceDelivery__c.Service__c,
-                new Set<Id>{ serviceRecord.Id },
-                Service__c.SObjectType,
-                'ServiceDeliveries__r'
+            rollupCount = systemAccess.getDeliveryRollupsCount(
+                'Service__c',
+                serviceRecord.Id
             );
         }
 
         System.assertEquals(
-            1,
-            recordsWithAccess.size(),
+            3,
+            rollupCount,
             'Expected the user to be able to bypass sharing.'
         );
     }
@@ -94,5 +110,41 @@ public with sharing class SystemAccess_TEST {
             serviceRecord.Name,
             'The service record name was not as expected.'
         );
+    }
+
+    @IsTest
+    private static void shouldGetAllRecordIdsForStandardUser() {
+        serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
+
+        User standardUser = TestUtil.getTestUser();
+        List<sObject> recordsWithAccess;
+
+        System.runAs(standardUser) {
+            recordsWithAccess = systemAccess.getRecordsById(
+                Service__c.sObjectType,
+                new Set<Id>{ serviceRecord.Id },
+                new List<String>{ PRESENT_FIELD, ABSENT_FIELD }
+            );
+        }
+
+        System.assertEquals(
+            1,
+            recordsWithAccess.size(),
+            'Expected the user to be able to bypass sharing.'
+        );
+    }
+
+    @IsTest
+    private static void shouldGetDeliveryRollupsQueryForStandardUser() {
+        serviceRecord = [SELECT Id FROM Service__c LIMIT 1];
+
+        User standardUser = TestUtil.getTestUser();
+        String rollupQuery;
+
+        System.runAs(standardUser) {
+            rollupQuery = systemAccess.getDeliveryRollupsQuery('Service__c');
+        }
+
+        System.assertNotEquals(null, rollupQuery, 'Expected the query to be returned.');
     }
 }

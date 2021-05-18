@@ -7,13 +7,8 @@
  *
  */
 
-public with sharing class AttendanceSelector {
+public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
-
-    @TestVisible
-    private static final String ABSENT = 'Absent';
-    @TestVisible
-    private static final String PRESENT = 'Present';
 
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
         if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
@@ -95,12 +90,7 @@ public with sharing class AttendanceSelector {
             .getRecords()[0];
     }
 
-    public List<Bucket__mdt> getAttendanceBuckets() {
-        List<String> bucketNames = new List<String>{
-            Util.prefixNamespace(ABSENT),
-            Util.prefixNamespace(PRESENT)
-        };
-
+    public List<Bucket__mdt> getBuckets(List<String> bucketNames) {
         // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
         // with SOQL for this layer.
         return [

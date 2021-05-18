@@ -74,6 +74,7 @@ public with sharing class TestDataFactory {
         contact2.LastName = 'Test Contact';
         contact2.AccountId = accountRecord.Id;
         contacts.add(contact2);
+
         insert contacts;
 
         programs = new List<Program__c>();
@@ -165,7 +166,7 @@ public with sharing class TestDataFactory {
         serviceDelivery2.ProgramEngagement__c = engagements[1].Id;
         serviceDelivery2.Contact__c = contacts[0].Id;
         serviceDelivery2.DeliveryDate__c = System.today() - 2;
-        ServiceDelivery2.AttendanceStatus__c = 'Present';
+        serviceDelivery2.AttendanceStatus__c = 'Present';
         serviceDelivery2.Quantity__c = 3;
         serviceDelivery2.Service__c = service2.Id;
         serviceDeliveries.add(serviceDelivery2);
@@ -274,6 +275,7 @@ public with sharing class TestDataFactory {
                 SignUpDate__c = System.today()
             )
         );
+
         insert serviceParticipants;
     }
 }

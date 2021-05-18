@@ -46,6 +46,17 @@ tasks:
             timeout: 60000
             skip_existing: true
 
+    update_experience_cloud_OWDs:
+        class_path: cumulusci.tasks.metadata_etl.SetOrgWideDefaults
+        options:
+            org_wide_defaults:
+                - api_name: "%%%NAMESPACE%%%ServiceSession__c"
+                  internal_sharing_model: ReadWrite
+                  external_sharing_model: Private
+                - api_name: Contact
+                  internal_sharing_model: ReadWrite
+                  external_sharing_model: Private
+
     publish_community:
         description: Publishes the "PMM Client Community" Community in the target org using the Connect API
         class_path: cumulusci.tasks.salesforce.PublishCommunity
@@ -175,12 +186,16 @@ flows:
             1:
                 task: create_community
             2:
-                task: create_community_owner
+                task: update_experience_cloud_OWDs
+            2.1:
+                task: util_sleep
             3:
-                task: deploy_experience_cloud
+                task: create_community_owner
             4:
-                task: create_community_user
+                task: deploy_experience_cloud
             5:
+                task: create_community_user
+            6:
                 task: publish_community
 
     load_data:

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
-    <sharingCriteriaRules>
+    <sharingOwnerRules>
         <fullName>Community_Volunteer</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Community Volunteer</label>
         <sharedTo>
             <group>Community_Volunteers</group>
         </sharedTo>
-        <criteriaItems>
-            <field>OwnerId</field>
-            <operation>equals</operation>
-            <value>0051D000006uRA5QAM</value>
-        </criteriaItems>
-    </sharingCriteriaRules>
+        <sharedFrom>
+            <roleAndSubordinatesInternal>CommunityOwner</roleAndSubordinatesInternal>
+        </sharedFrom>
+    </sharingOwnerRules>
 </SharingRules>

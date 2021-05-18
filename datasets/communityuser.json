@@ -8,29 +8,6 @@
         },
         {
             "method": "GET",
-            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+UserRole+WHERE+DeveloperName+IN+('CEO')+ORDER+BY+DeveloperName",
-            "referenceId": "ceorole"
-        },
-        {
-            "method": "POST",
-            "url": "/services/data/v46.0/sobjects/UserRole",
-            "referenceId": "role",
-            "body": {
-                "DeveloperName": "CommunityOwner",
-                "Name": "Community Owner",
-                "ParentRoleId": "@{ceorole.records[0].Id}"
-            }
-        },
-        {
-            "method": "PATCH",
-            "url": "/services/data/v46.0/sobjects/User/%%%USERID%%%",
-            "referenceId": "currentUser",
-            "body": {
-                "UserRoleId": "@{role.id}"
-            }
-        },
-        {
-            "method": "GET",
             "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+Contact+WHERE+Email+=+'mayalambert@example.com'",
             "referenceId": "volunteer"
         },

@@ -52,12 +52,19 @@ tasks:
         options:
             name: PMM Volunteer Community
 
+    create_community_owner:
+        description: POSTs json files to the Composite REST API endpoint.
+        class_path: cumulusci.tasks.salesforce.composite.CompositeApi
+        options:
+            data_files:
+                - "datasets/communityowner.json"
+
     create_community_user:
         description: POSTs json files to the Composite REST API endpoint.
         class_path: cumulusci.tasks.salesforce.composite.CompositeApi
         options:
             data_files:
-                - "datasets/communityusers.json"
+                - "datasets/communityuser.json"
 
     robot:
         options:
@@ -168,10 +175,12 @@ flows:
             1:
                 task: create_community
             2:
-                task: deploy_experience_cloud
+                task: create_community_owner
             3:
-                task: create_community_user
+                task: deploy_experience_cloud
             4:
+                task: create_community_user
+            5:
                 task: publish_community
 
     load_data:

@@ -197,6 +197,8 @@ flows:
                 task: create_community_user
             6:
                 task: publish_community
+            7:
+                task: snapshot_changes
 
     load_data:
         steps:

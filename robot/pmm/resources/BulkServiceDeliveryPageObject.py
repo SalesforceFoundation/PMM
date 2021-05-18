@@ -97,6 +97,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         ].format(row, label)
         self.selenium.get_webelement(locator).click()
         self.selenium.set_focus_to_element(locator)
+        self.selenium.clear_element_text(locator)
         self.selenium.get_webelement(locator).send_keys(value)
 
     def populate_bsdt_dropdown(self, row, title, value):

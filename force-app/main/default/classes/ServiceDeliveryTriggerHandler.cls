@@ -9,28 +9,24 @@
 
 public with sharing class ServiceDeliveryTriggerHandler {
     @TestVisible
-    private AttendanceService service = new AttendanceService();
+    private ServiceDeliveryRollupsService rollupsService;
 
     private final SObjectField ATTENDANCE_STATUS = ServiceDelivery__c.AttendanceStatus__c;
     private final SObjectField DELIVERY_DATE = ServiceDelivery__c.DeliveryDate__c;
     private final SObjectField QUANTITY = ServiceDelivery__c.Quantity__c;
-    private Map<SObjectField, Set<Id>> recordIdsByLookupFieldForAttendance = new Map<SObjectField, Set<Id>>{
+    private Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>{
         ServiceDelivery__c.Contact__c => new Set<Id>(),
         ServiceDelivery__c.Service__c => new Set<Id>(),
         ServiceDelivery__c.ServiceSession__c => new Set<Id>(),
         ServiceDelivery__c.ProgramEngagement__c => new Set<Id>()
     };
-    private Map<SObjectField, Set<Id>> recordIdsByLookupFieldForLastServiceDate = new Map<SObjectField, Set<Id>>{
-        ServiceDelivery__c.Contact__c => new Set<Id>(),
-        ServiceDelivery__c.ProgramEngagement__c => new Set<Id>()
-    };
-    private Map<SObjectType, List<SObject>> sObjectsByType = new Map<SObjectType, List<SObject>>();
     private static Map<String, SObjectField> LOOKUP_FIELD_BY_FEATURE = new Map<String, SObjectField>{
         'ServiceDeliveriesToContact' => ServiceDelivery__c.Contact__c,
         'ServiceDeliveriesToService' => ServiceDelivery__c.Service__c,
         'ServiceDeliveriesToServiceSession' => ServiceDelivery__c.ServiceSession__c,
         'ServiceDeliveriesToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
     };
+    @TestVisible
     private Set<SObjectField> lookupFields {
         get {
             if (lookupFields == null) {
@@ -48,10 +44,23 @@ public with sharing class ServiceDeliveryTriggerHandler {
         }
 
         delegate(Trigger.operationType);
-        service.doRollups(
-            recordIdsByLookupFieldForAttendance,
-            recordIdsByLookupFieldForLastServiceDate
-        );
+        doRollups(recordIdsByLookupField);
+    }
+
+    public void doRollups(Map<SObjectField, Set<Id>> recordIdsByLookupField) {
+        for (SObjectField lookupField : recordIdsByLookupField.keySet()) {
+            Set<Id> recordIds = recordIdsByLookupField.get(lookupField);
+            if (recordIds.isEmpty()) {
+                continue;
+            }
+
+            SObjectType sObjectType = new List<Id>(recordIds)[0].getSObjectType();
+            rollupsService = new ServiceDeliveryRollupsService(sObjectType, lookupField);
+            rollupsService.rollupDeliveryRecords(recordIds);
+            recordIds.removeAll(rollupsService.getProcessedRecordIds());
+            rollupsService.commitRollups();
+            rollupsService.resetRollupFields(recordIds);
+        }
     }
 
     @TestVisible
@@ -103,28 +112,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
         extractRecordIdsToRecalculate(
             oldRecord,
             newRecord,
-            new List<SObjectField>{ DELIVERY_DATE, QUANTITY },
-            recordIdsByLookupFieldForLastServiceDate
-        );
-        extractRecordIdsToRecalculate(
-            oldRecord,
-            newRecord,
-            ATTENDANCE_STATUS,
-            recordIdsByLookupFieldForAttendance
-        );
-    }
-
-    @TestVisible
-    private void extractRecordIdsToRecalculate(
-        SObject oldRecord,
-        SObject newRecord,
-        SObjectField fieldToInspect,
-        Map<SObjectField, Set<Id>> recordIdsByLookupField
-    ) {
-        extractRecordIdsToRecalculate(
-            oldRecord,
-            newRecord,
-            new List<SObjectField>{ fieldToInspect },
+            new List<SObjectField>{ DELIVERY_DATE, QUANTITY, ATTENDANCE_STATUS },
             recordIdsByLookupField
         );
     }

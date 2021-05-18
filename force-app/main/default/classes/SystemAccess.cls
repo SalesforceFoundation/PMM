@@ -13,65 +13,107 @@
 public without sharing class SystemAccess {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
-    public List<ServiceDelivery__c> getAttendanceRecords(
-        SObjectField field,
-        Set<Id> recordIds,
-        List<String> statuses
-    ) {
-        queryBuilder
-            .reset()
-            .withSelectFields(
-                new List<String>{
-                    String.valueOf(field),
-                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c)
-                }
-            )
-            .withSObjectType(ServiceDelivery__c.SObjectType)
-            .addCondition(String.valueOf(field) + ' IN :recordIds')
-            .addCondition(
-                String.valueOf(ServiceDelivery__c.AttendanceStatus__c) + ' IN :statuses'
-            )
-            .withOrderBy(
-                String.valueOf(field) +
-                ', ' +
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
-                ' DESC, Id DESC' // TODO: Discuss with the team how to best handle multiple from the same day
-            );
-
-        return Database.query(queryBuilder.buildSoqlQuery());
+    public String getDeliveryRollupsQuery(String lookupField) {
+        return buildDeliveryRollupsQuery(lookupField, ' != null');
     }
 
-    public List<SObject> getParentsWithServiceDeliveries(
-        SObjectField field,
-        Set<Id> recordIds,
-        SObjectType parentObject,
-        String relationshipName
-    ) {
-        QueryBuilder serviceDeliverySubquery = new QueryBuilder()
-            .withChildRelationshipName(relationshipName)
-            .withSelectFields(
-                new List<String>{ String.valueOf(ServiceDelivery__c.DeliveryDate__c) }
-            )
-            .withSelectFields(
-                new List<String>{ String.valueOf(ServiceDelivery__c.Quantity__c) }
-            )
-            .addCondition(String.valueOf(ServiceDelivery__c.Quantity__c) + ' > 0')
-            .addCondition(
-                String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' <= TODAY'
-            )
-            .withOrderBy(String.valueOf(ServiceDelivery__c.DeliveryDate__c) + ' DESC')
-            .withLimit(1);
+    public Integer getDeliveryRollupsCount(String lookupField, Id recordId) {
+        setDeliveryRollupQueryBuilder(lookupField, ' = :recordId');
 
-        queryBuilder
+        return Database.countQuery(queryBuilder.buildCountQuery());
+    }
+
+    public List<SObject> getParentsWithDeliveries(
+        SObjectType sObjectType,
+        String lookupField,
+        List<SObject> records
+    ) {
+        // Find all records that have service delivery child records e.g.
+        // SELECT Id FROM Contact where Id in (SELECT Contact FROM ServiceDelivery__c
+        // WHERE Contact IN :records)
+        String query = queryBuilder
             .reset()
+            .withSObjectType(sObjectType)
             .withSelectFields(new List<String>{ 'Id' })
-            .addSubQuery(serviceDeliverySubquery)
-            .withSObjectType(parentObject)
-            .addCondition('Id IN :recordIds');
-        return Database.query(queryBuilder.buildSoqlQuery());
+            .addCondition(
+                'Id IN (SELECT ' +
+                lookupField +
+                ' FROM ' +
+                String.valueOf(ServiceDelivery__c.SObjectType) +
+                ' WHERE ' +
+                lookupField +
+                ' IN :records)'
+            )
+            .buildSoqlQuery();
+
+        return Database.query(query);
+    }
+
+    public List<ServiceDelivery__c> getDeliveryRecordsToRollup(
+        String lookupField,
+        Set<Id> recordIds
+    ) {
+        String query = buildDeliveryRollupsQuery(
+            String.valueOf(lookupField),
+            ' IN: recordIds'
+        );
+        return Database.query(query);
+    }
+
+    public List<SObject> getRecordsById(
+        sObjectType sObjectType,
+        Set<Id> recordIds,
+        List<String> selectFields
+    ) {
+        return Database.query(
+            queryBuilder
+                .reset()
+                .withSObjectType(sObjectType)
+                .withSelectFields(selectFields)
+                .addCondition('Id IN :recordIds')
+                .buildSoqlQuery()
+        );
     }
 
     public void updateRecords(List<SObject> sObjects) {
         update sObjects;
+    }
+
+    private String buildDeliveryRollupsQuery(
+        String lookupField,
+        String lookupFieldCondition
+    ) {
+        setDeliveryRollupQueryBuilder(lookupField, lookupFieldCondition);
+        queryBuilder
+            .withSelectFields(
+                new List<String>{
+                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
+                    String.valueOf(ServiceDelivery__c.DeliveryDate__c),
+                    String.valueOf(lookupField),
+                    String.valueOf(ServiceDelivery__c.Quantity__c)
+                }
+            );
+
+        return queryBuilder.buildSoqlQuery();
+    }
+
+    private QueryBuilder setDeliveryRollupQueryBuilder(
+        String lookupField,
+        String lookupFieldCondition
+    ) {
+        String condition = lookupField + lookupFieldCondition;
+
+        queryBuilder
+            .reset()
+            .withSObjectType(ServiceDelivery__c.SObjectType)
+            .addCondition(lookupField + lookupFieldCondition)
+            .withOrderBy(
+                lookupField +
+                ', ' +
+                String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                ' ASC '
+            );
+
+        return queryBuilder;
     }
 }

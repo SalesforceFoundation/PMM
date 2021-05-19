@@ -18,12 +18,6 @@ public with sharing class ServiceSessionSelector {
             return new List<ServiceSession__c>();
         }
 
-        String scheduleRelationship =
-            ServiceSession__c.ServiceSchedule__c.getDescribe().getRelationshipName() +
-            '.';
-        String serviceRelationship =
-            ServiceSchedule__c.Service__c.getDescribe().getRelationshipName() + '.';
-
         Set<String> fields = new Set<String>(
             new FieldSetService()
                 .getFieldByFieldPath(

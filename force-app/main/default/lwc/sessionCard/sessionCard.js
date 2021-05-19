@@ -17,6 +17,7 @@ import SUCCESS_LABEL from "@salesforce/label/c.Success";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
+import ATTENDANCE_SUMMARY_FIELD from "@salesforce/schema/ServiceSession__c.AttendanceSummary__c";
 import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
 import SERVICE_LINK_FIELD from "@salesforce/schema/ServiceSession__c.ServiceLink__c";
@@ -42,6 +43,7 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
         status: STATUS_FIELD.fieldApiName,
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
         serviceLink: SERVICE_LINK_FIELD.fieldApiName,
+        attendanceSummary: ATTENDANCE_SUMMARY_FIELD.fieldApiName,
     };
 
     @api
@@ -64,6 +66,8 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
                     val.toLowerCase() === COMPLETE.toLowerCase();
             } else if (key === this.fields.primaryServiceProvider) {
                 this._session.hasServiceProviderValue = val !== undefined;
+            } else if (key === this.fields.attendanceSummary) {
+                this._session.hasAttendanceSummaryValue = val !== undefined;
             } else if (key === this.fields.serviceLink) {
                 this._session[key] = this._session[key].replace(
                     /<a[^>]*>(.*?)<\/a>/g,
@@ -108,7 +112,6 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
                         minute: "numeric",
                     });
                 }
-
                 this.populatedFields.push(populatedField);
             }
         });

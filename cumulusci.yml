@@ -20,10 +20,6 @@ project:
 
 orgs:
     scratch:
-        dev_namespaced:
-            config_file: orgs/dev.json
-            days: 7
-            namespaced: True
         prerelease:
             config_file: orgs/prerelease.json
             days: 7
@@ -212,10 +208,6 @@ flows:
             4:
                 task: restore_tdtm_trigger_handlers
                 when: "'npsp' in org_config.installed_packages"
-            5:
-                task: execute_anon
-                options:
-                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
 
     create_users_and_assign_permission_sets:
         steps:

@@ -54,7 +54,7 @@
           "componentAttributes" : {
             "recordId" : "{!recordId}"
           },
-          "componentName" : "c:attendance",
+          "componentName" : "%%%NAMESPACE_OR_C%%%:attendance",
           "id" : "3c63f228-a30d-4c6b-9a2f-58c47e84dc39",
           "renditionMap" : { },
           "type" : "component"

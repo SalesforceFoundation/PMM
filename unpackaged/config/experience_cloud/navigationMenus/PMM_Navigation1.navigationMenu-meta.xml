@@ -4,7 +4,7 @@
     <containerType>Network</containerType>
     <label>PMM Navigation</label>
     <navigationMenuItem>
-        <defaultListViewId>UpcomingServiceSchedules</defaultListViewId>
+        <defaultListViewId>%%%NAMESPACE%%%UpcomingServiceSchedules</defaultListViewId>
         <label>Service Schedules</label>
         <position>1</position>
         <publiclyAvailable>false</publiclyAvailable>
@@ -12,7 +12,7 @@
         <type>SalesforceObject</type>
     </navigationMenuItem>
     <navigationMenuItem>
-        <defaultListViewId>All</defaultListViewId>
+        <defaultListViewId>%%%NAMESPACE%%%All</defaultListViewId>
         <label>Service Sessions</label>
         <position>2</position>
         <publiclyAvailable>false</publiclyAvailable>

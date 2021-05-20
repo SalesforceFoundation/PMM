@@ -8,7 +8,7 @@
         <label>Service Schedules</label>
         <position>1</position>
         <publiclyAvailable>false</publiclyAvailable>
-        <target>ServiceSchedule__c</target>
+        <target>%%%NAMESPACE%%%ServiceSchedule__c</target>
         <type>SalesforceObject</type>
     </navigationMenuItem>
     <navigationMenuItem>
@@ -16,7 +16,7 @@
         <label>Service Sessions</label>
         <position>2</position>
         <publiclyAvailable>false</publiclyAvailable>
-        <target>ServiceSession__c</target>
+        <target>%%%NAMESPACE%%%ServiceSession__c</target>
         <type>SalesforceObject</type>
     </navigationMenuItem>
 </NavigationMenu>

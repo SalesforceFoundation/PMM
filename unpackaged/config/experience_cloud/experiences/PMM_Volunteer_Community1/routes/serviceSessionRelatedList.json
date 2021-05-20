@@ -3,7 +3,7 @@
   "appPageId" : "b4f1b062-39be-4db9-aa64-bfe331aa63d2",
   "id" : "9d278510-723d-4532-a502-2b2177ae9fbb",
   "label" : "Service Session Related List",
-  "objectApiName" : "ServiceSession__c",
+  "objectApiName" : "%%%NAMESPACE%%%ServiceSession__c",
   "routeType" : "relatedlist-a06",
   "type" : "route",
   "urlPrefix" : "servicesession"

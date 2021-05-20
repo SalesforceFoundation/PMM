@@ -3,7 +3,7 @@
   "appPageId" : "b4f1b062-39be-4db9-aa64-bfe331aa63d2",
   "id" : "6218f620-48ec-4c1f-85b0-667fb56c3841",
   "label" : "Service Schedule Detail",
-  "objectApiName" : "ServiceSchedule__c",
+  "objectApiName" : "%%%NAMESPACE%%%ServiceSchedule__c",
   "routeType" : "detail-a05",
   "type" : "route",
   "urlPrefix" : "serviceschedule"

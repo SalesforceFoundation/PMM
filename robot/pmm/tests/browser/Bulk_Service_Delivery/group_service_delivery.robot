@@ -87,9 +87,9 @@ Create service delivery using BSDT Wizard
     Save Current Record ID For Deletion        ${ns}ServiceDelivery__c
 
 Filter on bsdt wizard based on Program Cohort
-    [Documentation]                        On service schedule wizard,filter based on program cohort and 
+    [Documentation]                        On BSDT wizard contact selection screen,filter based on program cohort and 
     ...                                    validate filtered results are displayed on screen 3
-    [tags]                                 W-9176285   perm:admin   perm:manage   feature:bsdt
+    [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt
     Go To Page                              Custom                      Bulk_Service_Deliveries
     Click Dialog Button                     Create by Group
     Page Should Contain Text                Default Service Delivery Values
@@ -106,9 +106,9 @@ Filter on bsdt wizard based on Program Cohort
     Page Should Contain Text                ${contact3}[Name]
 
 Filter on bsdt wizard based on Client Name
-    [Documentation]                        On service schedule wizard,filter based on client name and 
+    [Documentation]                        On BSDT wizard contact selection screen,filter based on client name and 
     ...                                    validate filtered results are displayed on screen 3
-    [tags]                                 W-9176285   perm:admin   perm:manage   feature:bsdt
+    [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt
     Go To Page                              Custom                      Bulk_Service_Deliveries
     Click Dialog Button                     Create by Group
     Page Should Contain Text                Default Service Delivery Values
@@ -125,9 +125,9 @@ Filter on bsdt wizard based on Client Name
     Page Should Not Contain                 ${contact3}[Name]
 
 Filter on bsdt wizard based on Stage
-    [Documentation]                        On service schedule wizard,filter based on Stage and 
+    [Documentation]                        On BSDT wizard contact selection screen,filter based on Stage and 
     ...                                    validate no results are displayed on screen 3
-    [tags]                                 W-9176285   perm:admin   perm:manage   feature:bsdt
+    [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt
     Go To Page                              Custom                      Bulk_Service_Deliveries
     Click Dialog Button                     Create by Group
     Page Should Contain Text                Default Service Delivery Values

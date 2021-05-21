@@ -46,6 +46,8 @@ import PRINTABLE_VIEW_LABEL from "@salesforce/label/c.Printable_View";
 import NO_PARTICIPANTS_HEADER_LABEL from "@salesforce/label/c.No_Participants_Header";
 import NO_PARTICIPANTS_MESSAGE_LABEL from "@salesforce/label/c.No_Participants_Message";
 import NO_PERMISSIONS_MESSAGE_LABEL from "@salesforce/label/c.No_Permission_Message";
+import BAD_TAB_HEADER from "@salesforce/label/c.Incorrect_Tab";
+import ATTENDANCE_TAB_MESSAGE from "@salesforce/label/c.Attendance_Tab_Message";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const FIELD_SET_NAME = "Attendance_Service_Deliveries";
@@ -88,6 +90,8 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         noParticipantsHeader: NO_PARTICIPANTS_HEADER_LABEL,
         noParticipantsMessage: NO_PARTICIPANTS_MESSAGE_LABEL,
         noPermissions: NO_PERMISSIONS_MESSAGE_LABEL,
+        badTabHeader: BAD_TAB_HEADER,
+        badTabMessage: ATTENDANCE_TAB_MESSAGE,
     };
 
     fields = {

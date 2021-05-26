@@ -179,6 +179,20 @@
         <value>After participants are added to this Service Schedule, track their attendance here.</value>
     </labels>
     <labels>
+        <fullName>Incorrect_Tab</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Attendance tab when reached incorrectly</shortDescription>
+        <value>This isn’t the tab you want.</value>
+    </labels>
+    <labels>
+        <fullName>Attendance_Tab_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Attendance tab when reached incorrectly</shortDescription>
+        <value>This tab is used only for printing attendance from a Service Session page.</value>
+    </labels>
+    <labels>
         <fullName>Back</fullName>
         <language>en_US</language>
         <protected>false</protected>

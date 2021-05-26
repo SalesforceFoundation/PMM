@@ -249,53 +249,8 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
         Test.startTest();
         ServiceDeliveryTriggerHandler triggerHandler = new ServiceDeliveryTriggerHandler();
-        triggerHandler.delegate(System.TriggerOperation.BEFORE_UPDATE);
-        Test.stopTest();
-
-        requery();
-
-        //assert that none of the records were updated
-        System.assertEquals(2, contactRecord.NumPresentServiceDeliveries__c);
-        System.assertEquals(1, contactRecord.NumAbsentServiceDeliveries__c);
-        System.assertEquals(
-            serviceDeliveries[1].DeliveryDate__c,
-            contactRecord.LastServiceDate__c
-        );
-        System.assertEquals(1, contactRecord.ConsecutiveAbsences__c);
-        System.assertEquals(1, service.NumPresentServiceDeliveries__c);
-        System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
-        System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
-        System.assertEquals(0, sessions[0].NumAbsentServiceDeliveries__c);
-        System.assertEquals(0, sessions[1].NumPresentServiceDeliveries__c);
-        System.assertEquals(1, sessions[1].NumAbsentServiceDeliveries__c);
-        System.assertEquals(1, programEngagement.NumPresentServiceDeliveries__c);
-        System.assertEquals(1, programEngagement.NumAbsentServiceDeliveries__c);
-        System.assertEquals(
-            serviceDeliveries[1].DeliveryDate__c,
-            programEngagement.LastServiceDate__c
-        );
-        System.assertEquals(1, programEngagement.ConsecutiveAbsences__c);
-    }
-
-    @IsTest
-    private static void shouldPassInvalidLookupField() {
-        setupTest();
-
-        ServiceDeliveryTriggerHandler deliveryTriggerHandler = new ServiceDeliveryTriggerHandler();
-
-        Test.startTest();
-        ServiceDelivery__c oldRecord = new ServiceDelivery__c(Name = 'Test');
-        ServiceDelivery__c newRecord = new ServiceDelivery__c(Name = 'Test');
-        List<SObjectField> fields = new List<SObjectField>();
-
-        Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>();
-        deliveryTriggerHandler.extractRecordIdsToRecalculate(
-            oldRecord,
-            newRecord,
-            fields,
-            recordIdsByLookupField
-        );
-
+        TriggerContext.getInstance()
+            .operationType = System.TriggerOperation.BEFORE_UPDATE;
         Test.stopTest();
 
         requery();

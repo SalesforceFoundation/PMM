@@ -19,7 +19,7 @@ Setup Test Data
     Set suite variable              ${ns}
     ${contact1}                     API Create Contact
     Set suite variable              ${contact1}
-    ${contact2}                     API Create Contact      FirstName=ztest robot contact
+    ${contact2}                     API Create Contact
     Set suite variable              ${contact2}
     ${program} =                    API Create Program
     Set suite variable              ${program}
@@ -46,7 +46,7 @@ Dim attendance rows and validate service deliveries are not created
     [tags]                          W-8613706    perm:admin   perm:manage    perm:deliver   feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain Text        Track Attendance
-    Dim attendance Row              1         Select
+    Dim attendance Row              ${contact1}[Name]         Select
     Click Dialog Button             Submit
     Verify Toast Message            There are no Service Delivery records to update.
     Page Should Contain Text        ${contact1}[Name]
@@ -57,17 +57,16 @@ Validate Dim attendance icon is displayed only for newly added rows
     [tags]                          W-8613706    perm:admin   perm:manage   perm:deliver   feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session3}[Id]
     Page Should Contain Text            Track Attendance
-    Populate Attendance Field           1      Hours                10
-    Populate Attendance Dropdown        1      Attendance Status    Present
-    Sleep                               2s
+    Populate Attendance Field           ${contact1}[Name]       Hours                10
+    Populate Attendance Dropdown        ${contact1}[Name]      Attendance Status    Present
     Click Dialog Button             Submit
     Verify Toast Message            Saved 1 Service Delivery records.
     API Create Service Participant  ${contact2}[Id]   ${service_schedule}[Id]  ${service}[Id]
     Reload Page
     Page Should Contain             Service Session Name
     Click Dialog Button             Update
-    Dim Attendance Row              1       Is not displayed
-    Dim Attendance Row              2       Is displayed
+    Dim Attendance Row              ${contact1}[Name]       Is not displayed
+    Dim Attendance Row              ${contact2}[Name]       Is displayed
     Page Should Contain             ${contact1}[Name]
     Page Should Contain             ${contact2}[Name]
 
@@ -76,10 +75,10 @@ Dim attendance row and validate that the Quantity and Attendance Status is reset
     ...                             the data is reset when clicked on Submit
     [tags]                          W-8613706    perm:admin   perm:manage     perm:deliver   feature:Attendance
     Go To Page                          Details         ServiceSession__c        object_id=${service_session2}[Id]
-    Page Should Contain Text            ${contact1}[Name]
-    Populate Attendance Field           1      Hours                10
-    Populate Attendance Dropdown        1      Attendance Status    Present
-    Dim Attendance Row                  1      Select
+    Page Should Contain Text            Track Attendance
+    Populate Attendance Field           ${contact1}[Name]      Hours                10
+    Populate Attendance Dropdown        ${contact1}[Name]      Attendance Status    Present
+    Dim Attendance Row                  ${contact1}[Name]      Select
     Click Dialog Button                 Submit
-    Validate Attendance Info In Row     1     Hours                 does not contain    10
-    Validate Attendance Info In Row     1     Attendance Status     does not contain    Present
+    Validate Attendance Info In Row     ${contact1}[Name]     Hours                 does not contain    10
+    Validate Attendance Info In Row     ${contact1}[Name]     Attendance Status     does not contain    Present

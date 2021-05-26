@@ -106,12 +106,12 @@ pmm_lex_locators = {
         "filter": "//div[contains(@class,'slds-form-element__control')]/input[@placeholder='Search this list']",
     },
     "attendance": {
-        "attendance_text": "//c-attendance-row[{}]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",
-        "dropdown_field": "//c-attendance-row[{}]//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]//input",
-        "select_popup": "//c-attendance-row[{}]//div[contains(@class,'slds-listbox')]",
-        "dropdown_value": "//c-attendance-row[{}]//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(text(),'{}')]",
-        "dim_icon": "//c-attendance-row[{}]//button[contains(@class,'slds-button')]/lightning-primitive-icon",
-        "details": "//c-attendance-row[{}]//*[self::div or self::lightning-output-field][contains(@class,'slds-form-element_stacked')][.//*[text()='{}']]//div[@class='slds-form-element__control']/*[self::lightning-formatted-text or self::lightning-formatted-number]",
+        "attendance_text": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",
+        "dropdown_field": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]//input",
+        "select_popup": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//div[contains(@class,'slds-listbox')]",
+        "dropdown_value": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(text(),'{}')]",
+        "dim_icon": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//button[contains(@class,'slds-button')][./span[contains(text(),'track attendance')]]",
+        "details": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//*[self::div or self::lightning-output-field][contains(@class,'slds-form-element_stacked')][.//*[text()='{}']]//div[@class='slds-form-element__control']/*[self::lightning-formatted-text or self::lightning-formatted-number]",
     },
     "homepage": {
         "component_link": '//article[contains(@class,"forceBaseCard")][.//span[contains(@title,"{}")]]',

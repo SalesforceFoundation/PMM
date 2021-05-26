@@ -96,8 +96,16 @@ public with sharing class ServiceDeliveryRollupsService {
 
                 Id parentLookupId = delivery.getLookupId(parentLookup);
                 Id originalParentLookupId = originalDelivery.getLookupId(parentLookup);
-                Boolean parentLookupIdChanged = parentLookupId != originalParentLookupId;
+                Boolean parentLookupIdChanged =
+                    parentLookupId != originalParentLookupId &&
+                    (delivery.isAbsent() ||
+                    delivery.isPresent() ||
+                    delivery.isDelivered());
 
+                // We can skip this record if the lookup id did not change on a rollup
+                // record or if the rollup fields themselves have not changed. We cannot
+                // bail in the outer for loop because we also need to check the potential
+                // change of parent ids
                 if (
                     parentLookupId == null && originalParentLookupId == null ||
                     (!rollupFieldChanged && !parentLookupIdChanged)
@@ -105,7 +113,8 @@ public with sharing class ServiceDeliveryRollupsService {
                     continue;
                 }
 
-                // parentLookupId changes then increment new id and decrement old id
+                // When the parent lookup id is changed, we treat the record as a new service
+                // delivery rollup record
                 if (parentLookupIdChanged) {
                     if (parentLookupId != null) {
                         recordIdsByLookupField.get(parentLookup).add(parentLookupId);
@@ -119,7 +128,6 @@ public with sharing class ServiceDeliveryRollupsService {
 
                         RollupRecord parentRecord = rollupRecordById.get(parentLookupId);
                         parentRecord.addDelivery(delivery);
-                        parentRecord.increment = true;
                     }
                     if (originalParentLookupId != null) {
                         recordIdsByLookupField.get(parentLookup)
@@ -135,8 +143,7 @@ public with sharing class ServiceDeliveryRollupsService {
                         RollupRecord parentRecord = rollupRecordById.get(
                             originalParentLookupId
                         );
-                        parentRecord.addDelivery(delivery);
-                        parentRecord.increment = false;
+                        parentRecord.addOriginalDelivery(delivery);
                     }
                 } else {
                     recordIdsByLookupField.get(parentLookup).add(parentLookupId);
@@ -188,7 +195,7 @@ public with sharing class ServiceDeliveryRollupsService {
             }
 
             RollupRecord parentRecord = rollupRecordById.get(parentLookupId);
-            incrementRollup(delivery, parentRecord);
+            parentRecord.process(delivery);
         }
 
         for (Id rollupRecordId : rollupRecordById.keySet()) {
@@ -294,7 +301,7 @@ public with sharing class ServiceDeliveryRollupsService {
         return childRelationshipName;
     }
 
-    private void process(List<ServiceDelivery__c> deliveries, Boolean increment) {
+    private void process(List<ServiceDelivery__c> deliveries, Boolean isNew) {
         Set<SObjectField> activeRollupFields = getActiveRollupFields();
         if (activeRollupFields.isEmpty()) {
             return;
@@ -333,8 +340,11 @@ public with sharing class ServiceDeliveryRollupsService {
                 }
 
                 RollupRecord parentRecord = rollupRecordById.get(parentLookupId);
-                parentRecord.addDelivery(delivery);
-                parentRecord.increment = increment;
+                if (isNew) {
+                    parentRecord.addDelivery(delivery);
+                } else {
+                    parentRecord.addOriginalDelivery(delivery);
+                }
             }
         }
         processChanges();
@@ -419,20 +429,6 @@ public with sharing class ServiceDeliveryRollupsService {
         return createRollupRecord(recordId, recordId.getSObjectType());
     }
 
-    private void incrementRollup(ServiceDelivery delivery, RollupRecord record) {
-        record.incrementProcessed();
-
-        if (delivery.isPresent()) {
-            record.processPresent(delivery.getDeliveryDate());
-        } else if (delivery.isAbsent()) {
-            record.processAbsent(delivery.getDeliveryDate());
-        }
-        //Last Service Date
-        if (delivery.isDelivered()) {
-            record.processLastServiceDate(delivery.getDeliveryDate());
-        }
-    }
-
     /**
      * A single parent record can span multiple batches and the batches
      * are not guaranteed to run sequentially. We use the total record count on records that could
@@ -448,10 +444,6 @@ public with sharing class ServiceDeliveryRollupsService {
         List<ServiceDelivery__c> deliveries,
         SObjectField lookupField
     ) {
-        if (!isBatchRunning) {
-            return;
-        }
-
         trackTotalRecords(deliveries[0], lookupField); // Track total of the first parent record
         trackTotalRecords(deliveries[deliveries.size() - 1], lookupField); // Track total of the last parent record
     }

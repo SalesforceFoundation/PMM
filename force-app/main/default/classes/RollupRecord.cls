@@ -1,6 +1,5 @@
 public with sharing class RollupRecord {
     public Id recordId;
-    public Boolean increment = true;
     private SObject originalRecord;
     @TestVisible
     private Integer presentCount;
@@ -37,7 +36,95 @@ public with sharing class RollupRecord {
         this.consecutiveAbsenceDates = new List<Date>();
     }
 
+    ////////// Shared //////////
+    public SObject getSObject() {
+        SObject sObj = recordId.getSObjectType().newSObject(recordId);
+
+        if (numPresentField != null) {
+            sObj.put(numPresentField, presentCount);
+        }
+
+        if (numAbsentField != null) {
+            sObj.put(numAbsentField, absentCount);
+        }
+
+        if (consecutiveAbsencesField != null) {
+            sObj.put(consecutiveAbsencesField, consecutiveCount);
+        }
+
+        if (lastServiceDateField != null) {
+            sObj.put(lastServiceDateField, lastServiceDate);
+        }
+
+        return sObj;
+    }
+
+    public void rollupFields(
+        SObjectField numAbsentField,
+        SObjectField numPresentField,
+        SObjectField consecutiveAbsencesField,
+        SObjectField lastServiceDateField
+    ) {
+        this.numAbsentField = numAbsentField;
+        this.numPresentField = numPresentField;
+        this.consecutiveAbsencesField = consecutiveAbsencesField;
+        this.lastServiceDateField = lastServiceDateField;
+    }
+
+    private void incrementPresent() {
+        if (numPresentField == null) {
+            return;
+        }
+
+        presentCount = presentCount == null ? 1 : presentCount + 1;
+        absentCount = absentCount == null ? 0 : absentCount;
+    }
+
+    private void incrementAbsent() {
+        if (numAbsentField == null) {
+            return;
+        }
+
+        presentCount = presentCount == null ? 0 : presentCount;
+        absentCount = absentCount == null ? 1 : absentCount + 1;
+    }
+
+    private void decrementPresent() {
+        if (presentCount == null || numPresentField == null) {
+            return;
+        }
+
+        presentCount--;
+        resetAttendanceFields();
+    }
+
+    private void decrementAbsent() {
+        if (absentCount == null || numAbsentField == null) {
+            return;
+        }
+
+        absentCount--;
+        resetAttendanceFields();
+    }
+
+    private void resetAttendanceFields() {
+        if (presentCount > 0 || absentCount > 0) {
+            return;
+        }
+
+        presentCount = null;
+        absentCount = null;
+        consecutiveCount = null;
+    }
+
+    ////////// Batch Mode //////////
     public Boolean getIsProcessed() {
+        System.debug(
+            'totalRecords: ' +
+            totalRecords +
+            ', totalProcessed: ' +
+            totalProcessed
+        );
         return totalRecords == null || totalProcessed >= totalRecords;
     }
 
@@ -45,6 +132,85 @@ public with sharing class RollupRecord {
         this.totalRecords = totalRecords;
     }
 
+    public void process(ServiceDelivery delivery) {
+        incrementProcessed();
+
+        if (delivery.isPresent()) {
+            processPresent(delivery.getDeliveryDate());
+        } else if (delivery.isAbsent()) {
+            processAbsent(delivery.getDeliveryDate());
+        }
+        //Last Service Date
+        if (delivery.isDelivered()) {
+            processLastServiceDate(delivery.getDeliveryDate());
+        }
+    }
+
+    public Boolean isModified(SObject originalRecord) {
+        Boolean isModified = false;
+
+        isModified =
+            (numPresentField != null &&
+            originalRecord.get(numPresentField) != presentCount) ||
+            (numAbsentField != null &&
+            originalRecord.get(numAbsentField) != absentCount) ||
+            (consecutiveAbsencesField != null &&
+            originalRecord.get(consecutiveAbsencesField) != consecutiveCount) ||
+            (lastServiceDateField != null &&
+            originalRecord.get(lastServiceDateField) != lastServiceDate);
+
+        return isModified;
+    }
+
+    @TestVisible
+    private void incrementProcessed() {
+        totalProcessed++;
+    }
+
+    private void processPresent(Date presentDate) {
+        incrementPresent();
+
+        if (lastPresentDate == null || presentDate > lastPresentDate) {
+            lastPresentDate = presentDate;
+            processConsecutiveAbsences();
+        }
+
+        consecutiveCount = consecutiveAbsenceDates.size();
+    }
+
+    private void processAbsent(Date absentDate) {
+        incrementAbsent();
+
+        if (lastPresentDate == null || lastPresentDate < absentDate) {
+            consecutiveAbsenceDates.add(absentDate);
+            consecutiveCount = consecutiveAbsenceDates.size();
+        }
+    }
+
+    private void processLastServiceDate(Date deliveryDate) {
+        if (lastServiceDateField == null) {
+            return;
+        }
+
+        lastServiceDate = lastServiceDate == null ||
+            lastServiceDate < deliveryDate
+            ? deliveryDate
+            : lastServiceDate;
+    }
+
+    private void processConsecutiveAbsences() {
+        if (consecutiveAbsenceDates.isEmpty()) {
+            return;
+        }
+
+        for (Integer i = consecutiveAbsenceDates.size() - 1; i >= 0; i--) {
+            if (consecutiveAbsenceDates[i] <= lastPresentDate) {
+                consecutiveAbsenceDates.remove(i);
+            }
+        }
+    }
+
+    ////////// Trigger Mode //////////
     public void initialize(SObject originalRecord) {
         this.originalRecord = originalRecord;
 
@@ -67,14 +233,6 @@ public with sharing class RollupRecord {
         }
     }
 
-    public void addOriginalDelivery(ServiceDelivery delivery) {
-        if (originalDeliveries == null) {
-            originalDeliveries = new List<ServiceDelivery>();
-        }
-
-        originalDeliveries.add(delivery);
-    }
-
     public void addDelivery(ServiceDelivery delivery) {
         if (deliveries == null) {
             deliveries = new List<ServiceDelivery>();
@@ -83,59 +241,56 @@ public with sharing class RollupRecord {
         deliveries.add(delivery);
     }
 
-    public void rollupFields(
-        SObjectField numAbsentField,
-        SObjectField numPresentField,
-        SObjectField consecutiveAbsencesField,
-        SObjectField lastServiceDateField
-    ) {
-        this.numAbsentField = numAbsentField;
-        this.numPresentField = numPresentField;
-        this.consecutiveAbsencesField = consecutiveAbsencesField;
-        this.lastServiceDateField = lastServiceDateField;
-    }
+    public void addOriginalDelivery(ServiceDelivery delivery) {
+        if (originalDeliveries == null) {
+            originalDeliveries = new List<ServiceDelivery>();
+        }
 
-    public void incrementProcessed() {
-        totalProcessed++;
+        originalDeliveries.add(delivery);
     }
 
     public void process(String childRelationshipName) {
-        if (originalDeliveries != null) {
+        if (originalDeliveries != null && deliveries != null) {
             processUpdates(childRelationshipName);
             return;
         }
 
+        Boolean isNew = originalDeliveries == null;
         Boolean reprocessLastServiceDate = false;
         Boolean reprocessConsecutiveAbsences = false;
+        List<ServiceDelivery> deliveriesToProcess = isNew
+            ? deliveries
+            : originalDeliveries;
 
-        for (ServiceDelivery delivery : deliveries) {
+        for (ServiceDelivery delivery : deliveriesToProcess) {
             if (delivery.isPresent()) {
                 reprocessConsecutiveAbsences = true;
-                if (!increment) {
-                    decrementPresent();
-                } else {
+                if (isNew) {
                     incrementPresent();
+                } else {
+                    decrementPresent();
                 }
             } else if (delivery.isAbsent()) {
                 reprocessConsecutiveAbsences = true;
-                if (!increment) {
-                    decrementAbsent();
-                } else {
+                if (isNew) {
                     incrementAbsent();
+                } else {
+                    decrementAbsent();
                 }
             }
             // Last Service Date is only on Contact and Program Engagement no need to check
+            // when the field is not present
             if (lastServiceDateField == null) {
                 continue;
             }
 
             if (delivery.isDelivered()) {
                 if (
-                    increment && delivery.getDeliveryDate() > lastServiceDate ||
+                    isNew && delivery.getDeliveryDate() > lastServiceDate ||
                     lastServiceDate == null
                 ) {
                     lastServiceDate = delivery.getDeliveryDate();
-                } else if (!increment && delivery.getDeliveryDate() == lastServiceDate) {
+                } else if (!isNew && delivery.getDeliveryDate() == lastServiceDate) {
                     lastServiceDate = null;
                     reprocessLastServiceDate = true;
                 }
@@ -143,7 +298,7 @@ public with sharing class RollupRecord {
         }
 
         if (reprocessLastServiceDate || reprocessConsecutiveAbsences) {
-            reprocessOriginalDeliveries(
+            processExistingDeliveries(
                 reprocessLastServiceDate,
                 reprocessConsecutiveAbsences,
                 childRelationshipName
@@ -151,16 +306,7 @@ public with sharing class RollupRecord {
         }
     }
 
-    // if status changed from present to absent --present and ++absent
-    // if status changed from absent to present --absent and ++ present
-    // if status changed from absent to neither present nor absent --absent
-    // if status changed from present to neither present nor absent --present
-    // if status changed from neither to present ++present
-    // if status changed from neither to absent ++absent
-    // if qty changed from no qty to qty verify last service date
-    // if qty changed from qty to no qty verify last service date
-    // if delivery date changed and qty is greater than 0, verify last service date
-    public void processUpdates(String childRelationshipName) {
+    private void processUpdates(String childRelationshipName) {
         Map<Id, ServiceDelivery> originalDeliveryById = new Map<Id, ServiceDelivery>();
         for (ServiceDelivery originalDelivery : originalDeliveries) {
             originalDeliveryById.put(originalDelivery.getId(), originalDelivery);
@@ -203,14 +349,14 @@ public with sharing class RollupRecord {
             }
         }
 
-        reprocessOriginalDeliveries(
+        processExistingDeliveries(
             reprocessLastServiceDate,
             reprocessConsecutiveAbsences,
             childRelationshipName
         );
     }
 
-    private void reprocessOriginalDeliveries(
+    private void processExistingDeliveries(
         Boolean reprocessLastServiceDate,
         Boolean reprocessConsecutiveAbsences,
         String childRelationshipName
@@ -224,16 +370,17 @@ public with sharing class RollupRecord {
         reprocessConsecutiveAbsences =
             reprocessConsecutiveAbsences && consecutiveAbsencesField != null;
 
-        List<ServiceDelivery__c> childDeliveries = (List<ServiceDelivery__c>) originalRecord.getSObjects(
+        List<ServiceDelivery__c> existingDeliveries = (List<ServiceDelivery__c>) originalRecord.getSObjects(
             childRelationshipName
         );
 
-        if (childDeliveries == null) {
+        if (existingDeliveries == null) {
             return;
         }
 
-        for (ServiceDelivery__c record : childDeliveries) {
+        for (ServiceDelivery__c record : existingDeliveries) {
             ServiceDelivery delivery = new ServiceDelivery(record);
+
             if (reprocessLastServiceDate && delivery.isDelivered()) {
                 lastServiceDate = delivery.getDeliveryDate();
                 reprocessLastServiceDate = false;
@@ -262,132 +409,5 @@ public with sharing class RollupRecord {
                 consecutiveAbsenceDates.add(delivery.getDeliveryDate());
             }
         }
-    }
-
-    public void incrementPresent() {
-        if (numPresentField == null) {
-            return;
-        }
-
-        presentCount = presentCount == null ? 1 : presentCount + 1;
-        absentCount = absentCount == null ? 0 : absentCount;
-    }
-
-    public void incrementAbsent() {
-        if (numAbsentField == null) {
-            return;
-        }
-
-        presentCount = presentCount == null ? 0 : presentCount;
-        absentCount = absentCount == null ? 1 : absentCount + 1;
-    }
-
-    public void decrementPresent() {
-        if (presentCount == null || numPresentField == null) {
-            return;
-        }
-
-        presentCount--;
-        resetAttendanceFields();
-    }
-
-    public void decrementAbsent() {
-        if (absentCount == null || numAbsentField == null) {
-            return;
-        }
-
-        absentCount--;
-        resetAttendanceFields();
-    }
-
-    private void resetAttendanceFields() {
-        if (presentCount > 0 || absentCount > 0) {
-            return;
-        }
-
-        presentCount = null;
-        absentCount = null;
-        consecutiveCount = null;
-    }
-
-    public void processPresent(Date presentDate) {
-        incrementPresent();
-
-        if (lastPresentDate == null || presentDate > lastPresentDate) {
-            lastPresentDate = presentDate;
-            updateConsecutiveAbsences();
-        }
-
-        consecutiveCount = consecutiveAbsenceDates.size();
-    }
-
-    private void updateConsecutiveAbsences() {
-        if (consecutiveAbsenceDates.isEmpty()) {
-            return;
-        }
-
-        for (Integer i = consecutiveAbsenceDates.size() - 1; i >= 0; i--) {
-            if (consecutiveAbsenceDates[i] <= lastPresentDate) {
-                consecutiveAbsenceDates.remove(i);
-            }
-        }
-    }
-
-    public void processAbsent(Date absentDate) {
-        incrementAbsent();
-
-        if (lastPresentDate == null || lastPresentDate < absentDate) {
-            consecutiveAbsenceDates.add(absentDate);
-            consecutiveCount = consecutiveAbsenceDates.size();
-        }
-    }
-
-    public void processLastServiceDate(Date deliveryDate) {
-        if (lastServiceDateField == null) {
-            return;
-        }
-
-        lastServiceDate = lastServiceDate == null ||
-            lastServiceDate < deliveryDate
-            ? deliveryDate
-            : lastServiceDate;
-    }
-
-    public Boolean isModified(SObject originalRecord) {
-        Boolean isModified = false;
-
-        isModified =
-            (numPresentField != null &&
-            originalRecord.get(numPresentField) != presentCount) ||
-            (numAbsentField != null &&
-            originalRecord.get(numAbsentField) != absentCount) ||
-            (consecutiveAbsencesField != null &&
-            originalRecord.get(consecutiveAbsencesField) != consecutiveCount) ||
-            (lastServiceDateField != null &&
-            originalRecord.get(lastServiceDateField) != lastServiceDate);
-
-        return isModified;
-    }
-
-    public SObject getSObject() {
-        SObject sObj = recordId.getSObjectType().newSObject(recordId);
-
-        if (numPresentField != null) {
-            sObj.put(numPresentField, presentCount);
-        }
-
-        if (numAbsentField != null) {
-            sObj.put(numAbsentField, absentCount);
-        }
-
-        if (consecutiveAbsencesField != null) {
-            sObj.put(consecutiveAbsencesField, consecutiveCount);
-        }
-
-        if (lastServiceDateField != null) {
-            sObj.put(lastServiceDateField, lastServiceDate);
-        }
-
-        return sObj;
     }
 }

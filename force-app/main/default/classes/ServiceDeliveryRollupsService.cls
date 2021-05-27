@@ -380,6 +380,7 @@ public with sharing class ServiceDeliveryRollupsService {
                 rollupRecord.process(getChildRelationshipName(parentObject));
                 parentRecords.add(rollupRecord.getSObject());
             }
+
             systemAccess.updateRecords(parentRecords);
         }
     }

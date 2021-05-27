@@ -16,6 +16,10 @@ public with sharing class ServiceDeliveryTriggerHandler {
             return;
         }
 
+        delegate();
+    }
+
+    private void delegate() {
         switch on Trigger.operationType {
             when AFTER_DELETE {
                 rollupsService.processDeleted(Trigger.old);

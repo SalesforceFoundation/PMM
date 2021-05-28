@@ -24,6 +24,14 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
     };
 
     @IsTest
+    private static void shouldNotBeInBatchMode() {
+        System.assert(
+            !rollupsService.isBatchRunning,
+            'Should return false when not running in a batch context.'
+        );
+    }
+
+    @IsTest
     private static void shouldGetDeliveryRollupsQueryFromSystemAccess() {
         String rollupQueryToReturn =
             'SELECT AttendanceStatus__c, DeliveryDate__c, ' +

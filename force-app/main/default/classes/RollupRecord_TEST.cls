@@ -135,7 +135,7 @@ public with sharing class RollupRecord_TEST {
         System.assertEquals(
             null,
             record.absentCount,
-            'Expected the number absent to be null when number field is not absent.'
+            'Expected the number absent to be null when number field is not present.'
         );
     }
 
@@ -196,7 +196,7 @@ public with sharing class RollupRecord_TEST {
     }
 
     @IsTest
-    private static void shouldNotUpdateLastServiceDateWhenFieldIsNotAbsent() {
+    private static void shouldNotUpdateLastServiceDateWhenFieldIsNotPresent() {
         Date dateToday = System.today();
         System.assertEquals(
             null,
@@ -212,6 +212,68 @@ public with sharing class RollupRecord_TEST {
             null,
             record.lastServiceDate,
             'Expected the last service date to be null when number field is not absent.'
+        );
+    }
+
+    @IsTest
+    private static void shouldDecrementAbsentWhenFieldIsPresent() {
+        record.numAbsentField = Contact.NumAbsentServiceDeliveries__c;
+        record.absentCount = 2;
+
+        Test.startTest();
+        record.decrementAbsent();
+        Test.stopTest();
+
+        System.assertEquals(
+            1,
+            record.absentCount,
+            'Expected the number absent to be decremented to 1.'
+        );
+    }
+
+    @IsTest
+    private static void shouldNotDecrementAbsentWhenFieldIsNotPresent() {
+        record.absentCount = 2;
+
+        Test.startTest();
+        record.decrementAbsent();
+        Test.stopTest();
+
+        System.assertEquals(
+            2,
+            record.absentCount,
+            'Expected the number absent not to have changed.'
+        );
+    }
+
+    @IsTest
+    private static void shouldDecrementPresentWhenFieldIsPresent() {
+        record.numPresentField = Contact.NumPresentServiceDeliveries__c;
+        record.presentCount = 2;
+
+        Test.startTest();
+        record.decrementPresent();
+        Test.stopTest();
+
+        System.assertEquals(
+            1,
+            record.presentCount,
+            'Expected the number present to be decremented to 1.'
+        );
+    }
+
+    @IsTest
+    private static void shouldNotDecrementPresentWhenFieldIsNotPresent() {
+        record.presentCount = 2;
+
+        Test.startTest();
+        record.decrementPresent();
+        Test.stopTest();
+
+        System.assertEquals(
+            2,
+            record.presentCount,
+            'Expected the number present not to have changed.'
         );
     }
 

@@ -89,6 +89,7 @@ public with sharing class RollupRecord {
         absentCount = absentCount == null ? 1 : absentCount + 1;
     }
 
+    @TestVisible
     private void decrementPresent() {
         if (presentCount == null || numPresentField == null) {
             return;
@@ -98,6 +99,7 @@ public with sharing class RollupRecord {
         resetAttendanceFields();
     }
 
+    @TestVisible
     private void decrementAbsent() {
         if (absentCount == null || numAbsentField == null) {
             return;
@@ -167,6 +169,7 @@ public with sharing class RollupRecord {
         totalProcessed++;
     }
 
+    @TestVisible
     private void processPresent(Date presentDate) {
         incrementPresent();
 
@@ -178,6 +181,7 @@ public with sharing class RollupRecord {
         consecutiveCount = consecutiveAbsenceDates.size();
     }
 
+    @TestVisible
     private void processAbsent(Date absentDate) {
         incrementAbsent();
 
@@ -187,6 +191,7 @@ public with sharing class RollupRecord {
         }
     }
 
+    @TestVisible
     private void processLastServiceDate(Date deliveryDate) {
         if (lastServiceDateField == null) {
             return;

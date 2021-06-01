@@ -24,13 +24,15 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @TestSetup
     private static void createServiceData() {
+        // By turning off none, we turn on all
+        TestUtil.turnOffFeatureGates(new Set<String>{});
         TestDataFactory.generateAttendanceData('Monthly');
     }
 
     // ////////// Functional Tests //////////
     @IsTest
     private static void shouldIncrementOnInsert() {
-        setupTest();
+        setupTest(new Set<String>{});
         requery();
 
         // The attendance records were inserted in the setupTest method
@@ -58,8 +60,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldNotIncrementOnInsertWhenFeatureIsOff() {
-        TestUtil.turnOffFeatureGates(new Set<String>{ 'ServiceDeliveriesToContact' });
-        setupTest();
+        setupTest(new Set<String>{ 'ServiceDeliveriesToContact' });
         requery();
 
         // The attendance records were inserted in the setupTest method
@@ -87,7 +88,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldIncrementOnUpdate() {
-        setupTest();
+        setupTest(new Set<String>{});
 
         Test.startTest();
         // this SD was absent
@@ -121,7 +122,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldIncrementNewParentAndDecrementOriginal() {
-        setupTest();
+        setupTest(new Set<String>{});
         Contact newParent = new Contact(LastName = 'Charlie', FirstName = 'Georgia');
         insert newParent;
 
@@ -170,7 +171,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldUpdateLastServiceDateOnQuantityUpdate() {
-        setupTest();
+        setupTest(new Set<String>{});
 
         System.assertEquals(
             serviceDeliveries[1].DeliveryDate__c,
@@ -199,7 +200,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldNotUpdateLastServiceDateOnIrrelevantFieldUpdate() {
-        setupTest();
+        setupTest(new Set<String>{});
 
         System.assertEquals(
             serviceDeliveries[1].DeliveryDate__c,
@@ -224,7 +225,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldDecrementOnDelete() {
-        setupTest();
+        setupTest(new Set<String>{});
 
         Test.startTest();
         delete serviceDeliveries[0];
@@ -257,7 +258,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldIncrementOnUndelete() {
-        setupTest();
+        setupTest(new Set<String>{});
         delete serviceDeliveries[0];
 
         Test.startTest();
@@ -290,7 +291,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldCallExecuteMethod() {
-        setupTest();
+        setupTest(new Set<String>{});
 
         Test.startTest();
         ServiceDeliveryTriggerHandler triggerHandler = new ServiceDeliveryTriggerHandler();
@@ -323,7 +324,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     @IsTest
     private static void shouldPassInvalidOperationType() {
-        setupTest();
+        setupTest(new Set<String>{});
 
         Test.startTest();
         new ServiceDeliveryTriggerHandler().delegate();
@@ -356,7 +357,8 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
 
     ////////// Helpers //////////
 
-    private static void setupTest() {
+    private static void setupTest(Set<String> featureGatesToDisable) {
+        TestUtil.turnOffFeatureGates(featureGatesToDisable);
         requery();
 
         System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);

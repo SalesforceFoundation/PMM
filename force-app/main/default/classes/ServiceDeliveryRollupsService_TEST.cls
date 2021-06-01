@@ -246,4 +246,36 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
 
         systemAccessStub.assertCalledAsExpected();
     }
+
+    @IsTest
+    private static void shouldResetParentsWithoutDeliveries() {
+        List<SObject> records = new List<SObject>{
+            new Contact(Id = TestUtil.mockId(Contact.SObjectType))
+        };
+        Stub systemAccessStub = new StubBuilder(SystemAccess.class)
+            .when(
+                'getParentsHavingDeliveries',
+                SObjectType.class,
+                String.class,
+                List<SObject>.class
+            )
+            .calledWith(
+                Contact.SObjectType,
+                String.valueOf(ServiceDelivery__c.Contact__c),
+                records
+            )
+            .thenReturn(new List<SObject>())
+            .when('updateRecords', List<SObject>.class)
+            .signatureMatches()
+            .expectedToBeCalled(1)
+            .thenReturn()
+            .build();
+
+        rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
+        Test.startTest();
+        rollupsService.resetParentsWithoutDeliveries(records);
+        Test.stopTest();
+
+        systemAccessStub.assertCalledAsExpected();
+    }
 }

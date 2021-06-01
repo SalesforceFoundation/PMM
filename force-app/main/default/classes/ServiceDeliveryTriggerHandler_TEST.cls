@@ -121,6 +121,41 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
     }
 
     @IsTest
+    private static void shouldNotIncrementOnUpdateWhenFeatureIsOff() {
+        setupTest(new Set<String>{ 'ServiceDeliveriesToContact' });
+
+        Test.startTest();
+        // this SD was absent
+        serviceDeliveries[1].AttendanceStatus__c = PRESENT_STATUS;
+        update serviceDeliveries[1];
+        Test.stopTest();
+
+        requery();
+
+        // The attendance records were inserted in the setupTest method
+        System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
+        System.assertEquals(0, contactRecord.NumAbsentServiceDeliveries__c);
+        System.assertEquals(
+            serviceDeliveries[1].DeliveryDate__c,
+            contactRecord.LastServiceDate__c
+        );
+        System.assertEquals(0, contactRecord.ConsecutiveAbsences__c);
+        System.assertEquals(2, service.NumPresentServiceDeliveries__c);
+        System.assertEquals(0, service.NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, sessions[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, sessions[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, sessions[1].NumAbsentServiceDeliveries__c);
+        System.assertEquals(2, programEngagement.NumPresentServiceDeliveries__c);
+        System.assertEquals(0, programEngagement.NumAbsentServiceDeliveries__c);
+        System.assertEquals(
+            serviceDeliveries[1].DeliveryDate__c,
+            programEngagement.LastServiceDate__c
+        );
+        System.assertEquals(0, programEngagement.ConsecutiveAbsences__c);
+    }
+
+    @IsTest
     private static void shouldIncrementNewParentAndDecrementOriginal() {
         setupTest(new Set<String>{});
         Contact newParent = new Contact(LastName = 'Charlie', FirstName = 'Georgia');
@@ -391,6 +426,15 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
                 ProgramEngagement__c = programEngagement.Id,
                 Quantity__c = 1,
                 AttendanceStatus__c = ABSENCE_STATUS,
+                DeliveryDate__c = System.today()
+            ),
+            new ServiceDelivery__c(
+                Name = 'test3',
+                Service__c = service.Id,
+                Contact__c = contactRecord.Id,
+                ServiceSession__c = sessions[1].Id,
+                ProgramEngagement__c = programEngagement.Id,
+                Quantity__c = 0,
                 DeliveryDate__c = System.today()
             )
         };

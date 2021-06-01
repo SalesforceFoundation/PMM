@@ -19,6 +19,7 @@ public with sharing class ServiceDeliveryTriggerHandler {
         delegate();
     }
 
+    @TestVisible
     private void delegate() {
         switch on Trigger.operationType {
             when AFTER_DELETE {

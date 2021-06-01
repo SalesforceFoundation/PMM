@@ -230,4 +230,20 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
 
         systemAccessStub.assertCalledAsExpected();
     }
+
+    @IsTest
+    private static void shouldNotResetParentsWhenNoParentsAreProvided() {
+        Stub systemAccessStub = new StubBuilder(SystemAccess.class)
+            .when('getParentsHavingDeliveries')
+            .signatureMatches()
+            .expectedNotToBeCalled()
+            .build();
+
+        rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
+        Test.startTest();
+        rollupsService.resetParentsWithoutDeliveries(new List<SObject>());
+        Test.stopTest();
+
+        systemAccessStub.assertCalledAsExpected();
+    }
 }

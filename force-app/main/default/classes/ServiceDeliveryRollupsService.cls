@@ -32,7 +32,6 @@ public with sharing class ServiceDeliveryRollupsService {
         'ServiceDeliveriesToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
     };
 
-    private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
     @TestVisible
     private SystemAccess systemAccess = new SystemAccess();
     private Map<SObjectField, Set<Id>> recordIdsByLookupField = new Map<SObjectField, Set<Id>>{
@@ -361,7 +360,9 @@ public with sharing class ServiceDeliveryRollupsService {
             if (recordIds.isEmpty()) {
                 continue;
             }
+
             List<SObject> parentRecords = new List<SObject>();
+            String childRelationshipName = getChildRelationshipName(parentObject);
             Boolean shouldIncludeDeliveries =
                 LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.containsKey(parentObject) ||
                 CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.containsKey(parentObject);
@@ -370,14 +371,12 @@ public with sharing class ServiceDeliveryRollupsService {
                     parentObject,
                     recordIds,
                     buildSelectFieldsForOriginalQuery(parentObject),
-                    shouldIncludeDeliveries
-                        ? getChildRelationshipName(parentObject)
-                        : null
+                    shouldIncludeDeliveries ? childRelationshipName : null
                 )
             ) {
                 RollupRecord rollupRecord = rollupRecordById.get(record.Id);
-                rollupRecord.initialize(record);
-                rollupRecord.process(getChildRelationshipName(parentObject));
+                rollupRecord.initialize(record, childRelationshipName);
+                rollupRecord.process();
                 parentRecords.add(rollupRecord.getSObject());
             }
 

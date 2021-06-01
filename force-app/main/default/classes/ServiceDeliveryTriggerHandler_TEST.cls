@@ -57,6 +57,35 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
     }
 
     @IsTest
+    private static void shouldNotIncrementOnInsertWhenFeatureIsOff() {
+        TestUtil.turnOffFeatureGates(new Set<String>{ 'ServiceDeliveriesToContact' });
+        setupTest();
+        requery();
+
+        // The attendance records were inserted in the setupTest method
+        System.assertEquals(1, contactRecord.NumPresentServiceDeliveries__c);
+        System.assertEquals(0, contactRecord.NumAbsentServiceDeliveries__c);
+        System.assertEquals(
+            serviceDeliveries[1].DeliveryDate__c,
+            contactRecord.LastServiceDate__c
+        );
+        System.assertEquals(0, contactRecord.ConsecutiveAbsences__c);
+        System.assertEquals(1, service.NumPresentServiceDeliveries__c);
+        System.assertEquals(1, service.NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, sessions[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(0, sessions[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(1, sessions[1].NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, programEngagement.NumPresentServiceDeliveries__c);
+        System.assertEquals(1, programEngagement.NumAbsentServiceDeliveries__c);
+        System.assertEquals(
+            serviceDeliveries[1].DeliveryDate__c,
+            programEngagement.LastServiceDate__c
+        );
+        System.assertEquals(1, programEngagement.ConsecutiveAbsences__c);
+    }
+
+    @IsTest
     private static void shouldIncrementOnUpdate() {
         setupTest();
 
@@ -88,6 +117,55 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
             programEngagement.LastServiceDate__c
         );
         System.assertEquals(0, programEngagement.ConsecutiveAbsences__c);
+    }
+
+    @IsTest
+    private static void shouldIncrementNewParentAndDecrementOriginal() {
+        setupTest();
+        Contact newParent = new Contact(LastName = 'Charlie', FirstName = 'Georgia');
+        insert newParent;
+
+        Test.startTest();
+        // this SD was absent
+        serviceDeliveries[1].Contact__c = newParent.Id;
+        serviceDeliveries[1].ProgramEngagement__c = null;
+        update serviceDeliveries[1];
+        Test.stopTest();
+
+        requery();
+        newParent = [
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                LastServiceDate__c,
+                ConsecutiveAbsences__c,
+                LastModifiedDate
+            FROM Contact
+            WHERE Id = :newParent.Id
+        ];
+
+        ServiceDelivery__c serviceDelivery = [
+            SELECT Id, DeliveryDate__c
+            FROM ServiceDelivery__c
+            ORDER BY Id
+            LIMIT 1
+        ];
+
+        System.assertEquals(2, contactRecord.NumPresentServiceDeliveries__c);
+        System.assertEquals(0, contactRecord.NumAbsentServiceDeliveries__c);
+        System.assertEquals(
+            serviceDelivery.DeliveryDate__c,
+            contactRecord.LastServiceDate__c
+        );
+        System.assertEquals(0, contactRecord.ConsecutiveAbsences__c);
+        System.assertEquals(0, newParent.NumPresentServiceDeliveries__c);
+        System.assertEquals(1, newParent.NumAbsentServiceDeliveries__c);
+        System.assertEquals(
+            serviceDeliveries[1].DeliveryDate__c,
+            newParent.LastServiceDate__c
+        );
+        System.assertEquals(1, newParent.ConsecutiveAbsences__c);
     }
 
     @IsTest
@@ -248,9 +326,7 @@ public with sharing class ServiceDeliveryTriggerHandler_TEST {
         setupTest();
 
         Test.startTest();
-        ServiceDeliveryTriggerHandler triggerHandler = new ServiceDeliveryTriggerHandler();
-        TriggerContext.getInstance()
-            .operationType = System.TriggerOperation.BEFORE_UPDATE;
+        new ServiceDeliveryTriggerHandler().delegate();
         Test.stopTest();
 
         requery();

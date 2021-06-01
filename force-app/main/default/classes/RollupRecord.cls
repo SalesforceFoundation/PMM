@@ -1,6 +1,5 @@
 public with sharing class RollupRecord {
     public Id recordId;
-    private SObject originalRecord;
     @TestVisible
     private Integer presentCount;
     @TestVisible
@@ -29,6 +28,8 @@ public with sharing class RollupRecord {
     private List<ServiceDelivery> deliveries;
     @TestVisible
     private List<ServiceDelivery> originalDeliveries;
+    @TestVisible
+    private List<ServiceDelivery> existingDeliveries;
 
     public RollupRecord(Id recordId) {
         this.recordId = recordId;
@@ -119,14 +120,16 @@ public with sharing class RollupRecord {
         consecutiveCount = null;
     }
 
+    private void updateConsecutiveAbsenceDates() {
+        for (Integer i = consecutiveAbsenceDates.size() - 1; i >= 0; i--) {
+            if (consecutiveAbsenceDates[i] <= lastPresentDate) {
+                consecutiveAbsenceDates.remove(i);
+            }
+        }
+    }
+
     ////////// Batch Mode //////////
     public Boolean getIsProcessed() {
-        System.debug(
-            'totalRecords: ' +
-            totalRecords +
-            ', totalProcessed: ' +
-            totalProcessed
-        );
         return totalRecords == null || totalProcessed >= totalRecords;
     }
 
@@ -208,17 +211,11 @@ public with sharing class RollupRecord {
             return;
         }
 
-        for (Integer i = consecutiveAbsenceDates.size() - 1; i >= 0; i--) {
-            if (consecutiveAbsenceDates[i] <= lastPresentDate) {
-                consecutiveAbsenceDates.remove(i);
-            }
-        }
+        updateConsecutiveAbsenceDates();
     }
 
     ////////// Trigger Mode //////////
-    public void initialize(SObject originalRecord) {
-        this.originalRecord = originalRecord;
-
+    public void initialize(SObject originalRecord, String childRelationshipName) {
         if (numPresentField != null) {
             presentCount = Integer.valueOf(originalRecord.get(numPresentField));
         }
@@ -235,6 +232,23 @@ public with sharing class RollupRecord {
 
         if (lastServiceDateField != null) {
             lastServiceDate = (Date) originalRecord.get(lastServiceDateField);
+        }
+
+        if (consecutiveAbsencesField == null || lastServiceDateField == null) {
+            return;
+        }
+
+        existingDeliveries = new List<ServiceDelivery>();
+        List<ServiceDelivery__c> childDeliveries = (List<ServiceDelivery__c>) originalRecord.getSObjects(
+            childRelationshipName
+        );
+
+        if (childDeliveries == null) {
+            return;
+        }
+
+        for (ServiceDelivery__c delivery : childDeliveries) {
+            existingDeliveries.add(new ServiceDelivery(delivery));
         }
     }
 
@@ -254,9 +268,9 @@ public with sharing class RollupRecord {
         originalDeliveries.add(delivery);
     }
 
-    public void process(String childRelationshipName) {
+    public void process() {
         if (originalDeliveries != null && deliveries != null) {
-            processUpdates(childRelationshipName);
+            processUpdates();
             return;
         }
 
@@ -305,13 +319,12 @@ public with sharing class RollupRecord {
         if (reprocessLastServiceDate || reprocessConsecutiveAbsences) {
             processExistingDeliveries(
                 reprocessLastServiceDate,
-                reprocessConsecutiveAbsences,
-                childRelationshipName
+                reprocessConsecutiveAbsences
             );
         }
     }
 
-    private void processUpdates(String childRelationshipName) {
+    private void processUpdates() {
         Map<Id, ServiceDelivery> originalDeliveryById = new Map<Id, ServiceDelivery>();
         for (ServiceDelivery originalDelivery : originalDeliveries) {
             originalDeliveryById.put(originalDelivery.getId(), originalDelivery);
@@ -321,9 +334,6 @@ public with sharing class RollupRecord {
 
         for (ServiceDelivery delivery : deliveries) {
             ServiceDelivery originalDelivery = originalDeliveryById.get(delivery.getId());
-            if (originalDelivery == null) {
-                continue; // Skip the record this state should not exist
-            }
 
             Boolean deliveryDateChanged =
                 delivery.getDeliveryDate() != originalDelivery.getDeliveryDate();
@@ -354,38 +364,34 @@ public with sharing class RollupRecord {
             }
         }
 
-        processExistingDeliveries(
-            reprocessLastServiceDate,
-            reprocessConsecutiveAbsences,
-            childRelationshipName
-        );
+        processExistingDeliveries(reprocessLastServiceDate, reprocessConsecutiveAbsences);
     }
 
     private void processExistingDeliveries(
         Boolean reprocessLastServiceDate,
-        Boolean reprocessConsecutiveAbsences,
-        String childRelationshipName
+        Boolean reprocessConsecutiveAbsences
     ) {
-        if (consecutiveAbsencesField == null && lastServiceDateField == null) {
+        if ((consecutiveAbsencesField == null && lastServiceDateField == null)) {
             return;
+        }
+
+        reprocessConsecutiveAbsences =
+            reprocessConsecutiveAbsences && consecutiveAbsencesField != null;
+        if (reprocessConsecutiveAbsences) {
+            consecutiveCount = null;
         }
 
         reprocessLastServiceDate =
             reprocessLastServiceDate && lastServiceDateField != null;
-        reprocessConsecutiveAbsences =
-            reprocessConsecutiveAbsences && consecutiveAbsencesField != null;
+        if (reprocessLastServiceDate) {
+            lastServiceDate = null;
+        }
 
-        List<ServiceDelivery__c> existingDeliveries = (List<ServiceDelivery__c>) originalRecord.getSObjects(
-            childRelationshipName
-        );
-
-        if (existingDeliveries == null) {
+        if (existingDeliveries.isEmpty()) {
             return;
         }
 
-        for (ServiceDelivery__c record : existingDeliveries) {
-            ServiceDelivery delivery = new ServiceDelivery(record);
-
+        for (ServiceDelivery delivery : existingDeliveries) {
             if (reprocessLastServiceDate && delivery.isDelivered()) {
                 lastServiceDate = delivery.getDeliveryDate();
                 reprocessLastServiceDate = false;
@@ -397,22 +403,17 @@ public with sharing class RollupRecord {
 
             if (delivery.isPresent()) {
                 lastPresentDate = delivery.getDeliveryDate();
-
-                for (
-                    Integer index = consecutiveAbsenceDates.size() - 1;
-                    index >= 0;
-                    index--
-                ) {
-                    if (consecutiveAbsenceDates[index] <= lastPresentDate) {
-                        consecutiveAbsenceDates.remove(index);
-                    }
-                }
-
+                updateConsecutiveAbsenceDates();
                 consecutiveCount = consecutiveAbsenceDates.size();
                 reprocessConsecutiveAbsences = false;
             } else if (delivery.isAbsent()) {
                 consecutiveAbsenceDates.add(delivery.getDeliveryDate());
             }
+        }
+
+        // If there are not any records set to 'present' we need to set the count outside of the for loop
+        if (consecutiveCount == null && reprocessConsecutiveAbsences) {
+            consecutiveCount = consecutiveAbsenceDates.size();
         }
     }
 }

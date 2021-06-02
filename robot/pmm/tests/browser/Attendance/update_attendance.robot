@@ -45,12 +45,12 @@ Update attendance when service session status is Pending
     [Documentation]                 This test updates attendance for a service session record with Pending Status
     [tags]                          W-8607484   perm:admin   perm:manage    feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]         
-    Populate Attendance Field           1      Hours                10
-    Populate Attendance Dropdown        1      Attendance Status    Present
-    Populate Attendance Field           2      Hours                10
-    Populate Attendance Dropdown        2      Attendance Status    Unexcused Absence
-    Populate Attendance Field           3      Hours                10
-    Populate Attendance Dropdown        3      Attendance Status    Excused Absence
+    Populate Attendance Field           ${contact1}[Name]      Hours                10
+    Populate Attendance Dropdown        ${contact1}[Name]      Attendance Status    Present
+    Populate Attendance Field           ${contact2}[Name]       Hours                10
+    Populate Attendance Dropdown        ${contact2}[Name]      Attendance Status    Unexcused Absence
+    Populate Attendance Field           ${contact3}[Name]      Hours                10
+    Populate Attendance Dropdown        ${contact3}[Name]      Attendance Status    Excused Absence
     Click Dialog Button             Submit
     Verify Toast Message            Saved 3 Service Delivery records.
     Reload Page
@@ -66,10 +66,10 @@ Update attendance when service session status is Complete
     Go To Page                      Details         ServiceSession__c        object_id=${service_session2}[Id]
     Click Dialog Button             Update
     Page Should Contain             Track Attendance         
-    Populate Attendance Field           1      Hours                10
-    Populate Attendance Dropdown        1      Attendance Status    Present
-    Populate Attendance Dropdown        2      Attendance Status    Unexcused Absence
-    Populate Attendance Dropdown        3      Attendance Status    Excused Absence
+    Populate Attendance Field           ${contact1}[Name]       Hours                10
+    Populate Attendance Dropdown        ${contact1}[Name]      Attendance Status    Present
+    Populate Attendance Dropdown        ${contact2}[Name]      Attendance Status    Unexcused Absence
+    Populate Attendance Dropdown        ${contact3}[Name]      Attendance Status    Excused Absence
     Click Dialog Button             Save
     Verify Toast Message            Saved 3 Service Delivery records.
     Page Should Contain             Present

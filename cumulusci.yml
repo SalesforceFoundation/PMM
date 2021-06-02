@@ -20,6 +20,9 @@ project:
 
 orgs:
     scratch:
+        dev_exp:
+            config_file: orgs/dev_exp.json
+            days: 7
         prerelease:
             config_file: orgs/prerelease.json
             days: 7

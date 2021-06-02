@@ -128,8 +128,8 @@
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>DeliveryDate__c</fields>
-        <fields>Quantity__c</fields>
         <fields>AttendanceStatus__c</fields>
+        <fields>Quantity__c</fields>
         <fields>UnitOfMeasurement__c</fields>
         <fields>HouseholdBenefit__c</fields>
         <relatedList>ServiceDelivery__c.Service__c</relatedList>

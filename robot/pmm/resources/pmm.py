@@ -319,6 +319,7 @@ class pmm(object):
         self.selenium.wait_until_page_contains_element(
             locator, error="Toast message is not displayed"
         )
+        time.sleep(1)
 
     def click_dialog_button(self, label):
         """ Click on a button to on the new record dialog"""

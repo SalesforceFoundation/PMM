@@ -233,12 +233,13 @@ flows:
                 options:
                     objects:
                         - npe4__Relationship__c
-                when: "'npsp' in org_config.installed_packages'"
+                when: "'npsp' in org_config.installed_packages"
             2:
                 task: delete_data
                 options:
                     objects:
                         - Opportunity
+                        - Entitlement
                         - ServiceDelivery__c
                         - ProgramEngagement__c
                         - ProgramCohort__c

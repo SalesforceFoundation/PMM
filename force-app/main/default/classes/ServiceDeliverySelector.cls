@@ -7,7 +7,7 @@
  *
  */
 
-public with sharing class AttendanceSelector {
+public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
@@ -88,5 +88,21 @@ public with sharing class AttendanceSelector {
                 sessions
             )
             .getRecords()[0];
+    }
+
+    public List<Bucket__mdt> getBuckets(List<String> bucketNames) {
+        // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
+        // with SOQL for this layer.
+        return [
+            SELECT
+                Id,
+                DeveloperName,
+                BucketedField__r.Field__r.QualifiedApiName,
+                QualifiedApiName,
+                (SELECT Id, Value__c FROM BucketedValues__r)
+            FROM Bucket__mdt
+            WHERE QualifiedApiName IN :bucketNames
+            ORDER BY QualifiedApiName
+        ];
     }
 }

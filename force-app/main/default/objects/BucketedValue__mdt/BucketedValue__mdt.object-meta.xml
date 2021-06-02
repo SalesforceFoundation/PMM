@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>A value that should be bucketed, such as the Case.Status value &quot;New&quot; being bucketed into &quot;Open&quot;.</description>
+    <label>Bucketed Value</label>
+    <pluralLabel>Bucketed Values</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

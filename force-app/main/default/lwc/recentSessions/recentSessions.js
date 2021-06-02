@@ -23,6 +23,7 @@ import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import ID_FIELD from "@salesforce/schema/ServiceSession__c.Id";
 import NAME_FIELD from "@salesforce/schema/ServiceSession__c.Name";
 import PRIMARY_SERVICE_PROVIDER_FIELD from "@salesforce/schema/ServiceSession__c.PrimaryServiceProvider__c";
+import ATTENDANCE_SUMMARY_FIELD from "@salesforce/schema/ServiceSession__c.AttendanceSummary__c";
 import SESSION_START_FIELD from "@salesforce/schema/ServiceSession__c.SessionStart__c";
 
 import getFieldByFieldPath from "@salesforce/apex/FieldSetController.getFieldByFieldPath";
@@ -65,6 +66,7 @@ export default class RecentSessions extends LightningElement {
         id: ID_FIELD.fieldApiName,
         name: NAME_FIELD.fieldApiName,
         primaryServiceProvider: PRIMARY_SERVICE_PROVIDER_FIELD.fieldApiName,
+        attendanceSummary: ATTENDANCE_SUMMARY_FIELD.fieldApiName,
     };
 
     outputFields = [];
@@ -86,7 +88,8 @@ export default class RecentSessions extends LightningElement {
                     key === this.fields.id ||
                     key === this.fields.name ||
                     key === this.fields.status ||
-                    key === this.fields.primaryServiceProvider
+                    key === this.fields.primaryServiceProvider ||
+                    key === this.fields.attendanceSummary
                 ) {
                     continue;
                 }

@@ -67,6 +67,83 @@
         <value>Anonymous</value>
     </labels>
     <labels>
+        <fullName>BSDT_Selected_Contacts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Title for the Selected Contacts for the Bulk Service Delivery Tool Group Option</shortDescription>
+        <value>Selected Contacts</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Group_Option_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Title for the Bulk Service Delivery Tool Group Option</shortDescription>
+        <value>Create Service Deliveries for a Group</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Group_Option_Description</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Description for the Bulk Service Delivery Tool Group Option</shortDescription>
+        <value>Enter service deliveries for several Contacts. For example, a drop-in at a workshop.</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Group_Option_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Button for the Bulk Service Delivery Tool Group Option</shortDescription>
+        <value>Create by Group</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Single_Option_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Title for the Bulk Service Delivery Tool Individual Option</shortDescription>
+        <value>Create Service Deliveries for an Individual</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Single_Option_Description</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Description for the Bulk Service Delivery Tool Individual Option</shortDescription>
+        <value>Enter service deliveries for a single Contact.</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Single_Option_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Button for the Bulk Service Delivery Tool Individual Option</shortDescription>
+        <value>Create by Individual</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Select_Service</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service and Default Selections Step of the Bulk Service Delivery Tool</shortDescription>
+        <value>Default Service Delivery Values</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Select_Contacts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Contacts Step of the Bulk Service Delivery Tool</shortDescription>
+        <value>Contact Selection</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Review</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Review Step of the Bulk Service Delivery Tool</shortDescription>
+        <value>Review</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Warning_No_Contacts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning when no Contacts are selected for the BSDT Group Option</shortDescription>
+        <value>Select at least one Contact to continue.</value>
+    </labels>
+    <labels>
         <fullName>TrackAttendance</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -100,6 +177,20 @@
         <protected>true</protected>
         <shortDescription>Supporting message for Attendance empty state</shortDescription>
         <value>After participants are added to this Service Schedule, track their attendance here.</value>
+    </labels>
+    <labels>
+        <fullName>Incorrect_Tab</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Attendance tab when reached incorrectly</shortDescription>
+        <value>This isn’t the tab you want.</value>
+    </labels>
+    <labels>
+        <fullName>Attendance_Tab_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Attendance tab when reached incorrectly</shortDescription>
+        <value>This tab is used only for printing attendance from a Service Session page.</value>
     </labels>
     <labels>
         <fullName>Back</fullName>
@@ -328,7 +419,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Missing SObject Type</shortDescription>
-        <value>Your query must include an object.</value>
+        <value>Your query must include an object or child relationship.</value>
     </labels>
     <labels>
         <fullName>Monthly_On_Day</fullName>
@@ -411,8 +502,16 @@
         <fullName>No_Records_Found</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>No records found</shortDescription>
-        <value>No records found</value>
+        <shortDescription>No records found.</shortDescription>
+        <value>No records found.</value>
+    </labels>
+    <labels>
+        <fullName>NoFieldSetFound</fullName>
+        <categories>Field Set Service</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No field set found</shortDescription>
+        <value>{0} field set on the {1} object doesn't exist. Verify the field set name and try again.</value>
     </labels>
     <labels>
         <fullName>No_Records_Selected</fullName>
@@ -513,6 +612,13 @@
         <value>Update</value>
     </labels>
     <labels>
+        <fullName>Edited</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Edited</shortDescription>
+        <value>Edited</value>
+    </labels>
+    <labels>
         <fullName>Save</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -525,6 +631,20 @@
         <protected>true</protected>
         <shortDescription>SaveMessage</shortDescription>
         <value>New Program Engagement record created.</value>
+    </labels>
+    <labels>
+        <fullName>Add</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add</shortDescription>
+        <value>Add</value>
+    </labels>
+    <labels>
+        <fullName>Add_All</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add All</shortDescription>
+        <value>Add All</value>
     </labels>
     <labels>
         <fullName>Save_New</fullName>
@@ -730,7 +850,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Service Deliveries</shortDescription>
-        <value>Service Deliveries</value>
+        <value>Add Service Deliveries</value>
     </labels>
     <labels>
         <fullName>Service_Deliveries_Added</fullName>

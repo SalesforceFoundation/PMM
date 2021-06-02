@@ -8,7 +8,7 @@
 pmm_lex_locators = {
     "app_link": "//div[contains(@class,'slds-app-launcher__tile-body')]//span/p[@class='slds-truncate' and text()='Program Management']",
     "text": "//*[contains(text(), '{}')]",
-    "page_title": "//h2[contains(@class,'slds-text-heading')]",
+    "page_title": "//h2[contains(@class,'slds-text-heading') or contains(@class,'truncate title')]",
     "placeholder": "//*[contains(@placeholder,'{}')]",
     "placeholder_lookup": {
         "lookup1": "//div[@class='slds-lookup__result-text' and contains(text(), '{}')]",
@@ -74,6 +74,8 @@ pmm_lex_locators = {
         "error_message": "//div[@class='slds-text-color_error' and text()='{}']",
         "persist_save": "//div[{}][contains(@class,'slds-box')]/descendant::lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
         "persist_warning": "//div[{}][contains(@class,'slds-box')]/descendant::lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
+        "bsdt-button": "//div[@class='bsdt']//div[@class='slds-card__footer']//lightning-button/button[contains(@class,'slds-button') and text()='{}']",
+        "bsdt_wizard_lookup": "//lightning-grouped-combobox[.//*[text()='{}']]//input[contains(@class,'slds-input')]",
         "new_prog_engagement": {
             "title": "//h2[contains(@class,'slds-text-heading_medium') and text()='{}']",
             "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']]//input[contains(@class,'slds-input')]",
@@ -90,6 +92,8 @@ pmm_lex_locators = {
     "service_schedule": {
         "wizard_title": "//h3[contains(@class,'slds-section__title') and text()='{}']",
         "select_participants": "//tr[@class='slds-hint-parent']/th[.//*[text()='{}']]/preceding-sibling::td//span[@class='slds-checkbox_faux']",
+        "add_participants": "//lightning-layout[contains(@class,'slds-grid')]//tr[.//lightning-base-formatted-text[text()='{}']]//button[@title='Add']",
+        "add_all": "//lightning-layout[contains(@class,'slds-grid')]//button[text()='Add All']",
         "accordion": "//section[contains(@class,'slds-accordion')][.//span[contains(@title,'{}')]]//*[text()='{}']",
         "review_wizard": "//div[contains(@class,'slds-form-element')][./span[text()='{}']]/div",
         "participant_selector": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::*[text()='{}']",
@@ -99,6 +103,7 @@ pmm_lex_locators = {
         "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
         "first_session_end": "//lightning-input[contains(@class,'slds-form-element')][./descendant::*[text()='{}']]/descendant::div//input[@class='slds-input']",
         "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
+        "filter": "//div[contains(@class,'slds-form-element__control')]/input[@placeholder='Search this list']",
     },
     "attendance": {
         "attendance_text": "//c-attendance-row[{}]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",

@@ -19,9 +19,9 @@ Setup Test Data
     [Documentation]             Creates Service and PE using API and sets the fields required to add service deliveries on BSDT.
     ${ns} =                     Get PMM Namespace Prefix
     Set suite variable          ${ns}
-    ${quantity1} =              Generate Random String          2     [NUMBERS]
+    ${quantity1} =              Generate Random String          2     123456789
     Set suite variable          ${quantity1}
-    ${quantity2} =              Generate Random String          2     [NUMBERS]
+    ${quantity2} =              Generate Random String          2     123456789
     Set suite variable          ${quantity2}
     ${today} =                  Get Current Date                result_format=%Y-%m-%d
     Set suite variable          ${today}
@@ -57,49 +57,49 @@ Add service delivery on bulk service delivery
     [Documentation]             This test adds two service deliveries on bulk service delivery and 
     ...                         navigates to service delivery listview and verifies that the service delivery 
     ...                         records are displayed
-    [tags]                      unstable    W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                      W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
+    Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
     Populate Bsdt Dropdown      1           Service                 ${service1}[Name]
     Populate Bsdt Field         1           Quantity                ${quantity1}
-    Verify Persist Save Icon    1           Saved
-    Click Button                Add Entry
+    Click Bsdt Button           Add Entry
     Populate Bsdt Lookup        2           Client                  ${contact2}[FirstName] ${contact2}[LastName]
     Populate Bsdt Dropdown      2           Program Engagement      ${program_engagement2}[Name]
     Populate Bsdt Dropdown      2           Service                 ${service2}[Name]
     Populate Bsdt Field         2           Quantity                ${quantity2}
+    Click Bsdt Button           Save
+    Verify Persist Save Icon    1           Saved
     Verify Persist Save Icon    2           Saved
-    Click Button                Done
     Go To Page                  Listing                             ${ns}ServiceDelivery__c
     Page Should Contain         ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
     Page Should Contain         ${contact2}[FirstName] ${contact2}[LastName] ${today}: ${service2}[Name]
     Click Listview Link         ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
     Verify Details              Service Delivery Name           contains              ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
     Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
-    Save Current Record ID For Deletion     ${ns}Service__c
-    Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
-
 
 Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no
     ...                         services associated with the program.
-    [tags]                      unstable    W-040316     perm:admin   perm:manage     perm:deliver   feature:Service Delivery
+    [tags]                      W-040316     perm:admin   perm:manage     perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
+    Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact3}[FirstName] ${contact3}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement3}[Name]
-    verify error message        No services found, choose another program engagement.
-    verify persist warning icon  1          No services found, choose another program engagement.
+    Verify Error Message        No services found, choose another program engagement.
 
 Delete service delivery on bsdt
     [Documentation]             This test creates a service delivery on BSDT and then deletes it, verifies
     ...                         that a warning dialog is displayed when deleted.
-    [tags]                      unstable    W-042916     perm:admin   perm:manage   feature:Service Delivery
+    [tags]                      W-042916     perm:admin   perm:manage   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
+    Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
     Populate Bsdt Dropdown      1           Service                 ${service1}[Name]
     Populate Bsdt Field         1           Quantity                ${quantity1}
+    Click Bsdt Button           Save
     Verify Persist Save Icon    1           Saved
     Click Bsdt Icon             Delete
     Verify Dialog Title         Confirm deletion?
@@ -108,3 +108,23 @@ Delete service delivery on bsdt
     Page Should Not Contain     ${contact1}[FirstName] ${contact1}[LastName]
     Page Should Not Contain     ${program_engagement1}[Name]
     Page Should Not Contain     ${service1}[Name]
+
+Edit Service delivery on BSDT
+    [Documentation]             Edits a service delivery row and validates that 'Edited' message is displayed
+    ...                         and service delivery record is created when saved
+    [tags]                      W-9219421   perm:admin   perm:manage   perm:deliver   feature:Service Delivery
+    Go To Page                  Custom                              Bulk_Service_Deliveries
+    Click Dialog Button         Create by Individual
+    Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
+    Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement1}[Name]
+    Populate Bsdt Dropdown      1           Service                 ${service1}[Name]
+    Populate Bsdt Field         1           Quantity                ${quantity1}
+    Click Bsdt Button           Save
+    Verify Persist Save Icon    1           Saved
+    Populate Bsdt Field         1           Quantity                ${quantity2}
+    Verify Persist Warning Icon    1           Edited
+    Click Bsdt Button           Save
+    Verify Persist Save Icon    1           Saved
+    Go To Page                  Listing                             ${ns}ServiceDelivery__c
+    Click Listview Link         ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
+    Verify Details              Quantity          contains          ${quantity2}.00

@@ -1,20 +1,20 @@
 /*
  *
- *  * Copyright (c) 2020, salesforce.com, inc.
+ *  * Copyright (c) 2021, salesforce.com, inc.
  *  * All rights reserved.
  *  * SPDX-License-Identifier: BSD-3-Clause
  *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  *
  */
 
-public with sharing class AttendanceService {
+public with sharing class ServiceDeliveryService {
     @TestVisible
-    private AttendanceSelector attendanceSelector = new AttendanceSelector();
+    private ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
-
-    private static final String DEFAULT_STATUS = 'Present';
-
+    private static final String ABSENT = 'Absent';
+    private static final String PRESENT = 'Present';
+    private static final String DEFAULT_STATUS = PRESENT;
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
     // Service Deliveries that appear in the Attendance UI is hard-coded here.
@@ -25,6 +25,43 @@ public with sharing class AttendanceService {
         ServiceParticipant__c.Contact__c => ServiceDelivery__c.Contact__c,
         ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c
     };
+
+    public List<String> presentStatuses {
+        get {
+            return statusBuckets.get(PRESENT);
+        }
+        set;
+    }
+
+    public List<String> absentStatuses {
+        get {
+            return statusBuckets.get(ABSENT);
+        }
+        set;
+    }
+
+    public List<String> attendanceStatuses {
+        get {
+            if (attendanceStatuses == null) {
+                attendanceStatuses = new List<String>();
+                attendanceStatuses.addAll(presentStatuses);
+                attendanceStatuses.addAll(absentStatuses);
+            }
+            return attendanceStatuses;
+        }
+        set;
+    }
+
+    @TestVisible
+    private Map<String, List<String>> statusBuckets {
+        get {
+            if (statusBuckets == null) {
+                statusBuckets = getStatusBuckets();
+            }
+            return statusBuckets;
+        }
+        set;
+    }
 
     public List<ServiceDelivery__c> generateRoster(Id sessionId) {
         return createRows(sessionId);
@@ -117,18 +154,18 @@ public with sharing class AttendanceService {
     private List<ServiceDelivery__c> createRows(Id sessionId) {
         Set<Id> existingClients = new Set<Id>();
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
-            attendanceSelector.getServiceDeliveriesBySessionId(sessionId)
+            deliverySelector.getServiceDeliveriesBySessionId(sessionId)
         );
 
         for (ServiceDelivery__c delivery : deliveries) {
             existingClients.add(delivery.Contact__c);
         }
 
-        ServiceSession__c session = attendanceSelector.getSession(sessionId);
+        ServiceSession__c session = deliverySelector.getSession(sessionId);
         Id scheduleId = session.ServiceSchedule__c;
 
         for (
-            ServiceParticipant__c participant : attendanceSelector.getServiceParticipantsByScheduleId(
+            ServiceParticipant__c participant : deliverySelector.getServiceParticipantsByScheduleId(
                 scheduleId,
                 existingClients
             )
@@ -156,13 +193,30 @@ public with sharing class AttendanceService {
         );
 
         for (SObjectField sourceField : SERVICE_FIELD_BY_PARTICIPANT_FIELD.keySet()) {
-            SObjectField targetField = SERVICE_FIELD_BY_PARTICIPANT_FIELD.get(
+            SObjectField lookupFieldOnDelivery = SERVICE_FIELD_BY_PARTICIPANT_FIELD.get(
                 sourceField
             );
-            deliveryRecord.put(targetField, particpantRecord.get(sourceField));
+            deliveryRecord.put(lookupFieldOnDelivery, particpantRecord.get(sourceField));
         }
 
         return (ServiceDelivery__c) deliveryRecord;
+    }
+
+    private Map<String, List<String>> getStatusBuckets() {
+        List<String> bucketNames = new List<String>{
+            Util.prefixNamespace(ABSENT),
+            Util.prefixNamespace(PRESENT)
+        };
+        Map<String, List<String>> buckets = new Map<String, List<String>>();
+
+        for (Bucket__mdt bucket : deliverySelector.getBuckets(bucketNames)) {
+            buckets.put(bucket.DeveloperName, new List<String>());
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                buckets.get(bucket.DeveloperName).add(value.Value__c);
+            }
+        }
+
+        return buckets;
     }
 
     public class ServiceDeliveryException extends Exception {

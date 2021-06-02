@@ -8,8 +8,8 @@
  */
 
 @IsTest
-public with sharing class AttendanceSelector_TEST {
-    private static AttendanceSelector selector = new AttendanceSelector();
+public with sharing class ServiceDeliverySelector_TEST {
+    private static ServiceDeliverySelector selector = new ServiceDeliverySelector();
     private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
 
     @TestSetup
@@ -110,6 +110,41 @@ public with sharing class AttendanceSelector_TEST {
             participants.size() - 1,
             actualParticipants.size(),
             'Expected one participant record to be excluded.'
+        );
+    }
+
+    @IsTest
+    private static void shouldReturnSession() {
+        Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+
+        Test.startTest();
+        System.assertEquals(
+            sessionId,
+            selector.getSession(sessionId).Id,
+            'Expected the service session record to be returned.'
+        );
+        Test.stopTest();
+    }
+
+    @IsTest
+    private static void getAttendanceBucketsReturnsPackagedBuckets() {
+        List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
+        List<Bucket__mdt> buckets = selector.getBuckets(bucketNames);
+
+        System.assertEquals(
+            2,
+            buckets.size(),
+            'Expected the 2 packaged attendance records to be returned.'
+        );
+        System.assertEquals(
+            bucketNames[0],
+            buckets[0].DeveloperName,
+            'Expected the Absent bucket to be returned first.'
+        );
+        System.assertEquals(
+            bucketNames[1],
+            buckets[1].DeveloperName,
+            'Expected the Present bucket to be returned second.'
         );
     }
 

@@ -43,7 +43,7 @@ Setup Test Data
 Add/remove service participants on Screen3
     [Documentation]                        On service schedule wizard, add/remove service participants on screen 3 and validate that the
     ...                                    added participants are displayed on screen 4 and when the wizard is saved
-    [tags]                                 unstable    W-8449817    perm:admin    perm:manage     feature:Service Schedule
+    [tags]                                  W-8449817    perm:admin    perm:manage     feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
@@ -56,10 +56,7 @@ Add/remove service participants on Screen3
     Verify Wizard Screen Title              Add Service Participants
     Page Should Contain                     ${service_schedule_name}
     Page Should Contain                     No records selected
-    Select Service Participant              ${contact1}[Name]
-    Select Service Participant              ${contact2}[Name]
-    Select Service Participant              ${contact3}[Name]
-    Click Dialog Button                     Add Service Participants
+    Click Add All Button
     Validate Participant Is Added           ${contact1}[Name]
     Validate Participant Is Added           ${contact2}[Name]
     Validate Participant Is Added           ${contact3}[Name]

@@ -28,14 +28,6 @@
             "sessionSettings": {
                 "forceRelogin": false
             }
-        },
-        "communitiesSettings": {
-            "enableNetworksEnabled": true,
-            "enableGuestRecordReassignOrgPref": true,
-            "enableOotbProfExtUserOpsEnable": true
-        },
-        "experienceBundleSettings": {
-            "enableExperienceBundleMetadata": true
         }
     }
 }

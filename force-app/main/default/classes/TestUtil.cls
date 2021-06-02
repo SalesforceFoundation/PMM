@@ -71,6 +71,7 @@ public with sharing class TestUtil {
     }
 
     public static void turnOffFeatureGates(Set<String> developerNames) {
+        // Stub turned off Feature Gates so we can insert Service Deliveries without triggers running
         List<FeatureGate__mdt> featureGates = new List<FeatureGate__mdt>();
         for (String name : featureGateNames) {
             featureGates.add(
@@ -91,7 +92,6 @@ public with sharing class TestUtil {
     }
 
     public static void turnOffFeatureGates() {
-        // Stub turned off Feature Gates so we can insert Service Deliveries without triggers running
         turnOffFeatureGates(featureGateNames);
     }
 }

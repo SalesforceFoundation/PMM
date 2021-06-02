@@ -178,7 +178,7 @@ public with sharing class RollupRecord {
 
         if (lastPresentDate == null || presentDate > lastPresentDate) {
             lastPresentDate = presentDate;
-            processConsecutiveAbsences();
+            updateConsecutiveAbsenceDates();
         }
 
         consecutiveCount = consecutiveAbsenceDates.size();
@@ -204,14 +204,6 @@ public with sharing class RollupRecord {
             lastServiceDate < deliveryDate
             ? deliveryDate
             : lastServiceDate;
-    }
-
-    private void processConsecutiveAbsences() {
-        if (consecutiveAbsenceDates.isEmpty()) {
-            return;
-        }
-
-        updateConsecutiveAbsenceDates();
     }
 
     ////////// Trigger Mode //////////

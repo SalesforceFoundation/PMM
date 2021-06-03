@@ -24,7 +24,8 @@
     },
     "resolutions": {
         "axios": "^0.21.1",
-        "node-notifier": "^8.0.1"
+        "node-notifier": "^8.0.1",
+        "is-svg": "^4.3.1"
     },
     "scripts": {
         "test:unit": "lwc-jest",

@@ -13,6 +13,7 @@
 >
     <aura:attribute name="serviceId" type="String" access="private" />
     <aura:attribute name="recordTypeId" type="String" access="private" />
+    <aura:attribute name="isCommunity" type="Boolean" access="private" />
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:handler name="change" value="{!v.pageReference}" action="{!c.refresh}" />
@@ -20,11 +21,15 @@
     <aura:html tag="style">
         lightning-timepicker, lightning-datepicker { width: 100% }
         .slds-accordion__list-item { border-top: none; }
-        .slds-table_header-fixed_container { overflow-x: hidden; }
+        .slds-table_header-fixed_container { overflow-x: hidden; } .cuf-content { padding:
+        0 0rem !important; } .slds-p-around--medium { padding: 0rem !important; }
+        .slds-modal__content{ height:unset !important; max-height:unset !important; }
+        .slds-modal__container{ width: 80% !important; max-width: 80% !important; }
     </aura:html>
-    <c:serviceScheduleCreator
+    <c:serviceScheduleCreatorWrapper
         serviceId="{!v.serviceId}"
         recordTypeId="{!v.recordTypeId}"
+        isCommunity="{!v.isCommunity}"
         onclose="{!c.refresh}"
     />
 </aura:component>

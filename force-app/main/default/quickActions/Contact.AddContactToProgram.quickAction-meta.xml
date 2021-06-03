@@ -17,7 +17,7 @@
             <quickActionLayoutItems>
                 <emptySpace>false</emptySpace>
                 <field>Role__c</field>
-                <uiBehavior>Required</uiBehavior>
+                <uiBehavior>Edit</uiBehavior>
             </quickActionLayoutItems>
             <quickActionLayoutItems>
                 <emptySpace>false</emptySpace>
@@ -39,7 +39,7 @@
             <quickActionLayoutItems>
                 <emptySpace>false</emptySpace>
                 <field>Stage__c</field>
-                <uiBehavior>Required</uiBehavior>
+                <uiBehavior>Edit</uiBehavior>
             </quickActionLayoutItems>
         </quickActionLayoutColumns>
     </quickActionLayout>

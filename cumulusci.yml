@@ -1,4 +1,4 @@
-minimum_cumulusci_version: "3.23.0"
+minimum_cumulusci_version: "3.36.0"
 project:
     name: PMM
     package:
@@ -15,12 +15,14 @@ project:
     dependencies:
         - namespace: sfdobase
           version: 1.0
+    dependency_resolutions:
+        preproduction: include_beta
+
 orgs:
     scratch:
-        dev_namespaced:
-            config_file: orgs/dev.json
+        dev_exp:
+            config_file: orgs/dev_exp.json
             days: 7
-            namespaced: True
         prerelease:
             config_file: orgs/prerelease.json
             days: 7
@@ -33,6 +35,47 @@ sources:
         github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
+    create_community:
+        description: "Creates a community with the 'Customer Service' template"
+        class_path: cumulusci.tasks.salesforce.CreateCommunity
+        options:
+            template: Customer Service
+            name: PMM Volunteer Community
+            url_path_prefix: pmmvolunteers
+            timeout: 60000
+            skip_existing: true
+
+    update_experience_cloud_OWDs:
+        class_path: cumulusci.tasks.metadata_etl.SetOrgWideDefaults
+        options:
+            org_wide_defaults:
+                - api_name: "%%%NAMESPACE%%%ServiceSession__c"
+                  internal_sharing_model: ReadWrite
+                  external_sharing_model: Private
+                - api_name: Contact
+                  internal_sharing_model: ReadWrite
+                  external_sharing_model: Private
+
+    publish_community:
+        description: Publishes the "PMM Client Community" Community in the target org using the Connect API
+        class_path: cumulusci.tasks.salesforce.PublishCommunity
+        options:
+            name: PMM Volunteer Community
+
+    create_community_owner:
+        description: POSTs json files to the Composite REST API endpoint.
+        class_path: cumulusci.tasks.salesforce.composite.CompositeApi
+        options:
+            data_files:
+                - "datasets/communityowner.json"
+
+    create_community_user:
+        description: POSTs json files to the Composite REST API endpoint.
+        class_path: cumulusci.tasks.salesforce.composite.CompositeApi
+        options:
+            data_files:
+                - "datasets/communityuser.json"
+
     robot:
         options:
             suites: robot/pmm/tests
@@ -122,6 +165,13 @@ tasks:
         options:
             path: unpackaged/config/dev
 
+    deploy_experience_cloud:
+        group: "PMM: Config"
+        description: Deploys the post-install configuration for an unmanaged DE org
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/experience_cloud
+
     deploy_customer_profiles:
         group: "PMM: Config"
         description: Deploys the post-install configuration for an unmanaged DE org
@@ -130,6 +180,25 @@ tasks:
             path: unpackaged/config/customer_profiles
 
 flows:
+    make_community:
+        steps:
+            1:
+                task: create_community
+            2:
+                task: update_experience_cloud_OWDs
+            2.1:
+                task: util_sleep
+            3:
+                task: create_community_owner
+            4:
+                task: deploy_experience_cloud
+            5:
+                task: create_community_user
+            6:
+                task: publish_community
+            7:
+                task: snapshot_changes
+
     load_data:
         steps:
             1:
@@ -142,10 +211,6 @@ flows:
             4:
                 task: restore_tdtm_trigger_handlers
                 when: "'npsp' in org_config.installed_packages"
-            5:
-                task: execute_anon
-                options:
-                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
 
     create_users_and_assign_permission_sets:
         steps:

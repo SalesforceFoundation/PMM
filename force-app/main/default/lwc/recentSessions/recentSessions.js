@@ -198,9 +198,18 @@ export default class RecentSessions extends LightningElement {
             );
 
             if (sessionData.sessions && sessionData.sessions.length) {
+                sessionData.totalSessions = this.calculateTotalSessions(
+                    sessionData.sessions.length
+                );
                 this.sessionsData.push(sessionData);
             }
         });
+    }
+
+    calculateTotalSessions(sessionCount) {
+        return sessionCount === 1
+            ? sessionCount + " " + this.objectLabel
+            : sessionCount + " " + this.objectLabelPlural;
     }
 
     handleGetServiceSessions() {
@@ -235,14 +244,7 @@ export default class RecentSessions extends LightningElement {
                                             SESSION_START_FIELD.fieldApiName
                                         ]
                                     ).getDate() === currentDate.getDate(),
-                                totalSessions:
-                                    sessions[sessionStartDateValue].length === 1
-                                        ? sessions[sessionStartDateValue].length +
-                                          " " +
-                                          this.objectLabel
-                                        : sessions[sessionStartDateValue].length +
-                                          " " +
-                                          this.objectLabelPlural,
+                                totalSessions: "",
                             });
                         });
                         this.filter();

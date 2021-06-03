@@ -1,0 +1,92 @@
+{
+  "appPageId" : "b4f1b062-39be-4db9-aa64-bfe331aa63d2",
+  "componentName" : "siteforce:sldsTwoCol66Layout",
+  "id" : "bacb3b66-39f1-49d8-85bc-1103c0e992fc",
+  "label" : "Contact Support",
+  "regions" : [ {
+    "id" : "c0e22ef9-ece4-455e-9a75-3344474b69c2",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "allowAttachments" : true,
+        "attachmentLabel" : "Upload File",
+        "buttonAlignment" : "center",
+        "buttonBgColor" : "",
+        "buttonBgHoverColor" : "",
+        "buttonBorderColor" : "",
+        "buttonMaxWidth" : "",
+        "buttonRadius" : 0,
+        "buttonTextColor" : "",
+        "buttonTextHoverColor" : "",
+        "callToAction" : false,
+        "callToActionButtonText" : "",
+        "callToActionText" : "",
+        "callToActionUrl" : "",
+        "confirmationSubtext" : "We’ll get back to you soon.",
+        "confirmationText" : "Your case was created.",
+        "guestQuickActionName" : "GuestCommunityCase",
+        "headerSubtitle" : "Tell us how we can help.",
+        "headerTitle" : "Contact Customer Support",
+        "quickActionName" : "NewCommunityCase",
+        "requestSummaryText" : "Case summary"
+      },
+      "componentName" : "forceCommunity:contactSupportForm",
+      "id" : "26daf10a-da72-47e7-985f-d8aac6935ef4",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "e8c320ee-09b5-455b-917a-b3c83137dc03",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "askConfirmationQuestion" : true,
+        "confirmationMessageLabel" : "Got it!",
+        "deflectionSubtitle" : "Find what you need here.",
+        "deflectionTitle" : "Need Answers Fast?",
+        "firstQuestion" : "Did this content solve your issue?",
+        "maxResults" : 6,
+        "measureDeflection" : true,
+        "redirectUrl" : "",
+        "secondQuestion" : "Stop creating your case?",
+        "showArticles" : true,
+        "showDiscussions" : false,
+        "topicId" : ""
+      },
+      "componentName" : "forceCommunity:caseDeflection",
+      "id" : "4f28ac89-21ea-44ea-9108-95948fd561a4",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "19773178-4ffe-40e3-b394-03be8bf258b5",
+    "regionName" : "sidebar",
+    "type" : "region"
+  }, {
+    "id" : "5fe2b130-b062-4ce5-a58b-dd4ce99bb5e5",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "description" : "",
+        "metaTags" : "",
+        "title" : "Contact Support"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "81b0d3a0-9788-4c1a-acbc-c483ebffde28",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "87a3e832-4170-46f8-9466-e6a3c5df0ae2",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "contactsupport"
+}

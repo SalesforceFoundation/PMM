@@ -9,6 +9,7 @@
 
 ({
     doInit: function(component, event, helper) {
+        component.set("v.isCommunity", $A.get("$Site") ? true : false);
         helper.extractUrlParams(component, event, helper);
     },
 

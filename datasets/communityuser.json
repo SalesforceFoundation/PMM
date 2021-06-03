@@ -1,0 +1,68 @@
+{
+    "allOrNone": true,
+    "compositeRequest": [
+        {
+            "method": "GET",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+Profile+WHERE+Name+IN+('Customer+Community+Plus+User')+ORDER+BY+Name",
+            "referenceId": "profiles"
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+Group+WHERE+Name+IN+('Community+Volunteers')+ORDER+BY+Name",
+            "referenceId": "groups"
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+Contact+WHERE+Email+=+'mayalambert@example.com'",
+            "referenceId": "volunteer"
+        },
+        {
+            "method": "POST",
+            "url": "/services/data/v46.0/sobjects/User",
+            "referenceId": "mayaUser",
+            "body": {
+                "FirstName": "Maya",
+                "LastName": "Lambert",
+                "Alias": "maya",
+                "City": "San Francisco",
+                "ContactId": "@{volunteer.records[0].Id}",
+                "Country": "USA",
+                "Email": "mayalambert@example.com",
+                "EmailEncodingKey": "utf-8",
+                "LanguageLocaleKey": "en_US",
+                "LocaleSidKey": "en_US",
+                "MobilePhone": "(650) 555-1212",
+                "Phone": "(650) 555-1212",
+                "PostalCode": "94105",
+                "ProfileId": "@{profiles.records[0].Id}",
+                "State": "CA",
+                "Street": "1 Market Street",
+                "TimeZoneSidKey": "America/Los_Angeles",
+                "Username": "mayalambert@example.com"
+            }
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v46.0/query/?q=SELECT+Id+FROM+PermissionSet+WHERE+Name+IN+('PMDM_Community_Manage')+ORDER+BY+Name",
+            "referenceId": "permissionSets"
+        },
+        {
+            "method": "POST",
+            "url": "/services/data/v46.0/sobjects/PermissionSetAssignment",
+            "referenceId": "mayaManagePSA",
+            "body": {
+                "PermissionSetId": "@{permissionSets.records[0].Id}",
+                "AssigneeId": "@{mayaUser.id}"
+            }
+        },
+        {
+            "method": "POST",
+            "url": "/services/data/v46.0/sobjects/GroupMember",
+            "referenceId": "mayaGroupMember",
+            "body": {
+                "GroupId": "@{groups.records[0].Id}",
+                "UserOrGroupId": "@{mayaUser.id}"
+            }
+        }
+    ]
+}

@@ -19,7 +19,7 @@
                 <field>AutoName_Override__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>Stage__c</field>
             </layoutItems>
             <layoutItems>
@@ -63,7 +63,7 @@
         <label>Additional Details</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>Role__c</field>
             </layoutItems>
             <layoutItems>

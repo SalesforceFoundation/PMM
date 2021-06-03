@@ -3,6 +3,10 @@
         {
             "path": "force-app",
             "default": true
+        },
+        {
+            "path": "unpackaged/config/experience_cloud",
+            "default": false
         }
     ],
     "namespace": "pmdm",

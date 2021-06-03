@@ -1,0 +1,42 @@
+{
+    "orgName": "Program Management Module - Experience Cloud Dev Org",
+    "edition": "Developer",
+    "features": ["Communities"],
+    "settings": {
+        "lightningExperienceSettings": {
+            "enableS1DesktopEnabled": true
+        },
+        "chatterSettings": {
+            "enableChatter": true
+        },
+        "languageSettings": {
+            "enableTranslationWorkbench": true
+        },
+        "mobileSettings": {
+            "enableS1EncryptedStoragePref2": false
+        },
+        "enhancedNotesSettings": {
+            "enableEnhancedNotes": true
+        },
+        "pathAssistantSettings": {
+            "pathAssistantEnabled": true
+        },
+        "userManagementSettings": {
+            "enableNewProfileUI": true
+        },
+        "securitySettings": {
+            "enableAdminLoginAsAnyUser": true,
+            "sessionSettings": {
+                "forceRelogin": false
+            }
+        },
+        "communitiesSettings": {
+            "enableNetworksEnabled": true,
+            "enableGuestRecordReassignOrgPref": true,
+            "enableOotbProfExtUserOpsEnable": true
+        },
+        "experienceBundleSettings": {
+            "enableExperienceBundleMetadata": true
+        }
+    }
+}

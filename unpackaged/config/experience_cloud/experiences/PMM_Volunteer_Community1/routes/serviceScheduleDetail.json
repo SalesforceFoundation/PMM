@@ -1,0 +1,10 @@
+{
+  "activeViewId" : "fa7a528e-a703-4b99-a845-ddcf0f53ef60",
+  "appPageId" : "b4f1b062-39be-4db9-aa64-bfe331aa63d2",
+  "id" : "6218f620-48ec-4c1f-85b0-667fb56c3841",
+  "label" : "Service Schedule Detail",
+  "objectApiName" : "%%%NAMESPACE%%%ServiceSchedule__c",
+  "routeType" : "detail-a05",
+  "type" : "route",
+  "urlPrefix" : "serviceschedule"
+}

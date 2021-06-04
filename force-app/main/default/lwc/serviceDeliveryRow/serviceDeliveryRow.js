@@ -86,6 +86,8 @@ export default class ServiceDeliveryRow extends LightningElement {
     unitOfMeasureValue = quantity;
     saveMessage;
     errorMessage;
+    errorRetryCount = 0;
+    errorRetryMax = 3;
     // TODO: Store these with the field set so we do not have to continue to check
     hasContactField;
     hasProgramEngagementField;
@@ -250,11 +252,22 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleSaveError(event) {
+        if (
+            JSON.stringify(event.detail).includes("UNABLE_TO_LOCK_ROW") &&
+            this.errorRetryCount < this.errorRetryMax
+        ) {
+            this.errorRetryCount++;
+            this.saveRow();
+            return;
+        }
+
+        this.errorMessage = handleError(event, false, "dismissible", true);
+        this.errorRetryCount = 0;
         this.isDirty = false;
         this.isSaving = false;
         this.isSaved = false;
         this.isError = true;
-        this.errorMessage = handleError(event, false, "dismissible", true);
+
         event.detail.index = this.index;
         this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
     }

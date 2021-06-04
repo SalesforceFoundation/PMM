@@ -12,6 +12,11 @@
  */
 public without sharing class SystemAccess {
     private QueryBuilder queryBuilder = new QueryBuilder();
+    private List<String> serviceDeliveryFields = new List<String>{
+        String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
+        String.valueOf(ServiceDelivery__c.DeliveryDate__c),
+        String.valueOf(ServiceDelivery__c.Quantity__c)
+    };
 
     public String getDeliveryRollupsQuery(String lookupField) {
         return buildDeliveryRollupsQuery(lookupField, ' != null');
@@ -23,7 +28,7 @@ public without sharing class SystemAccess {
         return Database.countQuery(queryBuilder.buildCountQuery());
     }
 
-    public List<SObject> getParentsWithDeliveries(
+    public List<SObject> getParentsHavingDeliveries(
         SObjectType sObjectType,
         String lookupField,
         List<SObject> records
@@ -63,16 +68,39 @@ public without sharing class SystemAccess {
     public List<SObject> getRecordsById(
         sObjectType sObjectType,
         Set<Id> recordIds,
+        List<String> selectFields,
+        String childRelationshipName
+    ) {
+        queryBuilder
+            .reset()
+            .withSObjectType(sObjectType)
+            .withSelectFields(selectFields)
+            .addCondition('Id IN :recordIds');
+
+        if (childRelationshipName != null) {
+            QueryBuilder subquery = new QueryBuilder()
+                .withChildRelationshipName(childRelationshipName)
+                .withSelectFields(serviceDeliveryFields)
+                .withOrderBy(
+                    String.valueOf(ServiceDelivery__c.DeliveryDate__c) +
+                    ' DESC NULLS LAST'
+                )
+                .withLimit(100);
+
+            queryBuilder.addSubQuery(subquery);
+        }
+
+        List<SObject> records = Database.query(queryBuilder.buildSoqlQuery());
+
+        return records;
+    }
+
+    public List<SObject> getRecordsById(
+        sObjectType sObjectType,
+        Set<Id> recordIds,
         List<String> selectFields
     ) {
-        return Database.query(
-            queryBuilder
-                .reset()
-                .withSObjectType(sObjectType)
-                .withSelectFields(selectFields)
-                .addCondition('Id IN :recordIds')
-                .buildSoqlQuery()
-        );
+        return getRecordsById(sObjectType, recordIds, selectFields, null);
     }
 
     public void updateRecords(List<SObject> sObjects) {
@@ -84,17 +112,17 @@ public without sharing class SystemAccess {
         String lookupFieldCondition
     ) {
         setDeliveryRollupQueryBuilder(lookupField, lookupFieldCondition);
-        queryBuilder
-            .withSelectFields(
-                new List<String>{
-                    String.valueOf(ServiceDelivery__c.AttendanceStatus__c),
-                    String.valueOf(ServiceDelivery__c.DeliveryDate__c),
-                    String.valueOf(lookupField),
-                    String.valueOf(ServiceDelivery__c.Quantity__c)
-                }
-            );
+        queryBuilder.withSelectFields(getServiceDeliveryFields(lookupField));
 
         return queryBuilder.buildSoqlQuery();
+    }
+
+    private List<String> getServiceDeliveryFields(String lookupField) {
+        List<String> fields = new List<String>();
+        fields.addAll(serviceDeliveryFields);
+        fields.add(lookupField);
+
+        return fields;
     }
 
     private QueryBuilder setDeliveryRollupQueryBuilder(

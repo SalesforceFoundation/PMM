@@ -8,10 +8,7 @@
  */
 @IsTest
 public with sharing class ServiceDeliveryRollupsService_TEST {
-    private static ServiceDeliveryRollupsService rollupsService = new ServiceDeliveryRollupsService(
-        Contact.SObjectType,
-        ServiceDelivery__c.Contact__c
-    );
+    private static ServiceDeliveryRollupsService rollupsService = new ServiceDeliveryRollupsService();
     private static Stub systemAccessStub;
     private static Date yesterday = System.today().addDays(-1);
     private static Id mockContactId = TestUtil.mockId(Contact.SObjectType);
@@ -25,6 +22,14 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
             Quantity__c = 3
         )
     };
+
+    @IsTest
+    private static void shouldNotBeInBatchMode() {
+        System.assert(
+            !rollupsService.isBatchRunning,
+            'Should return false when not running in a batch context.'
+        );
+    }
 
     @IsTest
     private static void shouldGetDeliveryRollupsQueryFromSystemAccess() {
@@ -45,7 +50,7 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
         Test.startTest();
         System.assertEquals(
             rollupQueryToReturn,
-            rollupsService.getDeliveryRollupsQuery(),
+            rollupsService.getDeliveryRollupsQuery(Contact.SObjectType),
             'Expected the stub to return the query provided.'
         );
         Test.stopTest();
@@ -54,44 +59,14 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
     }
 
     @IsTest
-    private static void shouldRollupChildDeliveryRecords() {
-        systemAccessStub = new StubBuilder(SystemAccess.class)
-            .when('getDeliveryRecordsToRollup', String.class, Set<Id>.class)
-            .calledWith(
-                String.valueOf(ServiceDelivery__c.Contact__c),
-                new Set<Id>{ mockContactId }
-            )
-            .thenReturn(mockDeliveries)
-            .build();
-
-        rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
-
-        Test.startTest();
-        rollupsService.rollupDeliveryRecords(new Set<Id>{ mockContactId });
-        Test.stopTest();
-
-        Set<Id> processedRecords = rollupsService.getProcessedRecordIds();
-
-        System.assert(
-            processedRecords.contains(mockContactId),
-            'Expected the contact to have been processed.'
-        );
-        System.assertEquals(
-            1,
-            processedRecords.size(),
-            'Expected only the one contact provided to be processed.'
-        );
-    }
-
-    @IsTest
     private static void shouldRollupDeliveryRecords() {
         Date yesterday = System.today().addDays(-1);
 
         Test.startTest();
-        rollupsService.rollupDeliveryRecords(mockDeliveries);
+        rollupsService.rollupDeliveryRecords(Contact.SObjectType, mockDeliveries);
         Test.stopTest();
 
-        Set<Id> processedRecords = rollupsService.getProcessedRecordIds();
+        Set<Id> processedRecords = rollupsService.processedRecordsById.keySet();
 
         System.assert(
             processedRecords.contains(mockContactId),
@@ -109,10 +84,13 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
         Date yesterday = System.today().addDays(-1);
 
         Test.startTest();
-        rollupsService.rollupDeliveryRecords(new List<ServiceDelivery__c>());
+        rollupsService.rollupDeliveryRecords(
+            Contact.SObjectType,
+            new List<ServiceDelivery__c>()
+        );
         Test.stopTest();
 
-        Set<Id> processedRecords = rollupsService.getProcessedRecordIds();
+        Set<Id> processedRecords = rollupsService.processedRecordsById.keySet();
 
         System.assert(
             processedRecords.isEmpty(),
@@ -146,7 +124,7 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
             .calledWith(
                 Contact.SObjectType,
                 new Set<Id>{ mockContactId },
-                rollupsService.buildSelectFieldsForOriginalQuery()
+                rollupsService.buildSelectFieldsForOriginalQuery(Contact.SObjectType)
             )
             .thenReturn(mockContacts)
             .when('updateRecords', List<SObject>.class)
@@ -157,7 +135,7 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
         rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
 
         Test.startTest();
-        rollupsService.commitRollups();
+        rollupsService.commitRollups(Contact.SObjectType);
         Test.stopTest();
 
         systemAccessStub.assertCalledAsExpected();
@@ -190,7 +168,7 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
             .calledWith(
                 Contact.SObjectType,
                 new Set<Id>{ mockContactId },
-                rollupsService.buildSelectFieldsForOriginalQuery()
+                rollupsService.buildSelectFieldsForOriginalQuery(Contact.SObjectType)
             )
             .thenReturn(mockContacts)
             .when('updateRecords', List<SObject>.class)
@@ -201,7 +179,7 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
         rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
 
         Test.startTest();
-        rollupsService.commitRollups();
+        rollupsService.commitRollups(Contact.SObjectType);
         Test.stopTest();
 
         systemAccessStub.assertCalledAsExpected();
@@ -218,7 +196,10 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
         rollupsService.isBatchRunning = true;
 
         Test.startTest();
-        rollupsService.trackCrossBatchRecordTotals(mockDeliveries);
+        rollupsService.trackCrossBatchRecordTotals(
+            mockDeliveries,
+            ServiceDelivery__c.Contact__c
+        );
         Test.stopTest();
 
         System.assertEquals(
@@ -241,7 +222,58 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
         rollupsService.isBatchRunning = false;
 
         Test.startTest();
-        rollupsService.trackCrossBatchRecordTotals(mockDeliveries);
+        rollupsService.trackCrossBatchRecordTotals(
+            mockDeliveries,
+            ServiceDelivery__c.Contact__c
+        );
+        Test.stopTest();
+
+        systemAccessStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void shouldNotResetParentsWhenNoParentsAreProvided() {
+        Stub systemAccessStub = new StubBuilder(SystemAccess.class)
+            .when('getParentsHavingDeliveries')
+            .signatureMatches()
+            .expectedNotToBeCalled()
+            .build();
+
+        rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
+        Test.startTest();
+        rollupsService.resetParentsWithoutDeliveries(new List<SObject>());
+        Test.stopTest();
+
+        systemAccessStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void shouldResetParentsWithoutDeliveries() {
+        List<SObject> records = new List<SObject>{
+            new Contact(Id = TestUtil.mockId(Contact.SObjectType))
+        };
+        Stub systemAccessStub = new StubBuilder(SystemAccess.class)
+            .when(
+                'getParentsHavingDeliveries',
+                SObjectType.class,
+                String.class,
+                List<SObject>.class
+            )
+            .calledWith(
+                Contact.SObjectType,
+                String.valueOf(ServiceDelivery__c.Contact__c),
+                records
+            )
+            .thenReturn(new List<SObject>())
+            .when('updateRecords', List<SObject>.class)
+            .signatureMatches()
+            .expectedToBeCalled(1)
+            .thenReturn()
+            .build();
+
+        rollupsService.systemAccess = (SystemAccess) systemAccessStub.create();
+        Test.startTest();
+        rollupsService.resetParentsWithoutDeliveries(records);
         Test.stopTest();
 
         systemAccessStub.assertCalledAsExpected();

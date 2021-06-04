@@ -11,10 +11,7 @@ public class SessionRollupsSchedulable implements Database.Batchable<SObject>, S
     @TestVisible
     private QueryBuilder queryBuilder = new QueryBuilder();
     @TestVisible
-    private ServiceDeliveryRollupsService rollupsService = new ServiceDeliveryRollupsService(
-        ServiceSession__c.SObjectType,
-        ServiceDelivery__c.ServiceSession__c
-    );
+    private ServiceDeliveryRollupsService rollupsService = new ServiceDeliveryRollupsService();
 
     /*
      * Both the Schedulable and Batch jobs are within this class, the schedule
@@ -48,10 +45,7 @@ public class SessionRollupsSchedulable implements Database.Batchable<SObject>, S
      */
     public void finish(Database.BatchableContext bc) {
         Database.executeBatch(
-            new ServiceDeliveryRollupsBatch(
-                ServiceSession__c.SObjectType,
-                ServiceDelivery__c.ServiceSession__c
-            ),
+            new ServiceDeliveryRollupsBatch(ServiceSession__c.SObjectType),
             2000
         );
     }

@@ -92,7 +92,7 @@ public with sharing class RollupRecord {
 
     @TestVisible
     private void decrementPresent() {
-        if (presentCount == null || numPresentField == null) {
+        if (presentCount < 1 || numPresentField == null) {
             return;
         }
 

@@ -92,21 +92,25 @@ public with sharing class RollupRecord {
 
     @TestVisible
     private void decrementPresent() {
-        if (presentCount < 1 || numPresentField == null) {
+        if (numPresentField == null) {
             return;
         }
 
-        presentCount--;
+        if (presentCount > 0) {
+            presentCount--;
+        }
         resetAttendanceFields();
     }
 
     @TestVisible
     private void decrementAbsent() {
-        if (absentCount < 1 || numAbsentField == null) {
+        if (numAbsentField == null) {
             return;
         }
 
-        absentCount--;
+        if (absentCount > 0) {
+            absentCount--;
+        }
         resetAttendanceFields();
     }
 

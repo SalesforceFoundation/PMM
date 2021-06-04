@@ -232,7 +232,9 @@ public with sharing class FieldSetService {
             'apiName' => field.getName(),
             'label' => getLabel(field),
             'type' => field.getType().name(),
-            'isRequired' => !field.isNillable(),
+            'isRequired' => field.getType() == Schema.DisplayType.BOOLEAN
+                ? false
+                : !field.isNillable(),
             'helpText' => field.getInlineHelpText(),
             'isAccessible' => field.isAccessible(),
             'relationshipName' => field.getRelationshipName(),

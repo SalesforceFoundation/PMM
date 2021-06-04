@@ -1,0 +1,10 @@
+{
+  "activeViewId" : "52c8c3b0-2f76-49a7-9b27-10f4298686d4",
+  "appPageId" : "b4f1b062-39be-4db9-aa64-bfe331aa63d2",
+  "id" : "f451918f-a177-4b4e-b079-56e9063cc250",
+  "label" : "Service Session Detail",
+  "objectApiName" : "%%%NAMESPACE%%%ServiceSession__c",
+  "routeType" : "detail-a06",
+  "type" : "route",
+  "urlPrefix" : "servicesession"
+}

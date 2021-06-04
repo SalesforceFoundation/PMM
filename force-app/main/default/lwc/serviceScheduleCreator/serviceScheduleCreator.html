@@ -8,140 +8,140 @@
   -->
 
 <template>
-    <c-modal
-        header={labels.newServiceSchedule}
-        ondialogclose={handleClose}
-        default-visible="true"
-        size="large"
-    >
-        <template if:false={hideSpinner}>
-            <div
-                class="slds-var-p-around_medium slds-align_absolute-center slds-is-relative"
-            >
-                <lightning-spinner
-                    alternative-text={labels.loading}
-                    size="medium"
-                ></lightning-spinner>
-            </div>
-        </template>
-        <template if:true={isLoaded}>
-            <template if:true={isStep1}>
-                <c-new-service-schedule
-                    service-id={serviceId}
-                    service-schedule-model={serviceScheduleModel}
-                    onloaded={handleLoaded}
-                ></c-new-service-schedule>
-            </template>
-            <template if:true={isStep2}>
-                <c-review-sessions
-                    service-schedule-model={serviceScheduleModel}
-                    onloaded={handleLoaded}
-                ></c-review-sessions>
-            </template>
-            <template if:true={isStep3}>
-                <c-participant-selector
-                    service-id={serviceId}
-                    service-schedule={serviceScheduleModel.serviceSchedule}
-                    selected-rows={serviceScheduleModel.selectedParticipants}
-                    onloaded={handleLoaded}
-                ></c-participant-selector>
-            </template>
-            <template if:true={isStep4}>
-                <c-service-schedule-review
-                    service-schedule-model={serviceScheduleModel}
-                    onloaded={handleLoaded}
-                    participant-columns={participantColumns}
-                ></c-service-schedule-review>
-            </template>
-            <c-modal header={labels.goBack} is-nested="true">
-                {labels.backWarning}
+    <!-- fake header for Experience Cloud where the component brings its own modal -->
+    <template if:true={isCommunity}>
+        <header class="slds-modal__header">
+            <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                {labels.newServiceSchedule}
+            </h2>
+        </header>
+    </template>
 
-                <div slot="footer">
-                    <lightning-layout>
-                        <lightning-layout-item alignment-bump="left">
-                            <lightning-button
-                                label={labels.cancel}
-                                variant="neutral"
-                                onclick={closeBackWarningModal}
-                            ></lightning-button>
-                            <lightning-button
-                                label={labels.back}
-                                variant="brand"
-                                onclick={handleContinueBack}
-                                class="slds-var-p-left_medium"
-                            ></lightning-button>
-                        </lightning-layout-item>
-                    </lightning-layout>
-                </div>
-            </c-modal>
+    <template if:false={hideSpinner}>
+        <div class="slds-var-p-around_medium slds-align_absolute-center slds-is-relative">
+            <lightning-spinner
+                alternative-text={labels.loading}
+                size="medium"
+            ></lightning-spinner>
+        </div>
+    </template>
+    <template if:true={isLoaded}>
+        <template if:true={isStep1}>
+            <c-new-service-schedule
+                service-id={serviceId}
+                service-schedule-model={serviceScheduleModel}
+                onloaded={handleLoaded}
+            ></c-new-service-schedule>
+        </template>
+        <template if:true={isStep2}>
+            <c-review-sessions
+                service-schedule-model={serviceScheduleModel}
+                onloaded={handleLoaded}
+            ></c-review-sessions>
+        </template>
+        <template if:true={isStep3}>
+            <c-participant-selector
+                service-id={serviceId}
+                service-schedule={serviceScheduleModel.serviceSchedule}
+                selected-rows={serviceScheduleModel.selectedParticipants}
+                onloaded={handleLoaded}
+            ></c-participant-selector>
+        </template>
+        <template if:true={isStep4}>
+            <c-service-schedule-review
+                service-schedule-model={serviceScheduleModel}
+                onloaded={handleLoaded}
+                participant-columns={participantColumns}
+            ></c-service-schedule-review>
+        </template>
+        <c-modal header={labels.goBack} is-nested="true">
+            {labels.backWarning}
 
             <div slot="footer">
-                <lightning-layout horizontal-align="spread">
-                    <lightning-layout-item
-                        padding="around-small"
-                        class="slds-text-align_left"
-                    >
+                <lightning-layout>
+                    <lightning-layout-item alignment-bump="left">
                         <lightning-button
-                            if:true={currentStep.back}
-                            name="back"
-                            variant={currentStep.back.variant}
-                            label={currentStep.back.label}
-                            title={currentStep.back.label}
-                            onclick={handleBack}
+                            label={labels.cancel}
+                            variant="neutral"
+                            onclick={closeBackWarningModal}
                         ></lightning-button>
-                    </lightning-layout-item>
-
-                    <lightning-layout-item
-                        padding="around-small"
-                        class="slds-text-align_center"
-                        size="4"
-                    >
-                        <lightning-progress-indicator
-                            current-step={currentStep.value}
-                            type="base"
-                            variant="base"
-                        >
-                            <template for:each={steps} for:item="step">
-                                <lightning-progress-step
-                                    key={step.value}
-                                    label={step.label}
-                                    value={step.value}
-                                ></lightning-progress-step>
-                            </template>
-                        </lightning-progress-indicator>
-                    </lightning-layout-item>
-
-                    <lightning-layout-item padding="around-small">
-                        <lightning-layout>
-                            <lightning-layout-item
-                                flexibility="no-flex"
-                                alignment-bump="left"
-                                if:true={currentStep.next}
-                            >
-                                <lightning-button
-                                    name="next"
-                                    variant={currentStep.next.variant}
-                                    label={currentStep.next.label}
-                                    title={currentStep.next.label}
-                                    onclick={handleNext}
-                                    class="slds-var-p-right_small"
-                                    if:true={currentStep.next}
-                                ></lightning-button>
-                            </lightning-layout-item>
-                            <lightning-layout-item if:true={currentStep.finish}>
-                                <lightning-button
-                                    name="finish"
-                                    variant={currentStep.finish.variant}
-                                    label={currentStep.finish.label}
-                                    title={currentStep.finish.label}
-                                    onclick={handleFinish}
-                                    class="slds-var-p-right_small"
-                                ></lightning-button>
-                            </lightning-layout-item>
-                        </lightning-layout>
+                        <lightning-button
+                            label={labels.back}
+                            variant="brand"
+                            onclick={handleContinueBack}
+                            class="slds-var-p-left_medium"
+                        ></lightning-button>
                     </lightning-layout-item>
                 </lightning-layout>
             </div>
-        </template>
-    </c-modal>
+        </c-modal>
+
+        <div slot="footer">
+            <lightning-layout horizontal-align="spread">
+                <lightning-layout-item
+                    padding="around-small"
+                    class="slds-text-align_left"
+                >
+                    <lightning-button
+                        if:true={currentStep.back}
+                        name="back"
+                        variant={currentStep.back.variant}
+                        label={currentStep.back.label}
+                        title={currentStep.back.label}
+                        onclick={handleBack}
+                    ></lightning-button>
+                </lightning-layout-item>
+
+                <lightning-layout-item
+                    padding="around-small"
+                    class="slds-text-align_center"
+                    size="4"
+                >
+                    <lightning-progress-indicator
+                        current-step={currentStep.value}
+                        type="base"
+                        variant="base"
+                    >
+                        <template for:each={steps} for:item="step">
+                            <lightning-progress-step
+                                key={step.value}
+                                label={step.label}
+                                value={step.value}
+                            ></lightning-progress-step>
+                        </template>
+                    </lightning-progress-indicator>
+                </lightning-layout-item>
+
+                <lightning-layout-item padding="around-small">
+                    <lightning-layout>
+                        <lightning-layout-item
+                            flexibility="no-flex"
+                            alignment-bump="left"
+                            if:true={currentStep.next}
+                        >
+                            <lightning-button
+                                name="next"
+                                variant={currentStep.next.variant}
+                                label={currentStep.next.label}
+                                title={currentStep.next.label}
+                                onclick={handleNext}
+                                class="slds-var-p-right_small"
+                                if:true={currentStep.next}
+                            ></lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item if:true={currentStep.finish}>
+                            <lightning-button
+                                name="finish"
+                                variant={currentStep.finish.variant}
+                                label={currentStep.finish.label}
+                                title={currentStep.finish.label}
+                                onclick={handleFinish}
+                                class="slds-var-p-right_small"
+                            ></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </template>
 </template>

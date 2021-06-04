@@ -29,6 +29,7 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track hideSpinner = false;
     @api recordTypeId;
+    @api isCommunity;
     isSaving = false;
     isLoaded = false;
     serviceScheduleModel;
@@ -159,6 +160,12 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         return this.currentStep.value === 3;
     }
 
+    get warningModal() {
+        return this.isCommunity
+            ? this.template.querySelector("c-modal")
+            : this.template.querySelector("c-modal c-modal");
+    }
+
     handleNext() {
         if (this.isStep1) {
             this.processNewServiceSchedule();
@@ -284,23 +291,21 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     showBackWarning() {
-        const modal = this.template.querySelector("c-modal c-modal");
-        modal.show();
+        this.warningModal.show();
     }
 
     closeBackWarningModal() {
-        const modal = this.template.querySelector("c-modal c-modal");
-        modal.hide();
+        this.warningModal.hide();
     }
 
     handleFinish() {
         this.save(false);
     }
 
+    @api
     handleClose() {
-        this.hideModal();
         this.navigate();
-        this.dispatchEvent(new CustomEvent("close"));
+        this.dispatchEvent(new CustomEvent("close", { bubbles: true }));
     }
 
     init() {

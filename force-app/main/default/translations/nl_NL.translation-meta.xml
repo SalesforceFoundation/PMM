@@ -37,6 +37,50 @@
         <label>Anoniem</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Selected_Contacts</name>
+        <label>Geselecteerde contactpersonen</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Title</name>
+        <label>Serviceleveringen maken voor een groep</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Description</name>
+        <label>Voer serviceleveringen in voor meerdere contactpersonen. Voorbeeld: een spontane bezoeker bij een workshop.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Button</name>
+        <label>Maken op groep</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Title</name>
+        <label>Serviceleveringen maken voor een individu</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Description</name>
+        <label>Voer serviceleveringen in voor één contactpersoon.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Button</name>
+        <label>Maken op individu</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Service</name>
+        <label>Standaardwaarden voor serviceleveringen</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Contacts</name>
+        <label>Contactpersoonselectie</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Review</name>
+        <label>Beoordeling</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Warning_No_Contacts</name>
+        <label>Selecteer ten minste één contactpersoon om door te gaan.</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>Aanwezigheid bijhouden</label>
     </customLabels>
@@ -55,6 +99,14 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>Nadat deelnemers zijn toegevoegd aan deze serviceplanning, kunt u hun aanwezigheid hier bijhouden.</label>
+    </customLabels>
+    <customLabels>
+        <name>Incorrect_Tab</name>
+        <label>Dit is niet het tabblad dat u nodig hebt.</label>
+    </customLabels>
+    <customLabels>
+        <name>Attendance_Tab_Message</name>
+        <label>Dit tabblad wordt alleen gebruikt voor het afdrukken van de aanwezigheidsgegevens vanaf een servicesessiepagina.</label>
     </customLabels>
     <customLabels>
         <name>Back</name>
@@ -182,7 +234,7 @@
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
-        <label>Uw query moet een object omvatten.</label>
+        <label>Uw query moet een object of onderliggende relatie omvatten.</label>
     </customLabels>
     <customLabels>
         <name>Monthly_On_Day</name>
@@ -230,7 +282,11 @@
     </customLabels>
     <customLabels>
         <name>No_Records_Found</name>
-        <label>Geen records gevonden</label>
+        <label>Geen records gevonden.</label>
+    </customLabels>
+    <customLabels>
+        <name>NoFieldSetFound</name>
+        <label>De veldset {0} die is ingesteld in het object {1} bestaat niet. Controleer de naam van de veldset en probeer het opnieuw.</label>
     </customLabels>
     <customLabels>
         <name>No_Records_Selected</name>
@@ -289,12 +345,24 @@
         <label>Bijwerken</label>
     </customLabels>
     <customLabels>
+        <name>Edited</name>
+        <label>Bewerkt</label>
+    </customLabels>
+    <customLabels>
         <name>Save</name>
         <label>Opslaan</label>
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
         <label>Nieuw record voor programmabetrokkenheid gemaakt.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add</name>
+        <label>Toevoegen</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_All</name>
+        <label>Alles toevoegen</label>
     </customLabels>
     <customLabels>
         <name>Save_New</name>
@@ -410,7 +478,7 @@
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
-        <label>Serviceleveringen</label>
+        <label>Serviceleveringen toevoegen</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries_Added</name>
@@ -472,6 +540,18 @@
         <name>Warning</name>
         <label>Waarschuwing</label>
     </customLabels>
+    <reportTypes>
+        <name>Contacts_with_and_without_Program_Engagements</name>
+        <label>Contactpersonen met en zonder programmabetrokkenheden</label>
+        <sections>
+            <label>Contactpersonen</label>
+            <name>Contacts</name>
+        </sections>
+        <sections>
+            <label>Programmabetrokkenheden</label>
+            <name>Program Engagements</name>
+        </sections>
+    </reportTypes>
     <customTabs>
         <name>Attendance</name>
         <label>Aanwezigheid</label>

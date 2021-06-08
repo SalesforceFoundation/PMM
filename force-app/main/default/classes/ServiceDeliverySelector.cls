@@ -101,9 +101,7 @@ public with sharing class ServiceDeliverySelector {
                 QualifiedApiName,
                 (SELECT Id, Value__c FROM BucketedValues__r)
             FROM Bucket__mdt
-            WHERE
-                QualifiedApiName IN :bucketNames
-                AND NamespacePrefix = :Util.getNamespace()
+            WHERE DeveloperName IN :bucketNames AND NamespacePrefix = :Util.getNamespace()
             ORDER BY QualifiedApiName
         ];
     }

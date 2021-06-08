@@ -240,6 +240,8 @@ flows:
             4:
                 task: restore_tdtm_trigger_handlers
                 when: "'npsp' in org_config.installed_packages"
+            5:
+                flow: setup_alternate_field_sets
 
     create_users_and_assign_permission_sets:
         steps:

@@ -203,10 +203,7 @@ public with sharing class ServiceDeliveryService {
     }
 
     private Map<String, List<String>> getStatusBuckets() {
-        List<String> bucketNames = new List<String>{
-            Util.prefixNamespace(ABSENT),
-            Util.prefixNamespace(PRESENT)
-        };
+        List<String> bucketNames = new List<String>{ ABSENT, PRESENT };
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
         for (Bucket__mdt bucket : deliverySelector.getBuckets(bucketNames)) {

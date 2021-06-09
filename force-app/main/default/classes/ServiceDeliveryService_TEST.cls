@@ -27,7 +27,7 @@ public with sharing class ServiceDeliveryService_TEST {
                 QualifiedApiName,
                 (SELECT Id, Value__c FROM BucketedValues__r)
             FROM Bucket__mdt
-            WHERE QualifiedApiName IN :bucketNames
+            WHERE DeveloperName IN :bucketNames AND NamespacePrefix = :Util.getNamespace()
             ORDER BY QualifiedApiName
         ];
         deliverySelectorStub = new StubBuilder(ServiceDeliverySelector.class)

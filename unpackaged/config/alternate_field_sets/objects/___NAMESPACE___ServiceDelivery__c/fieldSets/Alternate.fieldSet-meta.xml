@@ -28,16 +28,6 @@
     </availableFields>
     <description>Used in the Bulk Service Delivery UI</description>
     <displayedFields>
-        <field>%%%NAMESPACE%%%Contact__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>true</isRequired>
-    </displayedFields>
-    <displayedFields>
-        <field>%%%NAMESPACE%%%ProgramEngagement__c</field>
-        <isFieldManaged>false</isFieldManaged>
-        <isRequired>true</isRequired>
-    </displayedFields>
-    <displayedFields>
         <field>%%%NAMESPACE%%%Service__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>true</isRequired>

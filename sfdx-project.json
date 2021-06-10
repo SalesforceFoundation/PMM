@@ -7,6 +7,10 @@
         {
             "path": "unpackaged/config/experience_cloud",
             "default": false
+        },
+        {
+            "path": "unpackaged/config/alternate_field_sets",
+            "default": false
         }
     ],
     "namespace": "pmdm",

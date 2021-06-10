@@ -167,10 +167,24 @@ tasks:
 
     deploy_experience_cloud:
         group: "PMM: Config"
-        description: Deploys the post-install configuration for an unmanaged DE org
+        description: Deploys the post-install configuration emulating a customer-created Experience Cloud
         class_path: cumulusci.tasks.salesforce.Deploy
         options:
             path: unpackaged/config/experience_cloud
+
+    deploy_alternate_field_sets:
+        group: "PMM: Config"
+        description: Deploys the post-install configuration emulating admin-configured alternate field sets
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/alternate_field_sets
+
+    use_alternate_field_sets:
+        group: "PMM: Config"
+        description: Execute anonymous apex to use Alternate field set on an example Service record
+        class_path: cumulusci.tasks.apex.anon.AnonymousApexTask
+        options:
+            path: scripts/Use_Alternate_Field_Sets.apex
 
     deploy_customer_profiles:
         group: "PMM: Config"
@@ -199,6 +213,21 @@ flows:
             7:
                 task: snapshot_changes
 
+    setup_alternate_field_sets:
+        steps:
+            1:
+                task: deploy_alternate_field_sets
+            2:
+                task: add_picklist_entries
+                options:
+                    entries:
+                        - fullName: Alternate
+                          label: Alternate
+                    picklists:
+                        - "%%%NAMESPACE%%%Service__c.%%%NAMESPACE%%%ServiceDeliveryFieldSet__c"
+            3:
+                task: use_alternate_field_sets
+
     load_data:
         steps:
             1:
@@ -211,6 +240,8 @@ flows:
             4:
                 task: restore_tdtm_trigger_handlers
                 when: "'npsp' in org_config.installed_packages"
+            5:
+                flow: setup_alternate_field_sets
 
     create_users_and_assign_permission_sets:
         steps:

@@ -15,6 +15,9 @@ README.md
 .prettierignore
 .eslintignore
 
+# namespacing in anonymous apex
+scripts 
+
 # Images
 *.png
 *.jpg

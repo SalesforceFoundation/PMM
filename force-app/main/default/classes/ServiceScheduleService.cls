@@ -230,13 +230,14 @@ public with sharing class ServiceScheduleService {
             return;
         }
 
+        model.programCohorts = programEngagementSelector.getProgramCohortsByProgramId(
+            model.program.Id
+        );
+
         model.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
             model.program.Id,
             getSelectFieldsWithToLabel(model),
             ACTIVE_ENGAGEMENT_STAGES
-        );
-        model.programCohorts = programEngagementSelector.getProgramCohortsByProgramId(
-            model.program.Id
         );
     }
 

@@ -84,7 +84,7 @@
                                             class="slds-border_top slds-var-m-top_xx-small"
                                         >
                                             <lightning-datatable
-                                                data={filteredEngagements}
+                                                data={data}
                                                 key-field="Id"
                                                 columns={selectorColumns}
                                                 column-widths-mode="auto"
@@ -92,6 +92,8 @@
                                                 resize-column-disabled
                                                 hide-checkbox-column
                                                 onrowaction={handleSelectParticipant}
+                                                enable-infinite-loading={enableInfiniteLoading}
+                                                onloadmore={handleLoadMore}
                                             ></lightning-datatable>
                                         </div>
                                     </lightning-layout-item>

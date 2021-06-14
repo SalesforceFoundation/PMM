@@ -27,7 +27,6 @@ import filterByRecord from "@salesforce/label/c.Filter_By_Record";
 import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
 import add from "@salesforce/label/c.Add";
 import addAll from "@salesforce/label/c.Add_All";
-import loading from "@salesforce/label/c.Loading";
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
     @api serviceSchedule;
@@ -58,7 +57,6 @@ export default class ParticipantSelector extends LightningElement {
     offset = this.offsetRows;
 
     labels = {
-        loading,
         selectContacts,
         selectedContacts,
         capacityWarning,

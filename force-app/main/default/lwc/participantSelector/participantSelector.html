@@ -146,12 +146,16 @@
             </lightning-layout>
         </lightning-layout-item>
     </lightning-layout>
-    <template if:false={isLoaded}>
-        <div class="slds-align_absolute-center">
-            <lightning-spinner
-                alternative-text={labels.loading}
-                size="medium"
-            ></lightning-spinner>
-        </div>
-    </template>
+    <lightning-layout if:false={isLoaded}>
+        <lightning-layout-item size="10">
+            <lightning-layout>
+                <lightning-layout-item size="8" class="slds-var-p-top_small">
+                    <c-loading-stencil></c-loading-stencil>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" class="slds-var-p-top_small">
+                    <c-loading-stencil></c-loading-stencil>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+    </lightning-layout>
 </template>

@@ -146,4 +146,12 @@
             </lightning-layout>
         </lightning-layout-item>
     </lightning-layout>
+    <template if:false={isLoaded}>
+        <div class="slds-align_absolute-center">
+            <lightning-spinner
+                alternative-text={labels.loading}
+                size="medium"
+            ></lightning-spinner>
+        </div>
+    </template>
 </template>

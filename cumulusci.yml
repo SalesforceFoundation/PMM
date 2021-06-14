@@ -223,6 +223,8 @@ flows:
                     entries:
                         - fullName: Alternate
                           label: Alternate
+                        - fullName: Alternate_no_service
+                          label: Alternate_no_service
                     picklists:
                         - "%%%NAMESPACE%%%Service__c.%%%NAMESPACE%%%ServiceDeliveryFieldSet__c"
             3:

@@ -417,3 +417,10 @@ class pmm(object):
         self.selenium.set_focus_to_element(locator)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
+
+    def select_listview(self, title):
+        """ Picks a list view on the listing page """
+        locator_select = pmm_lex_locators["list_view"]
+        self.selenium.get_webelement(locator_select).click()
+        locator = pmm_lex_locators["listview_options"].format(title)
+        self.salesforce._jsclick(locator)

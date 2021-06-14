@@ -59,7 +59,7 @@ pmm_lex_locators = {
         "related_list": "//a[contains(@class,'slds-card')]/span[contains(@class,'slds-truncate') and @title='{}']",
     },
     "quick_actions": "//button[@class='slds-button slds-button_neutral' and text()='{}']",
-    "list_view": "//a[contains(@class,'slds-button') and @title='Select List View']",
+    "list_view": "//button[contains(@class,'slds-button') and @title='Select List View']",
     "listview_options": "//li[contains(@class,'slds-dropdown__item')]//a//span[text()='{}']",
     "listview_link": "//a[contains(@class,'slds-truncate') and text()='{}']",
     "toast_link": "//span[contains(@class,'toastMessage')]/a[@class='forceActionLink']/div[contains(@title,'{}')]",

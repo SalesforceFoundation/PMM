@@ -4,5 +4,9 @@ for (%%%NAMESPACE%%%Service__c service : [SELECT Name, %%%NAMESPACE%%%ServiceDel
     service.%%%NAMESPACE%%%ServiceDeliveryFieldSet__c = 'Alternate';
     servicesToUpdate.add(service);
 }
+for (%%%NAMESPACE%%%Service__c service : [SELECT Name, %%%NAMESPACE%%%ServiceDeliveryFieldSet__c FROM %%%NAMESPACE%%%Service__c WHERE Name = 'Subsidized Lunch']){
+    service.%%%NAMESPACE%%%ServiceDeliveryFieldSet__c = 'Alternate_no_service';
+    servicesToUpdate.add(service);
+}
 
 update servicesToUpdate;

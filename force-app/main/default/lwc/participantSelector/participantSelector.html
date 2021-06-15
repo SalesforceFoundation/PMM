@@ -84,7 +84,7 @@
                                             class="slds-border_top slds-var-m-top_xx-small"
                                         >
                                             <lightning-datatable
-                                                data={filteredEngagements}
+                                                data={data}
                                                 key-field="Id"
                                                 columns={selectorColumns}
                                                 column-widths-mode="auto"
@@ -92,6 +92,8 @@
                                                 resize-column-disabled
                                                 hide-checkbox-column
                                                 onrowaction={handleSelectParticipant}
+                                                enable-infinite-loading={enableInfiniteLoading}
+                                                onloadmore={handleLoadMore}
                                             ></lightning-datatable>
                                         </div>
                                     </lightning-layout-item>
@@ -140,6 +142,18 @@
                             </div>
                         </template>
                     </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout if:false={isLoaded}>
+        <lightning-layout-item size="10">
+            <lightning-layout>
+                <lightning-layout-item size="8" class="slds-var-p-top_small">
+                    <c-loading-stencil></c-loading-stencil>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" class="slds-var-p-top_small">
+                    <c-loading-stencil></c-loading-stencil>
                 </lightning-layout-item>
             </lightning-layout>
         </lightning-layout-item>

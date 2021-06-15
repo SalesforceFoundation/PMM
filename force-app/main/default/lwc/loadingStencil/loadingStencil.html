@@ -1,0 +1,22 @@
+<template>
+    <lightning-card>
+        <lightning-layout multiple-rows="true">
+            <template for:each={levels} for:item="level">
+                <lightning-layout-item size="12" key={level}>
+                    <div class="opacity-target">
+                        <div class="stencil"></div>
+                    </div>
+                </lightning-layout-item>
+            </template>
+            <lightning-layout-item flexibility="auto" padding="around-large">
+                <div class="slds-is-relative">
+                    <lightning-spinner
+                        alternative-text={labels.loading}
+                        size="small"
+                        variant="brand"
+                    ></lightning-spinner>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

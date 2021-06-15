@@ -31,7 +31,7 @@ class NewProgramEngagementPage(BasePMMPage, BasePage):
         )
 
     def populate_program_engagement_bsdt_form(self, **kwargs):
-        """ Populates new program engagement form with the field-value pairs """
+        """Populates new program engagement form with the field-value pairs"""
         for key, value in kwargs.items():
             if key == "Role":
                 locator = pmm_lex_locators["bulk_service_delivery_locators"][

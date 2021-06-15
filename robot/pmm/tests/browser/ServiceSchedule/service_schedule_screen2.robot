@@ -53,3 +53,21 @@ Max number of service session
     Wait Until Modal is Closed
     Verify Details                          Service Schedule Name             contains      ${service_schedule_name}
     Verify Details                          Number of Service Sessions        contains      600
+
+Add new service session on Screen 2
+    [Documentation]                        On service schedule wizard, add a new service session on Screen 2
+    [tags]                                  W-8449817   perm:admin   perm:manage   feature:Service Schedule
+    Go To Page                              Details                        Service__c           object_id=${service}[Id]
+    Click Wrapper Related List Button       Service Schedules              New
+    Current Page Should Be                  New                            ServiceSchedule__c
+    Verify Wizard Screen Title              Service Schedule Information
+    Populate Field                          Service Schedule Name               ${service_schedule_name}
+    Click Dialog Button                     Next
+    Verify Wizard Screen Title              Review Service Sessions
+    Click Dialog Button                     Add Service Session
+    Populate Lightning Fields               Date=25
+    Click Dialog Button                     Save
+    Page Should Contain                     Total Sessions: 2
+
+
+

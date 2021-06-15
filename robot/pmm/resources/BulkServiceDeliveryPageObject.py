@@ -55,7 +55,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         )
 
     def verify_dialog_title(self, label):
-        """Verify dialog title on New PE dialog and Delete dialog """
+        """Verify dialog title on New PE dialog and Delete dialog"""
         locator = pmm_lex_locators["bulk_service_delivery_locators"][
             "new_prog_engagement"
         ]["title"].format(label)
@@ -64,7 +64,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         )
 
     def click_dialog_button(self, title):
-        """ Click on a button on new PE dialog and delete dialog """
+        """Click on a button on new PE dialog and delete dialog"""
         locator_save = pmm_lex_locators["bulk_service_delivery_locators"][
             "new_prog_engagement"
         ]["button"].format(title)
@@ -119,7 +119,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         self.selenium.driver.execute_script("arguments[0].click()", element_click)
 
     def click_bsdt_icon(self, icon):
-        """ Click on an icon on bsdt page"""
+        """Click on an icon on bsdt page"""
         locator = pmm_lex_locators["bulk_service_delivery_locators"]["icon"].format(
             icon
         )
@@ -129,7 +129,7 @@ class BulkServiceDeliveryPage(BasePMMPage, BasePage):
         self.selenium.click_element(locator)
 
     def click_bsdt_button(self, title):
-        """ Click on a button on new PE dialog and delete dialog """
+        """Click on a button on new PE dialog and delete dialog"""
         locator = pmm_lex_locators["bulk_service_delivery_locators"][
             "bsdt-button"
         ].format(title)

@@ -59,3 +59,13 @@ Add Service Participant quick action
     Page Should Contain                     ${service_participant1}[Name]
     Page Should Contain                     ${contact2}[Name] - ${service_schedule}[Name]
     Page Should Contain                     ${contact3}[Name] - ${service_schedule}[Name]
+
+Verify Upcoming Service Schedule listview
+    [Documentation]                        This test opens the upcoming service schedule listview and verifies that it contains 
+    ...                                    service, participant capacity and first session start fields
+    [tags]                                 W-9056626   perm:admin   perm:manage   perm:deliver   perm:view   feature:Program
+    Go To Page                             Listing                               ${ns}ServiceSchedule__c
+    Select Listview                        Upcoming Service Schedules
+    Page Should Contain                    Service
+    Page Should Contain                    First Session Start
+    Page Should Contain                    Participant Capacity

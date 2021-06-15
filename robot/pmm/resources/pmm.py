@@ -88,7 +88,7 @@ class pmm(object):
             return ""
 
     def get_pmm_namespace_prefix(self):
-        """ gets the namespace prefix for the objects """
+        """gets the namespace prefix for the objects"""
         if not hasattr(self.cumulusci, "_describe_result"):
             self.cumulusci._describe_result = self.cumulusci.sf.describe()
         objects = self.cumulusci._describe_result["sobjects"]
@@ -96,7 +96,7 @@ class pmm(object):
         return self.get_namespace_prefix(program_object["name"])
 
     def click_app_link(self):
-        """ clicks on the app link on the app launcher """
+        """clicks on the app link on the app launcher"""
         locator = pmm_lex_locators["app_link"]
         self.selenium.wait_until_page_contains_element(locator, error="App not found")
         self.selenium.set_focus_to_element(locator)
@@ -113,13 +113,13 @@ class pmm(object):
         return "".join(random.choice(string.ascii_lowercase) for _ in range(len))
 
     def generate_new_string(self, prefix="PMM Robot"):
-        """ generates a random string with PMM Robot prefix """
+        """generates a random string with PMM Robot prefix"""
         return "{PREFIX} {RANDOM}".format(
             PREFIX=prefix, RANDOM=self.new_random_string(len=5)
         )
 
     def page_should_contain_text(self, text):
-        """ Verifies if the page contains the given text """
+        """Verifies if the page contains the given text"""
         locator = pmm_lex_locators["text"].format(text)
         self.selenium.page_should_contain_element(locator)
 
@@ -139,7 +139,7 @@ class pmm(object):
         return id
 
     def click_new_related_record_link(self, value):
-        """ clicks on a link on the related list given the link """
+        """clicks on a link on the related list given the link"""
         locator = pmm_lex_locators["related"]["new_record_link"].format(value)
         self.selenium.set_focus_to_element(locator)
         element = self.selenium.driver.find_element_by_xpath(locator)
@@ -170,7 +170,7 @@ class pmm(object):
             raise Exception("Valid status not entered")
 
     def click_quick_action_button(self, title):
-        """ Click on quick action buttons and verifies the title of the quick action dialog """
+        """Click on quick action buttons and verifies the title of the quick action dialog"""
         locator = pmm_lex_locators["quick_actions"].format(title)
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
@@ -190,7 +190,7 @@ class pmm(object):
         )
 
     def click_listview_link(self, title):
-        """ clicks on a link on the listview page, given the link """
+        """clicks on a link on the listview page, given the link"""
         locator = pmm_lex_locators["listview_link"].format(title)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
@@ -276,7 +276,7 @@ class pmm(object):
         self.salesforce._jsclick(value_loc)
 
     def select_date_from_datepicker(self, title, value):
-        """ opens the date picker given the field name and picks a date from the date picker"""
+        """opens the date picker given the field name and picks a date from the date picker"""
         locator = pmm_lex_locators["new_record"]["open_date_picker"].format(title)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
@@ -307,7 +307,7 @@ class pmm(object):
         )
 
     def verify_modal_error(self, message):
-        """ Verify error message is displayed on the modal"""
+        """Verify error message is displayed on the modal"""
         locator = pmm_lex_locators["new_record"]["error_message"].format(message)
         self.selenium.wait_until_page_contains_element(
             locator, error="Error message is not displayed"
@@ -322,7 +322,7 @@ class pmm(object):
         time.sleep(1)
 
     def click_dialog_button(self, label):
-        """ Click on a button to on the new record dialog"""
+        """Click on a button to on the new record dialog"""
         locator = pmm_lex_locators["new_record"]["button"].format(label)
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
@@ -409,7 +409,7 @@ class pmm(object):
         assert cb_found, " Checkbox not found "
 
     def select_button_on_modal(self, label):
-        """ Click on a button to on the new record dialog"""
+        """Click on a button to on the new record dialog"""
         locator = pmm_lex_locators["new_record"]["modal_button"].format(label)
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
@@ -417,3 +417,10 @@ class pmm(object):
         self.selenium.set_focus_to_element(locator)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
+
+    def select_listview(self, title):
+        """Picks a list view on the listing page"""
+        locator_select = pmm_lex_locators["list_view"]
+        self.selenium.get_webelement(locator_select).click()
+        locator = pmm_lex_locators["listview_options"].format(title)
+        self.salesforce._jsclick(locator)

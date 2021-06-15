@@ -40,6 +40,7 @@ export default class ParticipantSelector extends LightningElement {
     @track filteredEngagements;
     @track engagements;
     @track cohorts;
+    @track data = [];
 
     searchValue;
     noRecordsFound = false;
@@ -52,6 +53,8 @@ export default class ParticipantSelector extends LightningElement {
     objectLabels;
     isLoaded = false;
     rendered = false;
+    offsetRows = 50;
+    offset = this.offsetRows;
 
     labels = {
         selectContacts,
@@ -182,9 +185,21 @@ export default class ParticipantSelector extends LightningElement {
         });
 
         this.sortData(this.availableEngagements);
-        this.filteredEngagements = [...this.availableEngagements];
+        this.applyFilters();
         this.noRecordsFound =
             this.filteredEngagements && this.filteredEngagements.length === 0;
+    }
+
+    get enableInfiniteLoading() {
+        return this.offset < this.filteredEngagements.length;
+    }
+
+    handleLoadMore() {
+        this.offset += this.offsetRows;
+        this.data = this.filteredEngagements.slice(
+            0,
+            Math.min(this.offset, this.filteredEngagements.length)
+        );
     }
 
     sortData(engagements) {
@@ -349,6 +364,10 @@ export default class ParticipantSelector extends LightningElement {
 
         this.noRecordsFound =
             this.filteredEngagements && this.filteredEngagements.length === 0;
+        this.data = this.filteredEngagements.slice(
+            0,
+            Math.min(this.filteredEngagements.length, this.offset)
+        );
     }
 
     dispatchSelectEvent() {

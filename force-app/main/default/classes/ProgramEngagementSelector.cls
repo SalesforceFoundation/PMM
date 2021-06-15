@@ -54,12 +54,18 @@ public with sharing class ProgramEngagementSelector {
             return new List<ProgramEngagement__c>();
         }
 
-        queryBuilder.withSObjectType(ProgramEngagement__c.getSObjectType())
+        Integer limitTo =
+            System.Limits.getLimitQueryRows() - System.Limits.getQueryRows();
+
+        queryBuilder
+            .reset()
+            .withSObjectType(ProgramEngagement__c.getSObjectType())
             .withSelectFields(new List<String>(fields))
             .addCondition(
                 String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
             )
-            .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages');
+            .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages')
+            .withLimit(limitTo);
 
         List<ProgramEngagement__c> programEngagements = Database.query(
             queryBuilder.buildSoqlQuery()

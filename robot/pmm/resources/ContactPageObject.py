@@ -16,7 +16,7 @@ class NewContactPage(BasePMMPage, BasePage):
     object_name = "Contact"
 
     def save_contact(self):
-        """ Saves the contact by clicking on the save button on new contact dialog"""
+        """Saves the contact by clicking on the save button on new contact dialog"""
         locator = pmm_lex_locators["contact_save"]
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"

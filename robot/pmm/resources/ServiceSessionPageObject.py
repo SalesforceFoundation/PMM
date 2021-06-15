@@ -57,7 +57,7 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
         self.selenium.wait_until_page_contains("Service Session Name", timeout=60)
 
     def populate_attendance_field(self, client_name, label, value):
-        """ Populate text field on attendance component given the Client Name """
+        """Populate text field on attendance component given the Client Name"""
         locator = pmm_lex_locators["attendance"]["attendance_text"].format(
             client_name, label
         )
@@ -105,7 +105,7 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
             raise Exception("Valid status not entered")
 
     def validate_attendance_info_in_row(self, client_name, field, status, value):
-        """ Validate details on attendance component given the client name and field name """
+        """Validate details on attendance component given the client name and field name"""
         locator = pmm_lex_locators["attendance"]["details"].format(client_name, field)
         actual_value = self.selenium.get_webelement(locator).text
         if status == "contains":

@@ -131,3 +131,13 @@ Validate program cohort on new PE dialog
      Select Value From Dropdown             Role                                   Volunteer
      Click Dialog Button                    Save
      Verify Modal Error                     Select a Program Cohort that matches the Program.
+
+Validate Waitlisted PE Listview
+    [Documentation]                        This test opens the Waitlisted PE listview and verifies that it contains 
+    ...                                    Client, Program and Stage fields
+    [tags]                                 perm:admin   perm:manage   perm:deliver   perm:view   feature:Program Engagement
+    Go To Page                             Listing                               ${ns}ProgramEngagement__c
+    Select Listview                        Waitlisted Program Engagements
+    Page Should Contain                    Client
+    Page Should Contain                    Program
+    Page Should Contain                    Stage

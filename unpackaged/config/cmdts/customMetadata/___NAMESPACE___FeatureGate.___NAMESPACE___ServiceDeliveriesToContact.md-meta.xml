@@ -3,7 +3,7 @@
     <label>Roll up Service Deliveries to Contact</label>
     <protected>false</protected>
     <values>
-        <field>IsActive__c</field>
+        <field>%%%NAMESPACE%%%IsActive__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
 </CustomMetadata>

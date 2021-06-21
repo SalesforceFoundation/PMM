@@ -76,6 +76,15 @@ tasks:
             data_files:
                 - "datasets/communityuser.json"
 
+    add_community_login_button:
+        description: Adds the "Log in to Experience as User" button to the PMM Contact layout
+        class_path: cumulusci.tasks.metadata_etl.layouts.AddRecordPlatformActionListItem
+        options:
+            api_names: "Contact-%%%NAMESPACE%%%Program Management"
+            action_name: LoginToNetworkAsUser
+            action_type: StandardButton
+            place_first: True
+
     robot:
         options:
             suites: robot/pmm/tests
@@ -211,6 +220,8 @@ flows:
             6:
                 task: publish_community
             7:
+                task: add_community_login_button
+            8:
                 task: snapshot_changes
 
     setup_alternate_field_sets:

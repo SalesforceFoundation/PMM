@@ -77,6 +77,7 @@ Setup Test Data
 Service attendance summary field
     [Documentation]                 This test updates attendance and validates the attendance summary field on a service record
     [tags]                          W-9323278   perm:admin   perm:manage    feature:Attendance
+    Run Task                       deploy_cmdts
     Go To Page                     Details         ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain Text       Track Attendance
     Populate Attendance Dropdown        ${contact1}[Name]      Attendance Status    Present

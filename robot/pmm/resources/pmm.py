@@ -13,14 +13,14 @@ from robot.libraries.BuiltIn import RobotNotRunningError
 from cumulusci.robotframework.utils import selenium_retry
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.keys import Keys
+from locators_52 import pmm_lex_locators as locators_52
 from locators_51 import pmm_lex_locators as locators_51
 from locators_50 import pmm_lex_locators as locators_50
-from locators_49 import pmm_lex_locators as locators_49
 
 locators_by_api_version = {
-    49.0: locators_49,  # summer '20
     50.0: locators_50,  # winter '21
-    51.0: locators_51,  # winter '21
+    51.0: locators_51,  # spring '21
+    52.0: locators_52,  # summer '21
 }
 # will get populated in _init_locators
 pmm_lex_locators = {}
@@ -175,10 +175,10 @@ class pmm(object):
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
         )
-        element = self.selenium.driver.find_element_by_xpath(locator)
-        self.selenium.driver.execute_script("arguments[0].click()", element)
+        self.salesforce._jsclick(locator)
+        locator_title = pmm_lex_locators["modal_title"]
         self.selenium.wait_until_page_contains_element(
-            locator, error="Section title is not as expected"
+            locator_title, error="Section title is not as expected"
         )
 
     def verify_current_page_title(self, label):
@@ -254,7 +254,7 @@ class pmm(object):
 
     def select_value_from_dropdown(self, dropdown, value):
         """Select given value in the dropdown field"""
-        locator_title = pmm_lex_locators["page_title"]
+        locator_title = pmm_lex_locators["modal_title"]
         value_title = self.selenium.get_webelement(locator_title).text
         if value_title == "Add Contact to Program":
             locator = pmm_lex_locators["new_record"]["quick_dropdown_field"].format(
@@ -268,7 +268,7 @@ class pmm(object):
             locator = pmm_lex_locators["new_record"]["dropdown_field"].format(dropdown)
             popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
             value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
-        self.salesforce.scroll_element_into_view(locator)
+        self.scroll_element_into_view(locator)
         self.selenium.get_webelement(locator).click()
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="Status field dropdown did not open"
@@ -358,7 +358,7 @@ class pmm(object):
                 if self.check_if_element_exists(locator):
                     self.selenium.set_focus_to_element(locator)
                     self.selenium.wait_until_element_is_visible(locator)
-                    self.selenium.scroll_element_into_view(locator)
+                    self.scroll_element_into_view(locator)
                     self.salesforce._jsclick(locator)
                     self.selenium.wait_until_element_is_visible(selection_value)
                     self.selenium._jsclick(selection_value)
@@ -382,7 +382,7 @@ class pmm(object):
     def select_from_date_picker(self, title, value):
         """Opens the date picker by clicking on the date picker icon given the title of the field and select a date"""
         locator = pmm_lex_locators["new_record"]["c_lightning_datepicker"].format(title)
-        self.selenium.scroll_element_into_view(locator)
+        self.scroll_element_into_view(locator)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
         locator_date = pmm_lex_locators["new_record"]["c_datepicker"].format(value)
@@ -424,3 +424,11 @@ class pmm(object):
         self.selenium.get_webelement(locator_select).click()
         locator = pmm_lex_locators["listview_options"].format(title)
         self.salesforce._jsclick(locator)
+
+    def scroll_element_into_view(self, locator):
+        """Scroll the element identified by 'locator' into view"""
+        element = self.selenium.get_webelement(locator)
+        self.selenium.driver.execute_script(
+            "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'})",
+            element,
+        )

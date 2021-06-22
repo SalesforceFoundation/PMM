@@ -34,7 +34,6 @@ Create Service from top nav
      Go To Page                             Listing                     ${ns}Service__c
      Click Object Button                    New
      Load Page Object                       NewService                  ${ns}Service__c
-     verify current page title              New Service
      Populate Field                         Service Name                ${service_name}
      Populate Field                         Description                 ${Description}
      Populate Field                         Unit of Measurement         ${unit_of_measurement}

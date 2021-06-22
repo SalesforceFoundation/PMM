@@ -66,9 +66,9 @@ Date validation on new program dialog
     Go To Page                             Listing                               ${ns}Program__c
     Click Object Button                    New
     Verify Current Page Title              New Program
-    Populate Modal Form                    Program Name=${program_name}
-    Populate Lightning Fields              Status=Active
-    ...                                    Start Date=25
+    Populate Field                         Program Name     ${program_name}
+    Select Value From Dropdown             Status           Active
+    Populate Lightning Fields              Start Date=25
     ...                                    End Date=10
-    Click Dialog button                     Save
+    Click Dialog button                    Save
     Verify Modal Error                     Start Date must be before End Date

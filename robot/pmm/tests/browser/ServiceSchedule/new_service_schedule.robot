@@ -52,7 +52,6 @@ Create a New Service Schedule
     Populate Field                          Service Schedule Name               ${service_schedule_name}
     Populate Field                          Participant Capacity                10
     Populate Lookup Field                   Primary Service Provider            ${contact}[Name]
-    Populate Lightning Fields               Date=Today
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Review Service Sessions
     Click Dialog Button                     Next

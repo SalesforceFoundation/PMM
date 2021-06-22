@@ -39,7 +39,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         locator_button = pmm_lex_locators["service_schedule"][
             "add_participants"
         ].format(participant)
-        self.selenium.scroll_element_into_view(locator_button)
+        self.pmm.scroll_element_into_view(locator_button)
         self.selenium.set_focus_to_element(locator_button)
         self.salesforce._jsclick(locator_button)
 
@@ -110,7 +110,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
     def set_frequency(self, frequency):
         """Sets the frequency on Screen1 of Service Schedule Wizard"""
         locator = pmm_lex_locators["service_schedule"]["frequency"].format(frequency)
-        self.selenium.scroll_element_into_view(locator)
+        self.pmm.scroll_element_into_view(locator)
         self.selenium.set_focus_to_element(locator)
         self.salesforce._jsclick(locator)
 
@@ -119,7 +119,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         locator = pmm_lex_locators["service_schedule"]["ends_radio_button"].format(
             frequency
         )
-        self.selenium.scroll_element_into_view(locator)
+        self.pmm.scroll_element_into_view(locator)
         self.selenium.set_focus_to_element(locator)
         self.salesforce._jsclick(locator)
         locator_session = pmm_lex_locators["service_schedule"]["session_end"].format(

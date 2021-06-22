@@ -43,10 +43,10 @@ Add contact to program quick action
      Verify Details                   Name                                    contains             ${contact}[Name]
      Click Quick Action Button        Add Contact to Program
      Populate Lookup Field            Program          ${program}[Name]    
-     Populate Modal form              Role=Client
-     ...                              Stage=Active
-     ...                              Program Cohort=${program_cohort}[Name]
-     ...                              Start Date=Today
+     Select Value From Dropdown       Role             Client
+     Select Value From Dropdown       Stage            Active
+     Populate Lookup Field            Program Cohort   ${program_cohort}[Name]
+     Select Date From Datepicker      Start Date       Today
      Select Button On Modal           Save
      Wait Until Modal Is Closed
      Load Related List                Program Engagements
@@ -61,9 +61,9 @@ Add service delivery on a contact
      Go To Page                       Details                                 Contact                  object_id=${contact}[Id]
      Verify Details                   Name                                    contains             ${contact}[Name]
      Click Quick Action Button        Create New Service Delivery
-     Populate Modal Form              Program Engagement=${program_engagement}[Name]
-     ...                              Service=${service}[Name]
-     ...                              Quantity=${quantity}
+     Populate Lookup Field            Program Engagement              ${program_engagement}[Name]
+     Populate Lookup Field            Service                         ${service}[Name]
+     Populate Field                   Quantity                        ${quantity}
      Select Button On Modal           Save
      Wait Until Modal Is Closed
      Load Related List                Service Deliveries

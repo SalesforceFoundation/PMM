@@ -68,6 +68,3 @@ Add new service session on Screen 2
     Populate Lightning Fields               Date=25
     Click Dialog Button                     Save
     Page Should Contain                     Total Sessions: 2
-
-
-

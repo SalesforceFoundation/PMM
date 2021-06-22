@@ -181,6 +181,13 @@ tasks:
         options:
             path: unpackaged/config/experience_cloud
 
+    deploy_cmdts:
+        group: "PMM: Config"
+        description: Deploys the updated Custom Metadata records, emulating admin setup
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/cmdts
+
     deploy_alternate_field_sets:
         group: "PMM: Config"
         description: Deploys the post-install configuration emulating admin-configured alternate field sets

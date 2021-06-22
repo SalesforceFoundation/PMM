@@ -32,6 +32,16 @@ Setup Test Data
 
 
 *** Test Cases ***
+Validate Waitlisted PE Listview
+    [Documentation]                        This test opens the Waitlisted PE listview and verifies that it contains 
+    ...                                    Client, Program and Stage fields
+    [tags]                                 perm:admin   perm:manage   perm:deliver   perm:view   feature:Program Engagement
+    Go To Page                             Listing                               ${ns}ProgramEngagement__c
+    Select Listview                        Waitlisted Program Engagements
+    Page Should Contain                    Client
+    Page Should Contain                    Program
+    Page Should Contain                    Stage
+
 Create Program Engagement
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
      [tags]                                  W-037565      perm:admin   perm:manage       perm:deliver    feature:Program Engagement
@@ -79,7 +89,7 @@ Date validation for PE when start date is later than end date
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
-     Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
+     Populate Field                         Program Engagement Name       ${program_engagement_name}
      Populate Lookup Field                  Program                                ${program}[Name]
      Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
      Select Value From Dropdown             Stage                                  Applied
@@ -97,7 +107,6 @@ Date validation when program engagement dates are not within program date range
      [tags]                                 W-042238   perm:admin   perm:manage     perm:deliver    feature:Program Engagement
      Go To Page                             Details                                 Program__c                   object_id=${program}[Id]
      Click Quick Action Button              Edit
-     Verify Current Page Title              Edit ${program}[Name]
      Populate Lightning Fields              Start Date=12
      ...                                    End Date=20
      Click Dialog Button                    Save
@@ -105,7 +114,7 @@ Date validation when program engagement dates are not within program date range
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
-     Populate Modal Form                    Program Engagement Name= ${program_engagement_name}
+     Populate Field                         Program Engagement Name     ${program_engagement_name}
      Populate Lookup Field                  Program                                ${program}[Name]
      Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
      Select Value From Dropdown             Stage                                  Applied

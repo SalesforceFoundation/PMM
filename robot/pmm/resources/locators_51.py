@@ -1,121 +1,16 @@
-""" Locators for spring '21 """
+""" Locators for spring'21 """
 
-# Copyright (c) 2020, salesforce.com, inc.
-# All rights reserved.
-# SPDX-License-Identifier: BSD-3-Clause
-# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+from locators_52 import pmm_lex_locators
+import copy
 
-pmm_lex_locators = {
-    "app_link": "//div[contains(@class,'slds-app-launcher__tile-body')]//span/p[@class='slds-truncate' and text()='Program Management']",
-    "text": "//*[contains(text(), '{}')]",
-    "page_title": "//h2[contains(@class,'slds-text-heading') or contains(@class,'truncate title')]",
-    "placeholder": "//*[contains(@placeholder,'{}')]",
-    "placeholder_lookup": {
-        "lookup1": "//div[@class='slds-lookup__result-text' and contains(text(), '{}')]",
-        "lookup2": "//mark[text() = '{}']/ancestor::a",
-    },
-    "input": {
-        "input1": "//label[text()='{}']/following::input",
-        "input2": "//input[@type='text' and @data-name='{}']",
-    },
-    "page_header": "//div[contains(@class, 'slds-page-header')]/descendant::span[text()='{}}']",
-    "checkbox": "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']",
-    "confirm": {
-        "details": "//div[contains(@class, 'forcePageBlockItem') or contains(@class, 'slds-form-element_stacked')][.//span[text()='{}']]//descendant::div[.//span[contains(@class, 'test-id__field-value')]]//*[self::a or self::lightning-formatted-number or self::lightning-formatted-text or self::lightning-formatted-name]",
-    },
-    "new_record": {
-        "label": "//div[./*/*[text()='{}']]",
-        "title": "//h2[contains(@class, 'inlineTitle') or contains(@class,'title') and text()='{}']",
-        "text_field": "//div[contains(@class, 'uiInput')][.//label[contains(@class, 'uiLabel')][.//span[text()='{}']]]//*[self::input or self::textarea]",
-        "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element')][.//label[text()='{}']]/div[@class='slds-form-element__control']/descendant::lightning-base-combobox/div/div/input[contains(@class,'slds-input')]",
-        "quick_dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
-        "quick_dropdown_popup": "//div[@class='select-options' and @role='menu']",
-        "quick_dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
-        "dropdown_popup": "//div[contains(@class,'slds-listbox') and @role='listbox']",
-        "dropdown_value": "//lightning-base-combobox-item[contains(@class,'slds-media')]//span[@class='slds-media__body']/span[@title='{}']",
-        "button": "//lightning-button/button[text()='{}']",
-        "lookup_field": "//div[contains(@class, 'autocompleteWrapper')]//input[@title='{}']",
-        "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']",
-        "open_date_picker": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]//div//a[contains(@class,'datePicker-openIcon display')]",
-        "c_open_date_picker": "//div[contains(@class,'slds-dropdown-trigger')][.//label[text()='{}']]/div/lightning-button-icon[contains(@class,'slds-input__icon')]/button[@title='Select a date']",
-        "datepicker_popup": "//table[@class='calGrid' and @role='grid']",
-        "select_date": "//div[contains(@class,'uiDatePickerGrid')]/table[@class='calGrid']//*[text()='{}']",
-        "checkbox": "//lightning-input[contains(@class,'slds-form-element_stacked')][./label/span[text()='{}']]/descendant::input[@type='checkbox']",
-        "error_message": '//ul[contains(@class,"errorsList")]/li[contains(text(),"{}")]',
-        "datepicker": "//div[contains(@class,'uiDatePickerGrid')]/table[@class='calGrid']//*[text()='{}']",
-        "c_lightning_datepicker": "//label[text()='{}']/following-sibling::div",
-        "c_dd_selection": "//lightning-base-combobox-item[@data-value='{}']",
-        "c_dd_popup": "//label[text()='{}']/following-sibling::div//div[contains(@class,'slds-dropdown-trigger') and @role='combobox']",
-        "c_field-input": "//*[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]/div/*[self::input or self::textarea]",
-        "c_lightning_selectdate": "//table/tbody/tr/td[@class='slds-day_adjacent-month']/span",
-        "c_datepicker": "//*[text()='{}']",
-        "override_checkbox": "//lightning-input[contains(@class,'slds-form-element_stacked')]/label[.//span[text()='{}']]/following-sibling::div/span/input[@type='checkbox']",
-        "input_text": "//lightning-input[contains(@class,'slds-form-element')][.//label[text()='{}']]/div/input[@class='slds-input']",
-        "modal_button": "//button[contains(@class,'slds-button')]/span[text()='{}']",
-    },
-    "related": {
-        "button": "//article[contains(@class, 'slds-card slds-card_boundary')][.//span[@title='{}']]//button[text()='{}']",
-        "new_record_link": "//div[@class='slds-grid']/a[contains(@class,'slds-truncate')]/span[contains(text(),'{}')]",
-        "related_list": "//a[contains(@class,'slds-card')]/span[contains(@class,'slds-truncate') and @title='{}']",
-    },
-    "quick_actions": "//button[@class='slds-button slds-button_neutral' and text()='{}']",
-    "list_view": "//button[contains(@class,'slds-button') and @title='Select List View']",
-    "listview_options": "//li[contains(@class,'slds-dropdown__item')]//a//span[text()='{}']",
-    "listview_link": "//a[contains(@class,'slds-truncate') and text()='{}']",
-    "toast_link": "//span[contains(@class,'toastMessage')]/a[@class='forceActionLink']/div[contains(@title,'{}')]",
-    "toast_msg": "//span[contains(@class,'toastMessage') and text()='{}']",
-    "contact_save": "//button[contains(@class,'slds-button_brand') and (text() or @title='Save')]",
-    "bulk_service_delivery_locators": {
-        "new_lookup": '//div[{}][contains(@class,"slds-box")]//div[@class="sd-input"][./div[contains(@class,"slds-truncate") and contains(text(),"{}")]]/descendant::input[contains(@class,"slds-input")]',
-        "new_field": '//div[{}][contains(@class,"slds-box")]//div[contains(@class,"slds-form-element__control")]/input[contains(@name,"{}")]',
-        "icon": '//button[contains(@class,"slds-button_icon") and @title="{}"]/lightning-primitive-icon',
-        "page_header": "//header[contains(@class,'flexipageHeader')]//h2[@class='truncate' and text()='{}']",
-        "select_lookup_value": "//lightning-base-combobox-item/descendant::span[contains(@class,'slds-listbox__option-text')]/lightning-base-combobox-formatted-text[@class='slds-truncate' and @title='{}']",
-        "select_dropdown_value": "//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(text(),'{}')]",
-        "select_popup": "//div[contains(@class,'slds-listbox')]",
-        "error_message": "//div[@class='slds-text-color_error' and text()='{}']",
-        "persist_save": "//div[{}][contains(@class,'slds-box')]/descendant::lightning-icon[contains(@class,'slds-icon-utility-success') and @title='{}']",
-        "persist_warning": "//div[{}][contains(@class,'slds-box')]/descendant::lightning-icon[contains(@class,'slds-icon-utility-warning') and @title='{}']",
-        "bsdt-button": "//div[@class='bsdt']//div[@class='slds-card__footer']//lightning-button/button[contains(@class,'slds-button') and text()='{}']",
-        "bsdt_wizard_lookup": "//lightning-grouped-combobox[.//*[text()='{}']]//input[contains(@class,'slds-input')]",
-        "new_prog_engagement": {
-            "title": "//h2[contains(@class,'slds-text-heading_medium') and text()='{}']",
-            "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']]//input[contains(@class,'slds-input')]",
-            "dropdown_popup": "//div[contains(@class,'slds-listbox')]",
-            "dropdown_value": "//span[@class='slds-truncate' and @title='{}']",
-            "text_field": "//div[contains(@class,'slds-dropdown-trigger')][.//label[@class='slds-form-element__label' and text()='{}']]//input[@class='slds-input']",
-            "button": "//button[contains(@class,'slds-button_brand') and text()='{}']",
-            "lookup_field": "//lightning-grouped-combobox[contains(@class,'slds-form-element')][.//label[@class='slds-form-element__label' and text()='{}']]/descendant::lightning-base-combobox//div[contains(@class,'slds-combobox')]/input[contains(@class,'slds-input')]",
-        },
-    },
-    "service_session": {
-        "date": "//fieldset[contains(@class,'slds-form-element')][./legend[text()='{}']]/descendant::button[@type='button']",
-    },
-    "service_schedule": {
-        "wizard_title": "//h3[contains(@class,'slds-section__title') and text()='{}']",
-        "select_participants": "//tr[@class='slds-hint-parent']/th[.//*[text()='{}']]/preceding-sibling::td//span[@class='slds-checkbox_faux']",
-        "add_participants": "//lightning-layout[contains(@class,'slds-grid')]//tr[.//lightning-base-formatted-text[text()='{}']]//button[@title='Add']",
-        "add_all": "//lightning-layout[contains(@class,'slds-grid')]//button[text()='Add All']",
-        "accordion": "//section[contains(@class,'slds-accordion')][.//span[contains(@title,'{}')]]//*[text()='{}']",
-        "review_wizard": "//div[contains(@class,'slds-form-element')][./span[text()='{}']]/div",
-        "participant_selector": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::*[text()='{}']",
-        "remove_participant": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::tr[./th/descendant::*[text()='{}']]/descendant::button[contains(@class,'slds-button')]",
-        "frequency": "//span[contains(@class,'slds-button')]/label/span[@class='slds-radio_faux' and text()='{}']",
-        "ends_radio_button": "//span[@class='slds-radio'][./input[@value='{}']]/descendant::span[@class='slds-radio_faux']",
-        "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
-        "first_session_end": "//lightning-input[contains(@class,'slds-form-element')][./descendant::*[text()='{}']]/descendant::div//input[@class='slds-input']",
-        "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
-        "filter": "//div[contains(@class,'slds-form-element__control')]/input[@placeholder='Search this list']",
-    },
-    "attendance": {
-        "attendance_text": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",
-        "dropdown_field": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]//input",
-        "select_popup": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//div[contains(@class,'slds-listbox')]",
-        "dropdown_value": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(text(),'{}')]",
-        "dim_icon": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//button[contains(@class,'slds-button')][./span[contains(text(),'track attendance')]]",
-        "details": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//*[self::div or self::lightning-output-field][contains(@class,'slds-form-element_stacked')][.//*[text()='{}']]//div[@class='slds-form-element__control']/*[self::lightning-formatted-text or self::lightning-formatted-number]",
-    },
-    "homepage": {
-        "component_link": '//article[contains(@class,"forceBaseCard")][.//span[contains(@title,"{}")]]',
-    },
-}
+pmm_lex_locators = copy.deepcopy(pmm_lex_locators)
+
+pmm_lex_locators[
+    "contact_save"
+] = "//button[contains(@class,'slds-button--neutral') and (text() or @title='Save')]"
+pmm_lex_locators["related"][
+    "button"
+] = "//article[contains(@class, 'slds-card slds-card_boundary')][.//span[@title='{}']]//a[@title='{}']"
+pmm_lex_locators["new_record"][
+    "checkbox"
+] = "//div[contains(@class,'uiInputCheckbox')]/label/span[text()='{}']/../following-sibling::input[@type='checkbox']"

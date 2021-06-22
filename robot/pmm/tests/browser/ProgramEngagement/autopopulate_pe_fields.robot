@@ -48,8 +48,8 @@ Autopopulate fields when stage is set to Applied
      [tags]                                  W-037569    perm:admin   perm:manage    perm:deliver   feature:Program Engagement
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
-     Wait For Modal                          New                             Program Engagement
-     Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
+     Wait For Modal                          New                            Program Engagement
+     Populate Field                          Program Engagement Name        ${program_engagement_name}
      Populate Lookup Field                   Program                        ${program}[Name]
      Select Value From Dropdown              Stage                          Applied
      Select Value From Dropdown              Role                           Volunteer
@@ -66,7 +66,7 @@ Autopopulate fields when stage is set to Completed
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
-     Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
+     Populate Field                          Program Engagement Name        ${program_engagement_name}
      Populate Lookup Field                   Program                        ${program}[Name]
      Select Value From Dropdown              Stage                          Completed
      Select Value From Dropdown              Role                           Volunteer
@@ -83,7 +83,7 @@ Autopopulate fields when stage is set to Withdrawn
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
-     Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
+     Populate Field                          Program Engagement Name        ${program_engagement_name}
      Populate Lookup Field                   Program                        ${program}[Name]
      Select Value From Dropdown              Stage                          Withdrawn
      Select Value From Dropdown              Role                           Service Provider
@@ -100,7 +100,7 @@ Autopopulate fields when stage is set to Active with Program start date is later
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
-     Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
+     Populate Field                          Program Engagement Name        ${program_engagement_name}
      Select Value From Dropdown              Stage               Active
      Populate Lookup Field                   Program                        ${program1}[Name]
      Select Value From Dropdown              Role                           Service Provider
@@ -116,7 +116,7 @@ Autopopulate fields when stage is set to Active with Program start date is today
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
-     Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
+     Populate Field                          Program Engagement Name     ${program_engagement_name}
      Select Value From Dropdown              Stage               Active
      Populate Lookup Field                   Program                        ${program2}[Name]
      Select Value From Dropdown              Role                           Service Provider
@@ -132,7 +132,7 @@ Autopopulate fields when stage is set to Applied with Program start date is earl
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
-     Populate Modal Form                     Program Engagement Name= ${program_engagement_name}
+     Populate Field                          Program Engagement Name       ${program_engagement_name}
      Select Value From Dropdown              Stage               Applied
      Populate Lookup Field                   Program                        ${program3}[Name]
      Select Value From Dropdown              Role                           Service Provider

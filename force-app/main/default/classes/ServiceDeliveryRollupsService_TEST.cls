@@ -9,7 +9,7 @@
 @IsTest
 public with sharing class ServiceDeliveryRollupsService_TEST {
     private static ServiceDeliveryRollupsService rollupsService = new ServiceDeliveryRollupsService();
-    private static Stub systemAccessStub;
+    private static TestStub systemAccessStub;
     private static Date yesterday = System.today().addDays(-1);
     private static Id mockContactId = TestUtil.mockId(Contact.SObjectType);
     private static List<String> attendanceStatuses = new ServiceDeliveryService()
@@ -233,7 +233,7 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
 
     @IsTest
     private static void shouldNotResetParentsWhenNoParentsAreProvided() {
-        Stub systemAccessStub = new StubBuilder(SystemAccess.class)
+        TestStub systemAccessStub = new StubBuilder(SystemAccess.class)
             .when('getParentsHavingDeliveries')
             .signatureMatches()
             .expectedNotToBeCalled()
@@ -252,7 +252,7 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
         List<SObject> records = new List<SObject>{
             new Contact(Id = TestUtil.mockId(Contact.SObjectType))
         };
-        Stub systemAccessStub = new StubBuilder(SystemAccess.class)
+        TestStub systemAccessStub = new StubBuilder(SystemAccess.class)
             .when(
                 'getParentsHavingDeliveries',
                 SObjectType.class,

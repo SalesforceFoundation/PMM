@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingOwnerRules>
+        <fullName>Community_Volunteer</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Community Volunteer</label>
+        <sharedTo>
+            <group>Community_Volunteers</group>
+        </sharedTo>
+        <sharedFrom>
+            <roleAndSubordinatesInternal>CommunityOwner</roleAndSubordinatesInternal>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

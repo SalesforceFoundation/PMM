@@ -37,6 +37,16 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
+        <field>AttendanceRate__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
+        <field>AttendanceSummary__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
         <field>AutoName_Override__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
@@ -68,6 +78,11 @@
     </availableFields>
     <availableFields>
         <field>Contact__r.Birthdate</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
+        <field>ConsecutiveAbsences__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>
@@ -177,6 +192,11 @@
         <isRequired>false</isRequired>
     </availableFields>
     <availableFields>
+        <field>LastServiceDate__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
         <field>Contact__r.MailingCity</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
@@ -218,6 +238,16 @@
     </availableFields>
     <availableFields>
         <field>Name</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
+        <field>NumAbsentServiceDeliveries__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </availableFields>
+    <availableFields>
+        <field>NumPresentServiceDeliveries__c</field>
         <isFieldManaged>false</isFieldManaged>
         <isRequired>false</isRequired>
     </availableFields>

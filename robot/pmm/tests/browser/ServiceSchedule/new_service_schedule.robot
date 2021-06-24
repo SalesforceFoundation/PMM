@@ -44,7 +44,7 @@ Setup Test Data
 Create a New Service Schedule
     [Documentation]                        Navigates to service schedule listing page, clicks 'New' on the listing page and
     ...                                    creates a new record using the wizard, validates the details on the service schedule record
-    [tags]                                 unstable    W-8294332     perm:admin   perm:manage       feature:Service Schedule
+    [tags]                                 W-8294332     perm:admin   perm:manage       feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
@@ -52,15 +52,11 @@ Create a New Service Schedule
     Populate Field                          Service Schedule Name               ${service_schedule_name}
     Populate Field                          Participant Capacity                10
     Populate Lookup Field                   Primary Service Provider            ${contact}[Name]
-    Populate Lightning Fields               Date=Today
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Review Service Sessions
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Add Service Participants
-    Select Service Participant              ${contact1}[Name]
-    Select Service Participant              ${contact2}[Name]
-    Select Service Participant              ${contact3}[Name]
-    Click Dialog Button                     Add Service Participants
+    Click Add All Button
     Click Dialog Button                     Next 
     Verify Wizard Screen Title              Review Service Schedule
     Verify Wizard Review Screen             Service Schedule Name        contains       ${service_schedule_name}      

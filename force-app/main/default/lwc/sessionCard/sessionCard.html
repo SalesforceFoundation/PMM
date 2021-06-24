@@ -18,12 +18,15 @@
             class="slds-box small-box slds-var-m-top_x-small slds-theme_default"
             multiple-rows="true"
         >
-            <lightning-layout-item size="8" class="slds-truncate">
+            <lightning-layout-item
+                size="8"
+                class="slds-truncate slds-var-p-bottom_xx-small"
+            >
                 <a href={sessionURL} onkeydown={handleSessionClick}>{session.Name} </a>
             </lightning-layout-item>
             <lightning-layout-item
                 size="4"
-                class="slds-list_horizontal slds-align_absolute-center slds-truncate"
+                class="slds-list_horizontal slds-align_absolute-center slds-truncate slds-var-p-bottom_xx-small"
             >
                 <lightning-icon
                     icon-name="utility:success"
@@ -46,7 +49,10 @@
                 </lightning-output-field>
             </lightning-layout-item>
 
-            <lightning-layout-item size="12" class="slds-var-p-right_x-large">
+            <lightning-layout-item
+                size="12"
+                class="slds-var-p-right_x-large slds-var-p-bottom_xx-small"
+            >
                 <lightning-layout multiple-rows="true">
                     <template iterator:it={populatedFields}>
                         <lightning-layout-item key={it.value.apiName}>
@@ -65,13 +71,33 @@
                 </lightning-layout>
             </lightning-layout-item>
             <lightning-layout-item
-                size="12"
+                size="8"
                 class="slds-list_horizontal slds-truncate"
                 if:true={session.hasServiceProviderValue}
             >
-                <lightning-icon icon-name="utility:user" size="xx-small"></lightning-icon>
+                <lightning-icon
+                    icon-name="utility:user"
+                    size="xx-small"
+                    class="slds-var-p-top_xxx-small"
+                ></lightning-icon>
                 <lightning-output-field
                     field-name={fields.primaryServiceProvider}
+                    variant="label-hidden"
+                    class="slds-var-p-left_x-small"
+                >
+                </lightning-output-field>
+            </lightning-layout-item>
+            <lightning-layout-item
+                size="4"
+                class="slds-list_horizontal slds-align_absolute-center"
+                if:true={session.hasAttendanceSummaryValue}
+            >
+                <lightning-icon
+                    icon-name="utility:people"
+                    size="x-small"
+                ></lightning-icon>
+                <lightning-output-field
+                    field-name={fields.attendanceSummary}
                     variant="label-hidden"
                     class="slds-var-p-left_x-small"
                 >

@@ -44,12 +44,12 @@ Add contact to program quick action on Program
      Go To Page                       Details                                 Program__c                    object_id=${program}[Id]
      Verify Details                   Program Name                            contains                      ${program}[Name]
      Click Quick Action Button        Add Contact to Program
-     Populate Modal form              Client=${contact}[FirstName] ${contact}[LastName]
-     ...                              Role=Client
-     ...                              Stage=Enrolled
-     ...                              Start Date=Today
-     Populate Lightning Fields        Program Cohort=${program_cohort}[Name]
-     Select Button On Modal          Save
+     Populate Lookup Field            Client           ${contact}[Name]
+     Select Value From Dropdown       Role             Client
+     Select Value From Dropdown       Stage            Enrolled
+     Select Date From Datepicker      Start Date       Today
+     Populate Lookup Field            Program Cohort   ${program_cohort}[Name]
+     Select Button On Modal           Save
      Wait Until Modal Is Closed
      Current Page Should Be           Details               Program__c
      Load Related List                Program Engagements
@@ -66,9 +66,9 @@ Validate cohort and PE look up to the same program
      Verify Details                 Program Name                             contains             ${program}[Name]
      Click Quick Action Button      Add Contact to Program
      Populate Lookup Field          Client                                  ${contact}[FirstName] ${contact}[LastName]
-     Populate Modal Form            Role=Client
-     ...                            Stage=Applied
-     ...                            Program Cohort=${program_cohort1}[Name]
+     Select Value From Dropdown     Role                    Client
+     Select Value From Dropdown     Stage                   Applied
+     Populate Lookup Field          Program Cohort          ${program_cohort1}[Name]
      Select Button On Modal         Save
      Verify Modal Error             Select a Program Cohort that matches the Program.
 
@@ -80,9 +80,9 @@ Autopopulate fields when stage is set to Applied and Start Date is today
      Verify Details                          Program Name                             contains             ${program}[Name]
      Click Quick Action Button               Add Contact to Program 
      Populate Lookup Field                   Client                                  ${contact1}[FirstName] ${contact1}[LastName]
-     Populate Modal Form                     Role=Client
-     ...                                     Stage=Applied
-     ...                                     Start Date=Today
+     Select Value From Dropdown              Role                    Client
+     Select Value From Dropdown              Stage                   Applied
+     Select Date From Datepicker             Start Date       Today
      Select Button On Modal                  Save
      Wait Until Modal Is Closed
      Click New Related Record Link           ${contact1}[FirstName] ${contact1}[LastName] ${result_date}: ${program}[Name]

@@ -41,7 +41,7 @@ Create a new service delivery using quick action
      Verify Details                 Program Engagement Name        contains                   ${contact}[FirstName] ${contact}[LastName] ${today}: ${program}[Name]
      Click Quick Action Button      Create New Service Delivery
      Populate Lookup Field          Service                        ${service}[Name]
-     Populate Modal Form            Quantity=${quantity}
+     Populate Field                 Quantity                       ${quantity}
      Select Button On Modal         Save
      Wait Until Modal Is Closed
      Current Page Should Be         Details                         ProgramEngagement__c

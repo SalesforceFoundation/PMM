@@ -14,19 +14,33 @@ const SELECTED_VARIANT = "brand";
 
 export default class Picklist extends LightningElement {
     // Expects an object with a label and the salesforce picklistValue object
-    @api picklist;
     @api value;
     @api type = "radio";
     @api multiSelect = false;
 
-    @track _options;
+    @track options;
+    _picklist;
 
-    get options() {
-        if (!this.picklist) {
-            return undefined;
-        }
+    @api
+    get picklist() {
+        return this._picklist;
+    }
 
-        this._options = this.picklist.picklistValues.map(picklistValue => {
+    set picklist(value) {
+        this._picklist = value;
+        this.setOptions();
+    }
+
+    get label() {
+        return this.picklist && this.picklist.label ? this.picklist.label : undefined;
+    }
+
+    get selection() {
+        return this.options.filter(option => option.isSelected);
+    }
+
+    setOptions() {
+        this.options = this.picklist.picklistValues.map(picklistValue => {
             let isSelected = !this.value
                 ? picklistValue.defaultValue
                 : this.value.includes(picklistValue.value);
@@ -42,20 +56,10 @@ export default class Picklist extends LightningElement {
                 variant: isSelected ? SELECTED_VARIANT : UNSELECTED_VARIANT,
             };
         });
-
-        return this._options;
-    }
-
-    get label() {
-        return this.picklist && this.picklist.label ? this.picklist.label : undefined;
-    }
-
-    get selection() {
-        return this._options.filter(option => option.isSelected);
     }
 
     handleChange(event) {
-        this._options.forEach(option => {
+        this.options.forEach(option => {
             option.isSelected = option.value === event.detail.value;
         });
 
@@ -63,7 +67,7 @@ export default class Picklist extends LightningElement {
     }
 
     handleMultiSelectClick(event) {
-        this._options.forEach(option => {
+        this.options.forEach(option => {
             if (option.value === event.target.name) {
                 option.isSelected = !option.isSelected;
                 option.variant = option.isSelected

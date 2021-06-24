@@ -11,8 +11,8 @@ import { LightningElement, wire, api, track } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { handleError } from "c/util";
-import { ProgressSteps } from "./progressSteps";
-import { NavigationItems } from "./navigationItems";
+import { ProgressSteps } from "c/progressSteps";
+import { NavigationItems } from "c/navigationItems";
 import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
 import persist from "@salesforce/apex/ServiceScheduleCreatorController.persist";
 

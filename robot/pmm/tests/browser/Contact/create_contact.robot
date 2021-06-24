@@ -30,9 +30,9 @@ Create a Contact
     Click Object Button                    New
     Load Page object                       NewContact                           Contact
     verify current page title              New Contact
-    Populate Modal Form                    First Name=${first_name}
-    ...                                    Last Name=${last_name}
-    ...                                    Email=user@example.com
+    Populate Field                         First Name       ${first_name}
+    Populate Field                         Last Name        ${last_name}
+    Populate Field                         Email            user@example.com
     Save Contact
     Wait Until Modal Is Closed
     Verify Details                         Name                                 contains            ${first_name} ${last_name}

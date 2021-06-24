@@ -217,7 +217,7 @@ public with sharing class ServiceService_TEST {
             serviceFieldIndex = fieldSetValues.indexOf(serviceField);
 
             System.assert(
-                serviceFieldIndex > 0,
+                serviceFieldIndex >= 0,
                 'Expected the service field to be added to the fieldset.'
             );
         }
@@ -275,7 +275,7 @@ public with sharing class ServiceService_TEST {
             serviceFieldIndex = fieldSetValues.indexOf(serviceField);
 
             System.assert(
-                serviceFieldIndex > 0,
+                serviceFieldIndex >= 0,
                 'Expected the service field to be added to the fieldset.'
             );
         }

@@ -1,13 +1,13 @@
 @IsTest
-public with sharing class Stub implements System.StubProvider {
+public with sharing class TestStub implements System.StubProvider {
     private Type objType;
     List<MethodCall> methodCalls = new List<MethodCall>();
 
-    public Stub(Type objType) {
+    public TestStub(Type objType) {
         this.objType = objType;
     }
 
-    public Stub(Type objType, List<MethodCall> methodCalls) {
+    public TestStub(Type objType, List<MethodCall> methodCalls) {
         this(objType);
         this.methodCalls = methodCalls;
     }
@@ -48,7 +48,7 @@ public with sharing class Stub implements System.StubProvider {
         private List<Id> ids;
         private Integer callCount = 0;
         private Integer expectedCalls;
-        private String testExceptionMessage = 'Exception thrown by Stub.';
+        private String testExceptionMessage = 'Exception thrown by TestStub.';
 
         public MethodCall(Signature signature) {
             this.signature = signature;

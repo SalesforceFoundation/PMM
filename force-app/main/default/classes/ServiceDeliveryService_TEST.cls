@@ -9,10 +9,10 @@
 
 @IsTest
 public with sharing class ServiceDeliveryService_TEST {
-    private static Stub deliverySelectorStub;
-    private static Stub domainStub;
-    private static Stub permValidatorStub;
-    private static Stub systemAccessStub;
+    private static TestStub deliverySelectorStub;
+    private static TestStub domainStub;
+    private static TestStub permValidatorStub;
+    private static TestStub systemAccessStub;
 
     private static ServiceDeliveryService service = new ServiceDeliveryService();
 

@@ -442,7 +442,7 @@ public with sharing class RollupRecord_TEST {
     @IsTest
     private static void shouldProcessPresentDelivery() {
         setRollupFields();
-        Stub deliveryStub = createDeliveryStub(false, true, false, System.today());
+        TestStub deliveryStub = createDeliveryStub(false, true, false, System.today());
 
         Test.startTest();
         rollupRecord.process((ServiceDelivery) deliveryStub.create());
@@ -458,7 +458,7 @@ public with sharing class RollupRecord_TEST {
     @IsTest
     private static void shouldProcessAbsentDelivery() {
         setRollupFields();
-        Stub deliveryStub = createDeliveryStub(true, false, false, System.today());
+        TestStub deliveryStub = createDeliveryStub(true, false, false, System.today());
 
         Test.startTest();
         rollupRecord.process((ServiceDelivery) deliveryStub.create());
@@ -475,7 +475,7 @@ public with sharing class RollupRecord_TEST {
     private static void shouldProcessDeliveredDelivery() {
         setRollupFields();
         Date dateToday = System.today();
-        Stub deliveryStub = createDeliveryStub(false, false, true, dateToday);
+        TestStub deliveryStub = createDeliveryStub(false, false, true, dateToday);
 
         Test.startTest();
         rollupRecord.process((ServiceDelivery) deliveryStub.create());
@@ -492,14 +492,19 @@ public with sharing class RollupRecord_TEST {
     private static void shouldIncrementConsecutiveAbsences() {
         setRollupFields();
         Date dateToday = System.today();
-        Stub absentStub = createDeliveryStub(true, false, false, dateToday);
-        Stub olderAbsentStub = createDeliveryStub(
+        TestStub absentStub = createDeliveryStub(true, false, false, dateToday);
+        TestStub olderAbsentStub = createDeliveryStub(
             true,
             false,
             false,
             dateToday.addDays(-3)
         );
-        Stub presentStub = createDeliveryStub(false, true, false, dateToday.addDays(-2));
+        TestStub presentStub = createDeliveryStub(
+            false,
+            true,
+            false,
+            dateToday.addDays(-2)
+        );
 
         Test.startTest();
         rollupRecord.process((ServiceDelivery) absentStub.create());
@@ -791,7 +796,7 @@ public with sharing class RollupRecord_TEST {
     }
 
     private static void setAbsentStub(Boolean val) {
-        Stub deliveryStub = createDeliveryStub(true, false, false, System.today());
+        TestStub deliveryStub = createDeliveryStub(true, false, false, System.today());
 
         rollupRecord.deliveries = new List<ServiceDelivery>{
             (ServiceDelivery) deliveryStub.create()
@@ -799,14 +804,14 @@ public with sharing class RollupRecord_TEST {
     }
 
     private static void setPresentStub(Boolean val) {
-        Stub deliveryStub = createDeliveryStub(false, true, true, System.today());
+        TestStub deliveryStub = createDeliveryStub(false, true, true, System.today());
 
         rollupRecord.deliveries = new List<ServiceDelivery>{
             (ServiceDelivery) deliveryStub.create()
         };
     }
 
-    private static Stub createDeliveryStub(
+    private static TestStub createDeliveryStub(
         Boolean absent,
         Boolean present,
         Boolean delivered,

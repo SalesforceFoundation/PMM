@@ -41,12 +41,12 @@ public with sharing class ServiceService_TEST {
             engagement1
         };
         List<Service__c> services = new List<Service__c>{ service1 };
-        Stub engagementSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
+        TestStub engagementSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
             .when('getProgramEngagementsByContactId', Id.class)
             .calledWith(contactId)
             .thenReturn(engagements)
             .build();
-        Stub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
+        TestStub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
             .when('getServicesByProgramIds', Set<Id>.class)
             .calledWith(new Set<Id>{ program1.Id })
             .thenReturn(services)
@@ -112,7 +112,7 @@ public with sharing class ServiceService_TEST {
 
         final List<object> expected = new List<Object>{ expectedValues };
 
-        Stub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
+        TestStub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
             .when('getServicesByProgramEngagementId', Id.class)
             .calledWith(programEngagementId)
             .thenReturn(services)
@@ -187,7 +187,7 @@ public with sharing class ServiceService_TEST {
             }
         }
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)
@@ -245,7 +245,7 @@ public with sharing class ServiceService_TEST {
             ServiceDelivery__c.ProgramEngagement__c.getDescribe()
         );
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)
@@ -347,7 +347,7 @@ public with sharing class ServiceService_TEST {
             }
         }
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)
@@ -451,7 +451,7 @@ public with sharing class ServiceService_TEST {
             }
         }
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)
@@ -582,7 +582,7 @@ public with sharing class ServiceService_TEST {
             }
         }
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)
@@ -659,7 +659,7 @@ public with sharing class ServiceService_TEST {
             fieldSetsToReturn.put(key, new List<Map<String, Object>>{ engagementField });
         }
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)

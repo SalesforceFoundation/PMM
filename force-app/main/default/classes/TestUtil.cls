@@ -71,7 +71,7 @@ public with sharing class TestUtil {
     }
 
     public static void turnOffFeatureGates(Set<String> developerNames) {
-        // Stub turned off Feature Gates so we can insert Service Deliveries without triggers running
+        // TestStub turned off Feature Gates so we can insert Service Deliveries without triggers running
         List<FeatureGate__mdt> featureGates = new List<FeatureGate__mdt>();
         for (String name : featureGateNames) {
             featureGates.add(
@@ -82,7 +82,9 @@ public with sharing class TestUtil {
             );
         }
 
-        Stub customMetadataSelectorStub = new StubBuilder(CustomMetadataSelector.class)
+        TestStub customMetadataSelectorStub = new StubBuilder(
+                CustomMetadataSelector.class
+            )
             .when('getAllFeatureGates')
             .called()
             .thenReturn(featureGates)

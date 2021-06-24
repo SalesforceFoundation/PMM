@@ -47,12 +47,12 @@ public with sharing class StubBuilder {
         );
     }
 
-    public Stub build() {
-        List<Stub.MethodCall> methodCalls = new List<Stub.MethodCall>();
+    public TestStub build() {
+        List<TestStub.MethodCall> methodCalls = new List<TestStub.MethodCall>();
         for (SignatureBuilder sb : signatureBuilders) {
             methodCalls.addAll(sb.build());
         }
-        return new Stub(objType, methodCalls);
+        return new TestStub(objType, methodCalls);
     }
 
     public class SignatureBuilder {
@@ -113,9 +113,9 @@ public with sharing class StubBuilder {
             return builder;
         }
 
-        private List<Stub.MethodCall> build() {
-            Stub.Signature signature = new Stub.Signature(methodName, paramTypes);
-            List<Stub.MethodCall> methodCalls = new List<Stub.MethodCall>();
+        private List<TestStub.MethodCall> build() {
+            TestStub.Signature signature = new TestStub.Signature(methodName, paramTypes);
+            List<TestStub.MethodCall> methodCalls = new List<TestStub.MethodCall>();
             for (MethodBuilder mb : methodBuilders) {
                 methodCalls.add(mb.build(signature));
             }
@@ -166,8 +166,9 @@ public with sharing class StubBuilder {
             return signatureBuilder.endSignature();
         }
 
-        private Stub.MethodCall build(Stub.Signature signature) {
-            Stub.MethodCall methodCall = new Stub.MethodCall(signature).calledWith(args);
+        private TestStub.MethodCall build(TestStub.Signature signature) {
+            TestStub.MethodCall methodCall = new TestStub.MethodCall(signature)
+                .calledWith(args);
             if (ids != null) {
                 methodCall.setIds(ids);
             }

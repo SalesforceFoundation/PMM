@@ -1,0 +1,115 @@
+<template>
+    <lightning-card>
+        <template if:true={isOptionSelection}>
+            <div class="slds-var-p-horizontal_medium slds-var-p-bottom_medium">
+                <div class="slds-box">
+                    <c-visual-picker
+                        title={labels.groupTitle}
+                        content={labels.groupDesc}
+                        onselect={handleOption1}
+                        icon-name="standard:groups"
+                        button-name="group"
+                        button-label={labels.groupButton}
+                    ></c-visual-picker>
+                </div>
+            </div>
+            <div class="slds-var-p-horizontal_medium">
+                <div class="slds-box">
+                    <c-visual-picker
+                        title={labels.singleTitle}
+                        content={labels.singleDesc}
+                        onselect={handleOption2}
+                        icon-name="standard:user"
+                        button-name="individual"
+                        button-label={labels.singleButton}
+                    ></c-visual-picker>
+                </div>
+            </div>
+        </template>
+        <div class="slds-var-p-horizontal_medium" if:true={isStep1}>
+            <div class="slds-box">
+                <c-service-delivery-defaults
+                    service-delivery={serviceDelivery}
+                ></c-service-delivery-defaults>
+            </div>
+        </div>
+        <div class="slds-var-p-horizontal_medium" if:true={isStep2}>
+            <div class="slds-box">
+                <c-participant-selector
+                    service-id={serviceId}
+                    onselect={handleParticipantSelected}
+                ></c-participant-selector>
+            </div>
+        </div>
+
+        <div slot="footer">
+            <lightning-layout horizontal-align="spread">
+                <lightning-layout-item
+                    padding="around-small"
+                    class="slds-text-align_left"
+                >
+                    <lightning-button
+                        if:true={currentStep.back}
+                        name="back"
+                        variant={currentStep.back.variant}
+                        label={currentStep.back.label}
+                        title={currentStep.back.label}
+                        onclick={handleBack}
+                    ></lightning-button>
+                </lightning-layout-item>
+
+                <lightning-layout-item
+                    padding="around-small"
+                    class="slds-text-align_center"
+                    size="4"
+                >
+                    <lightning-progress-indicator
+                        current-step={currentStep.value}
+                        type="base"
+                        variant="base"
+                        if:false={isOptionSelection}
+                    >
+                        <template for:each={steps} for:item="step">
+                            <lightning-progress-step
+                                key={step.value}
+                                label={step.label}
+                                value={step.value}
+                            ></lightning-progress-step>
+                        </template>
+                    </lightning-progress-indicator>
+                </lightning-layout-item>
+
+                <lightning-layout-item padding="around-small">
+                    <lightning-layout>
+                        <lightning-layout-item
+                            flexibility="no-flex"
+                            alignment-bump="left"
+                        >
+                            <template if:false={isNextDisabled}>
+                                <lightning-button
+                                    name="next"
+                                    variant={currentStep.next.variant}
+                                    label={currentStep.next.label}
+                                    title={nextTitle}
+                                    onclick={handleNext}
+                                    class="slds-var-p-right_small"
+                                    style="pointer-events: auto;"
+                                    if:true={currentStep.next}
+                                ></lightning-button>
+                            </template>
+                            <template if:true={isNextDisabled}>
+                                <button
+                                    class="slds-button slds-button_brand"
+                                    disabled
+                                    title={nextTitle}
+                                >
+                                    {currentStep.next.label}
+                                </button>
+                            </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>

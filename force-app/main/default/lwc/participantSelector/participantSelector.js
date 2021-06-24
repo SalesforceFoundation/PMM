@@ -8,26 +8,44 @@
  */
 
 import { LightningElement, track, api, wire } from "lwc";
-import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
-import PE_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
+import { format } from "c/util";
 
+import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
+
+import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
+
+import addRecord from "@salesforce/label/c.Add_Record";
+import selectContacts from "@salesforce/label/c.BSDT_Select_Contacts";
+import selectedContacts from "@salesforce/label/c.BSDT_Selected_Contacts";
+import capacityWarning from "@salesforce/label/c.Participant_Capacity_Warning";
+import selectedRecords from "@salesforce/label/c.Selected_Records";
+import searchThisList from "@salesforce/label/c.Search_this_list";
+import none from "@salesforce/label/c.None";
+import noRecordsFound from "@salesforce/label/c.No_Records_Found";
+import noRecordsSelected from "@salesforce/label/c.No_Records_Selected";
+import filterByRecord from "@salesforce/label/c.Filter_By_Record";
+import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
+import add from "@salesforce/label/c.Add";
+import addAll from "@salesforce/label/c.Add_All";
 export default class ParticipantSelector extends LightningElement {
+    @api serviceId;
+    @api serviceSchedule;
+    @api existingContactIds = [];
+    @api selectedParticipants = [];
+    @api columns;
+    @api selectedRows;
+    selectorColumns;
+
     @track availableEngagements;
     @track filteredEngagements;
     @track engagements;
     @track cohorts;
-    @api serviceId;
-    @api serviceScheduleModel;
-    @api selectedParticipants = [];
-    @api existingContactIds = [];
-    @api columns;
+    @track data = [];
 
-    selectedRowCount = 0;
     searchValue;
     noRecordsFound = false;
     cohortId;
     programName;
-    selectedRows;
     addToServiceButtonLabel;
     selectedColumns;
     fields;
@@ -35,23 +53,33 @@ export default class ParticipantSelector extends LightningElement {
     objectLabels;
     isLoaded = false;
     rendered = false;
+    offsetRows = 50;
+    offset = this.offsetRows;
+
+    labels = {
+        selectContacts,
+        selectedContacts,
+        capacityWarning,
+        selectedRecords,
+        searchThisList,
+        none,
+        noRecordsFound,
+        noRecordsSelected,
+        noContactsSelected,
+        add,
+        addAll,
+    };
 
     @api
     get newParticipantsProgramEngagements() {
         let result = [];
         this.selectedParticipants.forEach(row => {
-            let contactId = row[PE_CONTACT_FIELD.fieldApiName];
+            let contactId = row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName];
             if (!this.existingContactIds.includes(contactId)) {
                 result.push(row);
             }
         });
         return result;
-    }
-
-    get labels() {
-        return this.serviceScheduleModel.labels.serviceParticipant
-            ? this.serviceScheduleModel.labels.serviceParticipant
-            : {};
     }
 
     get showCapacityWarning() {
@@ -66,26 +94,36 @@ export default class ParticipantSelector extends LightningElement {
         return this.selectedParticipants && this.selectedParticipants.length === 0;
     }
 
-    get selectedRecordCountMessage() {
-        return this.labels.selectedRecords + ": " + this.selectedRowCount;
-    }
-
     get participantCount() {
         return this.selectedParticipants ? this.selectedParticipants.length : 0;
     }
 
     get capacity() {
-        return this.serviceScheduleModel.serviceSchedule[this.fields.capacity.apiName];
+        return this.serviceSchedule
+            ? this.serviceSchedule[this.fields.capacity.apiName]
+            : undefined;
+    }
+
+    get selectedHeader() {
+        if (this.serviceSchedule) {
+            return this.scheduleHeader;
+        }
+
+        return this.labels.selectedContacts;
+    }
+
+    get title() {
+        if (this.serviceSchedule) {
+            return this.labels.addServiceParticipants;
+        }
+
+        return this.labels.selectContacts;
     }
 
     get scheduleHeader() {
-        let capacity = this.serviceScheduleModel.serviceSchedule[
-            this.fields.capacity.apiName
-        ];
+        let name = this.serviceSchedule[this.fields.name.apiName];
 
-        let name = this.serviceScheduleModel.serviceSchedule[this.fields.name.apiName];
-
-        if (capacity === undefined) {
+        if (this.capacity === undefined) {
             return name;
         }
 
@@ -106,6 +144,7 @@ export default class ParticipantSelector extends LightningElement {
             this.cohorts = result.data.programCohorts.slice(0);
             this.programName = result.data.program ? result.data.program.Name : "";
 
+            this.formatLabels();
             this.setDataTableColumns();
             this.setSelectedColumns();
             this.loadDataTable();
@@ -119,6 +158,15 @@ export default class ParticipantSelector extends LightningElement {
 
         this.isLoaded = true;
         this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
+    }
+
+    formatLabels() {
+        this.labels.addServiceParticipants = format(addRecord, [
+            this.objectLabels.serviceParticipant.objectPluralLabel,
+        ]);
+        this.labels.filterByCohort = format(filterByRecord, [
+            this.objectLabels.programCohort.objectLabel,
+        ]);
     }
 
     loadDataTable() {
@@ -137,9 +185,21 @@ export default class ParticipantSelector extends LightningElement {
         });
 
         this.sortData(this.availableEngagements);
-        this.filteredEngagements = [...this.availableEngagements];
+        this.applyFilters();
         this.noRecordsFound =
             this.filteredEngagements && this.filteredEngagements.length === 0;
+    }
+
+    get enableInfiniteLoading() {
+        return this.offset < this.filteredEngagements.length;
+    }
+
+    handleLoadMore() {
+        this.offset += this.offsetRows;
+        this.data = this.filteredEngagements.slice(
+            0,
+            Math.min(this.offset, this.filteredEngagements.length)
+        );
     }
 
     sortData(engagements) {
@@ -154,12 +214,16 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     loadPreviousSelections() {
-        if (this.serviceScheduleModel.selectedParticipants === undefined) {
+        if (this.selectedRows === undefined) {
             return;
         }
-        this.selectedRows = [...this.serviceScheduleModel.selectedParticipants];
+        this.selectedRows = [...this.selectedRows];
         this.availableEngagements.forEach(eng => {
-            if (this.existingContactIds.includes(eng[PE_CONTACT_FIELD.fieldApiName])) {
+            if (
+                this.existingContactIds.includes(
+                    eng[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
+                )
+            ) {
                 eng.disableDeselect = true;
                 this.selectedRows.push(eng);
             }
@@ -191,6 +255,21 @@ export default class ParticipantSelector extends LightningElement {
                 hideDefaultActions: true,
             };
             this.columns.push(column);
+
+            this.selectorColumns = [...this.columns];
+
+            this.selectorColumns.push({
+                fieldName: "",
+                type: "button",
+                hideDefaultActions: true,
+                typeAttributes: {
+                    name: "add",
+                    label: this.labels.add,
+                    title: this.labels.add,
+                    variant: "neutral",
+                    iconPosition: "left",
+                },
+            });
         }
     }
 
@@ -217,24 +296,31 @@ export default class ParticipantSelector extends LightningElement {
         this.applyFilters();
     }
 
-    handleRowSelected(event) {
-        this.selectedRows = event.detail.selectedRows;
-        this.selectedRowCount = event.detail.selectedRows.length;
+    handleSelectAll() {
+        this.handleSelect([...this.filteredEngagements]);
+    }
+
+    handleSelectParticipant(event) {
+        this.handleSelect([event.detail.row]);
     }
 
     handleSelectParticipants() {
-        let tempContacts = [...this.availableEngagements];
-        this.selectedRows.forEach(row => {
-            let index = tempContacts.findIndex(element => element.Id === row.Id);
-            tempContacts.splice(index, 1);
+        this.handleSelect(this.selectedRows);
+    }
 
+    handleSelect(programEngagements) {
+        programEngagements.forEach(row => {
+            let index = this.availableEngagements.findIndex(
+                element => element.Id === row.Id
+            );
+            this.availableEngagements.splice(index, 1);
             this.selectedParticipants.push(row);
         });
 
         this.selectedParticipants = [...this.selectedParticipants];
-        this.availableEngagements = tempContacts;
         this.applyFilters();
         this.sortData(this.selectedParticipants);
+        this.dispatchSelectEvent();
     }
 
     handleDeselectParticipant(event) {
@@ -254,6 +340,7 @@ export default class ParticipantSelector extends LightningElement {
 
             //if filters exist apply the filters
             this.applyFilters();
+            this.dispatchSelectEvent();
         }
     }
 
@@ -277,5 +364,19 @@ export default class ParticipantSelector extends LightningElement {
 
         this.noRecordsFound =
             this.filteredEngagements && this.filteredEngagements.length === 0;
+        this.data = this.filteredEngagements.slice(
+            0,
+            Math.min(this.filteredEngagements.length, this.offset)
+        );
+    }
+
+    dispatchSelectEvent() {
+        this.dispatchEvent(
+            new CustomEvent("select", {
+                detail: {
+                    totalSelected: this.selectedParticipants.length,
+                },
+            })
+        );
     }
 }

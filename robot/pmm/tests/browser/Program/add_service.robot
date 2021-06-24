@@ -39,7 +39,7 @@ Create Service from Program Object
      Populate Field                         Service Name            ${service_name}
      Populate Field                         Description             ${Description}
      Populate Field                         Unit of Measurement     ${unit_of_measurement}
-     Populate Lightning Fields              Status=Planned
+     Select Value From Dropdown             Status                  Planned
      Click Dialog button                    Save
      Wait Until Modal Is Closed
      Current Page Should Be                 Details                 Program__c

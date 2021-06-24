@@ -42,6 +42,10 @@
                 <behavior>Edit</behavior>
                 <field>OtherServiceProvider__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>AttendanceSummary__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>
@@ -91,11 +95,13 @@
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
         <fields>DeliveryDate__c</fields>
-        <fields>Quantity__c</fields>
         <fields>AttendanceStatus__c</fields>
+        <fields>Quantity__c</fields>
+        <fields>UnitOfMeasurement__c</fields>
+        <fields>HouseholdBenefit__c</fields>
         <relatedList>ServiceDelivery__c.ServiceSession__c</relatedList>
         <sortField>DeliveryDate__c</sortField>
-        <sortOrder>Asc</sortOrder>
+        <sortOrder>Desc</sortOrder>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedFileList</relatedList>

@@ -12,6 +12,9 @@ public with sharing class ServiceService {
     }
 
     @TestVisible
+    private FieldSetService fieldSetService = new FieldSetService();
+
+    @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();
 
     @TestVisible
@@ -63,5 +66,45 @@ public with sharing class ServiceService {
             allServices.add(convertObjectToOption(service, serviceProgram));
         }
         return allServices;
+    }
+
+    public Map<String, Object> getServiceDeliveryFieldSets() {
+        Map<String, Object> fieldSets = fieldSetService.getFieldSetsByName(
+            Schema.SObjectType.ServiceDelivery__c.getName()
+        );
+        Map<String, Object> serviceField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Service__c.getDescribe()
+        );
+        Map<String, Object> contactField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Contact__c.getDescribe()
+        );
+        Map<String, Object> engagementField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.ProgramEngagement__c.getDescribe()
+        );
+
+        for (String key : fieldSets.keySet()) {
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) fieldSets.get(
+                key
+            );
+
+            Boolean fieldSetContainsServiceField = fieldSetValues.contains(serviceField);
+            if (fieldSetContainsServiceField) {
+                continue;
+            }
+
+            Integer indexToInsertServiceField =
+                fieldSetValues.indexOf(engagementField) + 1;
+            indexToInsertServiceField = indexToInsertServiceField > 0
+                ? indexToInsertServiceField
+                : fieldSetValues.indexOf(contactField) + 1;
+
+            if (fieldSetValues.size() <= indexToInsertServiceField) {
+                fieldSetValues.add(serviceField);
+            } else {
+                fieldSetValues.add(indexToInsertServiceField, serviceField);
+            }
+        }
+
+        return fieldSets;
     }
 }

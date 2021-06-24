@@ -9,20 +9,55 @@
 
 @IsTest
 public with sharing class TestDataFactory {
-    private static Account accountRecord;
-    private static List<Contact> contacts;
-    private static Contact contact1;
-    private static Contact contact2;
-    private static List<Program__c> programs;
-    private static List<ProgramCohort__c> programCohorts;
-    private static List<ProgramEngagement__c> engagements;
-    private static ProgramEngagement__c engagement1;
-    private static ProgramEngagement__c engagement2;
-    private static List<Service__c> services;
-    private static List<ServiceDelivery__c> serviceDeliveries;
-    private static List<ServiceSchedule__c> serviceSchedules;
-    private static List<ServiceSession__c> serviceSessions;
-    private static List<ServiceParticipant__c> serviceParticipants;
+    public static Account accountRecord;
+    public static List<Contact> contacts;
+    public static Contact contact1;
+    public static Contact contact2;
+    public static List<Program__c> programs;
+    public static List<ProgramCohort__c> programCohorts;
+    public static List<ProgramEngagement__c> engagements;
+    public static ProgramEngagement__c engagement1;
+    public static ProgramEngagement__c engagement2;
+    public static List<Service__c> services;
+    public static List<ServiceDelivery__c> serviceDeliveries;
+    public static List<ServiceSchedule__c> serviceSchedules;
+    public static List<ServiceSession__c> serviceSessions;
+    public static List<ServiceParticipant__c> serviceParticipants;
+
+    public static void requery() {
+        contacts = [
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                LastServiceDate__c,
+                ConsecutiveAbsences__c,
+                LastModifiedDate
+            FROM Contact
+        ];
+        services = [
+            SELECT Id, NumPresentServiceDeliveries__c, NumAbsentServiceDeliveries__c
+            FROM Service__c
+        ];
+        serviceSessions = [
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                SessionStart__c
+            FROM ServiceSession__c
+            ORDER BY SessionStart__c DESC
+        ];
+        engagements = [
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                LastServiceDate__c,
+                ConsecutiveAbsences__c
+            FROM ProgramEngagement__c
+        ];
+    }
 
     public static void generateProgramData() {
         accountRecord = new Account();
@@ -39,6 +74,7 @@ public with sharing class TestDataFactory {
         contact2.LastName = 'Test Contact';
         contact2.AccountId = accountRecord.Id;
         contacts.add(contact2);
+
         insert contacts;
 
         programs = new List<Program__c>();
@@ -125,6 +161,15 @@ public with sharing class TestDataFactory {
         serviceDelivery1.Quantity__c = 10;
         serviceDelivery1.Service__c = service1.Id;
         serviceDeliveries.add(serviceDelivery1);
+
+        ServiceDelivery__c serviceDelivery2 = new ServiceDelivery__c();
+        serviceDelivery2.ProgramEngagement__c = engagements[1].Id;
+        serviceDelivery2.Contact__c = contacts[0].Id;
+        serviceDelivery2.DeliveryDate__c = System.today() - 2;
+        serviceDelivery2.AttendanceStatus__c = 'Present';
+        serviceDelivery2.Quantity__c = 3;
+        serviceDelivery2.Service__c = service2.Id;
+        serviceDeliveries.add(serviceDelivery2);
 
         insert serviceDeliveries;
     }
@@ -230,6 +275,7 @@ public with sharing class TestDataFactory {
                 SignUpDate__c = System.today()
             )
         );
+
         insert serviceParticipants;
     }
 }

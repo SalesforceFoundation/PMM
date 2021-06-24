@@ -29,4 +29,13 @@ public with sharing class ServiceDeliveryController {
             throw Util.getAuraHandledException(e);
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Object> getServiceDeliveryFieldSets() {
+        try {
+            return service.getServiceDeliveryFieldSets();
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+    }
 }

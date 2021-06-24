@@ -1,0 +1,15 @@
+.container {
+    height: 150px;
+}
+.content {
+    height: 100%;
+}
+.icon {
+    --sds-c-icon-color-foreground: var(--lwc-brandAccessible, rgb(0, 112, 210));
+    --sds-c-icon-color-background: none;
+}
+.button_stretch {
+    justify-content: center;
+    width: 100%;
+    max-width: 200px;
+}

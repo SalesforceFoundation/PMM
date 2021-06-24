@@ -25,7 +25,6 @@
             ></lightning-spinner>
         </div>
     </template>
-
     <template if:true={isLoaded}>
         <template if:true={isStep1}>
             <c-new-service-schedule
@@ -43,7 +42,8 @@
         <template if:true={isStep3}>
             <c-participant-selector
                 service-id={serviceId}
-                service-schedule-model={serviceScheduleModel}
+                service-schedule={serviceScheduleModel.serviceSchedule}
+                selected-rows={serviceScheduleModel.selectedParticipants}
                 onloaded={handleLoaded}
             ></c-participant-selector>
         </template>

@@ -1,0 +1,129 @@
+{
+  "appPageId" : "b4f1b062-39be-4db9-aa64-bfe331aa63d2",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "id" : "52c8c3b0-2f76-49a7-9b27-10f4298686d4",
+  "label" : "Service Session Detail",
+  "regions" : [ {
+    "id" : "2cb00b43-ace4-4726-bd5f-686cd1d60e59",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "5105e5bd-ccd1-47b3-9cc7-99b2e45624b1",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "tabsetConfig" : {
+          "UUID" : "16e386e9-9ed0-49e8-a900-eaf21cf3c3cd",
+          "activeTab" : "",
+          "tabs" : [ {
+            "UUID" : "399ec98d-11c3-4ec6-a72d-a6be9470e0df",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "1",
+            "tabName" : "Attendance"
+          }, {
+            "UUID" : "6129b581-63ed-4649-8c4e-bf2a2df67003",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "4860d",
+            "tabName" : "Details"
+          }, {
+            "UUID" : "90bac28b-e636-4c43-8a6c-f6405346a692",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "4bbfd",
+            "tabName" : "Related"
+          } ],
+          "useOverflowMenu" : false
+        }
+      },
+      "componentName" : "forceCommunity:tabset",
+      "id" : "16e386e9-9ed0-49e8-a900-eaf21cf3c3cd",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "recordId" : "{!recordId}"
+          },
+          "componentName" : "%%%NAMESPACE_OR_C%%%:attendance",
+          "id" : "3c63f228-a30d-4c6b-9a2f-58c47e84dc39",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "399ec98d-11c3-4ec6-a72d-a6be9470e0df",
+        "regionLabel" : "Attendance",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      }, {
+        "components" : [ {
+          "componentAttributes" : {
+            "recordId" : "{!recordId}"
+          },
+          "componentName" : "forceCommunity:recordDetail",
+          "id" : "e05d25f6-7eb1-4856-a5a3-80c6fd54119a",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "6129b581-63ed-4649-8c4e-bf2a2df67003",
+        "regionLabel" : "Details",
+        "regionName" : "4860d",
+        "renditionMap" : { },
+        "type" : "region"
+      }, {
+        "components" : [ {
+          "componentAttributes" : {
+            "recordId" : "{!recordId}",
+            "width" : "MEDIUM"
+          },
+          "componentName" : "forceCommunity:relatedRecords",
+          "id" : "e473e620-f110-4c5e-abba-0acd69673aa9",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "90bac28b-e636-4c43-8a6c-f6405346a692",
+        "regionLabel" : "Related",
+        "regionName" : "4bbfd",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "b3c11375-8dd0-4530-b239-2b7511ccac77",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "2c7b453d-0e67-4c76-949a-0f5355402bef",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "description" : "",
+        "metaTags" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "2ef65d6a-63ec-4997-a530-3a1471ac4bae",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "70538287-e476-4114-a8bf-8c6cc0b67ce3",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail-a06"
+}

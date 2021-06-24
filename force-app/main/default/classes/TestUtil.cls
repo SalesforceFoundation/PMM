@@ -12,6 +12,13 @@
  * Utility methods for test classes
  */
 public with sharing class TestUtil {
+    private static final Set<String> featureGateNames = new Set<String>{
+        'ServiceDeliveriesToContact',
+        'ServiceDeliveriesToService',
+        'ServiceDeliveriesToServiceSession',
+        'ServiceDeliveriesToProgramEngagement'
+    };
+
     public static final String TEST_USER_EMAIL = 'temptestuser@caseplan.example.com';
 
     public static Integer counter {
@@ -61,5 +68,32 @@ public with sharing class TestUtil {
             UserName = TEST_USER_EMAIL
         );
         return user;
+    }
+
+    public static void turnOffFeatureGates(Set<String> developerNames) {
+        // TestStub turned off Feature Gates so we can insert Service Deliveries without triggers running
+        List<FeatureGate__mdt> featureGates = new List<FeatureGate__mdt>();
+        for (String name : featureGateNames) {
+            featureGates.add(
+                new FeatureGate__mdt(
+                    DeveloperName = name,
+                    IsActive__c = !developerNames.contains(name)
+                )
+            );
+        }
+
+        TestStub customMetadataSelectorStub = new StubBuilder(
+                CustomMetadataSelector.class
+            )
+            .when('getAllFeatureGates')
+            .called()
+            .thenReturn(featureGates)
+            .build();
+
+        CustomMetadataSelector.instance = (CustomMetadataSelector) customMetadataSelectorStub.create();
+    }
+
+    public static void turnOffFeatureGates() {
+        turnOffFeatureGates(featureGateNames);
     }
 }

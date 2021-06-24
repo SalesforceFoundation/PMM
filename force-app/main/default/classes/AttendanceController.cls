@@ -9,7 +9,7 @@
 
 public with sharing class AttendanceController {
     @TestVisible
-    private static AttendanceService service = new AttendanceService();
+    private static ServiceDeliveryService service = new ServiceDeliveryService();
 
     @AuraEnabled(cacheable=true)
     public static List<ServiceDelivery__c> generateRoster(Id sessionId) {

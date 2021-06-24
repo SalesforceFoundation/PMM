@@ -9,7 +9,6 @@
 
 import { LightningElement, api, wire } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
-import { debug } from "c/util";
 
 const events = {};
 
@@ -37,12 +36,6 @@ const samePageRef = (pageRef1, pageRef2) => {
  * @param {object} thisArg - The value to be passed as the this parameter to the callback function is bound.
  */
 const registerListener = (eventName, callback, thisArg) => {
-    debug(
-        {
-            eventName: eventName,
-        },
-        "PMDM: pubsub.registerListener"
-    );
     // Checking that the listener has a pageRef property. We rely on that property for filtering purpose in fireEvent()
     if (!thisArg.pageRef) {
         throw new Error(
@@ -96,14 +89,6 @@ const unregisterAllListeners = thisArg => {
  * @param {boolean} isGlobal - If to fire this event as a "global" event.
  */
 const fireEvent = (pageRef, eventName, payload, isGlobal = false) => {
-    debug(
-        {
-            eventName: eventName,
-            payload: payload,
-            isGlobal: !!isGlobal,
-        },
-        "PMDM: pubsub.fireEvent"
-    );
     if (events[eventName]) {
         const listeners = events[eventName];
         listeners.forEach(listener => {
@@ -138,12 +123,6 @@ export default class Pubsub extends LightningElement {
     }
 
     dispatchGlobalEvent(detail) {
-        debug(
-            {
-                detail: detail,
-            },
-            "PMDM: Pubsub.dispatchGlobalEvent"
-        );
         this.dispatchEvent(
             new CustomEvent(GLOBAL_PUBSUB_EVENT_NAME, {
                 detail: detail,
@@ -153,13 +132,6 @@ export default class Pubsub extends LightningElement {
 
     @api
     fireGlobalEvent(eventName, payload) {
-        debug(
-            {
-                eventName: eventName,
-                payload: payload,
-            },
-            "PMDM Pubsub.fireGlobalEvent"
-        );
         fireEvent(this.pageRef, eventName, payload, false);
     }
 }

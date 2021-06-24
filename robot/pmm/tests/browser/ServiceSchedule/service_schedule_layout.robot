@@ -40,7 +40,7 @@ Add Service Participant quick action
     [Documentation]                        Navigates to service schedule details page, creates two PE using API and clicks on Add service
     ...                                    Participants quick action, add more participants and Save. Validates that the contact name is 
     ...                                    displayed on the service schedule page
-    [tags]                                 unstable    W-8720124     perm:admin   perm:manage     perm:deliver    feature:Service Schedule 
+    [tags]                                 W-8720124     perm:admin   perm:manage     perm:deliver    feature:Service Schedule 
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
     API Create Program Engagement   ${Program}[Id]  ${contact2}[Id]
     API Create Program Engagement   ${Program}[Id]  ${contact3}[Id]
@@ -50,8 +50,7 @@ Add Service Participant quick action
     Load Page Object                        New             ServiceSchedule__c
     Verify Wizard Screen Title              Add Service Participants
     Select Service Participant              ${contact2}[Name]
-    Select Service Participant              ${contact3}[Name]
-    Click Dialog Button                     Add Service Participants    
+    Select Service Participant              ${contact3}[Name]   
     Validate Participant Is Added           ${contact1}[Name]
     Validate Participant Is Added           ${contact2}[Name]
     Validate Participant Is Added           ${contact3}[Name]
@@ -60,3 +59,13 @@ Add Service Participant quick action
     Page Should Contain                     ${service_participant1}[Name]
     Page Should Contain                     ${contact2}[Name] - ${service_schedule}[Name]
     Page Should Contain                     ${contact3}[Name] - ${service_schedule}[Name]
+
+Verify Upcoming Service Schedule listview
+    [Documentation]                        This test opens the upcoming service schedule listview and verifies that it contains 
+    ...                                    service, participant capacity and first session start fields
+    [tags]                                 W-9056626   perm:admin   perm:manage   perm:deliver   perm:view   feature:Program
+    Go To Page                             Listing                               ${ns}ServiceSchedule__c
+    Select Listview                        Upcoming Service Schedules
+    Page Should Contain                    Service
+    Page Should Contain                    First Session Start
+    Page Should Contain                    Participant Capacity

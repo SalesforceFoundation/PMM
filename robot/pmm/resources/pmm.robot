@@ -134,6 +134,7 @@ API Create Service Participant
     ...                             ${ns}Contact__c=${contact_id}
     ...                             ${ns}ServiceSchedule__c=${service_schedule_id}
     ...                             ${ns}Service__c=${service_id}
+    ...                             &{fields}
     &{service_participant} =       Salesforce Get  ${ns}ServiceParticipant__c  ${service_participant_id}
     Store Session Record      ${ns}ServiceParticipant__c  ${service_participant_id}
     [Return]            &{service_participant}

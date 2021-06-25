@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Value__c</name>
+    <help>バケット化する必要がある正確な値。項目が選択リストである場合、これは選択リスト値の API 値である必要があります。</help>
+    <label>値</label>
+</CustomFieldTranslation>

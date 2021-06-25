@@ -37,6 +37,50 @@
         <label>匿名</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Selected_Contacts</name>
+        <label>選択された取引先責任者</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Title</name>
+        <label>グループのサービス提供を作成</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Description</name>
+        <label>複数の取引先責任者のサービス提供を入力します。たとえば、ワークショップへの立ち寄りなど。</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Button</name>
+        <label>グループ別に作成</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Title</name>
+        <label>個人のサービス提供を作成</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Description</name>
+        <label>1 人の取引先責任者のサービス提供を入力します。</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Button</name>
+        <label>個人別に作成</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Service</name>
+        <label>デフォルトのサービス提供値</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Contacts</name>
+        <label>取引先責任者の選択</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Review</name>
+        <label>レビュー</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Warning_No_Contacts</name>
+        <label>続行するには 1 人以上の取引先責任者を選択します。</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>出席を追跡</label>
     </customLabels>
@@ -55,6 +99,14 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>このサービススケジュールに参加者が追加されたら、その出席をここで追跡します。</label>
+    </customLabels>
+    <customLabels>
+        <name>Incorrect_Tab</name>
+        <label>これは目的のタブではありません。</label>
+    </customLabels>
+    <customLabels>
+        <name>Attendance_Tab_Message</name>
+        <label>このタブの目的は [サービスセッション] ページからの出席者の印刷のみです。</label>
     </customLabels>
     <customLabels>
         <name>Back</name>
@@ -182,7 +234,7 @@
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
-        <label>クエリにはオブジェクトを含める必要があります。</label>
+        <label>クエリにはオブジェクトまたは子リレーションが含まれている必要があります。</label>
     </customLabels>
     <customLabels>
         <name>Monthly_On_Day</name>
@@ -230,7 +282,11 @@
     </customLabels>
     <customLabels>
         <name>No_Records_Found</name>
-        <label>レコードが見つかりません</label>
+        <label>レコードが見つかりません。</label>
+    </customLabels>
+    <customLabels>
+        <name>NoFieldSetFound</name>
+        <label>{1} オブジェクトの {0} 項目セットは存在しません。項目セット名を確認してもう一度お試しください。</label>
     </customLabels>
     <customLabels>
         <name>No_Records_Selected</name>
@@ -289,12 +345,24 @@
         <label>更新</label>
     </customLabels>
     <customLabels>
+        <name>Edited</name>
+        <label>編集済み</label>
+    </customLabels>
+    <customLabels>
         <name>Save</name>
         <label>保存</label>
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
         <label>新規プログラムエンゲージメントレコードが作成されました。</label>
+    </customLabels>
+    <customLabels>
+        <name>Add</name>
+        <label>追加</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_All</name>
+        <label>すべて追加</label>
     </customLabels>
     <customLabels>
         <name>Save_New</name>
@@ -410,7 +478,7 @@
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
-        <label>サービス提供</label>
+        <label>サービス提供を追加</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries_Added</name>
@@ -472,6 +540,18 @@
         <name>Warning</name>
         <label>警告</label>
     </customLabels>
+    <reportTypes>
+        <name>Contacts_with_and_without_Program_Engagements</name>
+        <label>プログラムエンゲージメントがある取引先責任者とない取引先責任者</label>
+        <sections>
+            <label>取引先責任者</label>
+            <name>Contacts</name>
+        </sections>
+        <sections>
+            <label>プログラムエンゲージメント</label>
+            <name>Program Engagements</name>
+        </sections>
+    </reportTypes>
     <customTabs>
         <name>Attendance</name>
         <label>出席</label>

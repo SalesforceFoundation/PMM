@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>BucketedField__c</name>
+    <help>このバケットはどのバケット化された項目に含まれますか?</help>
+    <relationshipLabel>バケット</relationshipLabel>
+    <label>バケット化された項目</label>
+</CustomFieldTranslation>

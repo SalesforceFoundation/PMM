@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Value__c</name>
+    <help>Der genaue Wert, der im Bucket erfasst werden soll. Wenn es sich bei dem Feld um eine Auswahlliste handelt, sollte dies der API-Wert des Werts aus der Auswahlliste sein.</help>
+    <label>Wert</label>
+</CustomFieldTranslation>

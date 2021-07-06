@@ -5,21 +5,21 @@
     "repository": "git@github.com:SalesforceFoundation/pmm.git",
     "private": true,
     "devDependencies": {
-        "@lwc/eslint-plugin-lwc": "^1.0.1",
-        "@sa11y/jest": "^0.4.2",
-        "@salesforce/eslint-config-lwc": "^2.0.0",
-        "@salesforce/sfdx-lwc-jest": "^0.12.6",
+        "@lwc/eslint-plugin-lwc": "^0.8.0",
+        "@sa11y/jest": "^0.1.2-alpha",
+        "@salesforce/eslint-config-lwc": "^0.4.0",
+        "@salesforce/sfdx-lwc-jest": "^0.9.1",
         "babel-eslint": "^10.0.3",
-        "eslint": "^7.30.0",
-        "eslint-config-prettier": "^8.3.0",
+        "eslint": "^6.6.0",
+        "eslint-config-prettier": "^6.7.0",
         "eslint-plugin-prettier": "^3.1.1",
         "hasha-cli": "^4.1.0",
-        "husky": "^7.0.1",
-        "jest": "^27.0.6",
-        "jest-junit": "^12.2.0",
-        "lint-staged": "^11.0.0",
+        "husky": "^3.1.0",
+        "jest": "^26.0.1",
+        "jest-junit": "^9.0.0",
+        "lint-staged": "^10.0.0",
         "lockfile-lint": "^4.3.7",
-        "prettier": "^2.3.2",
+        "prettier": "^1.19.1",
         "prettier-plugin-apex": "^1.1.0"
     },
     "resolutions": {
@@ -32,8 +32,5 @@
         "test:unit:watch": "lwc-jest --watch",
         "test:unit:debug": "lwc-jest --debug",
         "test:unit:coverage": "lwc-jest --coverage"
-    },
-    "dependencies": {
-        "node-notifier": "^10.0.0"
     }
 }

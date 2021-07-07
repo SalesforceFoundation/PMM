@@ -45,9 +45,9 @@ Create a new service delivery on service using quick action
      Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery
-     Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
-     ...                            Program Engagement=${program_engagement}[Name]
-     ...                            Quantity=${quantity}
+     Populate Lookup Field          Client                 ${contact}[Name]
+     Populate Lookup Field          Program Engagement     ${program_engagement}[Name]
+     Populate Field                 Quantity               ${quantity}
      Select Button On Modal         Save
      Wait Until Modal Is Closed
      Current Page Should Be         Details                        Service__c
@@ -63,8 +63,8 @@ Validate service and program engagement lookup to same program
      Go To Page                     Details                        Service__c           object_id=${service}[Id]
      Verify Details                 Service Name                   contains                  ${service}[Name]
      Click Quick Action Button      Create New Service Delivery
-     Populate Modal Form            Client=${contact}[FirstName] ${contact}[LastName]
-     ...                            Program Engagement=${program_engagement1}[Name]
-     ...                            Quantity=${quantity}
+     Populate Lookup Field          Client                 ${contact}[Name]
+     Populate Lookup Field          Program Engagement     ${program_engagement1}[Name]
+     Populate Field                 Quantity               ${quantity}
      Select Button On Modal         Save
      verify modal Error             Select a Program Engagement that matches the Program of the related Service.

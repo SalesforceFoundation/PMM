@@ -1,0 +1,38 @@
+{
+  "appPageId" : "b4f1b062-39be-4db9-aa64-bfe331aa63d2",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "id" : "7859ba04-efe5-4b54-83a7-2c977417da15",
+  "label" : "Service Schedule Related List",
+  "regions" : [ {
+    "id" : "fcc64d32-1267-471a-916e-06802f7d29d1",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customTitle" : "",
+        "parentRecordId" : "{!recordId}",
+        "relatedListName" : "{!relationshipApiName}",
+        "showBreadCrumbs" : true,
+        "showCustomTitle" : false,
+        "showManualRefreshButton" : true,
+        "showRowNumbers" : true
+      },
+      "componentName" : "forceCommunity:relatedList",
+      "id" : "03a9db84-7176-4e51-b145-4bf4e3522e01",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "a3372b37-ceff-40a4-92cf-94a9acf4125d",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "1ffd1a8d-2397-48f1-9e8c-16f1fd974158",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "relatedlist-a05"
+}

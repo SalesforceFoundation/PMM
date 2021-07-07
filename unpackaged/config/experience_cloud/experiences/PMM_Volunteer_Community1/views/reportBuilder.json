@@ -1,0 +1,32 @@
+{
+  "appPageId" : "b4f1b062-39be-4db9-aa64-bfe331aa63d2",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "id" : "add8fcba-1c90-437a-bddc-27eec789c371",
+  "label" : "Report Builder",
+  "regions" : [ {
+    "id" : "818b4077-2ad6-41ce-8fc0-a358b19c8bd1",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:reportBuilder",
+      "id" : "e40ae0cc-751e-46c0-9c3d-5c07cbf5ff2d",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "d0d454e5-d8e0-42d3-b8f8-de11cc3a9312",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "5ade52a0-4d1c-4e8c-ae5d-c0780c1fb87e",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "createreport"
+}

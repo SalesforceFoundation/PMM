@@ -28,23 +28,23 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.wait_until_page_contains("New Service Schedule")
 
     def verify_wizard_screen_title(self, title):
-        """ Verify title on a screen on service schedule wizard  """
+        """Verify title on a screen on service schedule wizard"""
         locator = pmm_lex_locators["service_schedule"]["wizard_title"].format(title)
         self.selenium.wait_until_page_contains_element(
             locator, error=" Incorrect title found"
         )
 
     def select_service_participant(self, participant):
-        """ Selects a service participant, by clicking on the Add button in the row of the participant """
+        """Selects a service participant, by clicking on the Add button in the row of the participant"""
         locator_button = pmm_lex_locators["service_schedule"][
             "add_participants"
         ].format(participant)
-        self.selenium.scroll_element_into_view(locator_button)
+        self.pmm.scroll_element_into_view(locator_button)
         self.selenium.set_focus_to_element(locator_button)
         self.salesforce._jsclick(locator_button)
 
     def click_add_all_button(self):
-        """ Selects all participants, by clicking on the Add All button above the participant list """
+        """Selects all participants, by clicking on the Add All button above the participant list"""
         locator_button = pmm_lex_locators["service_schedule"]["add_all"].format(self)
         self.selenium.set_focus_to_element(locator_button)
         self.salesforce._jsclick(locator_button)
@@ -84,7 +84,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
             raise Exception("Valid status not entered")
 
     def validate_participant_is_added(self, participant):
-        """ Validates that the service participant is added to the participant selector component"""
+        """Validates that the service participant is added to the participant selector component"""
         locator = pmm_lex_locators["service_schedule"]["participant_selector"].format(
             participant
         )
@@ -93,7 +93,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         )
 
     def remove_participant(self, participant):
-        """ Validates that the service participant is removed when clicked on X and added to the participant list on screen3 """
+        """Validates that the service participant is removed when clicked on X and added to the participant list on screen3"""
         locator = pmm_lex_locators["service_schedule"]["remove_participant"].format(
             participant
         )
@@ -108,9 +108,9 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         )
 
     def set_frequency(self, frequency):
-        """ Sets the frequency on Screen1 of Service Schedule Wizard """
+        """Sets the frequency on Screen1 of Service Schedule Wizard"""
         locator = pmm_lex_locators["service_schedule"]["frequency"].format(frequency)
-        self.selenium.scroll_element_into_view(locator)
+        self.pmm.scroll_element_into_view(locator)
         self.selenium.set_focus_to_element(locator)
         self.salesforce._jsclick(locator)
 
@@ -119,7 +119,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         locator = pmm_lex_locators["service_schedule"]["ends_radio_button"].format(
             frequency
         )
-        self.selenium.scroll_element_into_view(locator)
+        self.pmm.scroll_element_into_view(locator)
         self.selenium.set_focus_to_element(locator)
         self.salesforce._jsclick(locator)
         locator_session = pmm_lex_locators["service_schedule"]["session_end"].format(
@@ -130,7 +130,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.get_webelement(locator_session).send_keys(value)
 
     def remove_session(self, session_name):
-        """ On Screen2 of wizard, clicks on 'x' to remove the session given the service session name, and validates that it is removed, checks that the warning message is not displayed and 'Add Service Session' button is displayed """
+        """On Screen2 of wizard, clicks on 'x' to remove the session given the service session name, and validates that it is removed, checks that the warning message is not displayed and 'Add Service Session' button is displayed"""
         locator = pmm_lex_locators["service_schedule"]["remove_session"].format(
             session_name
         )
@@ -144,7 +144,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.wait_until_page_contains("Add Service Session")
 
     def set_end_date(self, date, value):
-        """ On Screen1 of wizard, enters a service session end date that is different from the start date """
+        """On Screen1 of wizard, enters a service session end date that is different from the start date"""
         locator = pmm_lex_locators["service_schedule"]["first_session_end"].format(date)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
@@ -152,7 +152,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.get_webelement(locator).send_keys(value)
 
     def filter_participants(self, filter_value):
-        """ Filter participants on service schedule wizard based on filter criteria """
+        """Filter participants on service schedule wizard based on filter criteria"""
         locator = pmm_lex_locators["service_schedule"]["filter"].format(filter_value)
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()

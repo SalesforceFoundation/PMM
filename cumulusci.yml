@@ -1,4 +1,4 @@
-minimum_cumulusci_version: "3.23.0"
+minimum_cumulusci_version: "3.36.0"
 project:
     name: PMM
     package:
@@ -15,12 +15,14 @@ project:
     dependencies:
         - namespace: sfdobase
           version: 1.0
+    dependency_resolutions:
+        preproduction: include_beta
+
 orgs:
     scratch:
-        dev_namespaced:
-            config_file: orgs/dev.json
+        dev_exp:
+            config_file: orgs/dev_exp.json
             days: 7
-            namespaced: True
         prerelease:
             config_file: orgs/prerelease.json
             days: 7
@@ -33,6 +35,56 @@ sources:
         github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
+    create_community:
+        description: "Creates a community with the 'Customer Service' template"
+        class_path: cumulusci.tasks.salesforce.CreateCommunity
+        options:
+            template: Customer Service
+            name: PMM Volunteer Community
+            url_path_prefix: pmmvolunteers
+            timeout: 60000
+            skip_existing: true
+
+    update_experience_cloud_OWDs:
+        class_path: cumulusci.tasks.metadata_etl.SetOrgWideDefaults
+        options:
+            org_wide_defaults:
+                - api_name: "%%%NAMESPACE%%%ServiceSession__c"
+                  internal_sharing_model: ReadWrite
+                  external_sharing_model: Private
+                - api_name: Contact
+                  internal_sharing_model: ReadWrite
+                  external_sharing_model: Private
+
+    publish_community:
+        description: Publishes the "PMM Client Community" Community in the target org using the Connect API
+        class_path: cumulusci.tasks.salesforce.PublishCommunity
+        options:
+            name: PMM Volunteer Community
+
+    create_community_owner:
+        description: POSTs json files to the Composite REST API endpoint.
+        class_path: cumulusci.tasks.salesforce.composite.CompositeApi
+        options:
+            data_files:
+                - "datasets/communityowner.json"
+
+    create_community_user:
+        description: POSTs json files to the Composite REST API endpoint.
+        class_path: cumulusci.tasks.salesforce.composite.CompositeApi
+        options:
+            data_files:
+                - "datasets/communityuser.json"
+
+    add_community_login_button:
+        description: Adds the "Log in to Experience as User" button to the PMM Contact layout
+        class_path: cumulusci.tasks.metadata_etl.layouts.AddRecordPlatformActionListItem
+        options:
+            api_names: "Contact-%%%NAMESPACE%%%Program Management"
+            action_name: LoginToNetworkAsUser
+            action_type: StandardButton
+            place_first: True
+
     robot:
         options:
             suites: robot/pmm/tests
@@ -122,6 +174,34 @@ tasks:
         options:
             path: unpackaged/config/dev
 
+    deploy_experience_cloud:
+        group: "PMM: Config"
+        description: Deploys the post-install configuration emulating a customer-created Experience Cloud
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/experience_cloud
+
+    deploy_cmdts:
+        group: "PMM: Config"
+        description: Deploys the updated Custom Metadata records, emulating admin setup
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/cmdts
+
+    deploy_alternate_field_sets:
+        group: "PMM: Config"
+        description: Deploys the post-install configuration emulating admin-configured alternate field sets
+        class_path: cumulusci.tasks.salesforce.Deploy
+        options:
+            path: unpackaged/config/alternate_field_sets
+
+    use_alternate_field_sets:
+        group: "PMM: Config"
+        description: Execute anonymous apex to use Alternate field set on an example Service record
+        class_path: cumulusci.tasks.apex.anon.AnonymousApexTask
+        options:
+            path: scripts/Use_Alternate_Field_Sets.apex
+
     deploy_customer_profiles:
         group: "PMM: Config"
         description: Deploys the post-install configuration for an unmanaged DE org
@@ -130,6 +210,44 @@ tasks:
             path: unpackaged/config/customer_profiles
 
 flows:
+    make_community:
+        steps:
+            1:
+                task: create_community
+            2:
+                task: update_experience_cloud_OWDs
+            2.1:
+                task: util_sleep
+            3:
+                task: create_community_owner
+            4:
+                task: deploy_experience_cloud
+            5:
+                task: create_community_user
+            6:
+                task: publish_community
+            7:
+                task: add_community_login_button
+            8:
+                task: snapshot_changes
+
+    setup_alternate_field_sets:
+        steps:
+            1:
+                task: deploy_alternate_field_sets
+            2:
+                task: add_picklist_entries
+                options:
+                    entries:
+                        - fullName: Alternate
+                          label: Alternate
+                        - fullName: Alternate_no_service
+                          label: Alternate_no_service
+                    picklists:
+                        - "%%%NAMESPACE%%%Service__c.%%%NAMESPACE%%%ServiceDeliveryFieldSet__c"
+            3:
+                task: use_alternate_field_sets
+
     load_data:
         steps:
             1:
@@ -143,9 +261,7 @@ flows:
                 task: restore_tdtm_trigger_handlers
                 when: "'npsp' in org_config.installed_packages"
             5:
-                task: execute_anon
-                options:
-                    path: "data/scripts/update_all_records_as_recently_viewed.apex"
+                flow: setup_alternate_field_sets
 
     create_users_and_assign_permission_sets:
         steps:
@@ -346,3 +462,20 @@ plans:
                     path: unpackaged/config/fix_deleted_reports
                 ui_options:
                     name: "Recover Deleted Report"
+    upgrade:
+        slug: upgrade
+        title: Product Upgrade
+        tier: additional
+        is_listed: False
+        preflight_message: "This installer upgrades this package and any required dependencies to the latest version in your org. This installer isn't supported and has risks. Please don't run this installer unless you're aware of its specific use cases and considerations."
+        post_install_message: "Installation complete and package is on the latest version."
+        steps:
+            1:
+                task: update_dependencies
+                options:
+                    security_type: PUSH
+                    packages_only: True
+            2:
+                task: install_managed
+                options:
+                    security_type: PUSH

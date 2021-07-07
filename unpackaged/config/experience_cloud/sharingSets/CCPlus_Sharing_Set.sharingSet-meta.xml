@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <accessMappings>
+        <accessLevel>Edit</accessLevel>
+        <object>%%%NAMESPACE%%%ProgramEngagement__c</object>
+        <objectField>%%%NAMESPACE%%%Contact__c</objectField>
+        <userField>Contact</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Edit</accessLevel>
+        <object>%%%NAMESPACE%%%ServiceSchedule__c</object>
+        <objectField>%%%NAMESPACE%%%PrimaryServiceProvider__c</objectField>
+        <userField>Contact</userField>
+    </accessMappings>
+    <name>Customer Community Plus Sharing Set</name>
+    <profiles>customer community plus user</profiles>
+</SharingSet>

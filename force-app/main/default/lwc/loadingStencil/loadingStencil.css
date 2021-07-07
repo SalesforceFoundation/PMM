@@ -1,0 +1,7 @@
+.stencil {
+    height: 6px;
+    margin: 13px auto;
+    border-radius: 1rem;
+    background: rgb(224, 229, 238);
+    width: 85%;
+}

@@ -2,6 +2,7 @@
 # All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+import time
 
 from cumulusci.robotframework.pageobjects import BasePage
 from cumulusci.robotframework.pageobjects import ListingPage
@@ -55,34 +56,40 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
         )
         self.selenium.wait_until_page_contains("Service Session Name", timeout=60)
 
-    def populate_attendance_field(self, row, label, value):
-        """ Populate text field on attendance component given the attendance row number """
-        locator = pmm_lex_locators["attendance"]["attendance_text"].format(row, label)
+    def populate_attendance_field(self, client_name, label, value):
+        """Populate text field on attendance component given the Client Name"""
+        locator = pmm_lex_locators["attendance"]["attendance_text"].format(
+            client_name, label
+        )
         self.selenium.get_webelement(locator).click()
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).send_keys(value)
 
-    def populate_attendance_dropdown(self, row, title, value):
-        """populate dropdown on attendace row given the attendance row number"""
-        locator = pmm_lex_locators["attendance"]["dropdown_field"].format(row, title)
+    def populate_attendance_dropdown(self, client_name, title, value):
+        """populate dropdown on attendace row given the contact name"""
+        locator = pmm_lex_locators["attendance"]["dropdown_field"].format(
+            client_name, title
+        )
         self.selenium.set_focus_to_element(locator)
-        # self.salesforce._jsclick(locator)
         element_click = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element_click)
-        popup_loc = pmm_lex_locators["attendance"]["select_popup"].format(row)
+        popup_loc = pmm_lex_locators["attendance"]["select_popup"].format(client_name)
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="The dropdown did not open"
         )
-        value_loc = pmm_lex_locators["attendance"]["dropdown_value"].format(row, value)
+        value_loc = pmm_lex_locators["attendance"]["dropdown_value"].format(
+            client_name, value
+        )
         element_click = self.selenium.driver.find_element_by_xpath(value_loc)
         self.selenium.driver.execute_script("arguments[0].click()", element_click)
+        time.sleep(1)
 
-    def dim_attendance_row(self, row, status):
+    def dim_attendance_row(self, client_name, status):
         """If status is set to 'Select' then the attendance row is Dimmed, if status is set to
         'Is displayed' then validate that the Dim icon is displayed given the row number. If status
-        is set to 'not displayed' then validate that the dim icon is not displayed given the row number
+        is set to 'not displayed' then validate that the dim icon is not displayed given the client name
         """
-        locator = pmm_lex_locators["attendance"]["dim_icon"].format(row)
+        locator = pmm_lex_locators["attendance"]["dim_icon"].format(client_name)
         if status == "Is displayed":
             self.selenium.wait_until_page_contains_element(
                 locator, error="Dim attendance icon is not displayed"
@@ -97,9 +104,9 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
         else:
             raise Exception("Valid status not entered")
 
-    def validate_attendance_info_in_row(self, row, field, status, value):
-        """ Validate details on attendance component given the row number and field name """
-        locator = pmm_lex_locators["attendance"]["details"].format(row, field)
+    def validate_attendance_info_in_row(self, client_name, field, status, value):
+        """Validate details on attendance component given the client name and field name"""
+        locator = pmm_lex_locators["attendance"]["details"].format(client_name, field)
         actual_value = self.selenium.get_webelement(locator).text
         if status == "contains":
             assert (

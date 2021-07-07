@@ -1,3 +1,4 @@
+@IsTest
 public with sharing class StubBuilder {
     private Type objType;
     List<SignatureBuilder> signatureBuilders = new List<SignatureBuilder>();
@@ -46,12 +47,12 @@ public with sharing class StubBuilder {
         );
     }
 
-    public Stub build() {
-        List<Stub.MethodCall> methodCalls = new List<Stub.MethodCall>();
+    public TestStub build() {
+        List<TestStub.MethodCall> methodCalls = new List<TestStub.MethodCall>();
         for (SignatureBuilder sb : signatureBuilders) {
             methodCalls.addAll(sb.build());
         }
-        return new Stub(objType, methodCalls);
+        return new TestStub(objType, methodCalls);
     }
 
     public class SignatureBuilder {
@@ -71,26 +72,32 @@ public with sharing class StubBuilder {
             this.paramTypes = paramTypes;
         }
 
-        public MethodBuilder called() {
-            return calledWith(new List<Object>());
+        // TODO: Create a new method builder constructor that is without args
+        // and be specific to why we are not checking args in the method match
+        public MethodBuilder signatureMatches() {
+            return calledWithList(null);
         }
 
-        public MethodBuilder calledWith(List<Object> args) {
+        public MethodBuilder called() {
+            return calledWithList(new List<Object>());
+        }
+
+        private MethodBuilder calledWithList(List<Object> args) {
             MethodBuilder mb = new MethodBuilder(this, args);
             methodBuilders.add(mb);
             return mb;
         }
 
         public MethodBuilder calledWith(Object arg) {
-            return calledWith(new List<Object>{ arg });
+            return calledWithList(new List<Object>{ arg });
         }
 
         public MethodBuilder calledWith(Object arg, Object arg2) {
-            return calledWith(new List<Object>{ arg, arg2 });
+            return calledWithList(new List<Object>{ arg, arg2 });
         }
 
         public MethodBuilder calledWith(Object arg, Object arg2, Object arg3) {
-            return calledWith(new List<Object>{ arg, arg2, arg3 });
+            return calledWithList(new List<Object>{ arg, arg2, arg3 });
         }
 
         public MethodBuilder calledWith(
@@ -99,16 +106,16 @@ public with sharing class StubBuilder {
             Object arg3,
             Object arg4
         ) {
-            return calledWith(new List<Object>{ arg, arg2, arg3, arg4 });
+            return calledWithList(new List<Object>{ arg, arg2, arg3, arg4 });
         }
 
         private StubBuilder endSignature() {
             return builder;
         }
 
-        private List<Stub.MethodCall> build() {
-            Stub.Signature signature = new Stub.Signature(methodName, paramTypes);
-            List<Stub.MethodCall> methodCalls = new List<Stub.MethodCall>();
+        private List<TestStub.MethodCall> build() {
+            TestStub.Signature signature = new TestStub.Signature(methodName, paramTypes);
+            List<TestStub.MethodCall> methodCalls = new List<TestStub.MethodCall>();
             for (MethodBuilder mb : methodBuilders) {
                 methodCalls.add(mb.build(signature));
             }
@@ -123,6 +130,7 @@ public with sharing class StubBuilder {
         private List<Id> ids;
         private Boolean throwException = false;
         private Object returnValue;
+        private Integer expectedCalls;
 
         public MethodBuilder(SignatureBuilder signatureBuilder, List<Object> args) {
             this.args = args;
@@ -132,6 +140,16 @@ public with sharing class StubBuilder {
         public MethodBuilder setIds(List<Id> ids) {
             this.ids = ids;
             return this;
+        }
+
+        public MethodBuilder expectedToBeCalled(Integer n) {
+            this.expectedCalls = n;
+            return this;
+        }
+
+        public StubBuilder expectedNotToBeCalled() {
+            this.expectedCalls = 0;
+            return signatureBuilder.endSignature();
         }
 
         public StubBuilder thenReturn(Object returnValue) {
@@ -148,10 +166,14 @@ public with sharing class StubBuilder {
             return signatureBuilder.endSignature();
         }
 
-        private Stub.MethodCall build(Stub.Signature signature) {
-            Stub.MethodCall methodCall = new Stub.MethodCall(signature).calledWith(args);
+        private TestStub.MethodCall build(TestStub.Signature signature) {
+            TestStub.MethodCall methodCall = new TestStub.MethodCall(signature)
+                .calledWith(args);
             if (ids != null) {
                 methodCall.setIds(ids);
+            }
+            if (expectedCalls != null) {
+                methodCall.setExpectedCalls(expectedCalls);
             }
             if (throwException) {
                 methodCall.thenThrowException();

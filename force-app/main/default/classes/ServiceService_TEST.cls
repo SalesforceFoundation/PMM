@@ -41,12 +41,12 @@ public with sharing class ServiceService_TEST {
             engagement1
         };
         List<Service__c> services = new List<Service__c>{ service1 };
-        Stub engagementSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
+        TestStub engagementSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
             .when('getProgramEngagementsByContactId', Id.class)
             .calledWith(contactId)
             .thenReturn(engagements)
             .build();
-        Stub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
+        TestStub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
             .when('getServicesByProgramIds', Set<Id>.class)
             .calledWith(new Set<Id>{ program1.Id })
             .thenReturn(services)
@@ -73,8 +73,8 @@ public with sharing class ServiceService_TEST {
             System.assert(!objList.isEmpty());
         }
 
-        engagementSelectorStub.assertMethodsCalled();
-        serviceSelectorStub.assertMethodsCalled();
+        engagementSelectorStub.assertCalledAsExpected();
+        serviceSelectorStub.assertCalledAsExpected();
     }
 
     @IsTest
@@ -112,7 +112,7 @@ public with sharing class ServiceService_TEST {
 
         final List<object> expected = new List<Object>{ expectedValues };
 
-        Stub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
+        TestStub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
             .when('getServicesByProgramEngagementId', Id.class)
             .calledWith(programEngagementId)
             .thenReturn(services)
@@ -140,7 +140,7 @@ public with sharing class ServiceService_TEST {
             'Expected the size of both expected and actual are the same'
         );
 
-        serviceSelectorStub.assertMethodsCalled();
+        serviceSelectorStub.assertCalledAsExpected();
     }
 
     //Removing the service field from the fieldset
@@ -187,7 +187,7 @@ public with sharing class ServiceService_TEST {
             }
         }
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)
@@ -217,12 +217,12 @@ public with sharing class ServiceService_TEST {
             serviceFieldIndex = fieldSetValues.indexOf(serviceField);
 
             System.assert(
-                serviceFieldIndex > 0,
-                'Expected the service field to be after the contact or the program engagement field.'
+                serviceFieldIndex >= 0,
+                'Expected the service field to be added to the fieldset.'
             );
         }
 
-        fieldSetServiceStub.assertMethodsCalled();
+        fieldSetServiceStub.assertCalledAsExpected();
     }
 
     //Do not remove any fields from the fieldset
@@ -245,7 +245,7 @@ public with sharing class ServiceService_TEST {
             ServiceDelivery__c.ProgramEngagement__c.getDescribe()
         );
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)
@@ -275,12 +275,12 @@ public with sharing class ServiceService_TEST {
             serviceFieldIndex = fieldSetValues.indexOf(serviceField);
 
             System.assert(
-                serviceFieldIndex > 0,
-                'Expected the service field to be after the contact or the program engagement field.'
+                serviceFieldIndex >= 0,
+                'Expected the service field to be added to the fieldset.'
             );
         }
 
-        fieldSetServiceStub.assertMethodsCalled();
+        fieldSetServiceStub.assertCalledAsExpected();
     }
 
     //Removing the contact and service field from the fieldset
@@ -310,7 +310,7 @@ public with sharing class ServiceService_TEST {
                 key
             );
 
-            if (fieldSetValues.indexOf(serviceField) > 0) {
+            if (fieldSetValues.indexOf(serviceField) >= 0) {
                 removedServiceField = fieldSetValues.remove(
                     fieldSetValues.indexOf(serviceField)
                 );
@@ -328,7 +328,7 @@ public with sharing class ServiceService_TEST {
                 );
             }
 
-            if (fieldSetValues.indexOf(contactField) > 0) {
+            if (fieldSetValues.indexOf(contactField) >= 0) {
                 removedContactField = fieldSetValues.remove(
                     fieldSetValues.indexOf(contactField)
                 );
@@ -347,7 +347,7 @@ public with sharing class ServiceService_TEST {
             }
         }
 
-        Stub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
             .when('getFieldSetsByName', String.class)
             .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
             .thenReturn(fieldSetsToReturn)
@@ -376,17 +376,329 @@ public with sharing class ServiceService_TEST {
 
             serviceFieldIndex = fieldSetValues.indexOf(serviceField);
 
-            System.assert(
-                serviceFieldIndex > 0,
-                'Expected the service field to be after the program engagement field.'
+            System.assertNotEquals(
+                serviceFieldIndex,
+                -1,
+                'Expected the service field to be added to the fieldset.'
             );
         }
 
-        fieldSetServiceStub.assertMethodsCalled();
+        fieldSetServiceStub.assertCalledAsExpected();
     }
 
-    // TODO: Write more tests for the following scenarios :
-    // 1. Remove the program engagement and contact field the fieldset
-    // 2. Remove the program engagement field from the fieldset
-    // 3. Test List index scenario when fieldset size is less than the index of where the service field needs to be added
+    //Removing the program engagement and service field from the fieldset
+    @IsTest
+    private static void testGetServiceDeliveryFieldSetsWithoutPEAndService() {
+        Map<String, Object> removedServiceField;
+        Map<String, Object> removedEngagementField;
+        FieldSetService fieldSetService = new FieldSetService();
+        Integer serviceFieldIndex;
+        Integer engagementFieldIndex;
+
+        Map<String, Object> fieldSetsToReturn = fieldSetService.getFieldSetsByName(
+            Schema.SObjectType.ServiceDelivery__c.getName()
+        );
+        Map<String, Object> serviceField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Service__c.getDescribe()
+        );
+        Map<String, Object> contactField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Contact__c.getDescribe()
+        );
+        Map<String, Object> engagementField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.ProgramEngagement__c.getDescribe()
+        );
+
+        //Remove the program engagement and service field from the fieldset that we got back
+        for (String key : fieldSetsToReturn.keySet()) {
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) fieldSetsToReturn.get(
+                key
+            );
+
+            if (fieldSetValues.indexOf(serviceField) >= 0) {
+                removedServiceField = fieldSetValues.remove(
+                    fieldSetValues.indexOf(serviceField)
+                );
+
+                System.assertEquals(
+                    removedServiceField,
+                    serviceField,
+                    'Service field was not removed from the fieldset as expected'
+                );
+
+                System.assertEquals(
+                    false,
+                    fieldSetValues.contains(serviceField),
+                    'Service field was not removed from the fieldset'
+                );
+            }
+
+            if (fieldSetValues.indexOf(engagementField) >= 0) {
+                removedEngagementField = fieldSetValues.remove(
+                    fieldSetValues.indexOf(engagementField)
+                );
+
+                System.assertEquals(
+                    removedEngagementField,
+                    engagementField,
+                    'Program Engagement field was not removed from the fieldset as expected'
+                );
+
+                System.assertEquals(
+                    false,
+                    fieldSetValues.contains(engagementField),
+                    'Program Engagement field was not removed from the fieldset'
+                );
+            }
+        }
+
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+            .when('getFieldSetsByName', String.class)
+            .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
+            .thenReturn(fieldSetsToReturn)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Service__c.getDescribe())
+            .thenReturn(serviceField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Contact__c.getDescribe())
+            .thenReturn(contactField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.ProgramEngagement__c.getDescribe())
+            .thenReturn(engagementField)
+            .build();
+
+        ServiceService service = new ServiceService();
+        service.fieldSetService = (FieldSetService) fieldSetServiceStub.create();
+
+        Test.startTest();
+        Map<String, Object> actualFieldSets = service.getServiceDeliveryFieldSets();
+        Test.stopTest();
+
+        for (String key : actualFieldSets.keySet()) {
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) actualFieldSets.get(
+                key
+            );
+
+            serviceFieldIndex = fieldSetValues.indexOf(serviceField);
+            engagementFieldIndex = fieldSetValues.indexOf(engagementField);
+
+            System.assertNotEquals(
+                serviceFieldIndex,
+                -1,
+                'Expected the service field to be added to the fieldset.'
+            );
+
+            System.assertEquals(
+                engagementFieldIndex,
+                -1,
+                'Expected the program engagement field to be removed from the fieldset.'
+            );
+        }
+
+        fieldSetServiceStub.assertCalledAsExpected();
+    }
+
+    //Removing the contact, program engagement and service field from the fieldset
+    @IsTest
+    private static void testGetServiceDeliveryFieldSetsWithoutContactPEAndService() {
+        Map<String, Object> removedServiceField;
+        Map<String, Object> removedContactField;
+        Map<String, Object> removedEngagementField;
+        FieldSetService fieldSetService = new FieldSetService();
+        Integer serviceFieldIndex;
+        Integer contactFieldIndex;
+        Integer engagementFieldIndex;
+
+        Map<String, Object> fieldSetsToReturn = fieldSetService.getFieldSetsByName(
+            Schema.SObjectType.ServiceDelivery__c.getName()
+        );
+        Map<String, Object> serviceField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Service__c.getDescribe()
+        );
+        Map<String, Object> contactField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Contact__c.getDescribe()
+        );
+        Map<String, Object> engagementField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.ProgramEngagement__c.getDescribe()
+        );
+
+        //Remove the contact, program engagement and service field from the fieldset that we got back
+        for (String key : fieldSetsToReturn.keySet()) {
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) fieldSetsToReturn.get(
+                key
+            );
+
+            if (fieldSetValues.indexOf(serviceField) >= 0) {
+                removedServiceField = fieldSetValues.remove(
+                    fieldSetValues.indexOf(serviceField)
+                );
+
+                System.assertEquals(
+                    removedServiceField,
+                    serviceField,
+                    'Service field was not removed from the fieldset as expected'
+                );
+
+                System.assertEquals(
+                    false,
+                    fieldSetValues.contains(serviceField),
+                    'Service field was not removed from the fieldset'
+                );
+            }
+
+            if (fieldSetValues.indexOf(contactField) >= 0) {
+                removedContactField = fieldSetValues.remove(
+                    fieldSetValues.indexOf(contactField)
+                );
+
+                System.assertEquals(
+                    removedContactField,
+                    contactField,
+                    'Contact field was not removed from the fieldset as expected'
+                );
+
+                System.assertEquals(
+                    false,
+                    fieldSetValues.contains(contactField),
+                    'Contact field was not removed from the fieldset'
+                );
+            }
+
+            if (fieldSetValues.indexOf(engagementField) >= 0) {
+                removedEngagementField = fieldSetValues.remove(
+                    fieldSetValues.indexOf(engagementField)
+                );
+
+                System.assertEquals(
+                    removedEngagementField,
+                    engagementField,
+                    'Program Engagement field was not removed from the fieldset as expected'
+                );
+
+                System.assertEquals(
+                    false,
+                    fieldSetValues.contains(engagementField),
+                    'Program Engagement field was not removed from the fieldset'
+                );
+            }
+        }
+
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+            .when('getFieldSetsByName', String.class)
+            .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
+            .thenReturn(fieldSetsToReturn)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Service__c.getDescribe())
+            .thenReturn(serviceField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Contact__c.getDescribe())
+            .thenReturn(contactField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.ProgramEngagement__c.getDescribe())
+            .thenReturn(engagementField)
+            .build();
+
+        ServiceService service = new ServiceService();
+        service.fieldSetService = (FieldSetService) fieldSetServiceStub.create();
+
+        Test.startTest();
+        Map<String, Object> actualFieldSets = service.getServiceDeliveryFieldSets();
+        Test.stopTest();
+
+        for (String key : actualFieldSets.keySet()) {
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) actualFieldSets.get(
+                key
+            );
+
+            serviceFieldIndex = fieldSetValues.indexOf(serviceField);
+            contactFieldIndex = fieldSetValues.indexOf(contactField);
+            engagementFieldIndex = fieldSetValues.indexOf(engagementField);
+
+            System.assertNotEquals(
+                serviceFieldIndex,
+                -1,
+                'Expected the service field to be added to the fieldset.'
+            );
+
+            System.assertEquals(
+                contactFieldIndex,
+                -1,
+                'Expected the contact field to be removed from the fieldset.'
+            );
+
+            System.assertEquals(
+                engagementFieldIndex,
+                -1,
+                'Expected the Program Engagement field to be removed from the fieldset.'
+            );
+        }
+
+        fieldSetServiceStub.assertCalledAsExpected();
+    }
+
+    //Clearing the fieldset that we got back and adding just the program engagement field back
+    @IsTest
+    private static void testGetServiceDeliveryFieldSetsWithOneField() {
+        FieldSetService fieldSetService = new FieldSetService();
+        Integer serviceFieldIndex;
+        Integer engagementFieldIndex;
+
+        Map<String, Object> fieldSetsToReturn = fieldSetService.getFieldSetsByName(
+            Schema.SObjectType.ServiceDelivery__c.getName()
+        );
+        Map<String, Object> serviceField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.Service__c.getDescribe()
+        );
+        Map<String, Object> engagementField = fieldSetService.getFieldForLWC(
+            ServiceDelivery__c.ProgramEngagement__c.getDescribe()
+        );
+
+        //Need to remove the fields from the fieldset and add just the program engagement field
+
+        for (String key : fieldSetsToReturn.keySet()) {
+            fieldSetsToReturn.remove(key);
+            fieldSetsToReturn.put(key, new List<Map<String, Object>>{ engagementField });
+        }
+
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+            .when('getFieldSetsByName', String.class)
+            .calledWith(Schema.SObjectType.ServiceDelivery__c.getName())
+            .thenReturn(fieldSetsToReturn)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.Service__c.getDescribe())
+            .thenReturn(serviceField)
+            .when('getFieldForLWC', DescribeFieldResult.class)
+            .calledWith(ServiceDelivery__c.ProgramEngagement__c.getDescribe())
+            .thenReturn(engagementField)
+            .build();
+
+        ServiceService service = new ServiceService();
+        service.fieldSetService = (FieldSetService) fieldSetServiceStub.create();
+
+        Test.startTest();
+        Map<String, Object> actualFieldSets = service.getServiceDeliveryFieldSets();
+        Test.stopTest();
+
+        for (String key : actualFieldSets.keySet()) {
+            List<Map<String, Object>> fieldSetValues = (List<Map<String, Object>>) actualFieldSets.get(
+                key
+            );
+
+            serviceFieldIndex = fieldSetValues.indexOf(serviceField);
+            engagementFieldIndex = fieldSetValues.indexOf(engagementField);
+
+            System.assertNotEquals(
+                serviceFieldIndex,
+                -1,
+                'Expected the service field to be added to the fieldset.'
+            );
+
+            System.assertNotEquals(
+                engagementFieldIndex,
+                -1,
+                'Expected the Program Engagement field to be in the fieldset.'
+            );
+        }
+
+        fieldSetServiceStub.assertCalledAsExpected();
+    }
 }

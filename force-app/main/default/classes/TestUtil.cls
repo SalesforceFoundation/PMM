@@ -12,9 +12,12 @@
  * Utility methods for test classes
  */
 public with sharing class TestUtil {
-    private static BasicStub customMetadataSelectorStub = new BasicStub(
-        CustomMetadataSelector.class
-    );
+    private static final Set<String> featureGateNames = new Set<String>{
+        'ServiceDeliveriesToContact',
+        'ServiceDeliveriesToService',
+        'ServiceDeliveriesToServiceSession',
+        'ServiceDeliveriesToProgramEngagement'
+    };
 
     public static final String TEST_USER_EMAIL = 'temptestuser@caseplan.example.com';
 
@@ -67,29 +70,30 @@ public with sharing class TestUtil {
         return user;
     }
 
-    public static void turnOffFeatureGates() {
-        // Stub turned off Feature Gates so we can insert Service Deliveries without triggers running
-        customMetadataSelectorStub.withReturnValue(
-            'getAllFeatureGates',
-            new List<FeatureGate__mdt>{
+    public static void turnOffFeatureGates(Set<String> developerNames) {
+        // TestStub turned off Feature Gates so we can insert Service Deliveries without triggers running
+        List<FeatureGate__mdt> featureGates = new List<FeatureGate__mdt>();
+        for (String name : featureGateNames) {
+            featureGates.add(
                 new FeatureGate__mdt(
-                    DeveloperName = 'ServiceDeliveriesToContact',
-                    IsActive__c = false
-                ),
-                new FeatureGate__mdt(
-                    DeveloperName = 'ServiceDeliveriesToService',
-                    IsActive__c = false
-                ),
-                new FeatureGate__mdt(
-                    DeveloperName = 'ServiceDeliveriesToServiceSession',
-                    IsActive__c = false
-                ),
-                new FeatureGate__mdt(
-                    DeveloperName = 'ServiceDeliveriesToProgramEngagement',
-                    IsActive__c = false
+                    DeveloperName = name,
+                    IsActive__c = !developerNames.contains(name)
                 )
-            }
-        );
-        CustomMetadataSelector.instance = (CustomMetadataSelector) customMetadataSelectorStub.createMock();
+            );
+        }
+
+        TestStub customMetadataSelectorStub = new StubBuilder(
+                CustomMetadataSelector.class
+            )
+            .when('getAllFeatureGates')
+            .called()
+            .thenReturn(featureGates)
+            .build();
+
+        CustomMetadataSelector.instance = (CustomMetadataSelector) customMetadataSelectorStub.create();
+    }
+
+    public static void turnOffFeatureGates() {
+        turnOffFeatureGates(featureGateNames);
     }
 }

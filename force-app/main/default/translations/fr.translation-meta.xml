@@ -37,6 +37,50 @@
         <label>Anonyme</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Selected_Contacts</name>
+        <label>Contacts sélectionnés</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Title</name>
+        <label>Créer des livraisons de services pour un groupe</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Description</name>
+        <label>Saisissez les livraisons de services pour plusieurs contacts. Par exemple, une halte dans un atelier.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Button</name>
+        <label>Créer par groupe</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Title</name>
+        <label>Créer des livraisons de services pour un individu</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Description</name>
+        <label>Saisissez les livraisons de services pour un seul contact.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Button</name>
+        <label>Créer par individu</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Service</name>
+        <label>Valeurs de livraison de services par défaut</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Contacts</name>
+        <label>Sélection des contacts</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Review</name>
+        <label>Examen</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Warning_No_Contacts</name>
+        <label>Sélectionnez au moins un contact pour continuer.</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>Suivre les présences</label>
     </customLabels>
@@ -55,6 +99,14 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>Une fois les participants ajoutés à ce calendrier de service, suivez leurs présences ici.</label>
+    </customLabels>
+    <customLabels>
+        <name>Incorrect_Tab</name>
+        <label>Cet onglet n’est pas celui que vous recherchez.</label>
+    </customLabels>
+    <customLabels>
+        <name>Attendance_Tab_Message</name>
+        <label>Cet onglet est utilisé uniquement pour imprimer la liste des présences depuis une page Session de service.</label>
     </customLabels>
     <customLabels>
         <name>Back</name>
@@ -182,7 +234,7 @@
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
-        <label>Votre requête doit inclure un objet.</label>
+        <label>Votre requête doit inclure un objet ou une relation enfant.</label>
     </customLabels>
     <customLabels>
         <name>Monthly_On_Day</name>
@@ -230,7 +282,11 @@
     </customLabels>
     <customLabels>
         <name>No_Records_Found</name>
-        <label>Aucun enregistrement trouvé</label>
+        <label>Aucun enregistrement trouvé.</label>
+    </customLabels>
+    <customLabels>
+        <name>NoFieldSetFound</name>
+        <label>Le champ {0} défini sur l’objet {1} n’existe pas. Vérifiez le nom de l’ensemble de champs et réessayez.</label>
     </customLabels>
     <customLabels>
         <name>No_Records_Selected</name>
@@ -289,12 +345,24 @@
         <label>Mettre à jour</label>
     </customLabels>
     <customLabels>
+        <name>Edited</name>
+        <label>Modifié</label>
+    </customLabels>
+    <customLabels>
         <name>Save</name>
         <label>Enregistrer</label>
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
         <label>Enregistrement Nouvel engagement dans le programme créé.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add</name>
+        <label>Ajouter</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_All</name>
+        <label>Tout ajouter</label>
     </customLabels>
     <customLabels>
         <name>Save_New</name>
@@ -410,7 +478,7 @@
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
-        <label>Livraisons de services</label>
+        <label>Ajouter des livraisons de services</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries_Added</name>
@@ -472,6 +540,18 @@
         <name>Warning</name>
         <label>Avertissement</label>
     </customLabels>
+    <reportTypes>
+        <name>Contacts_with_and_without_Program_Engagements</name>
+        <label>Contacts avec et sans engagements dans le programme</label>
+        <sections>
+            <label>Contacts</label>
+            <name>Contacts</name>
+        </sections>
+        <sections>
+            <label>Engagements dans le programme</label>
+            <name>Program Engagements</name>
+        </sections>
+    </reportTypes>
     <customTabs>
         <name>Attendance</name>
         <label>Présence</label>

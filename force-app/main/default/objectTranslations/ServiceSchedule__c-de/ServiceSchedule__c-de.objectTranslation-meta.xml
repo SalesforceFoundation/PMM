@@ -45,16 +45,16 @@
     <caseValues>
         <plural>true</plural>
         <caseType>Accusative</caseType>
-        <value> Leistungszeitpläne</value>
+        <value>Leistungszeitpläne</value>
     </caseValues>
     <caseValues>
         <plural>true</plural>
         <caseType>Dative</caseType>
-        <value> Leistungszeitplänen</value>
+        <value>Leistungszeitplänen</value>
     </caseValues>
     <caseValues>
         <plural>true</plural>
         <caseType>Genitive</caseType>
-        <value> Leistungszeitpläne</value>
+        <value>Leistungszeitpläne</value>
     </caseValues>
 </CustomObjectTranslation>

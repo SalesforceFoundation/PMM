@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Value__c</name>
+    <help>El valor exacto que debe colocarse en un depósito. Si el campo es una lista de selección, este debe ser el valor de API del valor de la lista de selección.</help>
+    <label>Valor</label>
+</CustomFieldTranslation>

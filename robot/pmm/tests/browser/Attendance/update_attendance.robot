@@ -83,14 +83,16 @@ Update attendance when service session status is Complete
     Page Should Contain Text        ${contact3}[Name]
 
 Validate fields added to AttendanceServiceDeliveries Fieldset
+    [Documentation]                 This test updates attendance for a service session record with Complete Status
+    [tags]                          W-9505038    perm:admin   feature:Attendance
     Run task                            add_fields_to_field_set
     ...                                 field_set=${ns}ServiceDelivery__c.${ns}Attendance_Service_Deliveries
-    ...                                 fields=${{ ["${ns}ServiceProvider__c"] }}
+    ...                                 fields=${{ ["${ns}Service_Provider__c"] }}
     Go To Page                          Details         ServiceSession__c        object_id=${service_session3}[Id]
     Page Should Contain                 Track Attendance         
     Populate Attendance Field           ${contact1}[Name]       Hours                10
     Populate Attendance Dropdown        ${contact1}[Name]       Attendance Status    Present
     Populate Attendance Lookup Field    ${contact1}[Name]       Service Provider     ${service_provider}[Name]
-    Click Dialog Button                 Save
+    Click Dialog Button                 Submit
     Verify Toast Message                Saved 3 Service Delivery records.
-    Page Should Contain Text             ${service_provider}[Name]
+    Page Should Contain Text            ${service_provider}[Name]

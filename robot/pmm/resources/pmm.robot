@@ -153,6 +153,16 @@ API Create Service Delivery
     Store Session Record      ${ns}ServiceDelivery__c  ${service_delivery_id}
     [Return]            &{service_delivery}
 
+API Update Records
+    [Documentation]         Updates the record based on the Id,field_name & field_value.
+    [Arguments]             ${obj_name}    ${id}   &{fields}
+    ${record} =             Salesforce Update  ${obj_name}   ${id}
+    ...                     &{fields}
+    @{records} =            Salesforce Query      ${obj_name}
+    ...                         select=Id
+    &{Id} =                 Get From List  ${records}  0
+    [return]                &{Id}
+
 Capture Screenshot and Delete Records and Close Browser
     [Documentation]         This keyword will capture a screenshot before closing the browser and deleting records when test fails
     Run Keyword If Any Tests Failed      Capture Page Screenshot

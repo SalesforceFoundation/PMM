@@ -7,7 +7,7 @@ Library        cumulusci.robotframework.PageObjects
 Suite Setup     Run Keywords
 ...             Open test browser            useralias=${test_user}             AND
 ...             Setup Test Data
-#Suite Teardown  Capture Screenshot and Delete Records and Close Browser
+Suite Teardown  Capture Screenshot and Delete Records and Close Browser
 
 *** Variables ***
 ${test_user}             UUser
@@ -40,9 +40,10 @@ Setup Test Data
 Delete Future Service Sessions quick action
     [Documentation]                        Navigates to service schedule details page, verifies the number of upcoming service sessions,
     ...                                    clicks delete future service session button, confirms toast and updated number of sessions.
-    [tags]                                 W-XXXXXX     perm:admin   perm:manage     perm:deliver    feature:Service Schedule 
+    [tags]                                 W-9597787     perm:admin   perm:manage    feature:Service Schedule 
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
     Verify Details                          Service Schedule Name          contains                   ${service_schedule}[Name]
     Click Quick Action Button               Delete Future Service Sessions
-#    Click Dialog Button                     Delete
-#    Verify Toast Message                    Successfully deleted 1 Service Session.
+    Populate Lightning Fields               Date=Today
+    Click Dialog Button                     Delete
+    Page Should Not Contain                 ${service_session2}

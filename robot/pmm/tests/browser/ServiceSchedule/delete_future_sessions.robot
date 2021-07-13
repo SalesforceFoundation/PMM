@@ -38,8 +38,8 @@ Setup Test Data
 
 *** Test Cases ***
 Delete Future Service Sessions quick action
-    [Documentation]                        Navigates to service schedule details page, verifies the number of upcoming service sessions,
-    ...                                    clicks delete future service session button, confirms toast and updated number of sessions.
+    [Documentation]                        Navigates to service schedule details page, clicks delete future service session button,
+    ...                                    confirms session has been deleted.
     [tags]                                 W-9597787     perm:admin   perm:manage    feature:Service Schedule 
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
     Verify Details                          Service Schedule Name          contains                   ${service_schedule}[Name]

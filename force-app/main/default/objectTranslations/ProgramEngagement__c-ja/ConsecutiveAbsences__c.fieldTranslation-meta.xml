@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ConsecutiveAbsences__c</name>
+    <help>現在の日付からさかぼってカウントされるこのプログラムエンゲージメントの連続欠席日数。最新のサービス提供が出席だった場合は 0 にクリアされます。</help>
+    <label>連続欠席</label>
+</CustomFieldTranslation>

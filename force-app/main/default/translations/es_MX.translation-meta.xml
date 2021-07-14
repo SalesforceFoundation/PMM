@@ -37,6 +37,50 @@
         <label>Anónima</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Selected_Contacts</name>
+        <label>Contactos seleccionados</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Title</name>
+        <label>Crear entregas de servicio para un grupo</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Description</name>
+        <label>Ingrese entregas de servicio para varios contactos. Por ejemplo, una entrega en un taller.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Button</name>
+        <label>Crear por grupo</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Title</name>
+        <label>Crear entregas de servicio para una persona</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Description</name>
+        <label>Ingrese entregas de servicio para un único contacto.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Button</name>
+        <label>Crear por persona</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Service</name>
+        <label>Valores de entrega de servicio predeterminados</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Contacts</name>
+        <label>Selección de contacto</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Review</name>
+        <label>Revisar</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Warning_No_Contacts</name>
+        <label>Seleccione al menos un contacto para continuar.</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>Seguimiento de asistencia</label>
     </customLabels>
@@ -55,6 +99,14 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>Después de que los participantes se agreguen a esta Programación de servicio, realice un seguimiento de su asistencia aquí.</label>
+    </customLabels>
+    <customLabels>
+        <name>Incorrect_Tab</name>
+        <label>Esta no es la ficha que desea.</label>
+    </customLabels>
+    <customLabels>
+        <name>Attendance_Tab_Message</name>
+        <label>Esta ficha se utiliza únicamente para imprimir la asistencia desde una página de sesión de servicio.</label>
     </customLabels>
     <customLabels>
         <name>Back</name>
@@ -182,7 +234,7 @@
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
-        <label>Su consulta debe incluir un objeto.</label>
+        <label>Su consulta debe incluir una relación de objeto o secundario.</label>
     </customLabels>
     <customLabels>
         <name>Monthly_On_Day</name>
@@ -230,7 +282,11 @@
     </customLabels>
     <customLabels>
         <name>No_Records_Found</name>
-        <label>No se encontraron registros</label>
+        <label>No se encontraron registros.</label>
+    </customLabels>
+    <customLabels>
+        <name>NoFieldSetFound</name>
+        <label>El conjunto de campos {0} en el objeto {1} no existe. Verifique el nombre del conjunto de campos e inténtelo de nuevo.</label>
     </customLabels>
     <customLabels>
         <name>No_Records_Selected</name>
@@ -289,12 +345,24 @@
         <label>Actualizar</label>
     </customLabels>
     <customLabels>
+        <name>Edited</name>
+        <label>Modificado</label>
+    </customLabels>
+    <customLabels>
         <name>Save</name>
         <label>Guardar</label>
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
         <label>Nuevo registro de participación en programa creado.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add</name>
+        <label>Agregar</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_All</name>
+        <label>Agregar todo</label>
     </customLabels>
     <customLabels>
         <name>Save_New</name>
@@ -410,7 +478,7 @@
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
-        <label>Entregas de servicio</label>
+        <label>Agregar entregas de servicio</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries_Added</name>
@@ -472,6 +540,18 @@
         <name>Warning</name>
         <label>Advertencia</label>
     </customLabels>
+    <reportTypes>
+        <name>Contacts_with_and_without_Program_Engagements</name>
+        <label>Contactos con y sin participaciones en programa</label>
+        <sections>
+            <label>Contactos</label>
+            <name>Contacts</name>
+        </sections>
+        <sections>
+            <label>Participaciones en programa</label>
+            <name>Program Engagements</name>
+        </sections>
+    </reportTypes>
     <customTabs>
         <name>Attendance</name>
         <label>Asistencia</label>

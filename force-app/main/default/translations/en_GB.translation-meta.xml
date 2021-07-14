@@ -37,6 +37,50 @@
         <label>Anonymous</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Selected_Contacts</name>
+        <label>Selected Contacts</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Title</name>
+        <label>Create Service Deliveries for a Group</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Description</name>
+        <label>Enter service deliveries for several Contacts. For example, a drop-in at a workshop.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Button</name>
+        <label>Create by Group</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Title</name>
+        <label>Create Service Deliveries for an Individual</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Description</name>
+        <label>Enter service deliveries for a single Contact.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Button</name>
+        <label>Create by Individual</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Service</name>
+        <label>Default Service Delivery Values</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Contacts</name>
+        <label>Contact Selection</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Review</name>
+        <label>Review</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Warning_No_Contacts</name>
+        <label>Select at least one Contact to continue.</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>Track Attendance</label>
     </customLabels>
@@ -55,6 +99,14 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>After participants are added to this Service Schedule, track their attendance here.</label>
+    </customLabels>
+    <customLabels>
+        <name>Incorrect_Tab</name>
+        <label>This isn’t the tab you want.</label>
+    </customLabels>
+    <customLabels>
+        <name>Attendance_Tab_Message</name>
+        <label>This tab is used only for printing attendance from a Service Session page.</label>
     </customLabels>
     <customLabels>
         <name>Back</name>
@@ -182,7 +234,7 @@
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
-        <label>Your query must include an object.</label>
+        <label>Your query must include an object or child relationship.</label>
     </customLabels>
     <customLabels>
         <name>Monthly_On_Day</name>
@@ -230,7 +282,11 @@
     </customLabels>
     <customLabels>
         <name>No_Records_Found</name>
-        <label>No records found</label>
+        <label>No records found.</label>
+    </customLabels>
+    <customLabels>
+        <name>NoFieldSetFound</name>
+        <label>{0} field set on the {1} object doesn&apos;t exist. Verify the field set name and try again.</label>
     </customLabels>
     <customLabels>
         <name>No_Records_Selected</name>
@@ -289,12 +345,24 @@
         <label>Update</label>
     </customLabels>
     <customLabels>
+        <name>Edited</name>
+        <label>Edited</label>
+    </customLabels>
+    <customLabels>
         <name>Save</name>
         <label>Save</label>
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
         <label>New Program Engagement record created.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add</name>
+        <label>Add</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_All</name>
+        <label>Add All</label>
     </customLabels>
     <customLabels>
         <name>Save_New</name>
@@ -410,7 +478,7 @@
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
-        <label>Service Deliveries</label>
+        <label>Add Service Deliveries</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries_Added</name>
@@ -472,6 +540,18 @@
         <name>Warning</name>
         <label>Warning</label>
     </customLabels>
+    <reportTypes>
+        <name>Contacts_with_and_without_Program_Engagements</name>
+        <label>Contacts with and without Programme Engagements</label>
+        <sections>
+            <label>Contacts</label>
+            <name>Contacts</name>
+        </sections>
+        <sections>
+            <label>Programme Engagements</label>
+            <name>Program Engagements</name>
+        </sections>
+    </reportTypes>
     <customTabs>
         <name>Attendance</name>
         <label>Attendance</label>

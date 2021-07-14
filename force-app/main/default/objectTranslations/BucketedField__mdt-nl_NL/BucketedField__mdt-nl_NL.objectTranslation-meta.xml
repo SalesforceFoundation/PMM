@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Bucketed Field Layout</layout>
+        <sections>
+            <label>Aangepaste koppelingen</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <gender>Neuter</gender>
     <caseValues>
         <plural>false</plural>
-        <value><!-- Bucketed Field --></value>
+        <value>Bucketveld</value>
     </caseValues>
     <caseValues>
         <plural>true</plural>
-        <value><!-- Bucketed Field --></value>
+        <value>Bucketvelden</value>
     </caseValues>
-    <gender><!-- Neuter --></gender>
 </CustomObjectTranslation>

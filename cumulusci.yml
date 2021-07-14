@@ -35,6 +35,10 @@ sources:
         github: https://github.com/SalesforceFoundation/NPSP
 
 tasks:
+    github_automerge_feature:
+        options:
+            update_future_releases: True
+
     create_community:
         description: "Creates a community with the 'Customer Service' template"
         class_path: cumulusci.tasks.salesforce.CreateCommunity

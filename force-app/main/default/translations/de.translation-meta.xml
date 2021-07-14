@@ -37,6 +37,50 @@
         <label>Anonym</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Selected_Contacts</name>
+        <label>Ausgewählte Kontakte</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Title</name>
+        <label>Leistungserbringungen für eine Gruppe erstellen</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Description</name>
+        <label>Geben Sie Leistungserbringungen für mehrere Kontakte ein. Beispielsweise einen Besuch bei einem Workshop.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Button</name>
+        <label>Nach Gruppe erstellen</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Title</name>
+        <label>Leistungserbringungen für eine Einzelperson erstellen</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Description</name>
+        <label>Geben Sie Leistungserbringungen für einen einzelnen Kontakt ein.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Button</name>
+        <label>Nach Einzelperson erstellen</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Service</name>
+        <label>Standardwerte für die Leistungserbringung</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Contacts</name>
+        <label>Kontaktauswahl</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Review</name>
+        <label>Überprüfung</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Warning_No_Contacts</name>
+        <label>Wählen Sie mindestens einen Kontakt aus, um fortzufahren.</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>Teilnahme nachverfolgen</label>
     </customLabels>
@@ -55,6 +99,14 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>Nachdem diesem Leistungszeitplan Teilnehmer hinzugefügt wurden, verfolgen Sie ihre Anwesenheit hier nach.</label>
+    </customLabels>
+    <customLabels>
+        <name>Incorrect_Tab</name>
+        <label>Dies ist nicht die gewünschte Registerkarte.</label>
+    </customLabels>
+    <customLabels>
+        <name>Attendance_Tab_Message</name>
+        <label>Diese Registerkarte wird nur für das Anzeigen der Teilnahme von einer Leistungssitzungsseite aus verwendet.</label>
     </customLabels>
     <customLabels>
         <name>Back</name>
@@ -182,7 +234,7 @@
     </customLabels>
     <customLabels>
         <name>MissingSObjectType</name>
-        <label>Ihre Abfrage muss ein Objekt enthalten.</label>
+        <label>Ihre Abfrage muss ein Objekt oder eine untergeordnete Beziehung enthalten.</label>
     </customLabels>
     <customLabels>
         <name>Monthly_On_Day</name>
@@ -230,7 +282,11 @@
     </customLabels>
     <customLabels>
         <name>No_Records_Found</name>
-        <label>Keine Datensätze gefunden</label>
+        <label>Keine Datensätze gefunden.</label>
+    </customLabels>
+    <customLabels>
+        <name>NoFieldSetFound</name>
+        <label>Der Feldsatz {0} ist nicht im Objekt {1} vorhanden. Überprüfen Sie den Namen des Feldsatzes, und versuchen Sie es noch einmal.</label>
     </customLabels>
     <customLabels>
         <name>No_Records_Selected</name>
@@ -289,12 +345,24 @@
         <label>Aktualisieren</label>
     </customLabels>
     <customLabels>
+        <name>Edited</name>
+        <label>Bearbeitet</label>
+    </customLabels>
+    <customLabels>
         <name>Save</name>
         <label>Speichern</label>
     </customLabels>
     <customLabels>
         <name>SaveMessage</name>
         <label>Neuer Programmteilnahme-Datensatz erstellt.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add</name>
+        <label>Hinzufügen</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_All</name>
+        <label>Alle hinzufügen</label>
     </customLabels>
     <customLabels>
         <name>Save_New</name>
@@ -410,7 +478,7 @@
     </customLabels>
     <customLabels>
         <name>Service_Deliveries</name>
-        <label>Erbrachte Leistungen</label>
+        <label>Leistungserbringungen hinzufügen</label>
     </customLabels>
     <customLabels>
         <name>Service_Deliveries_Added</name>
@@ -472,6 +540,18 @@
         <name>Warning</name>
         <label>Warnung</label>
     </customLabels>
+    <reportTypes>
+        <name>Contacts_with_and_without_Program_Engagements</name>
+        <label>Kontakte mit und ohne Programmteilnahmen</label>
+        <sections>
+            <label>Kontakte</label>
+            <name>Contacts</name>
+        </sections>
+        <sections>
+            <label>Programmteilnahme</label>
+            <name>Program Engagements</name>
+        </sections>
+    </reportTypes>
     <customTabs>
         <name>Attendance</name>
         <label>Teilnahme</label>

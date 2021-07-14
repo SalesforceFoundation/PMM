@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Value__c</name>
+    <help>Valeur exacte qui doit être compartimentée. Si le champ est une liste de sélection, il doit s’agir de la valeur API de la valeur de liste de sélection.</help>
+    <label>Valeur</label>
+</CustomFieldTranslation>

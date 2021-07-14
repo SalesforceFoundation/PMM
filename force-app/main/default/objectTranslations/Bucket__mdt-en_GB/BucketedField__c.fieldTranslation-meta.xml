@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>BucketedField__c</name>
+    <help>Which Bucketed Field does this Bucket belong to?</help>
+    <relationshipLabel>Buckets</relationshipLabel>
+    <label>Bucketed Field</label>
+</CustomFieldTranslation>

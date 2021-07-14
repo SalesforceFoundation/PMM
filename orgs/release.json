@@ -1,6 +1,6 @@
 {
     "orgName": "Program Management Module - Release Test Org",
-    "edition": "Enterprise",
+    "edition": "Developer",
     "settings": {
         "lightningExperienceSettings": {
             "enableS1DesktopEnabled": true

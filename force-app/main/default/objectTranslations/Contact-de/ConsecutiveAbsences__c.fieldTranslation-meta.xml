@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ConsecutiveAbsences__c</name>
+    <help>Die Anzahl der fortlaufenden Fehltermine für diesen Kontakt, von heute an rückwärts gezählt. Setzt sich bei Anwesenheit zur letzten Leistungserbringung auf 0 zurück.</help>
+    <label>Fortlaufendes Fehlen</label>
+</CustomFieldTranslation>

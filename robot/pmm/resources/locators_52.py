@@ -120,4 +120,8 @@ pmm_lex_locators = {
     "homepage": {
         "component_link": '//article[contains(@class,"forceBaseCard")][.//span[contains(@title,"{}")]]',
     },
+    "app_launcher": {
+        "app_link_search_result": "//mark[contains(text(),'{}')]",
+        "search_input": "//input[contains(@placeholder,'Search apps or items...')]",
+    },
 }

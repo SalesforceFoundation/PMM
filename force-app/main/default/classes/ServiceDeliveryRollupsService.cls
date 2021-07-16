@@ -286,20 +286,6 @@ public with sharing class ServiceDeliveryRollupsService {
         return fields;
     }
 
-    private String getChildRelationshipName(SObjectType sObjectType) {
-        String childRelationshipName;
-        for (
-            ChildRelationship relation : sObjectType.getDescribe().getChildRelationships()
-        ) {
-            if (relation.getChildSObject() == ServiceDelivery__c.SObjectType) {
-                childRelationshipName = relation.getRelationshipName();
-                break;
-            }
-        }
-
-        return childRelationshipName;
-    }
-
     private void process(List<ServiceDelivery__c> deliveries, Boolean isNew) {
         Set<SObjectField> activeRollupFields = getActiveRollupFields();
         if (activeRollupFields.isEmpty()) {
@@ -362,7 +348,10 @@ public with sharing class ServiceDeliveryRollupsService {
             }
 
             List<SObject> parentRecords = new List<SObject>();
-            String childRelationshipName = getChildRelationshipName(parentObject);
+            String childRelationshipName = Util.getChildRelationshipName(
+                parentObject,
+                ServiceDelivery__c.SObjectType
+            );
             Boolean shouldIncludeDeliveries =
                 LAST_SERVICE_DATE_FIELD_BY_SOBJECT_TYPE.containsKey(parentObject) ||
                 CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE.containsKey(parentObject);

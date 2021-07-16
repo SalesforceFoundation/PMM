@@ -38,6 +38,22 @@ public with sharing class FeatureParameters_TEST {
     }
 
     @IsTest
+    private static void integrationTestSendAllParameters() {
+        List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
+            .getAll();
+        FeatureManagement.FeatureParameter currentParam;
+
+        try {
+            for (FeatureManagement.FeatureParameter param : allFeatureParameters) {
+                currentParam = param;
+                param.send();
+            }
+        } catch (Exception ex) {
+            System.assert(false, 'Error occurred when sending: ' + currentParam);
+        }
+    }
+
+    @IsTest
     private static void shouldReturnNullForUndefinedParameters() {
         FeatureManagement.FeatureParameter featureParameter = new FeatureParameters()
             .makeFeatureParameter(null);
@@ -306,34 +322,8 @@ public with sharing class FeatureParameters_TEST {
         );
     }
 
-    ////////// Helper Methods //////////
-    private static void deleteExistingPermissionAssignments() {
-        delete [
-            SELECT Id
-            FROM PermissionSetAssignment
-            WHERE
-                AssigneeId = :System.UserInfo.getUserId()
-                AND (PermissionSet.Name = :FeatureParameters.MANAGE_PERMISSION
-                OR PermissionSet.Name = :FeatureParameters.DELIVER_PERMISSION)
-        ];
-    }
-
-    private static void assignPermissionSet(String permissionSetName) {
-        PermissionSet permission = [
-            SELECT Id
-            FROM PermissionSet
-            WHERE Name = :permissionSetName
-            LIMIT 1
-        ];
-
-        insert new PermissionSetAssignment(
-            AssigneeId = System.UserInfo.getUserId(),
-            PermissionSetId = permission.Id
-        );
-    }
-
     @IsTest
-    private static void shouldPassActualAttendanceWithServiceDeliveriesLast30() {
+    private static void shouldPassActualAttendanceServiceDeliveriesLast30() {
         Set<Id> serviceDeliveryIds = new Set<Id>();
         List<String> attendanceStatusOptions = new List<String>{
             'Present',
@@ -358,19 +348,45 @@ public with sharing class FeatureParameters_TEST {
             'Sanity check: Test setup should have generated at least 1 service delivery record with an attendance status.'
         );
 
-        final String expectedName = FeatureParameters.DeveloperName.ATTENDANCE_WITH_SERVICE_DELIVERIES_LAST30.name()
+        final String expectedName = FeatureParameters.DeveloperName.ATTENDANCE_SERVICE_DELIVERIES_LAST30.name()
             .remove('_');
         final Integer expectedValue = serviceDeliveryIds.size();
         FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
 
         Test.startTest();
-        new FeatureParameters.AttendanceWithServiceDeliveriesLast30().send();
+        new FeatureParameters.AttendanceServiceDeliveriesLast30().send();
         Test.stopTest();
 
         featureManagementStub.assertCalledWith(
             'setPackageIntegerValue',
             new List<Type>{ String.class, Integer.class },
             new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    ////////// Helper Methods //////////
+    private static void deleteExistingPermissionAssignments() {
+        delete [
+            SELECT Id
+            FROM PermissionSetAssignment
+            WHERE
+                AssigneeId = :System.UserInfo.getUserId()
+                AND (PermissionSet.Name = :FeatureParameters.MANAGE_PERMISSION
+                OR PermissionSet.Name = :FeatureParameters.DELIVER_PERMISSION)
+        ];
+    }
+
+    private static void assignPermissionSet(String permissionSetName) {
+        PermissionSet permission = [
+            SELECT Id
+            FROM PermissionSet
+            WHERE Name = :permissionSetName
+            LIMIT 1
+        ];
+
+        insert new PermissionSetAssignment(
+            AssigneeId = System.UserInfo.getUserId(),
+            PermissionSetId = permission.Id
         );
     }
 }

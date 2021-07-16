@@ -27,7 +27,7 @@ public without sharing class FeatureParameters {
         ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30,
         PERM_SET_DELIVER_USERS,
         PERM_SET_MANAGE_USERS,
-        ATTENDANCE_WITH_SERVICE_DELIVERIES_LAST30
+        ATTENDANCE_SERVICE_DELIVERIES_LAST30
     }
 
     private static final String ACTIVE_PROGRAM_CONDITION =
@@ -76,8 +76,8 @@ public without sharing class FeatureParameters {
             when PERM_SET_MANAGE_USERS {
                 return new PermSetManageUsers();
             }
-            when ATTENDANCE_WITH_SERVICE_DELIVERIES_LAST30 {
-                return new AttendanceWithServiceDeliveriesLast30();
+            when ATTENDANCE_SERVICE_DELIVERIES_LAST30 {
+                return new AttendanceServiceDeliveriesLast30();
             }
             when else {
                 return null;
@@ -383,7 +383,7 @@ public without sharing class FeatureParameters {
     }
 
     @TestVisible
-    private without sharing class AttendanceWithServiceDeliveriesLast30 implements FeatureManagement.FeatureParameter {
+    private without sharing class AttendanceServiceDeliveriesLast30 implements FeatureManagement.FeatureParameter {
         private String attendanceStatusField = String.valueOf(
             ServiceDelivery__c.AttendanceStatus__c
         );
@@ -437,17 +437,11 @@ public without sharing class FeatureParameters {
         }
 
         private String getName() {
-            return DeveloperName.ATTENDANCE_WITH_SERVICE_DELIVERIES_LAST30.name()
-                .remove('_');
+            return DeveloperName.ATTENDANCE_SERVICE_DELIVERIES_LAST30.name().remove('_');
         }
 
         private Object getValue() {
-            List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) finder.findRecords();
-            Set<Id> serviceDeliveryIds = new Set<Id>();
-            for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {
-                serviceDeliveryIds.add(serviceDelivery.Id);
-            }
-            return serviceDeliveryIds.size();
+            return finder.findCount();
         }
 
         public List<String> getAttendanceStatusPicklistValues() {

@@ -5,7 +5,7 @@
     <formula>IF(NumAbsentServiceDeliveries__c > 0 || NumPresentServiceDeliveries__c > 0 ,
 NumPresentServiceDeliveries__c / (NumPresentServiceDeliveries__c + NumAbsentServiceDeliveries__c),
 null)</formula>
-    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Attendance Rate</label>
     <precision>18</precision>
     <required>false</required>

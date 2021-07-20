@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>AttendanceSummary__c</fullName>
     <externalId>false</externalId>
-    <formula>IF(NOT(ISBLANK(AttendanceRate__c)),
+    <formula>IF(NumAbsentServiceDeliveries__c > 0 || NumPresentServiceDeliveries__c > 0,
     TEXT(ROUND(AttendanceRate__c,2)*100) &amp; &quot;% (&quot; &amp; 
     TEXT(NumPresentServiceDeliveries__c) &amp; 
     &quot;/&quot; &amp; 

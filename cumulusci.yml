@@ -375,11 +375,11 @@ flows:
                     include_beta: True
                     security_type: PUSH
             7:
-                flow: config_regression
-            8:
                 task: install_managed_beta
                 options:
                     security_type: PUSH
+            8:
+                flow: config_regression
             9:
                 task: assign_permission_sets
                 options:

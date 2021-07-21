@@ -189,15 +189,7 @@ public without sharing class FeatureParameters {
 
     @TestVisible
     private without sharing class ActiveProgramsWithServiceDeliveriesLast30 implements FeatureManagement.FeatureParameter {
-        private String childRelationshipName = Util.getChildRelationshipName(
-            ProgramEngagement__c.SObjectType,
-            ServiceDelivery__c.SObjectType
-        );
         private string programField = String.valueOf(ProgramEngagement__c.Program__c);
-        private QueryBuilder subQueryBuilder = new QueryBuilder()
-            .withChildRelationshipName(childRelationshipName)
-            .addCondition(CREATED_LAST_30_CONDITION)
-            .withLimit(1);
 
         private String activeProgram =
             ProgramEngagement__c.Program__c.getDescribe().getRelationshipName() +

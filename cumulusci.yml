@@ -387,7 +387,6 @@ flows:
                         - PMDM_Manage
             10:
                 flow: load_data
-
             11:
                 task: snapshot_changes
 

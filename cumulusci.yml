@@ -375,19 +375,31 @@ flows:
                     include_beta: True
                     security_type: PUSH
             7:
-                flow: config_regression
+                task: install_managed_beta
+                options:
+                    security_type: PUSH
             8:
+                flow: config_regression
+            9:
                 task: assign_permission_sets
                 options:
                     api_names:
                         - PMDM_Manage
-            9:
-                flow: load_data
             10:
+                flow: load_data
+
+            11:
+                task: snapshot_changes
+
+    telemetry_org:
+        steps:
+            1:
+                flow: install_prod
+            2:
                 task: install_managed_beta
                 options:
                     security_type: PUSH
-            11:
+            3:
                 task: snapshot_changes
 
     install_npsp:

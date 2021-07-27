@@ -36,6 +36,23 @@ public with sharing class Util {
         };
     }
 
+    public static String getChildRelationshipName(
+        SObjectType sObjectType,
+        SObjectType childSObjectType
+    ) {
+        String childRelationshipName;
+        for (
+            ChildRelationship relation : sObjectType.getDescribe().getChildRelationships()
+        ) {
+            if (relation.getChildSObject() == childSObjectType) {
+                childRelationshipName = relation.getRelationshipName();
+                break;
+            }
+        }
+
+        return childRelationshipName;
+    }
+
     public static Date getToday() {
         return System.today();
     }

@@ -390,6 +390,17 @@ flows:
             11:
                 task: snapshot_changes
 
+    telemetry_org:
+        steps:
+            1:
+                flow: install_prod
+            2:
+                task: install_managed_beta
+                options:
+                    security_type: PUSH
+            3:
+                task: snapshot_changes
+
     install_npsp:
         steps:
             1:

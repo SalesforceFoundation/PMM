@@ -213,21 +213,82 @@ public with sharing class FeatureParameters_TEST {
     private static void shouldPassActualActiveProgramsWithServiceDeliveriesLast30() {
         Set<Id> programIds = new Set<Id>();
 
-        List<ServiceDelivery__c> serviceDeliveries = [
-            SELECT ProgramEngagement__r.Program__c
-            FROM ServiceDelivery__c
+        List<ProgramEngagement__c> programEngagements = [
+            SELECT Program__c
+            FROM ProgramEngagement__c
             WHERE
-                ProgramEngagement__r.Program__r.Status__c = 'Active'
-                AND CreatedDate = LAST_N_DAYS:30
+                ProgramEngagement__c.Program__r.Status__c = 'Active'
+                AND Id IN (
+                    SELECT ProgramEngagement__c
+                    FROM ServiceDelivery__c
+                    WHERE CreatedDate = LAST_N_DAYS:30
+                )
         ];
 
-        for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {
-            programIds.add(serviceDelivery.ProgramEngagement__r.Program__c);
+        for (ProgramEngagement__c programEngagement : programEngagements) {
+            programIds.add(programEngagement.Program__c);
         }
 
         System.assert(
             !programIds.isEmpty(),
             'Sanity check: Test setup should have generated at least 1 active record with a related program engagement.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30.name()
+            .remove('_');
+        final Integer expectedValue = programIds.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.ActiveProgramsWithServiceDeliveriesLast30().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldNotPassActiveProgramsWithoutServiceDeliveriesLast30() {
+        Set<Id> programIds = new Set<Id>();
+
+        List<ProgramEngagement__c> programEngagements = [
+            SELECT Program__c
+            FROM ProgramEngagement__c
+            WHERE
+                Program__r.Status__c = 'Active'
+                AND Id IN (
+                    SELECT ProgramEngagement__c
+                    FROM ServiceDelivery__c
+                    WHERE CreatedDate = LAST_N_DAYS:30
+                )
+        ];
+
+        Id programEngagementId = programEngagements[0].Id;
+        delete [
+            SELECT Id
+            FROM ServiceDelivery__c
+            WHERE ProgramEngagement__c = :programEngagementId
+        ];
+
+        for (ProgramEngagement__c programEngagement : programEngagements) {
+            if (programEngagement.Id == programEngagementId) {
+                continue;
+            }
+
+            programIds.add(programEngagement.Program__c);
+        }
+
+        System.assert(
+            !programIds.isEmpty(),
+            'Sanity check: Test setup should have generated at least 1 active record with a related program engagement.'
+        );
+
+        System.assert(
+            !programIds.contains(programEngagements[0].Program__c),
+            'The program related to the first program engagement should not be included.'
         );
 
         final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30.name()

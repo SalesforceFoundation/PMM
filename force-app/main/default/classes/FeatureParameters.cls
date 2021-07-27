@@ -189,14 +189,9 @@ public without sharing class FeatureParameters {
 
     @TestVisible
     private without sharing class ActiveProgramsWithServiceDeliveriesLast30 implements FeatureManagement.FeatureParameter {
-        private string programField =
-            ServiceDelivery__c.ProgramEngagement__c.getDescribe().getRelationshipName() +
-            '.' +
-            String.valueOf(ProgramEngagement__c.Program__c);
+        private string programField = String.valueOf(ProgramEngagement__c.Program__c);
 
-        private String activeServiceDelivery =
-            ServiceDelivery__c.ProgramEngagement__c.getDescribe().getRelationshipName() +
-            '.' +
+        private String activeProgram =
             ProgramEngagement__c.Program__c.getDescribe().getRelationshipName() +
             '.' +
             String.valueOf(Program__c.Status__c) +
@@ -207,10 +202,10 @@ public without sharing class FeatureParameters {
             get {
                 if (queryBuilder == null) {
                     queryBuilder = new QueryBuilder()
-                        .withSObjectType(ServiceDelivery__c.SObjectType)
+                        .withSObjectType(ProgramEngagement__c.SObjectType)
                         .withSelectFields(new List<String>{ programField })
-                        .addCondition(activeServiceDelivery)
-                        .addCondition(CREATED_LAST_30_CONDITION);
+                        .addCondition(activeProgram)
+                        .addCondition('Id IN (' + buildServiceDeliveryQuery() + ')');
                 }
 
                 return queryBuilder;
@@ -245,12 +240,27 @@ public without sharing class FeatureParameters {
         }
 
         private Object getValue() {
-            List<ServiceDelivery__c> serviceDeliveries = (List<ServiceDelivery__c>) finder.findRecords();
             Set<Id> programIds = new Set<Id>();
-            for (ServiceDelivery__c serviceDelivery : serviceDeliveries) {
-                programIds.add(serviceDelivery.programengagement__r.Program__c);
+
+            for (
+                ProgramEngagement__c programEngagement : (List<ProgramEngagement__c>) finder.findRecords()
+            ) {
+                programIds.add(programEngagement.Program__c);
             }
+
             return programIds.size();
+        }
+
+        private String buildServiceDeliveryQuery() {
+            return new QueryBuilder()
+                .withSObjectType(ServiceDelivery__c.SObjectType)
+                .withSelectFields(
+                    new List<String>{
+                        String.valueOf(ServiceDelivery__c.ProgramEngagement__c)
+                    }
+                )
+                .addCondition(CREATED_LAST_30_CONDITION)
+                .buildSoqlQuery();
         }
     }
 

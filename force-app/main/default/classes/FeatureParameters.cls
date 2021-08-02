@@ -27,11 +27,16 @@ public without sharing class FeatureParameters {
         ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30,
         PERM_SET_DELIVER_USERS,
         PERM_SET_MANAGE_USERS,
-        ATTENDANCE_SERVICE_DELIVERIES_LAST30
+        ATTENDANCE_SERVICE_DELIVERIES_LAST30,
+        ACTIVE_SERVICES
     }
 
     private static final String ACTIVE_PROGRAM_CONDITION =
         String.valueOf(Program__c.Status__c) +
+        ' = ' +
+        '\'Active\'';
+    private static final String ACTIVE_SERVICE_CONDITION =
+        String.valueOf(Service__c.Status__c) +
         ' = ' +
         '\'Active\'';
     private static final String CREATED_LAST_30_CONDITION = 'CreatedDate = LAST_N_DAYS:30';
@@ -79,6 +84,9 @@ public without sharing class FeatureParameters {
             when ATTENDANCE_SERVICE_DELIVERIES_LAST30 {
                 return new AttendanceServiceDeliveriesLast30();
             }
+            when ACTIVE_SERVICES {
+                return new ActiveServices();
+            }
             when else {
                 return null;
             }
@@ -123,6 +131,51 @@ public without sharing class FeatureParameters {
 
         private String getName() {
             return DeveloperName.ACTIVE_PROGRAMS.name().remove('_');
+        }
+
+        private Object getValue() {
+            return finder.findCount();
+        }
+    }
+
+    @TestVisible
+    private without sharing class ActiveServices implements FeatureManagement.FeatureParameter {
+        @TestVisible
+        private QueryBuilder queryBuilder {
+            get {
+                if (queryBuilder == null) {
+                    queryBuilder = new QueryBuilder()
+                        .withSObjectType(Service__c.SObjectType)
+                        .addCondition(ACTIVE_SERVICE_CONDITION);
+                }
+
+                return queryBuilder;
+            }
+            set;
+        }
+        @TestVisible
+        private Finder finder {
+            get {
+                if (finder == null) {
+                    finder = new Finder(queryBuilder);
+                }
+
+                return finder;
+            }
+            set;
+        }
+
+        public void send() {
+            final Object value = getValue();
+
+            if (value instanceof Integer) {
+                FeatureManagement.getInstance()
+                    .setPackageIntegerValue(getName(), (Integer) value);
+            }
+        }
+
+        private String getName() {
+            return DeveloperName.ACTIVE_SERVICES.name().remove('_');
         }
 
         private Object getValue() {

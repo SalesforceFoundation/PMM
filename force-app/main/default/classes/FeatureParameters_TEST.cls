@@ -244,12 +244,7 @@ public with sharing class FeatureParameters_TEST {
         List<Program__c> programs = [
             SELECT Id
             FROM Program__c
-            WHERE
-                Status__c = 'Active'
-                AND Id IN (
-                    SELECT Program__c
-                    FROM ProgramCohort__c
-                )
+            WHERE Status__c = 'Active' AND Id IN (SELECT Program__c FROM ProgramCohort__c)
         ];
         System.assert(
             !programs.isEmpty(),

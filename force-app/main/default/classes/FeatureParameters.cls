@@ -229,8 +229,7 @@ public without sharing class FeatureParameters {
         }
 
         private String getName() {
-            return DeveloperName.ACTIVE_PROGRAMS_WITH_COHORTS.name()
-                .remove('_');
+            return DeveloperName.ACTIVE_PROGRAMS_WITH_COHORTS.name().remove('_');
         }
 
         private Object getValue() {

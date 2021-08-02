@@ -126,6 +126,36 @@ public with sharing class FeatureParameters_TEST {
     }
 
     @IsTest
+    private static void shouldCallSetPackageIntegerByActiveProgramsWithActiveServices() {
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES.name()
+            .remove('_');
+        final Integer expectedValue = 10;
+        Integer ordinalValue = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES.ordinal();
+
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
+            .getAll();
+        FeatureParameters.ActiveProgramsWithActiveServices activeProgramsWithEnagegmentsParameter = (FeatureParameters.ActiveProgramsWithActiveServices) allFeatureParameters[
+            ordinalValue
+        ];
+        BasicStub finderStub = new BasicStub(Finder.class)
+            .withReturnValue('findCount', expectedValue);
+        activeProgramsWithEnagegmentsParameter.finder = (Finder) finderStub.createMock();
+
+        Test.startTest();
+        activeProgramsWithEnagegmentsParameter.send();
+        Test.stopTest();
+
+        finderStub.assertCalled('findCount');
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
     private static void shouldCreateTheQueryBuilderOnDemand() {
         QueryBuilder queryBuilder = new FeatureParameters.ActivePrograms().queryBuilder;
 
@@ -200,6 +230,36 @@ public with sharing class FeatureParameters_TEST {
 
         Test.startTest();
         new FeatureParameters.ActiveProgramsWithEngagementsLast30().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldPassActualActiveProgramsWithActiveServices() {
+        List<Program__c> programs = [
+            SELECT Id
+            FROM Program__c
+            WHERE
+                Status__c = 'Active'
+                AND Id IN (SELECT Program__c FROM Service__c WHERE Status__c = 'Active')
+        ];
+        System.assert(
+            !programs.isEmpty(),
+            'Sanity check: Test setup should have generated at least 1 active record with a related active service.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES.name()
+            .remove('_');
+        final Integer expectedValue = programs.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.ActiveProgramsWithActiveServices().send();
         Test.stopTest();
 
         featureManagementStub.assertCalledWith(

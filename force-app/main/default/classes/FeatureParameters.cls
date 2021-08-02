@@ -14,7 +14,7 @@ When a new telemetry feature parameter needs to be added we need to modify this 
 1. Create a featureParameter manually under the featureParameters folder. Make sure the file name of the new
 featureParameter has the data type included. Refer to the existing featureParameter files in that folder.
 2. Need to add a new DeveloperName enum.
-3. Need to add a new when statement to the makeFeatureParameter method.
+3. Need to add a new when statement to the end of the makeFeatureParameter method.
 4. Need to create a new inner class similar to the other inner classes added for feature parameters and 
 update the methods within the inner class accordingly
 5. Modify FeatureParameters_TEST class to add tests for the newly created inner class*/
@@ -27,11 +27,16 @@ public without sharing class FeatureParameters {
         ACTIVE_PROGRAMS_WITH_SERVICE_DELIVERIES_LAST30,
         PERM_SET_DELIVER_USERS,
         PERM_SET_MANAGE_USERS,
-        ATTENDANCE_SERVICE_DELIVERIES_LAST30
+        ATTENDANCE_SERVICE_DELIVERIES_LAST30,
+        ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES
     }
 
     private static final String ACTIVE_PROGRAM_CONDITION =
         String.valueOf(Program__c.Status__c) +
+        ' = ' +
+        '\'Active\'';
+    private static final String ACTIVE_SERVICE_CONDITION =
+        String.valueOf(Service__c.Status__c) +
         ' = ' +
         '\'Active\'';
     private static final String CREATED_LAST_30_CONDITION = 'CreatedDate = LAST_N_DAYS:30';
@@ -78,6 +83,9 @@ public without sharing class FeatureParameters {
             }
             when ATTENDANCE_SERVICE_DELIVERIES_LAST30 {
                 return new AttendanceServiceDeliveriesLast30();
+            }
+            when ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES {
+                return new ActiveProgramsWithEngagementsLast30();
             }
             when else {
                 return null;
@@ -183,6 +191,62 @@ public without sharing class FeatureParameters {
                     new List<String>{ String.valueOf(ProgramEngagement__c.Program__c) }
                 )
                 .addCondition(CREATED_LAST_30_CONDITION)
+                .buildSoqlQuery();
+        }
+    }
+
+    @TestVisible
+    private without sharing class ActiveProgramsWithActiveServices implements FeatureManagement.FeatureParameter {
+        @TestVisible
+        private QueryBuilder queryBuilder {
+            get {
+                if (queryBuilder == null) {
+                    queryBuilder = new QueryBuilder()
+                        .withSObjectType(Program__c.SObjectType)
+                        .addCondition(ACTIVE_PROGRAM_CONDITION)
+                        .addCondition('Id IN (' + buildActiveServicesQuery() + ')');
+                }
+
+                return queryBuilder;
+            }
+            set;
+        }
+        @TestVisible
+        private Finder finder {
+            get {
+                if (finder == null) {
+                    finder = new Finder(queryBuilder);
+                }
+
+                return finder;
+            }
+            set;
+        }
+
+        public void send() {
+            final Object value = getValue();
+
+            if (value instanceof Integer) {
+                FeatureManagement.getInstance()
+                    .setPackageIntegerValue(getName(), (Integer) value);
+            }
+        }
+
+        private String getName() {
+            return DeveloperName.ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES.name().remove('_');
+        }
+
+        private Object getValue() {
+            return finder.findCount();
+        }
+
+        private String buildActiveServicesQuery() {
+            return new QueryBuilder()
+                .withSObjectType(Service__c.SObjectType)
+                .withSelectFields(
+                    new List<String>{ String.valueOf(Services__c.Program__c) }
+                )
+                .addCondition(ACTIVE_SERVICE_CONDITION)
                 .buildSoqlQuery();
         }
     }

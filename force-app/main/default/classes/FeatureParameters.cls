@@ -293,7 +293,7 @@ public without sharing class FeatureParameters {
             return new QueryBuilder()
                 .withSObjectType(Service__c.SObjectType)
                 .withSelectFields(
-                    new List<String>{ String.valueOf(Services__c.Program__c) }
+                    new List<String>{ String.valueOf(Service__c.Program__c) }
                 )
                 .addCondition(ACTIVE_SERVICE_CONDITION)
                 .buildSoqlQuery();

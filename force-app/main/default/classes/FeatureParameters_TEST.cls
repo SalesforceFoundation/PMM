@@ -136,7 +136,7 @@ public with sharing class FeatureParameters_TEST {
 
         List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
             .getAll();
-        FeatureParameters.ActiveProgramsWithEngagementsLast30 activeProgramsWithEnagegmentsParameter = (FeatureParameters.ActiveProgramsWithEngagementsLast30) allFeatureParameters[
+        FeatureParameters.ActiveProgramsWithEngagementsLast30 activeProgramsWithEngagementsParameter = (FeatureParameters.ActiveProgramsWithEngagementsLast30) allFeatureParameters[
             ordinalValue
         ];
         BasicStub finderStub = new BasicStub(Finder.class)

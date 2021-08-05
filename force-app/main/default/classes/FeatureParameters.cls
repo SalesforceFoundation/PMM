@@ -86,7 +86,7 @@ public without sharing class FeatureParameters {
                 return new AttendanceServiceDeliveriesLast30();
             }
             when ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES {
-                return new ActiveProgramsWithEngagementsLast30();
+                return new ActiveProgramsWithActiveServices();
             }
             when ACTIVE_SERVICES {
                 return new ActiveServices();

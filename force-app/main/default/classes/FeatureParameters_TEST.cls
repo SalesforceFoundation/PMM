@@ -141,10 +141,10 @@ public with sharing class FeatureParameters_TEST {
         ];
         BasicStub finderStub = new BasicStub(Finder.class)
             .withReturnValue('findCount', expectedValue);
-        activeProgramsWithEnagegmentsParameter.finder = (Finder) finderStub.createMock();
+        activeProgramsWithEngagementsParameter.finder = (Finder) finderStub.createMock();
 
         Test.startTest();
-        activeProgramsWithEnagegmentsParameter.send();
+        activeProgramsWithEngagementsParameter.send();
         Test.stopTest();
 
         finderStub.assertCalled('findCount');

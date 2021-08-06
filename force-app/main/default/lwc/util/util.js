@@ -215,7 +215,7 @@ const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) 
         "handleError"
     );
     if (fireShowToast) {
-        showToast(errorLabel, message, "error", showToastMode);
+        showToast(errorLabel, message.join("; "), "error", showToastMode);
     }
 
     return message;
@@ -299,6 +299,10 @@ const prefixNamespace = value => {
     return namespace + value;
 };
 
+const formatShortISODateString = date => {
+    return date.toISOString().substr(0, 10);
+};
+
 export {
     isString,
     showToast,
@@ -314,4 +318,5 @@ export {
     debouncify,
     createUUID,
     prefixNamespace,
+    formatShortISODateString,
 };

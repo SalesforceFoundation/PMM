@@ -8,7 +8,8 @@
  */
 
 import { LightningElement, track, api, wire } from "lwc";
-import { format } from "c/util";
+import { handleError, format, formatShortISODateString } from "c/util";
+import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
 
@@ -27,6 +28,10 @@ import filterByRecord from "@salesforce/label/c.Filter_By_Record";
 import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
 import add from "@salesforce/label/c.Add";
 import addAll from "@salesforce/label/c.Add_All";
+import cancel from "@salesforce/label/c.Cancel";
+import save from "@salesforce/label/c.Save";
+import saveAndNew from "@salesforce/label/c.Save_New";
+
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
     @api serviceSchedule;
@@ -46,6 +51,7 @@ export default class ParticipantSelector extends LightningElement {
     noRecordsFound = false;
     cohortId;
     programName;
+    programId;
     addToServiceButtonLabel;
     selectedColumns;
     fields;
@@ -68,6 +74,9 @@ export default class ParticipantSelector extends LightningElement {
         noContactsSelected,
         add,
         addAll,
+        save,
+        saveAndNew,
+        cancel,
     };
 
     @api
@@ -132,6 +141,7 @@ export default class ParticipantSelector extends LightningElement {
 
     @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
     dataSetup(result) {
+        this.wiredData = result;
         if (!(result.data || result.error)) {
             return;
         }
@@ -143,6 +153,7 @@ export default class ParticipantSelector extends LightningElement {
             this.engagements = result.data.programEngagements.slice(0);
             this.cohorts = result.data.programCohorts.slice(0);
             this.programName = result.data.program ? result.data.program.Name : "";
+            this.programId = result.data.program ? result.data.program.Id : "";
 
             this.formatLabels();
             this.setDataTableColumns();
@@ -192,6 +203,34 @@ export default class ParticipantSelector extends LightningElement {
 
     get enableInfiniteLoading() {
         return this.offset < this.filteredEngagements.length;
+    }
+
+    get today() {
+        return formatShortISODateString(new Date());
+    }
+
+    handleNewParticipantClick() {
+        const modal = this.template.querySelector("c-modal");
+        modal.show();
+    }
+
+    closeModal() {
+        const modal = this.template.querySelector("c-modal");
+        modal.hide();
+    }
+
+    handleSuccess(event) {
+        this.catchNewPE(event.detail.id);
+        this.closeModal();
+    }
+
+    async catchNewPE(id) {
+        await refreshApex(this.wiredData);
+        this.handleSelectById(id);
+    }
+
+    handleFormError(value) {
+        handleError(value);
     }
 
     handleLoadMore() {
@@ -306,6 +345,13 @@ export default class ParticipantSelector extends LightningElement {
 
     handleSelectParticipants() {
         this.handleSelect(this.selectedRows);
+    }
+
+    handleSelectById(programEngagementId) {
+        let index = this.availableEngagements.findIndex(
+            element => element.Id === programEngagementId
+        );
+        this.handleSelect([this.availableEngagements[index]]);
     }
 
     handleSelect(programEngagements) {

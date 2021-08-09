@@ -23,6 +23,10 @@ Setup Test Data
     Set suite variable          ${program}
     ${program1} =                API Create Program  
     Set suite variable          ${program1}
+    ${program_cohort1} =        API Create Program Cohort   ${program1}[Id]
+    Set suite variable          ${program_cohort1}
+    ${program_engagement} =     Generate Random String
+    Set suite variable          ${program_engagement} 
 
 
 *** Test Cases ***
@@ -87,3 +91,18 @@ Date validation when cohort dates are not within program date range
      Click Dialog Button                    Save
      Verify Modal Error                     End Date must be within the Program Start and End Dates
      Verify Modal Error                     Start Date must be within the range of the related Program Start and End Dates.
+
+Create Program Engagement from Program Cohort Object
+    [Documentation]                  On Program detail record, clicks New button on Service related list, populates the field on 
+    ...                              the dialog and Saves. Validates that the Service related list is updated with the new record
+    [tags]                                  perm:admin   perm:manage   perm:deliver     feature:Program Engagement
+     Go To Page                             Details                      ProgramCohort__c            object_id=${program_cohort1}[Id]
+     Page Should Contain                    ${program_cohort1}[Name]
+     Click Wrapper Related List Button      Program Engagements          New
+     Populate Field                         Program Engagement Name      ${program_engagement}
+     Populate Lookup Field                  Program                      ${program1}[Name]
+     Click Dialog button                    Save
+     Wait Until Modal Is Closed
+     Current Page Should Be                 Details                      ProgramCohort__c
+     Page Should Contain                    Anonymous
+     Save Current Record ID For Deletion    ${ns}ProgramEngagement__c

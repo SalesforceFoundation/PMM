@@ -28,6 +28,7 @@ public without sharing class FeatureParameters {
         PERM_SET_DELIVER_USERS,
         PERM_SET_MANAGE_USERS,
         ATTENDANCE_SERVICE_DELIVERIES_LAST30,
+        ACTIVE_PROGRAMS_WITH_COHORTS,
         ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES,
         ACTIVE_SERVICES
     }
@@ -85,6 +86,9 @@ public without sharing class FeatureParameters {
             when ATTENDANCE_SERVICE_DELIVERIES_LAST30 {
                 return new AttendanceServiceDeliveriesLast30();
             }
+            when ACTIVE_PROGRAMS_WITH_COHORTS {
+                return new ActiveProgramsWithCohorts();
+            }
             when ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES {
                 return new ActiveProgramsWithActiveServices();
             }
@@ -139,6 +143,61 @@ public without sharing class FeatureParameters {
 
         private Object getValue() {
             return finder.findCount();
+        }
+    }
+
+    @TestVisible
+    private without sharing class ActiveProgramsWithCohorts implements FeatureManagement.FeatureParameter {
+        @TestVisible
+        private QueryBuilder queryBuilder {
+            get {
+                if (queryBuilder == null) {
+                    queryBuilder = new QueryBuilder()
+                        .withSObjectType(Program__c.SObjectType)
+                        .addCondition(ACTIVE_PROGRAM_CONDITION)
+                        .addCondition('Id IN (' + buildProgramCohortQuery() + ')');
+                }
+
+                return queryBuilder;
+            }
+            set;
+        }
+        @TestVisible
+        private Finder finder {
+            get {
+                if (finder == null) {
+                    finder = new Finder(queryBuilder);
+                }
+
+                return finder;
+            }
+            set;
+        }
+
+        public void send() {
+            final Object value = getValue();
+
+            if (value instanceof Integer) {
+                FeatureManagement.getInstance()
+                    .setPackageIntegerValue(getName(), (Integer) value);
+            }
+        }
+
+        private String getName() {
+            return DeveloperName.ACTIVE_PROGRAMS_WITH_COHORTS.name().remove('_');
+        }
+
+        private Object getValue() {
+            return finder.findCount();
+        }
+
+        private String buildProgramCohortQuery() {
+            return new QueryBuilder()
+                .withSObjectType(ProgramCohort__c.SObjectType)
+                .withSelectFields(
+                    new List<String>{ String.valueOf(ProgramCohort__c.Program__c) }
+                )
+                .buildSoqlQuery();
         }
     }
 

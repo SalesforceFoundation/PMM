@@ -166,18 +166,76 @@ public with sharing class FeatureParameters_TEST {
 
         List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
             .getAll();
-        FeatureParameters.ActiveProgramsWithActiveServices activeProgramsWithEnagegmentsParameter = (FeatureParameters.ActiveProgramsWithActiveServices) allFeatureParameters[
+        FeatureParameters.ActiveProgramsWithActiveServices activeProgramsWithEngagementsParameter = (FeatureParameters.ActiveProgramsWithActiveServices) allFeatureParameters[
             ordinalValue
         ];
         BasicStub finderStub = new BasicStub(Finder.class)
             .withReturnValue('findCount', expectedValue);
-        activeProgramsWithEnagegmentsParameter.finder = (Finder) finderStub.createMock();
+        activeProgramsWithEngagementsParameter.finder = (Finder) finderStub.createMock();
 
         Test.startTest();
-        activeProgramsWithEnagegmentsParameter.send();
+        activeProgramsWithEngagementsParameter.send();
         Test.stopTest();
 
         finderStub.assertCalled('findCount');
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldCallSetPackageIntegerByActiveProgramsWithCohorts() {
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_COHORTS.name()
+            .remove('_');
+        final Integer expectedValue = 10;
+        Integer ordinalValue = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_COHORTS.ordinal();
+
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
+            .getAll();
+        FeatureParameters.ActiveProgramsWithCohorts activeProgramsWithCohortsParameter = (FeatureParameters.ActiveProgramsWithCohorts) allFeatureParameters[
+            ordinalValue
+        ];
+        BasicStub finderStub = new BasicStub(Finder.class)
+            .withReturnValue('findCount', expectedValue);
+        activeProgramsWithCohortsParameter.finder = (Finder) finderStub.createMock();
+
+        Test.startTest();
+        activeProgramsWithCohortsParameter.send();
+        Test.stopTest();
+
+        finderStub.assertCalled('findCount');
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldPassActualActiveProgramsWithCohorts() {
+        List<Program__c> programs = [
+            SELECT Id
+            FROM Program__c
+            WHERE Status__c = 'Active' AND Id IN (SELECT Program__c FROM ProgramCohort__c)
+        ];
+        System.assert(
+            !programs.isEmpty(),
+            'Sanity check: Test setup should have generated at least 1 active record with a related program cohort.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_PROGRAMS_WITH_COHORTS.name()
+            .remove('_');
+        final Integer expectedValue = programs.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.ActiveProgramsWithCohorts().send();
+        Test.stopTest();
+
         featureManagementStub.assertCalledWith(
             'setPackageIntegerValue',
             new List<Type>{ String.class, Integer.class },

@@ -58,7 +58,7 @@ pmm_lex_locators = {
         "new_record_link": "//div[@class='slds-grid']/a[contains(@class,'slds-truncate')]/span[contains(text(),'{}')]",
         "related_list": "//a[contains(@class,'slds-card')]/span[contains(@class,'slds-truncate') and @title='{}']",
     },
-    "modal_title": "//h2[contains(@class,'slds-modal__title') or contains(@class,'truncate title')]",
+    "modal_title": "//h2[contains(@class,'slds-modal__title') or contains(@class,'truncate title') or contains(@class,'slds-text-heading')]",
     "quick_actions": "//button[@class='slds-button slds-button_neutral' and text()='{}']",
     "list_view": "//button[contains(@class,'slds-button') and @title='Select List View']",
     "listview_options": "//li[contains(@class,'slds-dropdown__item')]//a//span[text()='{}']",
@@ -110,6 +110,7 @@ pmm_lex_locators = {
     },
     "attendance": {
         "attendance_text": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",
+        "attendance_lookup": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-grouped-combobox[@class='slds-form-element'][.//label[text()='{}']]//div/input",
         "dropdown_field": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]//input",
         "select_popup": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//div[contains(@class,'slds-listbox')]",
         "dropdown_value": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(text(),'{}')]",
@@ -118,5 +119,9 @@ pmm_lex_locators = {
     },
     "homepage": {
         "component_link": '//article[contains(@class,"forceBaseCard")][.//span[contains(@title,"{}")]]',
+    },
+    "app_launcher": {
+        "app_link_search_result": "//mark[contains(text(),'{}')]",
+        "search_input": "//input[contains(@placeholder,'Search apps or items...')]",
     },
 }

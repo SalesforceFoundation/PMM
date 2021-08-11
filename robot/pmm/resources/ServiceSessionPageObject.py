@@ -65,6 +65,24 @@ class ServiceSessionDetailPage(BasePMMPage, DetailPage):
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).send_keys(value)
 
+    def populate_attendance_lookup_field(self, client_name, label, value):
+        """Populate text field on attendance component given the Client Name"""
+        locator = pmm_lex_locators["attendance"]["attendance_lookup"].format(
+            client_name, label
+        )
+        self.selenium.get_webelement(locator).click()
+        self.selenium.set_focus_to_element(locator)
+        self.selenium.get_webelement(locator).send_keys(value)
+        locator_val = pmm_lex_locators["bulk_service_delivery_locators"][
+            "select_lookup_value"
+        ].format(value)
+        self.selenium.wait_until_page_contains_element(
+            locator_val, error="value is not available"
+        )
+        time.sleep(1)
+        self.salesforce._jsclick(locator_val)
+        time.sleep(0.5)
+
     def populate_attendance_dropdown(self, client_name, title, value):
         """populate dropdown on attendace row given the contact name"""
         locator = pmm_lex_locators["attendance"]["dropdown_field"].format(

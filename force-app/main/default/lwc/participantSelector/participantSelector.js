@@ -205,32 +205,19 @@ export default class ParticipantSelector extends LightningElement {
         return this.offset < this.filteredEngagements.length;
     }
 
-    get today() {
-        return formatShortISODateString(new Date());
-    }
-
     handleNewParticipantClick() {
-        const modal = this.template.querySelector("c-modal");
-        modal.show();
+        const newParticipant = this.template.querySelector("c-new-program-engagement");
+        newParticipant.showModal();
     }
 
-    closeModal() {
-        const modal = this.template.querySelector("c-modal");
-        modal.hide();
-    }
-
-    handleSuccess(event) {
-        this.catchNewPE(event.detail.id);
+    handleNewParticipantSuccess(event) {
+        this.catchNewPE(event.detail);
         this.closeModal();
     }
 
     async catchNewPE(id) {
         await refreshApex(this.wiredData);
         this.handleSelectById(id);
-    }
-
-    handleFormError(value) {
-        handleError(value);
     }
 
     handleLoadMore() {

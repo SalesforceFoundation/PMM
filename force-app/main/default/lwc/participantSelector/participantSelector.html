@@ -170,84 +170,8 @@
         </lightning-layout-item>
     </lightning-layout>
 
-    <lightning-record-edit-form
-        object-api-name="ProgramEngagement__c"
-        onsuccess={handleSuccess}
-        onerror={handleFormError}
-    >
-        <c-modal header="New Participant" is-nested="true">
-            <lightning-layout multiple-rows="true">
-                <lightning-layout-item size="12">
-                    Select Contact
-                </lightning-layout-item>
-                <lightning-layout-item size="6">
-                    <lightning-input-field
-                        field-name="Contact__c"
-                        required
-                    ></lightning-input-field
-                ></lightning-layout-item>
-                <lightning-layout-item size="12">
-                    <div>Program Engagement Details</div>
-                </lightning-layout-item>
-                <lightning-layout-item size="6">
-                    <lightning-input-field
-                        field-name="Program__c"
-                        value={programId}
-                        required
-                    ></lightning-input-field
-                ></lightning-layout-item>
-                <lightning-layout-item size="6">
-                    <lightning-input-field
-                        field-name="ProgramCohort__c"
-                    ></lightning-input-field
-                ></lightning-layout-item>
-                <lightning-layout-item size="6">
-                    <lightning-input-field
-                        field-name="Stage__c"
-                        required
-                        value="Enrolled"
-                    ></lightning-input-field
-                ></lightning-layout-item>
-                <lightning-layout-item size="6">
-                    <lightning-input-field
-                        field-name="StartDate__c"
-                        value={today}
-                        required
-                    ></lightning-input-field
-                ></lightning-layout-item>
-            </lightning-layout>
-            <div slot="footer">
-                <lightning-layout>
-                    <lightning-layout-item alignment-bump="right">
-                        <lightning-button
-                            label={labels.cancel}
-                            title={labels.cancel}
-                            variant="neutral"
-                            onclick={handleClose}
-                        >
-                        </lightning-button>
-                    </lightning-layout-item>
-                    <lightning-layout-item>
-                        <lightning-button
-                            label={labels.saveAndNew}
-                            title={labels.saveAndNew}
-                            variant="neutral"
-                            class="slds-p-left_medium"
-                            disabled="true"
-                        >
-                        </lightning-button>
-                        <lightning-button
-                            type="submit"
-                            label={labels.save}
-                            title={labels.save}
-                            variant="brand"
-                            class="slds-p-left_medium"
-                            onclick={handleSaveNewSession}
-                        >
-                        </lightning-button>
-                    </lightning-layout-item>
-                </lightning-layout>
-            </div>
-        </c-modal>
-    </lightning-record-edit-form>
+    <c-new-program-engagement
+        program-id={programId}
+        onsave={handleNewParticipantSuccess}
+    ></c-new-program-engagement>
 </template>

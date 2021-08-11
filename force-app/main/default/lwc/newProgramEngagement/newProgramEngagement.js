@@ -9,10 +9,14 @@
 
 import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
-import { handleError, showToast } from "c/util";
+import { handleError, showToast, formatShortISODateString } from "c/util";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
+import PROGRAM_FIELD from "@salesforce/schema/ProgramEngagement__c.Program__c";
+import ROLE_FIELD from "@salesforce/schema/ProgramEngagement__c.Role__c";
+import START_DATE_FIELD from "@salesforce/schema/ProgramEngagement__c.StartDate__c";
+import STAGE_FIELD from "@salesforce/schema/ProgramEngagement__c.Stage__c";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import cancel from "@salesforce/label/c.Cancel";
 import success from "@salesforce/label/c.Success";
@@ -24,11 +28,17 @@ const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
 export default class NewProgramEngagement extends LightningElement {
     fields = {
         contact: CONTACT_FIELD,
+        program: PROGRAM_FIELD,
+        role: ROLE_FIELD,
+        startDate: START_DATE_FIELD,
+        stage: STAGE_FIELD,
     };
     @api recordId;
     @api contactId;
+    @api programId;
     @api fieldSet;
     @track localFieldSet = [];
+    allowNewContact = false;
 
     @wire(CurrentPageReference) pageRef;
 
@@ -86,12 +96,33 @@ export default class NewProgramEngagement extends LightningElement {
             this.localFieldSet = [];
             this.fieldSet.forEach(element => {
                 element = Object.assign({}, element);
-                if (element.apiName === this.fields.contact.fieldApiName) {
-                    element.value = this.contactId;
-                    element.disabled = true;
+                if (element.apiName === this.fields.program.fieldApiName) {
+                    element.value = this.programId;
+                } else if (element.apiName === this.fields.contact.fieldApiName) {
+                    if (this.contactId) {
+                        element.value = this.contactId;
+                        element.disabled = true;
+                    } else {
+                        element.skipContact = true;
+                        this.allowNewContact = true;
+                    }
+                } else if (element.apiName === this.fields.role.fieldApiName) {
+                    element.value = "Client";
+                } else if (element.apiName === this.fields.startDate.fieldApiName) {
+                    element.value = this.today;
+                } else if (element.apiName === this.fields.stage.fieldApiName) {
+                    element.value = "Enrolled";
                 }
                 this.localFieldSet.push(element);
             });
         }
+    }
+
+    get today() {
+        return formatShortISODateString(new Date());
+    }
+
+    handleFormError(value) {
+        handleError(value);
     }
 }

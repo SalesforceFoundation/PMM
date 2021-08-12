@@ -8,7 +8,7 @@
  */
 
 import { LightningElement, track, api, wire } from "lwc";
-import { handleError, format, formatShortISODateString } from "c/util";
+import { format } from "c/util";
 import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
@@ -212,7 +212,6 @@ export default class ParticipantSelector extends LightningElement {
 
     handleNewParticipantSuccess(event) {
         this.catchNewPE(event.detail);
-        this.closeModal();
     }
 
     async catchNewPE(id) {

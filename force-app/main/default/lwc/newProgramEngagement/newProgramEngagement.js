@@ -88,25 +88,20 @@ export default class NewProgramEngagement extends LightningElement {
     handleLoad() {
         if (this.fieldSet) {
             this.localFieldSet = [];
-            this.fieldSet.forEach(element => {
-                element = Object.assign({}, element);
-                if (element.apiName === PROGRAM_FIELD.fieldApiName) {
-                    element.value = this.programId;
-                } else if (element.apiName === CONTACT_FIELD.fieldApiName) {
+            this.fieldSet.forEach(field => {
+                field = Object.assign({}, field);
+                if (field.apiName === CONTACT_FIELD.fieldApiName) {
                     if (this.contactId) {
-                        element.value = this.contactId;
-                        element.disabled = true;
+                        field.disabled = true;
                     } else {
-                        element.skip = true;
+                        field.skip = true;
                         this.allowNewContact = true;
                     }
                 }
-                element.value = this.defaults[element.apiName]
-                    ? this.defaults[element.apiName]
-                    : "";
+                field.value = this.defaults[field.apiName];
 
-                if (!element.skip) {
-                    this.localFieldSet.push(element);
+                if (!field.skip) {
+                    this.localFieldSet.push(field);
                 }
             });
         }
@@ -121,6 +116,9 @@ export default class NewProgramEngagement extends LightningElement {
         defaultValues[ROLE_FIELD.fieldApiName] = "Client";
         defaultValues[START_DATE_FIELD.fieldApiName] = this.today;
         defaultValues[STAGE_FIELD.fieldApiName] = "Enrolled";
+        defaultValues[PROGRAM_FIELD.fieldApiName] = this.programId;
+        defaultValues[CONTACT_FIELD.fieldApiName] = this.contactId;
+
         return defaultValues;
     }
 

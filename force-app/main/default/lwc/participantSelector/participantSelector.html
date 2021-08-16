@@ -84,7 +84,7 @@
                                             class="slds-border_top slds-var-m-top_xx-small"
                                         >
                                             <lightning-datatable
-                                                data={data}
+                                                data={availableEngagementsForSelection}
                                                 key-field="Id"
                                                 columns={selectorColumns}
                                                 column-widths-mode="auto"
@@ -140,7 +140,7 @@
                                 key-field="Id"
                                 hide-checkbox-column
                                 onrowaction={handleDeselectParticipant}
-                                data={selectedParticipants}
+                                data={selectedEngagements}
                                 column-widths-mode="auto"
                                 resize-column-disabled
                             ></lightning-datatable>

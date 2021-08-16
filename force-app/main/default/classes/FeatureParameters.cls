@@ -30,7 +30,8 @@ public without sharing class FeatureParameters {
         ATTENDANCE_SERVICE_DELIVERIES_LAST30,
         ACTIVE_PROGRAMS_WITH_COHORTS,
         ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES,
-        ACTIVE_SERVICES
+        ACTIVE_SERVICES,
+        ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES
     }
 
     private static final String ACTIVE_PROGRAM_CONDITION =
@@ -94,6 +95,9 @@ public without sharing class FeatureParameters {
             }
             when ACTIVE_SERVICES {
                 return new ActiveServices();
+            }
+            when ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES {
+                return new ActiveServicesWithServiceSchedules();
             }
             when else {
                 return null;
@@ -432,6 +436,62 @@ public without sharing class FeatureParameters {
                     }
                 )
                 .addCondition(CREATED_LAST_30_CONDITION)
+                .buildSoqlQuery();
+        }
+    }
+
+    @TestVisible
+    private without sharing class ActiveServicesWithServiceSchedules implements FeatureManagement.FeatureParameter {
+        @TestVisible
+        private QueryBuilder queryBuilder {
+            get {
+                if (queryBuilder == null) {
+                    queryBuilder = new QueryBuilder()
+                        .withSObjectType(Service__c.SObjectType)
+                        .addCondition(ACTIVE_SERVICE_CONDITION)
+                        .addCondition('Id IN (' + buildServiceScheduleQuery() + ')');
+                }
+
+                return queryBuilder;
+            }
+            set;
+        }
+        @TestVisible
+        private Finder finder {
+            get {
+                if (finder == null) {
+                    finder = new Finder(queryBuilder);
+                }
+
+                return finder;
+            }
+            set;
+        }
+
+        public void send() {
+            final Object value = getValue();
+
+            if (value instanceof Integer) {
+                FeatureManagement.getInstance()
+                    .setPackageIntegerValue(getName(), (Integer) value);
+            }
+        }
+
+        private String getName() {
+            return DeveloperName.ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES.name()
+                .remove('_');
+        }
+
+        private Object getValue() {
+            return finder.findCount();
+        }
+
+        private String buildServiceScheduleQuery() {
+            return new QueryBuilder()
+                .withSObjectType(ServiceSchedule__c.SObjectType)
+                .withSelectFields(
+                    new List<String>{ String.valueOf(ServiceSchedule__c.Service__c) }
+                )
                 .buildSoqlQuery();
         }
     }

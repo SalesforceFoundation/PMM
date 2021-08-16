@@ -26,13 +26,7 @@ import save from "@salesforce/label/c.Save";
 const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
 
 export default class NewProgramEngagement extends LightningElement {
-    fields = {
-        contact: CONTACT_FIELD,
-        program: PROGRAM_FIELD,
-        role: ROLE_FIELD,
-        startDate: START_DATE_FIELD,
-        stage: STAGE_FIELD,
-    };
+    contactField = CONTACT_FIELD;
     @api recordId;
     @api contactId;
     @api programId;
@@ -96,30 +90,38 @@ export default class NewProgramEngagement extends LightningElement {
             this.localFieldSet = [];
             this.fieldSet.forEach(element => {
                 element = Object.assign({}, element);
-                if (element.apiName === this.fields.program.fieldApiName) {
+                if (element.apiName === PROGRAM_FIELD.fieldApiName) {
                     element.value = this.programId;
-                } else if (element.apiName === this.fields.contact.fieldApiName) {
+                } else if (element.apiName === CONTACT_FIELD.fieldApiName) {
                     if (this.contactId) {
                         element.value = this.contactId;
                         element.disabled = true;
                     } else {
-                        element.skipContact = true;
+                        element.skip = true;
                         this.allowNewContact = true;
                     }
-                } else if (element.apiName === this.fields.role.fieldApiName) {
-                    element.value = "Client";
-                } else if (element.apiName === this.fields.startDate.fieldApiName) {
-                    element.value = this.today;
-                } else if (element.apiName === this.fields.stage.fieldApiName) {
-                    element.value = "Enrolled";
                 }
-                this.localFieldSet.push(element);
+                element.value = this.defaults[element.apiName]
+                    ? this.defaults[element.apiName]
+                    : "";
+
+                if (!element.skip) {
+                    this.localFieldSet.push(element);
+                }
             });
         }
     }
 
     get today() {
         return formatShortISODateString(new Date());
+    }
+
+    get defaults() {
+        let defaultValues = {};
+        defaultValues[ROLE_FIELD.fieldApiName] = "Client";
+        defaultValues[START_DATE_FIELD.fieldApiName] = this.today;
+        defaultValues[STAGE_FIELD.fieldApiName] = "Enrolled";
+        return defaultValues;
     }
 
     handleFormError(value) {

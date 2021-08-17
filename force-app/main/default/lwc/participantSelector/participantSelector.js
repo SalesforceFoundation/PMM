@@ -31,6 +31,8 @@ import addAll from "@salesforce/label/c.Add_All";
 import cancel from "@salesforce/label/c.Cancel";
 import save from "@salesforce/label/c.Save";
 import saveAndNew from "@salesforce/label/c.Save_New";
+import cantFind from "@salesforce/label/c.Cant_Find_Participant";
+import newLabel from "@salesforce/label/c.Util_New";
 
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
@@ -78,6 +80,8 @@ export default class ParticipantSelector extends LightningElement {
         save,
         saveAndNew,
         cancel,
+        cantFind,
+        newLabel,
     };
 
     @api

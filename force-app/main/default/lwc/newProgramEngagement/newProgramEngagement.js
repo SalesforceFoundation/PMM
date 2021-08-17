@@ -14,9 +14,6 @@ import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 import PROGRAM_FIELD from "@salesforce/schema/ProgramEngagement__c.Program__c";
-import ROLE_FIELD from "@salesforce/schema/ProgramEngagement__c.Role__c";
-import START_DATE_FIELD from "@salesforce/schema/ProgramEngagement__c.StartDate__c";
-import STAGE_FIELD from "@salesforce/schema/ProgramEngagement__c.Stage__c";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import cancel from "@salesforce/label/c.Cancel";
 import success from "@salesforce/label/c.Success";
@@ -78,10 +75,15 @@ export default class NewProgramEngagement extends LightningElement {
         const allInputFields = this.template.querySelectorAll("lightning-input-field");
         if (allInputFields) {
             allInputFields.forEach(field => {
-                if (field.value !== this.contactId) {
-                    field.reset();
-                }
+                field.reset();
+                this.applyFieldDefault(field, "fieldName");
             });
+        }
+    }
+
+    applyFieldDefault(field, key) {
+        if (this.defaults[field[key]]) {
+            field.value = this.defaults[field[key]];
         }
     }
 
@@ -97,8 +99,14 @@ export default class NewProgramEngagement extends LightningElement {
                         field.skip = true;
                         this.allowNewContact = true;
                     }
+                } else if (
+                    field.apiName === PROGRAM_FIELD.fieldApiName &&
+                    this.programId
+                ) {
+                    field.disabled = true;
                 }
-                field.value = this.defaults[field.apiName];
+
+                this.applyFieldDefault(field, "apiName");
 
                 if (!field.skip) {
                     this.localFieldSet.push(field);
@@ -113,9 +121,6 @@ export default class NewProgramEngagement extends LightningElement {
 
     get defaults() {
         let defaultValues = {};
-        defaultValues[ROLE_FIELD.fieldApiName] = "Client";
-        defaultValues[START_DATE_FIELD.fieldApiName] = this.today;
-        defaultValues[STAGE_FIELD.fieldApiName] = "Enrolled";
         defaultValues[PROGRAM_FIELD.fieldApiName] = this.programId;
         defaultValues[CONTACT_FIELD.fieldApiName] = this.contactId;
 

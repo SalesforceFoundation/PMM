@@ -9,7 +9,7 @@
 
 import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
-import { handleError, showToast, formatShortISODateString } from "c/util";
+import { handleError, showToast } from "c/util";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
@@ -59,7 +59,7 @@ export default class NewProgramEngagement extends LightningElement {
     @api
     hideModal() {
         this.template.querySelector("c-modal").hide();
-        this.clearAllValues();
+        this.resetForm();
     }
 
     handleClose() {
@@ -73,7 +73,7 @@ export default class NewProgramEngagement extends LightningElement {
         this.dispatchEvent(new CustomEvent("save", { detail: event.detail.id }));
     }
 
-    clearAllValues() {
+    resetForm() {
         const allInputFields = this.template.querySelectorAll("lightning-input-field");
         if (allInputFields) {
             allInputFields.forEach(field => {
@@ -117,19 +117,11 @@ export default class NewProgramEngagement extends LightningElement {
         }
     }
 
-    get today() {
-        return formatShortISODateString(new Date());
-    }
-
     get defaults() {
         let defaultValues = {};
         defaultValues[PROGRAM_FIELD.fieldApiName] = this.programId;
         defaultValues[CONTACT_FIELD.fieldApiName] = this.contactId;
 
         return defaultValues;
-    }
-
-    handleFormError(value) {
-        handleError(value);
     }
 }

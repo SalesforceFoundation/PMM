@@ -52,10 +52,10 @@ const debug = (...args) => {
 
 const showToast = (title, message, variant, mode = "pester") => {
     const toast = new ShowToastEvent({
-        title: title,
-        message: message,
-        variant: variant,
-        mode: mode,
+        title,
+        message,
+        variant,
+        mode,
     });
     dispatchEvent(toast);
 };
@@ -203,7 +203,7 @@ const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) 
                 return (e.fieldLabel ? e.fieldLabel + ": " : "") + e.message;
             });
 
-            if (!returnAsArray) {
+            if (!returnAsArray || fireShowToast) {
                 message.join("; ");
             }
         }
@@ -215,7 +215,7 @@ const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) 
         "handleError"
     );
     if (fireShowToast) {
-        showToast(errorLabel, message.join("; "), "error", showToastMode);
+        showToast(errorLabel, message, "error", showToastMode);
     }
 
     return message;
@@ -299,10 +299,6 @@ const prefixNamespace = value => {
     return namespace + value;
 };
 
-const formatShortISODateString = date => {
-    return date.toISOString().substr(0, 10);
-};
-
 export {
     isString,
     showToast,
@@ -318,5 +314,4 @@ export {
     debouncify,
     createUUID,
     prefixNamespace,
-    formatShortISODateString,
 };

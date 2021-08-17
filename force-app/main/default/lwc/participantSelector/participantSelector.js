@@ -197,7 +197,7 @@ export default class ParticipantSelector extends LightningElement {
         });
 
         this.sortData(this.availableEngagementRows);
-        
+
         this.applyFilters();
         this.noRecordsFound =
             this.filteredEngagements && this.filteredEngagements.length === 0;
@@ -243,7 +243,7 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     loadPreviousSelections() {
-        console.log(' **** in loadPreviousSelections');
+        console.log(" **** in loadPreviousSelections");
         if (this.previouslySelectedEngagements === undefined) {
             return;
         }
@@ -372,7 +372,10 @@ export default class ParticipantSelector extends LightningElement {
 
             this.selectedEngagements = tempSelectedEngagements;
 
-            this.availableEngagementRows = [...this.availableEngagementRows, event.detail.row];
+            this.availableEngagementRows = [
+                ...this.availableEngagementRows,
+                event.detail.row,
+            ];
             this.sortData(this.availableEngagementRows);
 
             //if filters exist apply the filters
@@ -400,18 +403,14 @@ export default class ParticipantSelector extends LightningElement {
         );
 
         let selectedEngagementIds = [];
-        this.selectedEngagements.forEach(
-            eng => {
-                selectedEngagementIds.push(eng.Id);
-            }
-        );  
+        this.selectedEngagements.forEach(eng => {
+            selectedEngagementIds.push(eng.Id);
+        });
 
         // Remove already selected rows
-        this.filteredEngagements = this.filteredEngagements.filter(
-            row => {
-                return !selectedEngagementIds.includes(row.Id);
-            }
-        );
+        this.filteredEngagements = this.filteredEngagements.filter(row => {
+            return !selectedEngagementIds.includes(row.Id);
+        });
 
         // TODO shouldn't this be a getter?
         this.noRecordsFound =

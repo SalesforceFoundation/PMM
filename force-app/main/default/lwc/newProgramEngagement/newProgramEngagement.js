@@ -21,6 +21,8 @@ import saveMessage from "@salesforce/label/c.SaveMessage";
 import save from "@salesforce/label/c.Save";
 
 const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
+const FIELD_NAME_KEY = "fieldName";
+const API_NAME_KEY = "apiName";
 
 export default class NewProgramEngagement extends LightningElement {
     contactField = CONTACT_FIELD;
@@ -76,7 +78,7 @@ export default class NewProgramEngagement extends LightningElement {
         if (allInputFields) {
             allInputFields.forEach(field => {
                 field.reset();
-                this.applyFieldDefault(field, "fieldName");
+                this.applyFieldDefault(field, FIELD_NAME_KEY);
             });
         }
     }
@@ -106,7 +108,7 @@ export default class NewProgramEngagement extends LightningElement {
                     field.disabled = true;
                 }
 
-                this.applyFieldDefault(field, "apiName");
+                this.applyFieldDefault(field, API_NAME_KEY);
 
                 if (!field.skip) {
                     this.localFieldSet.push(field);

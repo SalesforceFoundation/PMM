@@ -87,7 +87,10 @@ export default class ParticipantSelector extends LightningElement {
         let result = [];
         this.selectedEngagements.forEach(row => {
             let contactId = row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName];
-            if (!this.existingContactIds.includes(contactId)) {
+            if (
+                !this.existingContactIds ||
+                !this.existingContactIds.includes(contactId)
+            ) {
                 result.push(row);
             }
         });

@@ -60,7 +60,7 @@ public with sharing class ServiceScheduleDomain {
     }
 
     private void generateParticipants(ServiceScheduleModel model) {
-        for (ProgramEngagement__c engagement : model.selectedParticipants) {
+        for (ProgramEngagement__c engagement : model.selectedEngagements) {
             model.serviceParticipants.add(
                 createServiceParticipant(engagement, model.serviceSchedule)
             );

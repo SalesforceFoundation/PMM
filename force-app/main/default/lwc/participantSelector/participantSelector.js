@@ -60,7 +60,6 @@ export default class ParticipantSelector extends LightningElement {
     fieldByFieldPath;
     objectLabels;
     isLoaded = false;
-    isRefresh = false;
     rendered = false;
     offsetRows = 50;
     offset = this.offsetRows;
@@ -167,7 +166,6 @@ export default class ParticipantSelector extends LightningElement {
             this.loadPreviousSelections();
             this.loadProgramCohorts(this.cohorts);
         } else if (result.error) {
-            console.log(result.error);
             this.allEngagements = undefined;
             this.cohorts = undefined;
         }
@@ -221,9 +219,7 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     async catchNewPE(id) {
-        this.isRefresh = true;
         await refreshApex(this.wiredData);
-        this.isRefresh = false;
         this.handleSelectById(id);
     }
 
@@ -247,7 +243,6 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     loadPreviousSelections() {
-        console.log(" **** in loadPreviousSelections");
         if (this.previouslySelectedEngagements === undefined) {
             return;
         }

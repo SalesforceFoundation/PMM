@@ -342,7 +342,10 @@ export default class ParticipantSelector extends LightningElement {
         let index = this.availableEngagementRows.findIndex(
             element => element.Id === programEngagementId
         );
-        this.handleSelect([this.availableEngagementRows[index]]);
+
+        if (index) {
+            this.handleSelect([this.availableEngagementRows[index]]);
+        }
     }
 
     handleSelect(programEngagements) {

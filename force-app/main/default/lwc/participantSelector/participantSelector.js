@@ -32,7 +32,7 @@ import cancel from "@salesforce/label/c.Cancel";
 import save from "@salesforce/label/c.Save";
 import saveAndNew from "@salesforce/label/c.Save_New";
 import cantFind from "@salesforce/label/c.Cant_Find_Participant";
-import newLabel from "@salesforce/label/c.Util_New";
+import newLabel from "@salesforce/label/c.New";
 
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
@@ -50,7 +50,6 @@ export default class ParticipantSelector extends LightningElement {
     @track availableEngagementsForSelection = [];
 
     searchValue;
-    noRecordsFound = false;
     cohortId;
     programName;
     programId;
@@ -101,6 +100,10 @@ export default class ParticipantSelector extends LightningElement {
             this.participantCount &&
             this.capacity < this.participantCount
         );
+    }
+
+    get noRecordsFound() {
+        return this.filteredEngagements && this.filteredEngagements.length === 0;
     }
 
     get noRecordsSelected() {
@@ -201,8 +204,6 @@ export default class ParticipantSelector extends LightningElement {
         this.sortData(this.availableEngagementRows);
 
         this.applyFilters();
-        this.noRecordsFound =
-            this.filteredEngagements && this.filteredEngagements.length === 0;
     }
 
     get enableInfiniteLoading() {
@@ -215,10 +216,10 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleNewParticipantSuccess(event) {
-        this.catchNewPE(event.detail);
+        this.processNewParticipant(event.detail);
     }
 
-    async catchNewPE(id) {
+    async processNewParticipant(id) {
         await refreshApex(this.wiredData);
         this.handleSelectById(id);
     }
@@ -411,9 +412,6 @@ export default class ParticipantSelector extends LightningElement {
             return !selectedEngagementIds.includes(row.Id);
         });
 
-        // TODO shouldn't this be a getter?
-        this.noRecordsFound =
-            this.filteredEngagements && this.filteredEngagements.length === 0;
         this.availableEngagementsForSelection = this.filteredEngagements.slice(
             0,
             Math.min(this.filteredEngagements.length, this.offset)

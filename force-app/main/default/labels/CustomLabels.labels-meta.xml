@@ -956,8 +956,7 @@
         <value>You can't access this field. Your Salesforce admin can help with that.</value>
     </labels>
     <labels>
-        <fullName>Util_New</fullName>
-        <categories>Exception</categories>
+        <fullName>New</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>New</shortDescription>

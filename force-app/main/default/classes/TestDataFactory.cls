@@ -211,7 +211,8 @@ public with sharing class TestDataFactory {
                 FirstSessionStart__c = sessionStart,
                 FirstSessionEnd__c = sessionStart.addHours(24),
                 PrimaryServiceProvider__c = contacts[0].Id,
-                OtherServiceProvider__c = contacts[0].Id
+                OtherServiceProvider__c = contacts[0].Id,
+                Service__c = services[0].Id
             )
         );
         insert serviceSchedules;

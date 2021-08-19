@@ -15,7 +15,7 @@ public with sharing class FeatureParameters_TEST {
 
     @TestSetup
     static void generateData() {
-        TestDataFactory.generateServiceData();
+        TestDataFactory.generateAttendanceData('Daily');
     }
 
     @IsTest
@@ -234,6 +234,66 @@ public with sharing class FeatureParameters_TEST {
 
         Test.startTest();
         new FeatureParameters.ActiveProgramsWithCohorts().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldCallSetPackageIntegerByActiveServicesWithServiceSchedules() {
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES.name()
+            .remove('_');
+        final Integer expectedValue = 10;
+        Integer ordinalValue = FeatureParameters.DeveloperName.ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES.ordinal();
+
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
+            .getAll();
+        FeatureParameters.ActiveServicesWithServiceSchedules activeServicesWithServiceSchedulesParameter = (FeatureParameters.ActiveServicesWithServiceSchedules) allFeatureParameters[
+            ordinalValue
+        ];
+        BasicStub finderStub = new BasicStub(Finder.class)
+            .withReturnValue('findCount', expectedValue);
+        activeServicesWithServiceSchedulesParameter.finder = (Finder) finderStub.createMock();
+
+        Test.startTest();
+        activeServicesWithServiceSchedulesParameter.send();
+        Test.stopTest();
+
+        finderStub.assertCalled('findCount');
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldPassActualActiveServicesWithServiceSchedules() {
+        List<Service__c> services = [
+            SELECT Id
+            FROM Service__c
+            WHERE
+                Status__c = 'Active'
+                AND Id IN (SELECT Service__c FROM ServiceSchedule__c)
+        ];
+        System.assert(
+            !services.isEmpty(),
+            'Sanity check: Test setup should have generated at least 1 active record with a related service schedule.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES.name()
+            .remove('_');
+        final Integer expectedValue = services.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.ActiveServicesWithServiceSchedules().send();
         Test.stopTest();
 
         featureManagementStub.assertCalledWith(

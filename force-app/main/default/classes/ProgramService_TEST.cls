@@ -9,6 +9,50 @@
 
 @isTest
 public with sharing class ProgramService_TEST {
+    private static ProgramService programService = new ProgramService();
+
+    @IsTest
+    private static void testGetCohortsForProgram() {
+        List<ProgramCohort__c> cohortsToReturn = new List<ProgramCohort__c>();
+        cohortsToReturn.add(
+            new ProgramCohort__c(
+                Id = TestUtil.mockId(ProgramCohort__c.SObjectType),
+                Name = 'Cohort1'
+            )
+        );
+        cohortsToReturn.add(
+            new ProgramCohort__c(
+                Id = TestUtil.mockId(ProgramCohort__c.SObjectType),
+                Name = 'Cohort2'
+            )
+        );
+
+        Id programId = TestUtil.mockId(Program__c.SObjectType);
+
+        Set<String> programFields = new Set<String>{
+            String.valueOf(ProgramCohort__c.Id),
+            String.valueOf(ProgramCohort__c.Name)
+        };
+
+        TestStub programSelectorStub = new StubBuilder(ProgramSelector.class)
+            .when('getCohortsForProgram', Id.class, Set<String>.class)
+            .calledWith(programId, programFields)
+            .thenReturn(cohortsToReturn)
+            .build();
+
+        programService.programSelector = (ProgramSelector) programSelectorStub.create();
+
+        Test.startTest();
+        System.assertEquals(
+            cohortsToReturn,
+            programService.getCohortsForProgram(programId),
+            'Expected the service to return list delivered by selector.'
+        );
+        Test.stopTest();
+
+        programSelectorStub.assertCalledAsExpected();
+    }
+
     @isTest
     private static void testGetProgramNamesByIdForContact() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);

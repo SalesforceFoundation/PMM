@@ -110,6 +110,7 @@ export default class NewProgramEngagement extends LightningElement {
     handleFieldChange(event) {
         if (event.target.fieldName === PROGRAM_FIELD.fieldApiName) {
             this.selectedProgramId = event.detail.value[0];
+            this.selectedCohortId = undefined;
         }
     }
 

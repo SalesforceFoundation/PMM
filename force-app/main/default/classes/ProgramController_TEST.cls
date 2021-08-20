@@ -45,4 +45,41 @@ public with sharing class ProgramController_TEST {
 
         programServiceStub.assertCalledAsExpected();
     }
+
+    @IsTest
+    private static void throwsExceptionOnGetCohortsForProgram() {
+        Id programId = TestUtil.mockId(Program__c.SObjectType);
+
+        TestStub programServiceStub = new StubBuilder(ProgramService.class)
+            .when('getCohortsForProgram', Id.class)
+            .calledWith(programId)
+            .thenThrowException()
+            .build();
+
+        Exception actualException;
+
+        ProgramController.service = (ProgramService) programServiceStub.create();
+
+        Test.startTest();
+        try {
+            List<ProgramCohort__c> cohorts = ProgramController.getCohortsForProgram(
+                programId
+            );
+        } catch (AuraHandledException ex) {
+            actualException = ex;
+        } catch (Exception ex) {
+            System.assert(
+                false,
+                'Expecting only AuraHandledException: ' + ex.getMessage()
+            );
+        }
+        Test.stopTest();
+
+        System.assertNotEquals(
+            null,
+            actualException,
+            'Expected an exception to be thrown.'
+        );
+        programServiceStub.assertCalledAsExpected();
+    }
 }

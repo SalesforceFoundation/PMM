@@ -34,7 +34,7 @@ public with sharing class ProgramSelector_TEST {
             System.assertEquals(
                 programId,
                 cohort.Program__c,
-                'Should return cohorts only for the request program'
+                'Should return cohorts only for the requested program'
             );
         }
     }

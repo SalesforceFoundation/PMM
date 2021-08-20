@@ -9,10 +9,10 @@
 
 @IsTest
 public with sharing class ProgramSelector_TEST {
+    private static ProgramSelector programSelector = new ProgramSelector();
+
     @IsTest
     private static void testGetCohortsForProgram() {
-        ProgramSelector programSelector = new ProgramSelector();
-
         Set<String> cohortFields = new Set<String>{
             String.valueOf(ProgramCohort__c.Id),
             String.valueOf(ProgramCohort__c.Name),
@@ -37,5 +37,29 @@ public with sharing class ProgramSelector_TEST {
                 'Should return cohorts only for the requested program'
             );
         }
+    }
+
+    @IsTest
+    private static void returnsEmptyCohortListWithoutReadAccess() {
+        Set<String> cohortFields = new Set<String>{
+            String.valueOf(ProgramCohort__c.Id),
+            String.valueOf(ProgramCohort__c.Name),
+            String.valueOf(ProgramCohort__c.Program__c)
+        };
+
+        TestDataFactory.generateProgramData();
+
+        Id programId = TestDataFactory.programs[0].Id;
+
+        User standardUser = TestUtil.getTestUser();
+        List<ProgramCohort__c> cohorts;
+
+        System.runAs(standardUser) {
+            Test.startTest();
+            cohorts = programSelector.getCohortsForProgram(programId, cohortFields);
+            Test.stopTest();
+        }
+
+        System.assert(cohorts.isEmpty(), 'Expected an empty list to be returned.');
     }
 }

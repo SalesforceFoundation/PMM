@@ -29,14 +29,9 @@ public with sharing class ProgramService_TEST {
 
         Id programId = TestUtil.mockId(Program__c.SObjectType);
 
-        Set<String> programFields = new Set<String>{
-            String.valueOf(ProgramCohort__c.Id),
-            String.valueOf(ProgramCohort__c.Name)
-        };
-
         TestStub programSelectorStub = new StubBuilder(ProgramSelector.class)
-            .when('getProgramCohortsByProgramId', Id.class, Set<String>.class)
-            .calledWith(programId, programFields)
+            .when('getProgramCohortsByProgramId', Id.class)
+            .calledWith(programId)
             .thenReturn(cohortsToReturn)
             .build();
 

@@ -7,6 +7,10 @@
  *
  */
 
+.slds-modal__content {
+    overflow: initial;
+}
+
 .modal-hidden {
     display: none;
 }

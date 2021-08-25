@@ -909,11 +909,7 @@ public with sharing class ServiceScheduleService_TEST {
             }
         );
 
-        programEngagementSelectorStub.assertCalledWith(
-            cohortsMethodName,
-            Id.class,
-            programId
-        );
+        programSelectorStub.assertCalledWith(cohortsMethodName, Id.class, programId);
     }
 
     @IsTest

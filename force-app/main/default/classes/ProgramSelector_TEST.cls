@@ -13,27 +13,25 @@ public with sharing class ProgramSelector_TEST {
 
     @IsTest
     private static void testGetProgramCohortsByProgramId() {
-        Set<String> cohortFields = new Set<String>{
-            String.valueOf(ProgramCohort__c.Id),
-            String.valueOf(ProgramCohort__c.Name),
-            String.valueOf(ProgramCohort__c.Program__c)
-        };
-
         TestDataFactory.generateProgramData();
 
         Id programId = TestDataFactory.programs[0].Id;
 
         List<ProgramCohort__c> cohorts = programSelector.getProgramCohortsByProgramId(
-            programId,
-            cohortFields
+            programId
         );
 
         System.assert(cohorts.size() > 0, 'Should return at least one cohort');
 
+        Set<Id> cohortIdsForProgram = new Set<Id>();
+        for (ProgramCohort__c cohort : TestDataFactory.programCohorts) {
+            if (cohort.Program__c == programId) {
+                cohortIdsForProgram.add(cohort.Id);
+            }
+        }
         for (ProgramCohort__c cohort : cohorts) {
-            System.assertEquals(
-                programId,
-                cohort.Program__c,
+            System.assert(
+                cohortIdsForProgram.contains(cohort.Id),
                 'Should return cohorts only for the requested program'
             );
         }
@@ -41,12 +39,6 @@ public with sharing class ProgramSelector_TEST {
 
     @IsTest
     private static void returnsEmptyCohortListWithoutReadAccess() {
-        Set<String> cohortFields = new Set<String>{
-            String.valueOf(ProgramCohort__c.Id),
-            String.valueOf(ProgramCohort__c.Name),
-            String.valueOf(ProgramCohort__c.Program__c)
-        };
-
         TestDataFactory.generateProgramData();
 
         Id programId = TestDataFactory.programs[0].Id;
@@ -56,10 +48,7 @@ public with sharing class ProgramSelector_TEST {
 
         System.runAs(standardUser) {
             Test.startTest();
-            cohorts = programSelector.getProgramCohortsByProgramId(
-                programId,
-                cohortFields
-            );
+            cohorts = programSelector.getProgramCohortsByProgramId(programId);
             Test.stopTest();
         }
 

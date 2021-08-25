@@ -27,10 +27,6 @@ public with sharing class ProgramService {
     }
 
     public List<ProgramCohort__c> getProgramCohortsByProgramId(Id programId) {
-        Set<String> fields = new Set<String>{
-            String.valueOf(ProgramCohort__c.Id),
-            String.valueOf(ProgramCohort__c.Name)
-        };
-        return programSelector.getProgramCohortsByProgramId(programId, fields);
+        return programSelector.getProgramCohortsByProgramId(programId);
     }
 }

@@ -11,7 +11,7 @@ import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { handleError, showToast } from "c/util";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
-import getCohortsForProgram from "@salesforce/apex/ProgramController.getCohortsForProgram";
+import getProgramCohortsByProgramId from "@salesforce/apex/ProgramController.getProgramCohortsByProgramId";
 import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 import PROGRAM_FIELD from "@salesforce/schema/ProgramEngagement__c.Program__c";
@@ -66,7 +66,7 @@ export default class NewProgramEngagement extends LightningElement {
         }
     }
 
-    @wire(getCohortsForProgram, {
+    @wire(getProgramCohortsByProgramId, {
         programId: "$selectedProgramId",
     })
     wiredCohorts({ error, data }) {

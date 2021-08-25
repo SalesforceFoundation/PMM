@@ -46,7 +46,6 @@ export default class NewProgramEngagement extends LightningElement {
     @track cohorts;
     @track cohortOptions = [];
     selectedCohortId;
-    hasCohortField = false;
     allowNewContact = false;
     isSaving = false;
     selectedProgramId;
@@ -115,11 +114,6 @@ export default class NewProgramEngagement extends LightningElement {
     }
 
     setCohortOptions() {
-        // can't do this since the handleLoad function isn't done running and we don't yet know if the cohort field is present.
-        // leaving it here for further discussion.
-        // if (!this.hasCohortField) {
-        //     return;
-        // }
         this.cohortOptions = [];
         this.cohorts.forEach(cohort => {
             this.cohortOptions.push({
@@ -182,7 +176,6 @@ export default class NewProgramEngagement extends LightningElement {
                 ) {
                     field.disabled = true;
                 } else if (field.apiName === COHORT_FIELD.fieldApiName) {
-                    this.hasCohortField = true;
                     field.isCohortField = true;
                 }
 

@@ -26,11 +26,11 @@ public with sharing class ProgramService {
         return programNamesById;
     }
 
-    public List<ProgramCohort__c> getCohortsForProgram(Id programId) {
+    public List<ProgramCohort__c> getProgramCohortsByProgramId(Id programId) {
         Set<String> fields = new Set<String>{
             String.valueOf(ProgramCohort__c.Id),
             String.valueOf(ProgramCohort__c.Name)
         };
-        return programSelector.getCohortsForProgram(programId, fields);
+        return programSelector.getProgramCohortsByProgramId(programId, fields);
     }
 }

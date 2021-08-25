@@ -12,7 +12,7 @@ public with sharing class ProgramService_TEST {
     private static ProgramService programService = new ProgramService();
 
     @IsTest
-    private static void testGetCohortsForProgram() {
+    private static void testGetProgramCohortsByProgramId() {
         List<ProgramCohort__c> cohortsToReturn = new List<ProgramCohort__c>();
         cohortsToReturn.add(
             new ProgramCohort__c(
@@ -35,7 +35,7 @@ public with sharing class ProgramService_TEST {
         };
 
         TestStub programSelectorStub = new StubBuilder(ProgramSelector.class)
-            .when('getCohortsForProgram', Id.class, Set<String>.class)
+            .when('getProgramCohortsByProgramId', Id.class, Set<String>.class)
             .calledWith(programId, programFields)
             .thenReturn(cohortsToReturn)
             .build();
@@ -45,7 +45,7 @@ public with sharing class ProgramService_TEST {
         Test.startTest();
         System.assertEquals(
             cohortsToReturn,
-            programService.getCohortsForProgram(programId),
+            programService.getProgramCohortsByProgramId(programId),
             'Expected the service to return list delivered by selector.'
         );
         Test.stopTest();

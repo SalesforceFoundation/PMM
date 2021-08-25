@@ -3,9 +3,9 @@ public with sharing class ProgramController {
     private static ProgramService service = new ProgramService();
 
     @AuraEnabled(cacheable=true)
-    public static List<ProgramCohort__c> getCohortsForProgram(Id programId) {
+    public static List<ProgramCohort__c> getProgramCohortsByProgramId(Id programId) {
         try {
-            return service.getCohortsForProgram(programId);
+            return service.getProgramCohortsByProgramId(programId);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

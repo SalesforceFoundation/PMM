@@ -12,7 +12,7 @@ public with sharing class ProgramSelector_TEST {
     private static ProgramSelector programSelector = new ProgramSelector();
 
     @IsTest
-    private static void testGetCohortsForProgram() {
+    private static void testGetProgramCohortsByProgramId() {
         Set<String> cohortFields = new Set<String>{
             String.valueOf(ProgramCohort__c.Id),
             String.valueOf(ProgramCohort__c.Name),
@@ -23,7 +23,7 @@ public with sharing class ProgramSelector_TEST {
 
         Id programId = TestDataFactory.programs[0].Id;
 
-        List<ProgramCohort__c> cohorts = programSelector.getCohortsForProgram(
+        List<ProgramCohort__c> cohorts = programSelector.getProgramCohortsByProgramId(
             programId,
             cohortFields
         );
@@ -56,7 +56,10 @@ public with sharing class ProgramSelector_TEST {
 
         System.runAs(standardUser) {
             Test.startTest();
-            cohorts = programSelector.getCohortsForProgram(programId, cohortFields);
+            cohorts = programSelector.getProgramCohortsByProgramId(
+                programId,
+                cohortFields
+            );
             Test.stopTest();
         }
 

@@ -43,9 +43,9 @@
                             padding="around-small"
                             if:true={allowNewContact}
                         >
-                            Can't find the right Contact?
+                            {labels.cantFindContact}
                             <lightning-button
-                                label="New Contact"
+                                label={labels.newContact}
                                 onclick={handleNewContactClick}
                                 class="slds-var-p-around_small"
                             ></lightning-button>
@@ -102,9 +102,9 @@
                     class="slds-var-p-right_xx-small"
                 >
                 </lightning-button>
-                > New Contact
+                > {labels.newContact}
                 <lightning-record-edit-form
-                    object-api-name="Contact"
+                    object-api-name={contactObjectApiName}
                     class="slds-var-p-top_small"
                     onsuccess={handleNewContactSuccess}
                     onerror={handleFormError}

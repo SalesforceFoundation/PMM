@@ -27,6 +27,9 @@ import success from "@salesforce/label/c.Success";
 import saveMessage from "@salesforce/label/c.SaveMessage";
 import save from "@salesforce/label/c.Save";
 import loading from "@salesforce/label/c.Loading";
+import newContact from "@salesforce/label/c.New_Contact";
+import cancelAndBack from "@salesforce/label/c.Cancel_and_Back";
+import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
 
 const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
 const CREATE_CONTACT_FIELD_SET = "CreateContact";
@@ -56,8 +59,19 @@ export default class NewProgramEngagement extends LightningElement {
     allowNewContact = false;
     isSaving = false;
     selectedProgramId;
-    labels = { newProgramEngagement, cancel, success, saveMessage, save, loading };
+    labels = {
+        newProgramEngagement,
+        cancel,
+        success,
+        saveMessage,
+        save,
+        loading,
+        newContact,
+        cancelAndBack,
+        cantFindContact,
+    };
     objectApiName = PROGRAMENGAGEMENT_OBJECT;
+    contactObjectApiName = CONTACT_OBJECT;
     newContactMode = false;
 
     @wire(CurrentPageReference) pageRef;
@@ -281,10 +295,12 @@ export default class NewProgramEngagement extends LightningElement {
     }
 
     get modalHeader() {
-        return this.newContactMode ? "New Contact" : this.labels.newProgramEngagement;
+        return this.newContactMode
+            ? this.labels.newContact
+            : this.labels.newProgramEngagement;
     }
 
     get cancelButtonLabel() {
-        return this.newContactMode ? "Cancel & Back" : this.labels.cancel;
+        return this.newContactMode ? this.labels.cancelAndBack : this.labels.cancel;
     }
 }

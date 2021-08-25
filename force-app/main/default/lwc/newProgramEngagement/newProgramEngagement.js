@@ -13,7 +13,7 @@ import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { handleError, showToast } from "c/util";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
-import getCohortsForProgram from "@salesforce/apex/ProgramController.getCohortsForProgram";
+import getProgramCohortsByProgramId from "@salesforce/apex/ProgramController.getProgramCohortsByProgramId";
 import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
@@ -55,7 +55,6 @@ export default class NewProgramEngagement extends LightningElement {
     @track cohorts;
     @track cohortOptions = [];
     selectedCohortId;
-    hasCohortField = false;
     allowNewContact = false;
     isSaving = false;
     selectedProgramId;
@@ -100,7 +99,7 @@ export default class NewProgramEngagement extends LightningElement {
         }
     }
 
-    @wire(getCohortsForProgram, {
+    @wire(getProgramCohortsByProgramId, {
         programId: "$selectedProgramId",
     })
     wiredCohorts({ error, data }) {
@@ -153,15 +152,11 @@ export default class NewProgramEngagement extends LightningElement {
     handleFieldChange(event) {
         if (event.target.fieldName === PROGRAM_FIELD.fieldApiName) {
             this.selectedProgramId = event.detail.value[0];
+            this.selectedCohortId = undefined;
         }
     }
 
     setCohortOptions() {
-        // can't do this since the handleLoad function isn't done running and we don't yet know if the cohort field is present.
-        // leaving it here for further discussion.
-        // if (!this.hasCohortField) {
-        //     return;
-        // }
         this.cohortOptions = [];
         this.cohorts.forEach(cohort => {
             this.cohortOptions.push({
@@ -259,7 +254,6 @@ export default class NewProgramEngagement extends LightningElement {
                 ) {
                     field.disabled = true;
                 } else if (field.apiName === COHORT_FIELD.fieldApiName) {
-                    this.hasCohortField = true;
                     field.isCohortField = true;
                 }
 

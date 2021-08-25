@@ -3,10 +3,9 @@ public with sharing class ProgramController {
     private static ProgramService service = new ProgramService();
 
     @AuraEnabled(cacheable=true)
-    public static List<ProgramCohort__c> getCohortsForProgram(Id programId) {
+    public static List<ProgramCohort__c> getProgramCohortsByProgramId(Id programId) {
         try {
-            return [SELECT Id, Name FROM ProgramCohort__c WHERE Program__c = :programId];
-            //return service.generateRoster(sessionId);
+            return service.getProgramCohortsByProgramId(programId);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

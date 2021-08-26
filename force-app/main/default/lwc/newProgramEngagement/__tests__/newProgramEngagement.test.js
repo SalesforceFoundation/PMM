@@ -22,7 +22,7 @@ import {
 
 const mockGetFieldSet = require("./data/getFieldSet.json");
 const mockCurrentPageReference = require("./data/currentPageReference.json");
-const mockgetProgramCohortsFromProgramId = require("./data/getProgramCohortsFromProgramId.json");
+const mockGetProgramCohortsFromProgramId = require("./data/getProgramCohortsFromProgramId.json");
 
 //Register the  wire adapters
 const getFieldSetAdapter = registerApexTestWireAdapter(getFieldSet);
@@ -44,7 +44,7 @@ describe("c-new-program-engagement", () => {
         // Emit data from @wire
         currentPageReferenceAdapter.emit(mockCurrentPageReference);
         getFieldSetAdapter.emit(mockGetFieldSet);
-        getProgramCohortsFromProgramIdAdapter.emit(mockgetProgramCohortsFromProgramId);
+        getProgramCohortsFromProgramIdAdapter.emit(mockGetProgramCohortsFromProgramId);
     });
 
     it("displays the modal with input fields", () => {

@@ -144,6 +144,13 @@
         <value>Select at least one Contact to continue.</value>
     </labels>
     <labels>
+        <fullName>Cant_Find_Participant</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Can't find the right participant? Used in Participant Adder component.</shortDescription>
+        <value>Can't find the right participant?</value>
+    </labels>
+    <labels>
         <fullName>TrackAttendance</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -947,6 +954,13 @@
         <protected>true</protected>
         <shortDescription>Unsupported Field Error</shortDescription>
         <value>You can't access this field. Your Salesforce admin can help with that.</value>
+    </labels>
+    <labels>
+        <fullName>New</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New</shortDescription>
+        <value>New</value>
     </labels>
     <labels>
         <fullName>UpsertOperationException</fullName>

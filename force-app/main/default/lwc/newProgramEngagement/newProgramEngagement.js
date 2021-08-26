@@ -13,6 +13,7 @@ import { handleError, showToast } from "c/util";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
+import PROGRAM_FIELD from "@salesforce/schema/ProgramEngagement__c.Program__c";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import cancel from "@salesforce/label/c.Cancel";
 import success from "@salesforce/label/c.Success";
@@ -20,15 +21,17 @@ import saveMessage from "@salesforce/label/c.SaveMessage";
 import save from "@salesforce/label/c.Save";
 
 const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
+const FIELD_NAME_KEY = "fieldName";
+const API_NAME_KEY = "apiName";
 
 export default class NewProgramEngagement extends LightningElement {
-    fields = {
-        contact: CONTACT_FIELD,
-    };
+    contactField = CONTACT_FIELD;
     @api recordId;
     @api contactId;
+    @api programId;
     @api fieldSet;
     @track localFieldSet = [];
+    allowNewContact = false;
 
     @wire(CurrentPageReference) pageRef;
 
@@ -56,7 +59,7 @@ export default class NewProgramEngagement extends LightningElement {
     @api
     hideModal() {
         this.template.querySelector("c-modal").hide();
-        this.clearAllValues();
+        this.resetForm();
     }
 
     handleClose() {
@@ -70,28 +73,55 @@ export default class NewProgramEngagement extends LightningElement {
         this.dispatchEvent(new CustomEvent("save", { detail: event.detail.id }));
     }
 
-    clearAllValues() {
+    resetForm() {
         const allInputFields = this.template.querySelectorAll("lightning-input-field");
         if (allInputFields) {
             allInputFields.forEach(field => {
-                if (field.value !== this.contactId) {
-                    field.reset();
-                }
+                field.reset();
+                this.applyFieldDefault(field, FIELD_NAME_KEY);
             });
+        }
+    }
+
+    applyFieldDefault(field, key) {
+        if (this.defaults[field[key]]) {
+            field.value = this.defaults[field[key]];
         }
     }
 
     handleLoad() {
         if (this.fieldSet) {
             this.localFieldSet = [];
-            this.fieldSet.forEach(element => {
-                element = Object.assign({}, element);
-                if (element.apiName === this.fields.contact.fieldApiName) {
-                    element.value = this.contactId;
-                    element.disabled = true;
+            this.fieldSet.forEach(field => {
+                field = Object.assign({}, field);
+                if (field.apiName === CONTACT_FIELD.fieldApiName) {
+                    if (this.contactId) {
+                        field.disabled = true;
+                    } else {
+                        field.skip = true;
+                        this.allowNewContact = true;
+                    }
+                } else if (
+                    field.apiName === PROGRAM_FIELD.fieldApiName &&
+                    this.programId
+                ) {
+                    field.disabled = true;
                 }
-                this.localFieldSet.push(element);
+
+                this.applyFieldDefault(field, API_NAME_KEY);
+
+                if (!field.skip) {
+                    this.localFieldSet.push(field);
+                }
             });
         }
+    }
+
+    get defaults() {
+        let defaultValues = {};
+        defaultValues[PROGRAM_FIELD.fieldApiName] = this.programId;
+        defaultValues[CONTACT_FIELD.fieldApiName] = this.contactId;
+
+        return defaultValues;
     }
 }

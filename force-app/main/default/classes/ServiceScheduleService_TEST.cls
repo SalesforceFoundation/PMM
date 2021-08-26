@@ -992,7 +992,7 @@ public with sharing class ServiceScheduleService_TEST {
             !participantModel.programEngagements.isEmpty(),
             'Sanity check: expected at least 1 engagement record related to the service to be created by the test factory.'
         );
-        model.selectedParticipants = participantModel.programEngagements;
+        model.selectedEngagements = participantModel.programEngagements;
 
         // Step 4
         service.persist(model);

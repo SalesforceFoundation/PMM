@@ -84,7 +84,7 @@
                                             class="slds-border_top slds-var-m-top_xx-small"
                                         >
                                             <lightning-datatable
-                                                data={data}
+                                                data={availableEngagementsForSelection}
                                                 key-field="Id"
                                                 columns={selectorColumns}
                                                 column-widths-mode="auto"
@@ -106,6 +106,17 @@
                                         >
                                             {labels.noRecordsFound}
                                         </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item
+                                        alignment-bump="left"
+                                        padding="around-small"
+                                    >
+                                        {labels.cantFind}
+                                        <lightning-button
+                                            label={labels.newLabel}
+                                            onclick={handleNewParticipantClick}
+                                            class="slds-var-p-around_small"
+                                        ></lightning-button>
                                     </lightning-layout-item>
                                 </lightning-layout>
                             </div>
@@ -129,7 +140,7 @@
                                 key-field="Id"
                                 hide-checkbox-column
                                 onrowaction={handleDeselectParticipant}
-                                data={selectedParticipants}
+                                data={selectedEngagements}
                                 column-widths-mode="auto"
                                 resize-column-disabled
                             ></lightning-datatable>
@@ -158,4 +169,9 @@
             </lightning-layout>
         </lightning-layout-item>
     </lightning-layout>
+
+    <c-new-program-engagement
+        program-id={programId}
+        onsave={handleNewParticipantSuccess}
+    ></c-new-program-engagement>
 </template>

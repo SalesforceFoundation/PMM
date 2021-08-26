@@ -33,7 +33,7 @@
                     schedule-id={recordId}
                     existing-contact-ids={existingParticipants.data}
                     service-schedule={serviceScheduleModel.serviceSchedule}
-                    selected-rows={serviceScheduleModel.selectedParticipants}
+                    previously-selected-engagements={serviceScheduleModel.selectedEngagements}
                 ></c-participant-selector>
                 <template if:true={errorMessage}>
                     <c-scoped-notification

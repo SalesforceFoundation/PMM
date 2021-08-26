@@ -16,6 +16,16 @@
         <c-modal header={labels.newProgramEngagement} ondialogclose={handleClose}>
             <lightning-messages></lightning-messages>
             <lightning-layout multiple-rows="true">
+                <lightning-layout-item
+                    size="12"
+                    padding="around-small"
+                    if:true={allowNewContact}
+                >
+                    <lightning-input-field
+                        field-name={contactField.fieldApiName}
+                    ></lightning-input-field>
+                </lightning-layout-item>
+
                 <template for:each={localFieldSet} for:item="field">
                     <lightning-layout-item
                         key={field.apiName}

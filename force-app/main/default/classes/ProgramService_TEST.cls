@@ -12,7 +12,7 @@ public with sharing class ProgramService_TEST {
     private static ProgramService programService = new ProgramService();
 
     @IsTest
-    private static void testgetProgramCohortsFromProgramId() {
+    private static void testGetProgramCohortsFromProgramId() {
         List<ProgramCohort__c> cohortsToReturn = new List<ProgramCohort__c>();
         cohortsToReturn.add(
             new ProgramCohort__c(

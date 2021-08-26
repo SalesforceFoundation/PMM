@@ -10,7 +10,7 @@
 @IsTest
 public with sharing class ProgramController_TEST {
     @IsTest
-    private static void testgetProgramCohortsFromProgramId() {
+    private static void testGetProgramCohortsFromProgramId() {
         List<ProgramCohort__c> cohortsToReturn = new List<ProgramCohort__c>();
         cohortsToReturn.add(
             new ProgramCohort__c(

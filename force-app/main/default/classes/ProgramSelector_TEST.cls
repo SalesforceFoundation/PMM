@@ -15,7 +15,7 @@ public with sharing class ProgramSelector_TEST {
     );
 
     @IsTest
-    private static void testgetProgramCohortsFromProgramId() {
+    private static void testGetProgramCohortsFromProgramId() {
         TestDataFactory.generateProgramData();
 
         Id programId = TestDataFactory.programs[0].Id;

@@ -232,7 +232,7 @@ public with sharing class ServiceScheduleService {
             return;
         }
 
-        model.programCohorts = programSelector.getProgramCohortsByProgramId(
+        model.programCohorts = programSelector.getProgramCohortsFromProgramId(
             model.program.Id
         );
 

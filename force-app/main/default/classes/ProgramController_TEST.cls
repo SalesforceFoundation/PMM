@@ -10,7 +10,7 @@
 @IsTest
 public with sharing class ProgramController_TEST {
     @IsTest
-    private static void testGetProgramCohortsByProgramId() {
+    private static void testgetProgramCohortsFromProgramId() {
         List<ProgramCohort__c> cohortsToReturn = new List<ProgramCohort__c>();
         cohortsToReturn.add(
             new ProgramCohort__c(
@@ -28,7 +28,7 @@ public with sharing class ProgramController_TEST {
         Id programId = TestUtil.mockId(Program__c.SObjectType);
 
         TestStub programServiceStub = new StubBuilder(ProgramService.class)
-            .when('getProgramCohortsByProgramId', Id.class)
+            .when('getProgramCohortsFromProgramId', Id.class)
             .calledWith(programId)
             .thenReturn(cohortsToReturn)
             .build();
@@ -38,7 +38,7 @@ public with sharing class ProgramController_TEST {
         Test.startTest();
         System.assertEquals(
             cohortsToReturn,
-            ProgramController.getProgramCohortsByProgramId(programId),
+            ProgramController.getProgramCohortsFromProgramId(programId),
             'Expected the controller to return list delivered by service.'
         );
         Test.stopTest();
@@ -47,11 +47,11 @@ public with sharing class ProgramController_TEST {
     }
 
     @IsTest
-    private static void throwsExceptionOnGetProgramCohortsByProgramId() {
+    private static void throwsExceptionOngetProgramCohortsFromProgramId() {
         Id programId = TestUtil.mockId(Program__c.SObjectType);
 
         TestStub programServiceStub = new StubBuilder(ProgramService.class)
-            .when('getProgramCohortsByProgramId', Id.class)
+            .when('getProgramCohortsFromProgramId', Id.class)
             .calledWith(programId)
             .thenThrowException()
             .build();
@@ -62,7 +62,7 @@ public with sharing class ProgramController_TEST {
 
         Test.startTest();
         try {
-            List<ProgramCohort__c> cohorts = ProgramController.getProgramCohortsByProgramId(
+            List<ProgramCohort__c> cohorts = ProgramController.getProgramCohortsFromProgramId(
                 programId
             );
         } catch (AuraHandledException ex) {

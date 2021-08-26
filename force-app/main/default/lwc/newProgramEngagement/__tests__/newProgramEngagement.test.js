@@ -10,7 +10,7 @@
 import { createElement } from "lwc";
 import NewProgramEngagement from "c/newProgramEngagement";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
-import getProgramCohortsByProgramId from "@salesforce/apex/ProgramController.getProgramCohortsByProgramId";
+import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
 import { CurrentPageReference } from "lightning/navigation";
 import cancel from "@salesforce/label/c.Cancel";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
@@ -22,13 +22,13 @@ import {
 
 const mockGetFieldSet = require("./data/getFieldSet.json");
 const mockCurrentPageReference = require("./data/currentPageReference.json");
-const mockGetProgramCohortsByProgramId = require("./data/getProgramCohortsByProgramId.json");
+const mockgetProgramCohortsFromProgramId = require("./data/getProgramCohortsFromProgramId.json");
 
 //Register the  wire adapters
 const getFieldSetAdapter = registerApexTestWireAdapter(getFieldSet);
 const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference);
-const getProgramCohortsByProgramIdAdapter = registerApexTestWireAdapter(
-    getProgramCohortsByProgramId
+const getProgramCohortsFromProgramIdAdapter = registerApexTestWireAdapter(
+    getProgramCohortsFromProgramId
 );
 
 describe("c-new-program-engagement", () => {
@@ -44,7 +44,7 @@ describe("c-new-program-engagement", () => {
         // Emit data from @wire
         currentPageReferenceAdapter.emit(mockCurrentPageReference);
         getFieldSetAdapter.emit(mockGetFieldSet);
-        getProgramCohortsByProgramIdAdapter.emit(mockGetProgramCohortsByProgramId);
+        getProgramCohortsFromProgramIdAdapter.emit(mockgetProgramCohortsFromProgramId);
     });
 
     it("displays the modal with input fields", () => {

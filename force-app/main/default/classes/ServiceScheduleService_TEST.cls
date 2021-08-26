@@ -822,7 +822,7 @@ public with sharing class ServiceScheduleService_TEST {
     @IsTest
     private static void testGetSelectParticipantModel() {
         final String programEngagementsMethodName = 'getProgramEngagementsByProgramId';
-        final String cohortsMethodName = 'getProgramCohortsByProgramId';
+        final String cohortsMethodName = 'getProgramCohortsFromProgramId';
         final String programMethodName = 'getProgramByServiceId';
 
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);

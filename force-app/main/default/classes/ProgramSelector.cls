@@ -1,5 +1,5 @@
 public with sharing class ProgramSelector {
-    public List<ProgramCohort__c> getProgramCohortsByProgramId(Id programId) {
+    public List<ProgramCohort__c> getProgramCohortsFromProgramId(Id programId) {
         Boolean canReadProgramCohort = PermissionValidator.getInstance()
             .hasObjectAccess(
                 ProgramCohort__c.SObjectType,

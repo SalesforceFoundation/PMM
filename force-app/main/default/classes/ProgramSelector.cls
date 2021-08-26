@@ -1,6 +1,12 @@
 public with sharing class ProgramSelector {
     public List<ProgramCohort__c> getProgramCohortsByProgramId(Id programId) {
-        if (!Schema.SObjectType.ProgramCohort__c.isAccessible()) {
+        Boolean canReadProgramCohort = PermissionValidator.getInstance()
+            .hasObjectAccess(
+                ProgramCohort__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            );
+
+        if (!canReadProgramCohort) {
             return new List<ProgramCohort__c>();
         }
 

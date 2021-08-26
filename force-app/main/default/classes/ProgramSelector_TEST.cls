@@ -10,6 +10,9 @@
 @IsTest
 public with sharing class ProgramSelector_TEST {
     private static ProgramSelector programSelector = new ProgramSelector();
+    private static BasicStub permissionValidatorStub = new BasicStub(
+        PermissionValidator.class
+    );
 
     @IsTest
     private static void testGetProgramCohortsByProgramId() {
@@ -40,18 +43,30 @@ public with sharing class ProgramSelector_TEST {
     @IsTest
     private static void returnsEmptyCohortListWithoutReadAccess() {
         TestDataFactory.generateProgramData();
-
         Id programId = TestDataFactory.programs[0].Id;
 
-        User standardUser = TestUtil.getTestUser();
-        List<ProgramCohort__c> cohorts;
+        permissionValidatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
 
-        System.runAs(standardUser) {
-            Test.startTest();
-            cohorts = programSelector.getProgramCohortsByProgramId(programId);
-            Test.stopTest();
-        }
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) permissionValidatorStub.createMock();
+        List<ProgramCohort__c> cohorts = programSelector.getProgramCohortsByProgramId(
+            programId
+        );
+        Test.stopTest();
 
         System.assert(cohorts.isEmpty(), 'Expected an empty list to be returned.');
+
+        permissionValidatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ProgramCohort__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            }
+        );
     }
 }

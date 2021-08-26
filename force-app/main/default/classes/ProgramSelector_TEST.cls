@@ -15,12 +15,12 @@ public with sharing class ProgramSelector_TEST {
     );
 
     @IsTest
-    private static void testGetProgramCohortsByProgramId() {
+    private static void testgetProgramCohortsFromProgramId() {
         TestDataFactory.generateProgramData();
 
         Id programId = TestDataFactory.programs[0].Id;
 
-        List<ProgramCohort__c> cohorts = programSelector.getProgramCohortsByProgramId(
+        List<ProgramCohort__c> cohorts = programSelector.getProgramCohortsFromProgramId(
             programId
         );
 
@@ -53,7 +53,7 @@ public with sharing class ProgramSelector_TEST {
 
         Test.startTest();
         PermissionValidator.instance = (PermissionValidator) permissionValidatorStub.createMock();
-        List<ProgramCohort__c> cohorts = programSelector.getProgramCohortsByProgramId(
+        List<ProgramCohort__c> cohorts = programSelector.getProgramCohortsFromProgramId(
             programId
         );
         Test.stopTest();

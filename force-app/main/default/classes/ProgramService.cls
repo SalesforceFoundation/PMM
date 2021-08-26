@@ -26,7 +26,7 @@ public with sharing class ProgramService {
         return programNamesById;
     }
 
-    public List<ProgramCohort__c> getProgramCohortsByProgramId(Id programId) {
-        return programSelector.getProgramCohortsByProgramId(programId);
+    public List<ProgramCohort__c> getProgramCohortsFromProgramId(Id programId) {
+        return programSelector.getProgramCohortsFromProgramId(programId);
     }
 }

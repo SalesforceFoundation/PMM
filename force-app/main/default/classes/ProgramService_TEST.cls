@@ -12,7 +12,7 @@ public with sharing class ProgramService_TEST {
     private static ProgramService programService = new ProgramService();
 
     @IsTest
-    private static void testGetProgramCohortsByProgramId() {
+    private static void testgetProgramCohortsFromProgramId() {
         List<ProgramCohort__c> cohortsToReturn = new List<ProgramCohort__c>();
         cohortsToReturn.add(
             new ProgramCohort__c(
@@ -30,7 +30,7 @@ public with sharing class ProgramService_TEST {
         Id programId = TestUtil.mockId(Program__c.SObjectType);
 
         TestStub programSelectorStub = new StubBuilder(ProgramSelector.class)
-            .when('getProgramCohortsByProgramId', Id.class)
+            .when('getProgramCohortsFromProgramId', Id.class)
             .calledWith(programId)
             .thenReturn(cohortsToReturn)
             .build();
@@ -40,7 +40,7 @@ public with sharing class ProgramService_TEST {
         Test.startTest();
         System.assertEquals(
             cohortsToReturn,
-            programService.getProgramCohortsByProgramId(programId),
+            programService.getProgramCohortsFromProgramId(programId),
             'Expected the service to return list delivered by selector.'
         );
         Test.stopTest();

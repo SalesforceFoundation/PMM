@@ -11,7 +11,9 @@
     <lightning-record-edit-form
         object-api-name={objectApiName}
         record-id={recordId}
+        onsubmit={handleSubmit}
         onsuccess={handleSuccess}
+        onerror={handleFormError}
     >
         <c-modal header={labels.newProgramEngagement} ondialogclose={handleClose}>
             <lightning-messages></lightning-messages>
@@ -36,7 +38,24 @@
                             field-name={field.apiName}
                             value={field.value}
                             disabled={field.disabled}
+                            onchange={handleFieldChange}
+                            if:false={field.isCohortField}
                         ></lightning-input-field>
+                        <template if:true={field.isCohortField}>
+                            <div
+                                class="slds-form-element__label slds-truncate"
+                                title={field.label}
+                            >
+                                {field.label}
+                            </div>
+                            <lightning-combobox
+                                options={cohortOptions}
+                                value={selectedCohortId}
+                                disabled={cohortIsDisabled}
+                                onchange={handleCohortChange}
+                                variant="label-hidden"
+                            ></lightning-combobox>
+                        </template>
                     </lightning-layout-item>
                 </template>
             </lightning-layout>
@@ -54,6 +73,7 @@
                     variant="brand"
                     class="slds-p-left_medium"
                     type="submit"
+                    disabled={isSaving}
                 ></lightning-button>
             </div>
         </c-modal>

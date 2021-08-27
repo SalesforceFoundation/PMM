@@ -10,6 +10,7 @@
 import { createElement } from "lwc";
 import NewProgramEngagement from "c/newProgramEngagement";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
+import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
 import { CurrentPageReference } from "lightning/navigation";
 import cancel from "@salesforce/label/c.Cancel";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
@@ -21,10 +22,14 @@ import {
 
 const mockGetFieldSet = require("./data/getFieldSet.json");
 const mockCurrentPageReference = require("./data/currentPageReference.json");
+const mockGetProgramCohortsFromProgramId = require("./data/getProgramCohortsFromProgramId.json");
 
 //Register the  wire adapters
 const getFieldSetAdapter = registerApexTestWireAdapter(getFieldSet);
 const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference);
+const getProgramCohortsFromProgramIdAdapter = registerApexTestWireAdapter(
+    getProgramCohortsFromProgramId
+);
 
 describe("c-new-program-engagement", () => {
     let element;
@@ -39,6 +44,7 @@ describe("c-new-program-engagement", () => {
         // Emit data from @wire
         currentPageReferenceAdapter.emit(mockCurrentPageReference);
         getFieldSetAdapter.emit(mockGetFieldSet);
+        getProgramCohortsFromProgramIdAdapter.emit(mockGetProgramCohortsFromProgramId);
     });
 
     it("displays the modal with input fields", () => {
@@ -52,7 +58,9 @@ describe("c-new-program-engagement", () => {
             );
             let index = 0;
             mockGetFieldSet.forEach(field => {
-                expect(inputFields[index].fieldName).toBe(field.apiName);
+                if (inputFields[index] && inputFields[index].fieldName) {
+                    expect(inputFields[index].fieldName).toBe(field.apiName);
+                }
                 index++;
             });
 

@@ -18,6 +18,7 @@ public with sharing class ServiceScheduleService_TEST {
     private static BasicStub programEngagementSelectorStub = new BasicStub(
         ProgramEngagementSelector.class
     );
+    private static BasicStub programSelectorStub = new BasicStub(ProgramSelector.class);
     private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
     private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
 
@@ -821,7 +822,7 @@ public with sharing class ServiceScheduleService_TEST {
     @IsTest
     private static void testGetSelectParticipantModel() {
         final String programEngagementsMethodName = 'getProgramEngagementsByProgramId';
-        final String cohortsMethodName = 'getProgramCohortsByProgramId';
+        final String cohortsMethodName = 'getProgramCohortsFromProgramId';
         final String programMethodName = 'getProgramByServiceId';
 
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);
@@ -842,13 +843,14 @@ public with sharing class ServiceScheduleService_TEST {
             programEngagementsToReturn
         );
 
-        programEngagementSelectorStub.withReturnValue(
+        programSelectorStub.withReturnValue(
             cohortsMethodName,
             Id.class,
             programCohortsToReturn
         );
 
         service.programEngagementSelector = (ProgramEngagementSelector) programEngagementSelectorStub.createMock();
+        service.programSelector = (ProgramSelector) programSelectorStub.createMock();
 
         Test.startTest();
         SelectParticipantModel actual = service.getSelectParticipantModel(serviceId);
@@ -907,11 +909,7 @@ public with sharing class ServiceScheduleService_TEST {
             }
         );
 
-        programEngagementSelectorStub.assertCalledWith(
-            cohortsMethodName,
-            Id.class,
-            programId
-        );
+        programSelectorStub.assertCalledWith(cohortsMethodName, Id.class, programId);
     }
 
     @IsTest

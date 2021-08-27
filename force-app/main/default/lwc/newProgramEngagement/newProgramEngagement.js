@@ -11,9 +11,13 @@ import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { handleError, showToast } from "c/util";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
+import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
 import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 import PROGRAM_FIELD from "@salesforce/schema/ProgramEngagement__c.Program__c";
+import COHORT_FIELD from "@salesforce/schema/ProgramEngagement__c.ProgramCohort__c";
+import COHORT_ID_FIELD from "@salesforce/schema/ProgramCohort__c.Id";
+import COHORT_NAME_FIELD from "@salesforce/schema/ProgramCohort__c.Name";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import cancel from "@salesforce/label/c.Cancel";
 import success from "@salesforce/label/c.Success";
@@ -28,10 +32,25 @@ export default class NewProgramEngagement extends LightningElement {
     contactField = CONTACT_FIELD;
     @api recordId;
     @api contactId;
-    @api programId;
+    @api
+    set programId(value) {
+        this._programId = value;
+        this.selectedProgramId = value;
+    }
+    get programId() {
+        return this._programId;
+    }
+    _programId;
     @api fieldSet;
     @track localFieldSet = [];
+    @track cohorts;
+    @track cohortOptions = [];
+    selectedCohortId;
     allowNewContact = false;
+    isSaving = false;
+    selectedProgramId;
+    labels = { newProgramEngagement, cancel, success, saveMessage, save };
+    objectApiName = PROGRAMENGAGEMENT_OBJECT;
 
     @wire(CurrentPageReference) pageRef;
 
@@ -47,8 +66,17 @@ export default class NewProgramEngagement extends LightningElement {
         }
     }
 
-    labels = { newProgramEngagement, cancel, success, saveMessage, save };
-    objectApiName = PROGRAMENGAGEMENT_OBJECT;
+    @wire(getProgramCohortsFromProgramId, {
+        programId: "$selectedProgramId",
+    })
+    wiredCohorts({ error, data }) {
+        if (data) {
+            this.cohorts = data;
+            this.setCohortOptions();
+        } else if (error) {
+            handleError(error);
+        }
+    }
 
     @api
     showModal() {
@@ -68,9 +96,50 @@ export default class NewProgramEngagement extends LightningElement {
     }
 
     handleSuccess(event) {
+        this.isSaving = false;
         showToast(this.labels.success, this.labels.saveMessage, "success", "dismissible");
         this.hideModal();
         this.dispatchEvent(new CustomEvent("save", { detail: event.detail.id }));
+    }
+
+    handleFormError() {
+        this.isSaving = false;
+    }
+
+    handleFieldChange(event) {
+        if (event.target.fieldName === PROGRAM_FIELD.fieldApiName) {
+            this.selectedProgramId = event.detail.value[0];
+            this.selectedCohortId = undefined;
+        }
+    }
+
+    setCohortOptions() {
+        this.cohortOptions = [];
+        this.cohorts.forEach(cohort => {
+            this.cohortOptions.push({
+                value: cohort[COHORT_ID_FIELD.fieldApiName],
+                label: cohort[COHORT_NAME_FIELD.fieldApiName],
+            });
+        });
+    }
+
+    handleCohortChange(event) {
+        this.selectedCohortId = event.detail.value;
+    }
+
+    handleSubmit(event) {
+        this.isSaving = true;
+        let fields = event.detail.fields;
+
+        if (this.selectedCohortId) {
+            fields[COHORT_FIELD.fieldApiName] = this.selectedCohortId;
+        }
+
+        this.template.querySelector("lightning-record-edit-form").submit(fields);
+    }
+
+    get cohortIsDisabled() {
+        return !this.selectedProgramId || !this.cohorts || this.cohorts.length === 0;
     }
 
     resetForm() {
@@ -106,6 +175,8 @@ export default class NewProgramEngagement extends LightningElement {
                     this.programId
                 ) {
                     field.disabled = true;
+                } else if (field.apiName === COHORT_FIELD.fieldApiName) {
+                    field.isCohortField = true;
                 }
 
                 this.applyFieldDefault(field, API_NAME_KEY);

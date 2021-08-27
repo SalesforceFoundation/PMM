@@ -31,7 +31,8 @@ public without sharing class FeatureParameters {
         ACTIVE_PROGRAMS_WITH_COHORTS,
         ACTIVE_PROGRAMS_WITH_ACTIVE_SERVICES,
         ACTIVE_SERVICES,
-        ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES
+        ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES,
+        SERVICE_SCHEDULES_WITH_SESSIONS
     }
 
     private static final String ACTIVE_PROGRAM_CONDITION =
@@ -98,6 +99,9 @@ public without sharing class FeatureParameters {
             }
             when ACTIVE_SERVICES_WITH_SERVICE_SCHEDULES {
                 return new ActiveServicesWithServiceSchedules();
+            }
+            when SERVICE_SCHEDULES_WITH_SESSIONS {
+                return new ServiceSchedulesWithSessions();
             }
             when else {
                 return null;
@@ -491,6 +495,65 @@ public without sharing class FeatureParameters {
                 .withSObjectType(ServiceSchedule__c.SObjectType)
                 .withSelectFields(
                     new List<String>{ String.valueOf(ServiceSchedule__c.Service__c) }
+                )
+                .buildSoqlQuery();
+        }
+    }
+
+    @TestVisible
+    private without sharing class ServiceSchedulesWithSessions implements FeatureManagement.FeatureParameter {
+        @TestVisible
+        private QueryBuilder queryBuilder {
+            get {
+                if (queryBuilder == null) {
+                    queryBuilder = new QueryBuilder()
+                        .withSObjectType(ServiceSchedule__c.SObjectType)
+                        .addCondition('Id IN (' + buildSessionsQuery() + ')');
+                }
+
+                return queryBuilder;
+            }
+            set;
+        }
+        @TestVisible
+        private Finder finder {
+            get {
+                if (finder == null) {
+                    finder = new Finder(queryBuilder);
+                }
+
+                return finder;
+            }
+            set;
+        }
+
+        public void send() {
+            final Object value = getValue();
+
+            if (value instanceof Integer) {
+                FeatureManagement.getInstance()
+                    .setPackageIntegerValue(getName(), (Integer) value);
+            }
+        }
+
+        private String getName() {
+            return DeveloperName.SERVICE_SCHEDULES_WITH_SESSIONS.name().remove('_');
+        }
+
+        private Object getValue() {
+            return finder.findCount();
+        }
+
+        private String buildSessionsQuery() {
+            return new QueryBuilder()
+                .withSObjectType(ServiceSession__c.SObjectType)
+                .withSelectFields(
+                    new List<String>{
+                        String.valueOf(ServiceSession__c.ServiceSchedule__c)
+                    }
+                )
+                .addCondition(
+                    String.valueOf(ServiceSession__c.SessionStart__c) + ' > TODAY'
                 )
                 .buildSoqlQuery();
         }

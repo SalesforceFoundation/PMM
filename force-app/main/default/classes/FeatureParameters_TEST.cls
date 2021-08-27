@@ -304,6 +304,69 @@ public with sharing class FeatureParameters_TEST {
     }
 
     @IsTest
+    private static void shouldCallSetPackageIntegerByServiceSchedulesWithSessions() {
+        final String expectedName = FeatureParameters.DeveloperName.SERVICE_SCHEDULES_WITH_SESSIONS.name()
+            .remove('_');
+        final Integer expectedValue = 10;
+        Integer ordinalValue = FeatureParameters.DeveloperName.SERVICE_SCHEDULES_WITH_SESSIONS.ordinal();
+
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        List<FeatureManagement.FeatureParameter> allFeatureParameters = new FeatureParameters()
+            .getAll();
+        FeatureParameters.ServiceSchedulesWithSessions serviceSchedulesWithSessionsParameter = (FeatureParameters.ServiceSchedulesWithSessions) allFeatureParameters[
+            ordinalValue
+        ];
+        BasicStub finderStub = new BasicStub(Finder.class)
+            .withReturnValue('findCount', expectedValue);
+        serviceSchedulesWithSessionsParameter.finder = (Finder) finderStub.createMock();
+
+        Test.startTest();
+        serviceSchedulesWithSessionsParameter.send();
+        Test.stopTest();
+
+        finderStub.assertCalled('findCount');
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
+    private static void shouldPassActualServiceSchedulesWithSessions() {
+        List<ServiceSchedule__c> schedules = [
+            SELECT Id
+            FROM ServiceSchedule__c
+            WHERE
+                Id IN (
+                    SELECT ServiceSchedule__c
+                    FROM ServiceSession__c
+                    WHERE SessionStart__c > TODAY
+                )
+        ];
+        System.assert(
+            !schedules.isEmpty(),
+            'Sanity check: Test setup should have generated at least 1 service schedule with a session in the future.'
+        );
+
+        final String expectedName = FeatureParameters.DeveloperName.SERVICE_SCHEDULES_WITH_SESSIONS.name()
+            .remove('_');
+        final Integer expectedValue = schedules.size();
+        FeatureManagement.instance = (FeatureManagement) featureManagementStub.createMock();
+
+        Test.startTest();
+        new FeatureParameters.ServiceSchedulesWithSessions().send();
+        Test.stopTest();
+
+        featureManagementStub.assertCalledWith(
+            'setPackageIntegerValue',
+            new List<Type>{ String.class, Integer.class },
+            new List<Object>{ expectedName, expectedValue }
+        );
+    }
+
+    @IsTest
     private static void shouldCreateTheQueryBuilderOnDemand() {
         QueryBuilder queryBuilder = new FeatureParameters.ActivePrograms().queryBuilder;
 

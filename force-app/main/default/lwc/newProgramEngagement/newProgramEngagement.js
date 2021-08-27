@@ -139,7 +139,7 @@ export default class NewProgramEngagement extends LightningElement {
     }
 
     get cohortIsDisabled() {
-        return !this.selectedProgramId;
+        return !this.selectedProgramId || !this.cohorts || this.cohorts.length === 0;
     }
 
     resetForm() {

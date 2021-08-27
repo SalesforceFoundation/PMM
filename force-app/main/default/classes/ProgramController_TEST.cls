@@ -47,7 +47,7 @@ public with sharing class ProgramController_TEST {
     }
 
     @IsTest
-    private static void throwsExceptionOngetProgramCohortsFromProgramId() {
+    private static void throwsExceptionOnGetProgramCohortsFromProgramId() {
         Id programId = TestUtil.mockId(Program__c.SObjectType);
 
         TestStub programServiceStub = new StubBuilder(ProgramService.class)

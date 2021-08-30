@@ -22,8 +22,9 @@
                     object-api-name={engagementObjectApiName}
                     record-id={recordId}
                     onsubmit={handleSubmitEngagement}
-                    onsuccess={handleSuccess}
+                    onsuccess={handleEngagementSuccess}
                     onerror={handleFormError}
+                    if:true={showEngagementForm}
                 >
                     <lightning-messages></lightning-messages>
                     <lightning-layout multiple-rows="true">
@@ -36,6 +37,7 @@
                                 field-name={contactField.fieldApiName}
                                 value={selectedContactId}
                                 required="true"
+                                class="newContactField"
                             ></lightning-input-field>
                         </lightning-layout-item>
                         <lightning-layout-item
@@ -51,7 +53,7 @@
                             ></lightning-button>
                         </lightning-layout-item>
 
-                        <template for:each={localPeFieldSet} for:item="field">
+                        <template for:each={localEngagementFieldSet} for:item="field">
                             <lightning-layout-item
                                 key={field.apiName}
                                 padding="around-small"
@@ -63,7 +65,6 @@
                                     disabled={field.disabled}
                                     onchange={handleFieldChange}
                                     if:false={field.isCohortField}
-                                    class={field.class}
                                 ></lightning-input-field>
                                 <template if:true={field.isCohortField}>
                                     <div
@@ -85,7 +86,7 @@
                         </template>
                     </lightning-layout>
                     <lightning-button
-                        class="pe-submit slds-hide"
+                        class="submit slds-hide"
                         variant="neutral"
                         type="submit"
                         name="save"
@@ -123,7 +124,7 @@
                         </lightning-layout-item>
                     </template>
                     <lightning-button
-                        class="contact-submit slds-hide"
+                        class="submit slds-hide"
                         variant="neutral"
                         type="submit"
                         name="save"

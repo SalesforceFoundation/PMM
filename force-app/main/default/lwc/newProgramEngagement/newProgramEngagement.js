@@ -33,8 +33,6 @@ import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
 
 const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
 const CREATE_CONTACT_FIELD_SET = "CreateContact";
-const FIELD_NAME_KEY = "fieldName";
-const API_NAME_KEY = "apiName";
 
 export default class NewProgramEngagement extends LightningElement {
     contactField = CONTACT_FIELD;
@@ -49,14 +47,16 @@ export default class NewProgramEngagement extends LightningElement {
         return this._programId;
     }
     _programId;
-    @api peFieldSet;
-    @track localPeFieldSet = [];
+    @api engagementFieldSet;
+    @track localEngagementFieldSet = [];
     @track contactFieldSet;
     @track cohorts;
     @track cohortOptions = [];
     selectedCohortId;
     allowNewContact = false;
     isSaving = false;
+    newContactMode = false;
+    showEngagementForm = false;
     selectedProgramId;
     labels = {
         newProgramEngagement,
@@ -71,7 +71,6 @@ export default class NewProgramEngagement extends LightningElement {
     };
     engagementObjectApiName = PROGRAMENGAGEMENT_OBJECT;
     contactObjectApiName = CONTACT_OBJECT;
-    newContactMode = false;
 
     @wire(CurrentPageReference) pageRef;
 
@@ -79,9 +78,9 @@ export default class NewProgramEngagement extends LightningElement {
         objectName: PROGRAMENGAGEMENT_OBJECT.objectApiName,
         fieldSetName: CREATE_PROGRAM_ENGAGEMENT_FIELD_SET,
     })
-    wiredPeFields({ error, data }) {
+    wiredEngagementFields({ error, data }) {
         if (data) {
-            this.peFieldSet = data;
+            this.engagementFieldSet = data;
         } else if (error) {
             handleError(error);
         }
@@ -113,7 +112,7 @@ export default class NewProgramEngagement extends LightningElement {
 
     @api
     showModal() {
-        this.handleLoad();
+        this.loadForm();
         this.template.querySelector("c-modal").show();
         setTimeout(this.focusForm.bind(this), 400);
     }
@@ -138,7 +137,7 @@ export default class NewProgramEngagement extends LightningElement {
         this.dispatchEvent(new CustomEvent("cancel"));
     }
 
-    handleSuccess(event) {
+    handleEngagementSuccess(event) {
         this.isSaving = false;
         showToast(this.labels.success, this.labels.saveMessage, "success", "dismissible");
         this.hideModal();
@@ -196,12 +195,7 @@ export default class NewProgramEngagement extends LightningElement {
         }
 
         this.isSaving = true;
-        let submitButton = this.newContactMode
-            ? this.template.querySelector(".contact-submit")
-            : this.template.querySelector(".pe-submit");
-        if (submitButton) {
-            submitButton.click();
-        }
+        this.form.querySelector(".submit").click();
     }
 
     reportValidity() {
@@ -221,6 +215,7 @@ export default class NewProgramEngagement extends LightningElement {
 
     handleNewContactClick() {
         this.newContactMode = true;
+
         setTimeout(this.focusForm.bind(this), 500);
     }
 
@@ -229,29 +224,22 @@ export default class NewProgramEngagement extends LightningElement {
     }
 
     resetForm() {
-        const allInputFields = this.template.querySelectorAll("lightning-input-field");
-        if (allInputFields) {
-            allInputFields.forEach(field => {
-                field.reset();
-                this.applyFieldDefault(field, FIELD_NAME_KEY);
-            });
-        }
+        this.newContactMode = false;
+        this.showEngagementForm = false;
+        this.selectedContactId = undefined;
+        this.selectedCohortId = undefined;
+        this.selectedProgramId = this.programId;
     }
 
-    applyFieldDefault(field, key) {
-        if (this.defaults[field[key]]) {
-            field.value = this.defaults[field[key]];
-        }
-    }
-
-    handleLoad() {
-        if (this.peFieldSet) {
-            this.localPeFieldSet = [];
-            this.peFieldSet.forEach(field => {
+    loadForm() {
+        if (this.engagementFieldSet) {
+            this.localEngagementFieldSet = [];
+            this.engagementFieldSet.forEach(field => {
                 field = Object.assign({}, field);
                 if (field.apiName === CONTACT_FIELD.fieldApiName) {
                     if (this.contactId) {
                         field.disabled = true;
+                        field.value = this.contactId;
                     } else {
                         field.skip = true;
                         this.allowNewContact = true;
@@ -261,25 +249,17 @@ export default class NewProgramEngagement extends LightningElement {
                     this.programId
                 ) {
                     field.disabled = true;
+                    field.value = this.programId;
                 } else if (field.apiName === COHORT_FIELD.fieldApiName) {
                     field.isCohortField = true;
                 }
 
-                this.applyFieldDefault(field, API_NAME_KEY);
-
                 if (!field.skip) {
-                    this.localPeFieldSet.push(field);
+                    this.localEngagementFieldSet.push(field);
                 }
             });
         }
-    }
-
-    get defaults() {
-        let defaultValues = {};
-        defaultValues[PROGRAM_FIELD.fieldApiName] = this.programId;
-        defaultValues[CONTACT_FIELD.fieldApiName] = this.contactId;
-
-        return defaultValues;
+        this.showEngagementForm = true;
     }
 
     get rightClass() {

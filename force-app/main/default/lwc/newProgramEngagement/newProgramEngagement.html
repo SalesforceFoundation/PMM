@@ -19,9 +19,9 @@
 
             <div class={leftClass}>
                 <lightning-record-edit-form
-                    object-api-name={objectApiName}
+                    object-api-name={engagementObjectApiName}
                     record-id={recordId}
-                    onsubmit={handleSubmit}
+                    onsubmit={handleSubmitEngagement}
                     onsuccess={handleSuccess}
                     onerror={handleFormError}
                 >
@@ -35,7 +35,7 @@
                             <lightning-input-field
                                 field-name={contactField.fieldApiName}
                                 value={selectedContactId}
-                                class="contactSelect"
+                                required="true"
                             ></lightning-input-field>
                         </lightning-layout-item>
                         <lightning-layout-item
@@ -108,6 +108,7 @@
                     class="slds-var-p-top_small"
                     onsuccess={handleNewContactSuccess}
                     onerror={handleFormError}
+                    if:true={newContactMode}
                 >
                     <lightning-messages></lightning-messages>
                     <template for:each={contactFieldSet} for:item="field">
@@ -118,7 +119,6 @@
                         >
                             <lightning-input-field
                                 field-name={field.apiName}
-                                class="contactForm"
                             ></lightning-input-field>
                         </lightning-layout-item>
                     </template>
@@ -143,7 +143,7 @@
                 label={labels.save}
                 title={labels.save}
                 variant="brand"
-                class="slds-p-left_medium"
+                class="slds-var-p-left_medium"
                 disabled={isSaving}
                 onclick={handleSaveClick}
             ></lightning-button>

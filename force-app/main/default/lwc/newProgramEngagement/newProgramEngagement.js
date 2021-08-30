@@ -69,7 +69,7 @@ export default class NewProgramEngagement extends LightningElement {
         cancelAndBack,
         cantFindContact,
     };
-    objectApiName = PROGRAMENGAGEMENT_OBJECT;
+    engagementObjectApiName = PROGRAMENGAGEMENT_OBJECT;
     contactObjectApiName = CONTACT_OBJECT;
     newContactMode = false;
 
@@ -115,7 +115,7 @@ export default class NewProgramEngagement extends LightningElement {
     showModal() {
         this.handleLoad();
         this.template.querySelector("c-modal").show();
-        setTimeout(this.focusPEForm.bind(this), 400);
+        setTimeout(this.focusForm.bind(this), 400);
     }
 
     @api
@@ -127,7 +127,7 @@ export default class NewProgramEngagement extends LightningElement {
     handleCancel() {
         if (this.newContactMode) {
             this.newContactMode = false;
-            this.focusPEForm();
+            this.focusForm();
         } else {
             this.handleClose();
         }
@@ -170,7 +170,7 @@ export default class NewProgramEngagement extends LightningElement {
         this.selectedCohortId = event.detail.value;
     }
 
-    handleSubmit(event) {
+    handleSubmitEngagement(event) {
         this.isSaving = true;
         let fields = event.detail.fields;
 
@@ -185,7 +185,16 @@ export default class NewProgramEngagement extends LightningElement {
         return !this.selectedProgramId || !this.cohorts || this.cohorts.length === 0;
     }
 
+    get form() {
+        let index = this.newContactMode ? 1 : 0;
+        return this.template.querySelectorAll("lightning-record-edit-form")[index];
+    }
+
     handleSaveClick() {
+        if (!this.reportValidity()) {
+            return;
+        }
+
         this.isSaving = true;
         let submitButton = this.newContactMode
             ? this.template.querySelector(".contact-submit")
@@ -195,29 +204,28 @@ export default class NewProgramEngagement extends LightningElement {
         }
     }
 
+    reportValidity() {
+        return [...this.form.querySelectorAll("lightning-input-field")].reduce(
+            (validSoFar, inputField) => {
+                return validSoFar && inputField.reportValidity();
+            },
+            true
+        );
+    }
+
     handleNewContactSuccess(event) {
         this.selectedContactId = event.detail.id;
         this.isSaving = false;
         this.newContactMode = false;
-        this.focusPEForm();
     }
 
     handleNewContactClick() {
         this.newContactMode = true;
-        setTimeout(this.focusContactForm.bind(this), 500);
+        setTimeout(this.focusForm.bind(this), 500);
     }
 
-    focusPEForm() {
-        let contactSelect = this.template.querySelector(".contactSelect");
-        let firstField = contactSelect
-            ? contactSelect
-            : this.template.querySelector(".yesfocus");
-
-        firstField.focus();
-    }
-
-    focusContactForm() {
-        this.template.querySelector(".contactForm").focus();
+    focusForm() {
+        this.form.querySelector("lightning-input-field").focus();
     }
 
     resetForm() {
@@ -255,12 +263,6 @@ export default class NewProgramEngagement extends LightningElement {
                     field.disabled = true;
                 } else if (field.apiName === COHORT_FIELD.fieldApiName) {
                     field.isCohortField = true;
-                }
-
-                if (field.apiName === CONTACT_FIELD.fieldApiName && this.contactId) {
-                    field.class = "nofocus";
-                } else {
-                    field.class = "yesfocus";
                 }
 
                 this.applyFieldDefault(field, API_NAME_KEY);

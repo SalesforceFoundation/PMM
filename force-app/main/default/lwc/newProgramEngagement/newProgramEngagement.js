@@ -7,12 +7,15 @@
  *
  */
 
+/* eslint-disable @lwc/lwc/no-async-operation */
+
 import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { handleError, showToast } from "c/util";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
 import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
+import CONTACT_OBJECT from "@salesforce/schema/Contact";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 import PROGRAM_FIELD from "@salesforce/schema/ProgramEngagement__c.Program__c";
 import COHORT_FIELD from "@salesforce/schema/ProgramEngagement__c.ProgramCohort__c";
@@ -23,10 +26,13 @@ import cancel from "@salesforce/label/c.Cancel";
 import success from "@salesforce/label/c.Success";
 import saveMessage from "@salesforce/label/c.SaveMessage";
 import save from "@salesforce/label/c.Save";
+import loading from "@salesforce/label/c.Loading";
+import newContact from "@salesforce/label/c.New_Contact";
+import cancelAndBack from "@salesforce/label/c.Cancel_and_Back";
+import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
 
 const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
-const FIELD_NAME_KEY = "fieldName";
-const API_NAME_KEY = "apiName";
+const CREATE_CONTACT_FIELD_SET = "CreateContact";
 
 export default class NewProgramEngagement extends LightningElement {
     contactField = CONTACT_FIELD;
@@ -41,16 +47,30 @@ export default class NewProgramEngagement extends LightningElement {
         return this._programId;
     }
     _programId;
-    @api fieldSet;
-    @track localFieldSet = [];
+    @api engagementFieldSet;
+    @track localEngagementFieldSet = [];
+    @track contactFieldSet;
     @track cohorts;
     @track cohortOptions = [];
     selectedCohortId;
     allowNewContact = false;
     isSaving = false;
+    newContactMode = false;
+    showEngagementForm = false;
     selectedProgramId;
-    labels = { newProgramEngagement, cancel, success, saveMessage, save };
-    objectApiName = PROGRAMENGAGEMENT_OBJECT;
+    labels = {
+        newProgramEngagement,
+        cancel,
+        success,
+        saveMessage,
+        save,
+        loading,
+        newContact,
+        cancelAndBack,
+        cantFindContact,
+    };
+    engagementObjectApiName = PROGRAMENGAGEMENT_OBJECT;
+    contactObjectApiName = CONTACT_OBJECT;
 
     @wire(CurrentPageReference) pageRef;
 
@@ -58,9 +78,21 @@ export default class NewProgramEngagement extends LightningElement {
         objectName: PROGRAMENGAGEMENT_OBJECT.objectApiName,
         fieldSetName: CREATE_PROGRAM_ENGAGEMENT_FIELD_SET,
     })
-    wiredFields({ error, data }) {
+    wiredEngagementFields({ error, data }) {
         if (data) {
-            this.fieldSet = data;
+            this.engagementFieldSet = data;
+        } else if (error) {
+            handleError(error);
+        }
+    }
+
+    @wire(getFieldSet, {
+        objectName: CONTACT_OBJECT.objectApiName,
+        fieldSetName: CREATE_CONTACT_FIELD_SET,
+    })
+    wiredContactFields({ error, data }) {
+        if (data) {
+            this.contactFieldSet = data;
         } else if (error) {
             handleError(error);
         }
@@ -80,8 +112,9 @@ export default class NewProgramEngagement extends LightningElement {
 
     @api
     showModal() {
-        this.handleLoad();
+        this.loadForm();
         this.template.querySelector("c-modal").show();
+        setTimeout(this.focusForm.bind(this), 400);
     }
 
     @api
@@ -90,12 +123,21 @@ export default class NewProgramEngagement extends LightningElement {
         this.resetForm();
     }
 
+    handleCancel() {
+        if (this.newContactMode) {
+            this.newContactMode = false;
+            this.focusForm();
+        } else {
+            this.handleClose();
+        }
+    }
+
     handleClose() {
         this.hideModal();
         this.dispatchEvent(new CustomEvent("cancel"));
     }
 
-    handleSuccess(event) {
+    handleEngagementSuccess(event) {
         this.isSaving = false;
         showToast(this.labels.success, this.labels.saveMessage, "success", "dismissible");
         this.hideModal();
@@ -127,7 +169,7 @@ export default class NewProgramEngagement extends LightningElement {
         this.selectedCohortId = event.detail.value;
     }
 
-    handleSubmit(event) {
+    handleSubmitEngagement(event) {
         this.isSaving = true;
         let fields = event.detail.fields;
 
@@ -142,30 +184,62 @@ export default class NewProgramEngagement extends LightningElement {
         return !this.selectedProgramId || !this.cohorts || this.cohorts.length === 0;
     }
 
+    get form() {
+        let index = this.newContactMode ? 1 : 0;
+        return this.template.querySelectorAll("lightning-record-edit-form")[index];
+    }
+
+    handleSaveClick() {
+        if (!this.reportValidity()) {
+            return;
+        }
+
+        this.isSaving = true;
+        this.form.querySelector(".submit").click();
+    }
+
+    reportValidity() {
+        return [...this.form.querySelectorAll("lightning-input-field")].reduce(
+            (validSoFar, inputField) => {
+                return validSoFar && inputField.reportValidity();
+            },
+            true
+        );
+    }
+
+    handleNewContactSuccess(event) {
+        this.selectedContactId = event.detail.id;
+        this.isSaving = false;
+        this.newContactMode = false;
+    }
+
+    handleNewContactClick() {
+        this.newContactMode = true;
+
+        setTimeout(this.focusForm.bind(this), 500);
+    }
+
+    focusForm() {
+        this.form.querySelector("lightning-input-field").focus();
+    }
+
     resetForm() {
-        const allInputFields = this.template.querySelectorAll("lightning-input-field");
-        if (allInputFields) {
-            allInputFields.forEach(field => {
-                field.reset();
-                this.applyFieldDefault(field, FIELD_NAME_KEY);
-            });
-        }
+        this.newContactMode = false;
+        this.showEngagementForm = false;
+        this.selectedContactId = undefined;
+        this.selectedCohortId = undefined;
+        this.selectedProgramId = this.programId;
     }
 
-    applyFieldDefault(field, key) {
-        if (this.defaults[field[key]]) {
-            field.value = this.defaults[field[key]];
-        }
-    }
-
-    handleLoad() {
-        if (this.fieldSet) {
-            this.localFieldSet = [];
-            this.fieldSet.forEach(field => {
+    loadForm() {
+        if (this.engagementFieldSet) {
+            this.localEngagementFieldSet = [];
+            this.engagementFieldSet.forEach(field => {
                 field = Object.assign({}, field);
                 if (field.apiName === CONTACT_FIELD.fieldApiName) {
                     if (this.contactId) {
                         field.disabled = true;
+                        field.value = this.contactId;
                     } else {
                         field.skip = true;
                         this.allowNewContact = true;
@@ -175,24 +249,34 @@ export default class NewProgramEngagement extends LightningElement {
                     this.programId
                 ) {
                     field.disabled = true;
+                    field.value = this.programId;
                 } else if (field.apiName === COHORT_FIELD.fieldApiName) {
                     field.isCohortField = true;
                 }
 
-                this.applyFieldDefault(field, API_NAME_KEY);
-
                 if (!field.skip) {
-                    this.localFieldSet.push(field);
+                    this.localEngagementFieldSet.push(field);
                 }
             });
         }
+        this.showEngagementForm = true;
     }
 
-    get defaults() {
-        let defaultValues = {};
-        defaultValues[PROGRAM_FIELD.fieldApiName] = this.programId;
-        defaultValues[CONTACT_FIELD.fieldApiName] = this.contactId;
+    get rightClass() {
+        return this.newContactMode ? "inner right" : "inner right slide";
+    }
 
-        return defaultValues;
+    get leftClass() {
+        return this.newContactMode ? "inner left slide" : "inner left";
+    }
+
+    get modalHeader() {
+        return this.newContactMode
+            ? this.labels.newContact
+            : this.labels.newProgramEngagement;
+    }
+
+    get cancelButtonLabel() {
+        return this.newContactMode ? this.labels.cancelAndBack : this.labels.cancel;
     }
 }

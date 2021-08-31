@@ -151,6 +151,13 @@
         <value>Can't find the right participant?</value>
     </labels>
     <labels>
+        <fullName>Cant_Find_Contact</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Can't find the right Contact? Used in Participant Adder component.</shortDescription>
+        <value>Can't find the right Contact?</value>
+    </labels>
+    <labels>
         <fullName>TrackAttendance</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -212,6 +219,13 @@
         <protected>true</protected>
         <shortDescription>Cancel</shortDescription>
         <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>Cancel_and_Back</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Cancel &#38; Back</shortDescription>
+        <value>Cancel &#38; Back</value>
     </labels>
     <labels>
         <fullName>Clicking_Back_Button_In_Modal_Warning</fullName>
@@ -448,6 +462,13 @@
         <protected>true</protected>
         <shortDescription>New Program Engagement</shortDescription>
         <value>New Program Engagement</value>
+    </labels>
+    <labels>
+        <fullName>New_Contact</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New Contact</shortDescription>
+        <value>New Contact</value>
     </labels>
     <labels>
         <fullName>New_Service_Schedule</fullName>

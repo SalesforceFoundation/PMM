@@ -11,14 +11,16 @@
 
 import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
+import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import { handleError, showToast } from "c/util";
 import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
-import PROGRAMENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
+import PROGRAM_ENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 import PROGRAM_FIELD from "@salesforce/schema/ProgramEngagement__c.Program__c";
 import COHORT_FIELD from "@salesforce/schema/ProgramEngagement__c.ProgramCohort__c";
+import STAGE_FIELD from "@salesforce/schema/ProgramEngagement__c.Stage__c";
 import COHORT_ID_FIELD from "@salesforce/schema/ProgramCohort__c.Id";
 import COHORT_NAME_FIELD from "@salesforce/schema/ProgramCohort__c.Name";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
@@ -33,6 +35,9 @@ import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
 
 const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
 const CREATE_CONTACT_FIELD_SET = "CreateContact";
+const ACTIVE = "Active";
+const ENROLLED = "Enrolled";
+const ALLOWED_STAGES = [ACTIVE, ENROLLED];
 
 export default class NewProgramEngagement extends LightningElement {
     contactField = CONTACT_FIELD;
@@ -52,9 +57,14 @@ export default class NewProgramEngagement extends LightningElement {
     @track contactFieldSet;
     @track cohorts;
     @track cohortOptions = [];
+    @track stageOptions = [];
+    recordTypeId;
     selectedCohortId;
+    selectedStage;
+    defaultStage;
     allowNewContact = false;
     isSaving = false;
+    hasError;
     newContactMode = false;
     showEngagementForm = false;
     selectedProgramId;
@@ -69,13 +79,13 @@ export default class NewProgramEngagement extends LightningElement {
         cancelAndBack,
         cantFindContact,
     };
-    engagementObjectApiName = PROGRAMENGAGEMENT_OBJECT;
+    engagementObjectApiName = PROGRAM_ENGAGEMENT_OBJECT;
     contactObjectApiName = CONTACT_OBJECT;
 
     @wire(CurrentPageReference) pageRef;
 
     @wire(getFieldSet, {
-        objectName: PROGRAMENGAGEMENT_OBJECT.objectApiName,
+        objectName: PROGRAM_ENGAGEMENT_OBJECT.objectApiName,
         fieldSetName: CREATE_PROGRAM_ENGAGEMENT_FIELD_SET,
     })
     wiredEngagementFields({ error, data }) {
@@ -107,6 +117,40 @@ export default class NewProgramEngagement extends LightningElement {
             this.setCohortOptions();
         } else if (error) {
             handleError(error);
+        }
+    }
+
+    @wire(getObjectInfo, { objectApiName: PROGRAM_ENGAGEMENT_OBJECT })
+    wiredEngagementInfo({ error, data }) {
+        if (data) {
+            this.recordTypeId = data.defaultRecordTypeId;
+        }
+        if (error) {
+            console.log(error);
+        }
+    }
+
+    @wire(getPicklistValues, {
+        recordTypeId: "$recordTypeId",
+        fieldApiName: STAGE_FIELD,
+    })
+    wiredStageValues({ error, data }) {
+        if (data && data.values) {
+            let defaultValue = data.defaultValue.value;
+            if (ALLOWED_STAGES.includes(defaultValue)) {
+                this.defaultStage = defaultValue;
+            } else {
+                this.defaultStage = ALLOWED_STAGES[0];
+            }
+            this.selectedStage = this.defaultStage;
+
+            data.values.forEach(entry => {
+                if (ALLOWED_STAGES.includes(entry.value)) {
+                    this.stageOptions.push({ label: entry.label, value: entry.value });
+                }
+            });
+        } else if (error) {
+            console.log(error);
         }
     }
 
@@ -146,6 +190,7 @@ export default class NewProgramEngagement extends LightningElement {
 
     handleFormError() {
         this.isSaving = false;
+        this.hasError = true;
     }
 
     handleFieldChange(event) {
@@ -153,6 +198,15 @@ export default class NewProgramEngagement extends LightningElement {
             this.selectedProgramId = event.detail.value[0];
             this.selectedCohortId = undefined;
         }
+    }
+
+    handleFormChange() {
+        if (!this.hasError) {
+            return;
+        }
+
+        this.form.querySelector("lightning-messages").setError(undefined);
+        this.hasError = false;
     }
 
     setCohortOptions() {
@@ -169,13 +223,16 @@ export default class NewProgramEngagement extends LightningElement {
         this.selectedCohortId = event.detail.value;
     }
 
+    handleStageChange(event) {
+        this.selectedStage = event.detail.value;
+    }
+
     handleSubmitEngagement(event) {
         this.isSaving = true;
         let fields = event.detail.fields;
 
-        if (this.selectedCohortId) {
-            fields[COHORT_FIELD.fieldApiName] = this.selectedCohortId;
-        }
+        fields[COHORT_FIELD.fieldApiName] = this.selectedCohortId;
+        fields[STAGE_FIELD.fieldApiName] = this.selectedStage;
 
         this.template.querySelector("lightning-record-edit-form").submit(fields);
     }
@@ -211,6 +268,7 @@ export default class NewProgramEngagement extends LightningElement {
         this.selectedContactId = event.detail.id;
         this.isSaving = false;
         this.newContactMode = false;
+        this.handleFormChange();
     }
 
     handleNewContactClick() {
@@ -228,6 +286,7 @@ export default class NewProgramEngagement extends LightningElement {
         this.showEngagementForm = false;
         this.selectedContactId = undefined;
         this.selectedCohortId = undefined;
+        this.selectedStage = this.defaultStage;
         this.selectedProgramId = this.programId;
     }
 
@@ -252,6 +311,10 @@ export default class NewProgramEngagement extends LightningElement {
                     field.value = this.programId;
                 } else if (field.apiName === COHORT_FIELD.fieldApiName) {
                     field.isCohortField = true;
+                    field.isCombobox = true;
+                } else if (field.apiName === STAGE_FIELD.fieldApiName) {
+                    field.isStageField = true;
+                    field.isCombobox = true;
                 }
 
                 if (!field.skip) {

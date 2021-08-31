@@ -1,7 +1,7 @@
 .outer {
     width: 100%;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
     display: flex;
 }
 

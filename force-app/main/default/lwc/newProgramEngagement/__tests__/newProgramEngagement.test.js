@@ -9,29 +9,32 @@
 
 import { createElement } from "lwc";
 import NewProgramEngagement from "c/newProgramEngagement";
-import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
-import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
 import { CurrentPageReference } from "lightning/navigation";
+import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import cancel from "@salesforce/label/c.Cancel";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import { ShowToastEventName } from "lightning/platformShowToastEvent";
 import {
     registerApexTestWireAdapter,
     registerTestWireAdapter,
+    registerLdsTestWireAdapter,
 } from "@salesforce/sfdx-lwc-jest";
+import getNewEngagementSetup from "@salesforce/apex/pmdm.ProgramController.getNewEngagementSetup";
+import COHORT_FIELD from "@salesforce/schema/ProgramEngagement__c.ProgramCohort__c";
+import STAGE_FIELD from "@salesforce/schema/ProgramEngagement__c.Stage__c";
 
-const mockGetFieldSet = require("./data/getFieldSet.json");
+const mockGetObjectInfo = require("./data/getObjectInfo.json");
+const mockPicklistValues = require("./data/getPicklistValues.json");
+const mockGetNewEngagementSetup = require("./data/getNewEngagementSetup.json");
 const mockCurrentPageReference = require("./data/currentPageReference.json");
-const mockGetProgramCohortsFromProgramId = require("./data/getProgramCohortsFromProgramId.json");
 
 //Register the  wire adapters
-const getFieldSetAdapter = registerApexTestWireAdapter(getFieldSet);
 const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference);
-const getProgramCohortsFromProgramIdAdapter = registerApexTestWireAdapter(
-    getProgramCohortsFromProgramId
-);
+const getNewEngagementSetupAdapter = registerApexTestWireAdapter(getNewEngagementSetup);
+const getObjectInfoAdapter = registerLdsTestWireAdapter(getObjectInfo);
+const getPicklistValuesAdapter = registerLdsTestWireAdapter(getPicklistValues);
 
-describe("c-new-program-engagement", () => {
+describe("c-new-program-engagement with a known contact", () => {
     let element;
 
     afterEach(global.clearDOM);
@@ -41,10 +44,13 @@ describe("c-new-program-engagement", () => {
             is: NewProgramEngagement,
         });
 
+        element.contactId = "0031F00000l7mI9QAI";
+
         // Emit data from @wire
         currentPageReferenceAdapter.emit(mockCurrentPageReference);
-        getFieldSetAdapter.emit(mockGetFieldSet);
-        getProgramCohortsFromProgramIdAdapter.emit(mockGetProgramCohortsFromProgramId);
+        getNewEngagementSetupAdapter.emit(mockGetNewEngagementSetup);
+        getObjectInfoAdapter.emit(mockGetObjectInfo);
+        getPicklistValuesAdapter.emit(mockPicklistValues);
     });
 
     it("displays the modal with input fields", () => {
@@ -57,7 +63,12 @@ describe("c-new-program-engagement", () => {
                 "lightning-input-field"
             );
             let index = 0;
-            mockGetFieldSet.forEach(field => {
+            let fields = mockGetNewEngagementSetup.engagementFieldSet.filter(
+                field =>
+                    field.apiName !== COHORT_FIELD.fieldApiName &&
+                    field.apiName !== STAGE_FIELD.fieldApiName
+            );
+            fields.forEach(field => {
                 if (inputFields[index] && inputFields[index].fieldName) {
                     expect(inputFields[index].fieldName).toBe(field.apiName);
                 }
@@ -81,34 +92,43 @@ describe("c-new-program-engagement", () => {
         let modalContainer = element.shadowRoot.querySelector("c-modal");
         expect(modalContainer.header).toBe(newProgramEngagement);
 
-        const recordEditForm = element.shadowRoot.querySelector(
-            "lightning-record-edit-form"
-        );
-
-        recordEditForm.dispatchEvent(new CustomEvent("success", { detail: recordId }));
-
-        return global.flushPromises().then(async () => {
-            expect(handler).toHaveBeenCalled();
-            await expect(element).toBeAccessible();
-        });
+        return global
+            .flushPromises()
+            .then(() => {
+                const recordEditForm = element.shadowRoot.querySelector(
+                    "lightning-record-edit-form"
+                );
+                recordEditForm.dispatchEvent(
+                    new CustomEvent("success", { detail: recordId })
+                );
+            })
+            .then(async () => {
+                expect(handler).toHaveBeenCalled();
+                await expect(element).toBeAccessible();
+            });
     });
 
     it("closes the modal when the close button is clicked", () => {
         document.body.appendChild(element);
         element.showModal();
 
-        let buttonContainer = element.shadowRoot.querySelector("lightning-button");
-        expect(buttonContainer.label).not.toBe(null);
-        expect(buttonContainer.label).toBe(cancel);
-
         const handler = jest.fn();
         element.addEventListener("cancel", handler);
-        buttonContainer.click();
 
-        return global.flushPromises().then(async () => {
-            expect(handler).toHaveBeenCalled();
-            await expect(element).toBeAccessible();
-        });
+        return global
+            .flushPromises()
+            .then(() => {
+                let cancelButton = element.shadowRoot.querySelectorAll(
+                    "lightning-button"
+                )[2];
+                expect(cancelButton.label).not.toBe(null);
+                expect(cancelButton.label).toBe(cancel);
+                cancelButton.click();
+            })
+            .then(async () => {
+                expect(handler).toHaveBeenCalled();
+                await expect(element).toBeAccessible();
+            });
     });
 
     it("is accessible", async () => {

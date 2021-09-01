@@ -13,8 +13,7 @@ import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import { handleError, showToast } from "c/util";
-import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
-import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
+import getNewEngagementSetup from "@salesforce/apex/ProgramController.getNewEngagementSetup";
 import PROGRAM_ENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
@@ -33,8 +32,6 @@ import newContact from "@salesforce/label/c.New_Contact";
 import cancelAndBack from "@salesforce/label/c.Cancel_and_Back";
 import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
 
-const CREATE_PROGRAM_ENGAGEMENT_FIELD_SET = "CreateProgramEngagement";
-const CREATE_CONTACT_FIELD_SET = "CreateContact";
 const ACTIVE = "Active";
 const ENROLLED = "Enrolled";
 const ALLOWED_STAGES = [ACTIVE, ENROLLED];
@@ -84,36 +81,18 @@ export default class NewProgramEngagement extends LightningElement {
 
     @wire(CurrentPageReference) pageRef;
 
-    @wire(getFieldSet, {
-        objectName: PROGRAM_ENGAGEMENT_OBJECT.objectApiName,
-        fieldSetName: CREATE_PROGRAM_ENGAGEMENT_FIELD_SET,
-    })
-    wiredEngagementFields({ error, data }) {
-        if (data) {
-            this.engagementFieldSet = data;
-        } else if (error) {
-            handleError(error);
-        }
-    }
-
-    @wire(getFieldSet, {
-        objectName: CONTACT_OBJECT.objectApiName,
-        fieldSetName: CREATE_CONTACT_FIELD_SET,
-    })
-    wiredContactFields({ error, data }) {
-        if (data) {
-            this.contactFieldSet = data;
-        } else if (error) {
-            handleError(error);
-        }
-    }
-
-    @wire(getProgramCohortsFromProgramId, {
+    @wire(getNewEngagementSetup, {
         programId: "$selectedProgramId",
     })
-    wiredCohorts({ error, data }) {
+    wiredSetup({ error, data }) {
         if (data) {
-            this.cohorts = data;
+            this.cohorts = data.programCohorts;
+            if (!this.engagementFieldSet) {
+                this.engagementFieldSet = data.engagementFieldSet;
+            }
+            if (!this.contactFieldSet) {
+                this.contactFieldSet = data.contactFieldSet;
+            }
             this.setCohortOptions();
         } else if (error) {
             handleError(error);

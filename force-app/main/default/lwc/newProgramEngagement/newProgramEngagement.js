@@ -64,7 +64,7 @@ export default class NewProgramEngagement extends LightningElement {
     defaultStage;
     allowNewContact = false;
     isSaving = false;
-    hasError;
+    hasError = false;
     newContactMode = false;
     showEngagementForm = false;
     selectedProgramId;
@@ -268,10 +268,10 @@ export default class NewProgramEngagement extends LightningElement {
         this.selectedContactId = event.detail.id;
         this.isSaving = false;
         this.newContactMode = false;
-        this.handleFormChange();
     }
 
     handleNewContactClick() {
+        this.handleFormChange();
         this.newContactMode = true;
 
         setTimeout(this.focusForm.bind(this), 500);

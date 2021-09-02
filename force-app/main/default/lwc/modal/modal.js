@@ -56,8 +56,7 @@ export default class Modal extends LightningElement {
 
     get bodyCss() {
         return (
-            "slds-modal__content slds-scrollable" +
-            (this.hideBodyPadding ? "" : " slds-p-around_medium")
+            "slds-modal__content" + (this.hideBodyPadding ? "" : " slds-p-around_medium")
         );
     }
 

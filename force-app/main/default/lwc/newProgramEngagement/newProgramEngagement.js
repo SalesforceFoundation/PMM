@@ -35,6 +35,11 @@ import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
 const ACTIVE = "Active";
 const ENROLLED = "Enrolled";
 const ALLOWED_STAGES = [ACTIVE, ENROLLED];
+const OUTER_CLASS = "outer";
+const CONTACT_CLASS = "contact";
+const INNER_RIGHT_CLASS = "inner right";
+const INNER_LEFT_CLASS = "inner left";
+const SLIDE_CLASS = "slide";
 
 export default class NewProgramEngagement extends LightningElement {
     contactField = CONTACT_FIELD;
@@ -87,16 +92,20 @@ export default class NewProgramEngagement extends LightningElement {
     wiredSetup({ error, data }) {
         if (data) {
             this.cohorts = data.programCohorts;
-            if (!this.engagementFieldSet) {
-                this.engagementFieldSet = data.engagementFieldSet;
-            }
-            if (!this.contactFieldSet) {
-                this.contactFieldSet = data.contactFieldSet;
-            }
+            this.loadFieldSets(data);
             this.setCohortOptions();
         } else if (error) {
             handleError(error);
         }
+    }
+
+    loadFieldSets(data) {
+        if (this.engagementFieldSet && this.contactFieldSet) {
+            return;
+        }
+
+        this.engagementFieldSet = data.engagementFieldSet;
+        this.contactFieldSet = data.contactFieldSet;
     }
 
     @wire(getObjectInfo, { objectApiName: PROGRAM_ENGAGEMENT_OBJECT })
@@ -305,15 +314,19 @@ export default class NewProgramEngagement extends LightningElement {
     }
 
     get outerClass() {
-        return this.newContactMode ? "outer contact" : "outer";
+        return this.newContactMode ? `${OUTER_CLASS} ${CONTACT_CLASS}` : OUTER_CLASS;
     }
 
     get rightClass() {
-        return this.newContactMode ? "inner right" : "inner right slide";
+        return this.newContactMode
+            ? INNER_RIGHT_CLASS
+            : `${INNER_RIGHT_CLASS} ${SLIDE_CLASS}`;
     }
 
     get leftClass() {
-        return this.newContactMode ? "inner left slide" : "inner left";
+        return this.newContactMode
+            ? `${INNER_LEFT_CLASS} ${SLIDE_CLASS}`
+            : INNER_LEFT_CLASS;
     }
 
     get modalHeader() {

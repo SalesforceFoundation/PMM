@@ -304,6 +304,10 @@ export default class NewProgramEngagement extends LightningElement {
         this.showEngagementForm = true;
     }
 
+    get outerClass() {
+        return this.newContactMode ? "outer contact" : "outer";
+    }
+
     get rightClass() {
         return this.newContactMode ? "inner right" : "inner right slide";
     }

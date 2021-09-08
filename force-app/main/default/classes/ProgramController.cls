@@ -3,9 +3,9 @@ public with sharing class ProgramController {
     private static ProgramService service = new ProgramService();
     @TestVisible
     private static FieldSetService fieldSetService = new FieldSetService();
+
     private static final String ENGAGEMENT_FIELD_SET = 'CreateProgramEngagement';
     private static final String CONTACT_FIELD_SET = 'CreateContact';
-    private static final String PROGRAM_COHORTS_KEY = 'programCohorts';
     private static final String ENGAGEMENT_FIELD_SET_KEY = 'engagementFieldSet';
     private static final String CONTACT_FIELD_SET_KEY = 'contactFieldSet';
 

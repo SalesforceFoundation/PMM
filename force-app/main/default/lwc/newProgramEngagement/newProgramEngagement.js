@@ -13,7 +13,8 @@ import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import { handleError, showToast } from "c/util";
-import getNewEngagementSetup from "@salesforce/apex/ProgramController.getNewEngagementSetup";
+import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
+import getFieldSetByObjectKey from "@salesforce/apex/ProgramController.getFieldSetByObjectKey";
 import PROGRAM_ENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
@@ -54,7 +55,7 @@ export default class NewProgramEngagement extends LightningElement {
         return this._programId;
     }
     _programId;
-    @api engagementFieldSet;
+    @track engagementFieldSet;
     @track localEngagementFieldSet = [];
     @track contactFieldSet;
     @track cohorts;
@@ -86,26 +87,26 @@ export default class NewProgramEngagement extends LightningElement {
 
     @wire(CurrentPageReference) pageRef;
 
-    @wire(getNewEngagementSetup, {
-        programId: "$selectedProgramId",
-    })
-    wiredSetup({ error, data }) {
+    @wire(getFieldSetByObjectKey)
+    wireFieldSets({ data, error }) {
         if (data) {
-            this.cohorts = data.programCohorts;
-            this.loadFieldSets(data);
-            this.setCohortOptions();
+            this.engagementFieldSet = data.engagementFieldSet;
+            this.contactFieldSet = data.contactFieldSet;
         } else if (error) {
             handleError(error);
         }
     }
 
-    loadFieldSets(data) {
-        if (this.engagementFieldSet && this.contactFieldSet) {
-            return;
+    @wire(getProgramCohortsFromProgramId, {
+        programId: "$selectedProgramId",
+    })
+    wiredCohorts({ error, data }) {
+        if (data) {
+            this.cohorts = data;
+            this.setCohortOptions();
+        } else if (error) {
+            handleError(error);
         }
-
-        this.engagementFieldSet = data.engagementFieldSet;
-        this.contactFieldSet = data.contactFieldSet;
     }
 
     @wire(getObjectInfo, { objectApiName: PROGRAM_ENGAGEMENT_OBJECT })
@@ -124,9 +125,9 @@ export default class NewProgramEngagement extends LightningElement {
     })
     wiredStageValues({ error, data }) {
         if (data && data.values) {
-            let defaultValue = data.defaultValue.value;
-            if (ALLOWED_STAGES.includes(defaultValue)) {
-                this.defaultStage = defaultValue;
+            let defaultValue = data.defaultValue;
+            if (data.defaultValue && ALLOWED_STAGES.includes(defaultValue.value)) {
+                this.defaultStage = defaultValue.value;
             } else {
                 this.defaultStage = ALLOWED_STAGES[0];
             }
@@ -199,6 +200,7 @@ export default class NewProgramEngagement extends LightningElement {
 
     setCohortOptions() {
         this.cohortOptions = [];
+
         this.cohorts.forEach(cohort => {
             this.cohortOptions.push({
                 value: cohort[COHORT_ID_FIELD.fieldApiName],

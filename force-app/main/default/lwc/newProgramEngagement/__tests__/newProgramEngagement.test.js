@@ -19,18 +19,23 @@ import {
     registerTestWireAdapter,
     registerLdsTestWireAdapter,
 } from "@salesforce/sfdx-lwc-jest";
-import getNewEngagementSetup from "@salesforce/apex/pmdm.ProgramController.getNewEngagementSetup";
+import getFieldSetByObjectKey from "@salesforce/apex/pmdm.ProgramController.getFieldSetByObjectKey";
+import getProgramCohortsFromProgramId from "@salesforce/apex/pmdm.ProgramController.getProgramCohortsFromProgramId";
 import COHORT_FIELD from "@salesforce/schema/ProgramEngagement__c.ProgramCohort__c";
 import STAGE_FIELD from "@salesforce/schema/ProgramEngagement__c.Stage__c";
 
 const mockGetObjectInfo = require("./data/getObjectInfo.json");
 const mockPicklistValues = require("./data/getPicklistValues.json");
-const mockGetNewEngagementSetup = require("./data/getNewEngagementSetup.json");
+const mockGetNewEngagementSetup = require("./data/getFieldSetByObjectKey.json");
+const mockGetProgramCohortsFromProgramId = require("./data/getProgramCohortsFromProgramId.json");
 const mockCurrentPageReference = require("./data/currentPageReference.json");
 
 //Register the  wire adapters
 const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference);
-const getNewEngagementSetupAdapter = registerApexTestWireAdapter(getNewEngagementSetup);
+const getFieldSetByObjectKeyAdapter = registerApexTestWireAdapter(getFieldSetByObjectKey);
+const getProgramCohortsFromProgramIdAdapter = registerApexTestWireAdapter(
+    getProgramCohortsFromProgramId
+);
 const getObjectInfoAdapter = registerLdsTestWireAdapter(getObjectInfo);
 const getPicklistValuesAdapter = registerLdsTestWireAdapter(getPicklistValues);
 
@@ -48,7 +53,8 @@ describe("c-new-program-engagement with a known contact", () => {
 
         // Emit data from @wire
         currentPageReferenceAdapter.emit(mockCurrentPageReference);
-        getNewEngagementSetupAdapter.emit(mockGetNewEngagementSetup);
+        getFieldSetByObjectKeyAdapter.emit(mockGetNewEngagementSetup);
+        getProgramCohortsFromProgramIdAdapter.emit(mockGetProgramCohortsFromProgramId);
         getObjectInfoAdapter.emit(mockGetObjectInfo);
         getPicklistValuesAdapter.emit(mockPicklistValues);
     });

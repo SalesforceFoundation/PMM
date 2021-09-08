@@ -10,15 +10,20 @@ public with sharing class ProgramController {
     private static final String CONTACT_FIELD_SET_KEY = 'contactFieldSet';
 
     @AuraEnabled(cacheable=true)
-    public static Map<String, Object> getNewEngagementSetup(Id programId) {
-        Map<String, Object> newEngagementSetup = new Map<String, Object>();
+    public static List<ProgramCohort__c> getProgramCohortsFromProgramId(Id programId) {
+        try {
+            return service.getProgramCohortsFromProgramId(programId);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Object> getFieldSetByObjectKey() {
+        Map<String, Object> fieldSetByObjectKey = new Map<String, Object>();
 
         try {
-            newEngagementSetup.put(
-                PROGRAM_COHORTS_KEY,
-                service.getProgramCohortsFromProgramId(programId)
-            );
-            newEngagementSetup.put(
+            fieldSetByObjectKey.put(
                 ENGAGEMENT_FIELD_SET_KEY,
                 fieldSetService.getFieldSetForLWC(
                     String.valueOf(ProgramEngagement__c.SObjectType),
@@ -26,7 +31,7 @@ public with sharing class ProgramController {
                     false
                 )
             );
-            newEngagementSetup.put(
+            fieldSetByObjectKey.put(
                 CONTACT_FIELD_SET_KEY,
                 fieldSetService.getFieldSetForLWC(
                     String.valueOf(Contact.SObjectType),
@@ -34,7 +39,7 @@ public with sharing class ProgramController {
                     false
                 )
             );
-            return newEngagementSetup;
+            return fieldSetByObjectKey;
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

@@ -357,7 +357,9 @@ export default class ParticipantSelector extends LightningElement {
                 element => element.Id === row.Id
             );
             this.availableEngagementRows.splice(index, 1);
-            this.selectedEngagements.push(row);
+            if (!this.selectedEngagements.includes(row)) {
+                this.selectedEngagements.push(row);
+            }
         });
 
         this.selectedEngagements = [...this.selectedEngagements];
@@ -369,14 +371,26 @@ export default class ParticipantSelector extends LightningElement {
     handleDeselectParticipant(event) {
         if (event) {
             let tempSelectedEngagements = [...this.selectedEngagements];
+            let tempPreviouslySelectedEngagements = [
+                ...this.previouslySelectedEngagements,
+            ];
 
             let index = tempSelectedEngagements.findIndex(
                 element => element.Id === event.detail.row.Id
             );
 
+            let previouslySelectedEngagementIndex = tempPreviouslySelectedEngagements.findIndex(
+                element => element.Id === event.detail.row.Id
+            );
+
             tempSelectedEngagements.splice(index, 1);
+            tempPreviouslySelectedEngagements.splice(
+                previouslySelectedEngagementIndex,
+                1
+            );
 
             this.selectedEngagements = tempSelectedEngagements;
+            this.previouslySelectedEngagements = tempPreviouslySelectedEngagements;
 
             this.availableEngagementRows = [
                 ...this.availableEngagementRows,

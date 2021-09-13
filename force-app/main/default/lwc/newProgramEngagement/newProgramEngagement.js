@@ -129,7 +129,13 @@ export default class NewProgramEngagement extends LightningElement {
             if (data.defaultValue && ALLOWED_STAGES.includes(defaultValue.value)) {
                 this.defaultStage = defaultValue.value;
             } else {
-                this.defaultStage = ALLOWED_STAGES[0];
+                // If the customer removes the Active status then we will fall back
+                // to enrolled. If they do not have enrolled the record will fail to
+                // save. This is working as designed until we allow custom statuses
+                // for this component. It most be either Active or Enrolled.
+                this.defaultStage = data.values.includes(ALLOWED_STAGES[0])
+                    ? ALLOWED_STAGES[0]
+                    : ALLOWED_STAGES[1];
             }
             this.selectedStage = this.defaultStage;
 

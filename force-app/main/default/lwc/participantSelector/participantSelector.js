@@ -152,7 +152,7 @@ export default class ParticipantSelector extends LightningElement {
     @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
     dataSetup(result) {
         this.wiredData = result;
-        if (!(result.data || result.error)) {
+        if (!(result.data || result.error) || this.isLoaded) {
             return;
         }
 
@@ -223,6 +223,7 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     async processNewParticipant(id) {
+        this.isLoaded = false;
         await refreshApex(this.wiredData);
         this.handleSelectById(id);
     }
@@ -371,26 +372,14 @@ export default class ParticipantSelector extends LightningElement {
     handleDeselectParticipant(event) {
         if (event) {
             let tempSelectedEngagements = [...this.selectedEngagements];
-            let tempPreviouslySelectedEngagements = [
-                ...this.previouslySelectedEngagements,
-            ];
 
             let index = tempSelectedEngagements.findIndex(
                 element => element.Id === event.detail.row.Id
             );
 
-            let previouslySelectedEngagementIndex = tempPreviouslySelectedEngagements.findIndex(
-                element => element.Id === event.detail.row.Id
-            );
-
             tempSelectedEngagements.splice(index, 1);
-            tempPreviouslySelectedEngagements.splice(
-                previouslySelectedEngagementIndex,
-                1
-            );
 
             this.selectedEngagements = tempSelectedEngagements;
-            this.previouslySelectedEngagements = tempPreviouslySelectedEngagements;
 
             this.availableEngagementRows = [
                 ...this.availableEngagementRows,
@@ -398,7 +387,7 @@ export default class ParticipantSelector extends LightningElement {
             ];
             this.sortData(this.availableEngagementRows);
 
-            //if filters exist apply the filters
+            // if filters exist apply the filters
             this.applyFilters();
             this.dispatchSelectEvent();
         }

@@ -116,6 +116,7 @@ describe("c-new-program-engagement with a known contact", () => {
         element.showModal();
 
         const handler = jest.fn();
+        element.newContactMode = false;
         element.addEventListener("cancel", handler);
 
         return global

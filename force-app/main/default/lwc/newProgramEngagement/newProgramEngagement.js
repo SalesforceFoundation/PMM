@@ -140,9 +140,7 @@ export default class NewProgramEngagement extends LightningElement {
             this.selectedStage = this.defaultStage;
 
             data.values.forEach(entry => {
-                if (ALLOWED_STAGES.includes(entry.value)) {
-                    this.stageOptions.push({ label: entry.label, value: entry.value });
-                }
+                this.stageOptions.push({ label: entry.label, value: entry.value });
             });
         } else if (error) {
             console.log(error);
@@ -311,6 +309,11 @@ export default class NewProgramEngagement extends LightningElement {
                 } else if (field.apiName === STAGE_FIELD.fieldApiName) {
                     field.isStageField = true;
                     field.isCombobox = true;
+                    if (this.allowNewContact) {
+                        this.stageOptions = this.stageOptions.filter(stage =>
+                            ALLOWED_STAGES.includes(stage.label)
+                        );
+                    }
                 }
 
                 if (!field.skip) {

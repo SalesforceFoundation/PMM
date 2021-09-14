@@ -113,10 +113,10 @@ describe("c-new-program-engagement with a known contact", () => {
 
     it("closes the modal when the close button is clicked", () => {
         document.body.appendChild(element);
+        element.newContactMode = false;
         element.showModal();
 
         const handler = jest.fn();
-        element.newContactMode = false;
         element.addEventListener("cancel", handler);
 
         return global

@@ -78,7 +78,7 @@ describe("c-new-program-engagement with a known contact", () => {
                 index++;
             });
 
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 
@@ -107,7 +107,7 @@ describe("c-new-program-engagement with a known contact", () => {
             })
             .then(async () => {
                 expect(handler).toHaveBeenCalled();
-                await expect(element).toBeAccessible();
+                global.isAccessible(element);
             });
     });
 
@@ -131,13 +131,13 @@ describe("c-new-program-engagement with a known contact", () => {
             })
             .then(async () => {
                 expect(handler).toHaveBeenCalled();
-                await expect(element).toBeAccessible();
+                global.isAccessible(element);
             });
     });
 
     it("is accessible", async () => {
         document.body.appendChild(element);
         // assert that DOM is accessible (using extended preset-rule)
-        await expect(element).toBeAccessible();
+        global.isAccessible(element);
     });
 });

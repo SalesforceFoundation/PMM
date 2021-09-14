@@ -38,7 +38,7 @@ describe("c-listViewSelector", () => {
             );
             expect(lightningMenuItem.label).toBe("All");
             expect(lightningMenuItem.checked).toBeTruthy();
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 });

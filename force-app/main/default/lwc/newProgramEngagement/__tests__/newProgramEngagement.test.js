@@ -11,7 +11,7 @@ import { createElement } from "lwc";
 import NewProgramEngagement from "c/newProgramEngagement";
 import { CurrentPageReference } from "lightning/navigation";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
-// import cancel from "@salesforce/label/c.Cancel";
+import cancel from "@salesforce/label/c.Cancel";
 import newProgramEngagement from "@salesforce/label/c.New_Program_Engagement";
 import { ShowToastEventName } from "lightning/platformShowToastEvent";
 import {
@@ -22,7 +22,6 @@ import {
 import getFieldSetByObjectKey from "@salesforce/apex/pmdm.ProgramController.getFieldSetByObjectKey";
 import getProgramCohortsFromProgramId from "@salesforce/apex/pmdm.ProgramController.getProgramCohortsFromProgramId";
 import COHORT_FIELD from "@salesforce/schema/ProgramEngagement__c.ProgramCohort__c";
-import STAGE_FIELD from "@salesforce/schema/ProgramEngagement__c.Stage__c";
 
 const mockGetObjectInfo = require("./data/getObjectInfo.json");
 const mockPicklistValues = require("./data/getPicklistValues.json");
@@ -70,9 +69,7 @@ describe("c-new-program-engagement with a known contact", () => {
             );
             let index = 0;
             let fields = mockGetNewEngagementSetup.engagementFieldSet.filter(
-                field =>
-                    field.apiName !== COHORT_FIELD.fieldApiName &&
-                    field.apiName !== STAGE_FIELD.fieldApiName
+                field => field.apiName !== COHORT_FIELD.fieldApiName
             );
             fields.forEach(field => {
                 if (inputFields[index] && inputFields[index].fieldName) {
@@ -114,28 +111,28 @@ describe("c-new-program-engagement with a known contact", () => {
             });
     });
 
-    // it("closes the modal when the close button is clicked", () => {
-    //     document.body.appendChild(element);
-    //     element.showModal();
+    it("closes the modal when the close button is clicked", () => {
+        document.body.appendChild(element);
+        element.showModal();
 
-    //     const handler = jest.fn();
-    //     element.addEventListener("cancel", handler);
+        const handler = jest.fn();
+        element.addEventListener("cancel", handler);
 
-    //     return global
-    //         .flushPromises()
-    //         .then(() => {
-    //             let cancelButton = element.shadowRoot.querySelectorAll(
-    //                 "lightning-button"
-    //             )[2];
-    //             expect(cancelButton.label).not.toBe(null);
-    //             expect(cancelButton.label).toBe(cancel);
-    //             cancelButton.click();
-    //         })
-    //         .then(async () => {
-    //             expect(handler).toHaveBeenCalled();
-    //             await expect(element).toBeAccessible();
-    //         });
-    // });
+        return global
+            .flushPromises()
+            .then(() => {
+                let cancelButton = element.shadowRoot.querySelectorAll(
+                    "lightning-button"
+                )[2];
+                expect(cancelButton.label).not.toBe(null);
+                expect(cancelButton.label).toBe(cancel);
+                cancelButton.click();
+            })
+            .then(async () => {
+                expect(handler).toHaveBeenCalled();
+                await expect(element).toBeAccessible();
+            });
+    });
 
     it("is accessible", async () => {
         document.body.appendChild(element);

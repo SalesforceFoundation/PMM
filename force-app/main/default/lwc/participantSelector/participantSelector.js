@@ -387,6 +387,12 @@ export default class ParticipantSelector extends LightningElement {
             ];
             this.sortData(this.availableEngagementRows);
 
+            //filter previouslySelectedEngagements to remove program engagement that we deselected so it does not add the deselected value back
+            //after we create a new program engagement
+            this.previouslySelectedEngagements = this.previouslySelectedEngagements.filter(
+                element => element.Id !== event.detail.row.Id
+            );
+
             // if filters exist apply the filters
             this.applyFilters();
             this.dispatchSelectEvent();

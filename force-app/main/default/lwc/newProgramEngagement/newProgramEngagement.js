@@ -308,15 +308,13 @@ export default class NewProgramEngagement extends LightningElement {
                     field.isCombobox = true;
                 } else if (field.apiName === STAGE_FIELD.fieldApiName) {
                     field.isStageField = true;
-                    field.isCombobox = true;
+                    field.isCombobox = this.allowNewContact && field.isStageField;
                     // allowNewContact will be false when creating individual Service delivery records from BSDT.
                     // This will be true when using the participant selector component from group BSDT and service schedule wizard.
                     if (this.allowNewContact) {
                         this.stageOptions = this.stageOptions.filter(stage =>
                             ALLOWED_STAGES.includes(stage.value)
                         );
-                        //We set isStageFiltered to true since we will want to display just the options that are in the allowed stages
-                        field.isStageFiltered = true;
                     }
                 }
 

@@ -65,7 +65,7 @@
                                     value={field.value}
                                     disabled={field.disabled}
                                     onchange={handleFieldChange}
-                                    if:false={field.isStageFiltered}
+                                    if:false={field.isCombobox}
                                 ></lightning-input-field>
                                 <template if:true={field.isCohortField}>
                                     <div
@@ -83,7 +83,7 @@
                                         variant="label-hidden"
                                     ></lightning-combobox>
                                 </template>
-                                <template if:true={field.isStageFiltered}>
+                                <template if:true={field.isStageField}>
                                     <div
                                         class="slds-form-element__label slds-var-p-left_xx-small"
                                         title={field.label}

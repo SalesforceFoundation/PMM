@@ -9,7 +9,7 @@
 
 <template>
     <c-modal header={modalHeader} ondialogclose={handleClose}>
-        <div class="outer">
+        <div class={outerClass}>
             <div class="slds-align_absolute-center" if:true={isSaving}>
                 <lightning-spinner
                     alternative-text={labels.loading}
@@ -25,6 +25,7 @@
                     onsuccess={handleEngagementSuccess}
                     onerror={handleFormError}
                     if:true={showEngagementForm}
+                    onchange={handleFormChange}
                 >
                     <lightning-messages></lightning-messages>
                     <lightning-layout multiple-rows="true">
@@ -36,8 +37,8 @@
                             <lightning-input-field
                                 field-name={contactField.fieldApiName}
                                 value={selectedContactId}
-                                required="true"
                                 class="newContactField"
+                                required
                             ></lightning-input-field>
                         </lightning-layout-item>
                         <lightning-layout-item
@@ -64,7 +65,7 @@
                                     value={field.value}
                                     disabled={field.disabled}
                                     onchange={handleFieldChange}
-                                    if:false={field.isCohortField}
+                                    if:false={field.isCombobox}
                                 ></lightning-input-field>
                                 <template if:true={field.isCohortField}>
                                     <div
@@ -76,9 +77,24 @@
                                     <lightning-combobox
                                         class="hideHelpText slds-var-p-left_xx-small"
                                         options={cohortOptions}
-                                        value={field.value}
+                                        value={selectedCohortId}
                                         disabled={cohortIsDisabled}
                                         onchange={handleCohortChange}
+                                        variant="label-hidden"
+                                    ></lightning-combobox>
+                                </template>
+                                <template if:true={field.isStageField}>
+                                    <div
+                                        class="slds-form-element__label slds-var-p-left_xx-small"
+                                        title={field.label}
+                                    >
+                                        {field.label}
+                                    </div>
+                                    <lightning-combobox
+                                        class="hideHelpText slds-var-p-left_xx-small"
+                                        options={stageOptions}
+                                        value={selectedStage}
+                                        onchange={handleStageChange}
                                         variant="label-hidden"
                                     ></lightning-combobox>
                                 </template>
@@ -110,6 +126,7 @@
                     onsuccess={handleNewContactSuccess}
                     onerror={handleFormError}
                     if:true={newContactMode}
+                    onchange={handleFormChange}
                 >
                     <lightning-messages></lightning-messages>
                     <template for:each={contactFieldSet} for:item="field">
@@ -138,6 +155,7 @@
                 label={cancelButtonLabel}
                 title={cancelButtonLabel}
                 variant="neutral"
+                disabled={isSaving}
                 onclick={handleCancel}
             ></lightning-button>
             <lightning-button

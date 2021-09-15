@@ -3,6 +3,11 @@
     position: relative;
     overflow-x: hidden;
     display: flex;
+    overflow-y: visible;
+}
+
+.outer.contact {
+    overflow-x: visible;
 }
 
 .inner {

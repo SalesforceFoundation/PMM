@@ -26,7 +26,6 @@ public with sharing class ProgramController_TEST {
         );
 
         Id programId = TestUtil.mockId(Program__c.SObjectType);
-
         TestStub programServiceStub = new StubBuilder(ProgramService.class)
             .when('getProgramCohortsFromProgramId', Id.class)
             .calledWith(programId)
@@ -38,7 +37,9 @@ public with sharing class ProgramController_TEST {
         Test.startTest();
         System.assertEquals(
             cohortsToReturn,
-            ProgramController.getProgramCohortsFromProgramId(programId),
+            (List<ProgramCohort__c>) ProgramController.getProgramCohortsFromProgramId(
+                programId
+            ),
             'Expected the controller to return list delivered by service.'
         );
         Test.stopTest();
@@ -49,7 +50,6 @@ public with sharing class ProgramController_TEST {
     @IsTest
     private static void throwsExceptionOnGetProgramCohortsFromProgramId() {
         Id programId = TestUtil.mockId(Program__c.SObjectType);
-
         TestStub programServiceStub = new StubBuilder(ProgramService.class)
             .when('getProgramCohortsFromProgramId', Id.class)
             .calledWith(programId)
@@ -62,7 +62,7 @@ public with sharing class ProgramController_TEST {
 
         Test.startTest();
         try {
-            List<ProgramCohort__c> cohorts = ProgramController.getProgramCohortsFromProgramId(
+            List<ProgramCohort__c> cohorts = (List<ProgramCohort__c>) ProgramController.getProgramCohortsFromProgramId(
                 programId
             );
         } catch (AuraHandledException ex) {
@@ -81,5 +81,80 @@ public with sharing class ProgramController_TEST {
             'Expected an exception to be thrown.'
         );
         programServiceStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void shouldCallFieldSetServiceOnGetFieldSetByObjectKey() {
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+            .when('getFieldSetForLWC', String.class, String.class, Boolean.class)
+            .calledWith(
+                String.valueOf(ProgramEngagement__c.SObjectType),
+                'CreateProgramEngagement',
+                false
+            )
+            .thenReturn(null)
+            .when('getFieldSetForLWC', String.class, String.class, Boolean.class)
+            .calledWith(String.valueOf(Contact.SObjectType), 'CreateContact', false)
+            .thenReturn(null)
+            .build();
+
+        Exception actualException;
+
+        ProgramController.fieldSetService = (FieldSetService) fieldSetServiceStub.create();
+
+        Test.startTest();
+        Map<String, Object> fieldSetByObjectKey = ProgramController.getFieldSetByObjectKey();
+        Test.stopTest();
+
+        System.assertEquals(
+            2,
+            fieldSetByObjectKey.keySet().size(),
+            'Expected 2 items to be added.'
+        );
+        for (String key : fieldSetByObjectKey.keySet()) {
+            System.assertEquals(
+                null,
+                fieldSetByObjectKey.get(key),
+                'Expected the service to return null on each call.'
+            );
+        }
+        fieldSetServiceStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void throwsExceptionOnGetFieldSetByObjectKey() {
+        TestStub fieldSetServiceStub = new StubBuilder(fieldSetService.class)
+            .when('getFieldSetForLWC', String.class, String.class, Boolean.class)
+            .calledWith(
+                String.valueOf(ProgramEngagement__c.SObjectType),
+                'CreateProgramEngagement',
+                false
+            )
+            .thenThrowException()
+            .build();
+
+        Exception actualException;
+
+        ProgramController.fieldSetService = (FieldSetService) fieldSetServiceStub.create();
+
+        Test.startTest();
+        try {
+            Map<String, Object> fieldSetByObjectKey = ProgramController.getFieldSetByObjectKey();
+        } catch (AuraHandledException ex) {
+            actualException = ex;
+        } catch (Exception ex) {
+            System.assert(
+                false,
+                'Expecting only AuraHandledException: ' + ex.getMessage()
+            );
+        }
+        Test.stopTest();
+
+        System.assertNotEquals(
+            null,
+            actualException,
+            'Expected an exception to be thrown.'
+        );
+        fieldSetServiceStub.assertCalledAsExpected();
     }
 }

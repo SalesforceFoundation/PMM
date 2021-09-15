@@ -30,7 +30,7 @@ describe("c-service-schedule-creator", () => {
             expect(spinner).not.toBeNull();
 
             // TODO: Validate accessibility when each step is loads.
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 });

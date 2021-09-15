@@ -1,10 +1,4 @@
 [
-    {
-        "Id": "001000000000000",
-        "Name": "Cohort1"
-    },
-    {
-        "Id": "001000000000001",
-        "Name": "Cohort2"
-    }
+    { "Id": "a001100000GUejgAAD", "Name": "Fall 2019 STEM" },
+    { "Id": "a001100000GUejhAAD", "Name": "Genellen" }
 ]

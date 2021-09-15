@@ -152,7 +152,7 @@ export default class ParticipantSelector extends LightningElement {
     @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
     dataSetup(result) {
         this.wiredData = result;
-        if (!(result.data || result.error)) {
+        if (!(result.data || result.error) || this.isLoaded) {
             return;
         }
 
@@ -223,6 +223,7 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     async processNewParticipant(id) {
+        this.isLoaded = false;
         await refreshApex(this.wiredData);
         this.handleSelectById(id);
     }
@@ -357,7 +358,9 @@ export default class ParticipantSelector extends LightningElement {
                 element => element.Id === row.Id
             );
             this.availableEngagementRows.splice(index, 1);
-            this.selectedEngagements.push(row);
+            if (!this.selectedEngagements.includes(row)) {
+                this.selectedEngagements.push(row);
+            }
         });
 
         this.selectedEngagements = [...this.selectedEngagements];
@@ -384,7 +387,15 @@ export default class ParticipantSelector extends LightningElement {
             ];
             this.sortData(this.availableEngagementRows);
 
-            //if filters exist apply the filters
+            //filter previouslySelectedEngagements to remove program engagement that we deselected so it does not add the deselected value back
+            //after we create a new program engagement
+            if (this.previouslySelectedEngagements !== undefined) {
+                this.previouslySelectedEngagements = this.previouslySelectedEngagements.filter(
+                    element => element.Id !== event.detail.row.Id
+                );
+            }
+
+            // if filters exist apply the filters
             this.applyFilters();
             this.dispatchSelectEvent();
         }

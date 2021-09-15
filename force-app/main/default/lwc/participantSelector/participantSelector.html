@@ -7,6 +7,7 @@
   -  */
   -->
 
+<!-- sldsValidatorIgnore -->
 <template>
     <c-section title={title} if:true={isLoaded}></c-section>
     <lightning-layout if:true={isLoaded} multiple-rows="true" horizontal-align="center">
@@ -102,7 +103,8 @@
                                         size="12"
                                     >
                                         <div
-                                            class="slds-align_absolute-center slds-text-heading_small slds-border_top slds-var-p-top_small"
+                                            class="slds-text-align_center slds-text-heading_small slds-border_top slds-border_bottom slds-var-p-top_small"
+                                            style="height: 331px"
                                         >
                                             {labels.noRecordsFound}
                                         </div>

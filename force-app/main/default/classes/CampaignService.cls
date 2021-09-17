@@ -66,17 +66,25 @@ public without sharing class CampaignService {
     }
 
     public void stageCampaignMember(
+        Id newMemberContactId,
+        Id targetCampaignId,
+        String memberStatus
+    ) {
+        CampaignMember newCampaignMember = new CampaignMember(
+            ContactId = newMemberContactId,
+            CampaignId = targetCampaignId,
+            Status = targetCampaignId
+        );
+
+        stagedCampaignMembers.add(newCampaignMember);
+    }
+
+    public void stageCampaignMember(
         Contact newMember,
         Campaign targetCampaign,
         String memberStatus
     ) {
-        CampaignMember newCampaignMember = new CampaignMember(
-            ContactId = newMember.Id,
-            CampaignId = targetCampaign.Id,
-            Status = memberStatus
-        );
-
-        stagedCampaignMembers.add(newCampaignMember);
+        stageCampaignMember(newMember.Id, targetCampaign.Id, memberStatus);
     }
 
     public void commitCampaignMembers() {

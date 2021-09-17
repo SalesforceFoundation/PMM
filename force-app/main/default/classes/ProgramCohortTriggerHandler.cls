@@ -36,14 +36,51 @@ public with sharing class ProgramCohortTriggerHandler {
                 // TODO: bulkify, move to service class
                 Map<Id, Program__c> programById = new Map<Id, Program__c>();
                 for (ProgramCohort__c newCohort : (List<ProgramCohort__c>) Trigger.new) {
-                    programById.put(newCohort.Program__c, null);
+                    if (newCohort.Campaign__c == null) {
+                        programById.put(newCohort.Program__c, null);
+                    }
                 }
 
-                programById = new Map<Id, Program__c>(
-                    [SELECT Id, Name FROM Program__c WHERE Id = :programById.keySet()]
-                );
+                if (!programById.values().isEmpty()) {
+                    programById = new Map<Id, Program__c>(
+                        [SELECT Id, Name FROM Program__c WHERE Id = :programById.keySet()]
+                    );
+                }
 
                 for (ProgramCohort__c newCohort : (List<ProgramCohort__c>) Trigger.new) {
+                    if (newCohort.Campaign__c != null) {
+                        continue;
+                    }
+                    String linkedCampaignName =
+                        programById.get(newCohort.Program__c).Name +
+                        ': ' +
+                        newCohort.Name;
+                    Campaign linkedCampaign = campaignService.createCampaign(
+                        linkedCampaignName,
+                        programEngagementStages
+                    );
+                    newCohort.Campaign__c = linkedCampaign.Id;
+                }
+            }
+            when BEFORE_UPDATE {
+                // TODO: bulkify, move to service class
+                Map<Id, Program__c> programById = new Map<Id, Program__c>();
+                for (ProgramCohort__c newCohort : (List<ProgramCohort__c>) Trigger.new) {
+                    if (newCohort.Campaign__c == null) {
+                        programById.put(newCohort.Program__c, null);
+                    }
+                }
+
+                if (!programById.values().isEmpty()) {
+                    programById = new Map<Id, Program__c>(
+                        [SELECT Id, Name FROM Program__c WHERE Id = :programById.keySet()]
+                    );
+                }
+
+                for (ProgramCohort__c newCohort : (List<ProgramCohort__c>) Trigger.new) {
+                    if (newCohort.Campaign__c != null) {
+                        continue;
+                    }
                     String linkedCampaignName =
                         programById.get(newCohort.Program__c).Name +
                         ': ' +

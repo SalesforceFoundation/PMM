@@ -9,7 +9,7 @@
 
 <template>
     <c-modal header={modalHeader} ondialogclose={handleClose}>
-        <div class={outerClass}>
+        <div class="outer">
             <div class="slds-align_absolute-center" if:true={isSaving}>
                 <lightning-spinner
                     alternative-text={labels.loading}

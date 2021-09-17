@@ -37,6 +37,10 @@
     padding: var(--lwc-varSpacingXxxSmall, 0.125rem);
 }
 
+.bsdt .combobox .slds-dropdown {
+    position: unset;
+}
+
 c-modal .bsdt .small-box {
     padding: var(--lwc-spacingMedium, 1rem);
 }

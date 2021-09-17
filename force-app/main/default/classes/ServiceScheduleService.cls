@@ -18,6 +18,8 @@ public with sharing class ServiceScheduleService {
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
     private RecurrenceService recurrenceService = new RecurrenceService();
+    @TestVisible
+    private CampaignService campaignService = new CampaignService();
     private static final String ONE_TIME = 'One Time';
     @TestVisible
     private static final Set<String> ACTIVE_ENGAGEMENT_STAGES = new Set<String>{
@@ -128,6 +130,41 @@ public with sharing class ServiceScheduleService {
             SessionStart__c = startDateTime,
             SessionEnd__c = endDateTime
         );
+    }
+
+    public void createLinkedCampaigns(List<ServiceSchedule__c> schedules) {
+        // TODO: bulkify, move to service class
+        Map<Id, Service__c> serviceById = new Map<Id, Service__c>();
+        for (
+            ServiceSchedule__c newServiceSchedule : (List<ServiceSchedule__c>) schedules
+        ) {
+            if (newServiceSchedule.Campaign__c == null) {
+                serviceById.put(newServiceSchedule.Service__c, null);
+            }
+        }
+
+        if (!serviceById.values().isEmpty()) {
+            serviceById = new Map<Id, Service__c>(
+                [SELECT Id, Name FROM Service__c WHERE Id = :serviceById.keySet()]
+            );
+        }
+
+        for (
+            ServiceSchedule__c newServiceSchedule : (List<ServiceSchedule__c>) schedules
+        ) {
+            if (newServiceSchedule.Campaign__c != null) {
+                continue;
+            }
+            String linkedCampaignName =
+                serviceById.get(newServiceSchedule.Service__c).Name +
+                ': ' +
+                newServiceSchedule.Name;
+            Campaign linkedCampaign = campaignService.createCampaign(
+                linkedCampaignName,
+                ServiceParticipantService.serviceParticipantStatuses
+            );
+            newServiceSchedule.Campaign__c = linkedCampaign.Id;
+        }
     }
 
     private void setServiceProviders(ServiceSchedule__c schedule) {

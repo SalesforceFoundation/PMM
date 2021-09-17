@@ -12,6 +12,7 @@
 import { LightningElement, wire, api, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
+import { loadStyle } from "lightning/platformResourceLoader";
 import { handleError, showToast } from "c/util";
 import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
 import getFieldSetByObjectKey from "@salesforce/apex/ProgramController.getFieldSetByObjectKey";
@@ -32,6 +33,7 @@ import loading from "@salesforce/label/c.Loading";
 import newContact from "@salesforce/label/c.New_Contact";
 import cancelAndBack from "@salesforce/label/c.Cancel_and_Back";
 import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
+import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const ACTIVE = "Active";
 const ENROLLED = "Enrolled";
@@ -143,6 +145,10 @@ export default class NewProgramEngagement extends LightningElement {
         } else if (error) {
             console.log(error);
         }
+    }
+
+    connectedCallback() {
+        loadStyle(this, pmmFolder + "/newProgramEngagementOverrides.css");
     }
 
     @api

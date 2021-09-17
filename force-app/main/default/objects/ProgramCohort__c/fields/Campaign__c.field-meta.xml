@@ -9,7 +9,7 @@
     <referenceTo>Campaign</referenceTo>
     <relationshipLabel>Program Cohorts</relationshipLabel>
     <relationshipName>ProgramCohorts</relationshipName>
-    <required>true</required>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

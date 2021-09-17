@@ -9,7 +9,7 @@
     <referenceTo>Campaign</referenceTo>
     <relationshipLabel>Service Schedules</relationshipLabel>
     <relationshipName>ServiceSchedules</relationshipName>
-    <required>true</required>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

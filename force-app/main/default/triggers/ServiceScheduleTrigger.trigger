@@ -1,8 +1,6 @@
 trigger ServiceScheduleTrigger on ServiceSchedule__c(
-    after insert,
-    after update,
-    after delete,
-    after undelete
+    before insert,
+    before update
 ) {
     new ServiceScheduleTriggerHandler().execute();
 }

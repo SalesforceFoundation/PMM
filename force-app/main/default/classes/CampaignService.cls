@@ -87,8 +87,12 @@ public without sharing class CampaignService {
         stageCampaignMember(newMember.Id, targetCampaign.Id, memberStatus);
     }
 
+    public void addStagedCampaignMember(CampaignMember toStage) {
+        stagedCampaignMembers.add(toStage);
+    }
+
     public void commitCampaignMembers() {
-        insert stagedCampaignMembers;
+        upsert stagedCampaignMembers;
         stagedCampaignMembers = new List<CampaignMember>();
     }
 }

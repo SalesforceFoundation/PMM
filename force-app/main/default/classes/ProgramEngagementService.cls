@@ -36,8 +36,11 @@ public with sharing class ProgramEngagementService {
         );
 
         for (ProgramEngagement__c newProgramEngagement : engagements) {
-            Id campaignId = programCohortById.get(newProgramEngagement.ProgramCohort__c)
-                .Campaign__c;
+            Id campaignId = null;
+            if (programCohortById.containsKey(newProgramEngagement.ProgramCohort__c)) {
+                campaignId = programCohortById.get(newProgramEngagement.ProgramCohort__c)
+                    .Campaign__c;
+            }
             if (campaignId == null || newProgramEngagement.Contact__c == null) {
                 return;
             }

@@ -1,8 +1,9 @@
 .outer {
-    height: calc(100% + 175px);
+    height: 100%;
     width: 100%;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     display: flex;
 }
 

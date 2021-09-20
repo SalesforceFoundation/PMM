@@ -8,7 +8,7 @@
   -->
 
 <template>
-    <c-modal header={modalHeader} ondialogclose={handleClose}>
+    <c-modal header={modalHeader} ondialogclose={handleClose} hide-scroll="true">
         <div class="outer">
             <div class="slds-align_absolute-center" if:true={isSaving}>
                 <lightning-spinner

@@ -18,7 +18,7 @@ export default class Modal extends LightningElement {
     @api size = "fixed";
     @api isNested = false;
     @api hideBodyPadding = false;
-    @api hideScroll = false;
+    @api scrollModifier;
 
     visibilityClass = MODAL_HIDDEN;
 
@@ -58,7 +58,9 @@ export default class Modal extends LightningElement {
     get bodyCss() {
         return (
             "slds-modal__content" +
-            (this.hideScroll ? " slds-scrollable_none" : " slds-scrollable") +
+            (this.scrollModifier
+                ? " slds-scrollable_" + this.scrollModifier
+                : " slds-scrollable") +
             (this.hideBodyPadding ? "" : " slds-p-around_medium")
         );
     }

@@ -1,13 +1,10 @@
 .outer {
+    height: 100%;
     width: 100%;
     position: relative;
     overflow-x: hidden;
+    overflow-y: scroll;
     display: flex;
-    overflow-y: visible;
-}
-
-.outer.contact {
-    overflow-x: visible;
 }
 
 .inner {

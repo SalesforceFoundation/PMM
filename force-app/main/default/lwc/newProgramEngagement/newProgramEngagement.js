@@ -36,8 +36,6 @@ import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
 const ACTIVE = "Active";
 const ENROLLED = "Enrolled";
 const ALLOWED_STAGES = [ACTIVE, ENROLLED];
-const OUTER_CLASS = "outer";
-const CONTACT_CLASS = "contact";
 const INNER_RIGHT_CLASS = "inner right";
 const INNER_LEFT_CLASS = "inner left";
 const SLIDE_CLASS = "slide";
@@ -324,10 +322,6 @@ export default class NewProgramEngagement extends LightningElement {
             });
         }
         this.showEngagementForm = true;
-    }
-
-    get outerClass() {
-        return this.newContactMode ? `${OUTER_CLASS} ${CONTACT_CLASS}` : OUTER_CLASS;
     }
 
     get rightClass() {

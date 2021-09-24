@@ -371,6 +371,11 @@ export default class ParticipantSelector extends LightningElement {
 
     handleDeselectParticipant(event) {
         if (event) {
+            //filter availableEngagementRows to remove program engagement that we deselected so there are no duplicates
+            this.availableEngagementRows = this.availableEngagementRows.filter(
+                row => row.Id !== event.detail.row.Id
+            );
+
             let tempSelectedEngagements = [...this.selectedEngagements];
 
             let index = tempSelectedEngagements.findIndex(

@@ -48,7 +48,7 @@ describe("c-attendance", () => {
         element.recordId = "a06630000074mVnAAI";
     });
 
-    it("shows multiple returned rows with perms", async () => {
+    it("shows multiple returned rows with perms", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
@@ -56,7 +56,7 @@ describe("c-attendance", () => {
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         wiredCurrentPageReference.emit(mockCurrentPageReference);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
@@ -64,7 +64,7 @@ describe("c-attendance", () => {
             global.isAccessible(element);
         });
     });
-    it("shows empty state and no buttons when zero returned rows with no perms", async () => {
+    it("shows empty state and no buttons when zero returned rows with no perms", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
@@ -72,7 +72,7 @@ describe("c-attendance", () => {
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
         wiredCurrentPageReference.emit(mockCurrentPageReference);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
@@ -92,7 +92,7 @@ describe("c-attendance", () => {
             global.isAccessible(element);
         });
     });
-    it("shows empty state and no buttons when zero returned rows with perms", async () => {
+    it("shows empty state and no buttons when zero returned rows with perms", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
@@ -100,7 +100,7 @@ describe("c-attendance", () => {
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         wiredCurrentPageReference.emit(mockCurrentPageReference);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
@@ -120,7 +120,7 @@ describe("c-attendance", () => {
             global.isAccessible(element);
         });
     });
-    it("shows perms error when rows are returned with no perms", async () => {
+    it("shows perms error when rows are returned with no perms", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         fieldSetAdapter.emit(mockGetFieldSet);
@@ -128,7 +128,7 @@ describe("c-attendance", () => {
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
         wiredCurrentPageReference.emit(mockCurrentPageReference);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );

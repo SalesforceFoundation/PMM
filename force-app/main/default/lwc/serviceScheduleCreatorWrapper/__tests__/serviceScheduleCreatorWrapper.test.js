@@ -25,7 +25,7 @@ describe("c-service-schedule-creator", () => {
         element.isCommunity = false;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const modal = element.shadowRoot.querySelector("c-modal");
 
             // Modal will only display with a spinner loaded
@@ -40,7 +40,7 @@ describe("c-service-schedule-creator", () => {
     it("modal does not appear in experience-cloud context and element is accessible", () => {
         element.isCommunity = true;
         document.body.appendChild(element);
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const modal = element.shadowRoot.querySelector("c-modal");
             expect(modal).toBeNull();
 

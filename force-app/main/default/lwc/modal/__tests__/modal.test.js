@@ -38,7 +38,7 @@ describe("c-modal", () => {
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             //verify that the header is displayed
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer).not.toBeNull();
@@ -78,7 +78,7 @@ describe("c-modal", () => {
         element.addEventListener("dialogclose", handler);
         buttonContainer.click();
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer.textContent).toBe(HEADER_STRING);
             expect(handler).toHaveBeenCalled();
@@ -91,7 +91,7 @@ describe("c-modal", () => {
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer.textContent).toBe(HEADER_STRING);
 
@@ -108,12 +108,14 @@ describe("c-modal", () => {
     });
 
     // This jest test below validates that the component is accessible
-    it("is accessible", async () => {
+    it("is accessible", () => {
         const h2Container = element.shadowRoot.querySelector("h2");
         let slot = document.createElement("span");
         slot.textContent = "Test Accessibility";
         h2Container.attachShadow({ mode: "open" }).appendChild(slot.cloneNode(true));
-        // assert that DOM is accessible (using extended preset-rule)
-        global.isAccessible(element);
+
+        return global.flushPromises().then(() => {
+            global.isAccessible(element);
+        });
     });
 });

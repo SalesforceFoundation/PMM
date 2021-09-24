@@ -12,13 +12,16 @@ describe("c-loading-stencil", () => {
         });
     });
 
-    it("displays the stencils with default levels", async () => {
+    it("displays the stencils with default levels", () => {
         document.body.appendChild(element);
 
         let stencils = element.shadowRoot.querySelectorAll(".stencil");
-        expect(stencils.length).toBe(element.levels.length);
-        expect(element.levels.length).toBeGreaterThan(0);
-        global.isAccessible(element);
+
+        return global.flushPromises().then(() => {
+            expect(stencils.length).toBe(element.levels.length);
+            expect(element.levels.length).toBeGreaterThan(0);
+            global.isAccessible(element);
+        });
     });
 
     it("displays the stencils with provided levels", () => {

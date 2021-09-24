@@ -24,13 +24,14 @@ describe("c-service-schedule-creator", () => {
     it("element is accessible", () => {
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const spinner = element.shadowRoot.querySelector("lightning-spinner");
 
-            expect(spinner).not.toBeNull();
-
-            // TODO: Validate accessibility when each step is loads.
-            global.isAccessible(element);
+            return global.flushPromises().then(() => {
+                expect(spinner).not.toBeNull();
+                // TODO: Validate accessibility when each step is loads.
+                global.isAccessible(element);
+            });
         });
     });
 });

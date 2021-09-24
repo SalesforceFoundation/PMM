@@ -36,12 +36,12 @@ describe("c-formattedField", () => {
         };
     });
 
-    it("displays a lightning formatted text field when a value is present", async () => {
+    it("displays a lightning formatted text field when a value is present", () => {
         element.field = mockField;
         element.record = mockRecord;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningFormattedText = element.shadowRoot.querySelector(
                 "lightning-formatted-text"
             );
@@ -49,14 +49,14 @@ describe("c-formattedField", () => {
             global.isAccessible(element);
         });
     });
-    it("displays a lightning formatted text field when a related value is present", async () => {
+    it("displays a lightning formatted text field when a related value is present", () => {
         mockField.path = "Account.Name";
         mockRecord.Account = { Name: "Hola" };
         element.field = mockField;
         element.record = mockRecord;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningFormattedText = element.shadowRoot.querySelector(
                 "lightning-formatted-text"
             );
@@ -64,13 +64,13 @@ describe("c-formattedField", () => {
             global.isAccessible(element);
         });
     });
-    it("displays a lightning formatted text field when a related value is not present", async () => {
+    it("displays a lightning formatted text field when a related value is not present", () => {
         mockField.path = "Account.Name";
         element.field = mockField;
         element.record = mockRecord;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningFormattedText = element.shadowRoot.querySelector(
                 "lightning-formatted-text"
             );
@@ -78,14 +78,14 @@ describe("c-formattedField", () => {
             global.isAccessible(element);
         });
     });
-    it("displays a lightning formatted text field when a value is missing", async () => {
+    it("displays a lightning formatted text field when a value is missing", () => {
         mockField.apiName = "Title";
 
         element.field = mockField;
         element.record = mockRecord;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningFormattedText = element.shadowRoot.querySelector(
                 "lightning-formatted-text"
             );
@@ -94,11 +94,11 @@ describe("c-formattedField", () => {
         });
     });
 
-    it("displays a lightning formatted text field when the record is missing", async () => {
+    it("displays a lightning formatted text field when the record is missing", () => {
         element.field = mockField;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningFormattedText = element.shadowRoot.querySelector(
                 "lightning-formatted-text"
             );
@@ -107,7 +107,7 @@ describe("c-formattedField", () => {
         });
     });
 
-    it("displays a lightning formatted date time field when type is date", async () => {
+    it("displays a lightning formatted date time field when type is date", () => {
         let today = new Date();
         mockField.type = "DATE";
         mockField.apiName = "Today";
@@ -117,7 +117,7 @@ describe("c-formattedField", () => {
         element.record = mockRecord;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningFormattedDateTime = element.shadowRoot.querySelector(
                 "lightning-formatted-date-time"
             );
@@ -126,7 +126,7 @@ describe("c-formattedField", () => {
         });
     });
 
-    it("displays a lightning formatted date time field when type is date-time", async () => {
+    it("displays a lightning formatted date time field when type is date-time", () => {
         let today = new Date();
         mockField.type = "DATETIME";
         mockField.apiName = "Today";
@@ -136,7 +136,7 @@ describe("c-formattedField", () => {
         element.record = mockRecord;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningFormattedDateTime = element.shadowRoot.querySelector(
                 "lightning-formatted-date-time"
             );
@@ -145,7 +145,7 @@ describe("c-formattedField", () => {
         });
     });
 
-    it("displays a lightning formatted time field when type is time", async () => {
+    it("displays a lightning formatted time field when type is time", () => {
         let time = 1800000;
         mockField.type = "TIME";
         mockField.apiName = "Time";
@@ -155,7 +155,7 @@ describe("c-formattedField", () => {
         element.record = mockRecord;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningFormattedTime = element.shadowRoot.querySelector(
                 "lightning-formatted-time"
             );

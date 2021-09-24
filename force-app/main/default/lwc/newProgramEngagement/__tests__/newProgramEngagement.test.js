@@ -63,7 +63,7 @@ describe("c-new-program-engagement with a known contact", () => {
 
         element.showModal();
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const inputFields = element.shadowRoot.querySelectorAll(
                 "lightning-input-field"
             );
@@ -105,7 +105,7 @@ describe("c-new-program-engagement with a known contact", () => {
                     new CustomEvent("success", { detail: recordId })
                 );
             })
-            .then(async () => {
+            .then(() => {
                 expect(handler).toHaveBeenCalled();
                 global.isAccessible(element);
             });
@@ -129,15 +129,9 @@ describe("c-new-program-engagement with a known contact", () => {
                 expect(cancelButton.label).toBe(cancel);
                 cancelButton.click();
             })
-            .then(async () => {
+            .then(() => {
                 expect(handler).toHaveBeenCalled();
                 global.isAccessible(element);
             });
-    });
-
-    it("is accessible", async () => {
-        document.body.appendChild(element);
-        // assert that DOM is accessible (using extended preset-rule)
-        global.isAccessible(element);
     });
 });

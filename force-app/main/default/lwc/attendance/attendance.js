@@ -157,7 +157,10 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
 
         if (result.data) {
-            this.serviceDeliveries = [...result.data];
+            this.serviceDeliveries = result.data.map((item, index) => ({
+                index,
+                ...item,
+            }));
             this.serviceDeliveries.sort((a, b) => {
                 return getChildObjectByName(a, "Contact__r").Name >
                     getChildObjectByName(b, "Contact__r").Name

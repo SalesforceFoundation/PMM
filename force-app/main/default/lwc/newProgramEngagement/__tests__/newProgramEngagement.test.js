@@ -107,7 +107,6 @@ describe("c-new-program-engagement with a known contact", () => {
             })
             .then(() => {
                 expect(handler).toHaveBeenCalled();
-                return global.isAccessible(element);
             });
     });
 

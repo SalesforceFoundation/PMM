@@ -20,7 +20,7 @@ describe("c-loading-stencil", () => {
         return global.flushPromises().then(() => {
             expect(stencils.length).toBe(element.levels.length);
             expect(element.levels.length).toBeGreaterThan(0);
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 

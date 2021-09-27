@@ -27,7 +27,7 @@ describe("c-accordionSection", () => {
         return global.flushPromises().then(() => {
             const button = element.shadowRoot.querySelector("button");
             expect(button.ariaExpanded).toBe("false");
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -38,7 +38,7 @@ describe("c-accordionSection", () => {
         return global.flushPromises().then(() => {
             const button = element.shadowRoot.querySelector("button");
             expect(button.ariaExpanded).toBe("true");
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -49,7 +49,7 @@ describe("c-accordionSection", () => {
 
         return global.flushPromises().then(() => {
             // TODO: see if we can verify background color
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -60,7 +60,7 @@ describe("c-accordionSection", () => {
         return global.flushPromises().then(() => {
             const button = element.shadowRoot.querySelector("button");
             expect(button.ariaExpanded).toBe("true");
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -72,7 +72,7 @@ describe("c-accordionSection", () => {
         return global.flushPromises().then(() => {
             const button = element.shadowRoot.querySelector("button");
             expect(button.ariaExpanded).toBe("false");
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -84,7 +84,7 @@ describe("c-accordionSection", () => {
         return global.flushPromises().then(() => {
             const button = element.shadowRoot.querySelector("button");
             expect(button.ariaExpanded).toBe("false");
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -96,7 +96,7 @@ describe("c-accordionSection", () => {
         return global.flushPromises().then(() => {
             const button = element.shadowRoot.querySelector("button");
             expect(button.ariaExpanded).toBe("true");
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -107,7 +107,7 @@ describe("c-accordionSection", () => {
 
         return global.flushPromises().then(() => {
             expect(button.ariaExpanded).toBe("true");
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 });

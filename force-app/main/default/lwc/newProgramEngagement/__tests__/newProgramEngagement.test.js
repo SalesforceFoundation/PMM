@@ -78,7 +78,7 @@ describe("c-new-program-engagement with a known contact", () => {
                 index++;
             });
 
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -107,20 +107,21 @@ describe("c-new-program-engagement with a known contact", () => {
             })
             .then(() => {
                 expect(handler).toHaveBeenCalled();
-                global.isAccessible(element);
+                return global.isAccessible(element);
             });
     });
 
     it("closes the modal when the close button is clicked", () => {
-        document.body.appendChild(element);
-        element.newContactMode = false;
-        element.showModal();
-
         const handler = jest.fn();
         element.addEventListener("cancel", handler);
+        element.newContactMode = false;
+        document.body.appendChild(element);
 
         return global
             .flushPromises()
+            .then(() => {
+                element.showModal();
+            })
             .then(() => {
                 let cancelButton = element.shadowRoot.querySelectorAll(
                     "lightning-button"
@@ -131,7 +132,6 @@ describe("c-new-program-engagement with a known contact", () => {
             })
             .then(() => {
                 expect(handler).toHaveBeenCalled();
-                global.isAccessible(element);
             });
     });
 });

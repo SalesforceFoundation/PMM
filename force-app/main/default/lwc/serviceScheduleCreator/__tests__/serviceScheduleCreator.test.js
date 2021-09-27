@@ -30,7 +30,7 @@ describe("c-service-schedule-creator", () => {
             return global.flushPromises().then(() => {
                 expect(spinner).not.toBeNull();
                 // TODO: Validate accessibility when each step is loads.
-                global.isAccessible(element);
+                return global.isAccessible(element);
             });
         });
     });

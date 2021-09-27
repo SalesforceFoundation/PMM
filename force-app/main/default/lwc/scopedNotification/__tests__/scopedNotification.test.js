@@ -34,7 +34,7 @@ describe("c-scoped-notification", () => {
             expect(themeDiv).toBeDefined();
             expect(icon.iconName).toBe("utility:info");
             expect(titlePara.textContent).toEqual("");
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -53,7 +53,7 @@ describe("c-scoped-notification", () => {
             expect(themeDiv).toBeDefined();
             expect(icon.iconName).toBe("utility:info");
             expect(titlePara.textContent).toEqual(TITLE);
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -73,7 +73,7 @@ describe("c-scoped-notification", () => {
             expect(icon.iconName).toBe(`utility:${theme}`);
             expect(titlePara.textContent).toEqual(TITLE);
             // TODO: appears to be an issue running this in a 4 loop
-            // global.isAccessible(element);
+            // return global.isAccessible(element);
         });
     });
 });

@@ -26,12 +26,8 @@ describe("c-service-schedule-creator", () => {
 
         return global.flushPromises().then(() => {
             const spinner = element.shadowRoot.querySelector("lightning-spinner");
-
-            return global.flushPromises().then(() => {
-                expect(spinner).not.toBeNull();
-                // TODO: Validate accessibility when each step is loads.
-                return global.isAccessible(element);
-            });
+            expect(spinner).not.toBeNull();
+            return global.isAccessible(element);
         });
     });
 });

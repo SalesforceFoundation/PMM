@@ -58,36 +58,36 @@ describe("c-scoped-notification", () => {
     });
 
     it("displays the success theme", () => {
-        const theme = "success";
         element.title = TITLE;
-
-        element.theme = theme;
+        element.theme = "success";
         document.body.appendChild(element);
 
-        const icon = element.shadowRoot.querySelector("lightning-icon");
-        const themeDiv = element.shadowRoot.querySelector(`.slds-theme_${theme}`);
-        const titlePara = element.shadowRoot.querySelector("p");
+        return global.flushPromises().then(() => {
+            const icon = element.shadowRoot.querySelector("lightning-icon");
+            const themeDiv = element.shadowRoot.querySelector(".slds-theme_success");
+            const titlePara = element.shadowRoot.querySelector("p");
 
-        expect(themeDiv).toBeDefined();
-        expect(icon.iconName).toBe(`utility:${theme}`);
-        expect(titlePara.textContent).toEqual(TITLE);
-        return global.isAccessible();
+            expect(themeDiv).toBeDefined();
+            expect(icon.iconName).toBe("utility:success");
+            expect(titlePara.textContent).toEqual(TITLE);
+            return global.isAccessible(element);
+        });
     });
 
     it("displays the error theme", () => {
-        const theme = "error";
         element.title = TITLE;
-
-        element.theme = theme;
+        element.theme = "error";
         document.body.appendChild(element);
 
-        const icon = element.shadowRoot.querySelector("lightning-icon");
-        const themeDiv = element.shadowRoot.querySelector(`.slds-theme_${theme}`);
-        const titlePara = element.shadowRoot.querySelector("p");
+        return global.flushPromises().then(() => {
+            const icon = element.shadowRoot.querySelector("lightning-icon");
+            const themeDiv = element.shadowRoot.querySelector(".slds-theme_error");
+            const titlePara = element.shadowRoot.querySelector("p");
 
-        expect(themeDiv).toBeDefined();
-        expect(icon.iconName).toBe(`utility:${theme}`);
-        expect(titlePara.textContent).toEqual(TITLE);
-        return global.isAccessible();
+            expect(themeDiv).toBeDefined();
+            expect(icon.iconName).toBe("utility:error");
+            expect(titlePara.textContent).toEqual(TITLE);
+            return global.isAccessible(element);
+        });
     });
 });

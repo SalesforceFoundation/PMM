@@ -7,11 +7,7 @@ global.flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 // assert that DOM is accessible (using extended preset-rule)
 global.isAccessible = async element => {
-    try {
-        await expect(element).toBeAccessible();
-    } catch (e) {
-        console.log(JSON.stringify(e.message));
-    }
+    await expect(element).toBeAccessible();
 };
 
 global.clearDOM = () => {

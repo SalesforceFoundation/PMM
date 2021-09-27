@@ -57,23 +57,37 @@ describe("c-scoped-notification", () => {
         });
     });
 
-    it("displays the theme provided", () => {
-        const themes = ["warning", "info", "success", "error"];
+    it("displays the success theme", () => {
+        const theme = "success";
         element.title = TITLE;
 
-        themes.forEach(theme => {
-            element.theme = theme;
-            document.body.appendChild(element);
+        element.theme = theme;
+        document.body.appendChild(element);
 
-            const icon = element.shadowRoot.querySelector("lightning-icon");
-            const themeDiv = element.shadowRoot.querySelector(`.slds-theme_${theme}`);
-            const titlePara = element.shadowRoot.querySelector("p");
+        const icon = element.shadowRoot.querySelector("lightning-icon");
+        const themeDiv = element.shadowRoot.querySelector(`.slds-theme_${theme}`);
+        const titlePara = element.shadowRoot.querySelector("p");
 
-            expect(themeDiv).toBeDefined();
-            expect(icon.iconName).toBe(`utility:${theme}`);
-            expect(titlePara.textContent).toEqual(TITLE);
-            // TODO: appears to be an issue running this in a 4 loop
-            // return global.isAccessible(element);
-        });
+        expect(themeDiv).toBeDefined();
+        expect(icon.iconName).toBe(`utility:${theme}`);
+        expect(titlePara.textContent).toEqual(TITLE);
+        return global.isAccessible();
+    });
+
+    it("displays the error theme", () => {
+        const theme = "error";
+        element.title = TITLE;
+
+        element.theme = theme;
+        document.body.appendChild(element);
+
+        const icon = element.shadowRoot.querySelector("lightning-icon");
+        const themeDiv = element.shadowRoot.querySelector(`.slds-theme_${theme}`);
+        const titlePara = element.shadowRoot.querySelector("p");
+
+        expect(themeDiv).toBeDefined();
+        expect(icon.iconName).toBe(`utility:${theme}`);
+        expect(titlePara.textContent).toEqual(TITLE);
+        return global.isAccessible();
     });
 });

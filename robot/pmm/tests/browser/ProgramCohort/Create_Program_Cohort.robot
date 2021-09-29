@@ -104,6 +104,5 @@ Create Program Engagement from Program Cohort Object
      Populate Lookup Field                  Program                      ${program1}[Name]
      Click Dialog button                    Save
      Wait Until Modal Is Closed
-     Current Page Should Be                 Details                      ${ns}ProgramCohort__c
      Page Should Contain                    Anonymous
      Save Current Record ID For Deletion    ${ns}ProgramEngagement__c

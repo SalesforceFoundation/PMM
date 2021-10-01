@@ -7,7 +7,8 @@
         "isAccessible": true,
         "relationshipName": "Contact__r",
         "referenceTo": "Contact",
-        "referenceNameField": "Name"
+        "referenceNameField": "Name",
+        "isUpdateable": true
     },
     {
         "apiName": "Quantity__c",
@@ -15,20 +16,23 @@
         "type": "DOUBLE",
         "isRequired": false,
         "helpText": "A 2-decimal numeric field for Quantity of a Service Delivery expressed in the Unit of Measurement in the Service. For example, 30 minutes of tutoring where the Unit of Measure is hours, Quantity is .50.",
-        "isAccessible": true
+        "isAccessible": true,
+        "isUpdateable": true
     },
     {
         "apiName": "AttendanceStatus__c",
         "label": "Attendance Status",
         "type": "PICKLIST",
         "isRequired": false,
-        "isAccessible": true
+        "isAccessible": true,
+        "isUpdateable": true
     },
     {
         "apiName": "CreatedDate",
         "label": "Created Date",
         "type": "DATETIME",
         "isRequired": true,
-        "isAccessible": true
+        "isAccessible": true,
+        "isUpdateable": false
     }
 ]

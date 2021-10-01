@@ -16,4 +16,12 @@ export default class AttendanceRow extends LightningElement {
     @api record;
     @api fieldSet;
     @api readOnly;
+
+    @api getRow() {
+        return this.record;
+    }
+
+    @api save() {
+        jest.fn();
+    }
 }

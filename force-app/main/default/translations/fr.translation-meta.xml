@@ -81,6 +81,14 @@
         <label>Sélectionnez au moins un contact pour continuer.</label>
     </customLabels>
     <customLabels>
+        <name>Cant_Find_Participant</name>
+        <label>Vous ne trouvez pas le bon participant ?</label>
+    </customLabels>
+    <customLabels>
+        <name>Cant_Find_Contact</name>
+        <label>Vous ne trouvez pas le bon contact ?</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>Suivre les présences</label>
     </customLabels>
@@ -115,6 +123,10 @@
     <customLabels>
         <name>Cancel</name>
         <label>Annuler</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel_and_Back</name>
+        <label>Annuler et Retour</label>
     </customLabels>
     <customLabels>
         <name>Clicking_Back_Button_In_Modal_Warning</name>
@@ -247,6 +259,10 @@
     <customLabels>
         <name>New_Program_Engagement</name>
         <label>Nouvel engagement dans un programme</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Contact</name>
+        <label>Nouveau contact</label>
     </customLabels>
     <customLabels>
         <name>New_Service_Schedule</name>
@@ -531,6 +547,10 @@
     <customLabels>
         <name>Util_UnsupportedField</name>
         <label>Vous ne pouvez pas accéder à ce champ. Demandez de l’aide à votre administrateur Salesforce.</label>
+    </customLabels>
+    <customLabels>
+        <name>New</name>
+        <label>Nouveau</label>
     </customLabels>
     <customLabels>
         <name>UpsertOperationException</name>

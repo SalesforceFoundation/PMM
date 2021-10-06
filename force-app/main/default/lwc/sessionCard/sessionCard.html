@@ -25,8 +25,9 @@
                 <a href={sessionURL} onkeydown={handleSessionClick}>{session.Name} </a>
             </lightning-layout-item>
             <lightning-layout-item
+                alignment-bump="left"
                 size="4"
-                class="slds-list_horizontal slds-align_absolute-center slds-truncate slds-var-p-bottom_xx-small"
+                class="slds-list_horizontal slds-truncate slds-text-align_right slds-var-p-bottom_xx-small slds-grid_align-end"
             >
                 <lightning-icon
                     icon-name="utility:success"
@@ -72,7 +73,7 @@
             </lightning-layout-item>
             <lightning-layout-item
                 size="8"
-                class="slds-list_horizontal slds-truncate"
+                class="slds-truncate slds-list_horizontal slds-var-m-top_small"
                 if:true={session.hasServiceProviderValue}
             >
                 <lightning-icon
@@ -88,9 +89,10 @@
                 </lightning-output-field>
             </lightning-layout-item>
             <lightning-layout-item
-                size="4"
-                class="slds-list_horizontal slds-align_absolute-center"
+                class="slds-text-align_right slds-list_horizontal slds-var-m-top_small slds-grid_align-end"
                 if:true={session.hasAttendanceSummaryValue}
+                alignment-bump="left"
+                size="4"
             >
                 <lightning-icon
                     icon-name="utility:people"

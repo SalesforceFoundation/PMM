@@ -7,7 +7,7 @@
  *
  */
 
-import { LightningElement, api, wire } from "lwc";
+import { LightningElement, api, wire, track } from "lwc";
 import { format } from "c/util";
 import { getRecord } from "lightning/uiRecordApi";
 import { refreshApex } from "@salesforce/apex";
@@ -28,10 +28,10 @@ import NO_PERMISSIONS_MESSAGE_LABEL from "@salesforce/label/c.No_Permission_Mess
 
 export default class ParticipantAdder extends LightningElement {
     @api recordId;
+    @track serviceScheduleModel;
+    @track existingParticipants;
+    serviceId;
     errorMessage;
-    isLoaded = false;
-    serviceScheduleModel;
-    existingParticipants;
     hasPermissions;
     labels = {
         save: SAVE_LABEL,
@@ -75,29 +75,35 @@ export default class ParticipantAdder extends LightningElement {
         if (result.data) {
             this.serviceScheduleModel = JSON.parse(JSON.stringify(result.data));
             this.extractLabels(this.serviceScheduleModel.labels.serviceParticipant);
-            this.isLoaded = true;
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
     }
 
-    extractLabels(labels) {
-        if (!labels) {
-            return;
-        }
-
-        Object.keys(labels).forEach(label => {
-            let value = labels[label];
-            this.labels[label] = value;
-        });
-    }
-
     @wire(getExistingParticipantContactIds, { scheduleId: "$recordId" })
     wiredExistingParticipants(result) {
-        if (!result) {
+        if (!(result.data || result.error)) {
             return;
         }
-        this.existingParticipants = result; //cache for refreshing
+
+        if (result.data) {
+            this.existingParticipants = result; //cache for refreshing
+        } else {
+            console.log(JSON.stringify(result.error));
+        }
+    }
+
+    get isLoaded() {
+        return (
+            this.hasPermissions !== undefined &&
+            this.existingParticipants &&
+            this.serviceScheduleModel &&
+            this.serviceId
+        );
+    }
+
+    get isSaveDisabled() {
+        return !this.isLoaded || !this.hasPermissions;
     }
 
     handleSave() {
@@ -132,8 +138,27 @@ export default class ParticipantAdder extends LightningElement {
         this.closeModal();
     }
 
+    extractLabels(labels) {
+        if (!labels) {
+            return;
+        }
+
+        Object.keys(labels).forEach(label => {
+            let value = labels[label];
+            this.labels[label] = value;
+        });
+    }
+
     closeModal() {
+        this.reset();
         this.dispatchEvent(new CustomEvent("close"));
+    }
+
+    reset() {
+        this.hasPermissions = undefined;
+        this.serviceScheduleModel = undefined;
+        this.existingParticipants = undefined;
+        this.serviceId = undefined;
     }
 
     showSuccessToast(numSaved) {
@@ -143,9 +168,5 @@ export default class ParticipantAdder extends LightningElement {
             message: format(this.labels.successMessage, [numSaved]),
         });
         this.dispatchEvent(event);
-    }
-
-    get isSaveDisabled() {
-        return !this.isLoaded || !this.hasPermissions;
     }
 }

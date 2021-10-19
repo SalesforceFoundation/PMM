@@ -152,32 +152,36 @@ export default class ParticipantSelector extends LightningElement {
     @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
     dataSetup(result) {
         this.wiredData = result;
-        if (!(result.data || result.error) || this.isLoaded) {
+        if (!(result.data || result.error)) {
             return;
         }
 
         if (result.data) {
-            this.fields = result.data.fields;
-            this.fieldByFieldPath = result.data.fieldByFieldPath;
-            this.objectLabels = result.data.objectLabels;
-            this.allEngagements = result.data.programEngagements.slice(0);
-            this.cohorts = result.data.programCohorts.slice(0);
-            this.programName = result.data.program ? result.data.program.Name : "";
-            this.programId = result.data.program ? result.data.program.Id : "";
-
-            this.formatLabels();
-            this.setDataTableColumns();
-            this.setSelectedColumns();
-            this.loadDataTable();
+            this.loadTable(result.data);
+            this.loadTableRows(result.data);
             this.loadPreviousSelections();
-            this.loadProgramCohorts(this.cohorts);
+            this.dispatchLoaded();
         } else if (result.error) {
             this.allEngagements = undefined;
             this.cohorts = undefined;
         }
+    }
 
-        this.isLoaded = true;
-        this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
+    loadTable(data) {
+        // Static data that should not change when new program engagements are added
+        if (this.isLoaded) {
+            return;
+        }
+
+        this.fields = data.fields;
+        this.fieldByFieldPath = data.fieldByFieldPath;
+        this.objectLabels = data.objectLabels;
+        this.programName = data.program ? data.program.Name : "";
+        this.programId = data.program ? data.program.Id : "";
+        this.formatLabels();
+        this.setDataTableColumns();
+        this.setSelectedColumns();
+        this.loadProgramCohorts(data);
     }
 
     formatLabels() {
@@ -189,24 +193,35 @@ export default class ParticipantSelector extends LightningElement {
         ]);
     }
 
-    loadDataTable() {
-        this.availableEngagementRows = this.allEngagements.map(engagement => {
-            // Flatten relationship fields
-            let programEngagement = { ...engagement };
-            for (const [field, value] of Object.entries(programEngagement)) {
-                if (typeof value === "object") {
-                    for (const [parentField, parentValue] of Object.entries(value)) {
-                        programEngagement[field + parentField] = parentValue;
+    loadTableRows(data) {
+        let selectedIds = this.selectedEngagements.map(engagement => engagement.Id);
+        this.allEngagements = data.programEngagements.slice(0);
+
+        this.availableEngagementRows = this.allEngagements
+            .filter(engagement => !selectedIds.includes(engagement.Id))
+            .map(engagement => {
+                // Flatten relationship fields
+                let programEngagement = { ...engagement };
+                for (const [field, value] of Object.entries(programEngagement)) {
+                    if (typeof value === "object") {
+                        for (const [parentField, parentValue] of Object.entries(value)) {
+                            programEngagement[field + parentField] = parentValue;
+                        }
                     }
                 }
-            }
 
-            return programEngagement;
-        });
-
+                return programEngagement;
+            });
         this.sortData(this.availableEngagementRows);
+    }
 
-        this.applyFilters();
+    dispatchLoaded() {
+        if (this.isLoaded) {
+            return;
+        }
+
+        this.isLoaded = true;
+        this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
     }
 
     get enableInfiniteLoading() {
@@ -223,7 +238,6 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     async processNewParticipant(id) {
-        this.isLoaded = false;
         await refreshApex(this.wiredData);
         this.handleSelectById(id);
     }
@@ -249,24 +263,28 @@ export default class ParticipantSelector extends LightningElement {
 
     loadPreviousSelections() {
         if (this.previouslySelectedEngagements === undefined) {
+            // Filters are applied when handleSelectParticipants is called
+            this.applyFilters();
             return;
         }
+
         this.previouslySelectedEngagements = [...this.previouslySelectedEngagements];
-        this.availableEngagementRows.forEach(eng => {
+        this.availableEngagementRows.forEach(row => {
             if (
                 this.existingContactIds.includes(
-                    eng[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
+                    row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
                 )
             ) {
-                eng.disableDeselect = true;
-                this.previouslySelectedEngagements.push(eng);
+                row.disableDeselect = true;
+                this.previouslySelectedEngagements.push(row);
             }
         });
         this.handleSelectParticipants();
     }
 
-    loadProgramCohorts(cohorts) {
-        this.searchOptions = cohorts.map(element => {
+    loadProgramCohorts(data) {
+        this.cohorts = data.programCohorts.slice(0);
+        this.searchOptions = this.cohorts.map(element => {
             let newObj = {};
             newObj.label = element.Name;
             newObj.value = element.Id;
@@ -343,12 +361,12 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleSelectById(programEngagementId) {
-        let index = this.availableEngagementRows.findIndex(
+        let row = this.availableEngagementRows.find(
             element => element.Id === programEngagementId
         );
 
-        if (index) {
-            this.handleSelect([this.availableEngagementRows[index]]);
+        if (row) {
+            this.handleSelect([row]);
         }
     }
 
@@ -357,12 +375,18 @@ export default class ParticipantSelector extends LightningElement {
             let index = this.availableEngagementRows.findIndex(
                 element => element.Id === row.Id
             );
-            this.availableEngagementRows.splice(index, 1);
-            if (!this.selectedEngagements.includes(row)) {
+            if (index >= 0) {
+                this.availableEngagementRows.splice(index, 1);
+            }
+            let selectedRow = this.selectedEngagements.find(
+                engagement => engagement.Id === row.Id
+            );
+            if (!selectedRow) {
                 this.selectedEngagements.push(row);
             }
         });
 
+        // force the screen to rerender the selected engagements
         this.selectedEngagements = [...this.selectedEngagements];
         this.applyFilters();
         this.sortData(this.selectedEngagements);
@@ -423,16 +447,6 @@ export default class ParticipantSelector extends LightningElement {
                     ? row[this.fields.programCohort.apiName] === this.cohortId
                     : true)
         );
-
-        let selectedEngagementIds = [];
-        this.selectedEngagements.forEach(eng => {
-            selectedEngagementIds.push(eng.Id);
-        });
-
-        // Remove already selected rows
-        this.filteredEngagements = this.filteredEngagements.filter(row => {
-            return !selectedEngagementIds.includes(row.Id);
-        });
 
         this.availableEngagementsForSelection = this.filteredEngagements.slice(
             0,

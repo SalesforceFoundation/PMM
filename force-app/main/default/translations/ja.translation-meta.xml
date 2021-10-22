@@ -81,6 +81,14 @@
         <label>続行するには 1 人以上の取引先責任者を選択します。</label>
     </customLabels>
     <customLabels>
+        <name>Cant_Find_Participant</name>
+        <label>適切な参加者が見つからない場合</label>
+    </customLabels>
+    <customLabels>
+        <name>Cant_Find_Contact</name>
+        <label>適切な取引先責任者が見つからない場合</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>出席を追跡</label>
     </customLabels>
@@ -115,6 +123,10 @@
     <customLabels>
         <name>Cancel</name>
         <label>キャンセル</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel_and_Back</name>
+        <label>キャンセルして戻る</label>
     </customLabels>
     <customLabels>
         <name>Clicking_Back_Button_In_Modal_Warning</name>
@@ -247,6 +259,10 @@
     <customLabels>
         <name>New_Program_Engagement</name>
         <label>新規プログラムエンゲージメント</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Contact</name>
+        <label>新規取引先責任者</label>
     </customLabels>
     <customLabels>
         <name>New_Service_Schedule</name>
@@ -531,6 +547,10 @@
     <customLabels>
         <name>Util_UnsupportedField</name>
         <label>この項目にアクセスできません。Salesforce システム管理者にお問い合わせください。</label>
+    </customLabels>
+    <customLabels>
+        <name>New</name>
+        <label>新規</label>
     </customLabels>
     <customLabels>
         <name>UpsertOperationException</name>

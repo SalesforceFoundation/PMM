@@ -2,12 +2,12 @@
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <caseValues>
         <plural>false</plural>
-        <value><!-- Bucket --></value>
+        <value/>
     </caseValues>
     <caseValues>
         <plural>true</plural>
-        <value><!-- Bucket --></value>
+        <value/>
     </caseValues>
-    <gender><!-- Masculine --></gender>
-    <startsWith><!-- Consonant --></startsWith>
+    <gender/>
+    <startsWith/>
 </CustomObjectTranslation>

@@ -36,7 +36,6 @@
         "test:unit": "lwc-jest",
         "test:unit:watch": "lwc-jest --watch",
         "test:unit:debug": "lwc-jest --debug",
-        "test:unit:a11y": "SA11Y_AUTO=1 SA11Y_CLEANUP=1 lwc-jest",
         "test:unit:coverage": "lwc-jest --coverage"
     }
 }

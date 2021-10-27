@@ -76,7 +76,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         Test.startTest();
         model.serviceSchedule = schedule;
         model.serviceSessions = sessions;
-        model.selectedParticipants = selectedEngagements;
+        model.selectedEngagements = selectedEngagements;
         domain.insertModel(model);
         Test.stopTest();
 

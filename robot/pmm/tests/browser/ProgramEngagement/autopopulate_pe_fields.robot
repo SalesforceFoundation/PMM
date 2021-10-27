@@ -50,9 +50,8 @@ Autopopulate fields when stage is set to Applied
      Click Object Button                     New
      Wait For Modal                          New                            Program Engagement
      Populate Field                          Program Engagement Name        ${program_engagement_name}
-     Populate Lookup Field                   Program                        ${program}[Name]
      Select Value From Dropdown              Stage                          Applied
-     Select Value From Dropdown              Role                           Volunteer
+     Populate Lookup Field                   Program                        ${program}[Name]
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Application Date                 contains               ${today}
@@ -67,9 +66,8 @@ Autopopulate fields when stage is set to Completed
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Field                          Program Engagement Name        ${program_engagement_name}
-     Populate Lookup Field                   Program                        ${program}[Name]
      Select Value From Dropdown              Stage                          Completed
-     Select Value From Dropdown              Role                           Volunteer
+     Populate Lookup Field                   Program                        ${program}[Name]
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          End Date                         contains               ${today}
@@ -84,9 +82,8 @@ Autopopulate fields when stage is set to Withdrawn
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Field                          Program Engagement Name        ${program_engagement_name}
-     Populate Lookup Field                   Program                        ${program}[Name]
      Select Value From Dropdown              Stage                          Withdrawn
-     Select Value From Dropdown              Role                           Service Provider
+     Populate Lookup Field                   Program                        ${program}[Name]
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          End Date                         contains               ${today}
@@ -101,9 +98,8 @@ Autopopulate fields when stage is set to Active with Program start date is later
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
      Populate Field                          Program Engagement Name        ${program_engagement_name}
-     Select Value From Dropdown              Stage               Active
+     Select Value From Dropdown              Stage                           Active
      Populate Lookup Field                   Program                        ${program1}[Name]
-     Select Value From Dropdown              Role                           Service Provider
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Start Date                      does not contain               ${today}
@@ -119,7 +115,6 @@ Autopopulate fields when stage is set to Active with Program start date is today
      Populate Field                          Program Engagement Name     ${program_engagement_name}
      Select Value From Dropdown              Stage               Active
      Populate Lookup Field                   Program                        ${program2}[Name]
-     Select Value From Dropdown              Role                           Service Provider
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
      Verify Details                          Start Date                      contains               ${today}
@@ -135,7 +130,6 @@ Autopopulate fields when stage is set to Applied with Program start date is earl
      Populate Field                          Program Engagement Name       ${program_engagement_name}
      Select Value From Dropdown              Stage               Applied
      Populate Lookup Field                   Program                        ${program3}[Name]
-     Select Value From Dropdown              Role                           Service Provider
      Populate Field                          Start Date               ${start_date}
      Click Dialog Button                     Save
      Wait Until Modal Is Closed

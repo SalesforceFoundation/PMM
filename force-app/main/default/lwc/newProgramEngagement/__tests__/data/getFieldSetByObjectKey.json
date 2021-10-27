@@ -1,0 +1,118 @@
+{
+    "engagementFieldSet": [
+        {
+            "apiName": "Contact__c",
+            "label": "Client",
+            "type": "REFERENCE",
+            "isRequired": false,
+            "isAccessible": true,
+            "relationshipName": "Contact__r",
+            "referenceTo": "Contact",
+            "referenceNameField": "Name",
+            "isUpdateable": true
+        },
+        {
+            "apiName": "Program__c",
+            "label": "Program",
+            "type": "REFERENCE",
+            "isRequired": true,
+            "isAccessible": true,
+            "relationshipName": "Program__r",
+            "referenceTo": "Program__c",
+            "referenceNameField": "Name",
+            "isUpdateable": true
+        },
+        {
+            "apiName": "Stage__c",
+            "label": "Stage",
+            "type": "PICKLIST",
+            "isRequired": false,
+            "helpText": "These Picklist values describe a Contact's stage of engagement in a Program and are displayed in a Path. Values are determined by your Admin.",
+            "isAccessible": true,
+            "isUpdateable": true
+        },
+        {
+            "apiName": "Role__c",
+            "label": "Role",
+            "type": "PICKLIST",
+            "isRequired": false,
+            "helpText": "A Contact's relationship with the Program Engagement. Values are determined by your Admin.",
+            "isAccessible": true,
+            "isUpdateable": true
+        },
+        {
+            "apiName": "ApplicationDate__c",
+            "label": "Application Date",
+            "type": "DATE",
+            "isRequired": false,
+            "helpText": "If the Program Engagement stage is Applied, the Application Date defaults to today if left blank.",
+            "isAccessible": true,
+            "isUpdateable": true
+        },
+        {
+            "apiName": "StartDate__c",
+            "label": "Start Date",
+            "type": "DATE",
+            "isRequired": false,
+            "helpText": "If the Program Engagement Stage is Enrolled or Active, the Start Date defaults to today if left blank.",
+            "isAccessible": true,
+            "isUpdateable": true
+        },
+        {
+            "apiName": "ProgramCohort__c",
+            "label": "Program Cohort",
+            "type": "REFERENCE",
+            "isRequired": false,
+            "isAccessible": true,
+            "relationshipName": "ProgramCohort__r",
+            "referenceTo": "ProgramCohort__c",
+            "referenceNameField": "Name",
+            "isUpdateable": true
+        }
+    ],
+    "contactFieldSet": [
+        {
+            "apiName": "Name",
+            "label": "Full Name",
+            "type": "STRING",
+            "isRequired": true,
+            "isAccessible": true,
+            "isUpdateable": false
+        },
+        {
+            "apiName": "Phone",
+            "label": "Business Phone",
+            "type": "PHONE",
+            "isRequired": false,
+            "isAccessible": true,
+            "isUpdateable": true
+        },
+        {
+            "apiName": "Email",
+            "label": "Email",
+            "type": "EMAIL",
+            "isRequired": false,
+            "isAccessible": true,
+            "isUpdateable": true
+        },
+        {
+            "apiName": "AccountId",
+            "label": "Account Name",
+            "type": "REFERENCE",
+            "isRequired": false,
+            "isAccessible": true,
+            "relationshipName": "Account",
+            "referenceTo": "Account",
+            "referenceNameField": "Name",
+            "isUpdateable": true
+        },
+        {
+            "apiName": "IsClient__c",
+            "label": "Client",
+            "type": "BOOLEAN",
+            "isRequired": false,
+            "isAccessible": true,
+            "isUpdateable": true
+        }
+    ]
+}

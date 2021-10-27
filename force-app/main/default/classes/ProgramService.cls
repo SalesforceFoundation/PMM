@@ -11,6 +11,9 @@ public with sharing class ProgramService {
     @TestVisible
     private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
 
+    @TestVisible
+    private ProgramSelector programSelector = new ProgramSelector();
+
     public Map<Id, String> getProgramNamesByIdForContact(Id contactId) {
         Map<Id, String> programNamesById = new Map<Id, String>();
         for (
@@ -21,5 +24,9 @@ public with sharing class ProgramService {
             programNamesById.put(engagement.Program__c, engagement.Program__r.Name);
         }
         return programNamesById;
+    }
+
+    public List<ProgramCohort__c> getProgramCohortsFromProgramId(Id programId) {
+        return programSelector.getProgramCohortsFromProgramId(programId);
     }
 }

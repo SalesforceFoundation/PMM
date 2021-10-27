@@ -432,3 +432,18 @@ class pmm(object):
             "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'})",
             element,
         )
+
+    def select_app_from_all_items(self, app_name):
+        """Navigates to a Salesforce App via the App Launcher and selects an app from all items"""
+        locator_app_name = pmm_lex_locators["app_launcher"][
+            "app_link_search_result"
+        ].format(app_name)
+        locator_search_input = pmm_lex_locators["app_launcher"]["search_input"]
+        self.builtin.log("Opening the App Launcher")
+        self.salesforce.open_app_launcher()
+        time.sleep(5)
+        search_input_box = self.selenium.driver.find_element_by_xpath(
+            locator_search_input
+        )
+        search_input_box.send_keys(app_name)
+        self.selenium.click_element(locator_app_name)

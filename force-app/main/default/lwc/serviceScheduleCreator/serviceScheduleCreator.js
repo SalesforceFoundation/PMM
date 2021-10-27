@@ -253,13 +253,13 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     processServiceParticipants() {
         let participantSelector = this.template.querySelector("c-participant-selector");
 
-        if (!(participantSelector && participantSelector.selectedParticipants)) {
+        if (!(participantSelector && participantSelector.selectedEngagements)) {
             return;
         }
 
         this.hideSpinner = false;
-        this.serviceScheduleModel.selectedParticipants =
-            participantSelector.selectedParticipants;
+        this.serviceScheduleModel.selectedEngagements =
+            participantSelector.selectedEngagements;
         this.participantColumns = participantSelector.columns;
 
         this.setNextStep();
@@ -279,7 +279,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             this.serviceScheduleModel.serviceSessions = this.originalModel.serviceSessions;
         } else if (this.isStep3) {
             this.hideSpinner = false;
-            this.serviceScheduleModel.selectedParticipants = this.originalModel.selectedParticipants;
+            this.serviceScheduleModel.selectedEngagements = this.originalModel.selectedEngagements;
         }
 
         this.setBackStep();

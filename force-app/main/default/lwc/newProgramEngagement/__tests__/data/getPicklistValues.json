@@ -1,0 +1,34 @@
+{
+    "controllerValues": {},
+    "defaultValue": {
+        "attributes": null,
+        "label": "Active",
+        "validFor": [],
+        "value": "Active"
+    },
+    "url": "/services/data/v52.0/ui-api/object-info/ProgramEngagement__c/picklist-values/012000000000000AAA/Stage__c",
+    "values": [
+        { "attributes": null, "label": "Applied", "validFor": [], "value": "Applied" },
+        {
+            "attributes": null,
+            "label": "Application Denied",
+            "validFor": [],
+            "value": "Application Denied"
+        },
+        {
+            "attributes": null,
+            "label": "Waitlisted",
+            "validFor": [],
+            "value": "Waitlisted"
+        },
+        { "attributes": null, "label": "Enrolled", "validFor": [], "value": "Enrolled" },
+        { "attributes": null, "label": "Active", "validFor": [], "value": "Active" },
+        {
+            "attributes": null,
+            "label": "Completed",
+            "validFor": [],
+            "value": "Completed"
+        },
+        { "attributes": null, "label": "Withdrawn", "validFor": [], "value": "Withdrawn" }
+    ]
+}

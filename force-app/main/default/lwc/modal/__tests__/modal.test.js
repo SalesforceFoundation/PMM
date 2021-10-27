@@ -47,7 +47,7 @@ describe("c-modal", () => {
             //verify that the header slot is not displayed because the header is present
             const slotContainer = element.shadowRoot.querySelector(".header-slot");
             expect(slotContainer).toBeNull();
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 
@@ -82,7 +82,7 @@ describe("c-modal", () => {
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer.textContent).toBe(HEADER_STRING);
             expect(handler).toHaveBeenCalled();
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 
@@ -99,7 +99,7 @@ describe("c-modal", () => {
             element.show();
             //verify that there is no CSS class present
             expect(modalContainer.classList.value).toBe("");
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
 
             element.hide();
             //verify that the CSS class exists
@@ -114,6 +114,6 @@ describe("c-modal", () => {
         slot.textContent = "Test Accessibility";
         h2Container.attachShadow({ mode: "open" }).appendChild(slot.cloneNode(true));
         // assert that DOM is accessible (using extended preset-rule)
-        await expect(element).toBeAccessible();
+        global.isAccessible(element);
     });
 });

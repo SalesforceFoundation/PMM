@@ -46,7 +46,7 @@ describe("c-formattedField", () => {
                 "lightning-formatted-text"
             );
             expect(lightningFormattedText.value).toBe(mockRecord.Name);
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
     it("displays a lightning formatted text field when a related value is present", async () => {
@@ -61,7 +61,7 @@ describe("c-formattedField", () => {
                 "lightning-formatted-text"
             );
             expect(lightningFormattedText.value).toBe(mockRecord.Account.Name);
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
     it("displays a lightning formatted text field when a related value is not present", async () => {
@@ -75,7 +75,7 @@ describe("c-formattedField", () => {
                 "lightning-formatted-text"
             );
             expect(lightningFormattedText.value).toBeUndefined();
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
     it("displays a lightning formatted text field when a value is missing", async () => {
@@ -90,7 +90,7 @@ describe("c-formattedField", () => {
                 "lightning-formatted-text"
             );
             expect(lightningFormattedText.value).toBeUndefined();
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 
@@ -103,7 +103,7 @@ describe("c-formattedField", () => {
                 "lightning-formatted-text"
             );
             expect(lightningFormattedText.value).toBeUndefined();
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 
@@ -122,7 +122,7 @@ describe("c-formattedField", () => {
                 "lightning-formatted-date-time"
             );
             expect(lightningFormattedDateTime.value).toBe(today);
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 
@@ -141,7 +141,7 @@ describe("c-formattedField", () => {
                 "lightning-formatted-date-time"
             );
             expect(lightningFormattedDateTime.value).toBe(today);
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 
@@ -162,7 +162,7 @@ describe("c-formattedField", () => {
             // Javascript will convert the number into time format, relying on TimeZones
             // validating the semi colons vs the actual time.
             expect(lightningFormattedTime.value.includes(":")).toBeTruthy();
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 });

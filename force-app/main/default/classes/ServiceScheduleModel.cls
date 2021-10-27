@@ -20,7 +20,7 @@ public with sharing class ServiceScheduleModel {
     @AuraEnabled
     public List<ServiceSession__c> serviceSessions { get; set; }
     @AuraEnabled
-    public List<ProgramEngagement__c> selectedParticipants { get; set; }
+    public List<ProgramEngagement__c> selectedEngagements { get; set; }
     @AuraEnabled
     public Map<String, Map<String, String>> labels = new Map<String, Map<String, String>>();
     @AuraEnabled
@@ -112,7 +112,7 @@ public with sharing class ServiceScheduleModel {
             true
         );
         serviceSessions = new List<ServiceSession__c>();
-        selectedParticipants = new List<ProgramEngagement__c>();
+        selectedEngagements = new List<ProgramEngagement__c>();
         serviceParticipants = new List<ServiceParticipant__c>();
         maxSessions = DEFAULT_MAX_SESSIONS;
 

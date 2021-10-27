@@ -32,7 +32,7 @@ describe("c-scoped-notification", () => {
         expect(themeDiv).toBeDefined();
         expect(icon.iconName).toBe("utility:info");
         expect(titlePara.textContent).toEqual("");
-        await expect(element).toBeAccessible();
+        global.isAccessible(element);
     });
 
     it("displays the light info theme", async () => {
@@ -48,7 +48,7 @@ describe("c-scoped-notification", () => {
         expect(themeDiv).toBeDefined();
         expect(icon.iconName).toBe("utility:info");
         expect(titlePara.textContent).toEqual(TITLE);
-        await expect(element).toBeAccessible();
+        global.isAccessible(element);
     });
 
     it("displays the theme provided", () => {
@@ -65,7 +65,7 @@ describe("c-scoped-notification", () => {
             expect(themeDiv).toBeDefined();
             expect(icon.iconName).toBe(`utility:${theme}`);
             expect(titlePara.textContent).toEqual(TITLE);
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 });

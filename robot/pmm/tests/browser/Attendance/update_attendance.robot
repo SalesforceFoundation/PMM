@@ -23,6 +23,8 @@ Setup Test Data
     Set suite variable              ${contact2}
     ${contact3}                     API Create Contact
     Set suite variable              ${contact3}
+    ${service_provider}             API Create Contact
+    Set suite variable              ${service_provider}
     ${program} =                    API Create Program
     Set suite variable              ${program}
     ${service} =                    API Create Service                  ${Program}[Id]
@@ -33,6 +35,8 @@ Setup Test Data
     Set suite variable              ${service_session1}
     ${service_session2} =           API Create Service Session          ${service_schedule}[Id]     Complete
     Set suite variable              ${service_session2}
+    ${service_session3} =           API Create Service Session          ${service_schedule}[Id]     Pending
+    Set suite variable              ${service_session3}
     ${service_participant1} =       API Create Service Participant      ${contact1}[Id]   ${service_schedule}[Id]  ${service}[Id]
     Set suite variable              ${service_participant1}
     ${service_participant2} =       API Create Service Participant      ${contact2}[Id]   ${service_schedule}[Id]  ${service}[Id]
@@ -77,3 +81,18 @@ Update attendance when service session status is Complete
     Page Should Contain Text        ${contact1}[Name]
     Page Should Contain Text        ${contact2}[Name]
     Page Should Contain Text        ${contact3}[Name]
+
+Validate fields added to AttendanceServiceDeliveries Fieldset
+    [Documentation]                 This test updates attendance for a service session record with Complete Status
+    [tags]                          W-9505038    perm:admin   feature:Attendance
+    Run task                            add_fields_to_field_set
+    ...                                 field_set=${ns}ServiceDelivery__c.${ns}Attendance_Service_Deliveries
+    ...                                 fields=${{ ["${ns}Service_Provider__c"] }}
+    Go To Page                          Details         ServiceSession__c        object_id=${service_session3}[Id]
+    Page Should Contain                 Track Attendance         
+    Populate Attendance Field           ${contact1}[Name]       Hours                10
+    Populate Attendance Dropdown        ${contact1}[Name]       Attendance Status    Present
+    Populate Attendance Lookup Field    ${contact1}[Name]       Service Provider     ${service_provider}[Name]
+    Click Dialog Button                 Submit
+    Verify Toast Message                Saved 3 Service Delivery records.
+    Page Should Contain Text            ${service_provider}[Name]

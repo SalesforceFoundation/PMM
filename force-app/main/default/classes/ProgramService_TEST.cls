@@ -9,6 +9,45 @@
 
 @isTest
 public with sharing class ProgramService_TEST {
+    private static ProgramService programService = new ProgramService();
+
+    @IsTest
+    private static void testGetProgramCohortsFromProgramId() {
+        List<ProgramCohort__c> cohortsToReturn = new List<ProgramCohort__c>();
+        cohortsToReturn.add(
+            new ProgramCohort__c(
+                Id = TestUtil.mockId(ProgramCohort__c.SObjectType),
+                Name = 'Cohort1'
+            )
+        );
+        cohortsToReturn.add(
+            new ProgramCohort__c(
+                Id = TestUtil.mockId(ProgramCohort__c.SObjectType),
+                Name = 'Cohort2'
+            )
+        );
+
+        Id programId = TestUtil.mockId(Program__c.SObjectType);
+
+        TestStub programSelectorStub = new StubBuilder(ProgramSelector.class)
+            .when('getProgramCohortsFromProgramId', Id.class)
+            .calledWith(programId)
+            .thenReturn(cohortsToReturn)
+            .build();
+
+        programService.programSelector = (ProgramSelector) programSelectorStub.create();
+
+        Test.startTest();
+        System.assertEquals(
+            cohortsToReturn,
+            programService.getProgramCohortsFromProgramId(programId),
+            'Expected the service to return list delivered by selector.'
+        );
+        Test.stopTest();
+
+        programSelectorStub.assertCalledAsExpected();
+    }
+
     @isTest
     private static void testGetProgramNamesByIdForContact() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);

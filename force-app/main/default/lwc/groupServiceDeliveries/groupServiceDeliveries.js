@@ -21,8 +21,8 @@ export default class GroupServiceDeliveries extends LightningElement {
     currentStep = {};
     isOptionSelection = true;
     serviceDelivery;
-    selectedParticipants;
-    hasSelectedParticipants = false;
+    selectedEngagements;
+    hasSelectedEngagements = false;
 
     labels = {
         groupTitle,
@@ -50,7 +50,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     }
 
     get isNextDisabled() {
-        return this.isStep2 && !this.hasSelectedParticipants;
+        return this.isStep2 && !this.hasSelectedEngagements;
     }
 
     get nextTitle() {
@@ -85,7 +85,7 @@ export default class GroupServiceDeliveries extends LightningElement {
         }
 
         if (this.isStep2) {
-            this.getSelectedParticipants();
+            this.getSelectedEngagements();
             this.fireFinishEvent();
             return;
         }
@@ -98,7 +98,7 @@ export default class GroupServiceDeliveries extends LightningElement {
         this.dispatchEvent(
             new CustomEvent("finish", {
                 detail: {
-                    selectedParticipants: this.selectedParticipants,
+                    selectedEngagements: this.selectedEngagements,
                     serviceDelivery: this.serviceDelivery,
                 },
             })
@@ -111,7 +111,7 @@ export default class GroupServiceDeliveries extends LightningElement {
     }
 
     handleParticipantSelected(event) {
-        this.hasSelectedParticipants = event.detail.totalSelected > 0;
+        this.hasSelectedEngagements = event.detail.totalSelected > 0;
     }
 
     createSteps() {
@@ -136,13 +136,13 @@ export default class GroupServiceDeliveries extends LightningElement {
         this.serviceDelivery = serviceDelivery.getFields();
     }
 
-    getSelectedParticipants() {
+    getSelectedEngagements() {
         let participantSelector = this.template.querySelector("c-participant-selector");
 
         if (!participantSelector) {
             return;
         }
 
-        this.selectedParticipants = participantSelector.selectedParticipants;
+        this.selectedEngagements = participantSelector.selectedEngagements;
     }
 }

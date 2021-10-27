@@ -135,7 +135,7 @@ export default class ServiceScheduleReview extends LightningElement {
             this.serviceScheduleModel.labels.serviceParticipant.objectPluralLabel
         } (${
             this.hasServiceParticipants
-                ? this._serviceScheduleModel.selectedParticipants.length
+                ? this._serviceScheduleModel.selectedEngagements.length
                 : 0
         })`;
     }
@@ -149,7 +149,7 @@ export default class ServiceScheduleReview extends LightningElement {
     }
 
     get hasServiceParticipants() {
-        return this._serviceScheduleModel.selectedParticipants.length > 0;
+        return this._serviceScheduleModel.selectedEngagements.length > 0;
     }
 
     get hasServiceSessions() {

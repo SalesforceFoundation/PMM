@@ -61,7 +61,7 @@ describe("c-attendance", () => {
                 "c-attendance-row"
             );
             expect(attendanceRows).toHaveLength(mockGenerateRoster.length);
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
     it("shows empty state and no buttons when zero returned rows with no perms", async () => {
@@ -89,7 +89,7 @@ describe("c-attendance", () => {
             const buttons = element.shadowRoot.querySelectorAll("lightning-button");
             expect(buttons).toHaveLength(0);
 
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
     it("shows empty state and no buttons when zero returned rows with perms", async () => {
@@ -117,7 +117,7 @@ describe("c-attendance", () => {
             const buttons = element.shadowRoot.querySelectorAll("lightning-button");
             expect(buttons).toHaveLength(0);
 
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
     it("shows perms error when rows are returned with no perms", async () => {
@@ -142,7 +142,7 @@ describe("c-attendance", () => {
             );
             expect(scopedNotification).toHaveLength(1);
 
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 });

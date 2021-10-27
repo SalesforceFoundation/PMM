@@ -1,7 +1,6 @@
 **/jsconfig.json
 **/.eslintrc.json
-**/__tests__/**
-
+**/__tests__
 # All Profiles
 *.profile
 

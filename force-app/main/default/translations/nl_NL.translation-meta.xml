@@ -81,6 +81,14 @@
         <label>Selecteer ten minste één contactpersoon om door te gaan.</label>
     </customLabels>
     <customLabels>
+        <name>Cant_Find_Participant</name>
+        <label>Kunt u de juiste deelnemer niet vinden?</label>
+    </customLabels>
+    <customLabels>
+        <name>Cant_Find_Contact</name>
+        <label>Kunt u de juiste contactpersoon niet vinden?</label>
+    </customLabels>
+    <customLabels>
         <name>TrackAttendance</name>
         <label>Aanwezigheid bijhouden</label>
     </customLabels>
@@ -115,6 +123,10 @@
     <customLabels>
         <name>Cancel</name>
         <label>Annuleren</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel_and_Back</name>
+        <label>Annuleren en terug</label>
     </customLabels>
     <customLabels>
         <name>Clicking_Back_Button_In_Modal_Warning</name>
@@ -247,6 +259,10 @@
     <customLabels>
         <name>New_Program_Engagement</name>
         <label>Nieuwe programmabetrokkenheid</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Contact</name>
+        <label>Nieuwe contactpersoon</label>
     </customLabels>
     <customLabels>
         <name>New_Service_Schedule</name>
@@ -531,6 +547,10 @@
     <customLabels>
         <name>Util_UnsupportedField</name>
         <label>U hebt geen toegang tot dit veld. Uw Salesforce-beheerder kan hierbij helpen.</label>
+    </customLabels>
+    <customLabels>
+        <name>New</name>
+        <label>Nieuw</label>
     </customLabels>
     <customLabels>
         <name>UpsertOperationException</name>

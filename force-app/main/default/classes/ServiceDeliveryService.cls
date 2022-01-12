@@ -10,6 +10,8 @@
 public with sharing class ServiceDeliveryService {
     @TestVisible
     private ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
+    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
     private static final String ABSENT = 'Absent';
@@ -206,7 +208,7 @@ public with sharing class ServiceDeliveryService {
         List<String> bucketNames = new List<String>{ ABSENT, PRESENT };
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
-        for (Bucket__mdt bucket : deliverySelector.getBuckets(bucketNames)) {
+        for (Bucket__mdt bucket : bucketSelector.getBuckets(bucketNames)) {
             buckets.put(bucket.DeveloperName, new List<String>());
             for (BucketedValue__mdt value : bucket.BucketedValues__r) {
                 buckets.get(bucket.DeveloperName).add(value.Value__c);

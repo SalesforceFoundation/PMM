@@ -208,7 +208,10 @@ public with sharing class ServiceDeliveryService {
         List<String> bucketNames = new List<String>{ ABSENT, PRESENT };
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
-        for (Bucket__mdt bucket : bucketSelector.getBuckets(bucketNames)) {
+        Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType; 
+        Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap().get('Status__c');  
+
+        for (Bucket__mdt bucket : bucketSelector.getBuckets(bucketNames, serviceDeliverySObjType, statusField)) {
             buckets.put(bucket.DeveloperName, new List<String>());
             for (BucketedValue__mdt value : bucket.BucketedValues__r) {
                 buckets.get(bucket.DeveloperName).add(value.Value__c);

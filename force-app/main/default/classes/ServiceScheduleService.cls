@@ -18,12 +18,9 @@ public with sharing class ServiceScheduleService {
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
     private RecurrenceService recurrenceService = new RecurrenceService();
+    private ProgramEngagementService progEngagementService = new ProgramEngagementService();
     private static final String ONE_TIME = 'One Time';
     @TestVisible
-    private static final Set<String> ACTIVE_ENGAGEMENT_STAGES = new Set<String>{
-        'Active',
-        'Enrolled'
-    };
 
     public ServiceScheduleModel getServiceScheduleModel(Id recordTypeId) {
         return new ServiceScheduleModel(recordTypeId);
@@ -239,7 +236,7 @@ public with sharing class ServiceScheduleService {
         model.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
             model.program.Id,
             getSelectFieldsWithToLabel(model),
-            ACTIVE_ENGAGEMENT_STAGES
+            progEngagementService.getActiveOrEnrolledStages()
         );
     }
 

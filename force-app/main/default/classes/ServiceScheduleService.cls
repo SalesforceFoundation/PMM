@@ -21,7 +21,6 @@ public with sharing class ServiceScheduleService {
     private ProgramEngagementService progEngagementService = new ProgramEngagementService();
     private static final String ONE_TIME = 'One Time';
     @TestVisible
-
     public ServiceScheduleModel getServiceScheduleModel(Id recordTypeId) {
         return new ServiceScheduleModel(recordTypeId);
     }

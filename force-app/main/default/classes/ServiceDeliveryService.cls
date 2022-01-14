@@ -211,7 +211,7 @@ public with sharing class ServiceDeliveryService {
 
         Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
         Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap()
-            .get('Status__c');
+            .get('AttendanceStatus__c');
 
         for (
             Bucket__mdt bucket : bucketSelector.getBuckets(

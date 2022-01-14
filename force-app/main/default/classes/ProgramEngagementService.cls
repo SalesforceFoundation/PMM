@@ -11,6 +11,17 @@ public with sharing class ProgramEngagementService {
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
+    @TestVisible
+    private Set<String> activeOrEnrolledStages {
+        get {
+            if (activeOrEnrolledStages == null) {
+                activeOrEnrolledStages = getActiveOrEnrolledStages();
+            }
+            return activeOrEnrolledStages;
+        }
+        set;
+    }
+
     public Set<String> getActiveOrEnrolledStages() {
         List<String> bucketNames = new List<String>{ 'ActiveOrEnrolled' };
         Set<String> activeOrEnrolledStages = new Set<String>();

@@ -23,7 +23,7 @@ public with sharing class ServiceDeliveryService_TEST {
 
         Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
         Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap()
-            .get('Status__c');
+            .get('AttendanceStatus__c');
 
         List<Bucket__mdt> bucketsToReturn = [
             SELECT

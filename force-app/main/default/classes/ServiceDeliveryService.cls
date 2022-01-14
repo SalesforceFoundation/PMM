@@ -10,6 +10,7 @@
 public with sharing class ServiceDeliveryService {
     @TestVisible
     private ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
+    @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
     @TestVisible

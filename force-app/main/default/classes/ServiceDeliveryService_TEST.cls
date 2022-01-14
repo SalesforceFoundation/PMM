@@ -10,6 +10,7 @@
 @IsTest
 public with sharing class ServiceDeliveryService_TEST {
     private static TestStub deliverySelectorStub;
+    private static TestStub bucketSelectorStub;
     private static TestStub domainStub;
     private static TestStub permValidatorStub;
     private static TestStub systemAccessStub;
@@ -19,6 +20,11 @@ public with sharing class ServiceDeliveryService_TEST {
     @IsTest
     private static void shouldGetBuckets() {
         List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
+
+        Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
+        Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap()
+            .get('Status__c');
+
         List<Bucket__mdt> bucketsToReturn = [
             SELECT
                 Id,
@@ -27,16 +33,27 @@ public with sharing class ServiceDeliveryService_TEST {
                 QualifiedApiName,
                 (SELECT Id, Value__c FROM BucketedValues__r)
             FROM Bucket__mdt
-            WHERE DeveloperName IN :bucketNames AND NamespacePrefix = :Util.getNamespace()
+            WHERE
+                DeveloperName IN :bucketNames
+                AND NamespacePrefix = :Util.getNamespace()
+                AND BucketedField__r.Object__r.QualifiedApiName = :serviceDeliverySObjType.getDescribe()
+                    .getName()
+            //AND BucketedField__r.Field__r.QualifiedApiName = :statusField.getDescribe().getLocalName()
             ORDER BY QualifiedApiName
         ];
-        deliverySelectorStub = new StubBuilder(ServiceDeliverySelector.class)
-            .when('getBuckets', List<String>.class)
-            .calledWith(bucketNames)
+
+        bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
+            .when(
+                'getBuckets',
+                List<String>.class,
+                Schema.SOBjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, serviceDeliverySObjType, statusField)
             .thenReturn(bucketsToReturn)
             .build();
 
-        service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
+        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
 
         Test.startTest();
         Map<String, List<String>> buckets = service.statusBuckets;
@@ -51,7 +68,7 @@ public with sharing class ServiceDeliveryService_TEST {
             );
         }
 
-        deliverySelectorStub.assertCalledAsExpected();
+        bucketSelectorStub.assertCalledAsExpected();
     }
 
     @IsTest

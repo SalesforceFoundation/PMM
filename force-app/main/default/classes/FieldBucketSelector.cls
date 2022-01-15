@@ -17,7 +17,7 @@ public with sharing class FieldBucketSelector {
         // with SOQL for this layer.
 
         String sObjectAPIName = objectType.getDescribe().getName();
-        //String bucketedFieldAPIName = bucketedField.getDescribe().getName();
+        String bucketedFieldAPIName = bucketedField.getDescribe().getName();
 
         return [
             SELECT

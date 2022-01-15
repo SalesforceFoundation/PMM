@@ -17,9 +17,11 @@ public with sharing class ProgramEngagementService_TEST {
     private static void shouldGetActiveOrEnrolledStages() {
         List<String> bucketNames = new List<String>{ 'ActiveOrEnrolled' };
 
+        String stageFieldAPIName = Util.prefixNamespace('Stage__c');
+
         Schema.SObjectType programEngagementSObjType = ProgramEngagement__c.SObjectType;
         Schema.SObjectField stageField = Schema.SObjectType.ProgramEngagement__c.fields.getMap()
-            .get('Stage__c');
+            .get(stageFieldAPIName);
 
         Set<String> stagesToReturn = new Set<String>{ 'Active', 'Enrolled' };
 

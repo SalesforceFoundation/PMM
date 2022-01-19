@@ -18,8 +18,7 @@ public with sharing class FieldBucketSelector_TEST {
 
         String statusFieldApiName = Util.prefixNamespace('AttendanceStatus__c');
 
-        Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap()
-            .get(statusFieldApiName);
+        Schema.SObjectField statusField = ServiceDelivery__c.AttendanceStatus__c;
 
         List<Bucket__mdt> buckets = bucketSelector.getBuckets(
             bucketNames,

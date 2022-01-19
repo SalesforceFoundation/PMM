@@ -209,11 +209,8 @@ public with sharing class ServiceDeliveryService {
         List<String> bucketNames = new List<String>{ ABSENT, PRESENT };
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
-        String statusFieldApiName = Util.prefixNamespace('AttendanceStatus__c');
-
         Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
-        Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap()
-            .get(statusFieldApiName);
+        Schema.SObjectField statusField = ServiceDelivery__c.AttendanceStatus__c;
 
         for (
             Bucket__mdt bucket : bucketSelector.getBuckets(

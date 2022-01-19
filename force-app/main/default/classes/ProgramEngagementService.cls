@@ -24,13 +24,10 @@ public with sharing class ProgramEngagementService {
 
     public Set<String> getActiveStages() {
         List<String> bucketNames = new List<String>{ 'Active' };
-        Set<String> ActiveStages = new Set<String>();
-
-        String stageFieldApiName = Util.prefixNamespace('Stage__c');
+        Set<String> activeStages = new Set<String>();
 
         Schema.SObjectType programEngagementSObjType = ProgramEngagement__c.SObjectType;
-        Schema.SObjectField stageField = Schema.SObjectType.ProgramEngagement__c.fields.getMap()
-            .get(stageFieldApiName);
+        Schema.SObjectField stageField = ProgramEngagement__c.Stage__c;
 
         for (
             Bucket__mdt bucket : bucketSelector.getBuckets(
@@ -40,10 +37,10 @@ public with sharing class ProgramEngagementService {
             )
         ) {
             for (BucketedValue__mdt value : bucket.BucketedValues__r) {
-                ActiveStages.add(value.Value__c);
+                activeStages.add(value.Value__c);
             }
         }
 
-        return ActiveStages;
+        return activeStages;
     }
 }

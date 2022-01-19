@@ -27,7 +27,7 @@ public with sharing class ServiceDeliveryService_TEST {
         Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap()
             .get(statusFieldAPIName);
 
-        List<Bucket__mdt> bucketsToReturn = [
+        List<Bucket__mdt> attendanceBuckets = [
             SELECT
                 Id,
                 DeveloperName,
@@ -40,9 +40,18 @@ public with sharing class ServiceDeliveryService_TEST {
                 AND NamespacePrefix = :Util.getNamespace()
                 AND BucketedField__r.Object__r.QualifiedApiName = :serviceDeliverySObjType.getDescribe()
                     .getName()
-            //AND BucketedField__r.Field__r.QualifiedApiName = :statusField.getDescribe().getLocalName()
             ORDER BY QualifiedApiName
         ];
+
+        List<Bucket__mdt> bucketsToReturn = new List<Bucket__mdt>();
+        for (Bucket__mdt bucket : attendanceBuckets) {
+            if (
+                bucket.BucketedField__r.Field__r.QualifiedApiName ==
+                statusField.getDescribe().getName()
+            ) {
+                bucketsToReturn.add(bucket);
+            }
+        }
 
         bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
             .when(

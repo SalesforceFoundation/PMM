@@ -4,7 +4,7 @@
     <protected>false</protected>
     <values>
         <field>Bucket__c</field>
-        <value xsi:type="xsd:string">ActiveOrEnrolled</value>
+        <value xsi:type="xsd:string">Active</value>
     </values>
     <values>
         <field>Value__c</field>

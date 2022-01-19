@@ -19,7 +19,7 @@ public with sharing class FieldBucketSelector {
         String sObjectAPIName = objectType.getDescribe().getName();
         String bucketedFieldAPIName = bucketedField.getDescribe().getName();
 
-        return [
+        List<Bucket__mdt> matchingBucketsOnObject = [
             SELECT
                 Id,
                 DeveloperName,
@@ -32,8 +32,23 @@ public with sharing class FieldBucketSelector {
                 DeveloperName IN :bucketNames
                 AND NamespacePrefix = :Util.getNamespace()
                 AND BucketedField__r.Object__r.QualifiedApiName = :sObjectAPIName
-            //AND BucketedField__r.Field__r.QualifiedApiName = :bucketedFieldAPIName
             ORDER BY QualifiedApiName
         ];
+
+        List<Bucket__mdt> matchingBucketsOnFieldAndObject = new List<Bucket__mdt>();
+
+        // As of the time of writing, attempting to includ 'BucketedField__r.Field__r.QualifiedApiName'
+        // in the WHERE clause caused an Internal Server Error. As a workaround, testing manually
+        // here in the for loop.
+
+        for (Bucket__mdt bucket : matchingBucketsOnObject) {
+            if (
+                bucket.BucketedField__r.Field__r.QualifiedApiName == bucketedFieldAPIName
+            ) {
+                matchingBucketsOnFieldAndObject.add(bucket);
+            }
+        }
+
+        return matchingBucketsOnFieldAndObject;
     }
 }

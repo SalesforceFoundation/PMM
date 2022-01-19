@@ -12,19 +12,19 @@ public with sharing class ProgramEngagementService {
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
     @TestVisible
-    private Set<String> activeOrEnrolledStages {
+    private Set<String> activeStages {
         get {
-            if (activeOrEnrolledStages == null) {
-                activeOrEnrolledStages = getActiveOrEnrolledStages();
+            if (activeStages == null) {
+                activeStages = getActiveStages();
             }
-            return activeOrEnrolledStages;
+            return activeStages;
         }
         set;
     }
 
-    public Set<String> getActiveOrEnrolledStages() {
-        List<String> bucketNames = new List<String>{ 'ActiveOrEnrolled' };
-        Set<String> activeOrEnrolledStages = new Set<String>();
+    public Set<String> getActiveStages() {
+        List<String> bucketNames = new List<String>{ 'Active' };
+        Set<String> ActiveStages = new Set<String>();
 
         String stageFieldAPIName = Util.prefixNamespace('Stage__c');
 
@@ -40,10 +40,10 @@ public with sharing class ProgramEngagementService {
             )
         ) {
             for (BucketedValue__mdt value : bucket.BucketedValues__r) {
-                activeOrEnrolledStages.add(value.Value__c);
+                ActiveStages.add(value.Value__c);
             }
         }
 
-        return activeOrEnrolledStages;
+        return ActiveStages;
     }
 }

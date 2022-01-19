@@ -235,7 +235,7 @@ public with sharing class ServiceScheduleService {
         model.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
             model.program.Id,
             getSelectFieldsWithToLabel(model),
-            progEngagementService.getActiveOrEnrolledStages()
+            progEngagementService.getActiveStages()
         );
     }
 

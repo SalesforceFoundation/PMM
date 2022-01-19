@@ -14,8 +14,8 @@ public with sharing class ProgramEngagementService_TEST {
     private static ProgramEngagementService service = new ProgramEngagementService();
 
     @IsTest
-    private static void shouldGetActiveOrEnrolledStages() {
-        List<String> bucketNames = new List<String>{ 'ActiveOrEnrolled' };
+    private static void shouldGetActiveStages() {
+        List<String> bucketNames = new List<String>{ 'Active' };
 
         String stageFieldAPIName = Util.prefixNamespace('Stage__c');
 
@@ -26,7 +26,7 @@ public with sharing class ProgramEngagementService_TEST {
         Set<String> stagesToReturn = new Set<String>{ 'Active', 'Enrolled' };
 
         Test.startTest();
-        Set<String> returnedStages = service.activeOrEnrolledStages;
+        Set<String> returnedStages = service.ActiveStages;
         Test.stopTest();
 
         for (String stageName : stagesToReturn) {

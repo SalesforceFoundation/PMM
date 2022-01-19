@@ -16,10 +16,10 @@ public with sharing class FieldBucketSelector_TEST {
         List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
         Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
 
-        String statusFieldAPIName = Util.prefixNamespace('AttendanceStatus__c');
+        String statusFieldApiName = Util.prefixNamespace('AttendanceStatus__c');
 
         Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap()
-            .get(statusFieldAPIName);
+            .get(statusFieldApiName);
 
         List<Bucket__mdt> buckets = bucketSelector.getBuckets(
             bucketNames,

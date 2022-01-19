@@ -26,11 +26,11 @@ public with sharing class ProgramEngagementService {
         List<String> bucketNames = new List<String>{ 'Active' };
         Set<String> ActiveStages = new Set<String>();
 
-        String stageFieldAPIName = Util.prefixNamespace('Stage__c');
+        String stageFieldApiName = Util.prefixNamespace('Stage__c');
 
         Schema.SObjectType programEngagementSObjType = ProgramEngagement__c.SObjectType;
         Schema.SObjectField stageField = Schema.SObjectType.ProgramEngagement__c.fields.getMap()
-            .get(stageFieldAPIName);
+            .get(stageFieldApiName);
 
         for (
             Bucket__mdt bucket : bucketSelector.getBuckets(

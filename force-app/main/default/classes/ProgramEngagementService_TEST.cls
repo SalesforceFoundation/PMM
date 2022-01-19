@@ -17,11 +17,11 @@ public with sharing class ProgramEngagementService_TEST {
     private static void shouldGetActiveStages() {
         List<String> bucketNames = new List<String>{ 'Active' };
 
-        String stageFieldAPIName = Util.prefixNamespace('Stage__c');
+        String stageFieldApiName = Util.prefixNamespace('Stage__c');
 
         Schema.SObjectType programEngagementSObjType = ProgramEngagement__c.SObjectType;
         Schema.SObjectField stageField = Schema.SObjectType.ProgramEngagement__c.fields.getMap()
-            .get(stageFieldAPIName);
+            .get(stageFieldApiName);
 
         Set<String> stagesToReturn = new Set<String>{ 'Active', 'Enrolled' };
 

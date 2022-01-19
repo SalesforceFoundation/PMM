@@ -21,11 +21,11 @@ public with sharing class ServiceDeliveryService_TEST {
     private static void shouldGetBuckets() {
         List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
 
-        String statusFieldAPIName = Util.prefixNamespace('AttendanceStatus__c');
+        String statusFieldApiName = Util.prefixNamespace('AttendanceStatus__c');
 
         Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
         Schema.SObjectField statusField = Schema.SObjectType.ServiceDelivery__c.fields.getMap()
-            .get(statusFieldAPIName);
+            .get(statusFieldApiName);
 
         List<Bucket__mdt> attendanceBuckets = [
             SELECT

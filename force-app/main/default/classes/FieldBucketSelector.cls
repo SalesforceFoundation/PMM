@@ -16,8 +16,8 @@ public with sharing class FieldBucketSelector {
         // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
         // with SOQL for this layer.
 
-        String sObjectAPIName = objectType.getDescribe().getName();
-        String bucketedFieldAPIName = bucketedField.getDescribe().getName();
+        String sObjectApiName = objectType.getDescribe().getName();
+        String bucketedFieldApiName = bucketedField.getDescribe().getName();
 
         List<Bucket__mdt> matchingBucketsOnObject = [
             SELECT
@@ -31,7 +31,7 @@ public with sharing class FieldBucketSelector {
             WHERE
                 DeveloperName IN :bucketNames
                 AND NamespacePrefix = :Util.getNamespace()
-                AND BucketedField__r.Object__r.QualifiedApiName = :sObjectAPIName
+                AND BucketedField__r.Object__r.QualifiedApiName = :sObjectApiName
             ORDER BY QualifiedApiName
         ];
 
@@ -43,7 +43,7 @@ public with sharing class FieldBucketSelector {
 
         for (Bucket__mdt bucket : matchingBucketsOnObject) {
             if (
-                bucket.BucketedField__r.Field__r.QualifiedApiName == bucketedFieldAPIName
+                bucket.BucketedField__r.Field__r.QualifiedApiName == bucketedFieldApiName
             ) {
                 matchingBucketsOnFieldAndObject.add(bucket);
             }

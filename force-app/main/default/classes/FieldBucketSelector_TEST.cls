@@ -14,10 +14,8 @@ public with sharing class FieldBucketSelector_TEST {
     @IsTest
     private static void getAttendanceBucketsReturnsPackagedBuckets() {
         List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
+
         Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
-
-        String statusFieldApiName = Util.prefixNamespace('AttendanceStatus__c');
-
         Schema.SObjectField statusField = ServiceDelivery__c.AttendanceStatus__c;
 
         List<Bucket__mdt> buckets = bucketSelector.getBuckets(

@@ -60,6 +60,7 @@ export default class NewProgramEngagement extends LightningElement {
     @track stageOptions = [];
     recordTypeId;
     selectedCohortId;
+    picklistDefinedDefaultStage;
     selectedStage;
     defaultStage;
     allowNewContact = false;
@@ -98,6 +99,8 @@ export default class NewProgramEngagement extends LightningElement {
     wireActiveStages({ data, error }) {
         if (data) {
             this.allowedProgramEngagementStages = data;
+            this.setDefaultStage();
+            this.selectedStage = this.defaultStage;
         } else if (error) {
             handleError(error);
         }
@@ -131,25 +134,9 @@ export default class NewProgramEngagement extends LightningElement {
     })
     wiredStageValues({ error, data }) {
         if (data && data.values) {
-            let defaultValue = data.defaultValue;
-            if (
-                data.defaultValue &&
-                this.allowedProgramEngagementStages.includes(defaultValue.value)
-            ) {
-                this.defaultStage = defaultValue.value;
-            } else {
-                // In the event that the picklist values for prog engagement stage have
-                // fallen out of sync with the allowed values that are defined as active,
-                // set the default stage to a currently available picklist value that is
-                // defined as active/allowed. If no available stages are defined as active
-                // the record will fail to save.
-                if (this.allowedProgramEngagementStages) {
-                    this.defaultStage = this.allowedProgramEngagementStages.find(
-                        allowedStage => data.values.includes(allowedStage)
-                    );
-                }
-            }
-            this.selectedStage = this.defaultStage;
+            this.picklistDefinedDefaultStage = data.defaultValue;
+
+            this.setDefaultStage();
 
             data.values.forEach(entry => {
                 this.stageOptions.push({ label: entry.label, value: entry.value });
@@ -170,6 +157,32 @@ export default class NewProgramEngagement extends LightningElement {
     hideModal() {
         this.template.querySelector("c-modal").hide();
         this.resetForm();
+    }
+
+    setDefaultStage() {
+        if (this.allowedProgramEngagementStages) {
+            if (
+                this.picklistDefinedDefaultStage &&
+                this.allowedProgramEngagementStages.includes(
+                    this.picklistDefinedDefaultStage.value
+                )
+            ) {
+                this.defaultStage = this.picklistDefinedDefaultStage.value;
+            } else {
+                // In the event that the picklist values for prog engagement stage have
+                // fallen out of sync with the allowed values that are defined as active,
+                // set the default stage to a currently available picklist value that is
+                // defined as active/allowed. If no available stages are defined as active
+                // the record will fail to save.
+                this.stageOptions.every(option => {
+                    if (this.allowedProgramEngagementStages.includes(option.value)) {
+                        this.defaultStage = option.value;
+                        return false;
+                    }
+                    return true;
+                });
+            }
+        }
     }
 
     handleCancel() {

@@ -9,6 +9,8 @@
 
 @isTest
 public with sharing class ProgramEngagementSelector_TEST {
+    private static TestStub bucketSelectorStub;
+
     private static final Set<String> ACTIVE_ENGAGEMENT_STAGES = new Set<String>{
         'Active',
         'Enrolled'

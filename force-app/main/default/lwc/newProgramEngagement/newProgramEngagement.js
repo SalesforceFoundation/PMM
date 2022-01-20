@@ -137,6 +137,7 @@ export default class NewProgramEngagement extends LightningElement {
             this.picklistDefinedDefaultStage = data.defaultValue;
 
             this.setDefaultStage();
+            this.selectedStage = this.defaultStage;
 
             data.values.forEach(entry => {
                 this.stageOptions.push({ label: entry.label, value: entry.value });

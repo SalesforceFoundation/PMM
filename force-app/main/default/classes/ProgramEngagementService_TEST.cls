@@ -38,7 +38,7 @@ public with sharing class ProgramEngagementService_TEST {
         Set<String> expectedStages = new Set<String>{ 'Active', 'Enrolled' };
 
         Test.startTest();
-        Set<String> returnedStages = service.ActiveStages;
+        Set<String> returnedStages = service.activeStages;
         Test.stopTest();
 
         for (String stageName : expectedStages) {

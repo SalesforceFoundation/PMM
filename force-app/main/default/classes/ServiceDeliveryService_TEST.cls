@@ -30,7 +30,7 @@ public with sharing class ServiceDeliveryService_TEST {
             .when(
                 'getBuckets',
                 List<String>.class,
-                Schema.SOBjectType.class,
+                Schema.SObjectType.class,
                 Schema.SObjectField.class
             )
             .calledWith(bucketNames, serviceDeliverySObjType, statusField)

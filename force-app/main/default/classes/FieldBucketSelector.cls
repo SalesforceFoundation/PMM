@@ -37,7 +37,7 @@ public with sharing class FieldBucketSelector {
 
         List<Bucket__mdt> matchingBucketsOnFieldAndObject = new List<Bucket__mdt>();
 
-        // As of the time of writing, attempting to includ 'BucketedField__r.Field__r.QualifiedApiName'
+        // At the time of writing, attempting to include 'BucketedField__r.Field__r.QualifiedApiName'
         // in the WHERE clause caused an Internal Server Error. As a workaround, testing manually
         // here in the for loop.
 

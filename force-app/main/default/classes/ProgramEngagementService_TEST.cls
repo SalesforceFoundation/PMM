@@ -20,13 +20,28 @@ public with sharing class ProgramEngagementService_TEST {
         Schema.SObjectType programEngagementSObjType = ProgramEngagement__c.SObjectType;
         Schema.SObjectField stageField = ProgramEngagement__c.Stage__c;
 
-        Set<String> stagesToReturn = new Set<String>{ 'Active', 'Enrolled' };
+        List<Bucket__mdt> stageBuckets = createBuckets();
+
+        bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
+            .when(
+                'getBuckets',
+                List<String>.class,
+                Schema.SOBjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, programEngagementSObjType, stageField)
+            .thenReturn(stageBuckets)
+            .build();
+
+        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
+
+        Set<String> expectedStages = new Set<String>{ 'Active', 'Enrolled' };
 
         Test.startTest();
         Set<String> returnedStages = service.ActiveStages;
         Test.stopTest();
 
-        for (String stageName : stagesToReturn) {
+        for (String stageName : expectedStages) {
             System.assert(
                 returnedStages.contains(stageName),
                 'Expected the stage ' +
@@ -34,5 +49,46 @@ public with sharing class ProgramEngagementService_TEST {
                 ' to be returned.'
             );
         }
+        bucketSelectorStub.assertCalledAsExpected();
+    }
+
+    private static List<Bucket__mdt> createBuckets() {
+        BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
+            .withDeveloperName('ProgramEngagementStage')
+            .withQualifiedApiName('ProgramEngagementStage')
+            .withField('Stage__c')
+            .withObject('ProgramEngagement__c')
+            .withMockId()
+            .build();
+
+        List<BucketedValue__mdt> activeValues = new List<BucketedValue__mdt>();
+        activeValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('Active')
+                .withQualifiedApiName('Active')
+                .withBucket('Active')
+                .withValue('Active')
+                .withMockId()
+                .build()
+        );
+        activeValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('Enrolled')
+                .withQualifiedApiName('Enrolled')
+                .withBucket('Active')
+                .withValue('Enrolled')
+                .withMockId()
+                .build()
+        );
+
+        Bucket__mdt activeBucket = (Bucket__mdt) new TestUtil.BucketBuilder()
+            .withBucketedField(bucketedField)
+            .withBucketedValues(activeValues)
+            .withDeveloperName('Active')
+            .withQualifiedApiName('Active')
+            .withMockId()
+            .build();
+
+        return new List<Bucket__mdt>{ activeBucket };
     }
 }

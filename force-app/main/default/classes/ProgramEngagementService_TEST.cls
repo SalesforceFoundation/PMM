@@ -56,8 +56,8 @@ public with sharing class ProgramEngagementService_TEST {
         BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
             .withDeveloperName('ProgramEngagementStage')
             .withQualifiedApiName('ProgramEngagementStage')
-            .withField('Stage__c')
-            .withObject('ProgramEngagement__c')
+            .withField(String.valueOf(ProgramEngagement__c.Stage__c))
+            .withObject(String.valueOf(ProgramEngagement__c.SObjectType))
             .withMockId()
             .build();
 

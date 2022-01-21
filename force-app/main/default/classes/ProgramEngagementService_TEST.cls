@@ -55,7 +55,7 @@ public with sharing class ProgramEngagementService_TEST {
     private static List<Bucket__mdt> createBuckets() {
         BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
             .withDeveloperName('ProgramEngagementStage')
-            .withQualifiedApiName('ProgramEngagementStage')
+            .withQualifiedApiName(Util.prefixNamespace('ProgramEngagementStage'))
             .withField('Stage__c')
             .withObject('ProgramEngagement__c')
             .withMockId()
@@ -65,7 +65,7 @@ public with sharing class ProgramEngagementService_TEST {
         activeValues.add(
             (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
                 .withDeveloperName('Active')
-                .withQualifiedApiName('Active')
+                .withQualifiedApiName(Util.prefixNamespace('Active'))
                 .withBucket('Active')
                 .withValue('Active')
                 .withMockId()
@@ -74,7 +74,7 @@ public with sharing class ProgramEngagementService_TEST {
         activeValues.add(
             (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
                 .withDeveloperName('Enrolled')
-                .withQualifiedApiName('Enrolled')
+                .withQualifiedApiName(Util.prefixNamespace('Enrolled'))
                 .withBucket('Active')
                 .withValue('Enrolled')
                 .withMockId()
@@ -85,7 +85,7 @@ public with sharing class ProgramEngagementService_TEST {
             .withBucketedField(bucketedField)
             .withBucketedValues(activeValues)
             .withDeveloperName('Active')
-            .withQualifiedApiName('Active')
+            .withQualifiedApiName(Util.prefixNamespace('Active'))
             .withMockId()
             .build();
 

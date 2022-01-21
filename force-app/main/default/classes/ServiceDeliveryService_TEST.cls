@@ -382,7 +382,7 @@ public with sharing class ServiceDeliveryService_TEST {
     private static List<Bucket__mdt> createBuckets() {
         BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
             .withDeveloperName('AttendanceStatuses')
-            .withQualifiedApiName('AttendanceStatuses')
+            .withQualifiedApiName(Util.prefixNamespace('AttendanceStatuses'))
             .withField('AttendanceStatus__c')
             .withObject('ServiceDelivery__c')
             .withMockId()
@@ -392,7 +392,7 @@ public with sharing class ServiceDeliveryService_TEST {
         absentValues.add(
             (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
                 .withDeveloperName('ExcusedAbsence')
-                .withQualifiedApiName('ExcusedAbsence')
+                .withQualifiedApiName(Util.prefixNamespace('ExcusedAbsence'))
                 .withBucket('Absent')
                 .withValue('Excused Absence')
                 .withMockId()
@@ -401,7 +401,7 @@ public with sharing class ServiceDeliveryService_TEST {
         absentValues.add(
             (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
                 .withDeveloperName('UnexcusedAbsence')
-                .withQualifiedApiName('UnexcusedAbsence')
+                .withQualifiedApiName(Util.prefixNamespace('UnexcusedAbsence'))
                 .withBucket('Absent')
                 .withValue('Unexcused Absence')
                 .withMockId()
@@ -412,7 +412,7 @@ public with sharing class ServiceDeliveryService_TEST {
         presentValues.add(
             (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
                 .withDeveloperName('Present')
-                .withQualifiedApiName('Present')
+                .withQualifiedApiName(Util.prefixNamespace('Present'))
                 .withBucket('Present')
                 .withValue('Present')
                 .withMockId()
@@ -423,7 +423,7 @@ public with sharing class ServiceDeliveryService_TEST {
             .withBucketedField(bucketedField)
             .withBucketedValues(absentValues)
             .withDeveloperName('Absent')
-            .withQualifiedApiName('Absent')
+            .withQualifiedApiName(Util.prefixNamespace('Absent'))
             .withMockId()
             .build();
 
@@ -431,7 +431,7 @@ public with sharing class ServiceDeliveryService_TEST {
             .withBucketedField(bucketedField)
             .withBucketedValues(presentValues)
             .withDeveloperName('Present')
-            .withQualifiedApiName('Present')
+            .withQualifiedApiName(Util.prefixNamespace('Present'))
             .withMockId()
             .build();
 

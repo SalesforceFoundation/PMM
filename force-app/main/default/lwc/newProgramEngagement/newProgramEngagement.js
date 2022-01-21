@@ -100,7 +100,6 @@ export default class NewProgramEngagement extends LightningElement {
         if (data) {
             this.allowedProgramEngagementStages = data;
             this.setDefaultStage();
-            this.selectedStage = this.defaultStage;
         } else if (error) {
             handleError(error);
         }
@@ -137,7 +136,6 @@ export default class NewProgramEngagement extends LightningElement {
             this.picklistDefinedDefaultStage = data.defaultValue;
 
             this.setDefaultStage();
-            this.selectedStage = this.defaultStage;
 
             data.values.forEach(entry => {
                 this.stageOptions.push({ label: entry.label, value: entry.value });
@@ -182,6 +180,9 @@ export default class NewProgramEngagement extends LightningElement {
                     }
                     return true;
                 });
+            }
+            if (!this.selectedStage && this.defaultStage) {
+                this.selectedStage = this.defaultStage;
             }
         }
     }
@@ -338,9 +339,12 @@ export default class NewProgramEngagement extends LightningElement {
                     if (this.allowNewContact) {
                         field.isStageField = true;
                         field.isCombobox = true;
-                        this.stageOptions = this.stageOptions.filter(stage =>
-                            this.allowedProgramEngagementStages.includes(stage.value)
-                        );
+                        if (this.stageOptions && this.stageOptions.length > 0) {
+                            this.stageOptions = this.stageOptions.filter(stage =>
+                                this.allowedProgramEngagementStages.includes(stage.value)
+                            );
+                        }
+                        this.setDefaultStage();
                     }
                 }
 

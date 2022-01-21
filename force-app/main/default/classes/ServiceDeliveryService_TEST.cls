@@ -383,8 +383,8 @@ public with sharing class ServiceDeliveryService_TEST {
         BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
             .withDeveloperName('AttendanceStatuses')
             .withQualifiedApiName('AttendanceStatuses')
-            .withField(Util.prefixNamespace('AttendanceStatus__c'))
-            .withObject(Util.prefixNamespace('ServiceDelivery__c'))
+            .withField('AttendanceStatus__c')
+            .withObject('ServiceDelivery__c')
             .withMockId()
             .build();
 

@@ -70,12 +70,4 @@ public with sharing class Util {
     public static String prefixNamespace(String value) {
         return String.isBlank(namespace) ? value : namespace + '__' + value;
     }
-
-    public static String stripNamespaceFromSchema(String value) {
-        String delim = '__';
-        if (value.contains(delim) && !String.isBlank(namespace)) {
-            return value.replace(namespace + delim, '');
-        }
-        return value;
-    }
 }

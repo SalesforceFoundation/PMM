@@ -208,7 +208,10 @@ public with sharing class TestUtil {
         }
 
         public BucketBuilder withBucketedValues(List<BucketedValue__mdt> values) {
-            valuesByFieldName.put('BucketedValues__r', makeRelatedList(values));
+            valuesByFieldName.put(
+                Util.prefixNamespace('BucketedValues__r'),
+                makeRelatedList(values)
+            );
             return this;
         }
     }

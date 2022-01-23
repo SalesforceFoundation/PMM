@@ -246,17 +246,6 @@ public with sharing class TestUtil {
             );
             String jsonString = JSON.serialize(valuesByFieldName);
 
-            System.debug(' **** JSON String for ' + sObjectTypeName);
-            for (Integer i = 0; i < jsonString.length(); i = i + 200) {
-                System.debug(
-                    ' *** ' +
-                    jsonString.subString(
-                        i,
-                        (Integer) Math.min(i + 200, jsonString.length())
-                    )
-                );
-            }
-
             return (SObject) JSON.deserialize(jsonString, SObject.class);
         }
 

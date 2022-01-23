@@ -38,7 +38,7 @@ public with sharing class ServiceSessionService_TEST {
             ORDER BY SessionStart__c
         ];
 
-        System.AssertEquals(
+        System.assertEquals(
             2,
             expectedSessions.size(),
             'Test data should include two service sessions for this week'

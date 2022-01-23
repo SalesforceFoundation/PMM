@@ -42,7 +42,7 @@ public with sharing class ServiceSessionSelector_TEST {
             'The list size of actual Sessions is not the same as the list size of expected Sessions'
         );
 
-        System.AssertEquals(
+        System.assertEquals(
             2,
             expectedSessions.size(),
             'Test data should include two service sessions for this week'

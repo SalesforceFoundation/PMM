@@ -26,7 +26,7 @@ public with sharing class ProgramEngagementService_TEST {
             .when(
                 'getBuckets',
                 List<String>.class,
-                Schema.SOBjectType.class,
+                Schema.SObjectType.class,
                 Schema.SObjectField.class
             )
             .calledWith(bucketNames, programEngagementSObjType, stageField)

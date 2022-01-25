@@ -10,6 +10,7 @@
 @IsTest
 public with sharing class ServiceDeliveryService_TEST {
     private static TestStub deliverySelectorStub;
+    private static TestStub bucketSelectorStub;
     private static TestStub domainStub;
     private static TestStub permValidatorStub;
     private static TestStub systemAccessStub;
@@ -19,24 +20,24 @@ public with sharing class ServiceDeliveryService_TEST {
     @IsTest
     private static void shouldGetBuckets() {
         List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
-        List<Bucket__mdt> bucketsToReturn = [
-            SELECT
-                Id,
-                DeveloperName,
-                BucketedField__r.Field__r.QualifiedApiName,
-                QualifiedApiName,
-                (SELECT Id, Value__c FROM BucketedValues__r)
-            FROM Bucket__mdt
-            WHERE DeveloperName IN :bucketNames AND NamespacePrefix = :Util.getNamespace()
-            ORDER BY QualifiedApiName
-        ];
-        deliverySelectorStub = new StubBuilder(ServiceDeliverySelector.class)
-            .when('getBuckets', List<String>.class)
-            .calledWith(bucketNames)
-            .thenReturn(bucketsToReturn)
+
+        Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
+        Schema.SObjectField statusField = ServiceDelivery__c.AttendanceStatus__c;
+
+        List<Bucket__mdt> attendanceBuckets = createBuckets();
+
+        bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
+            .when(
+                'getBuckets',
+                List<String>.class,
+                Schema.SObjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, serviceDeliverySObjType, statusField)
+            .thenReturn(attendanceBuckets)
             .build();
 
-        service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
+        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
 
         Test.startTest();
         Map<String, List<String>> buckets = service.statusBuckets;
@@ -51,7 +52,7 @@ public with sharing class ServiceDeliveryService_TEST {
             );
         }
 
-        deliverySelectorStub.assertCalledAsExpected();
+        bucketSelectorStub.assertCalledAsExpected();
     }
 
     @IsTest
@@ -376,5 +377,64 @@ public with sharing class ServiceDeliveryService_TEST {
             Contact__c = TestUtil.mockId(Contact.SObjectType),
             ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType)
         );
+    }
+
+    private static List<Bucket__mdt> createBuckets() {
+        BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
+            .withDeveloperName('AttendanceStatuses')
+            .withQualifiedApiName(Util.prefixNamespace('AttendanceStatuses'))
+            .withField('AttendanceStatus__c')
+            .withObject('ServiceDelivery__c')
+            .withMockId()
+            .build();
+
+        List<BucketedValue__mdt> absentValues = new List<BucketedValue__mdt>();
+        absentValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('ExcusedAbsence')
+                .withQualifiedApiName(Util.prefixNamespace('ExcusedAbsence'))
+                .withBucket('Absent')
+                .withValue('Excused Absence')
+                .withMockId()
+                .build()
+        );
+        absentValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('UnexcusedAbsence')
+                .withQualifiedApiName(Util.prefixNamespace('UnexcusedAbsence'))
+                .withBucket('Absent')
+                .withValue('Unexcused Absence')
+                .withMockId()
+                .build()
+        );
+
+        List<BucketedValue__mdt> presentValues = new List<BucketedValue__mdt>();
+        presentValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('Present')
+                .withQualifiedApiName(Util.prefixNamespace('Present'))
+                .withBucket('Present')
+                .withValue('Present')
+                .withMockId()
+                .build()
+        );
+
+        Bucket__mdt absentBucket = (Bucket__mdt) new TestUtil.BucketBuilder()
+            .withBucketedField(bucketedField)
+            .withBucketedValues(absentValues)
+            .withDeveloperName('Absent')
+            .withQualifiedApiName(Util.prefixNamespace('Absent'))
+            .withMockId()
+            .build();
+
+        Bucket__mdt presentBucket = (Bucket__mdt) new TestUtil.BucketBuilder()
+            .withBucketedField(bucketedField)
+            .withBucketedValues(presentValues)
+            .withDeveloperName('Present')
+            .withQualifiedApiName(Util.prefixNamespace('Present'))
+            .withMockId()
+            .build();
+
+        return new List<Bucket__mdt>{ absentBucket, presentBucket };
     }
 }

@@ -11,6 +11,9 @@ public with sharing class ServiceDeliveryService {
     @TestVisible
     private ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
     @TestVisible
+    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+
+    @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
     private static final String ABSENT = 'Absent';
     private static final String PRESENT = 'Present';
@@ -206,7 +209,16 @@ public with sharing class ServiceDeliveryService {
         List<String> bucketNames = new List<String>{ ABSENT, PRESENT };
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
-        for (Bucket__mdt bucket : deliverySelector.getBuckets(bucketNames)) {
+        Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
+        Schema.SObjectField statusField = ServiceDelivery__c.AttendanceStatus__c;
+
+        for (
+            Bucket__mdt bucket : bucketSelector.getBuckets(
+                bucketNames,
+                serviceDeliverySObjType,
+                statusField
+            )
+        ) {
             buckets.put(bucket.DeveloperName, new List<String>());
             for (BucketedValue__mdt value : bucket.BucketedValues__r) {
                 buckets.get(bucket.DeveloperName).add(value.Value__c);

@@ -15,6 +15,7 @@ import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import { handleError, showToast } from "c/util";
 import getProgramCohortsFromProgramId from "@salesforce/apex/ProgramController.getProgramCohortsFromProgramId";
 import getFieldSetByObjectKey from "@salesforce/apex/ProgramController.getFieldSetByObjectKey";
+import getActiveProgramEngagementStages from "@salesforce/apex/ProgramController.getActiveProgramEngagementStages";
 import PROGRAM_ENGAGEMENT_OBJECT from "@salesforce/schema/ProgramEngagement__c";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
 import CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
@@ -33,9 +34,6 @@ import newContact from "@salesforce/label/c.New_Contact";
 import cancelAndBack from "@salesforce/label/c.Cancel_and_Back";
 import cantFindContact from "@salesforce/label/c.Cant_Find_Contact";
 
-const ACTIVE = "Active";
-const ENROLLED = "Enrolled";
-const ALLOWED_STAGES = [ACTIVE, ENROLLED];
 const INNER_RIGHT_CLASS = "inner right";
 const INNER_LEFT_CLASS = "inner left";
 const SLIDE_CLASS = "slide";
@@ -53,6 +51,7 @@ export default class NewProgramEngagement extends LightningElement {
         return this._programId;
     }
     _programId;
+    @track allowedProgramEngagementStages;
     @track engagementFieldSet;
     @track localEngagementFieldSet = [];
     @track contactFieldSet;
@@ -61,6 +60,7 @@ export default class NewProgramEngagement extends LightningElement {
     @track stageOptions = [];
     recordTypeId;
     selectedCohortId;
+    picklistDefinedDefaultStage;
     selectedStage;
     defaultStage;
     allowNewContact = false;
@@ -95,6 +95,16 @@ export default class NewProgramEngagement extends LightningElement {
         }
     }
 
+    @wire(getActiveProgramEngagementStages)
+    wireActiveStages({ data, error }) {
+        if (data) {
+            this.allowedProgramEngagementStages = data;
+            this.setDefaultStage();
+        } else if (error) {
+            handleError(error);
+        }
+    }
+
     @wire(getProgramCohortsFromProgramId, {
         programId: "$selectedProgramId",
     })
@@ -123,19 +133,9 @@ export default class NewProgramEngagement extends LightningElement {
     })
     wiredStageValues({ error, data }) {
         if (data && data.values) {
-            let defaultValue = data.defaultValue;
-            if (data.defaultValue && ALLOWED_STAGES.includes(defaultValue.value)) {
-                this.defaultStage = defaultValue.value;
-            } else {
-                // If the customer removes the Active status then we will fall back
-                // to enrolled. If they do not have enrolled the record will fail to
-                // save. This is working as designed until we allow custom statuses
-                // for this component. It most be either Active or Enrolled.
-                this.defaultStage = data.values.includes(ALLOWED_STAGES[0])
-                    ? ALLOWED_STAGES[0]
-                    : ALLOWED_STAGES[1];
-            }
-            this.selectedStage = this.defaultStage;
+            this.picklistDefinedDefaultStage = data.defaultValue;
+
+            this.setDefaultStage();
 
             data.values.forEach(entry => {
                 this.stageOptions.push({ label: entry.label, value: entry.value });
@@ -156,6 +156,35 @@ export default class NewProgramEngagement extends LightningElement {
     hideModal() {
         this.template.querySelector("c-modal").hide();
         this.resetForm();
+    }
+
+    setDefaultStage() {
+        if (this.allowedProgramEngagementStages) {
+            if (
+                this.picklistDefinedDefaultStage &&
+                this.allowedProgramEngagementStages.includes(
+                    this.picklistDefinedDefaultStage.value
+                )
+            ) {
+                this.defaultStage = this.picklistDefinedDefaultStage.value;
+            } else {
+                // In the event that the picklist values for prog engagement stage have
+                // fallen out of sync with the allowed values that are defined as active,
+                // set the default stage to a currently available picklist value that is
+                // defined as active/allowed. If no available stages are defined as active
+                // the record will fail to save.
+                this.stageOptions.every(option => {
+                    if (this.allowedProgramEngagementStages.includes(option.value)) {
+                        this.defaultStage = option.value;
+                        return false;
+                    }
+                    return true;
+                });
+            }
+            if (!this.selectedStage && this.defaultStage) {
+                this.selectedStage = this.defaultStage;
+            }
+        }
     }
 
     handleCancel() {
@@ -310,9 +339,12 @@ export default class NewProgramEngagement extends LightningElement {
                     if (this.allowNewContact) {
                         field.isStageField = true;
                         field.isCombobox = true;
-                        this.stageOptions = this.stageOptions.filter(stage =>
-                            ALLOWED_STAGES.includes(stage.value)
-                        );
+                        if (this.stageOptions && this.stageOptions.length > 0) {
+                            this.stageOptions = this.stageOptions.filter(stage =>
+                                this.allowedProgramEngagementStages.includes(stage.value)
+                            );
+                        }
+                        this.setDefaultStage();
                     }
                 }
 

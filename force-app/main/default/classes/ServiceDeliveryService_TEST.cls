@@ -15,6 +15,8 @@ public with sharing class ServiceDeliveryService_TEST {
     private static TestStub permValidatorStub;
     private static TestStub systemAccessStub;
 
+    private static FieldSet defaultFieldSet = SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
+
     private static ServiceDeliveryService service = new ServiceDeliveryService();
 
     @IsTest
@@ -87,15 +89,20 @@ public with sharing class ServiceDeliveryService_TEST {
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
         deliverySelectorStub = new StubBuilder(ServiceDeliverySelector.class)
-            .when('getServiceDeliveriesBySessionId', Id.class)
-            .calledWith(sessionId)
+            .when('getAttendanceFieldSetName', Id.class)
+            .calledWith(scheduleId)
+            .thenReturn(null)
+            .when('getServiceDeliveriesBySessionId', FieldSet.class, Id.class)
+            .calledWith(defaultFieldSet, sessionId)
             .thenReturn(new List<ServiceDelivery__c>())
             .when('getServiceParticipantsByScheduleId', Id.class, Set<Id>.class)
             .calledWith(scheduleId, new Set<Id>())
             .thenReturn(new List<ServiceParticipant__c>())
             .when('getSession', Id.class)
             .calledWith(sessionId)
-            .thenReturn(new ServiceSession__c(ServiceSchedule__c = scheduleId))
+            .thenReturn(
+                new ServiceSession__c(Id = sessionId, ServiceSchedule__c = scheduleId)
+            )
             .build();
 
         service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
@@ -114,15 +121,23 @@ public with sharing class ServiceDeliveryService_TEST {
         };
         Id scheduleId = TestUtil.mockId(ServiceSchedule__c.SObjectType);
         deliverySelectorStub = new StubBuilder(ServiceDeliverySelector.class)
-            .when('getServiceDeliveriesBySessionId', Id.class)
-            .calledWith(deliveriesToReturn[0].ServiceSession__c)
+            .when('getAttendanceFieldSetName', Id.class)
+            .calledWith(scheduleId)
+            .thenReturn(null)
+            .when('getServiceDeliveriesBySessionId', FieldSet.class, Id.class)
+            .calledWith(defaultFieldSet, deliveriesToReturn[0].ServiceSession__c)
             .thenReturn(deliveriesToReturn)
             .when('getServiceParticipantsByScheduleId', Id.class, Set<Id>.class)
             .calledWith(scheduleId, new Set<Id>{ deliveriesToReturn[0].Contact__c })
             .thenReturn(new List<ServiceParticipant__c>())
             .when('getSession', Id.class)
             .calledWith(deliveriesToReturn[0].ServiceSession__c)
-            .thenReturn(new ServiceSession__c(ServiceSchedule__c = scheduleId))
+            .thenReturn(
+                new ServiceSession__c(
+                    Id = deliveriesToReturn[0].ServiceSession__c,
+                    ServiceSchedule__c = scheduleId
+                )
+            )
             .build();
 
         service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
@@ -130,7 +145,7 @@ public with sharing class ServiceDeliveryService_TEST {
         Test.startTest();
         System.assertEquals(
             deliveriesToReturn,
-            service.generateRoster(deliveriesToReturn[0].ServiceSession__c),
+            service.generateRoster(deliveriesToReturn[0].ServiceSession__c).deliveries,
             'Expected only the service deliveries returned by the selector.'
         );
         Test.stopTest();
@@ -149,8 +164,11 @@ public with sharing class ServiceDeliveryService_TEST {
         };
         List<ServiceDelivery__c> actualDeliveries;
         deliverySelectorStub = new StubBuilder(ServiceDeliverySelector.class)
-            .when('getServiceDeliveriesBySessionId', Id.class)
-            .calledWith(sessionId)
+            .when('getAttendanceFieldSetName', Id.class)
+            .calledWith(scheduleId)
+            .thenReturn(null)
+            .when('getServiceDeliveriesBySessionId', FieldSet.class, Id.class)
+            .calledWith(defaultFieldSet, sessionId)
             .thenReturn(new List<ServiceDelivery__c>())
             .when('getServiceParticipantsByScheduleId', Id.class, Set<Id>.class)
             .calledWith(scheduleId, new Set<Id>())
@@ -169,7 +187,7 @@ public with sharing class ServiceDeliveryService_TEST {
         service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
 
         Test.startTest();
-        actualDeliveries = service.generateRoster(sessionId);
+        actualDeliveries = service.generateRoster(sessionId).deliveries;
         Test.stopTest();
 
         System.assertEquals(
@@ -218,21 +236,26 @@ public with sharing class ServiceDeliveryService_TEST {
         List<ServiceDelivery__c> actualDeliveries;
 
         deliverySelectorStub = new StubBuilder(ServiceDeliverySelector.class)
-            .when('getServiceDeliveriesBySessionId', Id.class)
-            .calledWith(sessionId)
+            .when('getAttendanceFieldSetName', Id.class)
+            .calledWith(scheduleId)
+            .thenReturn(null)
+            .when('getServiceDeliveriesBySessionId', FieldSet.class, Id.class)
+            .calledWith(defaultFieldSet, sessionId)
             .thenReturn(deliveriesToReturn)
             .when('getServiceParticipantsByScheduleId', Id.class, Set<Id>.class)
             .calledWith(scheduleId, new Set<Id>{ deliveriesToReturn[0].Contact__c })
             .thenReturn(participantsToReturn)
             .when('getSession', Id.class)
             .calledWith(sessionId)
-            .thenReturn(new ServiceSession__c(ServiceSchedule__c = scheduleId))
+            .thenReturn(
+                new ServiceSession__c(Id = sessionId, ServiceSchedule__c = scheduleId)
+            )
             .build();
 
         service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
 
         Test.startTest();
-        actualDeliveries = service.generateRoster(sessionId);
+        actualDeliveries = service.generateRoster(sessionId).deliveries;
         Test.stopTest();
 
         System.assertEquals(
@@ -348,7 +371,7 @@ public with sharing class ServiceDeliveryService_TEST {
         ];
 
         Test.startTest();
-        actualDeliveries = service.generateRoster(session.Id);
+        actualDeliveries = service.generateRoster(session.Id).deliveries;
         Test.stopTest();
 
         Integer countParticipants = [

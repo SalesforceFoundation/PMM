@@ -12,6 +12,8 @@ public with sharing class ServiceDeliveryService {
     private ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+    @TestVisible
+    private FieldSetService fieldSetService = new FieldSetService();
 
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
@@ -66,8 +68,19 @@ public with sharing class ServiceDeliveryService {
         set;
     }
 
-    public List<ServiceDelivery__c> generateRoster(Id sessionId) {
-        return createRows(sessionId);
+    public Roster generateRoster(Id sessionId) {
+        ServiceSession__c session = deliverySelector.getSession(sessionId);
+        FieldSet fieldSet = getFieldSet(session.ServiceSchedule__c);
+        List<ServiceDelivery__c> deliveries = createServiceDeliveries(fieldSet, session);
+
+        return new Roster(
+            fieldSetService.getFieldSetForLWC(
+                String.valueOf(ServiceDelivery__c.SObjectType),
+                fieldSet.getName(),
+                false
+            ),
+            deliveries
+        );
     }
 
     public void upsertServiceDeliveries(
@@ -154,22 +167,36 @@ public with sharing class ServiceDeliveryService {
         return result;
     }
 
-    private List<ServiceDelivery__c> createRows(Id sessionId) {
+    private FieldSet getFieldSet(Id scheduleId) {
+        FieldSet defaultFieldSet = SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
+        String fieldSetName = deliverySelector.getAttendanceFieldSetName(scheduleId);
+        if (fieldSetName == null) {
+            return defaultFieldSet;
+        }
+        FieldSet fieldSet = fieldSetService.getFieldSet(
+            ServiceDelivery__c.SObjectType.getDescribe(),
+            fieldSetName
+        );
+
+        return fieldSet == null ? defaultFieldSet : fieldSet;
+    }
+
+    private List<ServiceDelivery__c> createServiceDeliveries(
+        FieldSet fieldSet,
+        ServiceSession__c session
+    ) {
         Set<Id> existingClients = new Set<Id>();
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
-            deliverySelector.getServiceDeliveriesBySessionId(sessionId)
+            deliverySelector.getServiceDeliveriesBySessionId(fieldSet, session.Id)
         );
 
         for (ServiceDelivery__c delivery : deliveries) {
             existingClients.add(delivery.Contact__c);
         }
 
-        ServiceSession__c session = deliverySelector.getSession(sessionId);
-        Id scheduleId = session.ServiceSchedule__c;
-
         for (
             ServiceParticipant__c participant : deliverySelector.getServiceParticipantsByScheduleId(
-                scheduleId,
+                session.ServiceSchedule__c,
                 existingClients
             )
         ) {
@@ -229,6 +256,21 @@ public with sharing class ServiceDeliveryService {
         }
 
         return buckets;
+    }
+
+    public class Roster {
+        @AuraEnabled
+        public List<Map<String, Object>> fieldSet;
+        @AuraEnabled
+        public List<ServiceDelivery__c> deliveries;
+
+        public Roster(
+            List<Map<String, Object>> fieldSet,
+            List<ServiceDelivery__c> deliveries
+        ) {
+            this.fieldSet = fieldSet;
+            this.deliveries = deliveries;
+        }
     }
 
     public class ServiceDeliveryException extends Exception {

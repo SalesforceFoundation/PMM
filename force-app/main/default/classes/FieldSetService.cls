@@ -163,7 +163,7 @@ public with sharing class FieldSetService {
      * @param String fieldSetName
      * @return      FieldSet
      */
-    private FieldSet getFieldSet(
+    public FieldSet getFieldSet(
         DescribeSObjectResult objectDescribe,
         String fieldSetName
     ) {

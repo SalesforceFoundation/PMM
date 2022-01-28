@@ -11,6 +11,7 @@
 public with sharing class ServiceDeliverySelector_TEST {
     private static ServiceDeliverySelector selector = new ServiceDeliverySelector();
     private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
+    private static FieldSet defaultFieldSet = SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
 
     @TestSetup
     private static void setupServiceSessionData() {
@@ -31,7 +32,10 @@ public with sharing class ServiceDeliverySelector_TEST {
         insert serviceDelivery.clone();
 
         Test.startTest();
-        actualDeliveries = selector.getServiceDeliveriesBySessionId(sessionId);
+        actualDeliveries = selector.getServiceDeliveriesBySessionId(
+            defaultFieldSet,
+            sessionId
+        );
         Test.stopTest();
 
         List<ServiceDelivery__c> sessionDeliveries = [
@@ -134,7 +138,10 @@ public with sharing class ServiceDeliverySelector_TEST {
 
         System.runAs(standardUser) {
             Test.startTest();
-            actualDeliveries = selector.getServiceDeliveriesBySessionId(sessionId);
+            actualDeliveries = selector.getServiceDeliveriesBySessionId(
+                defaultFieldSet,
+                sessionId
+            );
             Test.stopTest();
         }
 

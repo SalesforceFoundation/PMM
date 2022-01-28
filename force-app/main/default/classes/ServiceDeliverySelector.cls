@@ -10,12 +10,24 @@
 public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
-    public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
+    public String getAttendanceFieldSetName(Id scheduleId) {
+        // We want to bypass FLS because this is a system field that drives our UI
+        List<ServiceSchedule__c> schedules = [
+            SELECT Service__r.AttendanceFieldSet__c
+            FROM ServiceSchedule__c
+            WHERE Id = :scheduleId
+        ];
+
+        return schedules.isEmpty() ? null : schedules[0].Service__r.AttendanceFieldSet__c;
+    }
+
+    public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(
+        FieldSet fieldSet,
+        Id sessionId
+    ) {
         if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
             return new List<ServiceDelivery__c>();
         }
-
-        FieldSet fieldSet = SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
 
         queryBuilder.withSObjectType(ServiceDelivery__c.getSObjectType())
             .withSelectFields(fieldSet)

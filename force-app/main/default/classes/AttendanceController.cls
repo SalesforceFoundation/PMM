@@ -12,7 +12,7 @@ public with sharing class AttendanceController {
     private static ServiceDeliveryService service = new ServiceDeliveryService();
 
     @AuraEnabled(cacheable=true)
-    public static List<ServiceDelivery__c> generateRoster(Id sessionId) {
+    public static ServiceDeliveryService.Roster generateRoster(Id sessionId) {
         try {
             return service.generateRoster(sessionId);
         } catch (Exception ex) {

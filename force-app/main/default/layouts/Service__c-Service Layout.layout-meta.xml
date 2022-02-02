@@ -40,6 +40,10 @@
         <editHeading>true</editHeading>
         <label>System Information</label>
         <layoutColumns>
+        <layoutItems>
+                <behavior>Edit</behavior>
+                <field>AttendanceFieldSet__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>ServiceDeliveryFieldSet__c</field>

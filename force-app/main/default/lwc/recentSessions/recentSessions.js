@@ -73,6 +73,8 @@ export default class RecentSessions extends LightningElement {
 
     HOME = "Home";
     END = "End";
+    SMALL_REGION_WIDTH = 480;
+    MEDIUM_REGION_WIDTH = 768;
 
     @wire(getFieldByFieldPath, {
         objectName: SERVICE_SESSION_OBJECT.objectApiName,
@@ -143,7 +145,31 @@ export default class RecentSessions extends LightningElement {
     connectedCallback() {
         loadStyle(this, pmmFolder + "/recentSessionsOverrides.css");
         loadStyle(this, pmmFolder + "/listViewSelectorOverrides.css");
+        this.handleComponentSize();
+    }
 
+    renderedCallback() {
+        if (this.flexipageRegionWidth) {
+            return;
+        }
+
+        let sessionsComponent = this.template.querySelector(".sessions");
+
+        if (sessionsComponent) {
+            let sessionsComponentWidth = sessionsComponent.getBoundingClientRect().width;
+
+            if (sessionsComponentWidth <= this.SMALL_REGION_WIDTH) {
+                this.flexipageRegionWidth = "SMALL";
+            } else if (sessionsComponentWidth <= this.MEDIUM_REGION_WIDTH) {
+                this.flexipageRegionWidth = "MEDIUM";
+            } else {
+                this.flexipageRegionWidth = "LARGE";
+            }
+            this.handleComponentSize();
+        }
+    }
+
+    handleComponentSize() {
         if (this.flexipageRegionWidth === "SMALL") {
             this.sessionsContainerMediumSize = 12;
             this.sessionsContainerLargeSize = 12;

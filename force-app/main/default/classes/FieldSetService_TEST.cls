@@ -290,12 +290,11 @@ public with sharing class FieldSetService_TEST {
             'field, the returned map should have a null value for both ' +
             'referenceTo and referenceNameField';
 
-        Map<String, Object> f = (new FieldSetService())
-            .getfieldforLWC(Schema.Contact.Name.getDescribe());
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.Contact.Name.getDescribe());
 
-        System.assertEquals(null, f.get('referenceTo'), message);
-
-        System.assertEquals(null, f.get('referenceNameField'), message);
+        System.assertEquals(null, field.get('referenceTo'), message);
+        System.assertEquals(null, field.get('referenceNameField'), message);
     }
 
     @IsTest
@@ -305,12 +304,11 @@ public with sharing class FieldSetService_TEST {
             'lookup field, the return map should have the name and name field of ' +
             'the "first" object type referenced by the polymorphic lookup';
 
-        Map<String, Object> f = (new FieldSetService())
-            .getfieldforLWC(Schema.Case.OwnerId.getDescribe());
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.Case.OwnerId.getDescribe());
 
-        System.assertEquals('Group', f.get('referenceTo'), message);
-
-        System.assertEquals('Name', f.get('referenceNameField'), message);
+        System.assertEquals('Group', field.get('referenceTo'), message);
+        System.assertEquals('Name', field.get('referenceNameField'), message);
     }
 
     @IsTest
@@ -321,12 +319,11 @@ public with sharing class FieldSetService_TEST {
             'the "first" object type referenced by the polymorphic lookup, ' +
             'even if this object has a non-standard name field';
 
-        Map<String, Object> f = (new FieldSetService())
-            .getfieldforLWC(Schema.PermissionSet.LicenseId.getDescribe());
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.PermissionSet.LicenseId.getDescribe());
 
-        System.assertEquals('PermissionSetLicense', f.get('referenceTo'), message);
-
-        System.assertEquals('DeveloperName', f.get('referenceNameField'), message);
+        System.assertEquals('PermissionSetLicense', field.get('referenceTo'), message);
+        System.assertEquals('DeveloperName', field.get('referenceNameField'), message);
     }
 
     @IsTest
@@ -336,12 +333,11 @@ public with sharing class FieldSetService_TEST {
             'a standard object, the return map should have the name and name ' +
             'field of the standard object';
 
-        Map<String, Object> f = (new FieldSetService())
-            .getfieldforLWC(Schema.Case.ParentId.getDescribe());
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.Case.ParentId.getDescribe());
 
-        System.assertEquals('Case', f.get('referenceTo'), message);
-
-        System.assertEquals('CaseNumber', f.get('referenceNameField'), message);
+        System.assertEquals('Case', field.get('referenceTo'), message);
+        System.assertEquals('CaseNumber', field.get('referenceNameField'), message);
     }
 
     @IsTest
@@ -352,8 +348,8 @@ public with sharing class FieldSetService_TEST {
             'and name field of the referenced object with the namespace ' +
             'prefixed if the code is running in a namespaced context';
 
-        Map<String, Object> f = (new FieldSetService())
-            .getfieldforLWC(Schema.ProgramEngagement__c.Program__c.getDescribe());
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.ProgramEngagement__c.Program__c.getDescribe());
 
         String expectedObjectName = 'Program__c';
 
@@ -365,8 +361,7 @@ public with sharing class FieldSetService_TEST {
             expectedObjectName = namespacePrefix + '__Program__c';
         }
 
-        System.assertEquals(expectedObjectName, f.get('referenceTo'), message);
-
-        System.assertEquals('Name', f.get('referenceNameField'), message);
+        System.assertEquals(expectedObjectName, field.get('referenceTo'), message);
+        System.assertEquals('Name', field.get('referenceNameField'), message);
     }
 }

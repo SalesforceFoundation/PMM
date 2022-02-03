@@ -9,7 +9,7 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Willkommen beim Installationsprogramm für das Program Management Module (PMM)!\r\n\r\nDas Program Management Module ist ein Standardframework zum Verfolgen, Verwalten und Bereitstellen von Programmen, Services und Leistungen.\r\n\r\n*WICHTIG*: Salesforce empfiehlt nicht, Upgrades direkt in Produktionsorganisationen zu installieren. Installieren Sie das Program Management Module stattdessen zunächst in einer Ihrer kostenlosen Sandbox-Umgebungen oder in einer Entwicklerorganisation.\r\n\r\nDas Program Management Module („PMM“) von salesforce.org ist eine erweiterbare Anwendung mit Open-Source- und Closed-Source-Komponenten, die auf die speziellen Kernanforderungen der Programmverwaltung ausgerichtet ist. PMM nutzt ein von salesforce.com, Inc. („Salesforce“) verwaltetes Paket, um gemeinnützigen Organisationen einen Weg zu bieten, programmatische Informationen zu zentralisieren, um elektronische Programme und Dienstleistungen effektiver verwalten und bereitstellen zu können.\r\n\r\nSehen Sie sich nach der Installation des Programm-Managements die Ressourcen in unserer Dokumentation an:\r\n\r\n* [Dokumentation zum Program Management Module](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\nFragen? Werden Sie Mitglied der [Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module)-Kundengruppe auf dem Power of Us-Hub.",
+            "message": "Willkommen beim Installationsprogramm für das Program Management Module (PMM)!\r\n\r\nDas Program Management Module ist ein Standardframework zum Verfolgen, Verwalten und Bereitstellen von Programmen, Services und Leistungen.\r\n\r\n*WICHTIG*: Salesforce empfiehlt nicht, Upgrades direkt in Produktionsorganisationen zu installieren. Installieren Sie das Program Management Module stattdessen zunächst in einer Ihrer kostenlosen Sandbox-Umgebungen oder in einer Entwicklerorganisation.\r\n\r\nDas Program Management Module („PMM“) von salesforce.org ist eine erweiterbare Anwendung mit Open-Source- und Closed-Source-Komponenten, die auf die speziellen Kernanforderungen der Programmverwaltung ausgerichtet ist. PMM nutzt ein von salesforce.com, Inc. („Salesforce“) verwaltetes Paket, um gemeinnützigen Organisationen einen Weg zu bieten, programmatische Informationen zu zentralisieren, um elektronische Programme und Dienstleistungen effektiver verwalten und bereitstellen zu können.\r\n\r\nSehen Sie sich nach der Installation des Programm-Managements die Ressourcen in unserer Dokumentation an:\r\n\r\n* [Dokumentation zum Program Management Module](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\nFragen? Werden Sie Mitglied der [Program Management Module](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE)-Kundengruppe auf dem Power of Us-Hub.",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
@@ -31,7 +31,7 @@
             "description": "shown before user starts installation (markdown)"
         },
         "post_install_message": {
-            "message": "Danke, dass Sie das Program Management Module installieren. Bitte besuchen Sie die [Kundenforumgruppe zum Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) auf dem Power of Us-Hub bei eventuellen Fragen zum Program Management Module.",
+            "message": "Danke, dass Sie das Program Management Module installieren. Bitte besuchen Sie die [Kundenforumgruppe zum Program Management Module](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) auf dem Power of Us-Hub bei eventuellen Fragen zum Program Management Module.",
             "description": "shown after successful installation (markdown)"
         },
         "error_message": {
@@ -81,7 +81,7 @@
             "description": "shown before user starts installation (markdown)"
         },
         "post_install_message": {
-            "message": "Danke, dass Sie zusätzliche Berichte für das Program Management Module installieren. Bitte besuchen Sie die [Kundenforumgruppe zum Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) auf dem Power of Us-Hub bei eventuellen Fragen zum Program Management Module.",
+            "message": "Danke, dass Sie zusätzliche Berichte für das Program Management Module installieren. Bitte besuchen Sie die [Kundenforumgruppe zum Program Management Module](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) auf dem Power of Us-Hub bei eventuellen Fragen zum Program Management Module.",
             "description": "shown after successful installation (markdown)"
         },
         "error_message": {

@@ -5,5 +5,7 @@
     <masterLabel>Recent Sessions</masterLabel>
     <targets>
         <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
     </targets>
 </LightningComponentBundle>

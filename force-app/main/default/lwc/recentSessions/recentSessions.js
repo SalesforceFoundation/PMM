@@ -33,7 +33,11 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 const THIS_WEEK = "THIS_WEEK";
 const FIELD_SET_NAME = "RecentSessionsView";
 const MAX_LIST_VIEW_RECORDS = 2000;
-
+const SMALL_REGION_WIDTH = 480;
+const MEDIUM_REGION_WIDTH = 768;
+const SMALL = "SMALL";
+const MEDIUM = "MEDIUM";
+const LARGE = "LARGE";
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
     @track sessionIds;
@@ -73,8 +77,6 @@ export default class RecentSessions extends LightningElement {
 
     HOME = "Home";
     END = "End";
-    SMALL_REGION_WIDTH = 480;
-    MEDIUM_REGION_WIDTH = 768;
 
     @wire(getFieldByFieldPath, {
         objectName: SERVICE_SESSION_OBJECT.objectApiName,
@@ -158,23 +160,23 @@ export default class RecentSessions extends LightningElement {
         if (sessionsComponent) {
             let sessionsComponentWidth = sessionsComponent.getBoundingClientRect().width;
 
-            if (sessionsComponentWidth <= this.SMALL_REGION_WIDTH) {
-                this.flexipageRegionWidth = "SMALL";
-            } else if (sessionsComponentWidth <= this.MEDIUM_REGION_WIDTH) {
-                this.flexipageRegionWidth = "MEDIUM";
+            if (sessionsComponentWidth <= SMALL_REGION_WIDTH) {
+                this.flexipageRegionWidth = SMALL;
+            } else if (sessionsComponentWidth <= MEDIUM_REGION_WIDTH) {
+                this.flexipageRegionWidth = MEDIUM;
             } else {
-                this.flexipageRegionWidth = "LARGE";
+                this.flexipageRegionWidth = LARGE;
             }
             this.handleComponentSize();
         }
     }
 
     handleComponentSize() {
-        if (this.flexipageRegionWidth === "SMALL") {
+        if (this.flexipageRegionWidth === SMALL) {
             this.sessionsContainerMediumSize = 12;
             this.sessionsContainerLargeSize = 12;
             this.sessionsContainerPaddingAround = "";
-        } else if (this.flexipageRegionWidth === "MEDIUM") {
+        } else if (this.flexipageRegionWidth === MEDIUM) {
             this.sessionsContainerLargeSize = 6;
             this.sessionsContainerPaddingAround = "horizontal-medium";
         }

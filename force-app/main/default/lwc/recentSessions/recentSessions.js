@@ -56,7 +56,7 @@ export default class RecentSessions extends LightningElement {
     sessionsContainerSmallSize = 12;
     sessionsContainerMediumSize = 6;
     sessionsContainerLargeSize = 6;
-    sessionsContainerPaddingAround;
+    sessionsContainerPaddingAround = "horizontal-medium";
 
     labels = {
         recentSessions: RECENT_SESSIONS_LABEL,

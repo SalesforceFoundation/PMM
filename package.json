@@ -24,10 +24,12 @@
     },
     "resolutions": {
         "axios": "^0.21.1",
-        "nth-check": "^2.0.1",
-        "node-notifier": "^8.0.1",
         "is-svg": "^4.3.1",
+        "node-notifier": "^8.0.1",
+        "nth-check": "^2.0.1",
+        "pretty-format": "^25.5.0",
         "set-value": "^4.0.1",
+        "strip-ansi": "^6.0.0",
         "tmpl": "^1.0.5",
         "trim-newlines": "^3.0.1",
         "yargs-parser": "^20.2.2"

@@ -33,7 +33,7 @@ describe("c-service-schedule-creator", () => {
             modal.dispatchEvent(new CustomEvent("dialogclose"));
 
             // TODO: Validate accessibility when each step is loads.
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 
@@ -54,7 +54,7 @@ describe("c-service-schedule-creator", () => {
             slot.textContent = "Test Accessibility";
             h2Container.attachShadow({ mode: "open" }).appendChild(slot.cloneNode(true));
             // assert that DOM is accessible (using extended preset-rule)
-            await expect(element).toBeAccessible();
+            global.isAccessible(element);
         });
     });
 });

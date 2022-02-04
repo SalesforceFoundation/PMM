@@ -9,6 +9,7 @@
 
 import { LightningElement, track, api, wire } from "lwc";
 import { format } from "c/util";
+import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
 
@@ -27,25 +28,31 @@ import filterByRecord from "@salesforce/label/c.Filter_By_Record";
 import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
 import add from "@salesforce/label/c.Add";
 import addAll from "@salesforce/label/c.Add_All";
+import cancel from "@salesforce/label/c.Cancel";
+import save from "@salesforce/label/c.Save";
+import saveAndNew from "@salesforce/label/c.Save_New";
+import cantFind from "@salesforce/label/c.Cant_Find_Participant";
+import newLabel from "@salesforce/label/c.New";
+
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
     @api serviceSchedule;
     @api existingContactIds = [];
-    @api selectedParticipants = [];
+    @api selectedEngagements = [];
     @api columns;
-    @api selectedRows;
+    @api previouslySelectedEngagements;
     selectorColumns;
 
-    @track availableEngagements;
+    @track availableEngagementRows;
     @track filteredEngagements;
-    @track engagements;
+    @track allEngagements;
     @track cohorts;
-    @track data = [];
+    @track availableEngagementsForSelection = [];
 
     searchValue;
-    noRecordsFound = false;
     cohortId;
     programName;
+    programId;
     addToServiceButtonLabel;
     selectedColumns;
     fields;
@@ -68,14 +75,22 @@ export default class ParticipantSelector extends LightningElement {
         noContactsSelected,
         add,
         addAll,
+        save,
+        saveAndNew,
+        cancel,
+        cantFind,
+        newLabel,
     };
 
     @api
     get newParticipantsProgramEngagements() {
         let result = [];
-        this.selectedParticipants.forEach(row => {
+        this.selectedEngagements.forEach(row => {
             let contactId = row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName];
-            if (!this.existingContactIds.includes(contactId)) {
+            if (
+                !this.existingContactIds ||
+                !this.existingContactIds.includes(contactId)
+            ) {
                 result.push(row);
             }
         });
@@ -90,12 +105,16 @@ export default class ParticipantSelector extends LightningElement {
         );
     }
 
+    get noRecordsFound() {
+        return this.filteredEngagements && this.filteredEngagements.length === 0;
+    }
+
     get noRecordsSelected() {
-        return this.selectedParticipants && this.selectedParticipants.length === 0;
+        return this.selectedEngagements && this.selectedEngagements.length === 0;
     }
 
     get participantCount() {
-        return this.selectedParticipants ? this.selectedParticipants.length : 0;
+        return this.selectedEngagements ? this.selectedEngagements.length : 0;
     }
 
     get capacity() {
@@ -132,32 +151,37 @@ export default class ParticipantSelector extends LightningElement {
 
     @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
     dataSetup(result) {
+        this.wiredData = result;
         if (!(result.data || result.error)) {
             return;
         }
 
         if (result.data) {
-            this.fields = result.data.fields;
-            this.fieldByFieldPath = result.data.fieldByFieldPath;
-            this.objectLabels = result.data.objectLabels;
-            this.engagements = result.data.programEngagements.slice(0);
-            this.cohorts = result.data.programCohorts.slice(0);
-            this.programName = result.data.program ? result.data.program.Name : "";
-
-            this.formatLabels();
-            this.setDataTableColumns();
-            this.setSelectedColumns();
-            this.loadDataTable();
+            this.loadTable(result.data);
+            this.loadTableRows(result.data);
             this.loadPreviousSelections();
-            this.loadProgramCohorts(this.cohorts);
+            this.dispatchLoaded();
         } else if (result.error) {
-            console.log(result.error);
-            this.engagements = undefined;
+            this.allEngagements = undefined;
             this.cohorts = undefined;
         }
+    }
 
-        this.isLoaded = true;
-        this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
+    loadTable(data) {
+        // Static data that should not change when new program engagements are added
+        if (this.isLoaded) {
+            return;
+        }
+
+        this.fields = data.fields;
+        this.fieldByFieldPath = data.fieldByFieldPath;
+        this.objectLabels = data.objectLabels;
+        this.programName = data.program ? data.program.Name : "";
+        this.programId = data.program ? data.program.Id : "";
+        this.formatLabels();
+        this.setDataTableColumns();
+        this.setSelectedColumns();
+        this.loadProgramCohorts(data);
     }
 
     formatLabels() {
@@ -169,34 +193,58 @@ export default class ParticipantSelector extends LightningElement {
         ]);
     }
 
-    loadDataTable() {
-        this.availableEngagements = this.engagements.map(engagement => {
-            // Flatten relationship fields
-            let programEngagement = { ...engagement };
-            for (const [field, value] of Object.entries(programEngagement)) {
-                if (typeof value === "object") {
-                    for (const [parentField, parentValue] of Object.entries(value)) {
-                        programEngagement[field + parentField] = parentValue;
+    loadTableRows(data) {
+        let selectedIds = this.selectedEngagements.map(engagement => engagement.Id);
+        this.allEngagements = data.programEngagements.slice(0);
+
+        this.availableEngagementRows = this.allEngagements
+            .filter(engagement => !selectedIds.includes(engagement.Id))
+            .map(engagement => {
+                // Flatten relationship fields
+                let programEngagement = { ...engagement };
+                for (const [field, value] of Object.entries(programEngagement)) {
+                    if (typeof value === "object") {
+                        for (const [parentField, parentValue] of Object.entries(value)) {
+                            programEngagement[field + parentField] = parentValue;
+                        }
                     }
                 }
-            }
 
-            return programEngagement;
-        });
+                return programEngagement;
+            });
+        this.sortData(this.availableEngagementRows);
+    }
 
-        this.sortData(this.availableEngagements);
-        this.applyFilters();
-        this.noRecordsFound =
-            this.filteredEngagements && this.filteredEngagements.length === 0;
+    dispatchLoaded() {
+        if (this.isLoaded) {
+            return;
+        }
+
+        this.isLoaded = true;
+        this.dispatchEvent(new CustomEvent("loaded", { detail: this.isLoaded }));
     }
 
     get enableInfiniteLoading() {
         return this.offset < this.filteredEngagements.length;
     }
 
+    handleNewParticipantClick() {
+        const newParticipant = this.template.querySelector("c-new-program-engagement");
+        newParticipant.showModal();
+    }
+
+    handleNewParticipantSuccess(event) {
+        this.processNewParticipant(event.detail);
+    }
+
+    async processNewParticipant(id) {
+        await refreshApex(this.wiredData);
+        this.handleSelectById(id);
+    }
+
     handleLoadMore() {
         this.offset += this.offsetRows;
-        this.data = this.filteredEngagements.slice(
+        this.availableEngagementsForSelection = this.filteredEngagements.slice(
             0,
             Math.min(this.offset, this.filteredEngagements.length)
         );
@@ -214,25 +262,29 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     loadPreviousSelections() {
-        if (this.selectedRows === undefined) {
+        if (this.previouslySelectedEngagements === undefined) {
+            // Filters are applied when handleSelectParticipants is called
+            this.applyFilters();
             return;
         }
-        this.selectedRows = [...this.selectedRows];
-        this.availableEngagements.forEach(eng => {
+
+        this.previouslySelectedEngagements = [...this.previouslySelectedEngagements];
+        this.availableEngagementRows.forEach(row => {
             if (
                 this.existingContactIds.includes(
-                    eng[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
+                    row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
                 )
             ) {
-                eng.disableDeselect = true;
-                this.selectedRows.push(eng);
+                row.disableDeselect = true;
+                this.previouslySelectedEngagements.push(row);
             }
         });
         this.handleSelectParticipants();
     }
 
-    loadProgramCohorts(cohorts) {
-        this.searchOptions = cohorts.map(element => {
+    loadProgramCohorts(data) {
+        this.cohorts = data.programCohorts.slice(0);
+        this.searchOptions = this.cohorts.map(element => {
             let newObj = {};
             newObj.label = element.Name;
             newObj.value = element.Id;
@@ -305,40 +357,74 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleSelectParticipants() {
-        this.handleSelect(this.selectedRows);
+        this.handleSelect(this.previouslySelectedEngagements);
+    }
+
+    handleSelectById(programEngagementId) {
+        let row = this.availableEngagementRows.find(
+            element => element.Id === programEngagementId
+        );
+
+        if (row) {
+            this.handleSelect([row]);
+        }
     }
 
     handleSelect(programEngagements) {
         programEngagements.forEach(row => {
-            let index = this.availableEngagements.findIndex(
+            let index = this.availableEngagementRows.findIndex(
                 element => element.Id === row.Id
             );
-            this.availableEngagements.splice(index, 1);
-            this.selectedParticipants.push(row);
+            if (index >= 0) {
+                this.availableEngagementRows.splice(index, 1);
+            }
+            let selectedRow = this.selectedEngagements.find(
+                engagement => engagement.Id === row.Id
+            );
+            if (!selectedRow) {
+                this.selectedEngagements.push(row);
+            }
         });
 
-        this.selectedParticipants = [...this.selectedParticipants];
+        // force the screen to rerender the selected engagements
+        this.selectedEngagements = [...this.selectedEngagements];
         this.applyFilters();
-        this.sortData(this.selectedParticipants);
+        this.sortData(this.selectedEngagements);
         this.dispatchSelectEvent();
     }
 
     handleDeselectParticipant(event) {
         if (event) {
-            let tempSelectedParticipants = [...this.selectedParticipants];
+            //filter availableEngagementRows to remove program engagement that we deselected so there are no duplicates
+            this.availableEngagementRows = this.availableEngagementRows.filter(
+                row => row.Id !== event.detail.row.Id
+            );
 
-            let index = tempSelectedParticipants.findIndex(
+            let tempSelectedEngagements = [...this.selectedEngagements];
+
+            let index = tempSelectedEngagements.findIndex(
                 element => element.Id === event.detail.row.Id
             );
 
-            tempSelectedParticipants.splice(index, 1);
+            tempSelectedEngagements.splice(index, 1);
 
-            this.selectedParticipants = tempSelectedParticipants;
+            this.selectedEngagements = tempSelectedEngagements;
 
-            this.availableEngagements = [...this.availableEngagements, event.detail.row];
-            this.sortData(this.availableEngagements);
+            this.availableEngagementRows = [
+                ...this.availableEngagementRows,
+                event.detail.row,
+            ];
+            this.sortData(this.availableEngagementRows);
 
-            //if filters exist apply the filters
+            //filter previouslySelectedEngagements to remove program engagement that we deselected so it does not add the deselected value back
+            //after we create a new program engagement
+            if (this.previouslySelectedEngagements !== undefined) {
+                this.previouslySelectedEngagements = this.previouslySelectedEngagements.filter(
+                    element => element.Id !== event.detail.row.Id
+                );
+            }
+
+            // if filters exist apply the filters
             this.applyFilters();
             this.dispatchSelectEvent();
         }
@@ -352,7 +438,7 @@ export default class ParticipantSelector extends LightningElement {
     applyFilters() {
         let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
 
-        this.filteredEngagements = this.availableEngagements.filter(
+        this.filteredEngagements = this.availableEngagementRows.filter(
             row =>
                 JSON.stringify(row)
                     .toLowerCase()
@@ -362,9 +448,7 @@ export default class ParticipantSelector extends LightningElement {
                     : true)
         );
 
-        this.noRecordsFound =
-            this.filteredEngagements && this.filteredEngagements.length === 0;
-        this.data = this.filteredEngagements.slice(
+        this.availableEngagementsForSelection = this.filteredEngagements.slice(
             0,
             Math.min(this.filteredEngagements.length, this.offset)
         );
@@ -374,7 +458,7 @@ export default class ParticipantSelector extends LightningElement {
         this.dispatchEvent(
             new CustomEvent("select", {
                 detail: {
-                    totalSelected: this.selectedParticipants.length,
+                    totalSelected: this.selectedEngagements.length,
                 },
             })
         );

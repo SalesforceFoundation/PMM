@@ -9,7 +9,7 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Program Management Module (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nProgram Management Module はプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、Program Management Module を無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\nSalesforce.org Program Management Module（以下「PMM」といいます）は、プログラム管理に特有の核心的ニーズに対処するためのオープンソース及びクローズドソースコンポーネントから成る拡張可能なアプリケーションです。PMMは、プログラム情報を一元化して、プログラム及びサービスをより効果的に管理・提供するための方策を非営利団体に提供するために、salesforce.com, Inc.（以下「Salesforce」といいます）の管理パッケージを利用しています。\r\n\r\nプログラム管理のインストールが完了したら、各種資料を確認してください。\r\n\r\n* [Program Management Module ドキュメント](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\nご質問がある場合は、Power of Us Hub の [Program Management Module](https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) カスタマーグループにご参加ください。",
+            "message": "Program Management Module (PMM) インストーラをご利用いただきありがとうございます。\r\n\r\nProgram Management Module はプログラム、サービス、サービス提供を追跡、管理、提供するための標準プラットフォームです。\r\n\r\n*重要*: Salesforce は、本番組織にアップグレードを直接インストールすることを推奨しません。まず、Program Management Module を無料の Sandbox 環境または Developer Edition 組織にインストールしてください。\r\n\r\nSalesforce.org Program Management Module（以下「PMM」といいます）は、プログラム管理に特有の核心的ニーズに対処するためのオープンソース及びクローズドソースコンポーネントから成る拡張可能なアプリケーションです。PMMは、プログラム情報を一元化して、プログラム及びサービスをより効果的に管理・提供するための方策を非営利団体に提供するために、salesforce.com, Inc.（以下「Salesforce」といいます）の管理パッケージを利用しています。\r\n\r\nプログラム管理のインストールが完了したら、各種資料を確認してください。\r\n\r\n* [Program Management Module ドキュメント](https://powerofus.force.com/s/article/PMM-Documentation)\r\n\r\nご質問がある場合は、Power of Us Hub の [Program Management Module](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) カスタマーグループにご参加ください。",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
@@ -31,7 +31,7 @@
             "description": "shown before user starts installation (markdown)"
         },
         "post_install_message": {
-            "message": "Program Management Module をインストールしていただきありがとうございます。Program Management Module に関するあらゆる質問については、Power of Us Hub の Program Management Module のカスタマーフォーラムグループ (https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) にアクセスしてください。",
+            "message": "Program Management Module をインストールしていただきありがとうございます。Program Management Module に関するあらゆる質問については、Power of Us Hub の Program Management Module のカスタマーフォーラムグループ (https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) にアクセスしてください。",
             "description": "shown after successful installation (markdown)"
         },
         "error_message": {
@@ -81,7 +81,7 @@
             "description": "shown before user starts installation (markdown)"
         },
         "post_install_message": {
-            "message": "Program Management Module にレポートを追加していただきありがとうございます。Program Management Module に関するあらゆる質問については、Power of Us Hub の Program Management Module のカスタマーフォーラムグループ (https://powerofus.force.com/s/group/0F91E000000bs8XSAQ/program-management-module) にアクセスしてください。",
+            "message": "Program Management Module にレポートを追加していただきありがとうございます。Program Management Module に関するあらゆる質問については、Power of Us Hub の Program Management Module のカスタマーフォーラムグループ (https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) にアクセスしてください。",
             "description": "shown after successful installation (markdown)"
         },
         "error_message": {

@@ -18,7 +18,7 @@ describe("c-loading-stencil", () => {
         let stencils = element.shadowRoot.querySelectorAll(".stencil");
         expect(stencils.length).toBe(element.levels.length);
         expect(element.levels.length).toBeGreaterThan(0);
-        await expect(element).toBeAccessible();
+        global.isAccessible(element);
     });
 
     it("displays the stencils with provided levels", () => {

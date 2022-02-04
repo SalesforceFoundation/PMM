@@ -91,6 +91,7 @@ Date validation when cohort dates are not within program date range
      Click Dialog Button                    Save
      Verify Modal Error                     End Date must be within the Program Start and End Dates
      Verify Modal Error                     Start Date must be within the range of the related Program Start and End Dates.
+     Click Dialog Button                    Cancel
 
 Create Program Engagement from Program Cohort Object
     [Documentation]                  On Program detail record, clicks New button on Service related list, populates the field on 
@@ -103,6 +104,5 @@ Create Program Engagement from Program Cohort Object
      Populate Lookup Field                  Program                      ${program1}[Name]
      Click Dialog button                    Save
      Wait Until Modal Is Closed
-     Current Page Should Be                 Details                      ProgramCohort__c
      Page Should Contain                    Anonymous
      Save Current Record ID For Deletion    ${ns}ProgramEngagement__c

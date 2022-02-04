@@ -181,9 +181,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     handleFinishWizard(event) {
         this.hideWizard = true;
-        let selectedParticipants = event.detail.selectedParticipants;
+        let selectedEngagements = event.detail.selectedEngagements;
 
-        if (!selectedParticipants) {
+        if (!selectedEngagements) {
             return;
         }
 
@@ -192,17 +192,17 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.serviceDeliveries = [];
 
         let index;
-        for (index = 0; index < selectedParticipants.length; index++) {
+        for (index = 0; index < selectedEngagements.length; index++) {
             let newServiceDelivery = Object.assign(
                 { index: index, isDirty: true },
                 this.defaultValues
             );
             newServiceDelivery[this.fields.contact.fieldApiName] =
-                selectedParticipants[index][
+                selectedEngagements[index][
                     this.fields.programEngagementContact.fieldApiName
                 ];
             newServiceDelivery[this.fields.programEngagement.fieldApiName] =
-                selectedParticipants[index].Id;
+                selectedEngagements[index].Id;
             this.serviceDeliveries.push(newServiceDelivery);
         }
 

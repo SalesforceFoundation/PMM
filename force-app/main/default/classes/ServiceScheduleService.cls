@@ -13,6 +13,8 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private ProgramEngagementSelector programEngagementSelector = new ProgramEngagementSelector();
     @TestVisible
+    private ProgramSelector programSelector = new ProgramSelector();
+    @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
     private RecurrenceService recurrenceService = new RecurrenceService();
@@ -230,7 +232,7 @@ public with sharing class ServiceScheduleService {
             return;
         }
 
-        model.programCohorts = programEngagementSelector.getProgramCohortsByProgramId(
+        model.programCohorts = programSelector.getProgramCohortsFromProgramId(
             model.program.Id
         );
 

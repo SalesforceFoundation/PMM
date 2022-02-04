@@ -16,11 +16,9 @@ import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
-import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
 
-import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
@@ -50,7 +48,6 @@ import BAD_TAB_HEADER from "@salesforce/label/c.Incorrect_Tab";
 import ATTENDANCE_TAB_MESSAGE from "@salesforce/label/c.Attendance_Tab_Message";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
-const FIELD_SET_NAME = "Attendance_Service_Deliveries";
 const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
 const LONG_DATA_TYPES = ["TEXTAREA", "PICKLIST", "REFERENCE"];
 const ID = "Id";
@@ -160,7 +157,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
 
         if (result.data) {
-            this.serviceDeliveries = result.data.map((item, index) => ({
+            this.serviceDeliveries = result.data.deliveries.map((item, index) => ({
                 index,
                 ...item,
             }));
@@ -170,22 +167,11 @@ export default class Attendance extends NavigationMixin(LightningElement) {
                     ? 1
                     : -1;
             });
-        } else {
-            console.log(result.error);
-        }
-        this.showSpinner = false;
-    }
-
-    @wire(getFieldSet, {
-        objectName: SERVICE_DELIVERY_OBJECT.objectApiName,
-        fieldSetName: FIELD_SET_NAME,
-    })
-    wiredFields(result) {
-        if (result.data) {
-            this.configureFieldSet(result.data.map(a => ({ ...a })));
+            this.configureFieldSet(result.data.fieldSet.map(a => ({ ...a })));
         } else if (result.error) {
             console.log(result.error);
         }
+        this.showSpinner = false;
     }
 
     connectedCallback() {

@@ -905,7 +905,7 @@ public with sharing class ServiceScheduleService_TEST {
             new List<Object>{
                 programId,
                 service.getSelectFieldsWithToLabel(actual),
-                ServiceScheduleService.ACTIVE_ENGAGEMENT_STAGES
+                new Set<String>{ 'Active', 'Enrolled' }
             }
         );
 

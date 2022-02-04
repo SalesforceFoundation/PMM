@@ -38,6 +38,12 @@ public with sharing class ServiceSessionService_TEST {
             ORDER BY SessionStart__c
         ];
 
+        System.assertEquals(
+            2,
+            expectedSessions.size(),
+            'Test data should include two service sessions for this week'
+        );
+
         expected.put(
             currentDate.format('EEEE, dd MMMM'),
             new List<ServiceSession__c>{ expectedSessions[0] }

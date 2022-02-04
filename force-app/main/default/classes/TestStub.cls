@@ -74,6 +74,8 @@ public with sharing class TestStub implements System.StubProvider {
         public void expectedToHaveBeenCalled() {
             String message =
                 'This bound method was called ' +
+                signature.methodName +
+                ' ' +
                 callCount +
                 'x and was expected to be called ';
             if (expectedCalls != null) {

@@ -43,6 +43,12 @@ public with sharing class ServiceSessionSelector_TEST {
         );
 
         System.assertEquals(
+            2,
+            expectedSessions.size(),
+            'Test data should include two service sessions for this week'
+        );
+
+        System.assertEquals(
             expectedSessions[0].Id,
             actualSessions[0].Id,
             'Actual Id returned is not the same as expected Id'

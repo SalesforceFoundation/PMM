@@ -282,4 +282,86 @@ public with sharing class FieldSetService_TEST {
             'The exception message was not as expected.'
         );
     }
+
+    @IsTest
+    private static void shouldReturnNullNameFieldForNonReferenceField() {
+        String message =
+            'When getFieldForLWC is called with a non-lookup ' +
+            'field, the returned map should have a null value for both ' +
+            'referenceTo and referenceNameField';
+
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.Contact.Name.getDescribe());
+
+        System.assertEquals(null, field.get('referenceTo'), message);
+        System.assertEquals(null, field.get('referenceNameField'), message);
+    }
+
+    @IsTest
+    private static void shouldReturnNameFieldForPolymorphicLookupField() {
+        String message =
+            'When getFieldForLWC is called with a polymorphic ' +
+            'lookup field, the return map should have the name and name field of ' +
+            'the "first" object type referenced by the polymorphic lookup';
+
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.Case.OwnerId.getDescribe());
+
+        System.assertEquals('Group', field.get('referenceTo'), message);
+        System.assertEquals('Name', field.get('referenceNameField'), message);
+    }
+
+    @IsTest
+    private static void shouldReturnNameFieldForPolymorphicLookupField2() {
+        String message =
+            'When getFieldForLWC is called with a polymorphic ' +
+            'lookup field, the return map should have the name and name field of ' +
+            'the "first" object type referenced by the polymorphic lookup, ' +
+            'even if this object has a non-standard name field';
+
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.PermissionSet.LicenseId.getDescribe());
+
+        System.assertEquals('PermissionSetLicense', field.get('referenceTo'), message);
+        System.assertEquals('DeveloperName', field.get('referenceNameField'), message);
+    }
+
+    @IsTest
+    private static void shouldReturnNameFieldForStandardLookupField() {
+        String message =
+            'When getFieldForLWC is called with a lookup field to ' +
+            'a standard object, the return map should have the name and name ' +
+            'field of the standard object';
+
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.Case.ParentId.getDescribe());
+
+        System.assertEquals('Case', field.get('referenceTo'), message);
+        System.assertEquals('CaseNumber', field.get('referenceNameField'), message);
+    }
+
+    @IsTest
+    private static void shouldReturnNameFieldForPackagedLookupField() {
+        String message =
+            'When getFieldForLWC is called with a lookup field to ' +
+            'an object in the same package, the return map should have the name ' +
+            'and name field of the referenced object with the namespace ' +
+            'prefixed if the code is running in a namespaced context';
+
+        Map<String, Object> field = (new FieldSetService())
+            .getFieldForLWC(Schema.ProgramEngagement__c.Program__c.getDescribe());
+
+        String expectedObjectName = 'Program__c';
+
+        String className = String.valueOf(FieldSetService_TEST.class);
+        Boolean isNamespaced = className.contains('.');
+
+        if (isNamespaced) {
+            String namespacePrefix = className.substringBefore('.');
+            expectedObjectName = namespacePrefix + '__Program__c';
+        }
+
+        System.assertEquals(expectedObjectName, field.get('referenceTo'), message);
+        System.assertEquals('Name', field.get('referenceNameField'), message);
+    }
 }

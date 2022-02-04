@@ -13,7 +13,6 @@ import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { CurrentPageReference } from "lightning/navigation";
 import * as cUtil from "c/util";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
-import getFieldSet from "@salesforce/apex/FieldSetController.getFieldSetForLWC";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
 import {
@@ -31,8 +30,7 @@ import CANCEL_LABEL from "@salesforce/label/c.Cancel";
 import QUANTITY_LABEL from "@salesforce/label/c.Quantity";
 
 const mockGenerateRoster = require("./data/generateRoster.json");
-const mockGenerateRosterEmpty = require("../../__tests__/data/emptyList.json");
-const mockGetFieldSet = require("./data/getFieldSet.json");
+const mockGenerateRosterEmpty = require("./data/emptyRoster.json");
 const mockWiredSession = require("./data/wiredPendingSession.json");
 const mockWiredPermissions = require("./data/wiredPermissions.json");
 const mockWiredNoPermissions = require("./data/wiredNoPermissions.json");
@@ -42,7 +40,6 @@ const mockApexError = require("../../__tests__/data/apexError.json");
 
 //Register the  wire adapters
 const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
-const fieldSetAdapter = registerApexTestWireAdapter(getFieldSet);
 const wiredSessionAdapter = registerLdsTestWireAdapter(getRecord);
 const wiredPermissionsAdapter = registerApexTestWireAdapter(checkFieldPermissions);
 const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference);
@@ -73,7 +70,6 @@ describe("c-attendance", () => {
     it("shows multiple returned rows with perms", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
 
@@ -81,14 +77,13 @@ describe("c-attendance", () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
-            expect(attendanceRows).toHaveLength(mockGenerateRoster.length);
-            return global.isAccessible(element);
+            expect(attendanceRows).toHaveLength(mockGenerateRoster.deliveries.length);
+            global.isAccessible(element);
         });
     });
     it("shows empty state and no buttons when zero returned rows with no perms", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
 
@@ -96,7 +91,9 @@ describe("c-attendance", () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
-            expect(attendanceRows).toHaveLength(mockGenerateRosterEmpty.length);
+            expect(attendanceRows).toHaveLength(
+                mockGenerateRosterEmpty.deliveries.length
+            );
 
             const emptyState = element.shadowRoot.querySelectorAll("c-empty-state");
             expect(emptyState).toHaveLength(1);
@@ -108,14 +105,11 @@ describe("c-attendance", () => {
 
             const buttons = element.shadowRoot.querySelectorAll("lightning-button");
             expect(buttons).toHaveLength(0);
-
-            return global.isAccessible(element);
         });
     });
     it("shows empty state and no buttons when zero returned rows with perms", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
 
@@ -123,7 +117,9 @@ describe("c-attendance", () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
-            expect(attendanceRows).toHaveLength(mockGenerateRosterEmpty.length);
+            expect(attendanceRows).toHaveLength(
+                mockGenerateRosterEmpty.deliveries.length
+            );
 
             const emptyState = element.shadowRoot.querySelectorAll("c-empty-state");
             expect(emptyState).toHaveLength(1);
@@ -142,7 +138,6 @@ describe("c-attendance", () => {
     it("shows perms error when rows are returned with no perms", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
 
@@ -168,7 +163,6 @@ describe("c-attendance", () => {
         delete sessionSinUom.fields.ServiceSchedule__r.value.fields.Service__r.value
             .fields.UnitOfMeasurement__c;
         wiredSessionAdapter.emit(sessionSinUom);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         document.body.appendChild(element);
@@ -182,7 +176,6 @@ describe("c-attendance", () => {
         let sessionSinUom = JSON.parse(JSON.stringify(mockWiredSession));
         delete sessionSinUom.fields.Status__c;
         wiredSessionAdapter.emit(sessionSinUom);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         document.body.appendChild(element);
@@ -191,24 +184,14 @@ describe("c-attendance", () => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
                 "c-attendance-row"
             );
-            expect(attendanceRows).toHaveLength(mockGenerateRoster.length);
+            expect(attendanceRows).toHaveLength(mockGenerateRoster.deliveries.length);
         });
-    });
-    it("logs errors on getFieldSet", () => {
-        document.body.appendChild(element);
-        console.log = jest.fn();
-        wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.error();
-        generateRosterAdapter.emit(mockGenerateRoster);
-        wiredPermissionsAdapter.emit(mockWiredNoPermissions);
-        expect(console.log).toHaveBeenCalled();
     });
 
     it("logs errors on generateRoster", () => {
         document.body.appendChild(element);
         console.log = jest.fn();
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.error();
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
         expect(console.log).toHaveBeenCalled();
@@ -218,7 +201,6 @@ describe("c-attendance", () => {
         document.body.appendChild(element);
         console.log = jest.fn();
         wiredSessionAdapter.error();
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
         expect(console.log).toHaveBeenCalled();
@@ -227,7 +209,6 @@ describe("c-attendance", () => {
         document.body.appendChild(element);
         console.log = jest.fn();
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.error();
         expect(console.log).toHaveBeenCalled();
@@ -250,7 +231,6 @@ describe("c-attendance saving rows", () => {
     it("upserts rows calls save on row when successful", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         upsertRows.mockResolvedValue();
@@ -271,14 +251,13 @@ describe("c-attendance saving rows", () => {
             .then(() => {
                 expect(
                     upsertRows.mock.calls[0][0].serviceDeliveriesToUpsert.length
-                ).toEqual(mockGenerateRoster.length);
+                ).toEqual(mockGenerateRoster.deliveries.length);
                 expect(spy).toHaveBeenCalled();
             });
     });
     it("updates the session status to complete", () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         upsertRows.mockResolvedValue();
@@ -298,10 +277,11 @@ describe("c-attendance saving rows", () => {
             });
     });
     it("upserts empty rows sends an empty list", () => {
+        let rosterWithEmptyRecord = JSON.parse(JSON.stringify(mockGenerateRosterEmpty));
+        rosterWithEmptyRecord.deliveries.push({});
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
-        generateRosterAdapter.emit([{}]);
+        generateRosterAdapter.emit(rosterWithEmptyRecord);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         upsertRows.mockResolvedValue();
 
@@ -326,7 +306,6 @@ describe("c-attendance saving rows", () => {
         const handleErrorSpy = jest.spyOn(cUtil, "handleError");
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         upsertRows.mockRejectedValue(mockApexError);
@@ -346,7 +325,6 @@ describe("c-attendance saving rows", () => {
         const handleErrorSpy = jest.spyOn(cUtil, "handleError");
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         upsertRows.mockResolvedValue();
@@ -384,7 +362,6 @@ describe("c-attendance printing the roster", () => {
         currentPageReferenceAdapter.emit(mockAttendanceTabPageReference);
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         window.print = jest.fn();
@@ -405,7 +382,6 @@ describe("c-attendance printing the roster", () => {
         currentPageReferenceAdapter.emit(mockServiceSessionPageReference);
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         window.open = jest.fn();
@@ -441,7 +417,6 @@ describe("c-attendance updating records", () => {
         let completedSession = JSON.parse(JSON.stringify(mockWiredSession));
         completedSession.fields[SESSION_STATUS_FIELD.fieldApiName].value = "Complete";
         wiredSessionAdapter.emit(completedSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
 
@@ -463,7 +438,6 @@ describe("c-attendance updating records", () => {
         let completedSession = JSON.parse(JSON.stringify(mockWiredSession));
         completedSession.fields[SESSION_STATUS_FIELD.fieldApiName].value = "Complete";
         wiredSessionAdapter.emit(completedSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
 
@@ -490,7 +464,6 @@ describe("c-attendance updating records", () => {
         let completedSession = JSON.parse(JSON.stringify(mockWiredSession));
         completedSession.fields[SESSION_STATUS_FIELD.fieldApiName].value = "Complete";
         wiredSessionAdapter.emit(completedSession);
-        fieldSetAdapter.emit(mockGetFieldSet);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         upsertRows.mockResolvedValue();

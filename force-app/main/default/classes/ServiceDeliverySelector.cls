@@ -10,12 +10,24 @@
 public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
-    public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(Id sessionId) {
+    public String getAttendanceFieldSetName(Id scheduleId) {
+        // We want to bypass FLS because this is a system field that drives our UI
+        List<ServiceSchedule__c> schedules = [
+            SELECT Service__r.AttendanceFieldSet__c
+            FROM ServiceSchedule__c
+            WHERE Id = :scheduleId
+        ];
+
+        return schedules.isEmpty() ? null : schedules[0].Service__r.AttendanceFieldSet__c;
+    }
+
+    public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(
+        FieldSet fieldSet,
+        Id sessionId
+    ) {
         if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
             return new List<ServiceDelivery__c>();
         }
-
-        FieldSet fieldSet = SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
 
         queryBuilder.withSObjectType(ServiceDelivery__c.getSObjectType())
             .withSelectFields(fieldSet)
@@ -88,21 +100,5 @@ public with sharing class ServiceDeliverySelector {
                 sessions
             )
             .getRecords()[0];
-    }
-
-    public List<Bucket__mdt> getBuckets(List<String> bucketNames) {
-        // Note: there doesn't seem to be a way to get the subquery with .getAll() so I think we're stuck
-        // with SOQL for this layer.
-        return [
-            SELECT
-                Id,
-                DeveloperName,
-                BucketedField__r.Field__r.QualifiedApiName,
-                QualifiedApiName,
-                (SELECT Id, Value__c FROM BucketedValues__r)
-            FROM Bucket__mdt
-            WHERE DeveloperName IN :bucketNames AND NamespacePrefix = :Util.getNamespace()
-            ORDER BY QualifiedApiName
-        ];
     }
 }

@@ -21,12 +21,14 @@ import {
 } from "@salesforce/sfdx-lwc-jest";
 import getFieldSetByObjectKey from "@salesforce/apex/pmdm.ProgramController.getFieldSetByObjectKey";
 import getProgramCohortsFromProgramId from "@salesforce/apex/pmdm.ProgramController.getProgramCohortsFromProgramId";
+import getActiveProgramEngagementStages from "@salesforce/apex/pmdm.ProgramController.getActiveProgramEngagementStages";
 import COHORT_FIELD from "@salesforce/schema/ProgramEngagement__c.ProgramCohort__c";
 
 const mockGetObjectInfo = require("./data/getObjectInfo.json");
 const mockPicklistValues = require("./data/getPicklistValues.json");
 const mockGetNewEngagementSetup = require("./data/getFieldSetByObjectKey.json");
 const mockGetProgramCohortsFromProgramId = require("./data/getProgramCohortsFromProgramId.json");
+const mockGetActiveProgramEngagementStages = require("./data/getActiveProgramEngagementStages.json");
 const mockCurrentPageReference = require("./data/currentPageReference.json");
 
 //Register the  wire adapters
@@ -34,6 +36,9 @@ const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference
 const getFieldSetByObjectKeyAdapter = registerApexTestWireAdapter(getFieldSetByObjectKey);
 const getProgramCohortsFromProgramIdAdapter = registerApexTestWireAdapter(
     getProgramCohortsFromProgramId
+);
+const getActiveProgramEngagementStagesAdapter = registerApexTestWireAdapter(
+    getActiveProgramEngagementStages
 );
 const getObjectInfoAdapter = registerLdsTestWireAdapter(getObjectInfo);
 const getPicklistValuesAdapter = registerLdsTestWireAdapter(getPicklistValues);
@@ -54,6 +59,9 @@ describe("c-new-program-engagement with a known contact", () => {
         currentPageReferenceAdapter.emit(mockCurrentPageReference);
         getFieldSetByObjectKeyAdapter.emit(mockGetNewEngagementSetup);
         getProgramCohortsFromProgramIdAdapter.emit(mockGetProgramCohortsFromProgramId);
+        getActiveProgramEngagementStagesAdapter.emit(
+            mockGetActiveProgramEngagementStages
+        );
         getObjectInfoAdapter.emit(mockGetObjectInfo);
         getPicklistValuesAdapter.emit(mockPicklistValues);
     });

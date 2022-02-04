@@ -15,13 +15,18 @@ public with sharing class AttendanceController_TEST {
     private static void shouldReturnServiceDeliveriesFromService() {
         String generateRoster = 'generateRoster';
         List<ServiceDelivery__c> serviceDeliveriesToReturn = new List<ServiceDelivery__c>();
-        serviceStub.withReturnValue(generateRoster, Id.class, serviceDeliveriesToReturn);
+        ServiceDeliveryService.Roster rosterToReturn = new ServiceDeliveryService.Roster(
+            null,
+            serviceDeliveriesToReturn
+        );
+        serviceStub.withReturnValue(generateRoster, Id.class, rosterToReturn);
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
 
         Test.startTest();
         System.assert(
-            serviceDeliveriesToReturn === AttendanceController.generateRoster(sessionId),
+            serviceDeliveriesToReturn ===
+            AttendanceController.generateRoster(sessionId).deliveries,
             'Expected the controller to return the list returned by the service.'
         );
         Test.stopTest();

@@ -207,7 +207,7 @@ public with sharing class ServiceDeliveryService {
         );
 
         for (ServiceParticipant__c participant : participants) {
-            if (filters != null && filters.shouldInclude(participant)) {
+            if (filters == null || filters.shouldInclude(participant)) {
                 deliveries.add(createServiceDelivery(session, participant));
             }
         }

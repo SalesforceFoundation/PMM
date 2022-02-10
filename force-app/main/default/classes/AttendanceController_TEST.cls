@@ -19,32 +19,43 @@ public with sharing class AttendanceController_TEST {
             null,
             serviceDeliveriesToReturn
         );
-        serviceStub.withReturnValue(generateRoster, Id.class, rosterToReturn);
+        serviceStub.withReturnValue(
+            generateRoster,
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
+            rosterToReturn
+        );
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
 
         Test.startTest();
         System.assert(
             serviceDeliveriesToReturn ===
-            AttendanceController.generateRoster(sessionId).deliveries,
+            AttendanceController.generateRoster(sessionId, '', '', '').deliveries,
             'Expected the controller to return the list returned by the service.'
         );
         Test.stopTest();
 
-        serviceStub.assertCalledWith(generateRoster, Id.class, sessionId);
+        serviceStub.assertCalledWith(
+            generateRoster,
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
+            new List<Object>{ sessionId, new ServiceDeliveryService.Filters('', '', '') }
+        );
     }
 
     @IsTest
     private static void shouldRethrowExceptionFromService() {
         String generateRoster = 'generateRoster';
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
-        serviceStub.withThrowException(generateRoster, Id.class);
+        serviceStub.withThrowException(
+            generateRoster,
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class }
+        );
         AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
         Exception actualException;
 
         Test.startTest();
         try {
-            AttendanceController.generateRoster(sessionId);
+            AttendanceController.generateRoster(sessionId, '', '', '');
         } catch (Exception ex) {
             actualException = ex;
         }
@@ -56,7 +67,11 @@ public with sharing class AttendanceController_TEST {
             'Expected the controller to rethrow the exception from the service.'
         );
 
-        serviceStub.assertCalledWith(generateRoster, Id.class, sessionId);
+        serviceStub.assertCalledWith(
+            generateRoster,
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
+            new List<Object>{ sessionId, new ServiceDeliveryService.Filters('', '', '') }
+        );
     }
 
     @IsTest

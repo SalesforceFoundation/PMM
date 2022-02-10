@@ -81,7 +81,7 @@ public with sharing class ServiceDeliveryService_TEST {
         service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
 
         Test.startTest();
-        service.generateRoster(sessionId);
+        service.generateRoster(sessionId, null);
         Test.stopTest();
 
         deliverySelectorStub.assertCalledAsExpected();
@@ -118,7 +118,8 @@ public with sharing class ServiceDeliveryService_TEST {
         Test.startTest();
         System.assertEquals(
             deliveriesToReturn,
-            service.generateRoster(deliveriesToReturn[0].ServiceSession__c).deliveries,
+            service.generateRoster(deliveriesToReturn[0].ServiceSession__c, null)
+                .deliveries,
             'Expected only the service deliveries returned by the selector.'
         );
         Test.stopTest();
@@ -160,7 +161,7 @@ public with sharing class ServiceDeliveryService_TEST {
         service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
 
         Test.startTest();
-        actualDeliveries = service.generateRoster(sessionId).deliveries;
+        actualDeliveries = service.generateRoster(sessionId, null).deliveries;
         Test.stopTest();
 
         System.assertEquals(
@@ -228,7 +229,7 @@ public with sharing class ServiceDeliveryService_TEST {
         service.deliverySelector = (ServiceDeliverySelector) deliverySelectorStub.create();
 
         Test.startTest();
-        actualDeliveries = service.generateRoster(sessionId).deliveries;
+        actualDeliveries = service.generateRoster(sessionId, null).deliveries;
         Test.stopTest();
 
         System.assertEquals(
@@ -344,7 +345,7 @@ public with sharing class ServiceDeliveryService_TEST {
         ];
 
         Test.startTest();
-        actualDeliveries = service.generateRoster(session.Id).deliveries;
+        actualDeliveries = service.generateRoster(session.Id, null).deliveries;
         Test.stopTest();
 
         Integer countParticipants = [

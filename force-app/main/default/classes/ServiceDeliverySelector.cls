@@ -67,9 +67,12 @@ public with sharing class ServiceDeliverySelector {
                 Id,
                 Contact__c,
                 Contact__r.Name,
-                Service__c,
                 ProgramEngagement__c,
-                Service__r.UnitOfMeasurement__c
+                ProgramEngagement__r.Stage__c,
+                ProgramEngagement__r.Role__c,
+                Service__c,
+                Service__r.UnitOfMeasurement__c,
+                Status__c
             FROM ServiceParticipant__c
             WHERE
                 ServiceSchedule__c = :scheduleId

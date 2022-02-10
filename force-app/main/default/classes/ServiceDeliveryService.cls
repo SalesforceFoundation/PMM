@@ -68,10 +68,15 @@ public with sharing class ServiceDeliveryService {
         set;
     }
 
-    public Roster generateRoster(Id sessionId) {
+    public Roster generateRoster(Id sessionId, ServiceDeliveryService.Filters filters) {
         ServiceSession__c session = deliverySelector.getSession(sessionId);
         FieldSet fieldSet = getFieldSet(session.ServiceSchedule__c);
-        List<ServiceDelivery__c> deliveries = createServiceDeliveries(fieldSet, session);
+
+        List<ServiceDelivery__c> deliveries = createServiceDeliveries(
+            fieldSet,
+            session,
+            filters
+        );
 
         return new Roster(
             fieldSetService.getFieldSetForLWC(
@@ -183,25 +188,49 @@ public with sharing class ServiceDeliveryService {
 
     private List<ServiceDelivery__c> createServiceDeliveries(
         FieldSet fieldSet,
-        ServiceSession__c session
+        ServiceSession__c session,
+        ServiceDeliveryService.Filters filters
     ) {
         Set<Id> existingClients = new Set<Id>();
+
+        // Get initial list of pre-existing service deliveries on the service session
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
             deliverySelector.getServiceDeliveriesBySessionId(fieldSet, session.Id)
         );
 
+        System.debug(
+            ' **** ServiceDeliveryService.createServiceDeliveres() # of deliveries: ' +
+            deliveries.size()
+        );
+
+        // get initial list of pre-existing clients from the deliveries
         for (ServiceDelivery__c delivery : deliveries) {
             existingClients.add(delivery.Contact__c);
         }
 
-        for (
-            ServiceParticipant__c participant : deliverySelector.getServiceParticipantsByScheduleId(
-                session.ServiceSchedule__c,
-                existingClients
-            )
-        ) {
-            deliveries.add(createServiceDelivery(session, participant));
+        // gets service participants for the service schedule NOT related to existing clients
+        List<ServiceParticipant__c> participants = deliverySelector.getServiceParticipantsByScheduleId(
+            session.ServiceSchedule__c,
+            existingClients
+        );
+
+        System.debug(
+            ' **** ServiceDeliveryService.createServiceDeliveres() # of participants: ' +
+            participants.size()
+        );
+
+        // for each participant NOT previuosly related to a service delivery, create a service delivery
+        // and add it to the list
+        for (ServiceParticipant__c participant : participants) {
+            if (filters != null && filters.shouldInclude(participant)) {
+                deliveries.add(createServiceDelivery(session, participant));
+            }
         }
+
+        System.debug(
+            ' **** ServiceDeliveryService.createServiceDeliveres() FINAL # of deliveries: ' +
+            deliveries.size()
+        );
 
         return deliveries;
     }
@@ -267,6 +296,61 @@ public with sharing class ServiceDeliveryService {
         ) {
             this.fieldSet = fieldSet;
             this.deliveries = deliveries;
+        }
+    }
+
+    public class Filters {
+        private Set<String> excludedServiceParticipantStatuses;
+        private Set<String> excludedProgramEngagementRoles;
+        private Set<String> excludedProgramEngagementStages;
+
+        public Filters(
+            String omitServiceParticipantStatuses,
+            String omitProgramEngagementRoles,
+            String omitProgramEngagementStages
+        ) {
+            this(
+                new Set<String>(omitServiceParticipantStatuses.split(',')),
+                new Set<String>(omitProgramEngagementRoles.split(',')),
+                new Set<String>(omitProgramEngagementStages.split(','))
+            );
+            System.debug(' **** [SDS] ' + omitServiceParticipantStatuses);
+            System.debug(' **** [SDS] ' + omitProgramEngagementRoles);
+            System.debug(' **** [SDS] ' + omitProgramEngagementStages);
+        }
+
+        public Filters(
+            Set<String> excludedServiceParticipantStatuses,
+            Set<String> excludedProgramEngagementRoles,
+            Set<String> excludedProgramEngagementStages
+        ) {
+            this.excludedServiceParticipantStatuses = excludedServiceParticipantStatuses;
+            this.excludedProgramEngagementRoles = excludedProgramEngagementRoles;
+            this.excludedProgramEngagementStages = excludedProgramEngagementStages;
+        }
+
+        public Boolean shouldInclude(ServiceParticipant__c participant) {
+            System.debug(
+                '**** participant status:' +
+                participant.Status__c +
+                ' PE Role:' +
+                participant.ProgramEngagement__r.Role__c +
+                ' PE Stage: ' +
+                participant.ProgramEngagement__r.Stage__c
+            );
+
+            if (
+                excludedServiceParticipantStatuses.contains(participant.Status__c) ||
+                excludedProgramEngagementRoles.contains(
+                    participant.ProgramEngagement__r.Role__c
+                ) ||
+                excludedProgramEngagementStages.contains(
+                    participant.ProgramEngagement__r.Stage__c
+                )
+            ) {
+                return false;
+            }
+            return true;
         }
     }
 

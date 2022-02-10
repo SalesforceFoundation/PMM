@@ -294,15 +294,15 @@ public with sharing class ServiceDeliveryService {
             List<String> peStages = omitProgramEngagementStages.split(',');
 
             for (Integer i = 0; i < spStatuses.size(); i++) {
-                spStatuses[i] = spStatuses[i].trim();
+                spStatuses[i] = spStatuses[i].trim().toLowerCase();
             }
 
             for (Integer i = 0; i < peRoles.size(); i++) {
-                peRoles[i] = peRoles[i].trim();
+                peRoles[i] = peRoles[i].trim().toLowerCase();
             }
 
             for (Integer i = 0; i < peStages.size(); i++) {
-                peStages[i] = peStages[i].trim();
+                peStages[i] = peStages[i].trim().toLowerCase();
             }
 
             setFilters(
@@ -312,26 +312,16 @@ public with sharing class ServiceDeliveryService {
             );
         }
 
-        public Filters(
-            Set<String> excludedServiceParticipantStatuses,
-            Set<String> excludedProgramEngagementRoles,
-            Set<String> excludedProgramEngagementStages
-        ) {
-            setFilters(
-                excludedServiceParticipantStatuses,
-                excludedProgramEngagementRoles,
-                excludedProgramEngagementStages
-            );
-        }
-
         public Boolean shouldInclude(ServiceParticipant__c participant) {
             if (
-                excludedServiceParticipantStatuses.contains(participant.Status__c) ||
+                excludedServiceParticipantStatuses.contains(
+                    participant.Status__c.toLowerCase()
+                ) ||
                 excludedProgramEngagementRoles.contains(
-                    participant.ProgramEngagement__r.Role__c
+                    participant.ProgramEngagement__r.Role__c.toLowerCase()
                 ) ||
                 excludedProgramEngagementStages.contains(
-                    participant.ProgramEngagement__r.Stage__c
+                    participant.ProgramEngagement__r.Stage__c.toLowerCase()
                 )
             ) {
                 return false;

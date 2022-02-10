@@ -18,10 +18,6 @@ public with sharing class AttendanceController {
         String omittedProgramEngagementRoles,
         String omittedProgramEngagementStages
     ) {
-        System.debug(' ***** [AC] ' + omittedServiceParticipantStatuses);
-        System.debug(' ***** [AC] ' + omittedProgramEngagementRoles);
-        System.debug(' ***** [AC] ' + omittedProgramEngagementStages);
-
         try {
             ServiceDeliveryService.Filters filters = null;
 

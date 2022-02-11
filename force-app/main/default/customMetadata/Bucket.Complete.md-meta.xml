@@ -4,6 +4,6 @@
     <protected>false</protected>
     <values>
         <field>BucketedField__c</field>
-        <value xsi:type="xsd:string">Service_Session_Statuses</value>
+        <value xsi:type="xsd:string">ServiceSessionStatuses</value>
     </values>
 </CustomMetadata>

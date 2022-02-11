@@ -314,15 +314,15 @@ public with sharing class ServiceDeliveryService {
 
         public Boolean shouldInclude(ServiceParticipant__c participant) {
             if (
-                filterIncludes(
+                valueIsFiltered(
                     excludedServiceParticipantStatuses,
                     participant.Status__c
                 ) ||
-                filterIncludes(
+                valueIsFiltered(
                     excludedProgramEngagementRoles,
                     participant.ProgramEngagement__r.Role__c
                 ) ||
-                filterIncludes(
+                valueIsFiltered(
                     excludedProgramEngagementStages,
                     participant.ProgramEngagement__r.Stage__c
                 )
@@ -332,7 +332,7 @@ public with sharing class ServiceDeliveryService {
             return true;
         }
 
-        private Boolean filterIncludes(Set<String> filter, String value) {
+        private Boolean valueIsFiltered(Set<String> filter, String value) {
             if (filter != null && filter.size() > 0 && value != null) {
                 return filter.contains(value.toLowerCase());
             }

@@ -11,6 +11,9 @@ public with sharing class ServiceSessionService {
     @TestVisible
     private ServiceSessionSelector serviceSessionSelector = new ServiceSessionSelector();
 
+    @TestVisible
+    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+
     public Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
         String dateLiteral
     ) {
@@ -37,5 +40,27 @@ public with sharing class ServiceSessionService {
         }
 
         return serviceSessions;
+    }
+
+    public Set<String> getServiceSessionStatusBuckets(String serviceSessionStatus) {
+        List<String> bucketNames = new List<String>{ serviceSessionStatus };
+        Set<String> statuses = new Set<String>();
+
+        Schema.SObjectType serviceSessionSObjType = ServiceSession__c.SObjectType;
+        Schema.SObjectField serviceSessionStatusField = ServiceSession__c.Status__c;
+
+        for (
+            Bucket__mdt bucket : bucketSelector.getBuckets(
+                bucketNames,
+                serviceSessionSObjType,
+                serviceSessionStatusField
+            )
+        ) {
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                statuses.add(value.Value__c);
+            }
+        }
+
+        return statuses;
     }
 }

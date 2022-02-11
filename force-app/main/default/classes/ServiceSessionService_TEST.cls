@@ -9,6 +9,8 @@
 
 @IsTest
 public with sharing class ServiceSessionService_TEST {
+    private static TestStub bucketSelectorStub;
+
     private static BasicStub serviceSelectorStub = new BasicStub(
         ServiceSessionSelector.class
     );
@@ -83,5 +85,77 @@ public with sharing class ServiceSessionService_TEST {
         );
 
         serviceSelectorStub.assertCalledWith(methodName, String.class, dateLiteral);
+    }
+
+    @IsTest
+    private static void testGetServiceSessionStatusBuckets() {
+        String status = 'Complete';
+        String methodName = 'getBuckets';
+        List<String> bucketNames = new List<String>{ status };
+
+        Schema.SObjectType serviceSessionSObjType = ServiceSession__c.SObjectType;
+        Schema.SObjectField statusField = ServiceSession__c.Status__c;
+
+        List<Bucket__mdt> statusBuckets = createStatusBuckets();
+
+        bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
+            .when(
+                methodName,
+                List<String>.class,
+                Schema.SObjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, serviceSessionSObjType, statusField)
+            .thenReturn(statusBuckets)
+            .build();
+
+        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
+
+        Set<String> expectedStatuses = new Set<String>{ status };
+
+        Test.startTest();
+        Set<String> returnedStatuses = service.getServiceSessionStatusBuckets(status);
+        Test.stopTest();
+
+        for (String statusName : expectedStatuses) {
+            System.assert(
+                returnedStatuses.contains(statusName),
+                'Expected the status ' +
+                statusName +
+                ' to be returned.'
+            );
+        }
+        bucketSelectorStub.assertCalledAsExpected();
+    }
+
+    private static List<Bucket__mdt> createStatusBuckets() {
+        BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
+            .withDeveloperName('ServiceSessionStatuses')
+            .withQualifiedApiName(Util.prefixNamespace('ServiceSessionStatuses'))
+            .withField('Status__c')
+            .withObject('ServiceSession__c')
+            .withMockId()
+            .build();
+
+        List<BucketedValue__mdt> statusValues = new List<BucketedValue__mdt>();
+        statusValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('Complete')
+                .withQualifiedApiName(Util.prefixNamespace('Complete'))
+                .withBucket('Complete')
+                .withValue('Complete')
+                .withMockId()
+                .build()
+        );
+
+        Bucket__mdt statusBucket = (Bucket__mdt) new TestUtil.BucketBuilder()
+            .withBucketedField(bucketedField)
+            .withBucketedValues(statusValues)
+            .withDeveloperName('Complete')
+            .withQualifiedApiName(Util.prefixNamespace('Complete'))
+            .withMockId()
+            .build();
+
+        return new List<Bucket__mdt>{ statusBucket };
     }
 }

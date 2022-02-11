@@ -115,4 +115,59 @@ public with sharing class RecentServiceSessionController_TEST {
             'Actual dateliteral options not the same as expected dateLiteral options'
         );
     }
+
+    @IsTest
+    private static void testGetCompleteServiceSessionStatuses() {
+        String completedStatus = 'Complete';
+        String methodName = 'getServiceSessionStatusBuckets';
+        Set<String> completeStatusesToReturn = new Set<String>{ 'Complete' };
+
+        TestStub serviceSessionServiceStub = new StubBuilder(ServiceSessionService.class)
+            .when(methodName, String.class)
+            .calledWith(completedStatus)
+            .thenReturn(completeStatusesToReturn)
+            .build();
+
+        RecentServiceSessionController.serviceSessionService = (ServiceSessionService) serviceSessionServiceStub.create();
+
+        Test.startTest();
+        System.assertEquals(
+            new List<String>(completeStatusesToReturn),
+            (List<String>) RecentServiceSessionController.getServiceSessionStatusBuckets(
+                'Complete'
+            ),
+            'Expected the controller to return list delivered by service.'
+        );
+        Test.stopTest();
+
+        serviceSessionServiceStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void testGetCompleteServiceSessionStatusesWithException() {
+        String methodName = 'getServiceSessionStatusBuckets';
+        Exception actualException;
+
+        TestStub serviceSessionServiceStub = new StubBuilder(ServiceSessionService.class)
+            .when(methodName, String.class)
+            .calledWith(null)
+            .thenThrowException()
+            .build();
+
+        RecentServiceSessionController.serviceSessionService = (ServiceSessionService) serviceSessionServiceStub.create();
+
+        Test.startTest();
+        try {
+            RecentServiceSessionController.getServiceSessionStatusBuckets(null);
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AuraHandledException,
+            actualException.getTypeName() + ': Expected an aura handled exception.'
+        );
+    }
 }

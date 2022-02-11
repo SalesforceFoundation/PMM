@@ -151,4 +151,79 @@ public with sharing class AttendanceController_TEST {
 
         serviceStub.assertCalled(methodName);
     }
+
+    @IsTest
+    private static void testGetServiceSessionStatusBuckets() {
+        List<String> bucketNames = new List<String>{ 'Complete', 'Pending' };
+        String methodName = 'getStatusBuckets';
+        Schema.SObjectType objectType = ServiceSession__c.SObjectType;
+        Schema.SObjectField bucketedField = ServiceSession__c.Status__c;
+
+        Map<String, List<String>> expectedValues = new Map<String, List<String>>();
+        expectedValues.put('Complete', new List<String>{ 'Complete' });
+        expectedValues.put('Pending', new List<String>{ 'Pending' });
+
+        TestStub serviceDeliveryStub = new StubBuilder(ServiceDeliveryService.class)
+            .when(
+                methodName,
+                List<String>.class,
+                Schema.sObjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, objectType, bucketedField)
+            .thenReturn(expectedValues)
+            .build();
+
+        AttendanceController.service = (ServiceDeliveryService) serviceDeliveryStub.create();
+
+        Test.startTest();
+        Map<String, List<String>> actualValues = AttendanceController.getServiceSessionStatusBuckets(
+            bucketNames,
+            'ServiceSession__c',
+            'Status__c'
+        );
+
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedValues,
+            actualValues,
+            'Expected the controller to return list delivered by service.'
+        );
+
+        serviceDeliveryStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void testGetServiceSessionStatusBucketsWithException() {
+        String methodName = 'getStatusBuckets';
+        Exception actualException;
+
+        TestStub serviceDeliveryStub = new StubBuilder(ServiceDeliveryService.class)
+            .when(
+                methodName,
+                List<String>.class,
+                Schema.sObjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(null, null, null)
+            .thenThrowException()
+            .build();
+
+        AttendanceController.service = (ServiceDeliveryService) serviceDeliveryStub.create();
+
+        Test.startTest();
+        try {
+            AttendanceController.getServiceSessionStatusBuckets(null, null, null);
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AuraHandledException,
+            actualException.getTypeName() + ': Expected an aura handled exception.'
+        );
+    }
 }

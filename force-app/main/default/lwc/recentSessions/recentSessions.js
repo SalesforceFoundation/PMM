@@ -9,6 +9,7 @@
 
 import { LightningElement, wire, track, api } from "lwc";
 import getServiceSessions from "@salesforce/apex/RecentServiceSessionController.getServiceSessionsByStartDate";
+import getServiceSessionStatuses from "@salesforce/apex/RecentServiceSessionController.getServiceSessionStatusBuckets";
 import getMenuOptions from "@salesforce/apex/RecentServiceSessionController.getMenuOptions";
 import { loadStyle } from "lightning/platformResourceLoader";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
@@ -38,11 +39,13 @@ const MEDIUM_REGION_WIDTH = 768;
 const SMALL = "SMALL";
 const MEDIUM = "MEDIUM";
 const LARGE = "LARGE";
+const COMPLETE = "Complete";
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
     @track sessionIds;
     @track menuItems = [];
     @api flexipageRegionWidth;
+    completedStatuses = [];
 
     _sessionsData;
     hasLoaded = false;
@@ -139,6 +142,19 @@ export default class RecentSessions extends LightningElement {
                 this.menuItems.push(menuItem);
             }
             this.handleGetServiceSessions();
+        } else if (error) {
+            console.log(error);
+        }
+    }
+
+    @wire(getServiceSessionStatuses, { serviceSessionStatus: COMPLETE })
+    wiredCompletedStatus(result, error) {
+        if (!result) {
+            return;
+        }
+
+        if (result.data) {
+            this.completedStatuses = result.data;
         } else if (error) {
             console.log(error);
         }

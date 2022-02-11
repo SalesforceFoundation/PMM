@@ -179,8 +179,8 @@ public with sharing class AttendanceController_TEST {
         Test.startTest();
         Map<String, List<String>> actualValues = AttendanceController.getServiceSessionStatusBuckets(
             bucketNames,
-            'ServiceSession__c',
-            'Status__c'
+            Util.prefixNamespace('ServiceSession__c'),
+            Util.prefixNamespace('Status__c')
         );
 
         Test.stopTest();

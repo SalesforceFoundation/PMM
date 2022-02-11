@@ -20,6 +20,45 @@ public with sharing class ServiceDeliveryService_TEST {
     private static ServiceDeliveryService service = new ServiceDeliveryService();
 
     @IsTest
+    private static void shouldFilterParticipants() {
+        ServiceParticipant__c enrolledParticipant = createMockParticipant();
+
+        ServiceDeliveryService.Filters filterOutEnrolled = new ServiceDeliveryService.Filters(
+            'Enrolled',
+            '',
+            ''
+        );
+
+        ServiceDeliveryService.Filters filterOutWaitlisted = new ServiceDeliveryService.Filters(
+            'Waitlisted',
+            '',
+            ''
+        );
+
+        ServiceDeliveryService.Filters filterOutBoth = new ServiceDeliveryService.Filters(
+            'waitlisted, ENROLLED',
+            '',
+            ''
+        );
+
+        System.AssertEquals(
+            false,
+            filterOutEnrolled.shouldInclude(enrolledParticipant),
+            'Enrolled participant should NOT be included by filter excluding enrolled'
+        );
+        System.AssertEquals(
+            true,
+            filterOutWaitlisted.shouldInclude(enrolledParticipant),
+            'Enrolled participant SHOULD be included by filter excluding only waitlisted'
+        );
+        System.AssertEquals(
+            false,
+            filterOutBoth.shouldInclude(enrolledParticipant),
+            'Enrolled participant should NOT be included by filter excluding both enrolled and waitlisted'
+        );
+    }
+
+    @IsTest
     private static void shouldGetBuckets() {
         List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
 
@@ -399,7 +438,8 @@ public with sharing class ServiceDeliveryService_TEST {
         return new ServiceParticipant__c(
             Id = TestUtil.mockId(ServiceParticipant__c.SObjectType),
             Contact__c = TestUtil.mockId(Contact.SObjectType),
-            ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType)
+            ProgramEngagement__c = TestUtil.mockId(ProgramEngagement__c.SObjectType),
+            Status__c = 'Enrolled'
         );
     }
 

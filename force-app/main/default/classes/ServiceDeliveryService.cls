@@ -314,19 +314,29 @@ public with sharing class ServiceDeliveryService {
 
         public Boolean shouldInclude(ServiceParticipant__c participant) {
             if (
-                excludedServiceParticipantStatuses.contains(
-                    participant.Status__c.toLowerCase()
+                filterIncludes(
+                    excludedServiceParticipantStatuses,
+                    participant.Status__c
                 ) ||
-                excludedProgramEngagementRoles.contains(
-                    participant.ProgramEngagement__r.Role__c.toLowerCase()
+                filterIncludes(
+                    excludedProgramEngagementRoles,
+                    participant.ProgramEngagement__r.Role__c
                 ) ||
-                excludedProgramEngagementStages.contains(
-                    participant.ProgramEngagement__r.Stage__c.toLowerCase()
+                filterIncludes(
+                    excludedProgramEngagementStages,
+                    participant.ProgramEngagement__r.Stage__c
                 )
             ) {
                 return false;
             }
             return true;
+        }
+
+        private Boolean filterIncludes(Set<String> filter, String value) {
+            if (filter != null && filter.size() > 0 && value != null) {
+                return filter.contains(value.toLowerCase());
+            }
+            return false;
         }
 
         private void setFilters(

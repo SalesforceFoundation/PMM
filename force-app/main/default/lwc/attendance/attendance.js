@@ -177,7 +177,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         objectType: SERVICE_SESSION_OBJECT.objectApiName,
         bucketedField: SESSION_STATUS_FIELD.fieldApiName,
     })
-    getSessionStatuses(result) {
+    wiredGetSessionStatuses(result) {
         if (!result) {
             return;
         }

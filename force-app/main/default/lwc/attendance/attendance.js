@@ -49,8 +49,6 @@ import BAD_TAB_HEADER from "@salesforce/label/c.Incorrect_Tab";
 import ATTENDANCE_TAB_MESSAGE from "@salesforce/label/c.Attendance_Tab_Message";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
-const SHORT_DATA_TYPES = ["DOUBLE", "INTEGER", "BOOLEAN"];
-const LONG_DATA_TYPES = ["TEXTAREA", "PICKLIST", "REFERENCE"];
 const COMPLETE = "Complete";
 const PENDING = "Pending";
 const SESSION_STATUSES = [COMPLETE, PENDING];
@@ -266,17 +264,8 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             field.isNormalField = false;
             field.isContactField = false;
 
-            if (SHORT_DATA_TYPES.includes(field.type)) {
-                field.size = 1;
-            } else if (LONG_DATA_TYPES.includes(field.type)) {
-                field.size = 3;
-            } else {
-                field.size = 2;
-            }
-
             if (field.apiName === this.fields.contact.fieldApiName) {
                 field.isContactField = true;
-                field.size = 2;
             } else if (field.apiName === this.fields.quantity.fieldApiName) {
                 field.isQuantityField = true;
                 field.variant = "label-hidden";

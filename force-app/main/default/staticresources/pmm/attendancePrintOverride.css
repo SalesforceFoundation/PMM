@@ -36,3 +36,10 @@
 div.slds-form-element__control > .slds-form-element__static {
     border: 0px;
 }
+
+.attendance-row label {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

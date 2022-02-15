@@ -15,9 +15,22 @@ public with sharing class AttendanceController {
     private static ServiceSessionService sessionService = new ServiceSessionService();
 
     @AuraEnabled(cacheable=true)
-    public static ServiceDeliveryService.Roster generateRoster(Id sessionId) {
+    public static ServiceDeliveryService.Roster generateRoster(
+        Id sessionId,
+        String omittedServiceParticipantStatuses,
+        String omittedProgramEngagementRoles,
+        String omittedProgramEngagementStages
+    ) {
         try {
-            return service.generateRoster(sessionId);
+            ServiceDeliveryService.Filters filters = null;
+
+            filters = new ServiceDeliveryService.Filters(
+                omittedServiceParticipantStatuses,
+                omittedProgramEngagementRoles,
+                omittedProgramEngagementStages
+            );
+
+            return service.generateRoster(sessionId, filters);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

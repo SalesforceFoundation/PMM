@@ -61,7 +61,7 @@
                       type="String" />
             <property name="omitProgramEngagementStages"
                       label="Excluded Program Engagement Stages"
-                      description="A comma-delimeted list of API stage values to omit"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker."
                       default=""
                       type="String" />   
         </targetConfig>

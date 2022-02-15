@@ -73,10 +73,15 @@ public with sharing class ServiceDeliveryService {
         set;
     }
 
-    public Roster generateRoster(Id sessionId) {
+    public Roster generateRoster(Id sessionId, ServiceDeliveryService.Filters filters) {
         ServiceSession__c session = deliverySelector.getSession(sessionId);
         FieldSet fieldSet = getFieldSet(session.ServiceSchedule__c);
-        List<ServiceDelivery__c> deliveries = createServiceDeliveries(fieldSet, session);
+
+        List<ServiceDelivery__c> deliveries = createServiceDeliveries(
+            fieldSet,
+            session,
+            filters
+        );
 
         return new Roster(
             fieldSetService.getFieldSetForLWC(
@@ -188,9 +193,11 @@ public with sharing class ServiceDeliveryService {
 
     private List<ServiceDelivery__c> createServiceDeliveries(
         FieldSet fieldSet,
-        ServiceSession__c session
+        ServiceSession__c session,
+        ServiceDeliveryService.Filters filters
     ) {
         Set<Id> existingClients = new Set<Id>();
+
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
             deliverySelector.getServiceDeliveriesBySessionId(fieldSet, session.Id)
         );
@@ -199,13 +206,15 @@ public with sharing class ServiceDeliveryService {
             existingClients.add(delivery.Contact__c);
         }
 
-        for (
-            ServiceParticipant__c participant : deliverySelector.getServiceParticipantsByScheduleId(
-                session.ServiceSchedule__c,
-                existingClients
-            )
-        ) {
-            deliveries.add(createServiceDelivery(session, participant));
+        List<ServiceParticipant__c> participants = deliverySelector.getServiceParticipantsByScheduleId(
+            session.ServiceSchedule__c,
+            existingClients
+        );
+
+        for (ServiceParticipant__c participant : participants) {
+            if (filters == null || filters.shouldInclude(participant)) {
+                deliveries.add(createServiceDelivery(session, participant));
+            }
         }
 
         return deliveries;
@@ -275,6 +284,77 @@ public with sharing class ServiceDeliveryService {
         ) {
             this.fieldSet = fieldSet;
             this.deliveries = deliveries;
+        }
+    }
+
+    public class Filters {
+        private Set<String> excludedServiceParticipantStatuses;
+        private Set<String> excludedProgramEngagementRoles;
+        private Set<String> excludedProgramEngagementStages;
+
+        public Filters(
+            String omitServiceParticipantStatuses,
+            String omitProgramEngagementRoles,
+            String omitProgramEngagementStages
+        ) {
+            List<String> spStatuses = omitServiceParticipantStatuses.split(',');
+            List<String> peRoles = omitProgramEngagementRoles.split(',');
+            List<String> peStages = omitProgramEngagementStages.split(',');
+
+            for (Integer i = 0; i < spStatuses.size(); i++) {
+                spStatuses[i] = spStatuses[i].trim().toLowerCase();
+            }
+
+            for (Integer i = 0; i < peRoles.size(); i++) {
+                peRoles[i] = peRoles[i].trim().toLowerCase();
+            }
+
+            for (Integer i = 0; i < peStages.size(); i++) {
+                peStages[i] = peStages[i].trim().toLowerCase();
+            }
+
+            setFilters(
+                new Set<String>(spStatuses),
+                new Set<String>(peRoles),
+                new Set<String>(peStages)
+            );
+        }
+
+        public Boolean shouldInclude(ServiceParticipant__c participant) {
+            if (
+                valueIsFiltered(
+                    excludedServiceParticipantStatuses,
+                    participant.Status__c
+                ) ||
+                valueIsFiltered(
+                    excludedProgramEngagementRoles,
+                    participant.ProgramEngagement__r.Role__c
+                ) ||
+                valueIsFiltered(
+                    excludedProgramEngagementStages,
+                    participant.ProgramEngagement__r.Stage__c
+                )
+            ) {
+                return false;
+            }
+            return true;
+        }
+
+        private Boolean valueIsFiltered(Set<String> filter, String value) {
+            if (filter != null && filter.size() > 0 && value != null) {
+                return filter.contains(value.toLowerCase());
+            }
+            return false;
+        }
+
+        private void setFilters(
+            Set<String> excludedServiceParticipantStatuses,
+            Set<String> excludedProgramEngagementRoles,
+            Set<String> excludedProgramEngagementStages
+        ) {
+            this.excludedServiceParticipantStatuses = excludedServiceParticipantStatuses;
+            this.excludedProgramEngagementRoles = excludedProgramEngagementRoles;
+            this.excludedProgramEngagementStages = excludedProgramEngagementStages;
         }
     }
 

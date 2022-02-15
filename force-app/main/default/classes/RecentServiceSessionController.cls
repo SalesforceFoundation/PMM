@@ -37,13 +37,9 @@ public with sharing class RecentServiceSessionController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<String> getServiceSessionStatusBuckets(
-        String serviceSessionStatus
-    ) {
+    public static Map<String, List<String>> getServiceSessionStatusBuckets() {
         try {
-            return new List<String>(
-                serviceSessionService.getServiceSessionStatusBuckets(serviceSessionStatus)
-            );
+            return serviceSessionService.getServiceSessionStatusBuckets();
         } catch (Exception e) {
             throw Util.getAuraHandledException(e);
         }

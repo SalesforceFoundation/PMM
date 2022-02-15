@@ -118,28 +118,30 @@ public with sharing class RecentServiceSessionController_TEST {
 
     @IsTest
     private static void testGetCompleteServiceSessionStatuses() {
-        String completedStatus = 'Complete';
         String methodName = 'getServiceSessionStatusBuckets';
-        Set<String> completeStatusesToReturn = new Set<String>{ 'Complete' };
+        Map<String, List<String>> expectedStatusesToReturn = new Map<String, List<String>>();
+        expectedStatusesToReturn.put('Complete', new List<String>{ 'Complete' });
+        expectedStatusesToReturn.put('Pending', new List<String>{ 'Pending' });
 
         TestStub serviceSessionServiceStub = new StubBuilder(ServiceSessionService.class)
-            .when(methodName, String.class)
-            .calledWith(completedStatus)
-            .thenReturn(completeStatusesToReturn)
+            .when(methodName)
+            .called()
+            .thenReturn(expectedStatusesToReturn)
             .build();
 
         RecentServiceSessionController.serviceSessionService = (ServiceSessionService) serviceSessionServiceStub.create();
 
         Test.startTest();
-        System.assertEquals(
-            new List<String>(completeStatusesToReturn),
-            (List<String>) RecentServiceSessionController.getServiceSessionStatusBuckets(
-                'Complete'
-            ),
-            'Expected the controller to return list delivered by service.'
-        );
+        Map<String, List<String>> returnedStatuses = new Map<String, List<String>>();
+        returnedStatuses = RecentServiceSessionController.getServiceSessionStatusBuckets();
+
         Test.stopTest();
 
+        System.assertEquals(
+            expectedStatusesToReturn,
+            returnedStatuses,
+            'Expected the controller to return list delivered by service.'
+        );
         serviceSessionServiceStub.assertCalledAsExpected();
     }
 
@@ -149,8 +151,8 @@ public with sharing class RecentServiceSessionController_TEST {
         Exception actualException;
 
         TestStub serviceSessionServiceStub = new StubBuilder(ServiceSessionService.class)
-            .when(methodName, String.class)
-            .calledWith(null)
+            .when(methodName)
+            .called()
             .thenThrowException()
             .build();
 
@@ -158,7 +160,7 @@ public with sharing class RecentServiceSessionController_TEST {
 
         Test.startTest();
         try {
-            RecentServiceSessionController.getServiceSessionStatusBuckets(null);
+            RecentServiceSessionController.getServiceSessionStatusBuckets();
         } catch (Exception ex) {
             actualException = ex;
         }

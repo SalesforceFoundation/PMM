@@ -155,33 +155,22 @@ public with sharing class AttendanceController_TEST {
     @IsTest
     private static void testGetServiceSessionStatusBuckets() {
         List<String> bucketNames = new List<String>{ 'Complete', 'Pending' };
-        String methodName = 'getStatusBuckets';
-        Schema.SObjectType objectType = ServiceSession__c.SObjectType;
-        Schema.SObjectField bucketedField = ServiceSession__c.Status__c;
+        String methodName = 'getServiceSessionStatusBuckets';
 
         Map<String, List<String>> expectedValues = new Map<String, List<String>>();
         expectedValues.put('Complete', new List<String>{ 'Complete' });
         expectedValues.put('Pending', new List<String>{ 'Pending' });
 
-        TestStub serviceDeliveryStub = new StubBuilder(ServiceDeliveryService.class)
-            .when(
-                methodName,
-                List<String>.class,
-                Schema.sObjectType.class,
-                Schema.SObjectField.class
-            )
-            .calledWith(bucketNames, objectType, bucketedField)
+        TestStub serviceSessionStub = new StubBuilder(ServiceSessionService.class)
+            .when(methodName)
+            .called()
             .thenReturn(expectedValues)
             .build();
 
-        AttendanceController.service = (ServiceDeliveryService) serviceDeliveryStub.create();
+        AttendanceController.sessionService = (ServiceSessionService) serviceSessionStub.create();
 
         Test.startTest();
-        Map<String, List<String>> actualValues = AttendanceController.getServiceSessionStatusBuckets(
-            bucketNames,
-            Util.prefixNamespace('ServiceSession__c'),
-            Util.prefixNamespace('Status__c')
-        );
+        Map<String, List<String>> actualValues = AttendanceController.getServiceSessionStatusBuckets();
 
         Test.stopTest();
 
@@ -191,30 +180,25 @@ public with sharing class AttendanceController_TEST {
             'Expected the controller to return list delivered by service.'
         );
 
-        serviceDeliveryStub.assertCalledAsExpected();
+        serviceSessionStub.assertCalledAsExpected();
     }
 
     @IsTest
     private static void testGetServiceSessionStatusBucketsWithException() {
-        String methodName = 'getStatusBuckets';
+        String methodName = 'getServiceSessionStatusBuckets';
         Exception actualException;
 
-        TestStub serviceDeliveryStub = new StubBuilder(ServiceDeliveryService.class)
-            .when(
-                methodName,
-                List<String>.class,
-                Schema.sObjectType.class,
-                Schema.SObjectField.class
-            )
-            .calledWith(null, null, null)
+        TestStub serviceSessionStub = new StubBuilder(ServiceSessionService.class)
+            .when(methodName)
+            .called()
             .thenThrowException()
             .build();
 
-        AttendanceController.service = (ServiceDeliveryService) serviceDeliveryStub.create();
+        AttendanceController.sessionService = (ServiceSessionService) serviceSessionStub.create();
 
         Test.startTest();
         try {
-            AttendanceController.getServiceSessionStatusBuckets(null, null, null);
+            AttendanceController.getServiceSessionStatusBuckets();
         } catch (Exception ex) {
             actualException = ex;
         }

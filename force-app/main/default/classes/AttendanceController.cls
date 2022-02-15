@@ -11,6 +11,9 @@ public with sharing class AttendanceController {
     @TestVisible
     private static ServiceDeliveryService service = new ServiceDeliveryService();
 
+    @TestVisible
+    private static ServiceSessionService sessionService = new ServiceSessionService();
+
     @AuraEnabled(cacheable=true)
     public static ServiceDeliveryService.Roster generateRoster(Id sessionId) {
         try {
@@ -41,17 +44,9 @@ public with sharing class AttendanceController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Map<String, List<String>> getServiceSessionStatusBuckets(
-        List<String> bucketNames,
-        String objectType,
-        String bucketedField
-    ) {
+    public static Map<String, List<String>> getServiceSessionStatusBuckets() {
         try {
-            Schema.SObjectType objType = Schema.getGlobalDescribe().get(objectType);
-            Schema.SObjectField objField = objType.getDescribe()
-                .fields.getMap()
-                .get(bucketedField);
-            return service.getStatusBuckets(bucketNames, objType, objField);
+            return sessionService.getServiceSessionStatusBuckets();
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

@@ -32,7 +32,7 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
 
     _session;
     _outputFields;
-    _completedStatuses;
+    _completeBucketedStatuses;
 
     labels = {
         sucess: SUCCESS_LABEL,
@@ -58,14 +58,12 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
     }
 
     @api
-    set completedStatuses(value) {
-        this._completedStatuses = value.map(status => {
-            return status.toLowerCase();
-        });
+    set completeBucketedStatuses(value) {
+        this._completeBucketedStatuses = value;
     }
 
-    get completedStatuses() {
-        return this._completedStatuses;
+    get completeBucketedStatuses() {
+        return this._completeBucketedStatuses;
     }
 
     @api
@@ -74,8 +72,11 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
 
         for (const [key, val] of Object.entries(value)) {
             if (key === this.fields.status) {
-                if (this.completedStatuses && this.completedStatuses.length > 0) {
-                    this._session.showCompleteIcon = this.completedStatuses.includes(
+                if (
+                    this.completeBucketedStatuses &&
+                    this.completeBucketedStatuses.length > 0
+                ) {
+                    this._session.showCompleteIcon = this.completeBucketedStatuses.includes(
                         val.toLowerCase()
                     );
                 }

@@ -9,7 +9,7 @@
 
 import { LightningElement, wire, track, api } from "lwc";
 import getServiceSessions from "@salesforce/apex/RecentServiceSessionController.getServiceSessionsByStartDate";
-import getServiceSessionStatuses from "@salesforce/apex/RecentServiceSessionController.getServiceSessionStatusBuckets";
+import getServiceSessionStatusBuckets from "@salesforce/apex/RecentServiceSessionController.getServiceSessionStatusBuckets";
 import getMenuOptions from "@salesforce/apex/RecentServiceSessionController.getMenuOptions";
 import { loadStyle } from "lightning/platformResourceLoader";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
@@ -44,8 +44,8 @@ export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
     @track sessionIds;
     @track menuItems = [];
+    @track completeBucketedStatuses = [];
     @api flexipageRegionWidth;
-    completedStatuses = [];
 
     _sessionsData;
     hasLoaded = false;
@@ -147,14 +147,20 @@ export default class RecentSessions extends LightningElement {
         }
     }
 
-    @wire(getServiceSessionStatuses, { serviceSessionStatus: COMPLETE })
-    wiredCompletedStatus(result, error) {
+    @wire(getServiceSessionStatusBuckets, {})
+    wiredServiceSessionStatusBuckets(result, error) {
         if (!result) {
             return;
         }
 
         if (result.data) {
-            this.completedStatuses = result.data;
+            for (const [key, value] of Object.entries(result.data)) {
+                if (key.toLowerCase() === COMPLETE.toLowerCase()) {
+                    this.completeBucketedStatuses = value.map(status =>
+                        status.toLowerCase()
+                    );
+                }
+            }
         } else if (error) {
             console.log(error);
         }

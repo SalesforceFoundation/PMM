@@ -47,10 +47,8 @@ public with sharing class ServiceSessionSelector {
             String.valueOf(ServiceSession__c.Status__c) + ' IN :allowedSessionStatuses'
         );
 
-        System.debug('allowedSessionStatuses : ' + allowedSessionStatuses);
         queryBuilder.withOrderBy(String.valueOf(ServiceSession__c.SessionStart__c));
 
-        System.debug(queryBuilder.buildSoqlQuery());
         allSessions = Database.query(queryBuilder.buildSoqlQuery());
 
         return Security.stripInaccessible(AccessType.READABLE, allSessions).getRecords();

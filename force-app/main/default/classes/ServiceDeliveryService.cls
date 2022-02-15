@@ -61,12 +61,7 @@ public with sharing class ServiceDeliveryService {
     private Map<String, List<String>> statusBuckets {
         get {
             if (statusBuckets == null) {
-                List<String> bucketNames = new List<String>{ ABSENT, PRESENT };
-                statusBuckets = getStatusBuckets(
-                    bucketNames,
-                    ServiceDelivery__c.SObjectType,
-                    ServiceDelivery__c.AttendanceStatus__c
-                );
+                statusBuckets = getStatusBuckets();
             }
             return statusBuckets;
         }
@@ -237,21 +232,18 @@ public with sharing class ServiceDeliveryService {
         return (ServiceDelivery__c) deliveryRecord;
     }
 
-    public Map<String, List<String>> getStatusBuckets(
-        List<String> bucketNames,
-        Schema.SObjectType objectType,
-        Schema.SObjectField bucketedField
-    ) {
+    private Map<String, List<String>> getStatusBuckets() {
+        List<String> bucketNames = new List<String>{ ABSENT, PRESENT };
         Map<String, List<String>> buckets = new Map<String, List<String>>();
-        System.debug('bucketNames : ' + bucketNames);
-        System.debug('objectType : ' + objectType);
-        System.debug('bucketedField : ' + bucketedField);
+
+        Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;
+        Schema.SObjectField statusField = ServiceDelivery__c.AttendanceStatus__c;
 
         for (
             Bucket__mdt bucket : bucketSelector.getBuckets(
                 bucketNames,
-                objectType,
-                bucketedField
+                serviceDeliverySObjType,
+                statusField
             )
         ) {
             buckets.put(bucket.DeveloperName, new List<String>());

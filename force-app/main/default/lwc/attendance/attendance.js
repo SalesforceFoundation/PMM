@@ -18,7 +18,7 @@ import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
-import getSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
+import getServiceSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
@@ -51,7 +51,6 @@ import pmmFolder from "@salesforce/resourceUrl/pmm";
 
 const COMPLETE = "Complete";
 const PENDING = "Pending";
-const SESSION_STATUSES = [COMPLETE, PENDING];
 const ID = "Id";
 const ITEM_PAGE_NAVIGATION_TYPE = "standard__navItemPage";
 const ATTENDANCE_TAB = "Attendance";
@@ -170,11 +169,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         this.showSpinner = false;
     }
 
-    @wire(getSessionStatusBuckets, {
-        bucketNames: SESSION_STATUSES,
-        objectType: SERVICE_SESSION_OBJECT.objectApiName,
-        bucketedField: SESSION_STATUS_FIELD.fieldApiName,
-    })
+    @wire(getServiceSessionStatusBuckets, {})
     wiredGetSessionStatuses(result) {
         if (!result) {
             return;

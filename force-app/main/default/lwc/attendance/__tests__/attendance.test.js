@@ -13,7 +13,7 @@ import { getRecord } from "lightning/uiRecordApi";
 import { CurrentPageReference } from "lightning/navigation";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
-import getSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
+import getServiceSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
 
 import {
     registerApexTestWireAdapter,
@@ -33,7 +33,7 @@ const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
 const wiredSessionAdapter = registerLdsTestWireAdapter(getRecord);
 const wiredPermissionsAdapter = registerApexTestWireAdapter(checkFieldPermissions);
 const wiredGetSessionStatusesAdapter = registerApexTestWireAdapter(
-    getSessionStatusBuckets
+    getServiceSessionStatusBuckets
 );
 const wiredCurrentPageReference = registerApexTestWireAdapter(CurrentPageReference);
 

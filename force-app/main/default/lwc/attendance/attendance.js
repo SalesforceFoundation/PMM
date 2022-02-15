@@ -55,6 +55,10 @@ const ITEM_PAGE_NAVIGATION_TYPE = "standard__navItemPage";
 const ATTENDANCE_TAB = "Attendance";
 export default class Attendance extends NavigationMixin(LightningElement) {
     @api recordId;
+    @api omitServiceParticipantStatuses;
+    @api omitProgramEngagementRoles;
+    @api omitProgramEngagementStages;
+
     @track serviceDeliveries;
     @track fieldSet;
 
@@ -144,7 +148,12 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
     }
 
-    @wire(generateRoster, { sessionId: "$recordId" })
+    @wire(generateRoster, {
+        sessionId: "$recordId",
+        omittedServiceParticipantStatuses: "$omittedServiceParticipantStatuses",
+        omittedProgramEngagementRoles: "$omittedProgramEngagementRoles",
+        omittedProgramEngagementStages: "$omittedProgramEngagementStages",
+    })
     wiredServiceDeliveries(result) {
         this.wiredServiceDeliveriesResult = result;
         if (!(result.data || result.error)) {
@@ -168,6 +177,20 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
     connectedCallback() {
         loadStyle(this, pmmFolder + "/attendancePrintOverride.css");
+    }
+
+    get omittedServiceParticipantStatuses() {
+        return this.omitServiceParticipantStatuses
+            ? this.omitServiceParticipantStatuses
+            : "";
+    }
+
+    get omittedProgramEngagementRoles() {
+        return this.omitProgramEngagementRoles ? this.omitProgramEngagementRoles : "";
+    }
+
+    get omittedProgramEngagementStages() {
+        return this.omitProgramEngagementStages ? this.omitProgramEngagementStages : "";
     }
 
     get hasServiceDeliveries() {

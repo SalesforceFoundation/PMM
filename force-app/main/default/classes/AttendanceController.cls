@@ -11,6 +11,9 @@ public with sharing class AttendanceController {
     @TestVisible
     private static ServiceDeliveryService service = new ServiceDeliveryService();
 
+    @TestVisible
+    private static ServiceSessionService sessionService = new ServiceSessionService();
+
     @AuraEnabled(cacheable=true)
     public static ServiceDeliveryService.Roster generateRoster(
         Id sessionId,
@@ -48,6 +51,15 @@ public with sharing class AttendanceController {
     public static Map<String, Boolean> checkFieldPermissions() {
         try {
             return service.checkFieldPermissions();
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, List<String>> getServiceSessionStatusBuckets() {
+        try {
+            return sessionService.getServiceSessionStatusBuckets();
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

@@ -13,6 +13,8 @@ import { getRecord } from "lightning/uiRecordApi";
 import { CurrentPageReference } from "lightning/navigation";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
+import getServiceSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
+
 import {
     registerApexTestWireAdapter,
     registerLdsTestWireAdapter,
@@ -23,12 +25,16 @@ const mockGenerateRosterEmpty = require("./data/emptyRoster.json");
 const mockWiredSession = require("./data/wiredPendingSession.json");
 const mockWiredPermissions = require("./data/wiredPermissions.json");
 const mockWiredNoPermissions = require("./data/wiredNoPermissions.json");
+const mockwiredGetSessionStatuses = require("./data/wiredGetSessionStatuses.json");
 const mockCurrentPageReference = require("./data/currentPageReference.json");
 
 //Register the  wire adapters
 const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
 const wiredSessionAdapter = registerLdsTestWireAdapter(getRecord);
 const wiredPermissionsAdapter = registerApexTestWireAdapter(checkFieldPermissions);
+const wiredGetSessionStatusesAdapter = registerApexTestWireAdapter(
+    getServiceSessionStatusBuckets
+);
 const wiredCurrentPageReference = registerApexTestWireAdapter(CurrentPageReference);
 
 jest.mock("c/attendanceRow");
@@ -50,6 +56,7 @@ describe("c-attendance", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockwiredGetSessionStatuses);
         wiredCurrentPageReference.emit(mockCurrentPageReference);
 
         return global.flushPromises().then(async () => {

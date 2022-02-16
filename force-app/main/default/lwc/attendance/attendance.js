@@ -18,6 +18,7 @@ import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
+import getServiceSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
@@ -48,9 +49,9 @@ import BAD_TAB_HEADER from "@salesforce/label/c.Incorrect_Tab";
 import ATTENDANCE_TAB_MESSAGE from "@salesforce/label/c.Attendance_Tab_Message";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
-const ID = "Id";
 const COMPLETE = "Complete";
 const PENDING = "Pending";
+const ID = "Id";
 const ITEM_PAGE_NAVIGATION_TYPE = "standard__navItemPage";
 const ATTENDANCE_TAB = "Attendance";
 export default class Attendance extends NavigationMixin(LightningElement) {
@@ -61,6 +62,8 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
     @track serviceDeliveries;
     @track fieldSet;
+    @track completeBucketedStatuses = [];
+    @track pendingBucketedStatuses = [];
 
     showSpinner = true;
     isUpdateMode = false;
@@ -175,6 +178,29 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         this.showSpinner = false;
     }
 
+    @wire(getServiceSessionStatusBuckets, {})
+    wiredGetSessionStatuses(result) {
+        if (!result) {
+            return;
+        }
+
+        if (result.data) {
+            for (const [key, value] of Object.entries(result.data)) {
+                if (key.toLowerCase() === COMPLETE.toLowerCase()) {
+                    this.completeBucketedStatuses = value.map(status =>
+                        status.toLowerCase()
+                    );
+                } else if (key.toLowerCase() === PENDING.toLowerCase()) {
+                    this.pendingBucketedStatuses = value.map(status =>
+                        status.toLowerCase()
+                    );
+                }
+            }
+        } else if (result.error) {
+            console.log(result.error);
+        }
+    }
+
     connectedCallback() {
         loadStyle(this, pmmFolder + "/attendancePrintOverride.css");
     }
@@ -198,7 +224,10 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     get isComplete() {
-        return this.sessionStatus && this.sessionStatus === COMPLETE;
+        return (
+            this.sessionStatus &&
+            this.completeBucketedStatuses.includes(this.sessionStatus.toLowerCase())
+        );
     }
 
     get isReadMode() {
@@ -206,7 +235,10 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     get isPending() {
-        return this.sessionStatus && this.sessionStatus === PENDING;
+        return (
+            this.sessionStatus &&
+            this.pendingBucketedStatuses.includes(this.sessionStatus.toLowerCase())
+        );
     }
 
     get printButtonLabel() {

@@ -35,4 +35,13 @@ public with sharing class RecentServiceSessionController {
     public static Map<String, String> getMenuOptions() {
         return DATE_LITERAL_OPTIONS;
     }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, List<String>> getServiceSessionStatusBuckets() {
+        try {
+            return serviceSessionService.getServiceSessionStatusBuckets();
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+    }
 }

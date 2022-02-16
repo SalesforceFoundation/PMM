@@ -10,9 +10,12 @@
 public with sharing class ServiceSessionSelector {
     private static final String RECENT_SESSIONS_VIEW = 'RecentSessionsView';
 
+    @TestVisible
+    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+
     public List<ServiceSession__c> getServiceSessionsByStartDate(String dateLiteral) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
-        Set<String> allowedSessionStatuses = new Set<String>{ 'Pending', 'Complete' };
+        Set<String> allowedSessionStatuses = getAllowedServiceSessionStatusValues();
 
         if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {
             return new List<ServiceSession__c>();
@@ -49,5 +52,27 @@ public with sharing class ServiceSessionSelector {
         allSessions = Database.query(queryBuilder.buildSoqlQuery());
 
         return Security.stripInaccessible(AccessType.READABLE, allSessions).getRecords();
+    }
+
+    public Set<String> getAllowedServiceSessionStatusValues() {
+        List<String> bucketNames = new List<String>{ 'Pending', 'Complete' };
+        Set<String> statuses = new Set<String>();
+
+        Schema.SObjectType serviceSessionSObjType = ServiceSession__c.SObjectType;
+        Schema.SObjectField serviceSessionStatusField = ServiceSession__c.Status__c;
+
+        for (
+            Bucket__mdt bucket : bucketSelector.getBuckets(
+                bucketNames,
+                serviceSessionSObjType,
+                serviceSessionStatusField
+            )
+        ) {
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                statuses.add(value.Value__c);
+            }
+        }
+
+        return statuses;
     }
 }

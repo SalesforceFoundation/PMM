@@ -22,7 +22,6 @@ import SESSION_START_DATE from "@salesforce/schema/ServiceSession__c.SessionStar
 import STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
 import SERVICE_LINK_FIELD from "@salesforce/schema/ServiceSession__c.ServiceLink__c";
 
-const COMPLETE = "Complete";
 const STRING = "STRING";
 
 export default class SessionCard extends NavigationMixin(LightningElement) {
@@ -33,6 +32,7 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
 
     _session;
     _outputFields;
+    _completeBucketedStatuses;
 
     labels = {
         sucess: SUCCESS_LABEL,
@@ -58,12 +58,28 @@ export default class SessionCard extends NavigationMixin(LightningElement) {
     }
 
     @api
+    set completeBucketedStatuses(value) {
+        this._completeBucketedStatuses = value;
+    }
+
+    get completeBucketedStatuses() {
+        return this._completeBucketedStatuses;
+    }
+
+    @api
     set session(value) {
         this._session = { ...value };
+
         for (const [key, val] of Object.entries(value)) {
             if (key === this.fields.status) {
-                this._session.showCompleteIcon =
-                    val.toLowerCase() === COMPLETE.toLowerCase();
+                if (
+                    this.completeBucketedStatuses &&
+                    this.completeBucketedStatuses.length > 0
+                ) {
+                    this._session.showCompleteIcon = this.completeBucketedStatuses.includes(
+                        val.toLowerCase()
+                    );
+                }
             } else if (key === this.fields.primaryServiceProvider) {
                 this._session.hasServiceProviderValue = val !== undefined;
             } else if (key === this.fields.attendanceSummary) {

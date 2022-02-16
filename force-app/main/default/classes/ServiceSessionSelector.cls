@@ -15,7 +15,7 @@ public with sharing class ServiceSessionSelector {
 
     public List<ServiceSession__c> getServiceSessionsByStartDate(String dateLiteral) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
-        Set<String> allowedSessionStatuses = getServiceSessionStatusBuckets();
+        Set<String> allowedSessionStatuses = getAllowedServiceSessionStatusValues();
 
         if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {
             return new List<ServiceSession__c>();
@@ -54,7 +54,7 @@ public with sharing class ServiceSessionSelector {
         return Security.stripInaccessible(AccessType.READABLE, allSessions).getRecords();
     }
 
-    public Set<String> getServiceSessionStatusBuckets() {
+    public Set<String> getAllowedServiceSessionStatusValues() {
         List<String> bucketNames = new List<String>{ 'Pending', 'Complete' };
         Set<String> statuses = new Set<String>();
 

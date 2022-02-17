@@ -16,7 +16,7 @@
             </objects>
             <property name="serviceSessionStatusForAfterSubmit" 
                       label="Status for Service Session after attendance is submitted"
-                      datasource="Completed,Pending,Canceled"
+                      datasource="apex://ServiceSessionStatusPicklist"
                       description="Status for Service Session after attendance is submitted." 
                       default=""
                       type="String" />    

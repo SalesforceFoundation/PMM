@@ -317,7 +317,14 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         })
             .then(() => {
                 if (this.isPending) {
-                    this.setStatus(COMPLETE);
+                    let newStatus = COMPLETE;
+                    if (
+                        this.serviceSessionStatusForAfterSubmit &&
+                        this.serviceSessionStatusForAfterSubmit !== ""
+                    ) {
+                        newStatus = this.serviceSessionStatusForAfterSubmit;
+                    }
+                    this.setStatus(newStatus);
                 }
                 refreshApex(this.wiredServiceDeliveriesResult);
                 rows.forEach(row => {

@@ -46,6 +46,11 @@ Contact:
         - MailingPostalCode
         - MailingCountry
 
+        # Custom Fields
+        - IsClient__c
+        - ConsecutiveAbsences__c
+        - LastServiceDate__c
+
     lookups:
         AccountId:
             table: Account

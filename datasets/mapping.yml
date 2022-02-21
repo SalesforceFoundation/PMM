@@ -50,6 +50,8 @@ Contact:
         - IsClient__c
         - ConsecutiveAbsences__c
         - LastServiceDate__c
+        - NumAbsentServiceDeliveries__c
+        - NumPresentServiceDeliveries__c
 
     lookups:
         AccountId:

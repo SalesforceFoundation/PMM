@@ -123,6 +123,13 @@ tasks:
                 - record_type: Campaign.Default
                   default: true
 
+    update_service_session_names:
+        group: "CaseMan: Test Data"
+        description: "Execute anonymous apex to update Service Session Names"
+        class_path: cumulusci.tasks.apex.anon.AnonymousApexTask
+        options:
+            path: scripts/Update_Service_Sessions.apex
+
     run_tests:
         options:
             retry_failures:
@@ -250,6 +257,14 @@ flows:
                     picklists:
                         - "%%%NAMESPACE%%%Service__c.%%%NAMESPACE%%%ServiceDeliveryFieldSet__c"
             3:
+                task: add_picklist_entries
+                options:
+                    entries:
+                        - fullName: AltAttendance
+                          label: AltAttendance
+                    picklists:
+                        - "%%%NAMESPACE%%%Service__c.%%%NAMESPACE%%%AttendanceFieldSet__c"
+            4:
                 task: use_alternate_field_sets
 
     load_data:
@@ -266,6 +281,8 @@ flows:
                 when: "'npsp' in org_config.installed_packages"
             5:
                 flow: setup_alternate_field_sets
+            6:
+                task: update_service_session_names
 
     create_users_and_assign_permission_sets:
         steps:

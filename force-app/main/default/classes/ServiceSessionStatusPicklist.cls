@@ -2,7 +2,7 @@ public class ServiceSessionStatusPicklist extends VisualEditor.DynamicPickList {
     private List<Schema.PicklistEntry> statusPicklistEntries = null;
 
     public override VisualEditor.DataRow getDefaultValue() {
-        return new VisualEditor.DataRow('', '');
+        return new VisualEditor.DataRow('--None--', '');
     }
 
     public override VisualEditor.DynamicPickListRows getValues() {

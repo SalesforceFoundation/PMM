@@ -13,6 +13,35 @@ public with sharing class ServiceSessionStatusPicklist_TEST {
         .getPicklistValues();
 
     @IsTest
+    private static void testGetDefaultValue() {
+        ServiceSessionStatusPicklist servSeshPicklist = new ServiceSessionStatusPicklist();
+
+        VisualEditor.DataRow defaultDataRow = servSeshPicklist.getDefaultValue();
+        System.AssertEquals(
+            defaultDataRow.getValue(),
+            ServiceSessionService.COMPLETE,
+            'Default value should be Complete option'
+        );
+
+        // remove the "Complete" option to test the edge case where customer has removed the complete option
+        for (Integer i = 0; i < servSeshPicklist.statusPicklistEntries.size(); i++) {
+            if (
+                servSeshPicklist.statusPicklistEntries[i].getValue() ==
+                ServiceSessionService.COMPLETE
+            ) {
+                servSeshPicklist.statusPicklistEntries.remove(i);
+            }
+        }
+
+        defaultDataRow = servSeshPicklist.getDefaultValue();
+        System.AssertEquals(
+            defaultDataRow.getValue(),
+            '',
+            'When complete option is absent, default value should be blank'
+        );
+    }
+
+    @IsTest
     private static void testGetPicklistValues() {
         ServiceSessionStatusPicklist servSeshPicklist = new ServiceSessionStatusPicklist();
         VisualEditor.DynamicPickListRows plRows = servSeshPicklist.getValues();

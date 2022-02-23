@@ -18,8 +18,8 @@ public with sharing class ServiceSessionStatusPicklist_TEST {
 
         VisualEditor.DataRow defaultDataRow = servSeshPicklist.getDefaultValue();
         System.AssertEquals(
-            defaultDataRow.getValue(),
             ServiceSessionService.COMPLETE,
+            defaultDataRow.getValue(),
             'Default value should be Complete option'
         );
 
@@ -35,8 +35,8 @@ public with sharing class ServiceSessionStatusPicklist_TEST {
 
         defaultDataRow = servSeshPicklist.getDefaultValue();
         System.AssertEquals(
-            defaultDataRow.getValue(),
             '',
+            defaultDataRow.getValue(),
             'When complete option is absent, default value should be blank'
         );
     }

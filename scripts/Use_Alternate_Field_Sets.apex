@@ -8,5 +8,9 @@ for (%%%NAMESPACE%%%Service__c service : [SELECT Name, %%%NAMESPACE%%%ServiceDel
     service.%%%NAMESPACE%%%ServiceDeliveryFieldSet__c = 'Alternate_no_service';
     servicesToUpdate.add(service);
 }
+for (%%%NAMESPACE%%%Service__c service : [SELECT Name, %%%NAMESPACE%%%ServiceDeliveryFieldSet__c FROM %%%NAMESPACE%%%Service__c WHERE Name = 'STEM Field Trips']){
+    service.%%%NAMESPACE%%%AttendanceFieldSet__c = 'AltAttendance';
+    servicesToUpdate.add(service);
+}
 
 update servicesToUpdate;

@@ -2,12 +2,17 @@ public class ServiceSessionStatusPicklist extends VisualEditor.DynamicPickList {
     private List<Schema.PicklistEntry> statusPicklistEntries = null;
 
     public override VisualEditor.DataRow getDefaultValue() {
-        return new VisualEditor.DataRow('--None--', '');
+        List<Schema.PicklistEntry> ples = getStatusPicklistEntries();
+        for (Schema.PicklistEntry ple : ples) {
+            if (ple.getValue() == ServiceSessionService.COMPLETE) {
+                return new VisualEditor.DataRow(ple.getLabel(), ple.getValue());
+            }
+        }
+        return new VisualEditor.DataRow('--' + System.Label.None + '--', '');
     }
 
     public override VisualEditor.DynamicPickListRows getValues() {
         VisualEditor.DynamicPickListRows statusOptions = new VisualEditor.DynamicPickListRows();
-        statusOptions.addRow(getDefaultValue());
         List<Schema.PicklistEntry> ples = getStatusPicklistEntries();
         for (Schema.PicklistEntry ple : ples) {
             VisualEditor.DataRow pickListEntryRow = new VisualEditor.DataRow(

@@ -14,8 +14,7 @@ public with sharing class ServiceSessionService {
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
-    @TestVisible
-    private static final String COMPLETE = 'Complete';
+    public static final String COMPLETE = 'Complete';
     private static final String PENDING = 'Pending';
 
     public Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(

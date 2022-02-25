@@ -56,6 +56,7 @@ const ITEM_PAGE_NAVIGATION_TYPE = "standard__navItemPage";
 const ATTENDANCE_TAB = "Attendance";
 export default class Attendance extends NavigationMixin(LightningElement) {
     @api recordId;
+    @api serviceSessionStatusForAfterSubmit;
     @api omitServiceParticipantStatuses;
     @api omitProgramEngagementRoles;
     @api omitProgramEngagementStages;
@@ -316,7 +317,14 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         })
             .then(() => {
                 if (this.isPending) {
-                    this.setStatus(COMPLETE);
+                    let newStatus = COMPLETE;
+                    if (
+                        this.serviceSessionStatusForAfterSubmit &&
+                        this.serviceSessionStatusForAfterSubmit !== ""
+                    ) {
+                        newStatus = this.serviceSessionStatusForAfterSubmit;
+                    }
+                    this.setStatus(newStatus);
                 }
                 refreshApex(this.wiredServiceDeliveriesResult);
                 rows.forEach(row => {

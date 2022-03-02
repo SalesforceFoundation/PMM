@@ -15,6 +15,8 @@ import * as cUtil from "c/util";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
+import getServiceSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
+
 import {
     registerApexTestWireAdapter,
     registerLdsTestWireAdapter,
@@ -37,12 +39,16 @@ const mockWiredNoPermissions = require("./data/wiredNoPermissions.json");
 const mockAttendanceTabPageReference = require("./data/attendanceTabPageReference.json");
 const mockServiceSessionPageReference = require("./data/serviceSessionPageReference.json");
 const mockApexError = require("../../__tests__/data/apexError.json");
+const mockWiredGetSessionStatuses = require("./data/wiredGetSessionStatuses.json");
 
 //Register the  wire adapters
 const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
 const wiredSessionAdapter = registerLdsTestWireAdapter(getRecord);
 const wiredPermissionsAdapter = registerApexTestWireAdapter(checkFieldPermissions);
 const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference);
+const wiredGetSessionStatusesAdapter = registerApexTestWireAdapter(
+    getServiceSessionStatusBuckets
+);
 
 jest.mock("c/attendanceRow");
 jest.mock(
@@ -72,6 +78,8 @@ describe("c-attendance", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
+        currentPageReferenceAdapter.emit(mockServiceSessionPageReference);
 
         return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
@@ -233,6 +241,7 @@ describe("c-attendance saving rows", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
         upsertRows.mockResolvedValue();
         updateRecord.mockResolvedValue();
         let spy;
@@ -260,6 +269,7 @@ describe("c-attendance saving rows", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
         upsertRows.mockResolvedValue();
         updateRecord.mockResolvedValue();
 
@@ -283,6 +293,7 @@ describe("c-attendance saving rows", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(rosterWithEmptyRecord);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
         upsertRows.mockResolvedValue();
 
         return global
@@ -308,6 +319,7 @@ describe("c-attendance saving rows", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
         upsertRows.mockRejectedValue(mockApexError);
 
         return global
@@ -327,6 +339,7 @@ describe("c-attendance saving rows", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
         upsertRows.mockResolvedValue();
         updateRecord.mockRejectedValue({});
 
@@ -419,6 +432,7 @@ describe("c-attendance updating records", () => {
         wiredSessionAdapter.emit(completedSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
 
         return global
             .flushPromises()
@@ -440,6 +454,7 @@ describe("c-attendance updating records", () => {
         wiredSessionAdapter.emit(completedSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
 
         return global
             .flushPromises()
@@ -466,6 +481,7 @@ describe("c-attendance updating records", () => {
         wiredSessionAdapter.emit(completedSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
         upsertRows.mockResolvedValue();
 
         return global

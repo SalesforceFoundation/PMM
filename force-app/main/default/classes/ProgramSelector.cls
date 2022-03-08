@@ -14,6 +14,7 @@ public with sharing class ProgramSelector {
             SELECT Id, Name
             FROM ProgramCohort__c
             WHERE Program__c = :programId
+            ORDER BY Name ASC
         ];
 
         return Security.stripInaccessible(AccessType.READABLE, programCohorts)

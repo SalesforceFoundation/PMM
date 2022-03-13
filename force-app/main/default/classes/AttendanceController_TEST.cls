@@ -14,6 +14,7 @@ public with sharing class AttendanceController_TEST {
     @IsTest
     private static void shouldReturnServiceDeliveriesFromService() {
         String generateRoster = 'generateRoster';
+        String sortBy = 'FirstName';
         List<ServiceDelivery__c> serviceDeliveriesToReturn = new List<ServiceDelivery__c>();
         ServiceDeliveryService.Roster rosterToReturn = new ServiceDeliveryService.Roster(
             null,
@@ -21,7 +22,11 @@ public with sharing class AttendanceController_TEST {
         );
         serviceStub.withReturnValue(
             generateRoster,
-            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
+            new List<Type>{
+                Id.class,
+                ServiceDeliveryService.Filters.class,
+                String.class
+            },
             rosterToReturn
         );
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
@@ -30,32 +35,41 @@ public with sharing class AttendanceController_TEST {
         Test.startTest();
         System.assert(
             serviceDeliveriesToReturn ===
-            AttendanceController.generateRoster(sessionId, '', '', '').deliveries,
+            AttendanceController.generateRoster(sessionId, '', '', '', sortBy).deliveries,
             'Expected the controller to return the list returned by the service.'
         );
         Test.stopTest();
 
         serviceStub.assertCalledWith(
             generateRoster,
-            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
-            new List<Object>{ sessionId, new ServiceDeliveryService.Filters('', '', '') }
+            new List<Type>{
+                Id.class,
+                ServiceDeliveryService.Filters.class,
+                String.class
+            },
+            new List<Object>{
+                sessionId,
+                new ServiceDeliveryService.Filters('', '', ''),
+                sortBy
+            }
         );
     }
 
     @IsTest
     private static void shouldRethrowExceptionFromService() {
         String generateRoster = 'generateRoster';
+        String sortBy = 'FirstName';
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         serviceStub.withThrowException(
             generateRoster,
-            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class }
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class, String.class }
         );
         AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
         Exception actualException;
 
         Test.startTest();
         try {
-            AttendanceController.generateRoster(sessionId, '', '', '');
+            AttendanceController.generateRoster(sessionId, '', '', '', sortBy);
         } catch (Exception ex) {
             actualException = ex;
         }
@@ -69,8 +83,16 @@ public with sharing class AttendanceController_TEST {
 
         serviceStub.assertCalledWith(
             generateRoster,
-            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
-            new List<Object>{ sessionId, new ServiceDeliveryService.Filters('', '', '') }
+            new List<Type>{
+                Id.class,
+                ServiceDeliveryService.Filters.class,
+                String.class
+            },
+            new List<Object>{
+                sessionId,
+                new ServiceDeliveryService.Filters('', '', ''),
+                sortBy
+            }
         );
     }
 

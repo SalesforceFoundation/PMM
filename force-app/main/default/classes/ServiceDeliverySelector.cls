@@ -8,7 +8,16 @@
  */
 
 public with sharing class ServiceDeliverySelector {
-    private QueryBuilder queryBuilder = new QueryBuilder();
+    @TestVisible
+    private QueryBuilder queryBuilder {
+        get {
+            if (queryBuilder == null) {
+                queryBuilder = new QueryBuilder();
+            }
+            return queryBuilder;
+        }
+        set;
+    }
 
     public String getAttendanceFieldSetName(Id scheduleId) {
         // We want to bypass FLS because this is a system field that drives our UI
@@ -23,7 +32,8 @@ public with sharing class ServiceDeliverySelector {
 
     public List<ServiceDelivery__c> getServiceDeliveriesBySessionId(
         FieldSet fieldSet,
-        Id sessionId
+        Id sessionId,
+        String sortBy
     ) {
         if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
             return new List<ServiceDelivery__c>();
@@ -44,7 +54,8 @@ public with sharing class ServiceDeliverySelector {
             .addCondition(
                 String.valueOf(ServiceDelivery__c.ServiceSession__c) + ' = :sessionId'
             )
-            .addCondition(String.valueOf(ServiceDelivery__c.Contact__c) + ' != NULL');
+            .addCondition(String.valueOf(ServiceDelivery__c.Contact__c) + ' != NULL')
+            .withOrderBy('Contact__r.' + sortBy);
 
         List<ServiceDelivery__c> serviceDeliveries = Database.query(
             queryBuilder.buildSoqlQuery()
@@ -56,29 +67,22 @@ public with sharing class ServiceDeliverySelector {
 
     public List<ServiceParticipant__c> getServiceParticipantsByScheduleId(
         Id scheduleId,
-        Set<Id> contactsToExclude
+        Set<Id> contactsToExclude,
+        String sortBy
     ) {
         if (!Schema.SObjectType.ServiceParticipant__c.isAccessible()) {
             return new List<ServiceParticipant__c>();
         }
 
-        List<ServiceParticipant__c> serviceParticipants = [
-            SELECT
-                Id,
-                Contact__c,
-                Contact__r.Name,
-                ProgramEngagement__c,
-                ProgramEngagement__r.Stage__c,
-                ProgramEngagement__r.Role__c,
-                Service__c,
-                Service__r.UnitOfMeasurement__c,
-                Status__c
-            FROM ServiceParticipant__c
-            WHERE
-                ServiceSchedule__c = :scheduleId
-                AND Contact__c NOT IN :contactsToExclude
-                AND Contact__c != NULL
-        ];
+        String serviceParticipantsQuery =
+            'SELECT Id, Contact__c, Contact__r.Name, ProgramEngagement__c,ProgramEngagement__r.Stage__c, ProgramEngagement__r.Role__c, Service__c, ' +
+            'Service__r.UnitOfMeasurement__c, Status__c ' +
+            'FROM ServiceParticipant__c WHERE ServiceSchedule__c = :scheduleId AND Contact__c NOT IN :contactsToExclude AND Contact__c != NULL ORDER BY Contact__r.' +
+            sortBy +
+            '';
+        List<ServiceParticipant__c> serviceParticipants = Database.query(
+            serviceParticipantsQuery
+        );
 
         return Security.stripInaccessible(AccessType.READABLE, serviceParticipants)
             .getRecords();

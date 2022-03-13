@@ -22,6 +22,7 @@ public with sharing class ServiceDeliverySelector_TEST {
     private static void getServiceDeliveriesFiltersWithClient() {
         List<ServiceDelivery__c> actualDeliveries;
         Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+        String sortBy = 'FirstName';
 
         ServiceDelivery__c serviceDelivery = [
             SELECT Service__c, ServiceSession__c
@@ -34,7 +35,8 @@ public with sharing class ServiceDeliverySelector_TEST {
         Test.startTest();
         actualDeliveries = selector.getServiceDeliveriesBySessionId(
             defaultFieldSet,
-            sessionId
+            sessionId,
+            sortBy
         );
         Test.stopTest();
 
@@ -42,6 +44,7 @@ public with sharing class ServiceDeliverySelector_TEST {
             SELECT Id
             FROM ServiceDelivery__c
             WHERE ServiceSession__c = :sessionId
+            ORDER BY Contact__r.FirstName
         ];
         System.assert(
             !actualDeliveries.isEmpty() &&
@@ -63,6 +66,8 @@ public with sharing class ServiceDeliverySelector_TEST {
 
     @IsTest
     private static void getServiceParticipantsByScheduleIdShouldReturnAllWhenNoExistingContacts() {
+        String sortBy = 'FirstName';
+
         ServiceSession__c session = [
             SELECT Id, ServiceSchedule__c
             FROM ServiceSession__c
@@ -79,7 +84,8 @@ public with sharing class ServiceDeliverySelector_TEST {
         );
         List<ServiceParticipant__c> actualParticipants = selector.getServiceParticipantsByScheduleId(
             session.ServiceSchedule__c,
-            new Set<Id>()
+            new Set<Id>(),
+            sortBy
         );
 
         System.assertEquals(
@@ -91,6 +97,8 @@ public with sharing class ServiceDeliverySelector_TEST {
 
     @IsTest
     private static void getServiceParticipantsByScheduleIdShouldOmitExistingContacts() {
+        String sortBy = 'FirstName';
+
         ServiceSession__c session = [
             SELECT Id, ServiceSchedule__c
             FROM ServiceSession__c
@@ -107,7 +115,8 @@ public with sharing class ServiceDeliverySelector_TEST {
         );
         List<ServiceParticipant__c> actualParticipants = selector.getServiceParticipantsByScheduleId(
             session.ServiceSchedule__c,
-            new Set<Id>{ participants[0].Contact__c }
+            new Set<Id>{ participants[0].Contact__c },
+            sortBy
         );
 
         System.assertEquals(
@@ -135,12 +144,14 @@ public with sharing class ServiceDeliverySelector_TEST {
         User standardUser = TestUtil.getTestUser();
         Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
         List<ServiceDelivery__c> actualDeliveries;
+        String sortBy = 'FirstName';
 
         System.runAs(standardUser) {
             Test.startTest();
             actualDeliveries = selector.getServiceDeliveriesBySessionId(
                 defaultFieldSet,
-                sessionId
+                sessionId,
+                sortBy
             );
             Test.stopTest();
         }
@@ -153,6 +164,7 @@ public with sharing class ServiceDeliverySelector_TEST {
 
     @IsTest
     private static void returnsEmptyParticipantListWithoutReadAccess() {
+        String sortBy = 'FirstName';
         User standardUser = TestUtil.getTestUser();
         Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
         List<ServiceParticipant__c> actualParticipants;
@@ -166,7 +178,8 @@ public with sharing class ServiceDeliverySelector_TEST {
             Test.startTest();
             actualParticipants = selector.getServiceParticipantsByScheduleId(
                 session.ServiceSchedule__c,
-                new Set<Id>()
+                new Set<Id>(),
+                sortBy
             );
             Test.stopTest();
         }

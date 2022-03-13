@@ -19,7 +19,8 @@ public with sharing class AttendanceController {
         Id sessionId,
         String omittedServiceParticipantStatuses,
         String omittedProgramEngagementRoles,
-        String omittedProgramEngagementStages
+        String omittedProgramEngagementStages,
+        String sortBy
     ) {
         try {
             ServiceDeliveryService.Filters filters = null;
@@ -30,7 +31,7 @@ public with sharing class AttendanceController {
                 omittedProgramEngagementStages
             );
 
-            return service.generateRoster(sessionId, filters);
+            return service.generateRoster(sessionId, filters, sortBy);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

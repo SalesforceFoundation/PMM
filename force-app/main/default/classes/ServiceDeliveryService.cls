@@ -68,14 +68,19 @@ public with sharing class ServiceDeliveryService {
         set;
     }
 
-    public Roster generateRoster(Id sessionId, ServiceDeliveryService.Filters filters) {
+    public Roster generateRoster(
+        Id sessionId,
+        ServiceDeliveryService.Filters filters,
+        String sortBy
+    ) {
         ServiceSession__c session = deliverySelector.getSession(sessionId);
         FieldSet fieldSet = getFieldSet(session.ServiceSchedule__c);
 
         List<ServiceDelivery__c> deliveries = createServiceDeliveries(
             fieldSet,
             session,
-            filters
+            filters,
+            sortBy
         );
 
         return new Roster(
@@ -189,12 +194,13 @@ public with sharing class ServiceDeliveryService {
     private List<ServiceDelivery__c> createServiceDeliveries(
         FieldSet fieldSet,
         ServiceSession__c session,
-        ServiceDeliveryService.Filters filters
+        ServiceDeliveryService.Filters filters,
+        String sortBy
     ) {
         Set<Id> existingClients = new Set<Id>();
 
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>(
-            deliverySelector.getServiceDeliveriesBySessionId(fieldSet, session.Id)
+            deliverySelector.getServiceDeliveriesBySessionId(fieldSet, session.Id, sortBy)
         );
 
         for (ServiceDelivery__c delivery : deliveries) {
@@ -203,7 +209,8 @@ public with sharing class ServiceDeliveryService {
 
         List<ServiceParticipant__c> participants = deliverySelector.getServiceParticipantsByScheduleId(
             session.ServiceSchedule__c,
-            existingClients
+            existingClients,
+            sortBy
         );
 
         for (ServiceParticipant__c participant : participants) {

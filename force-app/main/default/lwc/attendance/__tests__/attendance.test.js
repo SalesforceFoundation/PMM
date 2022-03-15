@@ -10,6 +10,7 @@
 import { createElement } from "lwc";
 import Attendance from "c/attendance";
 import { getRecord } from "lightning/uiRecordApi";
+import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { CurrentPageReference } from "lightning/navigation";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
@@ -26,11 +27,13 @@ const mockWiredSession = require("./data/wiredPendingSession.json");
 const mockWiredPermissions = require("./data/wiredPermissions.json");
 const mockWiredNoPermissions = require("./data/wiredNoPermissions.json");
 const mockwiredGetSessionStatuses = require("./data/wiredGetSessionStatuses.json");
+const mockWiredContactObjectInfo = require("./data/wiredContactObjectInfo.json");
 const mockCurrentPageReference = require("./data/currentPageReference.json");
 
 //Register the  wire adapters
 const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
 const wiredSessionAdapter = registerLdsTestWireAdapter(getRecord);
+const wiredContactObjectInfoAdapter = registerLdsTestWireAdapter(getObjectInfo);
 const wiredPermissionsAdapter = registerApexTestWireAdapter(checkFieldPermissions);
 const wiredGetSessionStatusesAdapter = registerApexTestWireAdapter(
     getServiceSessionStatusBuckets
@@ -53,6 +56,7 @@ describe("c-attendance", () => {
 
     it("shows multiple returned rows with perms", async () => {
         document.body.appendChild(element);
+        wiredContactObjectInfoAdapter.emit(mockWiredContactObjectInfo);
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
@@ -69,6 +73,7 @@ describe("c-attendance", () => {
     });
     it("shows empty state and no buttons when zero returned rows with no perms", async () => {
         document.body.appendChild(element);
+        wiredContactObjectInfoAdapter.emit(mockWiredContactObjectInfo);
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
@@ -98,6 +103,7 @@ describe("c-attendance", () => {
     });
     it("shows empty state and no buttons when zero returned rows with perms", async () => {
         document.body.appendChild(element);
+        wiredContactObjectInfoAdapter.emit(mockWiredContactObjectInfo);
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
@@ -127,6 +133,7 @@ describe("c-attendance", () => {
     });
     it("shows perms error when rows are returned with no perms", async () => {
         document.body.appendChild(element);
+        wiredContactObjectInfoAdapter.emit(mockWiredContactObjectInfo);
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);

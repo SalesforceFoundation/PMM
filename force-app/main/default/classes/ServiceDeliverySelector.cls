@@ -38,6 +38,18 @@ public with sharing class ServiceDeliverySelector {
                             .getRelationshipName() +
                         '.' +
                         String.valueOf(Contact.Name)
+                    ),
+                    String.valueOf(
+                        ServiceDelivery__c.Contact__c.getDescribe()
+                            .getRelationshipName() +
+                        '.' +
+                        String.valueOf(Contact.FirstName)
+                    ),
+                    String.valueOf(
+                        ServiceDelivery__c.Contact__c.getDescribe()
+                            .getRelationshipName() +
+                        '.' +
+                        String.valueOf(Contact.LastName)
                     )
                 }
             )
@@ -67,6 +79,8 @@ public with sharing class ServiceDeliverySelector {
                 Id,
                 Contact__c,
                 Contact__r.Name,
+                Contact__r.FirstName,
+                Contact__r.LastName,
                 ProgramEngagement__c,
                 ProgramEngagement__r.Stage__c,
                 ProgramEngagement__r.Role__c,

@@ -195,6 +195,13 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         if (result.data) {
             this.serviceDeliveries = [...result.data.deliveries];
 
+            this.serviceDeliveries.sort((a, b) => {
+                return getChildObjectByName(a, "Contact__r").FirstName >
+                    getChildObjectByName(b, "Contact__r").FirstName
+                    ? 1
+                    : -1;
+            });
+
             this.configureFieldSet(result.data.fieldSet.map(a => ({ ...a })));
         } else if (result.error) {
             console.log(result.error);
@@ -426,27 +433,12 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
     sortServiceDeliveries(sortBy) {
         if (this.serviceDeliveries) {
-            if (
-                sortBy.toLowerCase() ===
-                CONTACT_FIRST_NAME_FIELD.fieldApiName.toLowerCase()
-            ) {
-                this.serviceDeliveries.sort((a, b) => {
-                    return getChildObjectByName(a, "Contact__r").FirstName >
-                        getChildObjectByName(b, "Contact__r").FirstName
-                        ? 1
-                        : -1;
-                });
-            } else if (
-                sortBy.toLowerCase() ===
-                CONTACT_LAST_NAME_FIELD.fieldApiName.toLowerCase()
-            ) {
-                this.serviceDeliveries.sort((a, b) => {
-                    return getChildObjectByName(a, "Contact__r").LastName >
-                        getChildObjectByName(b, "Contact__r").LastName
-                        ? 1
-                        : -1;
-                });
-            }
+            this.serviceDeliveries.sort((a, b) => {
+                return getChildObjectByName(a, "Contact__r")[sortBy] >
+                    getChildObjectByName(b, "Contact__r")[sortBy]
+                    ? 1
+                    : -1;
+            });
         }
     }
 }

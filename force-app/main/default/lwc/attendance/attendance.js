@@ -77,7 +77,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     @track completeBucketedStatuses = [];
     @track pendingBucketedStatuses = [];
     sortAttendanceBy = SORTABLE_FIELDS[0];
-
+    options;
     showSpinner = true;
     isUpdateMode = false;
     hasReadPermissions;
@@ -422,7 +422,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
 
         this.sortAttendanceBy = event.detail.value;
-        this.sortServiceDeliveries(this.sortAttendanceBy);
+        this.sortServiceDeliveries();
     }
 
     sortServiceDeliveries() {

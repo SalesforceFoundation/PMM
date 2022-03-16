@@ -194,13 +194,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
         if (result.data) {
             this.serviceDeliveries = [...result.data.deliveries];
-
-            this.serviceDeliveries.sort((a, b) => {
-                return getChildObjectByName(a, "Contact__r").FirstName >
-                    getChildObjectByName(b, "Contact__r").FirstName
-                    ? 1
-                    : -1;
-            });
+            this.sortServiceDeliveries();
 
             this.configureFieldSet(result.data.fieldSet.map(a => ({ ...a })));
         } else if (result.error) {
@@ -431,11 +425,11 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         this.sortServiceDeliveries(this.sortAttendanceBy);
     }
 
-    sortServiceDeliveries(sortBy) {
+    sortServiceDeliveries() {
         if (this.serviceDeliveries) {
             this.serviceDeliveries.sort((a, b) => {
-                return getChildObjectByName(a, "Contact__r")[sortBy] >
-                    getChildObjectByName(b, "Contact__r")[sortBy]
+                return getChildObjectByName(a, "Contact__r")[this.sortAttendanceBy] >
+                    getChildObjectByName(b, "Contact__r")[this.sortAttendanceBy]
                     ? 1
                     : -1;
             });

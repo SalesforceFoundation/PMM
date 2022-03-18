@@ -39,23 +39,40 @@
                 </span>
             </div>
 
-            <lightning-button
-                onclick={handleUpdateClick}
-                variant="neutral"
-                label={labels.update}
-                title={labels.update}
-                slot="actions"
-                if:true={showUpdateButton}
-            ></lightning-button>
-
-            <lightning-button
-                onclick={handlePrintClick}
-                variant="neutral"
-                label={printButtonLabel}
-                title={printButtonLabel}
-                slot="actions"
-                if:true={showPrintButton}
-            ></lightning-button>
+            <div slot="actions">
+                <lightning-layout vertical-align="center">
+                    <lightning-layout-item
+                        class="slds-var-p-right_small slds-var-m-bottom_medium"
+                        ><lightning-combobox
+                            id="sort"
+                            label={labels.sortBy}
+                            value={sortAttendanceBy}
+                            options={options}
+                            onchange={handleSortOption}
+                            aria-labelledby="sortLabel"
+                            class="slds-p-bottom_x-small"
+                        ></lightning-combobox
+                    ></lightning-layout-item>
+                    <lightning-layout-item
+                        ><lightning-button
+                            onclick={handleUpdateClick}
+                            variant="neutral"
+                            label={labels.update}
+                            title={labels.update}
+                            if:true={showUpdateButton}
+                        ></lightning-button
+                    ></lightning-layout-item>
+                    <lightning-layout-item>
+                        <lightning-button
+                            onclick={handlePrintClick}
+                            variant="neutral"
+                            label={printButtonLabel}
+                            title={printButtonLabel}
+                            if:true={showPrintButton}
+                        ></lightning-button
+                    ></lightning-layout-item>
+                </lightning-layout>
+            </div>
 
             <div class="slds-border_top">
                 <template if:true={showSpinner}>

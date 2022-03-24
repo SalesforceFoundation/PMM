@@ -18,7 +18,7 @@
                       label="Status for Service Session after attendance is submitted"
                       datasource="apex://ServiceSessionStatusPicklist"
                       description="Status for Service Session after attendance is submitted." 
-                      default=""
+                      default="Complete"
                       type="String" />    
             <property name="omitServiceParticipantStatuses" 
                       label="Excluded Service Participant Statuses"

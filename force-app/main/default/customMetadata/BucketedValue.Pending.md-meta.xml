@@ -4,7 +4,7 @@
     <protected>false</protected>
     <values>
         <field>Bucket__c</field>
-        <value xsi:type="xsd:string">Pending</value>
+        <value xsi:type="xsd:string">ServiceSessionStatusPending</value>
     </values>
     <values>
         <field>Value__c</field>

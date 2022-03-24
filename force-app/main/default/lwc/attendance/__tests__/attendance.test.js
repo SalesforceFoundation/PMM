@@ -10,6 +10,7 @@
 import { createElement } from "lwc";
 import Attendance from "c/attendance";
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
+import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { CurrentPageReference } from "lightning/navigation";
 import * as cUtil from "c/util";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
@@ -40,6 +41,7 @@ const mockAttendanceTabPageReference = require("./data/attendanceTabPageReferenc
 const mockServiceSessionPageReference = require("./data/serviceSessionPageReference.json");
 const mockApexError = require("../../__tests__/data/apexError.json");
 const mockWiredGetSessionStatuses = require("./data/wiredGetSessionStatuses.json");
+const mockWiredContactObjectInfo = require("./data/wiredContactObjectInfo.json");
 
 //Register the  wire adapters
 const generateRosterAdapter = registerApexTestWireAdapter(generateRoster);
@@ -49,6 +51,7 @@ const currentPageReferenceAdapter = registerTestWireAdapter(CurrentPageReference
 const wiredGetSessionStatusesAdapter = registerApexTestWireAdapter(
     getServiceSessionStatusBuckets
 );
+const wiredContactObjectInfoAdapter = registerLdsTestWireAdapter(getObjectInfo);
 
 jest.mock("c/attendanceRow");
 jest.mock(
@@ -80,6 +83,7 @@ describe("c-attendance", () => {
         wiredPermissionsAdapter.emit(mockWiredPermissions);
         wiredGetSessionStatusesAdapter.emit(mockWiredGetSessionStatuses);
         currentPageReferenceAdapter.emit(mockServiceSessionPageReference);
+        wiredContactObjectInfoAdapter.emit(mockWiredContactObjectInfo);
 
         return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
@@ -94,6 +98,7 @@ describe("c-attendance", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
+        wiredContactObjectInfoAdapter.emit(mockWiredContactObjectInfo);
 
         return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
@@ -120,6 +125,7 @@ describe("c-attendance", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
         wiredPermissionsAdapter.emit(mockWiredPermissions);
+        wiredContactObjectInfoAdapter.emit(mockWiredContactObjectInfo);
 
         return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(
@@ -148,6 +154,7 @@ describe("c-attendance", () => {
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
         wiredPermissionsAdapter.emit(mockWiredNoPermissions);
+        wiredContactObjectInfoAdapter.emit(mockWiredContactObjectInfo);
 
         return global.flushPromises().then(() => {
             const attendanceRows = element.shadowRoot.querySelectorAll(

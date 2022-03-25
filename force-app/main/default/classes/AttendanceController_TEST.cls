@@ -9,6 +9,8 @@
 
 @IsTest
 public with sharing class AttendanceController_TEST {
+    private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
+    private static final String PENDING_BUCKET = 'ServiceSessionStatusPending';
     private static BasicStub serviceStub = new BasicStub(ServiceDeliveryService.class);
 
     @IsTest
@@ -169,7 +171,7 @@ public with sharing class AttendanceController_TEST {
 
     @IsTest
     private static void testGetServiceSessionStatusBuckets() {
-        List<String> bucketNames = new List<String>{ 'Complete', 'Pending' };
+        List<String> bucketNames = new List<String>{ COMPLETE_BUCKET, PENDING_BUCKET };
         String methodName = 'getServiceSessionStatusBuckets';
 
         Map<String, List<String>> expectedValues = new Map<String, List<String>>();

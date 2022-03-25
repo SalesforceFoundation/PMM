@@ -8,13 +8,15 @@
  */
 
 public class ServiceSessionStatusPicklist extends VisualEditor.DynamicPickList {
+    private static final String COMPLETE = 'Complete';
+
     @TestVisible
     private List<Schema.PicklistEntry> statusPicklistEntries = null;
 
     public override VisualEditor.DataRow getDefaultValue() {
         List<Schema.PicklistEntry> ples = getStatusPicklistEntries();
         for (Schema.PicklistEntry ple : ples) {
-            if (ple.getValue() == ServiceSessionService.COMPLETE) {
+            if (ple.getValue() == COMPLETE) {
                 return new VisualEditor.DataRow(ple.getLabel(), ple.getValue());
             }
         }

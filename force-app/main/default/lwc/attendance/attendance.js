@@ -60,8 +60,9 @@ import BAD_TAB_HEADER from "@salesforce/label/c.Incorrect_Tab";
 import ATTENDANCE_TAB_MESSAGE from "@salesforce/label/c.Attendance_Tab_Message";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
-const COMPLETE = "Complete";
-const PENDING = "Pending";
+const COMPLETE_STATUS = "Complete";
+const COMPLETE_BUCKET = "ServiceSessionStatusComplete";
+const PENDING_BUCKET = "ServiceSessionStatusPending";
 const ID = "Id";
 const ITEM_PAGE_NAVIGATION_TYPE = "standard__navItemPage";
 const ATTENDANCE_TAB = "Attendance";
@@ -216,11 +217,11 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
         if (result.data) {
             for (const [key, value] of Object.entries(result.data)) {
-                if (key.toLowerCase() === COMPLETE.toLowerCase()) {
+                if (key.toLowerCase() === COMPLETE_BUCKET.toLowerCase()) {
                     this.completeBucketedStatuses = value.map(status =>
                         status.toLowerCase()
                     );
-                } else if (key.toLowerCase() === PENDING.toLowerCase()) {
+                } else if (key.toLowerCase() === PENDING_BUCKET.toLowerCase()) {
                     this.pendingBucketedStatuses = value.map(status =>
                         status.toLowerCase()
                     );
@@ -346,7 +347,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         })
             .then(() => {
                 if (this.isPending) {
-                    let newStatus = COMPLETE;
+                    let newStatus = COMPLETE_STATUS;
                     if (
                         this.serviceSessionStatusForAfterSubmit &&
                         this.serviceSessionStatusForAfterSubmit !== ""

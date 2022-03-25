@@ -9,6 +9,8 @@
 
 @IsTest
 public with sharing class ServiceSessionStatusPicklist_TEST {
+    private static final String COMPLETE = 'Complete';
+
     private static List<Schema.PicklistEntry> statusPicklistEntries = ServiceSession__c.Status__c.getDescribe()
         .getPicklistValues();
 
@@ -18,17 +20,14 @@ public with sharing class ServiceSessionStatusPicklist_TEST {
 
         VisualEditor.DataRow defaultDataRow = servSeshPicklist.getDefaultValue();
         System.AssertEquals(
-            ServiceSessionService.COMPLETE,
+            COMPLETE,
             defaultDataRow.getValue(),
             'Default value should be Complete option'
         );
 
         // remove the "Complete" option to test the edge case where customer has removed the complete option
         for (Integer i = 0; i < servSeshPicklist.statusPicklistEntries.size(); i++) {
-            if (
-                servSeshPicklist.statusPicklistEntries[i].getValue() ==
-                ServiceSessionService.COMPLETE
-            ) {
+            if (servSeshPicklist.statusPicklistEntries[i].getValue() == COMPLETE) {
                 servSeshPicklist.statusPicklistEntries.remove(i);
             }
         }

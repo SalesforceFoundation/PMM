@@ -9,6 +9,9 @@
 
 @IsTest
 public with sharing class ServiceSessionService_TEST {
+    private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
+    private static final String PENDING_BUCKET = 'ServiceSessionStatusPending';
+
     private static TestStub bucketSelectorStub;
 
     private static BasicStub serviceSelectorStub = new BasicStub(
@@ -90,7 +93,7 @@ public with sharing class ServiceSessionService_TEST {
     @IsTest
     private static void testGetServiceSessionStatusBuckets() {
         String methodName = 'getBuckets';
-        List<String> bucketNames = new List<String>{ 'Complete', 'Pending' };
+        List<String> bucketNames = new List<String>{ COMPLETE_BUCKET, PENDING_BUCKET };
 
         Schema.SObjectType serviceSessionSObjType = ServiceSession__c.SObjectType;
         Schema.SObjectField statusField = ServiceSession__c.Status__c;

@@ -39,7 +39,7 @@ const MEDIUM_REGION_WIDTH = 768;
 const SMALL = "SMALL";
 const MEDIUM = "MEDIUM";
 const LARGE = "LARGE";
-const COMPLETE = "Complete";
+const COMPLETE_BUCKET = "ServiceSessionStatusComplete";
 export default class RecentSessions extends LightningElement {
     @track sessionsData = [];
     @track sessionIds;
@@ -155,7 +155,7 @@ export default class RecentSessions extends LightningElement {
 
         if (result.data) {
             for (const [key, value] of Object.entries(result.data)) {
-                if (key.toLowerCase() === COMPLETE.toLowerCase()) {
+                if (key.toLowerCase() === COMPLETE_BUCKET.toLowerCase()) {
                     this.completeBucketedStatuses = value.map(status =>
                         status.toLowerCase()
                     );

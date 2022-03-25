@@ -9,6 +9,8 @@
 
 public with sharing class ServiceSessionSelector {
     private static final String RECENT_SESSIONS_VIEW = 'RecentSessionsView';
+    private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
+    private static final String PENDING_BUCKET = 'ServiceSessionStatusPending';
 
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
@@ -55,7 +57,7 @@ public with sharing class ServiceSessionSelector {
     }
 
     public Set<String> getAllowedServiceSessionStatusValues() {
-        List<String> bucketNames = new List<String>{ 'Pending', 'Complete' };
+        List<String> bucketNames = new List<String>{ PENDING_BUCKET, COMPLETE_BUCKET };
         Set<String> statuses = new Set<String>();
 
         Schema.SObjectType serviceSessionSObjType = ServiceSession__c.SObjectType;

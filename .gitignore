@@ -53,6 +53,8 @@ yarn-debug.log*
 yarn-error.log*
 /test_results.json
 /test_results.xml
+results.csv
+sfca*
 
 # LWC
 **/lwc/jsconfig.json

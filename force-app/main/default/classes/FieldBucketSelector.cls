@@ -8,6 +8,10 @@
  */
 
 public with sharing class FieldBucketSelector {
+    // Custom metadata buckets are used to determine groupings of other fields
+    // similar to IsWon or IsClosed in an Opportunity. This data is consumed by
+    // our components and not the end user.
+    /* sfca-disable-stack ApexFlsViolationRule */
     public List<Bucket__mdt> getBuckets(
         List<String> bucketNames,
         Schema.SObjectType objectType,

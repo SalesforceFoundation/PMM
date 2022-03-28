@@ -49,6 +49,14 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.set_focus_to_element(locator_button)
         self.salesforce._jsclick(locator_button)
 
+    def click_wizard_button(self, title):
+        """Verify title on a screen on service schedule wizard"""
+        locator = pmm_lex_locators["service_schedule"]["wizard_button"].format(title)
+        self.selenium.wait_until_page_contains_element(
+            locator, error=" Incorrect title found"
+        )
+        self.salesforce._jsclick(locator)
+
     def verify_wizard_review_screen(self, title, status, value):
         """Verifies data on wizard screen 4, If status is 'contains' then the specified value should be present in the field
         'does not contain' then the specified value should not be present in the field

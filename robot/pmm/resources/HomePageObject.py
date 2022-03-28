@@ -32,5 +32,3 @@ class PMMHomePage(BasePMMPage, BasePage):
         self.selenium.wait_until_page_contains_element(
             locator, error=f"Recent sessions component does not contain '{text}' "
         )
-
-

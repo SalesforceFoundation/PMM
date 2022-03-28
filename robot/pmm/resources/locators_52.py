@@ -121,7 +121,6 @@ pmm_lex_locators = {
     "homepage": {
         "component_link": '//article[contains(@class,"forceBaseCard")][.//span[contains(@title,"{}")]]',
         "recent_sessions_info": "//div[@data-component-id='recentSessions']//*[contains(text(),'{}')]",
-
     },
     "app_launcher": {
         "app_link_search_result": "//mark[contains(text(),'{}')]",

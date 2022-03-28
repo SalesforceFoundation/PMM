@@ -28,6 +28,8 @@ Setup Test Data
     Set suite variable              ${contact2}
     ${contact3} =                   API Create Contact
     Set suite variable              ${contact3}
+    ${contact4} =                   API Create Contact
+    Set suite variable              ${contact4}
     ${program_engagement1} =        API Create Program Engagement   ${Program}[Id]     ${contact1}[Id]
     Set suite variable              ${program_engagement1}
     ${program_engagement2} =        API Create Program Engagement   ${Program}[Id]     ${contact2}[Id]
@@ -45,18 +47,29 @@ Create a New Service Schedule
     [Documentation]                        Navigates to service schedule listing page, clicks 'New' on the listing page and
     ...                                    creates a new record using the wizard, validates the details on the service schedule record
     [tags]                                 W-8294332     perm:admin   perm:manage       feature:Service Schedule
+    Run task                                add_fields_to_field_set
+    ...                                     field_set=${ns}ProgramEngagement__c.${ns}SessionParticipantView
+    ...                                     fields=${{ ["${ns}Role__c"]}}
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
     Verify Wizard Screen Title              Service Schedule Information
     Populate Field                          Service Schedule Name               ${service_schedule_name}
     Populate Field                          Participant Capacity                10
+    Populate Field                          Default Service Quantity (Hours)           2
     Populate Lookup Field                   Primary Service Provider            ${contact}[Name]
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Review Service Sessions
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Add Service Participants
+  #  sleep                                   2s
+    Page Should Contain Text                Role
     Click Add All Button
+    Click Wizard Button                     New
+   # Sleep                                   2s
+    Populate Lookup Field                   Client                      ${contact4}[Name]
+    Click Dialog Button                     Save
+    Validate Participant Is Added           ${contact4}[Name]
     Click Dialog Button                     Next 
     Verify Wizard Screen Title              Review Service Schedule
     Verify Wizard Review Screen             Service Schedule Name        contains       ${service_schedule_name}      
@@ -69,7 +82,6 @@ Create a New Service Schedule
     Click Dialog Button                     Save
     Wait Until Modal is Closed
     Verify Details                          Service Schedule Name        contains      ${service_schedule_name}
-    Verify Details                          Service                      contains      ${service}[Name]
     Verify Details                          Frequency                    contains       One Time
     Verify Page Contains Related List       Service Sessions
     Verify Page Contains Related List       Service Participants
@@ -78,3 +90,4 @@ Create a New Service Schedule
     Page Should Contain                     ${contact1}[Name] - ${service_schedule_name}
     Page Should Contain                     ${contact2}[Name] - ${service_schedule_name}
     Page Should Contain                     ${contact3}[Name] - ${service_schedule_name}
+    Page Should Contain                     ${contact4}[Name] - ${service_schedule_name}

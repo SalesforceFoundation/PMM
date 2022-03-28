@@ -94,6 +94,7 @@ pmm_lex_locators = {
     },
     "service_schedule": {
         "wizard_title": "//h3[contains(@class,'slds-section__title') and text()='{}']",
+        "wizard_button": "//lightning-layout[contains(@class,'slds-grid')]//lightning-button[@class='slds-var-p-around_small']/button[contains(@class,'slds-button') and text()='{}']",
         "select_participants": "//tr[@class='slds-hint-parent']/th[.//*[text()='{}']]/preceding-sibling::td//span[@class='slds-checkbox_faux']",
         "add_participants": "//lightning-layout[contains(@class,'slds-grid')]//tr[.//lightning-base-formatted-text[text()='{}']]//button[@title='Add']",
         "add_all": "//lightning-layout[contains(@class,'slds-grid')]//button[text()='Add All']",
@@ -119,6 +120,8 @@ pmm_lex_locators = {
     },
     "homepage": {
         "component_link": '//article[contains(@class,"forceBaseCard")][.//span[contains(@title,"{}")]]',
+        "recent_sessions_info": "//div[@data-component-id='recentSessions']//*[contains(text(),'{}')]",
+
     },
     "app_launcher": {
         "app_link_search_result": "//mark[contains(text(),'{}')]",

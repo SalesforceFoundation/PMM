@@ -45,7 +45,8 @@ Setup Test Data
 *** Test Cases ***
 Create a New Service Schedule
     [Documentation]                        Navigates to service schedule listing page, clicks 'New' on the listing page and
-    ...                                    creates a new record using the wizard, validates the details on the service schedule record
+    ...                                    creates a new record using the wizard,On Screen 3 validates the new field added to the fieldset
+    ...                                    and details on service schedule record once saved
     [tags]                                 W-8294332     perm:admin   perm:manage       feature:Service Schedule
     Run task                                add_fields_to_field_set
     ...                                     field_set=${ns}ProgramEngagement__c.${ns}SessionParticipantView
@@ -62,11 +63,9 @@ Create a New Service Schedule
     Verify Wizard Screen Title              Review Service Sessions
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Add Service Participants
-  #  sleep                                   2s
     Page Should Contain Text                Role
     Click Add All Button
     Click Wizard Button                     New
-   # Sleep                                   2s
     Populate Lookup Field                   Client                      ${contact4}[Name]
     Click Dialog Button                     Save
     Validate Participant Is Added           ${contact4}[Name]

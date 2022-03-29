@@ -336,7 +336,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
         rows.forEach(row => {
             let editedRow = row.getRow();
-            if (editedRow) {
+            if (editedRow && !editedRow.rowDisabled) {
                 editedRows.push(editedRow);
             }
         });
@@ -390,8 +390,9 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
     initialServiceDeliveries() {
         this.serviceDeliveries = this.wiredServiceDeliveriesResult.data.deliveries.map(
-            delivery => ({
-                ...delivery,
+            (item, index) => ({
+                index,
+                ...item,
             })
         );
     }
@@ -446,7 +447,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             let editedRow = row.getRow();
             if (editedRow) {
                 let editedDelivery = this.serviceDeliveries.find(
-                    delivery => delivery.Id === editedRow.Id
+                    delivery => delivery.index === editedRow.index
                 );
                 Object.assign(editedDelivery, editedRow);
             }

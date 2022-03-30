@@ -1,10 +1,13 @@
 public with sharing class ProgramSelector {
     public List<ProgramCohort__c> getProgramCohortsFromProgramId(Id programId) {
-        Boolean canReadProgramCohort = PermissionValidator.getInstance()
-            .hasObjectAccess(
-                ProgramCohort__c.SObjectType,
-                PermissionValidator.CRUDAccessType.READABLE
-            );
+        Boolean canReadProgramCohort =
+            PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ProgramCohort__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ) &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(ProgramCohort__c.Program__c.getDescribe());
 
         if (!canReadProgramCohort) {
             return new List<ProgramCohort__c>();

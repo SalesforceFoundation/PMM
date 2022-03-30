@@ -51,7 +51,13 @@ public with sharing class ServiceSelector {
     }
 
     public List<ServiceSession__c> getSessionsAfter(Id scheduleId, Date startDate) {
-        if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {
+        if (
+            !Schema.SObjectType.ServiceSession__c.isAccessible() ||
+            !PermissionValidator.getInstance()
+                .hasFieldReadAccess(ServiceSession__c.SessionStart__c.getDescribe()) ||
+            !PermissionValidator.getInstance()
+                .hasFieldReadAccess(ServiceSession__c.ServiceSchedule__c.getDescribe())
+        ) {
             return new List<ServiceSession__c>();
         }
         return [
@@ -77,7 +83,13 @@ public with sharing class ServiceSelector {
     public List<Id> getExistingParticipantContactIdsByScheduleId(Id scheduleId) {
         if (
             !Schema.SObjectType.Contact.isAccessible() ||
-            !Schema.SObjectType.ServiceParticipant__c.isAccessible()
+            !Schema.SObjectType.ServiceParticipant__c.isAccessible() ||
+            !PermissionValidator.getInstance()
+                .hasFieldReadAccess(
+                    ServiceParticipant__c.ServiceSchedule__c.getDescribe()
+                ) ||
+            !PermissionValidator.getInstance()
+                .hasFieldReadAccess(ServiceParticipant__c.Contact__c.getDescribe())
         ) {
             return new List<Id>();
         }

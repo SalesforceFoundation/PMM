@@ -200,7 +200,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
 
         if (result.data) {
-            this.serviceDeliveries = [...result.data.deliveries];
+            this.initialServiceDeliveries();
             this.sortServiceDeliveries();
             this.configureFieldSet(result.data.fieldSet.map(a => ({ ...a })));
         } else if (result.error) {
@@ -336,7 +336,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
         rows.forEach(row => {
             let editedRow = row.getRow();
-            if (editedRow) {
+            if (editedRow && !editedRow.rowDisabled) {
                 editedRows.push(editedRow);
             }
         });
@@ -362,12 +362,11 @@ export default class Attendance extends NavigationMixin(LightningElement) {
                 });
                 this.isUpdateMode = false;
                 this.showSuccessToast(editedRows.length);
-                this.showSpinner = false;
             })
             .catch(error => {
                 handleError(error);
-                this.showSpinner = false;
-            });
+            })
+            .finally((this.showSpinner = false));
     }
 
     setStatus(status) {
@@ -384,8 +383,18 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     handleCancel() {
-        this.serviceDeliveries = this.serviceDeliveries.map(a => ({ ...a }));
+        this.initialServiceDeliveries();
+        this.sortServiceDeliveries();
         this.isUpdateMode = false;
+    }
+
+    initialServiceDeliveries() {
+        this.serviceDeliveries = this.wiredServiceDeliveriesResult.data.deliveries.map(
+            (item, index) => ({
+                index,
+                ...item,
+            })
+        );
     }
 
     showSuccessToast(numSaved) {
@@ -428,7 +437,21 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
 
         this.sortAttendanceBy = event.detail.value;
+        this.updateEditedDeliveries();
         this.sortServiceDeliveries();
+    }
+
+    updateEditedDeliveries() {
+        let rows = this.template.querySelectorAll("c-attendance-row");
+        rows.forEach(row => {
+            let editedRow = row.getRow();
+            if (editedRow) {
+                let editedDelivery = this.serviceDeliveries.find(
+                    delivery => delivery.index === editedRow.index
+                );
+                Object.assign(editedDelivery, editedRow);
+            }
+        });
     }
 
     sortServiceDeliveries() {

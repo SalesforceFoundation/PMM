@@ -9,37 +9,55 @@
 
 @IsTest
 public with sharing class AttendanceController_TEST {
+    private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
+    private static final String PENDING_BUCKET = 'ServiceSessionStatusPending';
     private static BasicStub serviceStub = new BasicStub(ServiceDeliveryService.class);
 
     @IsTest
     private static void shouldReturnServiceDeliveriesFromService() {
         String generateRoster = 'generateRoster';
         List<ServiceDelivery__c> serviceDeliveriesToReturn = new List<ServiceDelivery__c>();
-        serviceStub.withReturnValue(generateRoster, Id.class, serviceDeliveriesToReturn);
+        ServiceDeliveryService.Roster rosterToReturn = new ServiceDeliveryService.Roster(
+            null,
+            serviceDeliveriesToReturn
+        );
+        serviceStub.withReturnValue(
+            generateRoster,
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
+            rosterToReturn
+        );
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
         AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
 
         Test.startTest();
         System.assert(
-            serviceDeliveriesToReturn === AttendanceController.generateRoster(sessionId),
+            serviceDeliveriesToReturn ===
+            AttendanceController.generateRoster(sessionId, '', '', '').deliveries,
             'Expected the controller to return the list returned by the service.'
         );
         Test.stopTest();
 
-        serviceStub.assertCalledWith(generateRoster, Id.class, sessionId);
+        serviceStub.assertCalledWith(
+            generateRoster,
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
+            new List<Object>{ sessionId, new ServiceDeliveryService.Filters('', '', '') }
+        );
     }
 
     @IsTest
     private static void shouldRethrowExceptionFromService() {
         String generateRoster = 'generateRoster';
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
-        serviceStub.withThrowException(generateRoster, Id.class);
+        serviceStub.withThrowException(
+            generateRoster,
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class }
+        );
         AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
         Exception actualException;
 
         Test.startTest();
         try {
-            AttendanceController.generateRoster(sessionId);
+            AttendanceController.generateRoster(sessionId, '', '', '');
         } catch (Exception ex) {
             actualException = ex;
         }
@@ -51,7 +69,11 @@ public with sharing class AttendanceController_TEST {
             'Expected the controller to rethrow the exception from the service.'
         );
 
-        serviceStub.assertCalledWith(generateRoster, Id.class, sessionId);
+        serviceStub.assertCalledWith(
+            generateRoster,
+            new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
+            new List<Object>{ sessionId, new ServiceDeliveryService.Filters('', '', '') }
+        );
     }
 
     @IsTest
@@ -145,5 +167,64 @@ public with sharing class AttendanceController_TEST {
         System.assertEquals(null, actual);
 
         serviceStub.assertCalled(methodName);
+    }
+
+    @IsTest
+    private static void testGetServiceSessionStatusBuckets() {
+        List<String> bucketNames = new List<String>{ COMPLETE_BUCKET, PENDING_BUCKET };
+        String methodName = 'getServiceSessionStatusBuckets';
+
+        Map<String, List<String>> expectedValues = new Map<String, List<String>>();
+        expectedValues.put('Complete', new List<String>{ 'Complete' });
+        expectedValues.put('Pending', new List<String>{ 'Pending' });
+
+        TestStub serviceSessionStub = new StubBuilder(ServiceSessionService.class)
+            .when(methodName)
+            .called()
+            .thenReturn(expectedValues)
+            .build();
+
+        AttendanceController.sessionService = (ServiceSessionService) serviceSessionStub.create();
+
+        Test.startTest();
+        Map<String, List<String>> actualValues = AttendanceController.getServiceSessionStatusBuckets();
+
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedValues,
+            actualValues,
+            'Expected the controller to return list delivered by service.'
+        );
+
+        serviceSessionStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void testGetServiceSessionStatusBucketsWithException() {
+        String methodName = 'getServiceSessionStatusBuckets';
+        Exception actualException;
+
+        TestStub serviceSessionStub = new StubBuilder(ServiceSessionService.class)
+            .when(methodName)
+            .called()
+            .thenThrowException()
+            .build();
+
+        AttendanceController.sessionService = (ServiceSessionService) serviceSessionStub.create();
+
+        Test.startTest();
+        try {
+            AttendanceController.getServiceSessionStatusBuckets();
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof AuraHandledException,
+            actualException.getTypeName() + ': Expected an aura handled exception.'
+        );
     }
 }

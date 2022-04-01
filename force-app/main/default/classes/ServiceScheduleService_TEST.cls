@@ -40,6 +40,16 @@ public with sharing class ServiceScheduleService_TEST {
         ServiceScheduleModel actualModel = service.getServiceScheduleModel(null);
         Test.stopTest();
 
+        // Because datetime includes seconds, this test can be flaky if they records are created 1 second apart.
+        // We will verify the times are within 1 second of each other before making adjustments for them to match
+        Long expectedTime = expectedModel.serviceSchedule.FirstSessionStart__c.getTime();
+        Long actualTime = actualModel.serviceSchedule.FirstSessionStart__c.getTime();
+        System.assert(
+            expectedTime - actualTime < 5000,
+            'Expected no more than a 5 second difference in the creation of the 2 records.'
+        );
+        actualModel.serviceSchedule.FirstSessionStart__c = expectedModel.serviceSchedule.FirstSessionStart__c;
+
         System.assertEquals(
             String.valueOf(expectedModel.serviceSchedule),
             String.valueOf(actualModel.serviceSchedule),
@@ -905,7 +915,7 @@ public with sharing class ServiceScheduleService_TEST {
             new List<Object>{
                 programId,
                 service.getSelectFieldsWithToLabel(actual),
-                ServiceScheduleService.ACTIVE_ENGAGEMENT_STAGES
+                new Set<String>{ 'Active', 'Enrolled' }
             }
         );
 

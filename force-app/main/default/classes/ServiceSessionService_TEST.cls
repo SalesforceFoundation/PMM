@@ -9,6 +9,11 @@
 
 @IsTest
 public with sharing class ServiceSessionService_TEST {
+    private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
+    private static final String PENDING_BUCKET = 'ServiceSessionStatusPending';
+
+    private static TestStub bucketSelectorStub;
+
     private static BasicStub serviceSelectorStub = new BasicStub(
         ServiceSessionSelector.class
     );
@@ -37,6 +42,12 @@ public with sharing class ServiceSessionService_TEST {
                 AND Status__c IN :allowedServiceSessionStatuses
             ORDER BY SessionStart__c
         ];
+
+        System.assertEquals(
+            2,
+            expectedSessions.size(),
+            'Test data should include two service sessions for this week'
+        );
 
         expected.put(
             currentDate.format('EEEE, dd MMMM'),
@@ -77,5 +88,95 @@ public with sharing class ServiceSessionService_TEST {
         );
 
         serviceSelectorStub.assertCalledWith(methodName, String.class, dateLiteral);
+    }
+
+    @IsTest
+    private static void testGetServiceSessionStatusBuckets() {
+        String methodName = 'getBuckets';
+        List<String> bucketNames = new List<String>{ COMPLETE_BUCKET, PENDING_BUCKET };
+
+        Schema.SObjectType serviceSessionSObjType = ServiceSession__c.SObjectType;
+        Schema.SObjectField statusField = ServiceSession__c.Status__c;
+
+        List<Bucket__mdt> statusBuckets = createStatusBuckets();
+
+        bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
+            .when(
+                methodName,
+                List<String>.class,
+                Schema.SObjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, serviceSessionSObjType, statusField)
+            .thenReturn(statusBuckets)
+            .build();
+
+        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
+
+        Map<String, List<String>> expectedStatuses = new Map<String, List<String>>();
+        expectedStatuses.put('Complete', new List<String>{ 'Complete' });
+        expectedStatuses.put('Pending', new List<String>{ 'Pending' });
+
+        Test.startTest();
+        Map<String, List<String>> returnedStatuses = service.getServiceSessionStatusBuckets();
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedStatuses,
+            returnedStatuses,
+            'Expected values is not the same as actual values'
+        );
+
+        bucketSelectorStub.assertCalledAsExpected();
+    }
+
+    private static List<Bucket__mdt> createStatusBuckets() {
+        BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
+            .withDeveloperName('ServiceSessionStatuses')
+            .withQualifiedApiName(Util.prefixNamespace('ServiceSessionStatuses'))
+            .withField('Status__c')
+            .withObject('ServiceSession__c')
+            .withMockId()
+            .build();
+
+        List<BucketedValue__mdt> completeValues = new List<BucketedValue__mdt>();
+        completeValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('Complete')
+                .withQualifiedApiName(Util.prefixNamespace('Complete'))
+                .withBucket('Complete')
+                .withValue('Complete')
+                .withMockId()
+                .build()
+        );
+
+        List<BucketedValue__mdt> pendingValues = new List<BucketedValue__mdt>();
+        pendingValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('Pending')
+                .withQualifiedApiName(Util.prefixNamespace('Pending'))
+                .withBucket('Pending')
+                .withValue('Pending')
+                .withMockId()
+                .build()
+        );
+
+        Bucket__mdt completeBucket = (Bucket__mdt) new TestUtil.BucketBuilder()
+            .withBucketedField(bucketedField)
+            .withBucketedValues(completeValues)
+            .withDeveloperName('Complete')
+            .withQualifiedApiName(Util.prefixNamespace('Complete'))
+            .withMockId()
+            .build();
+
+        Bucket__mdt pendingBucket = (Bucket__mdt) new TestUtil.BucketBuilder()
+            .withBucketedField(bucketedField)
+            .withBucketedValues(pendingValues)
+            .withDeveloperName('Pending')
+            .withQualifiedApiName(Util.prefixNamespace('Pending'))
+            .withMockId()
+            .build();
+
+        return new List<Bucket__mdt>{ completeBucket, pendingBucket };
     }
 }

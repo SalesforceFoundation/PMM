@@ -11,6 +11,7 @@
 public with sharing class ServiceDeliverySelector_TEST {
     private static ServiceDeliverySelector selector = new ServiceDeliverySelector();
     private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
+    private static FieldSet defaultFieldSet = SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
 
     @TestSetup
     private static void setupServiceSessionData() {
@@ -31,7 +32,10 @@ public with sharing class ServiceDeliverySelector_TEST {
         insert serviceDelivery.clone();
 
         Test.startTest();
-        actualDeliveries = selector.getServiceDeliveriesBySessionId(sessionId);
+        actualDeliveries = selector.getServiceDeliveriesBySessionId(
+            defaultFieldSet,
+            sessionId
+        );
         Test.stopTest();
 
         List<ServiceDelivery__c> sessionDeliveries = [
@@ -127,28 +131,6 @@ public with sharing class ServiceDeliverySelector_TEST {
     }
 
     @IsTest
-    private static void getAttendanceBucketsReturnsPackagedBuckets() {
-        List<String> bucketNames = new List<String>{ 'Absent', 'Present' };
-        List<Bucket__mdt> buckets = selector.getBuckets(bucketNames);
-
-        System.assertEquals(
-            2,
-            buckets.size(),
-            'Expected the 2 packaged attendance records to be returned.'
-        );
-        System.assertEquals(
-            bucketNames[0],
-            buckets[0].DeveloperName,
-            'Expected the Absent bucket to be returned first.'
-        );
-        System.assertEquals(
-            bucketNames[1],
-            buckets[1].DeveloperName,
-            'Expected the Present bucket to be returned second.'
-        );
-    }
-
-    @IsTest
     private static void returnsEmptyDeliveryListWithoutReadAccess() {
         User standardUser = TestUtil.getTestUser();
         Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
@@ -156,7 +138,10 @@ public with sharing class ServiceDeliverySelector_TEST {
 
         System.runAs(standardUser) {
             Test.startTest();
-            actualDeliveries = selector.getServiceDeliveriesBySessionId(sessionId);
+            actualDeliveries = selector.getServiceDeliveriesBySessionId(
+                defaultFieldSet,
+                sessionId
+            );
             Test.stopTest();
         }
 

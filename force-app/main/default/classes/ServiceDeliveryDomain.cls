@@ -14,12 +14,45 @@ public with sharing class ServiceDeliveryDomain {
     public void upsertServiceDeliveries(
         List<ServiceDelivery__c> serviceDeliveriesToUpsert
     ) {
+        List<ServiceDelivery__c> deliveriesToInsert = new List<ServiceDelivery__c>();
+        List<ServiceDelivery__c> deliveriesToUpdate = new List<ServiceDelivery__c>();
+
+        for (ServiceDelivery__c delivery : serviceDeliveriesToUpsert) {
+            if (delivery.Id == null) {
+                deliveriesToInsert.add(delivery);
+            } else {
+                deliveriesToUpdate.add(delivery);
+            }
+        }
+        insertServiceDeliveries(deliveriesToInsert);
+        updateServiceDeliveries(deliveriesToUpdate);
+    }
+
+    public void insertServiceDeliveries(List<ServiceDelivery__c> serviceDeliveries) {
+        if (serviceDeliveries.isEmpty()) {
+            return;
+        }
+
         if (
             !PermissionValidator.getInstance()
                 .hasObjectAccess(
                     ServiceDelivery__c.SObjectType,
                     PermissionValidator.CRUDAccessType.CREATEABLE
-                ) ||
+                )
+        ) {
+            throw new ServiceDeliveryDomainException(Label.UpsertOperationException);
+        }
+
+        insert Security.stripInaccessible(AccessType.CREATABLE, serviceDeliveries)
+            .getRecords();
+    }
+
+    public void updateServiceDeliveries(List<ServiceDelivery__c> serviceDeliveries) {
+        if (serviceDeliveries.isEmpty()) {
+            return;
+        }
+
+        if (
             !PermissionValidator.getInstance()
                 .hasObjectAccess(
                     ServiceDelivery__c.SObjectType,
@@ -29,6 +62,7 @@ public with sharing class ServiceDeliveryDomain {
             throw new ServiceDeliveryDomainException(Label.UpsertOperationException);
         }
 
-        upsert serviceDeliveriesToUpsert;
+        update Security.stripInaccessible(AccessType.UPDATABLE, serviceDeliveries)
+            .getRecords();
     }
 }

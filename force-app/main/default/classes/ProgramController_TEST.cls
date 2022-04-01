@@ -10,6 +10,29 @@
 @IsTest
 public with sharing class ProgramController_TEST {
     @IsTest
+    private static void testShouldGetActiveProgramEngagementStages() {
+        Set<String> activeStagesToReturn = new Set<String>{ 'Active', 'Enrolled' };
+
+        TestStub peServiceStub = new StubBuilder(ProgramEngagementService.class)
+            .when('getActiveStages')
+            .called()
+            .thenReturn(activeStagesToReturn)
+            .build();
+
+        ProgramController.peService = (ProgramEngagementService) peServiceStub.create();
+
+        Test.startTest();
+        System.assertEquals(
+            new List<String>(activeStagesToReturn),
+            (List<String>) ProgramController.getActiveProgramEngagementStages(),
+            'Expected the controller to return list delivered by service.'
+        );
+        Test.stopTest();
+
+        peServiceStub.assertCalledAsExpected();
+    }
+
+    @IsTest
     private static void testGetProgramCohortsFromProgramId() {
         List<ProgramCohort__c> cohortsToReturn = new List<ProgramCohort__c>();
         cohortsToReturn.add(

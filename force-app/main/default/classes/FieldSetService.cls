@@ -163,7 +163,7 @@ public with sharing class FieldSetService {
      * @param String fieldSetName
      * @return      FieldSet
      */
-    private FieldSet getFieldSet(
+    public FieldSet getFieldSet(
         DescribeSObjectResult objectDescribe,
         String fieldSetName
     ) {
@@ -239,7 +239,7 @@ public with sharing class FieldSetService {
             'isAccessible' => field.isAccessible(),
             'relationshipName' => field.getRelationshipName(),
             'referenceTo' => referenceObjectName,
-            'referenceNameField' => getNameFieldForObject(referenceObjectName),
+            'referenceNameField' => getNameFieldForReferenceField(field),
             'isUpdateable' => field.isUpdateable()
         };
     }
@@ -314,23 +314,25 @@ public with sharing class FieldSetService {
     }
 
     /**
-     * Platform limits the number of reference fields on an object so using this query
-     * within a loop of fields with a field set.
+     * Returns the API name of the "name" field of the object type referenced
+     * by this field.  If the field provided is not a lookup field, this method
+     * returns null.  If the lookup is polymorphic, then the name field for
+     * only one of the referenced types is returned.
      */
-    private String getNameFieldForObject(String sObjectApiName) {
-        if (sObjectApiName == null) {
-            return null;
+    private String getNameFieldForReferenceField(DescribeFieldResult field) {
+        List<Schema.SObjectType> references = field.getReferenceTo();
+        if (!references.isEmpty()) {
+            Schema.DescribeSObjectResult referencedType = references[0].getDescribe();
+            Map<String, Schema.SObjectField> fields = referencedType.fields.getMap();
+            for (Schema.SObjectField referenceField : fields.values()) {
+                Schema.DescribeFieldResult referenceFieldDescribe = referenceField.getDescribe();
+                if (referenceFieldDescribe.isNameField()) {
+                    return referenceFieldDescribe.getName();
+                }
+            }
         }
 
-        List<FieldDefinition> fieldDefinitions = [
-            SELECT QualifiedApiName
-            FROM FieldDefinition
-            WHERE
-                EntityDefinition.QualifiedApiName = :sObjectApiName
-                AND IsNameField = TRUE
-        ];
-
-        return fieldDefinitions.isEmpty() ? null : fieldDefinitions[0].QualifiedApiName;
+        return null;
     }
 
     private class FieldSetException extends Exception {

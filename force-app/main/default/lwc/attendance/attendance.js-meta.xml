@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>50.0</apiVersion>
+    <apiVersion>53.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>Attendance</masterLabel>
     <targets>
@@ -14,9 +14,63 @@
             <objects>
                 <object>ServiceSession__c</object>
             </objects>
+            <property name="serviceSessionStatusForAfterSubmit" 
+                      label="Status for Service Session after attendance is submitted"
+                      datasource="apex://ServiceSessionStatusPicklist"
+                      description="Status for Service Session after attendance is submitted." 
+                      default="Complete"
+                      type="String" />    
+            <property name="omitServiceParticipantStatuses" 
+                      label="Excluded Service Participant Statuses"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker." 
+                      default=""
+                      type="String" />
+            <property name="omitProgramEngagementRoles"
+                      label="Excluded Program Engagement Roles"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker." 
+                      default=""
+                      type="String" />
+            <property name="omitProgramEngagementStages"
+                      label="Excluded Program Engagement Stages"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker."
+                      default=""
+                      type="String" />   
+        </targetConfig>
+        <targetConfig targets="lightning__AppPage">
+            <property name="omitServiceParticipantStatuses" 
+                      label="Excluded Service Participant Statuses"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker." 
+                      default=""
+                      type="String" />
+            <property name="omitProgramEngagementRoles"
+                      label="Excluded Program Engagement Roles"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker." 
+                      default=""
+                      type="String" />
+            <property name="omitProgramEngagementStages"
+                      label="Excluded Program Engagement Stages"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker."
+                      default=""
+                      type="String" />          
         </targetConfig>
         <targetConfig targets="lightningCommunity__Default">
             <property name="recordId" type="String" label="Record ID" default="{!recordId}"/>
+            <property name="omitServiceParticipantStatuses" 
+                      label="Excluded Service Participant Statuses"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker." 
+                      default=""
+                      type="String" />
+            <property name="omitProgramEngagementRoles"
+                      label="Excluded Program Engagement Roles"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker." 
+                      default=""
+                      type="String" />
+            <property name="omitProgramEngagementStages"
+                      label="Excluded Program Engagement Stages"
+                      description="A comma-separated list of the API values used to exclude participants from Attendance Tracker."
+                      default=""
+                      type="String" />   
         </targetConfig>
     </targetConfigs>
+
 </LightningComponentBundle>

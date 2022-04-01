@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <caseValues>
-        <plural>false</plural>
-        <value/>
-    </caseValues>
-    <caseValues>
-        <plural>true</plural>
-        <value/>
-    </caseValues>
-    <gender/>
-    <nameFieldLabel/>
-    <startsWith/>
+    <fieldSets>
+        <label>Informations sur le calendrier de service</label>
+        <name>ServiceScheduleInformation</name>
+    </fieldSets>
+    <layouts>
+        <layout>Service Schedule Layout</layout>
+        <sections>
+            <label>Date et heure</label>
+            <section>Date and Time</section>
+        </sections>
+        <sections>
+            <label>Liens personnalisés</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nom du calendrier de service</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nom du calendrier de service</label>
+    </standardFields>
 </CustomObjectTranslation>

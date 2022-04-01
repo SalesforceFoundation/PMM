@@ -186,7 +186,7 @@
     </customLabels>
     <customLabels>
         <name>Dont_Track_Attendance</name>
-        <label>Ne pas suivre les présences de ce participant</label>
+        <label>Ne pas créer de livraison de service de présence pour cette personne</label>
     </customLabels>
     <customLabels>
         <name>Enabled</name>
@@ -387,6 +387,10 @@
     <customLabels>
         <name>Save_for_Later</name>
         <label>Enregistrer pour plus tard</label>
+    </customLabels>
+    <customLabels>
+        <name>Sort_By</name>
+        <label>Trier par</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>

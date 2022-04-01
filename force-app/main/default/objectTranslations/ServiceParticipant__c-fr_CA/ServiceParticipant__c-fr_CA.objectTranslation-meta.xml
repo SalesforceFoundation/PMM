@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <caseValues>
-        <plural>false</plural>
-        <value/>
-    </caseValues>
-    <caseValues>
-        <plural>true</plural>
-        <value/>
-    </caseValues>
-    <gender/>
-    <nameFieldLabel/>
-    <startsWith/>
+    <layouts>
+        <layout>Service Participant Layout</layout>
+        <sections>
+            <label>Liens personnalisés</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nom du participant au service</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nom du participant au service</label>
+    </standardFields>
 </CustomObjectTranslation>

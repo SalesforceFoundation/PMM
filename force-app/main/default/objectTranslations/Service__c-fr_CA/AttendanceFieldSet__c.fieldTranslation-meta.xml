@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AttendanceFieldSet__c</name>
+    <label>Ensemble de champs de présence</label>
+    <picklistValues>
+        <masterLabel>Attendance Service Deliveries</masterLabel>
+        <translation>Livraisons de services de présence</translation>
+    </picklistValues>
+</CustomFieldTranslation>

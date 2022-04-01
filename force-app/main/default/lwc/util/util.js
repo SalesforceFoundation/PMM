@@ -97,29 +97,37 @@ const sortObjectsByAttribute = (objects, attribute, direction = "desc", isNullsL
             bBeforeA = 1 * sortDirectionMultiplier;
         }
 
-        return objects.sort((a, b) => {
-            if (this.isNull(a)) {
-                if (this.isNull(b)) {
+        const attributes = attribute.split(".");
+
+        return objects.slice().sort((a, b) => {
+            if (isNull(a)) {
+                if (isNull(b)) {
                     return 0;
                 }
                 return isNullsLast ? bBeforeA : aBeforeB;
             }
-            if (this.isNull(b)) {
+            if (isNull(b)) {
                 return isNullsLast ? aBeforeB : bBeforeA;
             }
-            if (this.isNull(a[attribute])) {
-                if (this.isNull(b[attribute])) {
+
+            attributes.forEach(attr => {
+                a = a[attr];
+                b = b[attr];
+            });
+
+            if (isNull(a)) {
+                if (isNull(b)) {
                     return 0;
                 }
                 return isNullsLast ? bBeforeA : aBeforeB;
             }
-            if (this.isNull(b[attribute])) {
+            if (isNull(b)) {
                 return isNullsLast ? aBeforeB : bBeforeA;
             }
-            if (a[attribute] < b[attribute]) {
+            if (a < b) {
                 return aBeforeB;
             }
-            if (b[attribute] < a[attribute]) {
+            if (b < a) {
                 return bBeforeA;
             }
             return 0;

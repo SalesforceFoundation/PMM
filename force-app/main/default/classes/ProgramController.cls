@@ -3,6 +3,8 @@ public with sharing class ProgramController {
     private static ProgramService service = new ProgramService();
     @TestVisible
     private static FieldSetService fieldSetService = new FieldSetService();
+    @TestVisible
+    private static ProgramEngagementService peService = new ProgramEngagementService();
 
     private static final String ENGAGEMENT_FIELD_SET = 'CreateProgramEngagement';
     private static final String CONTACT_FIELD_SET = 'CreateContact';
@@ -43,5 +45,10 @@ public with sharing class ProgramController {
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<String> getActiveProgramEngagementStages() {
+        return new List<String>(peService.getActiveStages());
     }
 }

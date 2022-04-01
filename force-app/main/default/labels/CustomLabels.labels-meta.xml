@@ -329,8 +329,8 @@
         <fullName>Dont_Track_Attendance</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Don't track attendance for this participant</shortDescription>
-        <value>Don't track attendance for this participant</value>
+        <shortDescription>Don't create an attendance service delivery for this person</shortDescription>
+        <value>Don't create an attendance service delivery for this person</value>
     </labels>
     <labels>
         <fullName>Enabled</fullName>
@@ -687,6 +687,13 @@
         <protected>true</protected>
         <shortDescription>Save for Later</shortDescription>
         <value>Save for Later</value>
+    </labels>
+    <labels>
+        <fullName>Sort_By</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Sort By</shortDescription>
+        <value>Sort By</value>
     </labels>
     <labels>
         <fullName>Saved</fullName>

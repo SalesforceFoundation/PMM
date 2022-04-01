@@ -61,9 +61,12 @@ export default class ServiceDeliveryDefaults extends LightningElement {
             label = field.value;
         }
 
-        let quantityField = this.fieldSet.find(
-            member => member.apiName === QUANTITY_FIELD.fieldApiName
-        );
+        let quantityField;
+        if (this.fieldSet) {
+            quantityField = this.fieldSet.find(
+                member => member.apiName === QUANTITY_FIELD.fieldApiName
+            );
+        }
 
         if (!quantityField) {
             return;

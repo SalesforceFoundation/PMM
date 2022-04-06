@@ -24,15 +24,15 @@ public with sharing class FieldSetService {
         for (FieldSet fieldSet : fieldSets.values()) {
             Map<String, Map<String, Object>> fieldByApiName = new Map<String, Map<String, Object>>();
             for (
-                DescribeFieldResult fieldDescribe : getFieldDescribes(
+                FieldSetFieldInfo fieldInfo : getFieldSetFieldInfos(
                     sObjectType.getDescribe(),
                     fieldSet,
                     false
                 )
             ) {
                 fieldByApiName.put(
-                    fieldDescribe.getName(),
-                    getFieldForLWC(fieldDescribe)
+                    fieldInfo.getDescribe().getName(),
+                    getFieldForLWC(fieldInfo.getDescribe(), fieldInfo.getFieldSetMember())
                 );
             }
 
@@ -55,10 +55,14 @@ public with sharing class FieldSetService {
             return fieldByFieldPath;
         }
 
-        for (Schema.FieldSetMember field : fieldSet.fields) {
-            DescribeFieldResult fieldDescribe = field.getSObjectField().getDescribe();
+        for (Schema.FieldSetMember memberField : fieldSet.fields) {
+            DescribeFieldResult fieldDescribe = memberField.getSObjectField()
+                .getDescribe();
 
-            fieldByFieldPath.put(field.getFieldPath(), getFieldForLWC(fieldDescribe));
+            fieldByFieldPath.put(
+                memberField.getFieldPath(),
+                getFieldForLWC(fieldDescribe, memberField)
+            );
         }
 
         return fieldByFieldPath;
@@ -90,13 +94,22 @@ public with sharing class FieldSetService {
         return fieldByApiName.values();
     }
 
+    private Boolean fieldTypeIsSupported(
+        Schema.FieldSetMember memberField,
+        Boolean allowRelationshipFields
+    ) {
+        return !(unsupportedFieldTypes.contains(memberField.getType().name()) ||
+        (!allowRelationshipFields && memberField.getFieldPath().contains('.')));
+    }
+
     /**
      * @description "Casts" a FieldSet into a List<DescribeFieldResult>.
      * @param string objectName
      * @param string fieldSetName
      * @return      List<DescribeFieldResult> Set of fields describes
      */
-    public List<DescribeFieldResult> getFieldDescribes(
+    @TestVisible
+    private List<DescribeFieldResult> getFieldDescribes(
         String objectName,
         String fieldSetName,
         Boolean allowRelationshipFields
@@ -155,6 +168,35 @@ public with sharing class FieldSetService {
         }
 
         return fieldDescribes;
+    }
+
+    private List<FieldSetFieldInfo> getFieldSetFieldInfos(
+        DescribeSObjectResult objectDescribe,
+        FieldSet fieldSet,
+        Boolean allowRelationshipFields
+    ) {
+        List<FieldSetFieldInfo> fieldSetFieldInfos = new List<FieldSetFieldInfo>();
+
+        for (Schema.FieldSetMember memberField : fieldSet.fields) {
+            if (!fieldTypeIsSupported(memberField, allowRelationshipFields)) {
+                // Skipping unsupported field types and fields from related objects.
+                // NOTE: If we ever determine we want to allow reference fields
+                // we can overload this method with a Boolean flag
+                continue;
+            }
+
+            DescribeFieldResult fieldDescribe = memberField.getSObjectField()
+                .getDescribe();
+            fieldDescribe = getCompoundFieldDescribe(
+                objectDescribe,
+                fieldDescribe,
+                memberField.getFieldPath()
+            );
+
+            fieldSetFieldInfos.add(new FieldSetFieldInfo(fieldDescribe, memberField));
+        }
+
+        return fieldSetFieldInfos;
     }
 
     /**
@@ -223,24 +265,45 @@ public with sharing class FieldSetService {
      * @description "Casts" a FieldSetMember into a Map<String, Object> with 'apiName' and 'label', etc. keys.
      * An array of these is used by a Lightning Web Component to leverage an admin-controlled field set.
      *
-     * @param field FieldSetMember
+     * @param field DescribeFieldResult
      * @return      Map<String, Object>
      */
     public Map<String, Object> getFieldForLWC(DescribeFieldResult field) {
-        String referenceObjectName = getReferenceTo(field);
+        return getFieldForLWC(field, null);
+    }
+
+    /**
+     * @description "Casts" a FieldSetMember into a Map<String, Object> with 'apiName' and 'label', etc. keys.
+     * An array of these is used by a Lightning Web Component to leverage an admin-controlled field set.
+     *
+     * @param fieldDescribe DescribeFieldResult
+     * @param fieldSetMember Schema.FieldSetMember
+     * @return      Map<String, Object>
+     */
+    public Map<String, Object> getFieldForLWC(
+        DescribeFieldResult fieldDescribe,
+        Schema.FieldSetMember fieldSetMember
+    ) {
+        String referenceObjectName = getReferenceTo(fieldDescribe);
+
+        Boolean isRequiredOnFieldSet = fieldSetMember != null
+            ? fieldSetMember.getRequired()
+            : false;
+        Boolean isRequiredOnDescribe = fieldDescribe.getType() ==
+            Schema.DisplayType.BOOLEAN
+            ? false
+            : !fieldDescribe.isNillable();
         return new Map<String, Object>{
-            'apiName' => field.getName(),
-            'label' => getLabel(field),
-            'type' => field.getType().name(),
-            'isRequired' => field.getType() == Schema.DisplayType.BOOLEAN
-                ? false
-                : !field.isNillable(),
-            'helpText' => field.getInlineHelpText(),
-            'isAccessible' => field.isAccessible(),
-            'relationshipName' => field.getRelationshipName(),
+            'apiName' => fieldDescribe.getName(),
+            'label' => getLabel(fieldDescribe),
+            'type' => fieldDescribe.getType().name(),
+            'isRequired' => isRequiredOnFieldSet || isRequiredOnDescribe,
+            'helpText' => fieldDescribe.getInlineHelpText(),
+            'isAccessible' => fieldDescribe.isAccessible(),
+            'relationshipName' => fieldDescribe.getRelationshipName(),
             'referenceTo' => referenceObjectName,
-            'referenceNameField' => getNameFieldForReferenceField(field),
-            'isUpdateable' => field.isUpdateable()
+            'referenceNameField' => getNameFieldForReferenceField(fieldDescribe),
+            'isUpdateable' => fieldDescribe.isUpdateable()
         };
     }
 
@@ -336,5 +399,23 @@ public with sharing class FieldSetService {
     }
 
     private class FieldSetException extends Exception {
+    }
+
+    private class FieldSetFieldInfo {
+        private DescribeFieldResult fieldDescribe;
+        private Schema.FieldSetMember fieldSetMember;
+
+        public FieldSetFieldInfo(DescribeFieldResult dfr, Schema.FieldSetMember fsm) {
+            fieldDescribe = dfr;
+            fieldSetMember = fsm;
+        }
+
+        public DescribeFieldResult getDescribe() {
+            return fieldDescribe;
+        }
+
+        public Schema.FieldSetMember getFieldSetMember() {
+            return fieldSetMember;
+        }
     }
 }

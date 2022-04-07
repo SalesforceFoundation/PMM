@@ -31,7 +31,7 @@
                                 large-device-size="3"
                                 key={field.apiName}
                                 class="slds-var-p-around_xx-small"
-                                disabled={rowDisabled}
+                                disabled={record.rowDisabled}
                                 flexibility="grow"
                             >
                                 <!-- CONTACT FIELD, ALWAYS OUTPUT, CUSTOM VALUE -->
@@ -68,7 +68,7 @@
                                                 min="0"
                                                 step=".01"
                                                 value={quantity}
-                                                disabled={rowDisabled}
+                                                disabled={record.rowDisabled}
                                             ></lightning-input>
                                         </div>
                                     </template>
@@ -124,7 +124,7 @@
                                             onchange={handleInputChange}
                                             value={field.value}
                                             variant={field.variant}
-                                            disabled={rowDisabled}
+                                            disabled={record.rowDisabled}
                                         >
                                         </lightning-input-field>
                                     </template>
@@ -153,7 +153,7 @@
                         size="medium"
                         alternative-text={labels.skip}
                         onclick={handleToggleButton}
-                        selected={rowDisabled}
+                        selected={record.rowDisabled}
                         aria-label={labels.skip}
                     ></lightning-button-icon-stateful>
                 </lightning-layout-item>

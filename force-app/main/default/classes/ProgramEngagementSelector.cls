@@ -11,7 +11,13 @@ public with sharing class ProgramEngagementSelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
     public List<ProgramEngagement__c> getProgramEngagementsByContactId(Id contactId) {
-        if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {
+        if (
+            !(Schema.SObjectType.ProgramEngagement__c.isAccessible() &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(ProgramEngagement__c.Contact__c.getDescribe()) &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(ProgramEngagement__c.Program__c.getDescribe()))
+        ) {
             return new List<ProgramEngagement__c>();
         }
 
@@ -25,32 +31,56 @@ public with sharing class ProgramEngagementSelector {
             .getRecords();
     }
 
+    // Using strip inaccessible and performing access checks for
+    // all fields involved in the query. Id, Name must be true if object
+    // access is true.
+    /* sfca-disable-stack ApexFlsViolationRule */
     public Program__c getProgramByServiceId(Id serviceId) {
         if (
-            !PermissionValidator.getInstance()
+            !(PermissionValidator.getInstance()
                 .hasObjectAccess(
                     Program__c.SObjectType,
                     PermissionValidator.CRUDAccessType.READABLE
-                )
+                ) &&
+            PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    Service__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ) &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(Service__c.Program__c.getDescribe()))
         ) {
             return null;
         }
 
-        List<Program__c> programs = [
-            SELECT Id, Name
-            FROM Program__c
-            WHERE Id IN (SELECT Program__c FROM Service__c WHERE Id = :serviceId)
-        ];
+        List<Program__c> programs = Security.stripInaccessible(
+                AccessType.READABLE,
+                [
+                    SELECT Id, Name
+                    FROM Program__c
+                    WHERE Id IN (SELECT Program__c FROM Service__c WHERE Id = :serviceId)
+                ]
+            )
+            .getRecords();
 
         return programs.isEmpty() ? null : programs[0];
     }
 
+    // Using strip inaccessible on returned records and doing field access
+    // checks on the fields used to filter the query
+    /* sfca-disable-stack ApexFlsViolationRule */
     public List<ProgramEngagement__c> getProgramEngagementsByProgramId(
         Id programId,
         Set<String> fields,
         Set<String> stages
     ) {
-        if (!Schema.SObjectType.ProgramEngagement__c.isAccessible()) {
+        if (
+            !(Schema.SObjectType.ProgramEngagement__c.isAccessible() &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(ProgramEngagement__c.Program__c.getDescribe()) &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(ProgramEngagement__c.Stage__c.getDescribe()))
+        ) {
             return new List<ProgramEngagement__c>();
         }
 

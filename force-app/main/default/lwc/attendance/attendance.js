@@ -8,11 +8,18 @@
  */
 
 import { LightningElement, track, wire, api } from "lwc";
-import { handleError, getChildObjectByName, format, prefixNamespace } from "c/util";
+import {
+    handleError,
+    getChildObjectByName,
+    format,
+    prefixNamespace,
+    sortObjectsByAttribute,
+} from "c/util";
 import { NavigationMixin, CurrentPageReference } from "lightning/navigation";
 import { loadStyle } from "lightning/platformResourceLoader";
 
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
+import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
 import generateRoster from "@salesforce/apex/AttendanceController.generateRoster";
@@ -21,7 +28,10 @@ import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFi
 import getServiceSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
+import CONTACT_OBJECT from "@salesforce/schema/Contact";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
+import CONTACT_FIRST_NAME_FIELD from "@salesforce/schema/Contact.FirstName";
+import CONTACT_LAST_NAME_FIELD from "@salesforce/schema/Contact.LastName";
 import QUANTITY_FIELD from "@salesforce/schema/ServiceDelivery__c.Quantity__c";
 import UNIT_MEASUREMENT_RELATED_FIELD from "@salesforce/schema/ServiceSession__c.ServiceSchedule__r.Service__r.UnitOfMeasurement__c";
 import UNIT_MEASUREMENT_SERVICE_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
@@ -44,18 +54,27 @@ import PRINT_LABEL from "@salesforce/label/c.Print";
 import PRINTABLE_VIEW_LABEL from "@salesforce/label/c.Printable_View";
 import NO_PARTICIPANTS_HEADER_LABEL from "@salesforce/label/c.No_Participants_Header";
 import NO_PARTICIPANTS_MESSAGE_LABEL from "@salesforce/label/c.No_Participants_Message";
+import SORT_BY_LABEL from "@salesforce/label/c.Sort_By";
 import NO_PERMISSIONS_MESSAGE_LABEL from "@salesforce/label/c.No_Permission_Message";
 import BAD_TAB_HEADER from "@salesforce/label/c.Incorrect_Tab";
 import ATTENDANCE_TAB_MESSAGE from "@salesforce/label/c.Attendance_Tab_Message";
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 
-const COMPLETE = "Complete";
-const PENDING = "Pending";
+const COMPLETE_STATUS = "Complete";
+const COMPLETE_BUCKET = "ServiceSessionStatusComplete";
+const PENDING_BUCKET = "ServiceSessionStatusPending";
 const ID = "Id";
 const ITEM_PAGE_NAVIGATION_TYPE = "standard__navItemPage";
 const ATTENDANCE_TAB = "Attendance";
+
+// Fields for sorting attendance, the first field in the array will be the default
+const SORTABLE_FIELDS = [
+    CONTACT_FIRST_NAME_FIELD.fieldApiName,
+    CONTACT_LAST_NAME_FIELD.fieldApiName,
+];
 export default class Attendance extends NavigationMixin(LightningElement) {
     @api recordId;
+    @api serviceSessionStatusForAfterSubmit;
     @api omitServiceParticipantStatuses;
     @api omitProgramEngagementRoles;
     @api omitProgramEngagementStages;
@@ -64,7 +83,8 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     @track fieldSet;
     @track completeBucketedStatuses = [];
     @track pendingBucketedStatuses = [];
-
+    sortAttendanceBy = SORTABLE_FIELDS[0];
+    options;
     showSpinner = true;
     isUpdateMode = false;
     hasReadPermissions;
@@ -94,6 +114,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         noPermissions: NO_PERMISSIONS_MESSAGE_LABEL,
         badTabHeader: BAD_TAB_HEADER,
         badTabMessage: ATTENDANCE_TAB_MESSAGE,
+        sortBy: SORT_BY_LABEL,
     };
 
     fields = {
@@ -110,6 +131,21 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         this.pageRef = currentPageReference;
         if (currentPageReference.state && currentPageReference.state.c__sessionId) {
             this.recordId = currentPageReference.state.c__sessionId;
+        }
+    }
+
+    @wire(getObjectInfo, { objectApiName: CONTACT_OBJECT })
+    wiredContactObjectInfo(result) {
+        if (result.data) {
+            this.options = [];
+            SORTABLE_FIELDS.forEach(fieldApiName => {
+                this.options.push({
+                    label: result.data.fields[fieldApiName].label,
+                    value: fieldApiName,
+                });
+            });
+        } else if (result.error) {
+            console.log(result.error);
         }
     }
 
@@ -164,13 +200,8 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
 
         if (result.data) {
-            this.serviceDeliveries = [...result.data.deliveries];
-            this.serviceDeliveries.sort((a, b) => {
-                return getChildObjectByName(a, "Contact__r").Name >
-                    getChildObjectByName(b, "Contact__r").Name
-                    ? 1
-                    : -1;
-            });
+            this.initialServiceDeliveries();
+            this.sortServiceDeliveries();
             this.configureFieldSet(result.data.fieldSet.map(a => ({ ...a })));
         } else if (result.error) {
             console.log(result.error);
@@ -186,11 +217,11 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
         if (result.data) {
             for (const [key, value] of Object.entries(result.data)) {
-                if (key.toLowerCase() === COMPLETE.toLowerCase()) {
+                if (key.toLowerCase() === COMPLETE_BUCKET.toLowerCase()) {
                     this.completeBucketedStatuses = value.map(status =>
                         status.toLowerCase()
                     );
-                } else if (key.toLowerCase() === PENDING.toLowerCase()) {
+                } else if (key.toLowerCase() === PENDING_BUCKET.toLowerCase()) {
                     this.pendingBucketedStatuses = value.map(status =>
                         status.toLowerCase()
                     );
@@ -305,7 +336,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
 
         rows.forEach(row => {
             let editedRow = row.getRow();
-            if (editedRow) {
+            if (editedRow && !editedRow.rowDisabled) {
                 editedRows.push(editedRow);
             }
         });
@@ -316,7 +347,14 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         })
             .then(() => {
                 if (this.isPending) {
-                    this.setStatus(COMPLETE);
+                    let newStatus = COMPLETE_STATUS;
+                    if (
+                        this.serviceSessionStatusForAfterSubmit &&
+                        this.serviceSessionStatusForAfterSubmit !== ""
+                    ) {
+                        newStatus = this.serviceSessionStatusForAfterSubmit;
+                    }
+                    this.setStatus(newStatus);
                 }
                 refreshApex(this.wiredServiceDeliveriesResult);
                 rows.forEach(row => {
@@ -324,12 +362,11 @@ export default class Attendance extends NavigationMixin(LightningElement) {
                 });
                 this.isUpdateMode = false;
                 this.showSuccessToast(editedRows.length);
-                this.showSpinner = false;
             })
             .catch(error => {
                 handleError(error);
-                this.showSpinner = false;
-            });
+            })
+            .finally((this.showSpinner = false));
     }
 
     setStatus(status) {
@@ -346,8 +383,18 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     handleCancel() {
-        this.serviceDeliveries = this.serviceDeliveries.map(a => ({ ...a }));
+        this.initialServiceDeliveries();
+        this.sortServiceDeliveries();
         this.isUpdateMode = false;
+    }
+
+    initialServiceDeliveries() {
+        this.serviceDeliveries = this.wiredServiceDeliveriesResult.data.deliveries.map(
+            (item, index) => ({
+                index,
+                ...item,
+            })
+        );
     }
 
     showSuccessToast(numSaved) {
@@ -382,5 +429,42 @@ export default class Attendance extends NavigationMixin(LightningElement) {
                 window.open(url);
             });
         }
+    }
+
+    handleSortOption(event) {
+        if (!event || !event.detail || !event.detail.value) {
+            return;
+        }
+
+        this.sortAttendanceBy = event.detail.value;
+        this.updateEditedDeliveries();
+        this.sortServiceDeliveries();
+    }
+
+    updateEditedDeliveries() {
+        let rows = this.template.querySelectorAll("c-attendance-row");
+        rows.forEach(row => {
+            let editedRow = row.getRow();
+            if (editedRow) {
+                let editedDelivery = this.serviceDeliveries.find(
+                    delivery => delivery.index === editedRow.index
+                );
+                Object.assign(editedDelivery, editedRow);
+            }
+        });
+    }
+
+    sortServiceDeliveries() {
+        if (this.serviceDeliveries === undefined) {
+            return;
+        }
+        this.serviceDeliveries = sortObjectsByAttribute(
+            this.serviceDeliveries,
+            CONTACT_FIELD.fieldApiName.replace("__c", "__r") +
+                "." +
+                this.sortAttendanceBy,
+            "asc",
+            true
+        );
     }
 }

@@ -59,7 +59,7 @@ private with sharing class ServiceDeliveryDomain_TEST {
     }
 
     @IsTest
-    private static void shouldThrowExceptionWhenPermissionCheckFails() {
+    private static void shouldThrowExceptionWhenInsertPermissionCheckFails() {
         String methodName = 'hasObjectAccess';
         Integer dmlLimitAfter;
         Exception actualException;
@@ -71,7 +71,9 @@ private with sharing class ServiceDeliveryDomain_TEST {
         );
 
         PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
-        List<ServiceDelivery__c> serviceDeliveriesToUpsert = new List<ServiceDelivery__c>();
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert = new List<ServiceDelivery__c>{
+            new ServiceDelivery__c(Name = 'Test Upsert Failure.')
+        };
 
         Test.startTest();
         try {
@@ -92,6 +94,86 @@ private with sharing class ServiceDeliveryDomain_TEST {
             0,
             dmlLimitAfter,
             'Expected the exception to be thrown before any dml statements.'
+        );
+    }
+
+    @IsTest
+    private static void shouldThrowExceptionWhenUpdatePermissionCheckFails() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert = new List<ServiceDelivery__c>{
+            new ServiceDelivery__c(
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType),
+                Name = 'Test Insert Failure.'
+            )
+        };
+
+        Test.startTest();
+        try {
+            new ServiceDeliveryDomain()
+                .upsertServiceDeliveries(serviceDeliveriesToUpsert);
+        } catch (Exception ex) {
+            dmlLimitAfter = System.Limits.getDmlStatements();
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof ServiceDeliveryDomain.ServiceDeliveryDomainException,
+            'Expected the domain to throw the exception.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Expected the exception to be thrown before any dml statements.'
+        );
+    }
+
+    @IsTest
+    private static void shouldNotThrowExceptionWithoutPermissionsOnEmptyList() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert = new List<ServiceDelivery__c>();
+
+        Test.startTest();
+        try {
+            new ServiceDeliveryDomain()
+                .upsertServiceDeliveries(serviceDeliveriesToUpsert);
+            dmlLimitAfter = System.Limits.getDmlStatements();
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            null,
+            actualException,
+            'Did not expect the domain to throw the exception for an empty list.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Did not expect any dml statements for an empty list.'
         );
     }
 }

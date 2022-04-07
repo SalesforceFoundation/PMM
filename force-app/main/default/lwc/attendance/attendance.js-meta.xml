@@ -14,6 +14,12 @@
             <objects>
                 <object>ServiceSession__c</object>
             </objects>
+            <property name="serviceSessionStatusForAfterSubmit" 
+                      label="Status for Service Session after attendance is submitted"
+                      datasource="apex://ServiceSessionStatusPicklist"
+                      description="Status for Service Session after attendance is submitted." 
+                      default="Complete"
+                      type="String" />    
             <property name="omitServiceParticipantStatuses" 
                       label="Excluded Service Participant Statuses"
                       description="A comma-separated list of the API values used to exclude participants from Attendance Tracker." 

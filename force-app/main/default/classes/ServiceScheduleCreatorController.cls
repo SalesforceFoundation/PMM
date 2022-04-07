@@ -30,6 +30,8 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled
+    // Doing fls checks in the validateCreateAccess method in the domain
+    /* sfca-disable-stack ApexFlsViolationRule */
     public static void addParticipants(
         List<ProgramEngagement__c> engagements,
         Id scheduleId
@@ -78,6 +80,8 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled
+    // Doing fls read checks on the fields used to determine records to delete
+    /* sfca-disable-stack ApexFlsViolationRule */
     public static Integer deleteSessionsAfter(Id scheduleId, Date startDate) {
         try {
             return service.deleteSessionsAfter(scheduleId, startDate);

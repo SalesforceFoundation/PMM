@@ -82,92 +82,19 @@ public with sharing class FieldSetService {
     ) {
         Map<String, Map<String, Object>> fieldByApiName = new Map<String, Map<String, Object>>();
         for (
-            DescribeFieldResult fieldDescribe : getFieldDescribes(
+            FieldSetFieldInfo fieldInfo : getFieldSetFieldInfos(
                 objectName,
                 fieldSetName,
                 allowRelationshipFields
             )
         ) {
-            fieldByApiName.put(fieldDescribe.getName(), getFieldForLWC(fieldDescribe));
+            fieldByApiName.put(
+                fieldInfo.getDescribe().getName(),
+                getFieldForLWC(fieldInfo.getDescribe(), fieldInfo.getFieldSetMember())
+            );
         }
 
         return fieldByApiName.values();
-    }
-
-    private Boolean fieldTypeIsSupported(
-        Schema.FieldSetMember memberField,
-        Boolean allowRelationshipFields
-    ) {
-        return !(unsupportedFieldTypes.contains(memberField.getType().name()) ||
-        (!allowRelationshipFields && memberField.getFieldPath().contains('.')));
-    }
-
-    /**
-     * @description "Casts" a FieldSet into a List<DescribeFieldResult>.
-     * @param string objectName
-     * @param string fieldSetName
-     * @return      List<DescribeFieldResult> Set of fields describes
-     */
-    @TestVisible
-    private List<DescribeFieldResult> getFieldDescribes(
-        String objectName,
-        String fieldSetName,
-        Boolean allowRelationshipFields
-    ) {
-        Schema.FieldSet fieldSet;
-        DescribeSObjectResult objectDescribe = Schema.describeSObjects(
-            new List<String>{ objectName }
-        )[0];
-
-        Map<String, FieldSet> fieldSetMap = objectDescribe.fieldSets.getMap();
-        for (String key : fieldSetMap.keySet()) {
-            if (key.containsIgnoreCase(fieldSetName)) {
-                // temporary workaround for namespacing until design parameter definition is implemented
-                fieldSet = fieldSetMap.get(key);
-            }
-        }
-
-        if (fieldSet == null) {
-            throw new FieldSetException(
-                String.format(
-                    System.Label.NoFieldSetFound,
-                    new List<String>{ fieldSetName, objectName }
-                )
-            );
-        }
-
-        return getFieldDescribes(objectDescribe, fieldSet, allowRelationshipFields);
-    }
-
-    private List<DescribeFieldResult> getFieldDescribes(
-        DescribeSObjectResult objectDescribe,
-        FieldSet fieldSet,
-        Boolean allowRelationshipFields
-    ) {
-        List<DescribeFieldResult> fieldDescribes = new List<DescribeFieldResult>();
-
-        for (Schema.FieldSetMember field : fieldSet.fields) {
-            if (
-                unsupportedFieldTypes.contains(field.getType().name()) ||
-                (!allowRelationshipFields && field.getFieldPath().contains('.'))
-            ) {
-                // Skipping unsupported field types and fields from related objects.
-                // NOTE: If we ever determine we want to allow reference fields
-                // we can overload this method with a Boolean flag
-                continue;
-            }
-
-            DescribeFieldResult fieldDescribe = field.getSObjectField().getDescribe();
-            fieldDescribe = getCompoundFieldDescribe(
-                objectDescribe,
-                fieldDescribe,
-                field.getFieldPath()
-            );
-
-            fieldDescribes.add(fieldDescribe);
-        }
-
-        return fieldDescribes;
     }
 
     private List<FieldSetFieldInfo> getFieldSetFieldInfos(
@@ -197,6 +124,51 @@ public with sharing class FieldSetService {
         }
 
         return fieldSetFieldInfos;
+    }
+
+    /**
+     * @description Retrieve the field set from the object describe with or without a namespace
+     * @param string objectName
+     * @param string fieldSetName
+     * @return      List<DescribeFieldResult> Set of fields describes
+     */
+    @TestVisible
+    private List<FieldSetFieldInfo> getFieldSetFieldInfos(
+        String objectName,
+        String fieldSetName,
+        Boolean allowRelationshipFields
+    ) {
+        Schema.FieldSet fieldSet;
+        DescribeSObjectResult objectDescribe = Schema.describeSObjects(
+            new List<String>{ objectName }
+        )[0];
+
+        Map<String, FieldSet> fieldSetMap = objectDescribe.fieldSets.getMap();
+        for (String key : fieldSetMap.keySet()) {
+            if (key.containsIgnoreCase(fieldSetName)) {
+                // temporary workaround for namespacing until design parameter definition is implemented
+                fieldSet = fieldSetMap.get(key);
+            }
+        }
+
+        if (fieldSet == null) {
+            throw new FieldSetException(
+                String.format(
+                    System.Label.NoFieldSetFound,
+                    new List<String>{ fieldSetName, objectName }
+                )
+            );
+        }
+
+        return getFieldSetFieldInfos(objectDescribe, fieldSet, allowRelationshipFields);
+    }
+
+    private Boolean fieldTypeIsSupported(
+        Schema.FieldSetMember memberField,
+        Boolean allowRelationshipFields
+    ) {
+        return !(unsupportedFieldTypes.contains(memberField.getType().name()) ||
+        (!allowRelationshipFields && memberField.getFieldPath().contains('.')));
     }
 
     /**

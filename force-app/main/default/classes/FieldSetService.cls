@@ -336,8 +336,6 @@ public with sharing class FieldSetService {
          * @description "Casts" a FieldSetMember into a Map<String, Object> with 'apiName' and 'label', etc. keys.
          * An array of these is used by a Lightning Web Component to leverage an admin-controlled field set.
          *
-         * @param fieldDescribe DescribeFieldResult
-         * @param fieldSetMember Schema.FieldSetMember
          * @return      Map<String, Object>
          */
         public Map<String, Object> getFieldForLWC() {
@@ -358,8 +356,6 @@ public with sharing class FieldSetService {
         /**
          * @description Standard Salesforce UI has special handling of the label for Standard Reference Fields
          * this method will return the special label
-         * @param DescribeFieldResult fieldDescribe
-         * @return      String
          */
         public String getLabel() {
             String label;

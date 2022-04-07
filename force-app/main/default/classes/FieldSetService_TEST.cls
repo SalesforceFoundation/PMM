@@ -340,8 +340,8 @@ public with sharing class FieldSetService_TEST {
         String message =
             'When getFieldForLWC is called with a lookup field to ' +
             'an object in the same package, the return map should have the name ' +
-            'and name field of the referenced object with the namespace' +
-            ' prefixed if the code is running in a namespaced context';
+            'and name field of the referenced object with the namespace ' +
+            'prefixed if the code is running in a namespaced context';
 
         Map<String, Object> field = (new FieldSetService())
             .getFieldForLWC(Schema.ProgramEngagement__c.Program__c.getDescribe());

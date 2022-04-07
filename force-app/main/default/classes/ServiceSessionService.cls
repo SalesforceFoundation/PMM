@@ -14,9 +14,8 @@ public with sharing class ServiceSessionService {
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
-    @TestVisible
-    private static final String COMPLETE = 'Complete';
-    private static final String PENDING = 'Pending';
+    private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
+    private static final String PENDING_BUCKET = 'ServiceSessionStatusPending';
 
     public Map<String, List<ServiceSession__c>> getServiceSessionsByStartDate(
         String dateLiteral
@@ -47,7 +46,7 @@ public with sharing class ServiceSessionService {
     }
 
     public Map<String, List<String>> getServiceSessionStatusBuckets() {
-        List<String> bucketNames = new List<String>{ COMPLETE, PENDING };
+        List<String> bucketNames = new List<String>{ COMPLETE_BUCKET, PENDING_BUCKET };
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
         Schema.SObjectType serviceSessionSObjType = ServiceSession__c.SObjectType;

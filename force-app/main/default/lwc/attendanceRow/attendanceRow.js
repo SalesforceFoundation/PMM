@@ -32,7 +32,6 @@ export default class AttendanceRow extends LightningElement {
     name;
     _isEdited;
     recordId;
-    rowDisabled = false;
 
     labels = {
         skip: SKIP_LABEL,
@@ -63,9 +62,7 @@ export default class AttendanceRow extends LightningElement {
 
     @api
     getRow() {
-        return !this.rowDisabled && (this._isEdited || !this.recordId)
-            ? this.localRecord
-            : null;
+        return this._isEdited || !this.recordId ? this.localRecord : null;
     }
 
     @api
@@ -91,7 +88,7 @@ export default class AttendanceRow extends LightningElement {
             this.localFieldSet &&
             this.localFieldSet.length &&
             this.record &&
-            !this.rowDisabled
+            !this.localRecord.rowDisabled
         ) {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(field => {
@@ -122,8 +119,9 @@ export default class AttendanceRow extends LightningElement {
     }
 
     handleToggleButton() {
-        this.rowDisabled = !this.rowDisabled;
-        if (this.rowDisabled) {
+        this.localRecord.rowDisabled =
+            this.localRecord.rowDisabled === true ? false : true;
+        if (this.localRecord.rowDisabled) {
             let inputFields = [
                 ...this.template.querySelectorAll("lightning-input"),
                 ...this.template.querySelectorAll("lightning-input-field"),

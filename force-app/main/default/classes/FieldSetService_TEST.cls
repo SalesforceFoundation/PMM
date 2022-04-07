@@ -49,11 +49,6 @@ public with sharing class FieldSetService_TEST {
             );
 
             System.assertEquals(
-                !fieldDescribe.isNillable(),
-                fieldsResultByApiName.get(fieldSetMember.getFieldPath()).get('isRequired')
-            );
-
-            System.assertEquals(
                 fieldDescribe.getInlineHelpText(),
                 fieldsResultByApiName.get(fieldSetMember.getFieldPath()).get('helpText')
             );

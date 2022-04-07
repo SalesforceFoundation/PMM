@@ -97,6 +97,14 @@ public with sharing class FieldSetService {
         return fieldByApiName.values();
     }
 
+    /**
+     * @description Combine field set member and describe information for fields in a field set
+     * @param DescribeSObjectResult objectDescribe
+     * @param FieldSet fieldSet
+     * @param Boolean allowRelationshipFields
+     * @return      List<FieldSetFieldInfo> Set of FieldSetFieldInfo objects
+     */
+
     private List<FieldSetFieldInfo> getFieldSetFieldInfos(
         DescribeSObjectResult objectDescribe,
         FieldSet fieldSet,
@@ -127,10 +135,11 @@ public with sharing class FieldSetService {
     }
 
     /**
-     * @description Retrieve the field set from the object describe with or without a namespace
-     * @param string objectName
-     * @param string fieldSetName
-     * @return      List<DescribeFieldResult> Set of fields describes
+     * @description Combine field set member and describe information for fields in a field set
+     * @param String objectName
+     * @param String fieldSetName
+     * @param Boolean allowRelationshipFields
+     * @return      List<FieldSetFieldInfo> Set of FieldSetFieldInfo objects
      */
     @TestVisible
     private List<FieldSetFieldInfo> getFieldSetFieldInfos(

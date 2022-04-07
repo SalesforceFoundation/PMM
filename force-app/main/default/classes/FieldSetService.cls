@@ -313,10 +313,6 @@ public with sharing class FieldSetService {
             return fieldDescribe;
         }
 
-        public Schema.FieldSetMember getFieldSetMember() {
-            return fieldSetMember;
-        }
-
         public void setDescribe(DescribeFieldResult dfr) {
             fieldDescribe = dfr;
         }

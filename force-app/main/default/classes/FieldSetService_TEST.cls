@@ -359,4 +359,57 @@ public with sharing class FieldSetService_TEST {
         System.assertEquals(expectedObjectName, field.get('referenceTo'), message);
         System.assertEquals('Name', field.get('referenceNameField'), message);
     }
+
+    @IsTest
+    private static void shouldReturnFalseForBooleanIsRequired() {
+        FieldSetService.FieldInfo fieldInfo = new FieldSetService.FieldInfo(
+            Schema.Contact.DoNotCall.getDescribe()
+        );
+
+        System.assertEquals(
+            false,
+            fieldInfo.isRequired(),
+            'Checkbox fields should not be marked as required in UI'
+        );
+    }
+
+    @IsTest
+    private static void shouldReturnTrueForFieldRequiredInFieldSet() {
+        Test.startTest();
+
+        FieldSetService fieldSetService = new FieldSetService();
+        Schema.FieldSet fieldSet = Schema.SObjectType.ServiceDelivery__c.FieldSets.Attendance_Service_Deliveries;
+
+        List<Map<String, Object>> fieldsResult = fieldSetService.getFieldSetForLWC(
+            String.valueOf(ServiceDelivery__c.SObjectType),
+            fieldSet.getName(),
+            false
+        );
+
+        Test.stopTest();
+
+        Boolean fieldIsRequired;
+        Boolean fieldFoundInFieldSet = false;
+
+        for (Map<String, Object> fieldSetMap : fieldsResult) {
+            // AttendanceStatus__c is marked as required in the field set but not on the object
+            if (
+                (String) fieldSetMap.get('apiName') ==
+                String.valueOf(ServiceDelivery__c.AttendanceStatus__c)
+            ) {
+                fieldFoundInFieldSet = true;
+                fieldIsRequired = (Boolean) fieldSetMap.get('isRequired');
+            }
+        }
+        System.assertEquals(
+            true,
+            fieldFoundInFieldSet,
+            'AttendanceStatus__c field should be included in the fieldset'
+        );
+        System.assertEquals(
+            true,
+            fieldIsRequired,
+            'Field marked as required on field set should be required in UI'
+        );
+    }
 }

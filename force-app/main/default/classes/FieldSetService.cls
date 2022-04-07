@@ -24,7 +24,7 @@ public with sharing class FieldSetService {
         for (FieldSet fieldSet : fieldSets.values()) {
             Map<String, Map<String, Object>> fieldByApiName = new Map<String, Map<String, Object>>();
             for (
-                FieldSetFieldInfo fieldInfo : getFieldSetFieldInfos(
+                FieldInfo fieldInfo : getFieldInfos(
                     sObjectType.getDescribe(),
                     fieldSet,
                     false
@@ -32,7 +32,7 @@ public with sharing class FieldSetService {
             ) {
                 fieldByApiName.put(
                     fieldInfo.getDescribe().getName(),
-                    getFieldForLWC(fieldInfo.getDescribe(), fieldInfo.getFieldSetMember())
+                    fieldInfo.getFieldForLWC()
                 );
             }
 
@@ -56,12 +56,11 @@ public with sharing class FieldSetService {
         }
 
         for (Schema.FieldSetMember memberField : fieldSet.fields) {
-            DescribeFieldResult fieldDescribe = memberField.getSObjectField()
-                .getDescribe();
+            FieldInfo fieldSetField = new FieldInfo(memberField);
 
             fieldByFieldPath.put(
                 memberField.getFieldPath(),
-                getFieldForLWC(fieldDescribe, memberField)
+                fieldSetField.getFieldForLWC()
             );
         }
 
@@ -82,7 +81,7 @@ public with sharing class FieldSetService {
     ) {
         Map<String, Map<String, Object>> fieldByApiName = new Map<String, Map<String, Object>>();
         for (
-            FieldSetFieldInfo fieldInfo : getFieldSetFieldInfos(
+            FieldInfo fieldInfo : getFieldInfos(
                 objectName,
                 fieldSetName,
                 allowRelationshipFields
@@ -90,7 +89,7 @@ public with sharing class FieldSetService {
         ) {
             fieldByApiName.put(
                 fieldInfo.getDescribe().getName(),
-                getFieldForLWC(fieldInfo.getDescribe(), fieldInfo.getFieldSetMember())
+                fieldInfo.getFieldForLWC()
             );
         }
 
@@ -102,15 +101,15 @@ public with sharing class FieldSetService {
      * @param DescribeSObjectResult objectDescribe
      * @param FieldSet fieldSet
      * @param Boolean allowRelationshipFields
-     * @return      List<FieldSetFieldInfo> Set of FieldSetFieldInfo objects
+     * @return      List<FieldInfo> Set of FieldInfo objects
      */
 
-    private List<FieldSetFieldInfo> getFieldSetFieldInfos(
+    private List<FieldInfo> getFieldInfos(
         DescribeSObjectResult objectDescribe,
         FieldSet fieldSet,
         Boolean allowRelationshipFields
     ) {
-        List<FieldSetFieldInfo> fieldSetFieldInfos = new List<FieldSetFieldInfo>();
+        List<FieldInfo> FieldInfos = new List<FieldInfo>();
 
         for (Schema.FieldSetMember memberField : fieldSet.fields) {
             if (!fieldTypeIsSupported(memberField, allowRelationshipFields)) {
@@ -119,19 +118,20 @@ public with sharing class FieldSetService {
                 // we can overload this method with a Boolean flag
                 continue;
             }
+            FieldInfo fieldSetField = new FieldInfo(memberField);
 
-            DescribeFieldResult fieldDescribe = memberField.getSObjectField()
-                .getDescribe();
-            fieldDescribe = getCompoundFieldDescribe(
+            DescribeFieldResult fieldDescribe = getCompoundFieldDescribe(
                 objectDescribe,
-                fieldDescribe,
+                fieldSetField.getDescribe(),
                 memberField.getFieldPath()
             );
 
-            fieldSetFieldInfos.add(new FieldSetFieldInfo(fieldDescribe, memberField));
+            fieldSetField.setDescribe(fieldDescribe);
+
+            FieldInfos.add(fieldSetField);
         }
 
-        return fieldSetFieldInfos;
+        return FieldInfos;
     }
 
     /**
@@ -139,10 +139,10 @@ public with sharing class FieldSetService {
      * @param String objectName
      * @param String fieldSetName
      * @param Boolean allowRelationshipFields
-     * @return      List<FieldSetFieldInfo> Set of FieldSetFieldInfo objects
+     * @return      List<FieldInfo> Set of FieldInfo objects
      */
     @TestVisible
-    private List<FieldSetFieldInfo> getFieldSetFieldInfos(
+    private List<FieldInfo> getFieldInfos(
         String objectName,
         String fieldSetName,
         Boolean allowRelationshipFields
@@ -169,7 +169,7 @@ public with sharing class FieldSetService {
             );
         }
 
-        return getFieldSetFieldInfos(objectDescribe, fieldSet, allowRelationshipFields);
+        return getFieldInfos(objectDescribe, fieldSet, allowRelationshipFields);
     }
 
     private Boolean fieldTypeIsSupported(
@@ -249,43 +249,8 @@ public with sharing class FieldSetService {
      * @param field DescribeFieldResult
      * @return      Map<String, Object>
      */
-    public Map<String, Object> getFieldForLWC(DescribeFieldResult field) {
-        return getFieldForLWC(field, null);
-    }
-
-    /**
-     * @description "Casts" a FieldSetMember into a Map<String, Object> with 'apiName' and 'label', etc. keys.
-     * An array of these is used by a Lightning Web Component to leverage an admin-controlled field set.
-     *
-     * @param fieldDescribe DescribeFieldResult
-     * @param fieldSetMember Schema.FieldSetMember
-     * @return      Map<String, Object>
-     */
-    public Map<String, Object> getFieldForLWC(
-        DescribeFieldResult fieldDescribe,
-        Schema.FieldSetMember fieldSetMember
-    ) {
-        String referenceObjectName = getReferenceTo(fieldDescribe);
-
-        Boolean isRequiredOnFieldSet = fieldSetMember != null
-            ? fieldSetMember.getRequired()
-            : false;
-        Boolean isRequiredOnDescribe = fieldDescribe.getType() ==
-            Schema.DisplayType.BOOLEAN
-            ? false
-            : !fieldDescribe.isNillable();
-        return new Map<String, Object>{
-            'apiName' => fieldDescribe.getName(),
-            'label' => getLabel(fieldDescribe),
-            'type' => fieldDescribe.getType().name(),
-            'isRequired' => isRequiredOnFieldSet || isRequiredOnDescribe,
-            'helpText' => fieldDescribe.getInlineHelpText(),
-            'isAccessible' => fieldDescribe.isAccessible(),
-            'relationshipName' => fieldDescribe.getRelationshipName(),
-            'referenceTo' => referenceObjectName,
-            'referenceNameField' => getNameFieldForReferenceField(fieldDescribe),
-            'isUpdateable' => fieldDescribe.isUpdateable()
-        };
+    public Map<String, Object> getFieldForLWC(DescribeFieldResult fieldDescribe) {
+        return new FieldInfo(fieldDescribe).getFieldForLWC();
     }
 
     /**
@@ -323,72 +288,25 @@ public with sharing class FieldSetService {
         return picklistField;
     }
 
-    /**
-     * @description Standard Salesforce UI has special handling of the label for Standard Reference Fields
-     * this method will return the special label
-     * @param DescribeFieldResult fieldDescribe
-     * @return      String
-     */
-    @TestVisible
-    private String getLabel(DescribeFieldResult field) {
-        String label;
-
-        if (field.getName().equalsIgnoreCase('AccountId')) {
-            label = Schema.Account.Name.getDescribe().getLabel();
-        } else if (field.getName().equalsIgnoreCase('ContactId')) {
-            label = Schema.Contact.Name.getDescribe().getLabel();
-        } else if (field.getName().equalsIgnoreCase('OwnerId')) {
-            label = System.Label.Owner_Field;
-        } else {
-            label = field.getLabel();
-        }
-
-        return label;
-    }
-
-    @TestVisible
-    private String getReferenceTo(DescribeFieldResult field) {
-        String reference;
-
-        if (field.getReferenceTo().isEmpty()) {
-            return null;
-        } else {
-            return field.getReferenceTo()[0].getDescribe().getName();
-        }
-    }
-
-    /**
-     * Returns the API name of the "name" field of the object type referenced
-     * by this field.  If the field provided is not a lookup field, this method
-     * returns null.  If the lookup is polymorphic, then the name field for
-     * only one of the referenced types is returned.
-     */
-    private String getNameFieldForReferenceField(DescribeFieldResult field) {
-        List<Schema.SObjectType> references = field.getReferenceTo();
-        if (!references.isEmpty()) {
-            Schema.DescribeSObjectResult referencedType = references[0].getDescribe();
-            Map<String, Schema.SObjectField> fields = referencedType.fields.getMap();
-            for (Schema.SObjectField referenceField : fields.values()) {
-                Schema.DescribeFieldResult referenceFieldDescribe = referenceField.getDescribe();
-                if (referenceFieldDescribe.isNameField()) {
-                    return referenceFieldDescribe.getName();
-                }
-            }
-        }
-
-        return null;
-    }
-
     private class FieldSetException extends Exception {
     }
 
-    private class FieldSetFieldInfo {
+    @TestVisible
+    private class FieldInfo {
         private DescribeFieldResult fieldDescribe;
         private Schema.FieldSetMember fieldSetMember;
 
-        public FieldSetFieldInfo(DescribeFieldResult dfr, Schema.FieldSetMember fsm) {
+        public FieldInfo(DescribeFieldResult dfr, Schema.FieldSetMember fsm) {
             fieldDescribe = dfr;
             fieldSetMember = fsm;
+        }
+
+        public FieldInfo(DescribeFieldResult dfr) {
+            this(dfr, null);
+        }
+
+        public FieldInfo(Schema.FieldSetMember fsm) {
+            this(fsm.getSObjectField().getDescribe(), fsm);
         }
 
         public DescribeFieldResult getDescribe() {
@@ -397,6 +315,98 @@ public with sharing class FieldSetService {
 
         public Schema.FieldSetMember getFieldSetMember() {
             return fieldSetMember;
+        }
+
+        public void setDescribe(DescribeFieldResult dfr) {
+            fieldDescribe = dfr;
+        }
+
+        public Boolean isRequired() {
+            Boolean isRequiredOnFieldSet = fieldSetMember != null
+                ? fieldSetMember.getRequired()
+                : false;
+            Boolean isRequiredOnDescribe = fieldDescribe.getType() ==
+                Schema.DisplayType.BOOLEAN
+                ? false
+                : !fieldDescribe.isNillable();
+            return isRequiredOnDescribe || isRequiredOnFieldSet;
+        }
+
+        /**
+         * @description "Casts" a FieldSetMember into a Map<String, Object> with 'apiName' and 'label', etc. keys.
+         * An array of these is used by a Lightning Web Component to leverage an admin-controlled field set.
+         *
+         * @param fieldDescribe DescribeFieldResult
+         * @param fieldSetMember Schema.FieldSetMember
+         * @return      Map<String, Object>
+         */
+        public Map<String, Object> getFieldForLWC() {
+            return new Map<String, Object>{
+                'apiName' => fieldDescribe.getName(),
+                'label' => getLabel(),
+                'type' => fieldDescribe.getType().name(),
+                'isRequired' => isRequired(),
+                'helpText' => fieldDescribe.getInlineHelpText(),
+                'isAccessible' => fieldDescribe.isAccessible(),
+                'relationshipName' => fieldDescribe.getRelationshipName(),
+                'referenceTo' => getReferenceTo(),
+                'referenceNameField' => getNameFieldForReferenceField(),
+                'isUpdateable' => fieldDescribe.isUpdateable()
+            };
+        }
+
+        /**
+         * @description Standard Salesforce UI has special handling of the label for Standard Reference Fields
+         * this method will return the special label
+         * @param DescribeFieldResult fieldDescribe
+         * @return      String
+         */
+        public String getLabel() {
+            String label;
+
+            if (fieldDescribe.getName().equalsIgnoreCase('AccountId')) {
+                label = Schema.Account.Name.getDescribe().getLabel();
+            } else if (fieldDescribe.getName().equalsIgnoreCase('ContactId')) {
+                label = Schema.Contact.Name.getDescribe().getLabel();
+            } else if (fieldDescribe.getName().equalsIgnoreCase('OwnerId')) {
+                label = System.Label.Owner_Field;
+            } else {
+                label = fieldDescribe.getLabel();
+            }
+
+            return label;
+        }
+
+        /**
+         * Returns the API name of the "name" field of the object type referenced
+         * by this field.  If the field provided is not a lookup field, this method
+         * returns null.  If the lookup is polymorphic, then the name field for
+         * only one of the referenced types is returned.
+         */
+        public String getNameFieldForReferenceField() {
+            List<Schema.SObjectType> references = fieldDescribe.getReferenceTo();
+            if (!references.isEmpty()) {
+                Schema.DescribeSObjectResult referencedType = references[0].getDescribe();
+                Map<String, Schema.SObjectField> fields = referencedType.fields.getMap();
+                for (Schema.SObjectField referenceField : fields.values()) {
+                    Schema.DescribeFieldResult referenceFieldDescribe = referenceField.getDescribe();
+                    if (referenceFieldDescribe.isNameField()) {
+                        return referenceFieldDescribe.getName();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public String getReferenceTo() {
+            String reference;
+
+            if (fieldDescribe.getReferenceTo().isEmpty()) {
+                return null;
+            } else {
+                return fieldDescribe.getReferenceTo()[0].getDescribe().getName();
+            }
         }
     }
 }

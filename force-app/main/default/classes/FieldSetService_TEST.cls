@@ -195,7 +195,7 @@ public with sharing class FieldSetService_TEST {
         for (DescribeFieldResult field : expectedLabelByField.keySet()) {
             System.assertEquals(
                 expectedLabelByField.get(field),
-                new FieldSetService().getLabel(field),
+                new FieldSetService.FieldInfo(field).getLabel(),
                 'Expected the special handling of standard object Id fields'
             );
         }
@@ -266,7 +266,7 @@ public with sharing class FieldSetService_TEST {
         );
 
         try {
-            new FieldSetService().getFieldSetFieldInfos(objectName, fieldSetName, false);
+            new FieldSetService().getFieldInfos(objectName, fieldSetName, false);
         } catch (Exception ex) {
             actualException = ex.getMessage();
         }
@@ -340,8 +340,8 @@ public with sharing class FieldSetService_TEST {
         String message =
             'When getFieldForLWC is called with a lookup field to ' +
             'an object in the same package, the return map should have the name ' +
-            'and name field of the referenced object with the namespace ' +
-            'prefixed if the code is running in a namespaced context';
+            'and name field of the referenced object with the namespace' +
+            ' prefixed if the code is running in a namespaced context';
 
         Map<String, Object> field = (new FieldSetService())
             .getFieldForLWC(Schema.ProgramEngagement__c.Program__c.getDescribe());

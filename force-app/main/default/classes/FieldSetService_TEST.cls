@@ -271,7 +271,7 @@ public with sharing class FieldSetService_TEST {
         );
 
         try {
-            new FieldSetService().getFieldDescribes(objectName, fieldSetName, false);
+            new FieldSetService().getFieldSetFieldInfos(objectName, fieldSetName, false);
         } catch (Exception ex) {
             actualException = ex.getMessage();
         }

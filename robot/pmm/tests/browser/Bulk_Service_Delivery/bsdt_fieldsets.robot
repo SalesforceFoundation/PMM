@@ -126,7 +126,7 @@ Switch fieldsets on wizard screen 4
     Verify Persist Save Icon        2           Saved
     Verify Persist Save Icon        3           Saved
 
-Switch fieldsets via create by individal
+Switch fieldsets via create by individual
     [Documentation]             Fieldset switching scenarios via group service delivery -
     ...                         a. switch from fieldset with PE+Service fields to a fieldset with Contact+PE+Service field
     ...                         b. Switch from fieldset with Contact+PE+Service field to a fieldset with Contact+PE field

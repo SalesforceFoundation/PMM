@@ -27,7 +27,7 @@ pmm_lex_locators = {
         "label": "//div[./*/*[text()='{}']]",
         "title": "//h2[contains(@class, 'inlineTitle') or contains(@class,'title') and text()='{}']",
         "text_field": "//div[contains(@class, 'uiInput')][.//label[contains(@class, 'uiLabel')][.//span[text()='{}']]]//*[self::input or self::textarea]",
-        "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element')][.//label[text()='{}']]/div[@class='slds-form-element__control']/descendant::lightning-base-combobox/div/div/input[contains(@class,'slds-input')]",
+        "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element')][.//label[text()='{}']]/div[@class='slds-form-element__control'][last()]",
         "quick_dropdown_field": "//div[@class='slds-form-element__control']/div[.//span[text()='{}']]/div//a[@class='select']",
         "quick_dropdown_popup": "//div[@class='select-options' and @role='menu']",
         "quick_dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
@@ -67,7 +67,7 @@ pmm_lex_locators = {
     "toast_msg": "//span[contains(@class,'toastMessage') and text()='{}']",
     "contact_save": "//button[contains(@class,'slds-button_brand') and (text() or @title='Save')]",
     "bulk_service_delivery_locators": {
-        "new_lookup": '//div[{}][contains(@class,"slds-box")]//div[@class="sd-input"][./div[contains(@class,"slds-truncate") and contains(text(),"{}")]]/descendant::input[contains(@class,"slds-input")]',
+        "new_lookup": '//div[{}][contains(@class,"slds-box")]//div[@class="sd-input"][./div[contains(@class,"slds-truncate") and contains(text(),"{}")]]//div[contains(@class,"slds-combobox__form-element")][last()]',
         "new_field": '//div[{}][contains(@class,"slds-box")]//div[contains(@class,"slds-form-element__control")]/input[contains(@name,"{}")]',
         "icon": '//button[contains(@class,"slds-button_icon") and @title="{}"]/lightning-primitive-icon',
         "page_header": "//header[contains(@class,'flexipageHeader')]//h2[@class='truncate' and text()='{}']",
@@ -81,7 +81,7 @@ pmm_lex_locators = {
         "bsdt_wizard_lookup": "//lightning-grouped-combobox[.//*[text()='{}']]//input[contains(@class,'slds-input')]",
         "new_prog_engagement": {
             "title": "//h2[contains(@class,'slds-text-heading_medium') and text()='{}']",
-            "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']]//input[contains(@class,'slds-input')]",
+            "dropdown_field": "//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[@class='slds-form-element__label' and text()='{}']][last()]",
             "dropdown_popup": "//div[contains(@class,'slds-listbox')]",
             "dropdown_value": "//span[@class='slds-truncate' and @title='{}']",
             "text_field": "//div[contains(@class,'slds-dropdown-trigger')][.//label[@class='slds-form-element__label' and text()='{}']]//input[@class='slds-input']",
@@ -104,7 +104,7 @@ pmm_lex_locators = {
         "remove_participant": "//lightning-layout-item[contains(@class,'slds-size_4')]/descendant::tr[./th/descendant::*[text()='{}']]/descendant::button[contains(@class,'slds-button')]",
         "frequency": "//span[contains(@class,'slds-button')]/label/span[@class='slds-radio_faux' and text()='{}']",
         "ends_radio_button": "//span[@class='slds-radio'][./input[@value='{}']]/descendant::span[@class='slds-radio_faux']",
-        "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']]/descendant::input",
+        "session_end": "//lightning-input[contains(@class,'slds-form-element_stacked')][./descendant::*[text()='{}']][last()]",
         "first_session_end": "//lightning-input[contains(@class,'slds-form-element')][./descendant::*[text()='{}']]/descendant::div//input[@class='slds-input']",
         "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
         "filter": "//div[contains(@class,'slds-form-element__control')]/input[@placeholder='Search this list']",
@@ -112,10 +112,10 @@ pmm_lex_locators = {
     "attendance": {
         "attendance_text": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",
         "attendance_lookup": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-grouped-combobox[@class='slds-form-element'][.//label[text()='{}']]//div/input",
-        "dropdown_field": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]//input",
+        "dropdown_field": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-combobox[contains(@class,'slds-form-element_stacked')][.//label[text()='{}']]//button",
         "select_popup": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//div[contains(@class,'slds-listbox')]",
         "dropdown_value": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//span[@class='slds-media__body']/span[@class='slds-truncate' and contains(text(),'{}')]",
-        "dim_icon": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//button[contains(@class,'slds-button')][./span[contains(text(),'track attendance')]]",
+        "dim_icon": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//button[contains(@title,'for this person')]",
         "details": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//*[self::div or self::lightning-output-field][contains(@class,'slds-form-element_stacked')][.//*[text()='{}']]//div[@class='slds-form-element__control']/*[self::lightning-formatted-text or self::lightning-formatted-number]",
     },
     "homepage": {

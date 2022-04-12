@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AttendanceFieldSet__c</name>
+    <label>Conjunto de campos de atendimento</label>
+    <picklistValues>
+        <masterLabel>Attendance Service Deliveries</masterLabel>
+        <translation>Prestações de serviços de atendimento </translation>
+    </picklistValues>
+</CustomFieldTranslation>

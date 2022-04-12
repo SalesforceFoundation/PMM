@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ProgramIssueArea__c</name>
+    <help>A área problemática abordada pelo Programa. Os valores são determinados pelo seu administrador.</help>
+    <label>Área de problemas do programa</label>
+    <picklistValues>
+        <masterLabel>Housing</masterLabel>
+        <translation>Habitação</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Employment</masterLabel>
+        <translation>Emprego</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Education</masterLabel>
+        <translation>Educação</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Legal</masterLabel>
+        <translation>Jurídico</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Counseling</masterLabel>
+        <translation>Aconselhamento</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Food and Nutrition</masterLabel>
+        <translation>Alimentação e nutrição</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Advocacy</masterLabel>
+        <translation>Advocacia</translation>
+    </picklistValues>
+</CustomFieldTranslation>

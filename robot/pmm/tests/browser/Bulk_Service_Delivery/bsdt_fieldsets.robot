@@ -55,7 +55,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Switch to a fieldset without service field
+BSDTF1: Switch to a fieldset without service field
     [Documentation]             Switch to a fieldset without service field and validate that the service field is
     ...                         displayed on BSDT
     [tags]                      W-9654524    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
@@ -78,7 +78,7 @@ Switch to a fieldset without service field
     Verify Persist Save Icon    1           Saved
     Verify Persist Save Icon    2           Saved
 
-Switch fieldsets on wizard screen 4
+BSDTF2: Switch fieldsets on wizard screen 4
     [Documentation]             Fieldset switching scenarios via group service delivery -
     ...                         a. Switch from fieldset with Contact+PE+Service fields to a fieldset with Service field
     ...                         b. Switch from fieldset with Service field to a fieldset with Contact field
@@ -126,7 +126,7 @@ Switch fieldsets on wizard screen 4
     Verify Persist Save Icon        2           Saved
     Verify Persist Save Icon        3           Saved
 
-Switch fieldsets via create by individual
+BSDTF3: Switch fieldsets via create by individual
     [Documentation]             Fieldset switching scenarios via group service delivery -
     ...                         a. switch from fieldset with PE+Service fields to a fieldset with Contact+PE+Service field
     ...                         b. Switch from fieldset with Contact+PE+Service field to a fieldset with Contact+PE field

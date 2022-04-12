@@ -51,7 +51,7 @@ Setup Test Data
     Set suite variable              ${service_schedule_name}
 
 *** Test Cases ***
-Create service delivery using BSDT Wizard
+GSD1: Create service delivery using BSDT Wizard
     [Documentation]             Clicks on Create by Group on BSDT, selects default service delivery values, adds contact
     ...                         and creates service delivery using wizard
     [tags]                      W-9118269    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
@@ -86,7 +86,7 @@ Create service delivery using BSDT Wizard
     Verify Details                  Unit of Measurement     contains   ${service}[${ns}UnitOfMeasurement__c]
     Save Current Record ID For Deletion        ${ns}ServiceDelivery__c
 
-Filter on bsdt wizard based on Program Cohort
+GSD2: Filter on bsdt wizard based on Program Cohort
     [Documentation]                        On BSDT wizard contact selection screen,filter based on program cohort and 
     ...                                    validate filtered results are displayed on screen 3
     [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt
@@ -105,7 +105,7 @@ Filter on bsdt wizard based on Program Cohort
     Page Should Not Contain                 ${contact2}[Name]
     Page Should Contain Text                ${contact3}[Name]
 
-Filter on bsdt wizard based on Client Name
+GSD3: Filter on bsdt wizard based on Client Name
     [Documentation]                        On BSDT wizard contact selection screen,filter based on client name and 
     ...                                    validate filtered results are displayed on screen 3
     [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt
@@ -124,7 +124,7 @@ Filter on bsdt wizard based on Client Name
     Page Should Not Contain                 ${contact2}[Name]
     Page Should Not Contain                 ${contact3}[Name]
 
-Filter on bsdt wizard based on Stage
+GSD4: Filter on bsdt wizard based on Stage
     [Documentation]                        On BSDT wizard contact selection screen,filter based on Stage and 
     ...                                    validate no results are displayed on screen 3
     [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt

@@ -33,7 +33,7 @@ Setup Test Data
     Set suite variable              ${service_participant}
 
 *** Test Cases ***
-View Perms Attendance Snapshot for Pending Status
+ATT13: View Perms Attendance Snapshot for Pending Status
     [Documentation]                        Logged in as a non admin user with view perm sets, navigates to service session details page, and 
     ...                                    validates that a warning message is displayed on attendance component.
     [tags]                                 unstable         perm:view      feature:Service Session
@@ -41,7 +41,7 @@ View Perms Attendance Snapshot for Pending Status
     Page Should Contain                    Track Attendance  
     Page Should Contain                    You don't have access to this information. Ask your admin for help.
 
-View Perms Attendance Snapshot for Complete Status
+ATT14: View Perms Attendance Snapshot for Complete Status
     [Documentation]                        Logged in as a non admin user with view perm sets, navigates to service session details page, and 
     ...                                    validates that a warning message is displayed on attendance component.
     [tags]                                 unstable         perm:view      feature:Service Session

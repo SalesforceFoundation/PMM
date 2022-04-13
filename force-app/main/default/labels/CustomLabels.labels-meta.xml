@@ -539,7 +539,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No field set found</shortDescription>
-        <value>{0} field set on the {1} object doesn't exist. Verify the field set name and try again.</value>
+        <value>{0} field set on the {1} object doesn&apos;t exist. Verify the field set name and try again.</value>
     </labels>
     <labels>
         <fullName>No_Records_Selected</fullName>

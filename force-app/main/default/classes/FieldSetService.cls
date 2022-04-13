@@ -109,7 +109,7 @@ public with sharing class FieldSetService {
         FieldSet fieldSet,
         Boolean allowRelationshipFields
     ) {
-        List<FieldInfo> FieldInfos = new List<FieldInfo>();
+        List<FieldInfo> fieldInfos = new List<FieldInfo>();
 
         for (Schema.FieldSetMember memberField : fieldSet.fields) {
             if (!fieldTypeIsSupported(memberField, allowRelationshipFields)) {
@@ -128,10 +128,10 @@ public with sharing class FieldSetService {
 
             fieldSetField.setDescribe(fieldDescribe);
 
-            FieldInfos.add(fieldSetField);
+            fieldInfos.add(fieldSetField);
         }
 
-        return FieldInfos;
+        return fieldInfos;
     }
 
     /**

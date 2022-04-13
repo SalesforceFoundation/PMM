@@ -48,6 +48,7 @@
                                                     disabled={field.disabled}
                                                     value={field.value}
                                                     variant="label-hidden"
+                                                    required={field.isRequired}
                                                     if:true={field.isAccessible}
                                                 >
                                                 </lightning-combobox>
@@ -67,6 +68,7 @@
                                                         disabled={field.disabled}
                                                         value={field.value}
                                                         variant="label-hidden"
+                                                        required={field.isRequired}
                                                         class="hideHelpText"
                                                         if:true={field.isAccessible}
                                                     ></lightning-input-field>
@@ -87,6 +89,7 @@
                                                         disabled={field.disabled}
                                                         value={field.value}
                                                         variant="label-hidden"
+                                                        required={field.isRequired}
                                                         if:true={field.isAccessible}
                                                     ></lightning-input-field>
                                                 </template>

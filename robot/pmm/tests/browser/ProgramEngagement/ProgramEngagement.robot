@@ -32,7 +32,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Validate Waitlisted PE Listview
+PE1: Validate Waitlisted PE Listview
     [Documentation]                        This test opens the Waitlisted PE listview and verifies that it contains 
     ...                                    Client, Program and Stage fields
     [tags]                                 perm:admin   perm:manage   perm:deliver   perm:view   feature:Program Engagement
@@ -42,7 +42,7 @@ Validate Waitlisted PE Listview
     Page Should Contain                    Program
     Page Should Contain                    Stage
 
-Create Program Engagement
+PE2: Create Program Engagement
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
      [tags]                                  W-037565      perm:admin   perm:manage       perm:deliver    feature:Program Engagement
      Go To Page                              Listing                                ${ns}ProgramEngagement__c
@@ -63,7 +63,7 @@ Create Program Engagement
      ${program_engagement_id} =              Save Current Record ID For Deletion                ${ns}ProgramEngagement__c
 
 
-Create Program Engagement with Auto Name Override
+PE3: Create Program Engagement with Auto Name Override
     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list
      ...                                    and Checking Auto-Name Override checkbox. Verify PE name is same as what user added.
     [tags]                                  W-037577        perm:admin   perm:manage      perm:deliver    feature:Program Engagement
@@ -82,7 +82,7 @@ Create Program Engagement with Auto Name Override
      Verify Page Contains Related List      Service Deliveries
      ${program_engagement_id} =             Save Current Record ID For Deletion    ${ns}ProgramEngagement__c
 
-Date validation for PE when start date is later than end date
+PE4: Date validation for PE when start date is later than end date
      [Documentation]                        This test opens the new program engagement dialog and enters a end date earlier than start date
      ...                                    and verifies that an error message is displayed
      [tags]                                 W-042238   perm:admin   perm:manage       perm:deliver    feature:Program Engagement
@@ -100,7 +100,7 @@ Date validation for PE when start date is later than end date
      Verify Modal Error                     Start Date must be before End Date
      Click Dialog Button                    Cancel
 
-Date validation when program engagement dates are not within program date range
+PE5: Date validation when program engagement dates are not within program date range
      [Documentation]                        This test opens the program record, edits the start and end dates and goes to the PE listing
      ...                                    page, clicks on new and verifes that an error message is displayed when PE date 
      ...                                    range is outside the program date range 
@@ -126,7 +126,7 @@ Date validation when program engagement dates are not within program date range
      Verify Modal Error                     Select a start date that's on or after the program start date and on or before the program end date.
      Click Dialog Button                    Cancel
 
-Validate program cohort on new PE dialog
+PE6: Validate program cohort on new PE dialog
      [Documentation]                        This test opens the new program engagement dialog, enters a cohort that does not lookup to the
      ...                                    program entered the dialog, validates that an error message is displayed when saved
      [tags]                                 W-042238    perm:admin   perm:manage     perm:deliver     feature:Program Engagement

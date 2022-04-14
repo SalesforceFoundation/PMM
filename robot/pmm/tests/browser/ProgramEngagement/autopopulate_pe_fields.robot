@@ -105,7 +105,7 @@ APEF4: Autopopulate fields when stage is set to Active and Program start date is
      Verify Details                          Start Date                      does not contain               ${today}
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
-APEF5: Autopopulate fields when stage is set to Active with Program start date is today
+APEF5: Autopopulate fields when stage is set to Active and Program start date is today
      [Documentation]                         Validates that start date is set to today when stage is 'Active' and Program
      ...                                     start date is than 'Today'
      [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement

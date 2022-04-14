@@ -55,7 +55,7 @@ pmm_lex_locators = {
     },
     "related": {
         "button": "//article[contains(@class, 'slds-card slds-card_boundary')][.//span[@title='{}']]//button[text()='{}']",
-        "new_record_link": "//div[@class='slds-grid']/a[contains(@class,'slds-truncate')]/span[contains(text(),'{}')]",
+        "new_record_link": "//div[@class='slds-grid']/a[contains(@class,'slds-truncate')]/slot/slot/span[contains(text(),'{}')]",
         "related_list": "//a[contains(@class,'slds-card')]/span[contains(@class,'slds-truncate') and @title='{}']",
     },
     "modal_title": "//h2[contains(@class,'slds-modal__title') or contains(@class,'truncate title') or contains(@class,'slds-text-heading')]",

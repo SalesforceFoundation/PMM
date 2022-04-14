@@ -42,7 +42,7 @@ PE1: Validate Waitlisted PE Listview
     Page Should Contain                    Program
     Page Should Contain                    Stage
 
-PE2: Create Program Engagement
+PE2: Create a new Program Engagement
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
      [tags]                                  W-037565      perm:admin   perm:manage       perm:deliver    feature:Program Engagement
      Go To Page                              Listing                                ${ns}ProgramEngagement__c

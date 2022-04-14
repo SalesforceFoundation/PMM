@@ -32,7 +32,7 @@ pmm_lex_locators = {
         "quick_dropdown_popup": "//div[@class='select-options' and @role='menu']",
         "quick_dropdown_value": "//div[@class='select-options']//ul//li//a[@title='{}']",
         "dropdown_popup": "//div[contains(@class,'slds-listbox') and @role='listbox']",
-        "dropdown_value": "//lightning-base-combobox-item[contains(@class,'slds-media')]//span[@class='slds-media__body']/span[@title='{}']",
+        "dropdown_value": "//lightning-base-combobox-item[contains(@class,'slds-media')]/span[@class='slds-media__body']/span[@title='{}']",
         "button": "//lightning-button/button[text()='{}']",
         "lookup_field": "//div[contains(@class, 'autocompleteWrapper')]//input[@title='{}']",
         "lookup_value": "//div[contains(@class, 'listContent')]//div[contains(@class, 'slds-truncate') and @title='{}']",

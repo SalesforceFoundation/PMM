@@ -30,7 +30,7 @@ Setup Test Data
     Set suite variable              ${session_start}
 
 *** Test Cases ***
-Create a new service session
+NSS1: Create a new service session
     [Documentation]                        Navigates to service session listing page, clicks 'New' on the listing page and
     ...                                    creates a new record, validates the details on the service session record
     [tags]                                 W-8294332     perm:admin   perm:manage         feature:Service Session

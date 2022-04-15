@@ -55,8 +55,8 @@ PE2: Create a new Program Engagement
      Select Value From Dropdown              Role                                   Volunteer
      Click Dialog Button                     Save
      Wait Until Modal Is Closed
-     Verify Details                          Program                  contains                  ${program}[Name]
-     Verify Details                          Client                   contains                  ${contact}[FirstName] ${contact}[LastName]
+     Verify Lookup Details                          Program                  contains                  ${program}[Name]
+     Verify Lookup Details                          Client                   contains                  ${contact}[FirstName] ${contact}[LastName]
      Page Should Not Contain                 ${program_engagement_name}
      Verify Page Contains Related List       Service Deliveries
      Verify Page Contains Related List       Service Participants
@@ -75,7 +75,7 @@ PE3: Create Program Engagement with Auto Name Override
      Populate Lookup Field                  Client                                 ${contact}[FirstName] ${contact}[LastName]
      Select Value From Dropdown             Stage                                  Applied
      Select Value From Dropdown             Role                                   Volunteer
-     Set Checkbox                           Auto-Name Override                      checked
+     Set Checkbox                           Auto-Name Override                     checked
      Click Dialog Button                    Save
      Wait Until Modal Is Closed
      Verify Details                         Program Engagement Name                contains         ${program_engagement_name}

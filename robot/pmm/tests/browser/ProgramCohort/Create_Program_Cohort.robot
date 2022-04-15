@@ -47,7 +47,7 @@ CPC1: Create Program Cohort
      Wait Until Modal Is Closed
      Verify Details                         Program Cohort          contains        ${program_cohort}
      Verify Details                         Status                  contains        Active
-     Verify Details                         Program                 contains        ${program}[Name]
+     Verify Lookup Details                  Program                 contains        ${program}[Name]
      Verify Page Contains Related List      Program Engagements
      Verify Page Contains Related List      Files
      ${program_cohort_id} =                 Save Current Record ID For Deletion     ${ns}ProgramCohort__c

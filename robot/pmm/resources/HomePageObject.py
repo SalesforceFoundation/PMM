@@ -25,11 +25,10 @@ class PMMHomePage(BasePMMPage, BasePage):
             locator, error=f"Component '{component_name}' is not displayed"
         )
 
-
-def verify_recent_sessions_component_contains(self, text):
-    """Validates that the recents sessions component contians the given data"""
-    locator = pmm_lex_locators["homepage"]["recent_sessions_info"].format(text)
-    self.pmm.scroll_element_into_view(locator)
-    self.selenium.wait_until_page_contains_element(
-        locator, error=f"Recent sessions component does not contain '{text}' "
-    )
+    def verify_recent_sessions_component_contains(self, text):
+        """Validates that the recents sessions component contians the given data"""
+        locator = pmm_lex_locators["homepage"]["recent_sessions_info"].format(text)
+        self.pmm.scroll_element_into_view(locator)
+        self.selenium.wait_until_page_contains_element(
+            locator, error=f"Recent sessions component does not contain '{text}' "
+        )

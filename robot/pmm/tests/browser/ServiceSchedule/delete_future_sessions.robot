@@ -37,7 +37,7 @@ Setup Test Data
     API Update Records              ${ns}ServiceSession__c              ${service_session2}[Id]     ${ns}SessionStart__c=${future_date}
 
 *** Test Cases ***
-Delete Future Service Sessions quick action
+DFS1: Delete Future Service Sessions quick action
     [Documentation]                        Navigates to service schedule details page, clicks delete future service session button,
     ...                                    confirms session has been deleted.
     [tags]                                 W-9597787     perm:admin   perm:manage    feature:Service Schedule 

@@ -44,7 +44,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Filter based on Program Cohort
+SSF1: Filter based on Program Cohort
     [Documentation]                        On service schedule wizard,filter based on program cohort and 
     ...                                    validate filtered results are displayed on screen 3
     [tags]                                 W-9176285   perm:admin    perm:manage     feature:Service Schedule
@@ -64,7 +64,7 @@ Filter based on Program Cohort
     Page Should Not Contain                 ${contact2}[Name]
     Page Should Contain Text                ${contact3}[Name]
 
-Filter based on Client Name
+SSF2: Filter based on Client Name
     [Documentation]                        On service schedule wizard,filter based on client name and 
     ...                                    validate filtered results are displayed on screen 3
     [tags]                                 W-9176285   perm:admin    perm:manage     feature:Service Schedule
@@ -84,7 +84,7 @@ Filter based on Client Name
     Page Should Not Contain                 ${contact2}[Name]
     Page Should Not Contain                 ${contact3}[Name]
 
-Filter based on Stage
+SSF3: Filter based on Stage
     [Documentation]                        On service schedule wizard,filter based on Stage and 
     ...                                    validate no results are displayed on screen 3
     [tags]                                 W-9176285   perm:admin    perm:manage     feature:Service Schedule

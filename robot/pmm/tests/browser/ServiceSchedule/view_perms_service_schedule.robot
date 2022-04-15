@@ -36,7 +36,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-View Perms Add Service Participant quick action
+VPSSS1: View Perms Add Service Participant quick action
     [Documentation]                        Logged in as a non admin user with view perm sets, navigates to service schedule details page, clicks on Add service
     ...                                    Participants quick action, and validates that a warning message is displayed
     [tags]                                 unstable         perm:view      feature:Service Schedule 

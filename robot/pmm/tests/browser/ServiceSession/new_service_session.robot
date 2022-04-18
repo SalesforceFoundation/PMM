@@ -46,6 +46,6 @@ NSS1: Create a new service session
      Wait Until Modal Is Closed
      Verify Details                          Service Session Name        contains       ${service_session_name}
      Verify Details                          Session Start               contains       ${session_start}, 12:00 PM
-     Verify Details                          Primary Service Provider    contains       ${contact}[Name]
+     Verify Lookup Details                   Primary Service Provider    contains       ${contact}[Name]
      Verify Details                          Status                      contains       Complete
      Verify Page Contains Related List       Service Deliveries

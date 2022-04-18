@@ -41,7 +41,7 @@ NS1: Create Service from top nav
      Populate Lightning Fields              Status=Active
      Click Dialog button                    Save
      Wait Until Modal Is Closed
-     verify details                         Program            contains          ${program}[Name]
+     verify lookup details                  Program            contains          ${program}[Name]
      verify details                         Service Name       contains          ${service_name}
      verify page contains related list      Service Deliveries
      Verify Page Contains Related List      Service Schedules

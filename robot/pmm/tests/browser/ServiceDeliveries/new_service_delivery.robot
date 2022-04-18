@@ -51,8 +51,8 @@ NSD1: Create a Service Delivery via UI
     Click Dialog Button                    Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
-    Verify Details                         Service                                 contains             ${service}[Name]
-    Verify Details                         Program Engagement                      contains             ${program_engagement}[Name]
+    Verify Lookup Details                  Service                                 contains             ${service}[Name]
+    Verify Lookup Details                  Program Engagement                      contains             ${program_engagement}[Name]
     Verify Details                         Delivery Date                           contains             ${today}
     Page Should Not Contain                ${service_delivery_name}
     Verify Page Contains Related List      Files

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label>Prestação de serviços de atendimento</label>
+        <name>Attendance_Service_Deliveries</name>
+    </fieldSets>
+    <fieldSets>
+        <label>Prestação de serviços em massa</label>
+        <name>Bulk_Service_Deliveries</name>
+    </fieldSets>
+    <validationRules>
+        <errorMessage>Selecione uma Conta que corresponda ao Contato relacionado.</errorMessage>
+        <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Selecione um Engajamento em programa que corresponda ao Programa do Serviço relacionado.</errorMessage>
+        <name>PROGRAM_MATCH</name>
+    </validationRules>
+    <layouts>
+        <layout>Service Delivery Layout</layout>
+        <sections>
+            <label>Informações adicionais</label>
+            <section>Additional Information</section>
+        </sections>
+        <sections>
+            <label>Links personalizados</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nome da prestação de serviços</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nome da prestação de serviços</label>
+    </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Prestação de serviço</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Prestações de serviços</value>
+    </caseValues>
+</CustomObjectTranslation>

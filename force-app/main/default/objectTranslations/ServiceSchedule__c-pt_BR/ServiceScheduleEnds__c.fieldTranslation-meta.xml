@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ServiceScheduleEnds__c</name>
+    <label>Fim do cronograma de serviços</label>
+    <picklistValues>
+        <masterLabel>On</masterLabel>
+        <translation>Ativado</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>After</masterLabel>
+        <translation>Depois</translation>
+    </picklistValues>
+</CustomFieldTranslation>

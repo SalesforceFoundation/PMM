@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label>CreateProgramEngagement</label>
+        <name>CreateProgramEngagement</name>
+    </fieldSets>
+    <fieldSets>
+        <label>SessionParticipantView</label>
+        <name>SessionParticipantView</name>
+    </fieldSets>
+    <validationRules>
+        <errorMessage>Selecione uma Conta que corresponda ao Contato relacionado.</errorMessage>
+        <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>A data de término deve ser posterior à data de aplicação</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>A data de início deve ser posterior à data de aplicação</errorMessage>
+        <name>APPLICATION_DATE_BEFORE_START_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Selecione uma data de término que esteja na data de início do programa ou após, e que esteja na data de término do programa ou antes.</errorMessage>
+        <name>END_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Selecione uma Coorte de programa que corresponda ao Programa.</errorMessage>
+        <name>PROGRAM_MATCHES_COHORT_PROGRAM</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>A data de início deve ser anterior à data de término</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Selecione uma data de início que esteja na data de início do programa ou após, e que esteja na data de término do programa ou antes.</errorMessage>
+        <name>START_DATE_WITHIN_PROGRAM_DATES</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Engagement Layout</layout>
+        <sections>
+            <label>Detalhes adicionais</label>
+            <section>Additional Details</section>
+        </sections>
+        <sections>
+            <label>Links personalizados</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nome do engajamento em programa</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nome do engajamento em programa</label>
+    </standardFields>
+    <gender>Masculine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Engajamento de programa</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Engajamentos de programa</value>
+    </caseValues>
+</CustomObjectTranslation>

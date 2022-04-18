@@ -186,7 +186,7 @@
     </customLabels>
     <customLabels>
         <name>Dont_Track_Attendance</name>
-        <label>No realizar el seguimiento de asistencia para este participante</label>
+        <label>No crear una entrega de servicio de asistencia para esta persona</label>
     </customLabels>
     <customLabels>
         <name>Enabled</name>
@@ -387,6 +387,10 @@
     <customLabels>
         <name>Save_for_Later</name>
         <label>Guardar para más tarde</label>
+    </customLabels>
+    <customLabels>
+        <name>Sort_By</name>
+        <label>Ordenar por</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>

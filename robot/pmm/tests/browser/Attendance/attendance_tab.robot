@@ -18,7 +18,7 @@ Setup Test Data
     Set suite variable             ${ns}
 
 *** Test Cases ***
-Validate Attendance Tab
+AT1: Validate Attendance Tab
     [Documentation]                        Opens Attendance tab and confirms message on screen.
     [tags]                                 W-9607506   perm:admin   perm:manage   perm:deliver   perm:view   feature:Attendance
     Select App From All Items              Attendance                         

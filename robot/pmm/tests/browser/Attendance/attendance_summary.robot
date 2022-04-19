@@ -74,7 +74,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Service attendance summary field
+AS1: Service attendance summary field
     [Documentation]                 This test updates attendance and validates the attendance summary field on a service record
     [tags]                          W-9323278   perm:admin   perm:manage    feature:Attendance
     Run Task                       deploy_cmdts
@@ -87,7 +87,7 @@ Service attendance summary field
     Go To Page                     Details              Service__c           object_id=${service}[Id]
     Verify Details                 Attendance Summary     contains           50% (1/2)
 
-Service session attendance summary field
+AS2: Service session attendance summary field
     [Documentation]                 This test updates attendance and validates the attendance summary field on a service session record
     [tags]                          W-9323278  perm:admin   perm:manage    feature:Attendance
     Go To Page                     Details         ServiceSession__c        object_id=${service_session2}[Id]
@@ -98,7 +98,7 @@ Service session attendance summary field
     Verify toast Message           Saved 2 Service Delivery records.
     Verify Details                 Attendance Summary     contains           50% (1/2)
 
-Contact attendance summary field
+AS3: Contact attendance summary field
     [Documentation]                This test updates attendance and validates the attendance summary field on a contact record
     [tags]                         W-9323278   perm:admin   perm:manage    feature:Attendance
     Go To Page                     Details         ServiceSession__c        object_id=${service_session3}[Id]
@@ -114,7 +114,7 @@ Contact attendance summary field
     Verify Details                 Attendance Summary     contains           0% (0/1)
     Verify Details                 Consecutive Absences   contains           1
 
-Program Engagement attendance summary field
+AS4: Program Engagement attendance summary field
     [Documentation]                 This test updates attendance and validates the attendance summary field on a program engagement record
     [tags]                          W-9323278   perm:admin   perm:manage    feature:Attendance
     Go To Page                     Details         ServiceSession__c        object_id=${service_session4}[Id]

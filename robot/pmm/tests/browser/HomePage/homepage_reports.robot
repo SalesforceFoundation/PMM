@@ -17,20 +17,20 @@ Setup Test Data
     Set suite variable          ${ns}
 
 *** Test Cases ***
-Clients missing phone number report on Homepage
+HR1: Clients missing phone number report on Homepage
     [Documentation]             Go to homepage and validate 'Clients missing phone number' report is displayed
     [tags]                      W-8956949   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                  Home                    Homepage
     Maximize Browser Window
     Page Should Contain         Client Records Missing Phone
 
-Active Program Engagements report on Homepage
+HR2: Active Program Engagements report on Homepage
     [Documentation]             Go to homepage and validate 'Active Program Engagements' report is displayed
     [tags]                      W-8956949   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                  Home                    Homepage
     Page Should Contain         All Active Program Engagements 
 
-Services Delivered report on Homepage
+HR3: Services Delivered report on Homepage
     [Documentation]             Go to homepage and validate 'Services Delivered (Year to Date)' report is displayed
     [tags]                      W-8956949   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                  Home                    Homepage

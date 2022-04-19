@@ -35,19 +35,19 @@ Setup Test Data
     API Update Records              ${ns}ServiceSession__c              ${service_session}[Id]      ${ns}SessionEnd__c=${end_date}
 
 *** Test Cases ***
-Today's tasks on homepage
+HC1: Today's tasks on homepage
     [Documentation]                 Go to homepage and validate 'Today's task' component is displayed
     [tags]                          W-037575   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                      Home                    Homepage
     Verify Component On HomePage    Today’s Tasks
 
-Recent Items on Homepage
+HC2: Recent Items on Homepage
     [Documentation]                 Go to homepage and validate 'Recent Items' component is displayed
     [tags]                          W-037575   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                      Home                    Homepage
     Verify Component On HomePage    Recent Items
 
-Add fields to recent sessions field_set
+HC3: Add fields to recent sessions field_set
     [Documentation]                 Add fields to Recent Sessions fieldset and validate on recent sessions component
     [tags]                          T-3842208   perm:admin   perm:manage   feature:Homepage
     Run task                                add_fields_to_field_set

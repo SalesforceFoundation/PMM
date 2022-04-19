@@ -29,7 +29,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-View Perm Test for Service Session
+VSS1: View Perm Test for Service Session
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Service Participant (View Perm Set) 
      [tags]                           unstable    perm:view    feature:Service Session

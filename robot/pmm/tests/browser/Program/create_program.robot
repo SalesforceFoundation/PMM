@@ -28,7 +28,7 @@ Setup Test Data
 
 *** Test Cases ***
 
-Create a Program via UI
+CP1: Create a Program via UI
     [Documentation]                        This test creates Program and verifies that the Program record
     ...                                    has all the values from the form
     [tags]                                 perm:admin   perm:manage         feature:Program
@@ -51,7 +51,7 @@ Create a Program via UI
     Verify Page Contains Related List      Program Cohorts
     Verify Page Contains Related List      Files
 
-Verify Programs listview
+CP2: Verify Programs list view
     [Documentation]                        This test opens the programs listview and verifies that it contains 
     ...                                    the program name and short summary fields
     [tags]                                 W-9056626    perm:admin   perm:manage   perm:deliver   perm:view   feature:Program
@@ -59,7 +59,7 @@ Verify Programs listview
     Page Should Contain                    Program Name
     Page Should Contain                    Short Summary
 
-Date validation on new program dialog
+CP3: Date validation on new program dialog
     [Documentation]                        This test opens the new program dialog and enters a end date earlier than start date
     ...                                    and verifies that an error message is displayed
     [tags]                                 W-041962    perm:admin   perm:manage    feature:Program

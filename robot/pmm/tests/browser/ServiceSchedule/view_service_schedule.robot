@@ -27,7 +27,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-View and Deliver Perm Test for Service Schedule
+VSS1: View and Deliver Perm Test for Service Schedule
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Service Schedule(View and Deliver Perm Set)   
      [tags]                           unstable    perm:view    perm:deliver      feature:ServiceSchedule

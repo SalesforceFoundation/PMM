@@ -22,7 +22,7 @@ Setup Test Data
     Set suite variable      ${program_cohort}
 
 *** Test Cases ***
-View and Deliver Perm Test for Program Cohort
+VPPC1: View and Deliver Perm Test for Program Cohort
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Program Cohort (View and Deliver Perm Set) 
      [tags]                           unstable    perm:view    perm:deliver      feature:Program Cohort

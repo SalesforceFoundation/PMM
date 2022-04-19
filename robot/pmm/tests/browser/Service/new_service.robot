@@ -27,7 +27,7 @@ Setup Test Data
     Set suite variable          ${program}
 
 *** Test Cases ***
-Create Service from top nav
+NS1: Create Service from top nav
     [Documentation]                        This test creates Service record and verifies that the Service record
     ...                                    has all the values from the form
     [tags]                                  perm:admin   perm:manage    feature:Service
@@ -41,7 +41,7 @@ Create Service from top nav
      Populate Lightning Fields              Status=Active
      Click Dialog button                    Save
      Wait Until Modal Is Closed
-     verify details                         Program            contains          ${program}[Name]
+     verify lookup details                  Program            contains          ${program}[Name]
      verify details                         Service Name       contains          ${service_name}
      verify page contains related list      Service Deliveries
      Verify Page Contains Related List      Service Schedules

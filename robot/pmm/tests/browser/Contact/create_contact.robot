@@ -23,7 +23,7 @@ Setup Test Data
     Set suite variable      ${description}
 
 *** Test Cases ***
-Create a Contact 
+CC1: Create a Contact 
     [Documentation]                        This test creates a Contact and verifies the details of the contact
     [tags]                                 perm:admin   perm:manage      perm:deliver    perm:view    feature:Contact
     Go To Page                             Listing                              Contact

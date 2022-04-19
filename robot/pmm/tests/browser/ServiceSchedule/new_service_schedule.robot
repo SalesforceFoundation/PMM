@@ -43,7 +43,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Create a New Service Schedule
+NSS1: Create a New Service Schedule
     [Documentation]                        Navigates to service schedule listing page, clicks 'New' on the listing page and
     ...                                    creates a new record using the wizard,On Screen 3 validates the new field added to the fieldset
     ...                                    and details on service schedule record once saved

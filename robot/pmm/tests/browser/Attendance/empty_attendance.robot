@@ -28,7 +28,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Validate Empty Attendance State
+EA1: Validate Empty Attendance State
     [Documentation]                 This test confirms that the service session empty state message shows in track attendance
     [tags]                          W-8607484   perm:admin   perm:manage    perm:deliver     perm:view    feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]

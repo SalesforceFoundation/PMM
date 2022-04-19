@@ -38,7 +38,7 @@ Setup Test Data
     Set suite variable          ${quantity}
 
 *** Test Cases ***
-Create a new service delivery on service using quick action
+QAS1: Create a new service delivery on service using quick action
      [Documentation]                This test loads the service record, clicks on the new service delivery quick action and creates
      ...                            new service delivery record.
      [tags]                         W-042516      perm:admin   perm:manage    perm:deliver    feature:Service Delivery
@@ -56,7 +56,7 @@ Create a new service delivery on service using quick action
      Verify Details                 Service Delivery Name      contains     ${contact}[FirstName] ${contact}[LastName] ${today}: ${service}[Name]
      Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
 
-Validate service and program engagement lookup to same program
+QAS2: Validate service and program engagement lookup to same program
      [Documentation]                This test loads the program engagement record, clicks on the new service delivery quick action and
      ...                            validates an error message is displayed when service and program engagement do not lookup to the same program
      [tags]                         W-042516      perm:admin   perm:manage    perm:deliver   feature:Service Delivery

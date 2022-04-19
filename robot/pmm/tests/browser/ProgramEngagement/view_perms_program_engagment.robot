@@ -24,7 +24,7 @@ Setup Test Data
     Set suite variable          ${program_engagement}
 
 *** Test Cases ***
-View Perm Test for Program Engagement
+VPPE1: View Perm Test for Program Engagement
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Program Engagement (View Perm Set) 
      [tags]                           unstable    perm:view    feature:Program Engagement

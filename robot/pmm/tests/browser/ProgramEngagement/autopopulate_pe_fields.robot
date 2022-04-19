@@ -42,7 +42,7 @@ Setup Test Data
     Set suite variable             ${program3}
 
 *** Test Cases ***
-Autopopulate fields when stage is set to Applied
+APEF1: Autopopulate fields when stage is set to Applied
      [Documentation]                         Autopopulates application date and PE name with anonymous when the stage is set as 
      ...                                     applied on new program engagment dialog
      [tags]                                  W-037569    perm:admin   perm:manage    perm:deliver   feature:Program Engagement
@@ -58,7 +58,7 @@ Autopopulate fields when stage is set to Applied
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
-Autopopulate fields when stage is set to Completed
+APEF2: Autopopulate fields when stage is set to Completed
      [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
      ...                                     completed on new program engagment dialog
      [tags]                                  W-037569       perm:admin   perm:manage     perm:deliver      feature:Program Engagement
@@ -74,7 +74,7 @@ Autopopulate fields when stage is set to Completed
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
-Autopopulate fields when stage is set to Withdrawn
+APEF3: Autopopulate fields when stage is set to Withdrawn
      [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
      ...                                     withdrawn on new program engagment dialog
      [tags]                                  W-037569     perm:admin   perm:manage     perm:deliver   feature:Program Engagement
@@ -90,7 +90,7 @@ Autopopulate fields when stage is set to Withdrawn
      Verify Details                          Program Engagement Name          contains               Anonymous ${created_date}: ${program}[Name]           
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
-Autopopulate fields when stage is set to Active with Program start date is later than today
+APEF4: Autopopulate fields when stage is set to Active and Program start date is later than today
      [Documentation]                         Validates that start date is not set to today when stage is 'Active' and Program
      ...                                     start date is later than 'Today'
      [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement
@@ -105,7 +105,7 @@ Autopopulate fields when stage is set to Active with Program start date is later
      Verify Details                          Start Date                      does not contain               ${today}
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
-Autopopulate fields when stage is set to Active with Program start date is today
+APEF5: Autopopulate fields when stage is set to Active and Program start date is today
      [Documentation]                         Validates that start date is set to today when stage is 'Active' and Program
      ...                                     start date is than 'Today'
      [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement
@@ -120,7 +120,7 @@ Autopopulate fields when stage is set to Active with Program start date is today
      Verify Details                          Start Date                      contains               ${today}
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
 
-Autopopulate fields when stage is set to Applied with Program start date is earlier than today
+APEF6: Autopopulate fields when stage is set to Applied with Program start date is earlier than today
      [Documentation]                         Validates that application date is not set to today when stage is 'Active' and Program
      ...                                     start date is earlier than 'Today'
      [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement

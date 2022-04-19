@@ -38,7 +38,7 @@ Setup Test Data
     Set suite variable      ${service}
 
 *** Test Cases ***
-Create program engagement from BSDT
+APEOBSDT1: Create program engagement from BSDT
     [Documentation]                         This test adds service deliveries on bulk service delivery by creating
     ...                                     a new PE on bsdt page
     [tags]                                  W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery

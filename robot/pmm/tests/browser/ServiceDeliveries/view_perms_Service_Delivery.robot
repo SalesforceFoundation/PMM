@@ -28,7 +28,7 @@ Setup Test Data
     Set suite variable          ${service_delivery}
 
 *** Test Cases ***
-View Perm Test for Service Delivery
+VPSD1: View Perm Test for Service Delivery
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Service Delivery (View Perm Set) 
      [tags]                           unstable    perm:view    feature:Service Delivery

@@ -36,7 +36,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Add Service Participant quick action
+SSL1: Add Service Participant quick action
     [Documentation]                        Navigates to service schedule details page, creates two PE using API and clicks on Add service
     ...                                    Participants quick action, add more participants and Save. Validates that the contact name is 
     ...                                    displayed on the service schedule page
@@ -60,7 +60,7 @@ Add Service Participant quick action
     Page Should Contain                     ${contact2}[Name] - ${service_schedule}[Name]
     Page Should Contain                     ${contact3}[Name] - ${service_schedule}[Name]
 
-Verify Upcoming Service Schedule listview
+SSL2: Verify Upcoming Service Schedule listview
     [Documentation]                        This test opens the upcoming service schedule listview and verifies that it contains 
     ...                                    service, participant capacity and first session start fields
     [tags]                                 W-9056626   perm:admin   perm:manage   perm:deliver   perm:view   feature:Program

@@ -36,7 +36,7 @@ Setup Test Data
     Set suite variable          ${today}
 
 *** Test Cases ***
-Add contact to program quick action
+QA1: Add contact to program quick action
      [Documentation]                  Add a contact to a program using quick action and verify the record
      [tags]                           W-037575    perm:admin   perm:manage      perm:deliver    feature:Program Engagement
      Go To Page                       Details                                 Contact              object_id=${contact}[Id]
@@ -55,7 +55,7 @@ Add contact to program quick action
      Save Current Record ID For Deletion     ${ns}ProgramCohort__c
      Save Current Record ID For Deletion     ${ns}ProgramEngagement__c
      
-Add service delivery on a contact
+QA2: Add service delivery on a contact
      [Documentation]                  Add a service delivery on a contact and verify the record
      [tags]                           W-037575    perm:admin   perm:manage     perm:deliver    feature:Service Delivery
      Go To Page                       Details                                 Contact                  object_id=${contact}[Id]

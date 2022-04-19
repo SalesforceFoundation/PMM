@@ -35,7 +35,7 @@ Setup Test Data
 
 
 *** Test Cases ***
-Create a Service Delivery via UI
+NSD1: Create a Service Delivery via UI
     [Documentation]                        This test creates Service Delivery record and verifies that the Service Delivery record
     ...                                    has all the values from the form
     [tags]                                 perm:admin   perm:manage     perm:deliver     feature:Service Delivery
@@ -51,14 +51,14 @@ Create a Service Delivery via UI
     Click Dialog Button                    Save
     Wait Until Modal Is Closed
     Current Page Should Be                 Details                                 ServiceDelivery__c
-    Verify Details                         Service                                 contains             ${service}[Name]
-    Verify Details                         Program Engagement                      contains             ${program_engagement}[Name]
+    Verify Lookup Details                  Service                                 contains             ${service}[Name]
+    Verify Lookup Details                  Program Engagement                      contains             ${program_engagement}[Name]
     Verify Details                         Delivery Date                           contains             ${today}
     Page Should Not Contain                ${service_delivery_name}
     Verify Page Contains Related List      Files
     Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
 
-Create a Service Delivery via UI with Auto Name Override
+NSD2: Create a Service Delivery via UI with Auto Name Override
     [Documentation]                        This test creates Service Delivery record with auto name override selected and verifies
     ...                                    user entered name is saved as the service delivery name
     [tags]                                 perm:admin   perm:manage    perm:deliver         feature:Service Delivery
@@ -80,7 +80,7 @@ Create a Service Delivery via UI with Auto Name Override
     Verify Page Contains Related List      Files
     Save Current Record ID For Deletion    ${ns}ServiceDelivery__c
 
-Validate contact and account lookup to the same household
+NSD3: Validate contact and account lookup to the same household
     [Documentation]                        This test loads the new service delivery dialog and validates that an error message is displayed
     ...                                    when contact and account do not lookup to the same household
     [tags]                                 W-042516   perm:admin   perm:manage    perm:deliver    feature:Service Delivery

@@ -155,6 +155,27 @@ class pmm(object):
         'does not contain' then the specified value should not be present in the field
         """
         locator = pmm_lex_locators["confirm"]["details"].format(field)
+
+        actual_value = self.selenium.get_webelement(locator).text
+        print(f"actual value is {actual_value}")
+        print(f"value is {value}")
+        if status == "contains":
+            assert (
+                value == actual_value
+            ), f"Expected value to be {value} but found {actual_value}"
+        elif status == "does not contain":
+            assert (
+                value != actual_value
+            ), f"Expected value {value} should not match {actual_value}"
+        else:
+            raise Exception("Valid status not entered")
+
+    def verify_lookup_details(self, field, status, value):
+        """If status is 'contains' then the specified value should be present in the field
+        'does not contain' then the specified value should not be present in the field
+        """
+        locator = pmm_lex_locators["confirm"]["lookup_details"].format(field)
+
         actual_value = self.selenium.get_webelement(locator).text
         print(f"actual value is {actual_value}")
         print(f"value is {value}")

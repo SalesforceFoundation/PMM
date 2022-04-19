@@ -45,7 +45,7 @@ Setup Test Data
     Set suite variable              ${service_participant3}
 
 *** Test Cases ***
-Update attendance when service session status is Pending
+UA1: Update attendance when service session status is Pending
     [Documentation]                 This test updates attendance for a service session record with Pending Status
     [tags]                          W-8607484   perm:admin   perm:manage    feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]         
@@ -64,7 +64,7 @@ Update attendance when service session status is Pending
     Page Should Contain Text        ${contact2}[Name]
     Page Should Contain Text        ${contact3}[Name] 
     
-Update attendance when service session status is Complete
+UA2: Update attendance when service session status is Complete
     [Documentation]                 This test updates attendance for a service session record with Complete Status
     [tags]                          W-8611541    perm:admin   perm:manage     feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session2}[Id]
@@ -82,7 +82,7 @@ Update attendance when service session status is Complete
     Page Should Contain Text        ${contact2}[Name]
     Page Should Contain Text        ${contact3}[Name]
 
-Validate fields added to AttendanceServiceDeliveries Fieldset
+UA3: Validate fields added to AttendanceServiceDeliveries Fieldset
     [Documentation]                 This test updates attendance for a service session record with Complete Status
     [tags]                          W-9505038    perm:admin   feature:Attendance
     Run task                            add_fields_to_field_set

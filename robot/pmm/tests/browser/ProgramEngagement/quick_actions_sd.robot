@@ -33,7 +33,7 @@ Setup Test Data
     Set suite variable          ${quantity}
 
 *** Test Cases ***
-Create a new service delivery using quick action
+QASD1: Create a new service delivery using quick action on PE record
      [Documentation]                This test loads the program engagement record, clicks on the new service delivery quick action and creates
      ...                            new service delivery record.
      [tags]                         W-037572        perm:admin   perm:manage       perm:deliver    feature:Service Delivery

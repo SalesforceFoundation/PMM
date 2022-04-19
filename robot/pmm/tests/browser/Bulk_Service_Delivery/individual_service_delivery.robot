@@ -53,7 +53,7 @@ Setup Test Data
 
 *** Test Cases ***
 
-Add service delivery on bulk service delivery
+ISD1: Add service delivery on bulk service delivery
     [Documentation]             This test adds two service deliveries on bulk service delivery and 
     ...                         navigates to service delivery listview and verifies that the service delivery 
     ...                         records are displayed
@@ -79,7 +79,7 @@ Add service delivery on bulk service delivery
     Verify Details              Service Delivery Name           contains              ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
     Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
 
-Verify error message when there are no services associated with the program
+ISD2: Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no
     ...                         services associated with the program.
     [tags]                      W-040316     perm:admin   perm:manage     perm:deliver   feature:Service Delivery
@@ -89,7 +89,7 @@ Verify error message when there are no services associated with the program
     Populate Bsdt Dropdown      1           Program Engagement      ${program_engagement3}[Name]
     Verify Error Message        No services found, choose another program engagement.
 
-Delete service delivery on bsdt
+ISD3: Delete service delivery on bsdt
     [Documentation]             This test creates a service delivery on BSDT and then deletes it, verifies
     ...                         that a warning dialog is displayed when deleted.
     [tags]                      W-042916     perm:admin   perm:manage   feature:Service Delivery
@@ -109,7 +109,7 @@ Delete service delivery on bsdt
     Page Should Not Contain     ${program_engagement1}[Name]
     Page Should Not Contain     ${service1}[Name]
 
-Edit Service delivery on BSDT
+ISD4: Edit Service delivery on BSDT
     [Documentation]             Edits a service delivery row and validates that 'Edited' message is displayed
     ...                         and service delivery record is created when saved
     [tags]                      W-9219421   perm:admin   perm:manage   perm:deliver   feature:Service Delivery

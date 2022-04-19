@@ -22,7 +22,7 @@ Setup Test Data
     Set suite variable          ${service}
 
 *** Test Cases ***
-View and Deliver Perm Test for Service
+VPS1: View and Deliver Perm Test for Service
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Service (View and Deliver Perm Set)   
      [tags]                           unstable    perm:view    perm:deliver      feature:Service

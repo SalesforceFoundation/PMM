@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label>Informações do cronograma de serviços</label>
+        <name>ServiceScheduleInformation</name>
+    </fieldSets>
+    <layouts>
+        <layout>Service Schedule Layout</layout>
+        <sections>
+            <label>Data e hora</label>
+            <section>Date and Time</section>
+        </sections>
+        <sections>
+            <label>Links personalizados</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nome do cronograma de serviços</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nome do cronograma de serviços</label>
+    </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Programação de serviço</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Programações de serviço</value>
+    </caseValues>
+</CustomObjectTranslation>

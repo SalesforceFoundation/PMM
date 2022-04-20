@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <errorMessage>A data de término deve estar dentro das datas de início e término do programa</errorMessage>
+        <name>END_DATE_PROGRAM_DATES</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>A data de início deve ser anterior à data de término</errorMessage>
+        <name>START_DATE_BEFORE_END_DATE</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>A data de início deve estar dentro do intervalo de datas relacionadas de início e término do programa.</errorMessage>
+        <name>START_DATE_PROGRAM_DATES</name>
+    </validationRules>
+    <layouts>
+        <layout>Program Cohort Layout</layout>
+        <sections>
+            <label>Informações adicionais</label>
+            <section>Additional Information</section>
+        </sections>
+        <sections>
+            <label>Links personalizados</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Coorte do programa</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Coorte do programa</label>
+    </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Coorte de programa</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Coortes de programa</value>
+    </caseValues>
+</CustomObjectTranslation>

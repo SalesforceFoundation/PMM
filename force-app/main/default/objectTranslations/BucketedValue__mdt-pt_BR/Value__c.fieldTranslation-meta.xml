@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Value__c</name>
+    <help>O valor exato que deve ser agrupado. Se o campo for uma lista de opções, este deve ser o valor de API do valor da lista de opções.</help>
+    <label>Valor</label>
+</CustomFieldTranslation>

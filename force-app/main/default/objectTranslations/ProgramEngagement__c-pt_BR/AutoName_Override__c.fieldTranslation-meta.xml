@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>AutoName_Override__c</name>
+    <help>Quando isso for marcado, o nome do Engajamento em programas pode ser definido manualmente. O nome não será definido automaticamente.</help>
+    <label>Substituição automática de nomes</label>
+</CustomFieldTranslation>

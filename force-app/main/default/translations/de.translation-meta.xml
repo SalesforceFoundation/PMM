@@ -186,7 +186,7 @@
     </customLabels>
     <customLabels>
         <name>Dont_Track_Attendance</name>
-        <label>Teilnahme für diesen Teilnehmer nicht nachverfolgen</label>
+        <label>Für diese Person keine erbrachte Teilnahmeleistung erstellen</label>
     </customLabels>
     <customLabels>
         <name>Enabled</name>
@@ -387,6 +387,10 @@
     <customLabels>
         <name>Save_for_Later</name>
         <label>Für später speichern</label>
+    </customLabels>
+    <customLabels>
+        <name>Sort_By</name>
+        <label>Sortieren nach</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>

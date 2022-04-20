@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Quantity__c</name>
+    <help>Um campo numérico de 2 decimais para Quantidade de uma Prestação de serviços, expresso através da Unidade de medida no Serviço. Por exemplo, em 30 minutos de tutoria onde a Unidade de medida é horas, a quantidade é 0.50.</help>
+    <label>Quantidade</label>
+</CustomFieldTranslation>

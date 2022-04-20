@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label>Entregas de servicio de asistencia</label>
+        <name>Attendance_Service_Deliveries</name>
+    </fieldSets>
+    <fieldSets>
+        <label>Entregas de servicio masivas</label>
+        <name>Bulk_Service_Deliveries</name>
+    </fieldSets>
     <validationRules>
         <errorMessage>Seleccione una cuenta que coincida con el contacto relacionado.</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>

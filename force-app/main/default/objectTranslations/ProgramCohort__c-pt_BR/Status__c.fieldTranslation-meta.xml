@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Status__c</name>
+    <help>O status da Coorte do programa. Os valores são determinados pelo seu administrador.</help>
+    <label>Status</label>
+    <picklistValues>
+        <masterLabel>Planned</masterLabel>
+        <translation>Planejado</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Active</masterLabel>
+        <translation>Ativo</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation>Concluído</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Canceled</masterLabel>
+        <translation>Cancelado</translation>
+    </picklistValues>
+</CustomFieldTranslation>

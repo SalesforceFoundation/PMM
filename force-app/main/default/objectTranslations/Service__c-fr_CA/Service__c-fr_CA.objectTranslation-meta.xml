@@ -12,4 +12,14 @@
         <name>Name</name>
         <label>Nom du service</label>
     </standardFields>
+    <gender>Masculine</gender>
+    <startsWith>Consonant</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Service</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Services</value>
+    </caseValues>
 </CustomObjectTranslation>

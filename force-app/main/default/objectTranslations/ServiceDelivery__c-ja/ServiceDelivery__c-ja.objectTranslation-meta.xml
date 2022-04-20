@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label>出席サービス提供</label>
+        <name>Attendance_Service_Deliveries</name>
+    </fieldSets>
+    <fieldSets>
+        <label>一括サービス提供</label>
+        <name>Bulk_Service_Deliveries</name>
+    </fieldSets>
     <validationRules>
         <errorMessage>関連する取引先責任者に一致する取引先を選択してください。</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>

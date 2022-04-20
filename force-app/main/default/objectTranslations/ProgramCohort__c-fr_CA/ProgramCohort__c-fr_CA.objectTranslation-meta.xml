@@ -28,4 +28,14 @@
         <name>Name</name>
         <label>Cohorte de programmes</label>
     </standardFields>
+    <gender>Feminine</gender>
+    <startsWith>Consonant</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Cohorte de programmes</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Cohortes de programmes</value>
+    </caseValues>
 </CustomObjectTranslation>

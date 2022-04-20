@@ -186,7 +186,7 @@
     </customLabels>
     <customLabels>
         <name>Dont_Track_Attendance</name>
-        <label>Don&apos;t track attendance for this participant</label>
+        <label>Don&apos;t create an attendance service delivery for this person</label>
     </customLabels>
     <customLabels>
         <name>Enabled</name>
@@ -387,6 +387,10 @@
     <customLabels>
         <name>Save_for_Later</name>
         <label>Save for Later</label>
+    </customLabels>
+    <customLabels>
+        <name>Sort_By</name>
+        <label>Sort By</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>

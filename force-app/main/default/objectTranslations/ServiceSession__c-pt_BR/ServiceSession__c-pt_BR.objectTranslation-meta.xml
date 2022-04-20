@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label>RecentSessionsView</label>
+        <name>RecentSessionsView</name>
+    </fieldSets>
+    <layouts>
+        <layout>Service Session Layout</layout>
+        <sections>
+            <label>Links personalizados</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Nome da sessão de serviço</nameFieldLabel>
+    <standardFields>
+        <name>Name</name>
+        <label>Nome da sessão de serviço</label>
+    </standardFields>
+    <gender>Feminine</gender>
+    <caseValues>
+        <plural>false</plural>
+        <value>Sessão de serviço</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Sessões de serviço</value>
+    </caseValues>
+</CustomObjectTranslation>

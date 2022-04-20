@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>StartDate__c</name>
+    <help>Se a fase de Engajamento em programas for Inscrito ou Ativo, a Data de início será definida como hoje por padrão, se deixada em branco.</help>
+    <label>Data de início</label>
+</CustomFieldTranslation>

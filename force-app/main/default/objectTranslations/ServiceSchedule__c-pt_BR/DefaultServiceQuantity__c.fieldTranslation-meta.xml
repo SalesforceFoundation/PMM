@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>DefaultServiceQuantity__c</name>
+    <help>A quantidade de Serviço padrão refletida em uma Prestação de serviços ao acompanhar o atendimento.</help>
+    <label>Quantidade de serviço padrão</label>
+</CustomFieldTranslation>

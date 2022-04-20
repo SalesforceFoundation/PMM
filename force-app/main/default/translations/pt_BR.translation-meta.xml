@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customLabels>
+        <name>accordionSection_ToggleInstructionsWhenOpen</name>
+        <label>Clique para ocultar a seção. Esta seção está aberta.</label>
+    </customLabels>
+    <customLabels>
+        <name>accordionSection_ToggleInstructionsWhenClosed</name>
+        <label>Clique para mostrar a seção. Esta seção não está aberta.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Entry</name>
+        <label>Adicionar entrada</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Record</name>
+        <label>Adicionar {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Service_Participants_Success</name>
+        <label>Adicionados {0} participantes do serviço.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Service_Delivery</name>
+        <label>Adicionar prestação de serviço</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_to_Record</name>
+        <label>Adicionar a(o) {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Adding_More_Service_Session_Warning</name>
+        <label>Você está adicionando mais de {0} sessões. Isso vai levar algum tempo extra para ser concluído.</label>
+    </customLabels>
+    <customLabels>
+        <name>Anonymous</name>
+        <label>Anônimo</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Selected_Contacts</name>
+        <label>Contatos selecionados.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Title</name>
+        <label>Criar prestações de serviço para um grupo</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Description</name>
+        <label>Insira prestações de serviço para vários Contatos. Por exemplo, uma reunião informal em uma oficina.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Group_Option_Button</name>
+        <label>Criar por grupo</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Title</name>
+        <label>Criar prestações de serviço para um indivíduo</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Description</name>
+        <label>Insira prestações de serviço para um único Contato.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Single_Option_Button</name>
+        <label>Criar por indivíduo</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Service</name>
+        <label>Valores padrão de prestação de serviços </label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Select_Contacts</name>
+        <label>Seleção de contatos</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Review</name>
+        <label>Revisão</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Warning_No_Contacts</name>
+        <label>Selecione pelo menos um Contato para continuar.</label>
+    </customLabels>
+    <customLabels>
+        <name>Cant_Find_Participant</name>
+        <label>Não consegue encontrar o participante correto?</label>
+    </customLabels>
+    <customLabels>
+        <name>Cant_Find_Contact</name>
+        <label>Não consegue encontrar o Contato correto?</label>
+    </customLabels>
+    <customLabels>
+        <name>TrackAttendance</name>
+        <label>Acompanhar atendimento</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_Service_Delivery_Success</name>
+        <label>{0} registros de Prestação de serviços foram salvos.</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_Service_Delivery_No_Updates</name>
+        <label>Não há registros de Prestação de serviços para atualizar.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Participants_Header</name>
+        <label>Nenhum participante até o momento</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Participants_Message</name>
+        <label>Depois que os participantes forem adicionados a este Cronograma de serviços, acompanhe a atendimento deles aqui.</label>
+    </customLabels>
+    <customLabels>
+        <name>Incorrect_Tab</name>
+        <label>Esta não é a guia que você precisa.</label>
+    </customLabels>
+    <customLabels>
+        <name>Attendance_Tab_Message</name>
+        <label>Esta guia é usada apenas para imprimir o atendimento a partir de uma página de Sessão de serviço.</label>
+    </customLabels>
+    <customLabels>
+        <name>Back</name>
+        <label>Voltar</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel</name>
+        <label>Cancelar</label>
+    </customLabels>
+    <customLabels>
+        <name>Cancel_and_Back</name>
+        <label>Cancelar e voltar</label>
+    </customLabels>
+    <customLabels>
+        <name>Clicking_Back_Button_In_Modal_Warning</name>
+        <label>As alterações feitas nesta página não serão salvas.</label>
+    </customLabels>
+    <customLabels>
+        <name>Clone_Service_Participant</name>
+        <label>Clonar com Participantes do serviço</label>
+    </customLabels>
+    <customLabels>
+        <name>Close</name>
+        <label>Fechar</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete</name>
+        <label>Confirmar exclusão?</label>
+    </customLabels>
+    <customLabels>
+        <name>Confirm_Delete_Row</name>
+        <label>A exclusão desta linha remove esta prestação de serviços.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Future_Sessions</name>
+        <label>Excluir sessões de serviço futuras</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_Success</name>
+        <label>{0} Sessões de serviço excluídas com sucesso.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_X_Future_Sessions</name>
+        <label>Isso excluirá {0} registros futuros de Sessão de serviço.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_After</name>
+        <label>Excluir todas as Sessões de serviço após esta data:</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Sessions_Invalid_Date</name>
+        <label>A data deve ser hoje ou depois.</label>
+    </customLabels>
+    <customLabels>
+        <name>Creating_Service_Session_Warning</name>
+        <label>Só podemos criar {0} sessões para um Cronograma de serviços. Apenas as sessões listadas aqui serão criadas.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete</name>
+        <label>Excluir</label>
+    </customLabels>
+    <customLabels>
+        <name>Disabled</name>
+        <label>Desabilitado</label>
+    </customLabels>
+    <customLabels>
+        <name>Done</name>
+        <label>Pronto</label>
+    </customLabels>
+    <customLabels>
+        <name>Dont_Track_Attendance</name>
+        <label>Não criar uma prestação de serviços de atendimento para essa pessoa</label>
+    </customLabels>
+    <customLabels>
+        <name>Enabled</name>
+        <label>Habilitado</label>
+    </customLabels>
+    <customLabels>
+        <name>End_Date_After_Start_Date</name>
+        <label>{0} deve estar antes de {1}</label>
+    </customLabels>
+    <customLabels>
+        <name>Error</name>
+        <label>Erro</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Record</name>
+        <label>Filtrar por {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Finish</name>
+        <label>Finalizar</label>
+    </customLabels>
+    <customLabels>
+        <name>Go_Back</name>
+        <label>Voltar?</label>
+    </customLabels>
+    <customLabels>
+        <name>Insert_Operation_Exception</name>
+        <label>Você não pode adicionar este registro. Peça ajuda ao seu administrador.</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Operation_Exception</name>
+        <label>Você não pode excluir este registro. Peça ajuda ao seu administrador.</label>
+    </customLabels>
+    <customLabels>
+        <name>Time_Frame</name>
+        <label>Cronograma</label>
+    </customLabels>
+    <customLabels>
+        <name>Last_Week</name>
+        <label>Semana passada</label>
+    </customLabels>
+    <customLabels>
+        <name>List_View</name>
+        <label>Modo de exibição de lista</label>
+    </customLabels>
+    <customLabels>
+        <name>List_Views</name>
+        <label>Modos de exibição de lista</label>
+    </customLabels>
+    <customLabels>
+        <name>Loading</name>
+        <label>Carregando</label>
+    </customLabels>
+    <customLabels>
+        <name>Last_Day_Of_Month</name>
+        <label>no último dia</label>
+    </customLabels>
+    <customLabels>
+        <name>MissingSObjectType</name>
+        <label>Sua consulta deve incluir um objeto ou relacionamento do tipo filho.</label>
+    </customLabels>
+    <customLabels>
+        <name>Monthly_On_Day</name>
+        <label>no dia {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Monthly_On_The</name>
+        <label>Mensalmente na {0} {1}</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Program_Engagement</name>
+        <label>Novo engajamento de programa</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Contact</name>
+        <label>Novo contato</label>
+    </customLabels>
+    <customLabels>
+        <name>New_Service_Schedule</name>
+        <label>Novo cronograma de serviços</label>
+    </customLabels>
+    <customLabels>
+        <name>Next</name>
+        <label>Próximo</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Permission_Message</name>
+        <label>Você não tem acesso a essa informação. Peça ajuda ao seu administrador.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_On_BSDT</name>
+        <label>O campo Serviço deve ser incluído no campo Prestação de serviços em massa definido para salvar registros. Peça ajuda ao seu administrador.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Participants_Created_Warning</name>
+        <label>Nenhum participante foi selecionado, portanto, nenhum Participante do serviço será criado.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Service_Sessions_Created_Warning</name>
+        <label>Nenhuma sessão foi adicionada, então nenhuma Sessão de serviço será criada.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Services_For_Program_Engagement</name>
+        <label>Nenhum serviço encontrado. Escolha outro engajamento em programa.</label>
+    </customLabels>
+    <customLabels>
+        <name>None</name>
+        <label>Nenhuma</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Found</name>
+        <label>Não foram encontrados registros.</label>
+    </customLabels>
+    <customLabels>
+        <name>NoFieldSetFound</name>
+        <label>O conjunto de campos {0} no objeto {1} não existe. Verifique o nome do conjunto de campos e tente novamente.</label>
+    </customLabels>
+    <customLabels>
+        <name>No_Records_Selected</name>
+        <label>Nenhum registro selecionado</label>
+    </customLabels>
+    <customLabels>
+        <name>Owner_Field</name>
+        <label>Proprietário</label>
+    </customLabels>
+    <customLabels>
+        <name>Participant_Capacity_Warning</name>
+        <label>Apenas um aviso: há mais participantes do que a Capacidade de participantes que você selecionou.</label>
+    </customLabels>
+    <customLabels>
+        <name>Previous</name>
+        <label>Anterior</label>
+    </customLabels>
+    <customLabels>
+        <name>Print</name>
+        <label>Imprimir</label>
+    </customLabels>
+    <customLabels>
+        <name>Printable_View</name>
+        <label>Modo de exibição de impressão</label>
+    </customLabels>
+    <customLabels>
+        <name>Quantity</name>
+        <label>Quantidade</label>
+    </customLabels>
+    <customLabels>
+        <name>RecentSessions</name>
+        <label>Sessões recentes</label>
+    </customLabels>
+    <customLabels>
+        <name>Record_Deleted</name>
+        <label>Registro excluído.</label>
+    </customLabels>
+    <customLabels>
+        <name>Remove</name>
+        <label>Remover</label>
+    </customLabels>
+    <customLabels>
+        <name>Required</name>
+        <label>Obrigatório</label>
+    </customLabels>
+    <customLabels>
+        <name>Review_Records</name>
+        <label>Revisão {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Rows_With_Errors</name>
+        <label>Existem linhas da Prestação de serviços com erros.</label>
+    </customLabels>
+    <customLabels>
+        <name>Update</name>
+        <label>Atualizar</label>
+    </customLabels>
+    <customLabels>
+        <name>Edited</name>
+        <label>Editado</label>
+    </customLabels>
+    <customLabels>
+        <name>Save</name>
+        <label>Salvar</label>
+    </customLabels>
+    <customLabels>
+        <name>SaveMessage</name>
+        <label>Novo registro de Engajamento em programa criado.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add</name>
+        <label>Adicionar</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_All</name>
+        <label>Adicionar todos</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_New</name>
+        <label>Salvar e novo</label>
+    </customLabels>
+    <customLabels>
+        <name>Save_for_Later</name>
+        <label>Salvar para mais tarde</label>
+    </customLabels>
+    <customLabels>
+        <name>Sort_By</name>
+        <label>Classificar por</label>
+    </customLabels>
+    <customLabels>
+        <name>Saved</name>
+        <label>Salvo</label>
+    </customLabels>
+    <customLabels>
+        <name>Saving</name>
+        <label>Salvando</label>
+    </customLabels>
+    <customLabels>
+        <name>Search_this_list</name>
+        <label>Pesquisar nesta lista</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Create_Service_Session_Warning</name>
+        <label>Criar sessões de serviço não foi selecionado, portanto, nenhum registro será criado automaticamente. Clique em Adicionar sessão de serviço para adicionar manualmente registros de Sessão de serviço.</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Program_Engagement</name>
+        <label>Selecionar engajamento em programas</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service</name>
+        <label>Selecionar serviço</label>
+    </customLabels>
+    <customLabels>
+        <name>Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning</name>
+        <label>Selecione uma data de término para o Cronograma de serviços ou um número de Sessões de serviço.</label>
+    </customLabels>
+    <customLabels>
+        <name>SkipToStartLink</name>
+        <label>Pular para o início da lista</label>
+    </customLabels>
+    <customLabels>
+        <name>SkipToEndLink</name>
+        <label>Pular para o fim da lista</label>
+    </customLabels>
+    <customLabels>
+        <name>Day_Required_When_Weekly_Selected</name>
+        <label>Selecione pelo menos um dia da semana.</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Week</name>
+        <label>Toda semana</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Month</name>
+        <label>Todo mês</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Day</name>
+        <label>Todos os dias</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Year</name>
+        <label>Todo ano</label>
+    </customLabels>
+    <customLabels>
+        <name>Every_Custom</name>
+        <label>A cada</label>
+    </customLabels>
+    <customLabels>
+        <name>Weeks</name>
+        <label>Semanas</label>
+    </customLabels>
+    <customLabels>
+        <name>Week</name>
+        <label>Semana</label>
+    </customLabels>
+    <customLabels>
+        <name>Days</name>
+        <label>Dias</label>
+    </customLabels>
+    <customLabels>
+        <name>Day</name>
+        <label>Dia</label>
+    </customLabels>
+    <customLabels>
+        <name>List_View_Limit</name>
+        <label>Este modo de exibição de lista tem mais de 2.000 registros. Alguns registros podem não ser mostrados.</label>
+    </customLabels>
+    <customLabels>
+        <name>Months</name>
+        <label>Meses</label>
+    </customLabels>
+    <customLabels>
+        <name>Month</name>
+        <label>Mês</label>
+    </customLabels>
+    <customLabels>
+        <name>Pin_List_View</name>
+        <label>Fixar modo de exibição de lista </label>
+    </customLabels>
+    <customLabels>
+        <name>Pin_Title</name>
+        <label>Para desafixar, fixe outro modo de exibição de lista</label>
+    </customLabels>
+    <customLabels>
+        <name>Years</name>
+        <label>Anos</label>
+    </customLabels>
+    <customLabels>
+        <name>Selected_Records</name>
+        <label>Registros selecionados</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Deliveries</name>
+        <label>Adicionar prestações de serviço</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Deliveries_Added</name>
+        <label>Prestações de serviço adicionadas.</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Delivery_Contact_Without_Programs</name>
+        <label>Para salvar uma Prestação de serviços, primeiro inscreva este cliente em um Programa com Serviços ativos.</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Date_Time</name>
+        <label>Data e hora</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Information</name>
+        <label>Informações do cronograma de serviços</label>
+    </customLabels>
+    <customLabels>
+        <name>Session_Scheduled_Outside_Start_And_End_Date</name>
+        <label>Esta sessão seria agendada fora das datas de início e término do Cronograma de serviço ({0} a {1}).</label>
+    </customLabels>
+    <customLabels>
+        <name>Submit</name>
+        <label>Enviar</label>
+    </customLabels>
+    <customLabels>
+        <name>Success</name>
+        <label>Sucesso</label>
+    </customLabels>
+    <customLabels>
+        <name>TelemetryException</name>
+        <label>Não conseguimos coletar métricas de telemetria.</label>
+    </customLabels>
+    <customLabels>
+        <name>This_Week</name>
+        <label>Esta semana</label>
+    </customLabels>
+    <customLabels>
+        <name>Total_Sessions</name>
+        <label>Total de sessões</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Error</name>
+        <label>Erro</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_Unknown_Error</name>
+        <label>Erro desconhecido</label>
+    </customLabels>
+    <customLabels>
+        <name>Util_UnsupportedField</name>
+        <label>Você não tem acesso a este campo. Seu administrador do Salesforce pode ajudá-lo com isso.</label>
+    </customLabels>
+    <customLabels>
+        <name>New</name>
+        <label>Novo</label>
+    </customLabels>
+    <customLabels>
+        <name>UpsertOperationException</name>
+        <label>Você não pode adicionar ou atualizar este registro. Seu administrador do Salesforce pode ajudá-lo com isso.</label>
+    </customLabels>
+    <customLabels>
+        <name>Warning</name>
+        <label>Aviso</label>
+    </customLabels>
+    <reportTypes>
+        <name>Contacts_with_and_without_Program_Engagements</name>
+        <label>Contatos com e sem Engajamentos em programas</label>
+        <sections>
+            <label>Contatos</label>
+            <name>Contacts</name>
+        </sections>
+        <sections>
+            <label>Engajamentos em programas</label>
+            <name>Program Engagements</name>
+        </sections>
+    </reportTypes>
+    <customTabs>
+        <name>Attendance</name>
+        <label>Atendimento</label>
+    </customTabs>
+    <customTabs>
+        <name>Bulk_Service_Deliveries</name>
+        <label>Prestações de serviço em massa</label>
+    </customTabs>
+    <customApplications>
+        <name>Program_Management</name>
+        <label>Gerenciamento de programas</label>
+    </customApplications>
+    <quickActions>
+        <name>ProgramEngagement__c.Add_to_Program_Cohort</name>
+        <label>Adicionar à coorte do programa</label>
+    </quickActions>
+    <quickActions>
+        <name>Contact.AddContactToProgram</name>
+        <label>Adicionar contato ao programa</label>
+    </quickActions>
+    <quickActions>
+        <name>Program__c.AddContactToProgram</name>
+        <label>Adicionar contato ao programa</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Delete_Future_Sessions</name>
+        <label>Excluir sessões de serviço futuras</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Participants</name>
+        <label>Adicionar mais participantes</label>
+    </quickActions>
+</Translations>

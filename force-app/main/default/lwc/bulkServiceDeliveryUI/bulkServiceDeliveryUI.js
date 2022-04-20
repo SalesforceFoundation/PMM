@@ -92,7 +92,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     set defaultValues(value) {
         let serviceDelivery = this.serviceDeliveries[0];
         this._defaultValues = value;
-        console.log("defaultvlaues inside setter", JSON.stringify(this._defaultValues));
         Object.assign(serviceDelivery, this._defaultValues);
     }
 
@@ -102,12 +101,12 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this._nextIndex = 0;
         this._defaultValues = {};
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        // setTimeout(
-        //     function() {
-        //         this.addDelivery();
-        //     }.bind(this),
-        //     50
-        // );
+        setTimeout(
+            function() {
+                this.addDelivery();
+            }.bind(this),
+            50
+        );
     }
 
     connectedCallback() {

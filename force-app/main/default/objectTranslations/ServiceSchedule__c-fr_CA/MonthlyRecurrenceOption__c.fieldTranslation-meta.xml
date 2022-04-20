@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>MonthlyRecurrenceOption__c</name>
+    <label>Option de récurrence mensuelle</label>
+    <picklistValues>
+        <masterLabel>on the Last Day</masterLabel>
+        <translation>le dernier jour</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Monday</masterLabel>
+        <translation>le premier lundi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Monday</masterLabel>
+        <translation>le deuxième lundi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Monday</masterLabel>
+        <translation>le troisième lundi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Monday</masterLabel>
+        <translation>le quatrième lundi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Monday</masterLabel>
+        <translation>le cinquième lundi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Tuesday</masterLabel>
+        <translation>le premier mardi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Tuesday</masterLabel>
+        <translation>le deuxième mardi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Tuesday</masterLabel>
+        <translation>le troisième mardi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Tuesday</masterLabel>
+        <translation>le quatrième mardi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Tuesday</masterLabel>
+        <translation>le cinquième mardi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Wednesday</masterLabel>
+        <translation>le premier mercredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Wednesday</masterLabel>
+        <translation>le deuxième mercredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Wednesday</masterLabel>
+        <translation>le troisième mercredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Wednesday</masterLabel>
+        <translation>le quatrième mercredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Wednesday</masterLabel>
+        <translation>le cinquième mercredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Thursday</masterLabel>
+        <translation>le premier jeudi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Thursday</masterLabel>
+        <translation>le deuxième jeudi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Thursday</masterLabel>
+        <translation>le troisième jeudi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Thursday</masterLabel>
+        <translation>le quatrième jeudi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Thursday</masterLabel>
+        <translation>le cinquième jeudi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Friday</masterLabel>
+        <translation>le premier vendredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Friday</masterLabel>
+        <translation>le deuxième vendredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Friday</masterLabel>
+        <translation>le troisième vendredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Friday</masterLabel>
+        <translation>le quatrième vendredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Friday</masterLabel>
+        <translation>le cinquième vendredi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Saturday</masterLabel>
+        <translation>le premier samedi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Saturday</masterLabel>
+        <translation>le deuxième samedi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Saturday</masterLabel>
+        <translation>le troisième samedi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Saturday</masterLabel>
+        <translation>le quatrième samedi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Saturday</masterLabel>
+        <translation>le cinquième samedi</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the First Sunday</masterLabel>
+        <translation>le premier dimanche</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Second Sunday</masterLabel>
+        <translation>le deuxième dimanche</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Third Sunday</masterLabel>
+        <translation>le troisième dimanche</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fourth Sunday</masterLabel>
+        <translation>le quatrième dimanche</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>on the Fifth Sunday</masterLabel>
+        <translation>le cinquième dimanche</translation>
+    </picklistValues>
+</CustomFieldTranslation>

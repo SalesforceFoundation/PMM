@@ -186,7 +186,7 @@
     </customLabels>
     <customLabels>
         <name>Dont_Track_Attendance</name>
-        <label>この参加者の出席を追跡しない</label>
+        <label>この個人に対して、出席サービス提供を作成しない</label>
     </customLabels>
     <customLabels>
         <name>Enabled</name>
@@ -387,6 +387,10 @@
     <customLabels>
         <name>Save_for_Later</name>
         <label>後で使用するために保存</label>
+    </customLabels>
+    <customLabels>
+        <name>Sort_By</name>
+        <label>並び替え基準</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>

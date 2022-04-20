@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label>CreateContact</label>
+        <name>CreateContact</name>
+    </fieldSets>
+    <layouts>
+        <layout>Program Management</layout>
+        <sections>
+            <label>Informações demográficas</label>
+            <section>Demographic Information</section>
+        </sections>
+        <sections>
+            <label>Função do contato</label>
+            <section>Contact Role</section>
+        </sections>
+        <sections>
+            <label>Links personalizados</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+</CustomObjectTranslation>

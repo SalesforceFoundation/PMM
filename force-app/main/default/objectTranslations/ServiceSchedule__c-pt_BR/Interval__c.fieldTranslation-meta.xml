@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Interval__c</name>
+    <help>O intervalo entre as sessões. Em um cronograma semanal, um intervalo de 2 significa uma vez a cada 2 semanas.</help>
+    <label>Intervalo</label>
+</CustomFieldTranslation>

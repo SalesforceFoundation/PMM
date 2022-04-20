@@ -7,4 +7,14 @@
             <section>Custom Links</section>
         </sections>
     </layouts>
+    <gender>Masculine</gender>
+    <startsWith>Consonant</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Champ compartimenté</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Champs compartimentés</value>
+    </caseValues>
 </CustomObjectTranslation>

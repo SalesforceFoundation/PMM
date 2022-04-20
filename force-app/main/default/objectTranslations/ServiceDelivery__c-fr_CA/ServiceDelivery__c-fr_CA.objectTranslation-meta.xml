@@ -32,4 +32,14 @@
         <name>Name</name>
         <label>Nom de la livraison de services</label>
     </standardFields>
+    <gender>Feminine</gender>
+    <startsWith>Consonant</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Livraison de services</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Livraisons de services</value>
+    </caseValues>
 </CustomObjectTranslation>

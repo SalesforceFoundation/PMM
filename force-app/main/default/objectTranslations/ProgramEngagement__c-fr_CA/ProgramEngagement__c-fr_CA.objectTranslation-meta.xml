@@ -52,4 +52,14 @@
         <name>Name</name>
         <label>Nom de l&apos;engagement dans le programme</label>
     </standardFields>
+    <gender>Masculine</gender>
+    <startsWith>Vowel</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Engagement dans le programme</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Engagements dans le programme</value>
+    </caseValues>
 </CustomObjectTranslation>

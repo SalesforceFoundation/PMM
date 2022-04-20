@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Stage__c</name>
+    <help>Esses valores da lista de opções descrevem a fase de engajamento de um Contato em um Programa e são exibidos em um Caminho. Os valores são determinados pelo seu administrador.</help>
+    <label>Fase</label>
+    <picklistValues>
+        <masterLabel>Applied</masterLabel>
+        <translation>Candidatura aceita</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Application Denied</masterLabel>
+        <translation>Candidatura negada</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Waitlisted</masterLabel>
+        <translation>Lista de espera</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Enrolled</masterLabel>
+        <translation>Inscrito</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Active</masterLabel>
+        <translation>Ativo</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation>Concluído</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Withdrawn</masterLabel>
+        <translation>Retirado</translation>
+    </picklistValues>
+</CustomFieldTranslation>

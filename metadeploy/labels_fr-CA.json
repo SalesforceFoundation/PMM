@@ -9,11 +9,11 @@
             "description": "tagline of product"
         },
         "description": {
-            "message": "Bienvenue dans le programme d’installation de Program Management Module (PMM)!\r\n\r\nProgram Management Module est un cadre standard pour assurer le suivi, la gestion et la livraison de programmes, de services et de livraison de services.\r\n\r\n*IMPORTANT* : Salesforce recommande de ne pas installer les mises à niveau directement dans les organisations de production. Au lieu de cela, installez d’abord Program Management Module dans l’un de vos environnements sandbox ou dans une organisation de développeurs.\r\n\r\nProgram Management Module (« PMM ») de Salesforce.org est une application extensible qui comprend des composants libres et fermés permettant de répondre aux besoins fondamentaux uniques de la gestion de programmes. Le logiciel PMM fait appel à un progiciel géré de salesforce.com, Inc. (« Salesforce ») afin d’offrir aux organisations à but non lucratif un moyen de centraliser l’information sur les programmes ce qui leur permettra de gérer et de mettre en œuvre plus efficacement leurs programmes et services.\r\n\r\nAprès avoir installé Program Management Module, consultez les ressources dans notre documentation :\r\n\r\n* [Documentation sur Program Management Module](https://powerofus.force.com/PMM_Documentation)\r\n\r\nVous avez des questions? Devenez membre du groupe de clients [Program Management Module](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) dans le hub Power of Us.",
+            "message": "Bienvenue dans le programme d’installation de Program Management Module (PMM) !\r\n\r\nProgram Management Module est un cadre standard pour assurer le suivi, la gestion et la livraison de programmes, de services et de livraison de services.\r\n\r\n*IMPORTANT* : Salesforce recommande de ne pas installer les mises à niveau directement dans les organisations de production. Au lieu de cela, installez d’abord Program Management Module dans l’un de vos environnements sandbox gratuits ou dans une organisation de développeurs.\r\n\r\nProgram Management Module (« PMM ») de Salesforce.org est une application extensible intégrant des composants open source (libres) et closed source (fermés) qui a vocation à répondre aux besoins fondamentaux uniques liés à la gestion de programmes. Le PMM utilise un progiciel géré par Salesforce.com, Inc. (« Salesforce ») pour doter les organisations à but non lucratif d’un outil de centralisation des informations programmatiques, ce qui leur permet ainsi de gérer et de mettre en œuvre les programmes et les services plus efficacement.\r\n\r\nAprès avoir installé Program Management Module, consultez les ressources dans notre documentation :\r\n\r\n* [Documentation sur Program Management Module](https://powerofus.force.com/PMM_Documentation)\r\n\r\nVous avez des questions ? Devenez membre du groupe de clients [Program Management Module](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) dans la Trailblazer Community.",
             "description": "shown on product detail page (markdown)"
         },
         "error_message": {
-            "message": "Pour obtenir de l’aide sur cette erreur, accédez à [help.salesforce.com](https://help.salesforce.com/), recherchez la zone Support et services, et enregistrez un billet de demande d’assistance avec Salesforce. Incluez « PMM » dans la ligne d'objet et insérez dans votre commentaire le lien d’installation affiché ici.",
+            "message": "Pour obtenir de l’aide sur cette erreur, accédez à [help.salesforce.com](https://help.salesforce.com/), recherchez la zone Support et services, et enregistrez un ticket de support technique avec Salesforce. Incluez « PMM » dans la ligne d'objet et insérez dans votre commentaire le lien d’installation affiché ici.",
             "description": "shown after failed installation (markdown)"
         },
         "click_through_agreement": {
@@ -31,11 +31,11 @@
             "description": "shown before user starts installation (markdown)"
         },
         "post_install_message": {
-            "message": "Merci d’avoir installé Program Management Module. Pour toute question concernant Program Management Module, consultez le [Program Management Module customer forum group](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) dans le hub Power of Us.",
+            "message": "Merci d’avoir installé Program Management Module. Pour toute question concernant Program Management Module, consultez le [groupe du forum client Program Management Module](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) dans la Trailblazer Community.",
             "description": "shown after successful installation (markdown)"
         },
         "error_message": {
-            "message": "Pour obtenir de l’aide sur cette erreur, accédez à [help.salesforce.com](https://help.salesforce.com/), recherchez la zone Support et services, et enregistrez un billet de demande d’assistance avec Salesforce. Incluez « PMM » dans la ligne d'objet et insérez dans votre commentaire le lien d’installation affiché ici.",
+            "message": "Pour obtenir de l’aide sur cette erreur, accédez à [help.salesforce.com](https://help.salesforce.com/), recherchez la zone Support et services, et enregistrez un ticket de support technique avec Salesforce. Incluez « PMM » dans la ligne d'objet et insérez dans votre commentaire le lien d’installation affiché ici.",
             "description": "shown after failed installation (markdown)"
         }
     },
@@ -45,7 +45,15 @@
             "description": "title of installation step"
         },
         "Deploy Program Management Profile": {
-            "message": "Déployer le Profil de gestion de programme",
+            "message": "Déployer le profil de Gestion de programme",
+            "description": "title of installation step"
+        },
+        "Deploy Folder of Unmanaged Reports": {
+            "message": "Déployer le dossier des rapports non gérés",
+            "description": "title of installation step"
+        },
+        "Recover Deleted Report": {
+            "message": "Récupérer le rapport supprimé",
             "description": "title of installation step"
         }
     },
@@ -53,6 +61,42 @@
         "Please enable My Domain in your org prior to installing.": {
             "message": "Activez My Domain dans votre organisation avant l’installation.",
             "description": "shown if validation fails"
+        },
+        "Please install Program Management Module in your org prior to installing reports.": {
+            "message": "Installez Program Management Module dans votre organisation avant d’installer les rapports.",
+            "description": "shown if validation fails"
+        },
+        "Program Management Module requires Chatter. Please enable Chatter in your org and try again.": {
+            "message": "Program Management Module nécessite Chatter. Veuillez activer Chatter dans votre organisation et réessayer.",
+            "description": "shown if validation fails"
+        }
+    },
+    "plan:reports": {
+        "title": {
+            "message": "Installer les Rapports de Program Management Module",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Ceci installera les rapports supplémentaires pour Program Management Module dans votre organisation.",
+            "description": "shown before user starts installation (markdown)"
+        },
+        "post_install_message": {
+            "message": "Merci d’avoir installé les rapports supplémentaires pour Program Management Module. Pour toute question concernant Program Management Module, consultez le [groupe du forum client Program Management Module](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) dans la Trailblazer Community.",
+            "description": "shown after successful installation (markdown)"
+        },
+        "error_message": {
+            "message": "Pour obtenir de l’aide sur cette erreur, accédez à [help.salesforce.com](https://help.salesforce.com/), recherchez la zone Support et services, et enregistrez un ticket de support technique avec Salesforce. Incluez « MGP » dans la ligne d'objet et insérez dans votre commentaire le lien d’installation affiché ici.",
+            "description": "shown after failed installation (markdown)"
+        }
+    },
+    "plan:recover-deleted-report": {
+        "title": {
+            "message": "Récupérer le rapport de Program Management Module supprimé",
+            "description": "title of installation plan"
+        },
+        "preflight_message": {
+            "message": "Ce programme d’installation est conçu pour corriger les problèmes de mise à niveau provoqués par la suppression d’un rapport de Program Management Module (clients inscrits ce mois-ci). N’exécutez pas ce programme d’installation, sauf indication contraire du support Salesforce.",
+            "description": "shown before user starts installation (markdown)"
         }
     }
 }

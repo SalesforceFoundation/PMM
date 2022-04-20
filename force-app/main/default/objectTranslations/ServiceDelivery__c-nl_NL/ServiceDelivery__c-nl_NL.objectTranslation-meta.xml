@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label>Serviceleveringen voor deelname</label>
+        <name>Attendance_Service_Deliveries</name>
+    </fieldSets>
+    <fieldSets>
+        <label>Serviceleveringen in bulk</label>
+        <name>Bulk_Service_Deliveries</name>
+    </fieldSets>
     <validationRules>
         <errorMessage>Selecteer een account dat hoort bij de gerelateerde contactpersoon.</errorMessage>
         <name>ACCOUNT_MATCHES_CONTACT_ACCOUNT</name>

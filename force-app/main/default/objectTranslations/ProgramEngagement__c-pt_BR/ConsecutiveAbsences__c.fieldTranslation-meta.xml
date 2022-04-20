@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ConsecutiveAbsences__c</name>
+    <help>O número de ausências consecutivas deste Engajamento em programas, contando a partir de hoje. Retorna para 0 quando a Entrega de serviço mais recente estiver presente.</help>
+    <label>Ausências consecutivas</label>
+</CustomFieldTranslation>

@@ -186,7 +186,7 @@
     </customLabels>
     <customLabels>
         <name>Dont_Track_Attendance</name>
-        <label>Geen aanwezigheid bijhouden voor deze deelnemer</label>
+        <label>Geen serviceleveringen voor deelname maken voor deze persoon</label>
     </customLabels>
     <customLabels>
         <name>Enabled</name>
@@ -387,6 +387,10 @@
     <customLabels>
         <name>Save_for_Later</name>
         <label>Opslaan voor later</label>
+    </customLabels>
+    <customLabels>
+        <name>Sort_By</name>
+        <label>Sorteren op</label>
     </customLabels>
     <customLabels>
         <name>Saved</name>

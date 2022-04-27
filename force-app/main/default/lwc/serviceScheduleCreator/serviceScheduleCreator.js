@@ -89,7 +89,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     addSteps() {
         this._steps
-            .addStep("", this.labels.newSchedule, new NavigationItems().addNext())
+            .addStep("", this.labels.scheduleInfo, new NavigationItems().addNext())
             .addStep(
                 "",
                 this.serviceScheduleModel.labels.serviceSession.reviewSessions,

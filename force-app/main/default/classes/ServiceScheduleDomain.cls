@@ -18,7 +18,11 @@ public with sharing class ServiceScheduleDomain {
 
     public void insertSchedule(ServiceSchedule__c schedule) {
         validateCreateAccess(new List<SObject>{ schedule });
-        insert schedule;
+        if (schedule.Id == null) {
+            insert schedule;
+        } else {
+            update schedule;
+        }
     }
 
     public void deleteSessions(List<ServiceSession__c> sessionsToDelete) {

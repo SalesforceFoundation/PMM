@@ -21,8 +21,25 @@ public with sharing class ServiceScheduleService {
     private ProgramEngagementService progEngagementService = new ProgramEngagementService();
     private static final String ONE_TIME = 'One Time';
     @TestVisible
-    public ServiceScheduleModel getServiceScheduleModel(Id recordTypeId) {
-        return new ServiceScheduleModel(recordTypeId);
+    public ServiceScheduleModel getServiceScheduleModel(
+        Id serviceScheduleId,
+        Id recordTypeId
+    ) {
+        ServiceScheduleModel ssModel = new ServiceScheduleModel(
+            serviceScheduleId,
+            recordTypeId
+        );
+        if (serviceScheduleId != null) {
+            SelectParticipantModel spModel = getSelectParticipantModel(
+                ssModel.serviceSchedule.Service__c
+            );
+            populateRecords(ssModel.serviceSchedule.Service__c, spModel);
+            ssModel.serviceSessions = getSessions(
+                ssModel.serviceSchedule,
+                ssModel.maxSessions
+            );
+        }
+        return ssModel;
     }
 
     public ServiceScheduleModel persist(ServiceScheduleModel model) {

@@ -29,6 +29,7 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track hideSpinner = false;
     @api recordTypeId;
+    @api recordId;
     @api isCommunity;
     isSaving = false;
     isLoaded = false;
@@ -51,12 +52,14 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     _steps = new ProgressSteps();
     _serviceSchedules = [];
 
-    @wire(getServiceScheduleModel, { recordTypeId: "$recordTypeId" })
+    @wire(getServiceScheduleModel, {
+        serviceScheduleId: "$serviceScheduleId",
+        recordTypeId: "$serviceScheduleRecordTypeId",
+    })
     wireServiceScheduleModel(result) {
         if (!result) {
             return;
         }
-
         if (result.data) {
             this.originalModel = result.data;
             this.init();
@@ -67,6 +70,14 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
+    }
+
+    get serviceScheduleId() {
+        return this.recordId ? this.recordId : null;
+    }
+
+    get serviceScheduleRecordTypeId() {
+        return this.recordTypeId ? this.recordTypeId : null;
     }
 
     extractLabels(labels) {

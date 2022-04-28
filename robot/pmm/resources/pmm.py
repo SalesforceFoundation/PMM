@@ -352,6 +352,16 @@ class pmm(object):
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
 
+    def click_modal_dialog_button(self, label):
+        """Click a button on the new record dialog"""
+        locator = pmm_lex_locators["new_record"]["dialog_modal_button"].format(label)
+        self.selenium.wait_until_element_is_enabled(
+            locator, error="Button is not enabled"
+        )
+        self.selenium.set_focus_to_element(locator)
+        element = self.selenium.driver.find_element_by_xpath(locator)
+        self.selenium.driver.execute_script("arguments[0].click()", element)
+
     def populate_lightning_fields(self, **kwargs):
         """During winter 2020 part of the modal fields appear as lightning elements.
         This keyword validates , identifies the element and populates value"""

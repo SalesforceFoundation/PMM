@@ -326,9 +326,11 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this._steps.restart();
         this._currentStep = undefined;
         this.serviceScheduleModel = JSON.parse(JSON.stringify(this.originalModel));
-        this.serviceScheduleModel.serviceSchedule[
-            SERVICE_FIELD.fieldApiName
-        ] = this.serviceId;
+        if (this.serviceId) {
+            this.serviceScheduleModel.serviceSchedule[
+                SERVICE_FIELD.fieldApiName
+            ] = this.serviceId;
+        }
     }
 
     showModal() {

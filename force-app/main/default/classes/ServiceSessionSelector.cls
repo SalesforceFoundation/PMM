@@ -15,6 +15,42 @@ public with sharing class ServiceSessionSelector {
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
+    public List<ServiceSession__c> getServiceSessionsForServiceSchedule(
+        Id serviceScheduleId
+    ) {
+        List<ServiceSession__c> serviceSessions = new List<ServiceSession__c>();
+
+        if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {
+            return serviceSessions;
+        }
+
+        Set<String> fields = new Set<String>();
+        fields.add(String.valueOf(ServiceSession__c.Id)); // Name is required
+        fields.add(String.valueOf(ServiceSession__c.Name)); // Name is required
+        fields.add(String.valueOf(ServiceSession__c.Status__c)); // Status is required
+        fields.add(String.valueOf(ServiceSession__c.SessionStart__c)); // Start date is used to group the records
+        fields.add(String.valueOf(ServiceSession__c.SessionEnd__c)); // Start date is used to group the records
+        fields.add(String.valueOf(ServiceSession__c.ServiceSchedule__c)); // Start date is used to group the records
+
+        QueryBuilder queryBuilder = new QueryBuilder()
+            .withSObjectType(ServiceSession__c.SObjectType)
+            .withSelectFields(new List<String>(fields));
+
+        queryBuilder.addCondition(
+            String.valueOf(ServiceSession__c.ServiceSchedule__c) +
+            ' = \'' +
+            serviceScheduleId +
+            '\''
+        );
+
+        queryBuilder.withOrderBy(String.valueOf(ServiceSession__c.SessionStart__c));
+
+        serviceSessions = Database.query(queryBuilder.buildSoqlQuery());
+
+        return Security.stripInaccessible(AccessType.READABLE, serviceSessions)
+            .getRecords();
+    }
+
     public List<ServiceSession__c> getServiceSessionsByStartDate(String dateLiteral) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
         Set<String> allowedSessionStatuses = getAllowedServiceSessionStatusValues();

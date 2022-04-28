@@ -33,6 +33,7 @@ export default class ReviewSessions extends LightningElement {
     sessionNameLabel;
     sessionStartLabel;
     sessionEndLabel;
+    sessionIdLabel;
     addSessionError;
     duration;
     addSessionStart;
@@ -81,10 +82,16 @@ export default class ReviewSessions extends LightningElement {
             return a[this.sessionStartFieldName] > b[this.sessionStartFieldName] ? 1 : -1;
         });
 
-        return this._serviceSessions.map((session, index) => ({
+        let localServiceSessions = this._serviceSessions.map((session, index) => ({
             ...session,
             index: index,
+            alreadyCreatedCSSClass: session.Id
+                ? "pmm-session-already-exists"
+                : "pmm-session-is-new",
         }));
+        console.log("Hey!" + JSON.stringify(localServiceSessions[0]));
+
+        return localServiceSessions;
     }
 
     get serviceSchedule() {
@@ -135,6 +142,10 @@ export default class ReviewSessions extends LightningElement {
         return this._serviceScheduleModel.sessionFields.sessionEnd.apiName;
     }
 
+    getSessionIdFieldName() {
+        return this._serviceScheduleModel.sessionFields.id.apiName;
+    }
+
     setLabels() {
         this.objectName = this._serviceScheduleModel.labels.serviceSession.objectApiName;
         this.labels.addSession = this._serviceScheduleModel.labels.serviceSession.addSession;
@@ -142,6 +153,7 @@ export default class ReviewSessions extends LightningElement {
         this.sessionNameLabel = this._serviceScheduleModel.sessionFields.name.label;
         this.sessionStartLabel = this._serviceScheduleModel.sessionFields.sessionStart.label;
         this.sessionEndLabel = this._serviceScheduleModel.sessionFields.sessionEnd.label;
+        this.sessionIdLabel = this._serviceScheduleModel.sessionFields.id.label;
         this.limitMessage = format(MAX_SESSIONS_WARNING_LABEL, [
             this._serviceScheduleModel.maxSessions,
         ]);
@@ -164,11 +176,13 @@ export default class ReviewSessions extends LightningElement {
         const COLUMNS = [
             {
                 label: this.sessionNameLabel,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 fieldName: this._serviceScheduleModel.sessionFields.name.apiName,
                 hideDefaultActions: true,
             },
             {
                 label: this.sessionStartLabel,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 fieldName: this.sessionStartFieldName,
                 hideDefaultActions: true,
                 type: "date",
@@ -185,6 +199,7 @@ export default class ReviewSessions extends LightningElement {
             },
             {
                 label: this.sessionEndLabel,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 fieldName: this.sessionEndFieldName,
                 hideDefaultActions: true,
                 type: "date",
@@ -201,6 +216,7 @@ export default class ReviewSessions extends LightningElement {
             },
             {
                 label: "",
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 name: "delete",
                 type: "button-icon",
                 hideDefaultActions: true,

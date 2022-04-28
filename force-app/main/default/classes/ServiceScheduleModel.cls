@@ -81,6 +81,10 @@ public with sharing class ServiceScheduleModel {
         'name' => fieldSetService.getFieldForLWC(
             Schema.ServiceSession__c.Name.getDescribe()
         ),
+        'id' => fieldSetService.getFieldForLWC(Schema.ServiceSession__c.Id.getDescribe()),
+        'createdDate' => fieldSetService.getFieldForLWC(
+            Schema.ServiceSession__c.CreatedDate.getDescribe()
+        ),
         'sessionStart' => fieldSetService.getFieldForLWC(
             Schema.ServiceSession__c.SessionStart__c.getDescribe()
         ),
@@ -187,6 +191,61 @@ public with sharing class ServiceScheduleModel {
             PROGRAM_ENGAGEMENT_FIELD_SET_NAME,
             true
         );
+    }
+
+    public void addServiceSessions(List<ServiceSession__c> newServiceSessions) {
+        Set<ServiceSessionKey> sessionKeys = new Set<ServiceSessionKey>();
+        for (ServiceSession__c serviceSession : serviceSessions) {
+            sessionKeys.add(new ServiceSessionKey(serviceSession));
+        }
+
+        for (ServiceSession__c newServiceSession : newServiceSessions) {
+            if (!sessionKeys.contains(new ServiceSessionKey(newServiceSession))) {
+                serviceSessions.add(newServiceSession);
+            }
+        }
+    }
+
+    @TestVisible
+    private class ServiceSessionKey {
+        public Datetime sessionStart;
+        public Datetime sessionEnd;
+        //public String status;
+        //public Id serviceScheduleId;
+
+        public ServiceSessionKey(ServiceSession__c serviceSession) {
+            this(serviceSession.SessionStart__c, serviceSession.SessionEnd__c);
+            //serviceSession.Status__c,
+            //serviceSession.ServiceSchedule__c
+        }
+
+        public ServiceSessionKey(
+            Datetime sessionStart,
+            Datetime sessionEnd //String status, //Id serviceScheduleId
+        ) {
+            this.sessionStart = sessionStart;
+            this.sessionEnd = sessionEnd;
+            //this.status = status;
+            //this.serviceScheduleId = serviceScheduleId;
+        }
+
+        public Boolean equals(Object obj) {
+            ServiceSessionKey otherKey = (ServiceSessionKey) obj;
+
+            if (
+                sessionStart.day() == otherKey.sessionStart.day() &&
+                sessionStart.month() == otherKey.sessionStart.month() &&
+                sessionStart.year() == otherKey.sessionStart.year() &&
+                sessionStart.hour() == otherKey.sessionStart.hour() &&
+                sessionEnd.day() == otherKey.sessionEnd.day() &&
+                sessionEnd.month() == otherKey.sessionEnd.month() &&
+                sessionEnd.year() == otherKey.sessionEnd.year() &&
+                sessionEnd.hour() == otherKey.sessionEnd.hour()
+            ) {
+                return true;
+            }
+            return false;
+        }
     }
 
     private static Map<String, String> serviceScheduleLabels = new Map<String, String>{

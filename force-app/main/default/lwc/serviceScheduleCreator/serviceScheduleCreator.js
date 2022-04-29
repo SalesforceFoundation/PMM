@@ -76,6 +76,12 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         return this.recordId ? this.recordId : null;
     }
 
+    get serviceScheduleModelId() {
+        return this.serviceScheduleModel.serviceSchedule.Id
+            ? this.serviceScheduleModel.serviceSchedule.Id
+            : "No Id";
+    }
+
     get serviceScheduleRecordTypeId() {
         return this.recordTypeId ? this.recordTypeId : null;
     }
@@ -239,6 +245,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             // Ok to hardcode standard field, cannot import schema since we do not package record types
             this.serviceScheduleModel.serviceSchedule.RecordTypeId = this.recordTypeId;
         }
+
         this._serviceId = this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ];

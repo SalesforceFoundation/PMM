@@ -88,18 +88,20 @@ export default class ServiceScheduleReview extends LightningElement {
         }
     }
 
+    get serviceScheduleId() {
+        return this._serviceScheduleModel.serviceSchedule.Id;
+    }
+
     get sessionDataTableColumns() {
         return [
             {
                 label: this.sessionNameLabel,
-                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 fieldName: this._serviceScheduleModel.sessionFields.name.apiName,
                 hideDefaultActions: true,
             },
             {
                 label: this.sessionStartLabel,
-                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
-                fieldName: this.sessionStartFieldName,
+                fieldName: this._serviceScheduleModel.sessionFields.sessionStart.apiName,
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {
@@ -115,8 +117,7 @@ export default class ServiceScheduleReview extends LightningElement {
             },
             {
                 label: this.sessionEndLabel,
-                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
-                fieldName: this.sessionEndFieldName,
+                fieldName: this._serviceScheduleModel.sessionFields.sessionEnd.apiName,
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {

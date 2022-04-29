@@ -77,6 +77,12 @@ export default class ReviewSessions extends LightningElement {
         //}
     }
 
+    get serviceScheduleId() {
+        return this._serviceScheduleModel.serviceSchedule.Id
+            ? this._serviceScheduleModel.serviceSchedule.Id
+            : "No Id";
+    }
+
     get serviceSessions() {
         this._serviceSessions.sort((a, b) => {
             return a[this.sessionStartFieldName] > b[this.sessionStartFieldName] ? 1 : -1;

@@ -178,7 +178,9 @@ export default class NewServiceSchedule extends LightningElement {
                 DEFAULT_SERVICE_QUANTITY.fieldApiName
             ] = this.defaultServiceQuantity;
         }
-
+        if (this._serviceScheduleModel.serviceSchedule.Id) {
+            serviceSchedule.Id = this._serviceScheduleModel.serviceSchedule.Id;
+        }
         return serviceSchedule;
     }
 

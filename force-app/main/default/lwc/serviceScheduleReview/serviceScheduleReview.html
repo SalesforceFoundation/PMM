@@ -9,7 +9,6 @@
 
 <template>
     <c-section title={reviewLabel} if:true={isLoaded}></c-section>
-
     <lightning-layout
         multiple-rows="true"
         class="slds-var-p-around_small"
@@ -26,7 +25,7 @@
             <c-output-field
                 label={serviceScheduleModel.scheduleRequiredFields.name.label}
             >
-                {serviceScheduleModel.serviceSchedule.Name}
+                {serviceScheduleModel.serviceSchedule.Name} {serviceScheduleId}
             </c-output-field>
             <c-output-field label={labels.dateAndTime}>
                 <!-- date range -->

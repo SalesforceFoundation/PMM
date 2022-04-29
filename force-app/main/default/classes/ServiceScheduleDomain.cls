@@ -17,10 +17,11 @@ public with sharing class ServiceScheduleDomain {
     }
 
     public void insertSchedule(ServiceSchedule__c schedule) {
-        validateCreateAccess(new List<SObject>{ schedule });
         if (schedule.Id == null) {
+            validateCreateAccess(new List<SObject>{ schedule });
             insert schedule;
         } else {
+            validateUpdateAccess(new List<SObject>{ schedule });
             update schedule;
         }
     }
@@ -90,6 +91,43 @@ public with sharing class ServiceScheduleDomain {
             ProgramEngagement__c = engagement.Id,
             Contact__c = engagement.Contact__c
         );
+    }
+
+    private void validateUpdateAccess(List<SObject> sObjects) {
+        if (sObjects == null || sObjects.isEmpty()) {
+            return;
+        }
+
+        Boolean hasObjectPermissions;
+        Boolean hasFieldPermissions;
+
+        SObjectType sObjectType = sObjects[0].getSObjectType();
+        hasObjectPermissions = PermissionValidator.getInstance()
+            .hasObjectAccess(sObjectType, PermissionValidator.CRUDAccessType.UPDATEABLE);
+
+        Set<String> populatedFieldNames = new Set<String>();
+        for (SObject sObj : sObjects) {
+            populatedFieldNames.addAll(sObj.getPopulatedFieldsAsMap().keySet());
+        }
+
+        // Id can be included in update call but is never updateable
+        if (populatedFieldNames.contains('Id')) {
+            populatedFieldNames.remove('Id');
+        }
+
+        hasFieldPermissions = PermissionValidator.getInstance()
+            .hasFLSAccessForFields(
+                sObjectType.getDescribe().getName(),
+                new List<String>(populatedFieldNames),
+                'update',
+                false
+            );
+
+        if (!(hasObjectPermissions && hasFieldPermissions)) {
+            throw new ServiceScheduleDomainException(
+                System.Label.Insert_Operation_Exception
+            );
+        }
     }
 
     private void validateCreateAccess(List<SObject> sObjects) {

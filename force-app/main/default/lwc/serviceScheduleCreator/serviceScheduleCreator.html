@@ -27,6 +27,7 @@
     </template>
     <template if:true={isLoaded}>
         <template if:true={isStep1}>
+            <h1>{serviceScheduleModelId}</h1>
             <c-new-service-schedule
                 service-id={serviceId}
                 service-schedule-model={serviceScheduleModel}
@@ -34,12 +35,14 @@
             ></c-new-service-schedule>
         </template>
         <template if:true={isStep2}>
+            <h1>{serviceScheduleModelId}</h1>
             <c-review-sessions
                 service-schedule-model={serviceScheduleModel}
                 onloaded={handleLoaded}
             ></c-review-sessions>
         </template>
         <template if:true={isStep3}>
+            <h1>{serviceScheduleModelId}</h1>
             <c-participant-selector
                 service-id={serviceId}
                 service-schedule={serviceScheduleModel.serviceSchedule}
@@ -48,6 +51,7 @@
             ></c-participant-selector>
         </template>
         <template if:true={isStep4}>
+            <h1>{serviceScheduleModelId}</h1>
             <c-service-schedule-review
                 service-schedule-model={serviceScheduleModel}
                 onloaded={handleLoaded}

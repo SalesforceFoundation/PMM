@@ -88,10 +88,6 @@ export default class ServiceScheduleReview extends LightningElement {
         }
     }
 
-    get serviceScheduleId() {
-        return this._serviceScheduleModel.serviceSchedule.Id;
-    }
-
     get sessionDataTableColumns() {
         return [
             {

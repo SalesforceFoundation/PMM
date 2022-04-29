@@ -76,12 +76,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         return this.recordId ? this.recordId : null;
     }
 
-    get serviceScheduleModelId() {
-        return this.serviceScheduleModel.serviceSchedule.Id
-            ? this.serviceScheduleModel.serviceSchedule.Id
-            : "No Id";
-    }
-
     get serviceScheduleRecordTypeId() {
         return this.recordTypeId ? this.recordTypeId : null;
     }

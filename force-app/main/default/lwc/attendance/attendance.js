@@ -200,7 +200,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
 
         if (result.data) {
-            this.initialServiceDeliveries();
+            this.initializeServiceDeliveries();
             this.sortServiceDeliveries();
             this.configureFieldSet(result.data.fieldSet.map(a => ({ ...a })));
         } else if (result.error) {
@@ -333,33 +333,34 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         let rows = this.template.querySelectorAll("c-attendance-row");
 
         let editedRows = [];
+        let omittedContactIds = [];
 
         rows.forEach(row => {
             let editedRow = row.getRow();
-            if (editedRow && !editedRow.rowDisabled) {
-                editedRows.push(editedRow);
+            if (editedRow) {
+                if (editedRow.rowDisabled) {
+                    omittedContactIds.push(
+                        getChildObjectByName(editedRow, "Contact__r").Id
+                    );
+                } else {
+                    editedRows.push(editedRow);
+                }
             }
         });
+        omittedContactIds = JSON.stringify(omittedContactIds);
         this.showSpinner = true;
 
         upsertRows({
+            sessionId: this.recordId,
             serviceDeliveriesToUpsert: editedRows,
+            omittedContactIds,
         })
             .then(() => {
-                if (this.isPending) {
-                    let newStatus = COMPLETE_STATUS;
-                    if (
-                        this.serviceSessionStatusForAfterSubmit &&
-                        this.serviceSessionStatusForAfterSubmit !== ""
-                    ) {
-                        newStatus = this.serviceSessionStatusForAfterSubmit;
-                    }
-                    this.setStatus(newStatus);
-                }
                 refreshApex(this.wiredServiceDeliveriesResult);
                 rows.forEach(row => {
                     row.save();
                 });
+                this.updateServiceSession();
                 this.isUpdateMode = false;
                 this.showSuccessToast(editedRows.length);
             })
@@ -369,10 +370,22 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             .finally((this.showSpinner = false));
     }
 
-    setStatus(status) {
+    updateServiceSession() {
+        if (!this.isPending) {
+            return;
+        }
+
         let fields = {};
         fields[ID] = this.recordId;
+        let status = COMPLETE_STATUS;
+        if (
+            this.serviceSessionStatusForAfterSubmit &&
+            this.serviceSessionStatusForAfterSubmit !== ""
+        ) {
+            status = this.serviceSessionStatusForAfterSubmit;
+        }
         fields[this.fields.sessionStatus.fieldApiName] = status;
+
         updateRecord({ fields }).catch(error => {
             handleError(error);
         });
@@ -383,16 +396,23 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     handleCancel() {
-        this.initialServiceDeliveries();
+        this.initializeServiceDeliveries();
         this.sortServiceDeliveries();
         this.isUpdateMode = false;
     }
 
-    initialServiceDeliveries() {
+    initializeServiceDeliveries() {
+        let omittedContactIds = this.wiredServiceDeliveriesResult.data.omittedContactIds;
+        omittedContactIds = omittedContactIds ? JSON.parse(omittedContactIds) : [];
         this.serviceDeliveries = this.wiredServiceDeliveriesResult.data.deliveries.map(
             (item, index) => ({
                 index,
                 ...item,
+                rowDisabled:
+                    !item.Id &&
+                    omittedContactIds.includes(
+                        getChildObjectByName(item, "Contact__r").Id
+                    ),
             })
         );
     }

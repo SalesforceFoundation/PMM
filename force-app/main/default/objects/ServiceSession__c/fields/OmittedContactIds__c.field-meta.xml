@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OmittedContactIds__c</fullName>
+    <description>This field is used to track which contacts were admitted from the Attendance roster. This is a system field and should not be manually altered.</description>
+    <externalId>false</externalId>
+    <label>Omitted Contact Ids</label>
+    <length>131072</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>3</visibleLines>
+</CustomField>

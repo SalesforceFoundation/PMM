@@ -38,10 +38,13 @@ public with sharing class AttendanceController {
 
     @AuraEnabled
     public static void upsertServiceDeliveries(
-        List<ServiceDelivery__c> serviceDeliveriesToUpsert
+        Id sessionId,
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert,
+        String omittedContactIds
     ) {
         try {
             service.upsertServiceDeliveries(serviceDeliveriesToUpsert);
+            sessionService.updateOmittedContactIds(sessionId, omittedContactIds);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

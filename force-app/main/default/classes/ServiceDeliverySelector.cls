@@ -105,6 +105,7 @@ public with sharing class ServiceDeliverySelector {
                 ServiceSchedule__c,
                 PrimaryServiceProvider__c,
                 SessionStart__c,
+                OmittedContactIds__c,
                 ServiceSchedule__r.Service__c,
                 ServiceSchedule__r.DefaultServiceQuantity__c
             FROM ServiceSession__c
@@ -112,10 +113,18 @@ public with sharing class ServiceDeliverySelector {
             LIMIT 1
         ];
 
-        return (ServiceSession__c) Security.stripInaccessible(
+        if (sessions.isEmpty()) {
+            return null;
+        }
+
+        ServiceSession__c strippedSession = (ServiceSession__c) Security.stripInaccessible(
                 AccessType.READABLE,
                 sessions
             )
             .getRecords()[0];
+
+        // We are intentionally bypassing security for this system level field
+        strippedSession.OmittedContactIds__c = sessions[0].OmittedContactIds__c;
+        return strippedSession;
     }
 }

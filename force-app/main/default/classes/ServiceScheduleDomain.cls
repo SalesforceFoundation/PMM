@@ -40,8 +40,16 @@ public with sharing class ServiceScheduleDomain {
     }
 
     private void insertRelatedRecords(List<SObject> sObjects) {
-        validateCreateAccess(sObjects);
-        insert sObjects;
+        List<SObject> sObjectsNotYetInserted = new List<SObject>();
+        for (SObject sObj : sObjects) {
+            if (sObj.Id == null) {
+                sObjectsNotYetInserted.add(sObj);
+            }
+        }
+
+        validateCreateAccess(sObjectsNotYetInserted);
+
+        insert sObjectsNotYetInserted;
     }
 
     private void setSessionDefaults(ServiceScheduleModel model) {

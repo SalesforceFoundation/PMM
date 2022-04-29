@@ -119,6 +119,7 @@ public with sharing class ServiceScheduleModel {
     }
 
     public void loadFromDatabase(Id serviceScheduleId) {
+        // TODO: Move this to ServiceScheduleDomain
         serviceSchedule = [
             SELECT
                 Id,
@@ -144,9 +145,17 @@ public with sharing class ServiceScheduleModel {
             LIMIT 1
         ];
 
-        serviceSessions = new List<ServiceSession__c>();
-        selectedEngagements = new List<ProgramEngagement__c>();
-        serviceParticipants = new List<ServiceParticipant__c>();
+        if (serviceSessions == null) {
+            serviceSessions = new List<ServiceSession__c>();
+        }
+
+        if (selectedEngagements == null) {
+            selectedEngagements = new List<ProgramEngagement__c>();
+        }
+
+        if (serviceParticipants == null) {
+            serviceParticipants = new List<ServiceParticipant__c>();
+        }
         maxSessions = DEFAULT_MAX_SESSIONS;
 
         labels.put('serviceSchedule', getServiceScheduleLabels());

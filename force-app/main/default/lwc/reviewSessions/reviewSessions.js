@@ -70,11 +70,11 @@ export default class ReviewSessions extends LightningElement {
 
         this._serviceSessions = [...this._serviceScheduleModel.serviceSessions];
 
-        if (!this._serviceSessions.length) {
-            this.getSessions();
-        } else {
-            this.handleDispatchLoadedEvent();
-        }
+        //if (!this._serviceSessions.length) {
+        this.getSessions();
+        //} else {
+        //    this.handleDispatchLoadedEvent();
+        //}
     }
 
     get serviceSessions() {
@@ -82,16 +82,11 @@ export default class ReviewSessions extends LightningElement {
             return a[this.sessionStartFieldName] > b[this.sessionStartFieldName] ? 1 : -1;
         });
 
-        let localServiceSessions = this._serviceSessions.map((session, index) => ({
+        return this._serviceSessions.map((session, index) => ({
             ...session,
             index: index,
-            alreadyCreatedCSSClass: session.Id
-                ? "pmm-session-already-exists"
-                : "pmm-session-is-new",
+            alreadyCreatedCSSClass: session.Id ? "slds-color__background_gray-7" : "",
         }));
-        console.log("Hey!" + JSON.stringify(localServiceSessions[0]));
-
-        return localServiceSessions;
     }
 
     get serviceSchedule() {

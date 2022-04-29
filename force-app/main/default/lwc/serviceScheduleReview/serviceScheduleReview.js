@@ -92,12 +92,14 @@ export default class ServiceScheduleReview extends LightningElement {
         return [
             {
                 label: this.sessionNameLabel,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 fieldName: this._serviceScheduleModel.sessionFields.name.apiName,
                 hideDefaultActions: true,
             },
             {
                 label: this.sessionStartLabel,
-                fieldName: this._serviceScheduleModel.sessionFields.sessionStart.apiName,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
+                fieldName: this.sessionStartFieldName,
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {
@@ -113,7 +115,8 @@ export default class ServiceScheduleReview extends LightningElement {
             },
             {
                 label: this.sessionEndLabel,
-                fieldName: this._serviceScheduleModel.sessionFields.sessionEnd.apiName,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
+                fieldName: this.sessionEndFieldName,
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {

@@ -86,6 +86,7 @@ export default class ReviewSessions extends LightningElement {
             ...session,
             index: index,
             alreadyCreatedCSSClass: session.Id ? "slds-color__background_gray-7" : "",
+            disableDeselect: session.Id ? true : false,
         }));
     }
 
@@ -219,7 +220,7 @@ export default class ReviewSessions extends LightningElement {
                     iconName: "utility:clear",
                     variant: "bare",
                     iconPosition: "left",
-                    disabled: false,
+                    disabled: { fieldName: "disableDeselect" },
                 },
             },
         ];

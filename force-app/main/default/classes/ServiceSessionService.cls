@@ -12,10 +12,10 @@ public with sharing class ServiceSessionService {
     private ServiceSessionSelector serviceSessionSelector = new ServiceSessionSelector();
 
     @TestVisible
-    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+    private ServiceSessionDomain serviceSessionDomain = new ServiceSessionDomain();
 
     @TestVisible
-    private SystemAccess systemAccess = new SystemAccess();
+    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
     private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
     private static final String PENDING_BUCKET = 'ServiceSessionStatusPending';
@@ -71,15 +71,7 @@ public with sharing class ServiceSessionService {
         return buckets;
     }
 
-    public void updateOmittedContactIds(Id sessionId, String omittedContactIds) {
-        // We are using system access here to update the system field without permission checks
-        systemAccess.updateRecords(
-            new List<SObject>{
-                new ServiceSession__c(
-                    Id = sessionId,
-                    OmittedContactIds__c = omittedContactIds
-                )
-            }
-        );
+    public void updateServiceSession(ServiceSession__c serviceSession) {
+        serviceSessionDomain.updateServiceSession(serviceSession);
     }
 }

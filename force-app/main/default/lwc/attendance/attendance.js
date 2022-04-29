@@ -18,7 +18,7 @@ import {
 import { NavigationMixin, CurrentPageReference } from "lightning/navigation";
 import { loadStyle } from "lightning/platformResourceLoader";
 
-import { getRecord, updateRecord } from "lightning/uiRecordApi";
+import { getRecord } from "lightning/uiRecordApi";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
@@ -26,6 +26,7 @@ import generateRoster from "@salesforce/apex/AttendanceController.generateRoster
 import upsertRows from "@salesforce/apex/AttendanceController.upsertServiceDeliveries";
 import checkFieldPermissions from "@salesforce/apex/AttendanceController.checkFieldPermissions";
 import getServiceSessionStatusBuckets from "@salesforce/apex/AttendanceController.getServiceSessionStatusBuckets";
+import updateServiceSession from "@salesforce/apex/AttendanceController.updateServiceSession";
 
 import SERVICE_SESSION_OBJECT from "@salesforce/schema/ServiceSession__c";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
@@ -39,6 +40,7 @@ import ATTENDANCE_STATUS_FIELD from "@salesforce/schema/ServiceDelivery__c.Atten
 import CREATED_DATE_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedDate";
 import CREATED_BY_FIELD from "@salesforce/schema/ServiceDelivery__c.CreatedById";
 import SESSION_STATUS_FIELD from "@salesforce/schema/ServiceSession__c.Status__c";
+import OMITTED_CONTACT_IDS_FIELD from "@salesforce/schema/ServiceSession__c.OmittedContactIds__c";
 
 import SUBMIT_LABEL from "@salesforce/label/c.Submit";
 import TRACK_ATTENDANCE_LABEL from "@salesforce/label/c.TrackAttendance";
@@ -348,19 +350,20 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             }
         });
         omittedContactIds = JSON.stringify(omittedContactIds);
+        let serviceSession = this.getServiceSession();
+        serviceSession[OMITTED_CONTACT_IDS_FIELD.fieldApiName] = omittedContactIds;
         this.showSpinner = true;
 
         upsertRows({
-            sessionId: this.recordId,
             serviceDeliveriesToUpsert: editedRows,
-            omittedContactIds,
         })
             .then(() => {
                 refreshApex(this.wiredServiceDeliveriesResult);
                 rows.forEach(row => {
                     row.save();
                 });
-                this.updateServiceSession();
+
+                updateServiceSession({ serviceSession });
                 this.isUpdateMode = false;
                 this.showSuccessToast(editedRows.length);
             })
@@ -370,13 +373,14 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             .finally((this.showSpinner = false));
     }
 
-    updateServiceSession() {
-        if (!this.isPending) {
-            return;
-        }
-
+    getServiceSession() {
         let fields = {};
         fields[ID] = this.recordId;
+
+        if (!this.isPending) {
+            return fields;
+        }
+
         let status = COMPLETE_STATUS;
         if (
             this.serviceSessionStatusForAfterSubmit &&
@@ -386,9 +390,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         }
         fields[this.fields.sessionStatus.fieldApiName] = status;
 
-        updateRecord({ fields }).catch(error => {
-            handleError(error);
-        });
+        return fields;
     }
 
     handleUpdateClick() {

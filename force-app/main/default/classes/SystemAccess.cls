@@ -54,23 +54,13 @@ public without sharing class SystemAccess {
                 )
                 .buildSoqlQuery();
         } else {
-            List<SObject> sessionIds = new List<SObject>();
-            query = queryBuilder
-                .reset()
-                .withSObjectType(ServiceSession__c.SObjectType)
-                .withSelectFields(new List<String>{ 'Id' })
-                .addCondition('ServiceSchedule__c IN :records')
-                .buildSoqlQuery();
-
-            sessionIds = Database.query(query);
-
             query = queryBuilder
                 .reset()
                 .withSObjectType(ServiceDelivery__c.SObjectType)
                 .withSelectFields(
                     new List<String>{ 'ServiceSession__r.ServiceSchedule__c' }
                 )
-                .addCondition(' ServiceSession__c IN :sessionIds')
+                .addCondition(' ServiceSession__r.ServiceSchedule__c IN :records')
                 .buildSoqlQuery();
         }
 

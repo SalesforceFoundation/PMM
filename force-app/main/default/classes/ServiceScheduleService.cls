@@ -37,8 +37,10 @@ public with sharing class ServiceScheduleService {
             );
 
             loadAndPopulateSessionRecords(ssModel);
-            loadAndPopulateSelectedEngagements(ssModel);
-
+            ssModel.selectedEngagements = getParticpantEngagementsByServiceScheduleId(
+                serviceScheduleId,
+                getSelectFieldsWithToLabel(spModel)
+            );
             /**
             loadAndPopulateParticipantRecords(
                 ssModel.serviceSchedule.Service__c,
@@ -302,13 +304,6 @@ public with sharing class ServiceScheduleService {
     private void loadAndPopulateSessionRecords(ServiceScheduleModel model) {
         model.serviceSessions = serviceSessionSelector.getServiceSessionsForServiceSchedule(
             model.serviceSchedule.Id
-        );
-    }
-
-    private void loadAndPopulateSelectedEngagements(ServiceScheduleModel model) {
-        ssModel.selectedEngagements = getParticpantEngagementsByServiceScheduleId(
-            serviceScheduleId,
-            getSelectFieldsWithToLabel(spModel)
         );
     }
 

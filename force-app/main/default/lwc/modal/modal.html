@@ -10,7 +10,14 @@
 
 <template>
     <div class={visibilityClass}>
-        <section>
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-labelledby="modal-heading-01"
+            aria-modal="true"
+            aria-describedby="modal-content-id-1"
+            class={modalCss}
+        >
             <div class={modalContainerCss}>
                 <header class="slds-modal__header">
                     <lightning-button-icon

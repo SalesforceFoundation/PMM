@@ -633,6 +633,13 @@
         <value>There are Service Delivery rows with errors.</value>
     </labels>
     <labels>
+        <fullName>Start_Date_After_Last_Session</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>{Start Date Label} must be before {Date of last session}</shortDescription>
+        <value>{0} must be after last session date of {1}</value>
+    </labels>    
+    <labels>
         <fullName>Update</fullName>
         <language>en_US</language>
         <protected>true</protected>

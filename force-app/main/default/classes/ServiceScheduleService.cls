@@ -35,12 +35,15 @@ public with sharing class ServiceScheduleService {
             SelectParticipantModel spModel = getSelectParticipantModel(
                 ssModel.serviceSchedule.Service__c
             );
+
+            loadAndPopulateSessionRecords(ssModel);
+            loadAndPopulateSelectedEngagements(ssModel);
+
+            /**
             loadAndPopulateParticipantRecords(
                 ssModel.serviceSchedule.Service__c,
                 spModel
             );
-            loadAndPopulateSessionRecords(ssModel);
-            /**
             ssModel.serviceSessions = createSessionsFromSchedule(
                 ssModel.serviceSchedule,
                 ssModel.maxSessions
@@ -60,6 +63,50 @@ public with sharing class ServiceScheduleService {
             Database.rollback(savepoint);
             throw new ServiceScheduleServiceException(ex);
         }
+    }
+
+    private List<ProgramEngagement__c> getParticpantEngagementsByServiceScheduleId(
+        Id serviceScheduleId,
+        Set<String> fieldNames
+    ) {
+        // TODO: Move to new ServiceParticipant Selector?
+        // ... or ProgramEngagementSelector?
+        if (
+            !(PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceParticipant__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ) &&
+            PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ProgramEngagement__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ) &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(
+                    ServiceParticipant__c.ProgramEngagement__c.getDescribe()
+                ))
+        ) {
+            return null;
+        }
+
+        List<ServiceParticipant__c> participants = [
+            SELECT ProgramEngagement__c
+            FROM ServiceParticipant__c
+            WHERE ServiceSchedule__c = :serviceScheduleId
+        ];
+
+        Set<Id> programEngagementIds = new Set<Id>();
+        for (ServiceParticipant__c participant : participants) {
+            programEngagementIds.add(participant.ProgramEngagement__c);
+        }
+
+        List<ProgramEngagement__c> programEngagements = programEngagementSelector.getProgramEngagementsById(
+            programEngagementIds,
+            fieldNames,
+            progEngagementService.getActiveStages()
+        );
+        return programEngagements;
     }
 
     public List<Id> getExistingParticipantContactIds(Id scheduleId) {
@@ -258,6 +305,13 @@ public with sharing class ServiceScheduleService {
         );
     }
 
+    private void loadAndPopulateSelectedEngagements(ServiceScheduleModel model) {
+        ssModel.selectedEngagements = getParticpantEngagementsByServiceScheduleId(
+            serviceScheduleId,
+            getSelectFieldsWithToLabel(spModel)
+        );
+    }
+
     private void loadAndPopulateParticipantRecords(
         Id serviceId,
         SelectParticipantModel model
@@ -290,6 +344,7 @@ public with sharing class ServiceScheduleService {
                 continue;
             }
             selectFields.add(fieldPath);
+            System.debug(' ***** Field Path: ' + fieldPath);
         }
 
         return selectFields;

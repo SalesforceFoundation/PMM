@@ -219,27 +219,63 @@ public with sharing class ServiceScheduleModel {
     private class ServiceSessionKey {
         public Datetime sessionStart;
         public Datetime sessionEnd;
-        //public String status;
-        //public Id serviceScheduleId;
 
         public ServiceSessionKey(ServiceSession__c serviceSession) {
             this(serviceSession.SessionStart__c, serviceSession.SessionEnd__c);
-            //serviceSession.Status__c,
-            //serviceSession.ServiceSchedule__c
         }
 
-        public ServiceSessionKey(
-            Datetime sessionStart,
-            Datetime sessionEnd //String status, //Id serviceScheduleId
-        ) {
+        public ServiceSessionKey(Datetime sessionStart, Datetime sessionEnd) {
             this.sessionStart = sessionStart;
             this.sessionEnd = sessionEnd;
-            //this.status = status;
-            //this.serviceScheduleId = serviceScheduleId;
         }
 
         public Boolean equals(Object obj) {
             ServiceSessionKey otherKey = (ServiceSessionKey) obj;
+
+            System.debug(
+                '***** This session: ' +
+                sessionStart.day() +
+                ' ' +
+                sessionStart.month() +
+                ' ' +
+                sessionStart.year() +
+                ' ' +
+                sessionStart.hour() +
+                ' ' +
+                sessionEnd.day() +
+                ' ' +
+                sessionEnd.month() +
+                ' ' +
+                sessionEnd.year() +
+                ' ' +
+                sessionEnd.hour() +
+                ' ' +
+                sessionStart.formatLong() +
+                ' ' +
+                sessionEnd.formatLong()
+            );
+            System.debug(
+                '**** Other session: ' +
+                otherKey.sessionStart.day() +
+                ' ' +
+                otherKey.sessionStart.month() +
+                ' ' +
+                otherKey.sessionStart.year() +
+                ' ' +
+                otherKey.sessionStart.hour() +
+                ' ' +
+                otherKey.sessionEnd.day() +
+                ' ' +
+                otherKey.sessionEnd.month() +
+                ' ' +
+                otherKey.sessionEnd.year() +
+                ' ' +
+                otherKey.sessionEnd.hour() +
+                ' ' +
+                otherKey.sessionStart.formatLong() +
+                ' ' +
+                otherKey.sessionEnd.formatLong()
+            );
 
             if (
                 sessionStart.day() == otherKey.sessionStart.day() &&
@@ -251,6 +287,7 @@ public with sharing class ServiceScheduleModel {
                 sessionEnd.year() == otherKey.sessionEnd.year() &&
                 sessionEnd.hour() == otherKey.sessionEnd.hour()
             ) {
+                System.debug(' **** KEYS EQUAL!');
                 return true;
             }
             return false;

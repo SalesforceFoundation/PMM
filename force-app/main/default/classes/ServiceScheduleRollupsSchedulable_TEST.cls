@@ -1,0 +1,295 @@
+/*
+ *
+ *  * Copyright (c) 2021, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+@IsTest
+public class ServiceScheduleRollupsSchedulable_TEST {
+    private static Id accountRecordId;
+    private static Contact contactRecord;
+    private static Service__c service;
+    private static ProgramEngagement__c programEngagement;
+    private static Program__c program;
+    private static List<ServiceSchedule__c> serviceSchedules;
+    private static List<ServiceSession__c> sessions;
+    private static List<ServiceDelivery__c> serviceDeliveries;
+    private static final String PRESENT_STATUS = 'Present';
+    private static final String ABSENCE_STATUS = 'Excused Absence';
+
+    @TestSetup
+    static void setupTestData() {
+        TestUtil.turnOffFeatureGates();
+        TestDataFactory.generateAttendanceData('Monthly');
+    }
+
+    @IsTest
+    private static void shouldIncrementCountOnInsert() {
+        testDataSetup();
+
+        Test.startTest();
+
+        ServiceScheduleRollupsSchedulable scheduleRollups = new ServiceScheduleRollupsSchedulable();
+        Database.executeBatch(scheduleRollups);
+
+        Test.stopTest();
+
+        List<ServiceSchedule__c> schedules = [
+            SELECT Id, NumAbsentServiceDeliveries__c, NumPresentServiceDeliveries__c
+            FROM ServiceSchedule__c
+        ];
+
+        System.assertEquals(2, schedules[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(1, schedules[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(2, schedules[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, schedules[1].NumAbsentServiceDeliveries__c);
+    }
+
+    // @IsTest
+    // private static void shouldIncrementCountOnUpdate() {
+    //     testDataSetup();
+
+    //     Test.startTest();
+    //     TestUtil.turnOffFeatureGates();
+    //     serviceDeliveries[3].AttendanceStatus__c = ABSENCE_STATUS;
+    //     serviceDeliveries[3].Quantity__c = 0;
+    //     update serviceDeliveries[3];
+
+    //     SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
+    //     Database.executeBatch(sessionRollups);
+
+    //     Test.stopTest();
+    //     requery();
+
+    //     System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
+    //     System.assertEquals(1, sessions[0].NumAbsentServiceDeliveries__c);
+    //     System.assertEquals(null, sessions[1].NumPresentServiceDeliveries__c);
+    //     System.assertEquals(null, sessions[1].NumAbsentServiceDeliveries__c);
+    // }
+
+    // @IsTest
+    // private static void shouldDecrementCountOnDelete() {
+    //     testDataSetup();
+
+    //     Test.startTest();
+    //     TestUtil.turnOffFeatureGates();
+    //     delete serviceDeliveries[3];
+
+    //     SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
+    //     Database.executeBatch(sessionRollups);
+
+    //     Test.stopTest();
+    //     requery();
+
+    //     System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
+    //     System.assertEquals(0, sessions[0].NumAbsentServiceDeliveries__c);
+    // }
+
+    // @IsTest
+    // private static void shouldResetParentsWithoutDeliveries() {
+    //     testDataSetup();
+
+    //     Test.startTest();
+    //     TestUtil.turnOffFeatureGates();
+
+    //     List<ServiceDelivery__c> deliveries = [
+    //         SELECT Id
+    //         FROM ServiceDelivery__c
+    //         WHERE ServiceSession__c = :sessions[0].Id
+    //     ];
+    //     delete deliveries;
+
+    //     SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
+    //     Database.executeBatch(sessionRollups);
+    //     Test.stopTest();
+    //     requery();
+
+    //     System.assertEquals(null, sessions[0].NumPresentServiceDeliveries__c);
+    //     System.assertEquals(null, sessions[0].NumAbsentServiceDeliveries__c);
+    // }
+
+    // @IsTest
+    // private static void shouldScheduleSessionRollupsBatch() {
+    //     Test.startTest();
+
+    //     //parse to cron expression
+    //     String scheduledTime = '0 0 12 * * ?';
+
+    //     SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
+    //     String jobId = System.schedule(
+    //         'Job Started At ' + scheduledTime,
+    //         scheduledTime,
+    //         sessionRollups
+    //     );
+
+    //     CronTrigger cronTrigger = [
+    //         SELECT Id, CronExpression, TimesTriggered
+    //         FROM CronTrigger
+    //         WHERE Id = :jobId
+    //     ];
+
+    //     //Assert the job has not run yet
+    //     System.assertEquals(0, cronTrigger.TimesTriggered);
+
+    //     Test.stopTest();
+    // }
+
+    private static void testDataSetup() {
+        requery();
+
+        System.assertEquals(null, serviceSchedules[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, serviceSchedules[0].NumAbsentServiceDeliveries__c);
+
+        ServiceSchedule__c newSchedule = new ServiceSchedule__c(
+            Name = 'New Schedule',
+            Frequency__c = 'Monthly',
+            FirstSessionStart__c = System.today(),
+            FirstSessionEnd__c = System.today(),
+            PrimaryServiceProvider__c = contactRecord.Id,
+            OtherServiceProvider__c = contactRecord.Id,
+            Service__c = service.Id
+        );
+        insert newSchedule;
+
+        List<ServiceSession__c> serviceSessions = new List<ServiceSession__c>();
+        ServiceSession__c newSession1 = new ServiceSession__c();
+        newSession1.ServiceSchedule__c = serviceSchedules[0].Id;
+        newSession1.SessionStart__c = serviceSchedules[0].FirstSessionStart__c;
+        newSession1.SessionEnd__c = serviceSchedules[0].FirstSessionEnd__c;
+        newSession1.PrimaryServiceProvider__c = serviceSchedules[0]
+            .PrimaryServiceProvider__c;
+        newSession1.OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c;
+        newSession1.NumAbsentServiceDeliveries__c = 1;
+        newSession1.NumPresentServiceDeliveries__c = 2;
+        newSession1.Status__c = 'Complete';
+        serviceSessions.add(newSession1);
+
+        ServiceSession__c newSession2 = new ServiceSession__c();
+        newSession2.ServiceSchedule__c = newSchedule.Id;
+        newSession2.SessionStart__c = newSchedule.FirstSessionStart__c;
+        newSession2.SessionEnd__c = newSchedule.FirstSessionEnd__c;
+        newSession2.PrimaryServiceProvider__c = newSchedule.PrimaryServiceProvider__c;
+        newSession2.OtherServiceProvider__c = newSchedule.OtherServiceProvider__c;
+        newSession2.NumAbsentServiceDeliveries__c = 1;
+        newSession2.NumPresentServiceDeliveries__c = 2;
+        newSession2.Status__c = 'Complete';
+        serviceSessions.add(newSession2);
+
+        insert serviceSessions;
+
+        serviceDeliveries = new List<ServiceDelivery__c>{
+            new ServiceDelivery__c(
+                Name = 'test',
+                Service__c = service.Id,
+                Contact__c = contactRecord.Id,
+                ServiceSession__c = serviceSessions[0].Id,
+                ProgramEngagement__c = programEngagement.Id,
+                Quantity__c = 0,
+                AttendanceStatus__c = ABSENCE_STATUS,
+                DeliveryDate__c = System.today() - 1
+            ),
+            new ServiceDelivery__c(
+                Name = 'test2',
+                Service__c = service.Id,
+                Contact__c = contactRecord.Id,
+                ServiceSession__c = serviceSessions[0].Id,
+                ProgramEngagement__c = programEngagement.Id,
+                Quantity__c = 1,
+                AttendanceStatus__c = PRESENT_STATUS,
+                DeliveryDate__c = System.today()
+            ),
+            new ServiceDelivery__c(
+                Name = 'test3',
+                Service__c = service.Id,
+                Contact__c = contactRecord.Id,
+                ServiceSession__c = serviceSessions[0].Id,
+                ProgramEngagement__c = programEngagement.Id,
+                Quantity__c = 1,
+                AttendanceStatus__c = PRESENT_STATUS,
+                DeliveryDate__c = System.today() - 5
+            ),
+            new ServiceDelivery__c(
+                Name = 'test4',
+                Service__c = service.Id,
+                Contact__c = contactRecord.Id,
+                ServiceSession__c = serviceSessions[1].Id,
+                ProgramEngagement__c = programEngagement.Id,
+                Quantity__c = 1,
+                AttendanceStatus__c = PRESENT_STATUS,
+                DeliveryDate__c = System.today() - 2
+            ),
+            new ServiceDelivery__c(
+                Name = 'test5',
+                Service__c = service.Id,
+                Contact__c = contactRecord.Id,
+                ServiceSession__c = serviceSessions[1].Id,
+                ProgramEngagement__c = programEngagement.Id,
+                Quantity__c = 1,
+                AttendanceStatus__c = PRESENT_STATUS,
+                DeliveryDate__c = System.today() - 5
+            )
+        };
+
+        insert serviceDeliveries;
+    }
+
+    private static void requery() {
+        accountRecordId = [SELECT Id FROM Account LIMIT 1].Id;
+        contactRecord = [
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                LastServiceDate__c,
+                ConsecutiveAbsences__c,
+                LastModifiedDate
+            FROM Contact
+            LIMIT 1
+        ];
+
+        service = [
+            SELECT Id, NumPresentServiceDeliveries__c, NumAbsentServiceDeliveries__c
+            FROM Service__c
+            LIMIT 1
+        ];
+
+        sessions = [
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                SessionStart__c
+            FROM ServiceSession__c
+            ORDER BY SessionStart__c DESC
+            LIMIT 2
+        ];
+
+        programEngagement = [
+            SELECT
+                Id,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c,
+                LastServiceDate__c,
+                ConsecutiveAbsences__c
+            FROM ProgramEngagement__c
+            LIMIT 1
+        ];
+
+        program = [SELECT Id, Name FROM Program__c LIMIT 1];
+
+        serviceSchedules = [
+            SELECT
+                Id,
+                FirstSessionStart__c,
+                FirstSessionEnd__c,
+                PrimaryServiceProvider__c,
+                OtherServiceProvider__c,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c
+            FROM ServiceSchedule__c
+            LIMIT 2
+        ];
+    }
+}

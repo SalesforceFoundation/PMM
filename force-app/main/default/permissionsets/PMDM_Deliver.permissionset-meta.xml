@@ -283,6 +283,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>ServiceSchedule__c.AttendanceRate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.AttendanceSummary__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>ServiceSchedule__c.CreateServiceSessionRecords__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -319,6 +329,16 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>ServiceSchedule__c.MonthlyRecurrenceOption__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.NumAbsentServiceDeliveries__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.NumPresentServiceDeliveries__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

@@ -31,7 +31,7 @@ Setup Test Data
 CP1: Create a Program via UI
     [Documentation]                        This test creates Program and verifies that the Program record
     ...                                    has all the values from the form
-    [tags]                                 perm:admin   perm:manage         feature:Program
+    [tags]                                 quadrant:Q2   perm:admin   perm:manage   feature:Program
     Go To Page                              Listing                               ${ns}Program__c
     Click Object Button                     New
     Wait for Modal                          New                     Program__c
@@ -54,7 +54,7 @@ CP1: Create a Program via UI
 CP2: Verify Programs list view
     [Documentation]                        This test opens the programs listview and verifies that it contains 
     ...                                    the program name and short summary fields
-    [tags]                                 W-9056626    perm:admin   perm:manage   perm:deliver   perm:view   feature:Program
+    [tags]                                 W-9056626   quadrant:Q2   perm:admin   perm:manage   perm:deliver   perm:view   feature:Program
     Go To Page                             Listing                               ${ns}Program__c
     Page Should Contain                    Program Name
     Page Should Contain                    Short Summary
@@ -62,7 +62,7 @@ CP2: Verify Programs list view
 CP3: Date validation on new program dialog
     [Documentation]                        This test opens the new program dialog and enters a end date earlier than start date
     ...                                    and verifies that an error message is displayed
-    [tags]                                 W-041962    perm:admin   perm:manage    feature:Program
+    [tags]                                 W-041962   quadrant:Q2   perm:admin   perm:manage    feature:Program
     Go To Page                             Listing                               ${ns}Program__c
     Click Object Button                    New
     Verify Current Page Title              New Program

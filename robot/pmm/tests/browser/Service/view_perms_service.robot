@@ -25,7 +25,7 @@ Setup Test Data
 VPS1: View and Deliver Perm Test for Service
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Service (View and Deliver Perm Set)   
-     [tags]                           unstable    perm:view    perm:deliver      feature:Service
+     [tags]                           unstable   quadrant:Q2   perm:view    perm:deliver      feature:Service
      Go To Page                              Listing                               ${ns}Service__c
      Page Should Not Contain Button          New
      Go To Page                              Details              Service__c                    object_id=${service}[Id]

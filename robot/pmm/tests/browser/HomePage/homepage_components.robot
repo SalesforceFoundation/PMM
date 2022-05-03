@@ -37,19 +37,19 @@ Setup Test Data
 *** Test Cases ***
 HC1: Today's tasks on homepage
     [Documentation]                 Go to homepage and validate 'Today's task' component is displayed
-    [tags]                          W-037575   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
+    [tags]                          W-037575   quadrant:Q2   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                      Home                    Homepage
     Verify Component On HomePage    Today’s Tasks
 
 HC2: Recent Items on Homepage
     [Documentation]                 Go to homepage and validate 'Recent Items' component is displayed
-    [tags]                          W-037575   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
+    [tags]                          W-037575   quadrant:Q2   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                      Home                    Homepage
     Verify Component On HomePage    Recent Items
 
 HC3: Add fields to recent sessions field_set
     [Documentation]                 Add fields to Recent Sessions fieldset and validate on recent sessions component
-    [tags]                          T-3842208   perm:admin   perm:manage   feature:Homepage
+    [tags]                          T-3842208   quadrant:Q3   perm:admin   perm:manage   feature:Homepage
     Run task                                add_fields_to_field_set
     ...                                     field_set=${ns}ServiceSession__c.${ns}RecentSessionsView
     ...                                     fields=${{ ["${ns}SessionEnd__c"]}}

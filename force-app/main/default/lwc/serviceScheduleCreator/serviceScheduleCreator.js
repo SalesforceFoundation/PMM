@@ -172,6 +172,9 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     get warningModal() {
+        // TODO this works but could definitely be improved upon; ideally there would be a way
+        // to locate the warning modal that doesn't depending on either the community or
+        // this dubious method of inferring that we were launched from a quick action
         return this.isCommunity || this.editingExistingSchedule
             ? this.template.querySelector("c-modal")
             : this.template.querySelector("c-modal c-modal");

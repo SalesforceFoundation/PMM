@@ -14,6 +14,7 @@ import { handleError } from "c/util";
 import { ProgressSteps } from "c/progressSteps";
 import { NavigationItems } from "c/navigationItems";
 import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
+import getExistingParticipantContactIds from "@salesforce/apex/ServiceScheduleCreatorController.getExistingParticipantContactIds";
 import persist from "@salesforce/apex/ServiceScheduleCreatorController.persist";
 
 import SAVE_LABEL from "@salesforce/label/c.Save";
@@ -31,6 +32,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     @api recordTypeId;
     @api recordId;
     @api isCommunity;
+    @track existingParticipants;
     isSaving = false;
     isLoaded = false;
     serviceScheduleModel;
@@ -68,6 +70,19 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             this.isLoaded = true;
             this.hideSpinner = true;
         } else if (result.error) {
+            console.log(JSON.stringify(result.error));
+        }
+    }
+
+    @wire(getExistingParticipantContactIds, { scheduleId: "$recordId" })
+    wiredExistingParticipants(result) {
+        if (!(result.data || result.error)) {
+            return;
+        }
+
+        if (result.data) {
+            this.existingParticipants = result; //cache for refreshing
+        } else {
             console.log(JSON.stringify(result.error));
         }
     }

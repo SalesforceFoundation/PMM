@@ -270,13 +270,38 @@ export default class ParticipantSelector extends LightningElement {
 
         this.previouslySelectedEngagements = [...this.previouslySelectedEngagements];
         this.availableEngagementRows.forEach(row => {
-            if (
-                this.existingContactIds.includes(
+            let previouslySelectedEngagementIndex = this.previouslySelectedEngagements.findIndex(
+                engagement =>
+                    engagement[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName] ===
                     row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
-                )
-            ) {
-                row.disableDeselect = true;
-                this.previouslySelectedEngagements.push(row);
+            );
+            if (previouslySelectedEngagementIndex > -1) {
+                let previouslySelectedEngagement = {
+                    ...this.previouslySelectedEngagements[
+                        previouslySelectedEngagementIndex
+                    ],
+                };
+                if (
+                    this.existingContactIds.includes(
+                        previouslySelectedEngagement[
+                            PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName
+                        ]
+                    )
+                ) {
+                    previouslySelectedEngagement.disableDeselect = true;
+                    this.previouslySelectedEngagements[
+                        previouslySelectedEngagementIndex
+                    ] = previouslySelectedEngagement;
+                }
+            } else {
+                if (
+                    this.existingContactIds.includes(
+                        row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
+                    )
+                ) {
+                    row.disableDeselect = true;
+                    this.previouslySelectedEngagements.push(row);
+                }
             }
         });
         this.handleSelectParticipants();

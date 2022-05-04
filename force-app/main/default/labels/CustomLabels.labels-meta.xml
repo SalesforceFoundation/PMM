@@ -193,6 +193,13 @@
         <value>After participants are added to this Service Schedule, track their attendance here.</value>
     </labels>
     <labels>
+        <fullName>Add_Sessions_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Adding Sessions to an existing schedule.</shortDescription>
+        <value>You are updating an existing schedule any changes you make here will be saved to the schedule record. Please note that you will only be able to add sessions after the most current existing sessions.</value>
+    </labels>
+    <labels>
         <fullName>Incorrect_Tab</fullName>
         <language>en_US</language>
         <protected>true</protected>

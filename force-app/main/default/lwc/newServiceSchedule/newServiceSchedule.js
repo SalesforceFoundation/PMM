@@ -32,6 +32,7 @@ import MONTHS_LABEL from "@salesforce/label/c.Months";
 import LAST_DAY_OF_MONTH_LABEL from "@salesforce/label/c.Last_Day_Of_Month";
 import MONTHLY_ON_DAY_LABEL from "@salesforce/label/c.Monthly_On_Day";
 import MONTHLY_ON_THE_LABEL from "@salesforce/label/c.Monthly_On_The";
+import ADD_SESSIONS_MESSAGE from "@salesforce/label/c.Add_Sessions_Message";
 
 const WEEKLY = "Weekly";
 const MONTHLY = "Monthly";
@@ -67,6 +68,7 @@ export default class NewServiceSchedule extends LightningElement {
         lastDayOfMonth: LAST_DAY_OF_MONTH_LABEL,
         monthlyOnDay: MONTHLY_ON_DAY_LABEL,
         monthlyOnThe: MONTHLY_ON_THE_LABEL,
+        addSessionsMessage: ADD_SESSIONS_MESSAGE,
     };
     sizes = {
         large: LARGE_SIZE,

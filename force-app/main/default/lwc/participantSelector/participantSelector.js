@@ -282,6 +282,7 @@ export default class ParticipantSelector extends LightningElement {
                     ],
                 };
                 if (
+                    this.existingContactIds &&
                     this.existingContactIds.includes(
                         previouslySelectedEngagement[
                             PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName
@@ -295,6 +296,7 @@ export default class ParticipantSelector extends LightningElement {
                 }
             } else {
                 if (
+                    this.existingContactIds &&
                     this.existingContactIds.includes(
                         row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
                     )

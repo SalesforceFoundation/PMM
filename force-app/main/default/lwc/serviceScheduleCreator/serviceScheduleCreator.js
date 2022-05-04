@@ -81,7 +81,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         }
 
         if (result.data) {
-            this.existingParticipants = result; //cache for refreshing
+            this.existingParticipants = result.data; //cache for refreshing
         } else {
             console.log(JSON.stringify(result.error));
         }

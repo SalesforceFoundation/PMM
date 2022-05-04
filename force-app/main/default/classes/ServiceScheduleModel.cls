@@ -232,51 +232,6 @@ public with sharing class ServiceScheduleModel {
         public Boolean equals(Object obj) {
             ServiceSessionKey otherKey = (ServiceSessionKey) obj;
 
-            System.debug(
-                '***** This session: ' +
-                sessionStart.day() +
-                ' ' +
-                sessionStart.month() +
-                ' ' +
-                sessionStart.year() +
-                ' ' +
-                sessionStart.hour() +
-                ' ' +
-                sessionEnd.day() +
-                ' ' +
-                sessionEnd.month() +
-                ' ' +
-                sessionEnd.year() +
-                ' ' +
-                sessionEnd.hour() +
-                ' ' +
-                sessionStart.formatLong() +
-                ' ' +
-                sessionEnd.formatLong()
-            );
-            System.debug(
-                '**** Other session: ' +
-                otherKey.sessionStart.day() +
-                ' ' +
-                otherKey.sessionStart.month() +
-                ' ' +
-                otherKey.sessionStart.year() +
-                ' ' +
-                otherKey.sessionStart.hour() +
-                ' ' +
-                otherKey.sessionEnd.day() +
-                ' ' +
-                otherKey.sessionEnd.month() +
-                ' ' +
-                otherKey.sessionEnd.year() +
-                ' ' +
-                otherKey.sessionEnd.hour() +
-                ' ' +
-                otherKey.sessionStart.formatLong() +
-                ' ' +
-                otherKey.sessionEnd.formatLong()
-            );
-
             if (
                 sessionStart.day() == otherKey.sessionStart.day() &&
                 sessionStart.month() == otherKey.sessionStart.month() &&

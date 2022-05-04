@@ -123,6 +123,16 @@ export default class NewServiceSchedule extends LightningElement {
         this.picklistFields = this._serviceScheduleModel.scheduleRecurrencePicklistFields;
         this.fieldSet = this._serviceScheduleModel.scheduleInformationFields;
 
+        // Write values from service schedule to local properties
+        if (this.editingExistingSchedule) {
+            if (this._serviceScheduleModel.serviceSchedule.Frequency__c) {
+                this.picklistFields.frequency.value = this._serviceScheduleModel.serviceSchedule.Frequency__c;
+            }
+            if (this._serviceScheduleModel.serviceSchedule.DaysOfWeek__c) {
+                this.picklistFields.daysOfWeek.value = this._serviceScheduleModel.serviceSchedule.DaysOfWeek__c;
+            }
+        }
+
         this.processFields();
 
         this.isLoaded = true;

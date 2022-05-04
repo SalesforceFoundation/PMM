@@ -41,100 +41,112 @@ public class ServiceScheduleRollupsSchedulable_TEST {
             FROM ServiceSchedule__c
         ];
 
-        System.assertEquals(2, schedules[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(4, schedules[0].NumPresentServiceDeliveries__c);
         System.assertEquals(1, schedules[0].NumAbsentServiceDeliveries__c);
-        System.assertEquals(2, schedules[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(1, schedules[1].NumPresentServiceDeliveries__c);
         System.assertEquals(0, schedules[1].NumAbsentServiceDeliveries__c);
     }
 
-    // @IsTest
-    // private static void shouldIncrementCountOnUpdate() {
-    //     testDataSetup();
+    @IsTest
+    private static void shouldIncrementCountOnUpdate() {
+        testDataSetup();
 
-    //     Test.startTest();
-    //     TestUtil.turnOffFeatureGates();
-    //     serviceDeliveries[3].AttendanceStatus__c = ABSENCE_STATUS;
-    //     serviceDeliveries[3].Quantity__c = 0;
-    //     update serviceDeliveries[3];
+        Test.startTest();
+        TestUtil.turnOffFeatureGates();
+        serviceDeliveries[3].AttendanceStatus__c = ABSENCE_STATUS;
+        serviceDeliveries[3].Quantity__c = 0;
+        update serviceDeliveries[3];
 
-    //     SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
-    //     Database.executeBatch(sessionRollups);
+        ServiceScheduleRollupsSchedulable scheduleRollups = new ServiceScheduleRollupsSchedulable();
+        Database.executeBatch(scheduleRollups);
 
-    //     Test.stopTest();
-    //     requery();
+        Test.stopTest();
+        requery();
 
-    //     System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
-    //     System.assertEquals(1, sessions[0].NumAbsentServiceDeliveries__c);
-    //     System.assertEquals(null, sessions[1].NumPresentServiceDeliveries__c);
-    //     System.assertEquals(null, sessions[1].NumAbsentServiceDeliveries__c);
-    // }
+        System.assertEquals(3, serviceSchedules[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(2, serviceSchedules[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, serviceSchedules[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, serviceSchedules[1].NumAbsentServiceDeliveries__c);
+    }
 
-    // @IsTest
-    // private static void shouldDecrementCountOnDelete() {
-    //     testDataSetup();
+    @IsTest
+    private static void shouldDecrementCountOnDelete() {
+        testDataSetup();
 
-    //     Test.startTest();
-    //     TestUtil.turnOffFeatureGates();
-    //     delete serviceDeliveries[3];
+        Test.startTest();
+        TestUtil.turnOffFeatureGates();
+        delete serviceDeliveries[3];
 
-    //     SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
-    //     Database.executeBatch(sessionRollups);
+        ServiceScheduleRollupsSchedulable scheduleRollups = new ServiceScheduleRollupsSchedulable();
+        Database.executeBatch(scheduleRollups);
 
-    //     Test.stopTest();
-    //     requery();
+        Test.stopTest();
+        requery();
 
-    //     System.assertEquals(1, sessions[0].NumPresentServiceDeliveries__c);
-    //     System.assertEquals(0, sessions[0].NumAbsentServiceDeliveries__c);
-    // }
+        System.assertEquals(3, serviceSchedules[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(1, serviceSchedules[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, serviceSchedules[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, serviceSchedules[1].NumAbsentServiceDeliveries__c);
+    }
 
-    // @IsTest
-    // private static void shouldResetParentsWithoutDeliveries() {
-    //     testDataSetup();
+    @IsTest
+    private static void shouldResetParentsWithoutDeliveries() {
+        testDataSetup();
 
-    //     Test.startTest();
-    //     TestUtil.turnOffFeatureGates();
+        Test.startTest();
+        TestUtil.turnOffFeatureGates();
 
-    //     List<ServiceDelivery__c> deliveries = [
-    //         SELECT Id
-    //         FROM ServiceDelivery__c
-    //         WHERE ServiceSession__c = :sessions[0].Id
-    //     ];
-    //     delete deliveries;
+        List<ServiceDelivery__c> deliveries = [
+            SELECT Id
+            FROM ServiceDelivery__c
+            WHERE ServiceSession__c = :sessions[0].Id
+        ];
+        delete deliveries;
 
-    //     SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
-    //     Database.executeBatch(sessionRollups);
-    //     Test.stopTest();
-    //     requery();
+        List<ServiceDelivery__c> sessionDeliveries = [
+            SELECT Id
+            FROM ServiceDelivery__c
+            WHERE ServiceSession__c = :sessions[1].Id
+        ];
 
-    //     System.assertEquals(null, sessions[0].NumPresentServiceDeliveries__c);
-    //     System.assertEquals(null, sessions[0].NumAbsentServiceDeliveries__c);
-    // }
+        delete sessionDeliveries;
 
-    // @IsTest
-    // private static void shouldScheduleSessionRollupsBatch() {
-    //     Test.startTest();
+        ServiceScheduleRollupsSchedulable scheduleRollups = new ServiceScheduleRollupsSchedulable();
+        Database.executeBatch(scheduleRollups);
+        Test.stopTest();
+        requery();
 
-    //     //parse to cron expression
-    //     String scheduledTime = '0 0 12 * * ?';
+        System.assertEquals(null, serviceSchedules[0].NumPresentServiceDeliveries__c);
+        System.assertEquals(null, serviceSchedules[0].NumAbsentServiceDeliveries__c);
+        System.assertEquals(1, serviceSchedules[1].NumPresentServiceDeliveries__c);
+        System.assertEquals(0, serviceSchedules[1].NumAbsentServiceDeliveries__c);
+    }
 
-    //     SessionRollupsSchedulable sessionRollups = new SessionRollupsSchedulable();
-    //     String jobId = System.schedule(
-    //         'Job Started At ' + scheduledTime,
-    //         scheduledTime,
-    //         sessionRollups
-    //     );
+    @IsTest
+    private static void shouldScheduleServiceScheduleRollupsBatch() {
+        Test.startTest();
 
-    //     CronTrigger cronTrigger = [
-    //         SELECT Id, CronExpression, TimesTriggered
-    //         FROM CronTrigger
-    //         WHERE Id = :jobId
-    //     ];
+        //parse to cron expression
+        String scheduledTime = '0 0 12 * * ?';
 
-    //     //Assert the job has not run yet
-    //     System.assertEquals(0, cronTrigger.TimesTriggered);
+        ServiceScheduleRollupsSchedulable scheduleRollups = new ServiceScheduleRollupsSchedulable();
+        String jobId = System.schedule(
+            'Job Started At ' + scheduledTime,
+            scheduledTime,
+            scheduleRollups
+        );
 
-    //     Test.stopTest();
-    // }
+        CronTrigger cronTrigger = [
+            SELECT Id, CronExpression, TimesTriggered
+            FROM CronTrigger
+            WHERE Id = :jobId
+        ];
+
+        //Assert the job has not run yet
+        System.assertEquals(0, cronTrigger.TimesTriggered);
+
+        Test.stopTest();
+    }
 
     private static void testDataSetup() {
         requery();
@@ -142,49 +154,34 @@ public class ServiceScheduleRollupsSchedulable_TEST {
         System.assertEquals(null, serviceSchedules[0].NumPresentServiceDeliveries__c);
         System.assertEquals(null, serviceSchedules[0].NumAbsentServiceDeliveries__c);
 
-        ServiceSchedule__c newSchedule = new ServiceSchedule__c(
-            Name = 'New Schedule',
-            Frequency__c = 'Monthly',
-            FirstSessionStart__c = System.today(),
-            FirstSessionEnd__c = System.today(),
-            PrimaryServiceProvider__c = contactRecord.Id,
-            OtherServiceProvider__c = contactRecord.Id,
-            Service__c = service.Id
-        );
-        insert newSchedule;
+        ServiceSchedule__c schedule = new ServiceSchedule__c();
 
-        List<ServiceSession__c> serviceSessions = new List<ServiceSession__c>();
-        ServiceSession__c newSession1 = new ServiceSession__c();
-        newSession1.ServiceSchedule__c = serviceSchedules[0].Id;
-        newSession1.SessionStart__c = serviceSchedules[0].FirstSessionStart__c;
-        newSession1.SessionEnd__c = serviceSchedules[0].FirstSessionEnd__c;
-        newSession1.PrimaryServiceProvider__c = serviceSchedules[0]
-            .PrimaryServiceProvider__c;
-        newSession1.OtherServiceProvider__c = serviceSchedules[0].OtherServiceProvider__c;
-        newSession1.NumAbsentServiceDeliveries__c = 1;
-        newSession1.NumPresentServiceDeliveries__c = 2;
-        newSession1.Status__c = 'Complete';
-        serviceSessions.add(newSession1);
+        schedule.Name = 'Payday';
+        schedule.Frequency__c = 'Monthly';
+        schedule.FirstSessionStart__c = System.Today();
+        schedule.FirstSessionEnd__c = System.Today();
+        schedule.PrimaryServiceProvider__c = contactRecord.Id;
+        schedule.OtherServiceProvider__c = contactRecord.Id;
+        schedule.Service__c = service.Id;
 
-        ServiceSession__c newSession2 = new ServiceSession__c();
-        newSession2.ServiceSchedule__c = newSchedule.Id;
-        newSession2.SessionStart__c = newSchedule.FirstSessionStart__c;
-        newSession2.SessionEnd__c = newSchedule.FirstSessionEnd__c;
-        newSession2.PrimaryServiceProvider__c = newSchedule.PrimaryServiceProvider__c;
-        newSession2.OtherServiceProvider__c = newSchedule.OtherServiceProvider__c;
-        newSession2.NumAbsentServiceDeliveries__c = 1;
-        newSession2.NumPresentServiceDeliveries__c = 2;
-        newSession2.Status__c = 'Complete';
-        serviceSessions.add(newSession2);
+        insert schedule;
 
-        insert serviceSessions;
+        ServiceSession__c session = new ServiceSession__c();
+        session.ServiceSchedule__c = schedule.Id;
+        session.SessionStart__c = schedule.FirstSessionStart__c;
+        session.SessionEnd__c = schedule.FirstSessionEnd__c;
+        session.PrimaryServiceProvider__c = schedule.PrimaryServiceProvider__c;
+        session.OtherServiceProvider__c = schedule.OtherServiceProvider__c;
+        session.Status__c = 'Pending';
+
+        insert session;
 
         serviceDeliveries = new List<ServiceDelivery__c>{
             new ServiceDelivery__c(
                 Name = 'test',
                 Service__c = service.Id,
                 Contact__c = contactRecord.Id,
-                ServiceSession__c = serviceSessions[0].Id,
+                ServiceSession__c = sessions[0].Id,
                 ProgramEngagement__c = programEngagement.Id,
                 Quantity__c = 0,
                 AttendanceStatus__c = ABSENCE_STATUS,
@@ -194,7 +191,7 @@ public class ServiceScheduleRollupsSchedulable_TEST {
                 Name = 'test2',
                 Service__c = service.Id,
                 Contact__c = contactRecord.Id,
-                ServiceSession__c = serviceSessions[0].Id,
+                ServiceSession__c = sessions[0].Id,
                 ProgramEngagement__c = programEngagement.Id,
                 Quantity__c = 1,
                 AttendanceStatus__c = PRESENT_STATUS,
@@ -204,7 +201,7 @@ public class ServiceScheduleRollupsSchedulable_TEST {
                 Name = 'test3',
                 Service__c = service.Id,
                 Contact__c = contactRecord.Id,
-                ServiceSession__c = serviceSessions[0].Id,
+                ServiceSession__c = sessions[0].Id,
                 ProgramEngagement__c = programEngagement.Id,
                 Quantity__c = 1,
                 AttendanceStatus__c = PRESENT_STATUS,
@@ -214,7 +211,7 @@ public class ServiceScheduleRollupsSchedulable_TEST {
                 Name = 'test4',
                 Service__c = service.Id,
                 Contact__c = contactRecord.Id,
-                ServiceSession__c = serviceSessions[1].Id,
+                ServiceSession__c = sessions[1].Id,
                 ProgramEngagement__c = programEngagement.Id,
                 Quantity__c = 1,
                 AttendanceStatus__c = PRESENT_STATUS,
@@ -224,7 +221,17 @@ public class ServiceScheduleRollupsSchedulable_TEST {
                 Name = 'test5',
                 Service__c = service.Id,
                 Contact__c = contactRecord.Id,
-                ServiceSession__c = serviceSessions[1].Id,
+                ServiceSession__c = sessions[1].Id,
+                ProgramEngagement__c = programEngagement.Id,
+                Quantity__c = 1,
+                AttendanceStatus__c = PRESENT_STATUS,
+                DeliveryDate__c = System.today() - 5
+            ),
+            new ServiceDelivery__c(
+                Name = 'test6',
+                Service__c = service.Id,
+                Contact__c = contactRecord.Id,
+                ServiceSession__c = session.Id,
                 ProgramEngagement__c = programEngagement.Id,
                 Quantity__c = 1,
                 AttendanceStatus__c = PRESENT_STATUS,
@@ -263,7 +270,7 @@ public class ServiceScheduleRollupsSchedulable_TEST {
                 SessionStart__c
             FROM ServiceSession__c
             ORDER BY SessionStart__c DESC
-            LIMIT 2
+            LIMIT 3
         ];
 
         programEngagement = [
@@ -289,6 +296,7 @@ public class ServiceScheduleRollupsSchedulable_TEST {
                 NumPresentServiceDeliveries__c,
                 NumAbsentServiceDeliveries__c
             FROM ServiceSchedule__c
+            ORDER BY FirstSessionStart__c DESC
             LIMIT 2
         ];
     }

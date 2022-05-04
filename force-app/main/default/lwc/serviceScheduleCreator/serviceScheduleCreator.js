@@ -172,9 +172,20 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     get warningModal() {
-        return this.isCommunity
+        return this.isCommunity || this.editingExistingSchedule
             ? this.template.querySelector("c-modal")
             : this.template.querySelector("c-modal c-modal");
+    }
+
+    get editingExistingSchedule() {
+        if (
+            this.serviceScheduleModel &&
+            this.serviceScheduleModel.serviceSchedule &&
+            this.serviceScheduleModel.serviceSchedule.Id
+        ) {
+            return true;
+        }
+        return false;
     }
 
     handleNext() {

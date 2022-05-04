@@ -85,6 +85,7 @@
             >
                 <c-section title={labels.dateTime}></c-section>
                 <c-scoped-notification
+                    if:true={editingExistingSchedule}
                     title={labels.addSessionsMessage}
                 ></c-scoped-notification>
             </lightning-layout-item>

@@ -54,13 +54,26 @@ public without sharing class SystemAccess {
                 )
                 .buildSoqlQuery();
         } else {
+            String sessionRelationshipName = ServiceDelivery__c.ServiceSession__c.getDescribe()
+                .getRelationshipName();
+
             query = queryBuilder
                 .reset()
                 .withSObjectType(ServiceDelivery__c.SObjectType)
                 .withSelectFields(
-                    new List<String>{ 'ServiceSession__r.ServiceSchedule__c' }
+                    new List<String>{
+                        sessionRelationshipName +
+                        '.' +
+                        String.valueOf(ServiceSchedule__c.SObjectType)
+                    }
                 )
-                .addCondition(' ServiceSession__r.ServiceSchedule__c IN :records')
+                .addCondition(
+                    ' ' +
+                    sessionRelationshipName +
+                    '.' +
+                    String.valueOf(ServiceSchedule__c.SObjectType) +
+                    ' IN :records'
+                )
                 .buildSoqlQuery();
         }
 

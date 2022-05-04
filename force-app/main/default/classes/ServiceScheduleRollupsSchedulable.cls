@@ -6,7 +6,7 @@
  *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  *
  */
-public class ServiceScheduleRollupsSchedulable implements Database.Batchable<SObject>, Schedulable, Database.Stateful {
+public class ServiceScheduleRollupsSchedulable implements Database.Batchable<SObject>, System.Schedulable, Database.Stateful {
     @TestVisible
     private QueryBuilder queryBuilder = new QueryBuilder();
     @TestVisible

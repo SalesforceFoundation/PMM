@@ -7,7 +7,7 @@
  *
  */
 @IsTest
-public class ServiceScheduleRollupsSchedulable_TEST {
+private class ServiceScheduleRollupsSchedulable_TEST {
     private static Id accountRecordId;
     private static Contact contactRecord;
     private static Service__c service;
@@ -101,15 +101,16 @@ public class ServiceScheduleRollupsSchedulable_TEST {
             FROM ServiceDelivery__c
             WHERE ServiceSession__c = :sessions[0].Id
         ];
+
         delete deliveries;
 
-        List<ServiceDelivery__c> sessionDeliveries = [
+        List<ServiceDelivery__c> deliveriesToDelete = [
             SELECT Id
             FROM ServiceDelivery__c
             WHERE ServiceSession__c = :sessions[1].Id
         ];
 
-        delete sessionDeliveries;
+        delete deliveriesToDelete;
 
         ServiceScheduleRollupsSchedulable scheduleRollups = new ServiceScheduleRollupsSchedulable();
         Database.executeBatch(scheduleRollups);
@@ -156,14 +157,21 @@ public class ServiceScheduleRollupsSchedulable_TEST {
 
         ServiceSchedule__c schedule = new ServiceSchedule__c();
 
-        schedule.Name = 'Payday';
+        schedule.Name = 'New Schedule';
         schedule.Frequency__c = 'Monthly';
-        schedule.FirstSessionStart__c = System.Today();
-        schedule.FirstSessionEnd__c = System.Today();
+        schedule.FirstSessionStart__c = DateTime.newInstance(
+            System.today().year(),
+            System.today().month() + 1,
+            10
+        );
+        schedule.FirstSessionEnd__c = DateTime.newInstance(
+            System.today().year(),
+            System.today().month() + 1,
+            10
+        );
         schedule.PrimaryServiceProvider__c = contactRecord.Id;
         schedule.OtherServiceProvider__c = contactRecord.Id;
         schedule.Service__c = service.Id;
-
         insert schedule;
 
         ServiceSession__c session = new ServiceSession__c();
@@ -173,7 +181,6 @@ public class ServiceScheduleRollupsSchedulable_TEST {
         session.PrimaryServiceProvider__c = schedule.PrimaryServiceProvider__c;
         session.OtherServiceProvider__c = schedule.OtherServiceProvider__c;
         session.Status__c = 'Pending';
-
         insert session;
 
         serviceDeliveries = new List<ServiceDelivery__c>{
@@ -262,6 +269,19 @@ public class ServiceScheduleRollupsSchedulable_TEST {
             LIMIT 1
         ];
 
+        serviceSchedules = [
+            SELECT
+                Id,
+                FirstSessionStart__c,
+                FirstSessionEnd__c,
+                PrimaryServiceProvider__c,
+                OtherServiceProvider__c,
+                NumPresentServiceDeliveries__c,
+                NumAbsentServiceDeliveries__c
+            FROM ServiceSchedule__c
+            LIMIT 2
+        ];
+
         sessions = [
             SELECT
                 Id,
@@ -270,7 +290,6 @@ public class ServiceScheduleRollupsSchedulable_TEST {
                 SessionStart__c
             FROM ServiceSession__c
             ORDER BY SessionStart__c DESC
-            LIMIT 3
         ];
 
         programEngagement = [
@@ -285,19 +304,5 @@ public class ServiceScheduleRollupsSchedulable_TEST {
         ];
 
         program = [SELECT Id, Name FROM Program__c LIMIT 1];
-
-        serviceSchedules = [
-            SELECT
-                Id,
-                FirstSessionStart__c,
-                FirstSessionEnd__c,
-                PrimaryServiceProvider__c,
-                OtherServiceProvider__c,
-                NumPresentServiceDeliveries__c,
-                NumAbsentServiceDeliveries__c
-            FROM ServiceSchedule__c
-            ORDER BY FirstSessionStart__c DESC
-            LIMIT 2
-        ];
     }
 }

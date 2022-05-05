@@ -171,6 +171,8 @@ private class ServiceScheduleRollupsSchedulable_TEST {
         );
         schedule.PrimaryServiceProvider__c = contactRecord.Id;
         schedule.OtherServiceProvider__c = contactRecord.Id;
+        schedule.NumPresentServiceDeliveries__c = 1;
+        schedule.NumAbsentServiceDeliveries__c = 0;
         schedule.Service__c = service.Id;
         insert schedule;
 

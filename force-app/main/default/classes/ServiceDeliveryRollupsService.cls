@@ -26,14 +26,14 @@ public with sharing class ServiceDeliveryRollupsService {
         ProgramEngagement__c.SObjectType => ServiceDelivery__c.ProgramEngagement__c,
         ServiceSession__c.SObjectType => ServiceDelivery__c.ServiceSession__c,
         Service__c.SObjectType => ServiceDelivery__c.Service__c,
-        ServiceSchedule__c.SObjectType => ServiceDelivery__c.ServiceSession__r.ServiceSchedule__c
+        ServiceSchedule__c.SObjectType => ServiceDelivery__c.ServiceSchedule__c
     };
     private static Map<String, SObjectField> LOOKUP_FIELD_BY_FEATURE = new Map<String, SObjectField>{
         'ServiceDeliveriesToContact' => ServiceDelivery__c.Contact__c,
         'ServiceDeliveriesToService' => ServiceDelivery__c.Service__c,
         'ServiceDeliveriesToServiceSession' => ServiceDelivery__c.ServiceSession__c,
         'ServiceDeliveriesToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c,
-        'ServiceDeliveriesToServiceSchedule' => ServiceDelivery__c.ServiceSession__r.ServiceSchedule__c
+        'ServiceDeliveriesToServiceSchedule' => ServiceDelivery__c.ServiceSchedule__c
     };
 
     @TestVisible
@@ -43,7 +43,7 @@ public with sharing class ServiceDeliveryRollupsService {
         ServiceDelivery__c.Service__c => new Set<Id>(),
         ServiceDelivery__c.ServiceSession__c => new Set<Id>(),
         ServiceDelivery__c.ProgramEngagement__c => new Set<Id>(),
-        ServiceDelivery__c.ServiceSession__r.ServiceSchedule__c => new Set<Id>()
+        ServiceDelivery__c.ServiceSchedule__c => new Set<Id>()
     };
     @TestVisible
     private Map<Id, RollupRecord> rollupRecordById = new Map<Id, RollupRecord>();

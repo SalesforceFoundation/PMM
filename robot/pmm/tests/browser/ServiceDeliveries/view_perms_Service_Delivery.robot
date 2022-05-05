@@ -31,7 +31,7 @@ Setup Test Data
 VPSD1: View Perm Test for Service Delivery
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Service Delivery (View Perm Set) 
-     [tags]                           unstable    perm:view    feature:Service Delivery
+     [tags]                           unstable    quadrant:Q2   perm:view    feature:Service Delivery
      Go To Page                              Listing                               ${ns}ServiceDelivery__c
      Page Should Not Contain Button          New
      Go To Page                              Details              ServiceDelivery__c                    object_id=${service_delivery}[Id]

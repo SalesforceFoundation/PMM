@@ -33,7 +33,7 @@ Setup Test Data
 NSS1: Create a new service session
     [Documentation]                        Navigates to service session listing page, clicks 'New' on the listing page and
     ...                                    creates a new record, validates the details on the service session record
-    [tags]                                 W-8294332     perm:admin   perm:manage         feature:Service Session
+    [tags]                                 W-8294332   quadrant:Q2   perm:admin   perm:manage         feature:Service Session
      Go To Page                              Listing                                ${ns}ServiceSession__c
      Click Object Button                     New
      Load Page Object                        New                                    ServiceSession__c

@@ -254,13 +254,14 @@ public with sharing class ServiceScheduleModel {
         'scheduleInformation' => System.Label.Service_Schedule_Information,
         'dateTime' => System.Label.Service_Schedule_Date_Time,
         'loading' => System.Label.Loading,
+        'scheduleInfo' => System.Label.Service_Schedule_Information,
         'addToServiceSchedule' => String.format(
             System.Label.Add_To_Record,
             new List<String>{ ServiceSchedule__c.SObjectType.getDescribe().getLabel() }
         ),
         'reviewSchedule' => String.format(
             System.Label.Review_Records,
-            new List<String>{ ServiceSession__c.SObjectType.getDescribe().getLabel() }
+            new List<String>{ ServiceSchedule__c.SObjectType.getDescribe().getLabel() }
         ),
         'serviceObjectApiName' => Service__c.SObjectType.getDescribe().getName()
     };

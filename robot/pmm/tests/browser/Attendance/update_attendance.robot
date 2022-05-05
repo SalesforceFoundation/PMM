@@ -84,7 +84,7 @@ UA2: Update attendance when service session status is Complete
 
 UA3: Validate fields added to AttendanceServiceDeliveries Fieldset
     [Documentation]                 This test updates attendance for a service session record with Complete Status
-    [tags]                          W-9505038    perm:admin   feature:Attendance
+    [tags]                          W-9505038    quadrant:Q2   perm:admin   feature:Attendance
     Run task                            add_fields_to_field_set
     ...                                 field_set=${ns}ServiceDelivery__c.${ns}Attendance_Service_Deliveries
     ...                                 fields=${{ ["${ns}Service_Provider__c"] }}

@@ -89,13 +89,6 @@ public with sharing class ServiceScheduleService {
         ];
 
         ssModel.serviceParticipants = participants;
-        System.debug(' **** Loaded ' + participants.size() + ' existing participants');
-        for (ServiceParticipant__c participant : participants) {
-            System.debug(
-                ' *** Loaded existing service participant for contact: ' +
-                participant.Contact__c
-            );
-        }
 
         Set<Id> programEngagementIds = new Set<Id>();
         for (ServiceParticipant__c participant : participants) {
@@ -107,18 +100,6 @@ public with sharing class ServiceScheduleService {
             fieldNames,
             progEngagementService.getActiveStages()
         );
-
-        System.debug(
-            ' **** Loaded ' +
-            programEngagements.size() +
-            ' existing engagements'
-        );
-        for (ProgramEngagement__c engagement : programEngagements) {
-            System.debug(
-                ' *** Loaded existing program engagement for contact: ' +
-                engagement.Contact__c
-            );
-        }
 
         ssModel.selectedEngagements = programEngagements;
     }
@@ -351,7 +332,6 @@ public with sharing class ServiceScheduleService {
                 continue;
             }
             selectFields.add(fieldPath);
-            System.debug(' ***** Field Path: ' + fieldPath);
         }
 
         return selectFields;

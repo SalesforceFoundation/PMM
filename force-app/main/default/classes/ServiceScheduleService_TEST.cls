@@ -37,7 +37,7 @@ public with sharing class ServiceScheduleService_TEST {
         expectedModel.serviceSchedule = schedule;
 
         Test.startTest();
-        ServiceScheduleModel actualModel = service.getServiceScheduleModel(null);
+        ServiceScheduleModel actualModel = service.getServiceScheduleModel(null, null);
         Test.stopTest();
 
         // Because datetime includes seconds, this test can be flaky if they records are created 1 second apart.
@@ -675,7 +675,10 @@ public with sharing class ServiceScheduleService_TEST {
         }
 
         Test.startTest();
-        List<ServiceSession__c> actual = service.getSessions(schedule, null);
+        List<ServiceSession__c> actual = service.createSessionsFromSchedule(
+            schedule,
+            null
+        );
         Test.stopTest();
 
         System.assertEquals(
@@ -958,7 +961,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
 
         // Step 1
-        ServiceScheduleModel model = service.getServiceScheduleModel(null);
+        ServiceScheduleModel model = service.getServiceScheduleModel(null, null);
         DateTime firstSessionStart = System.now();
         DateTime firstSessionEnd = System.now().addHours(2);
         ServiceSchedule__c schedule = new ServiceSchedule__c(
@@ -1059,7 +1062,10 @@ public with sharing class ServiceScheduleService_TEST {
         }
 
         Test.startTest();
-        List<ServiceSession__c> actual = service.getSessions(schedule, null);
+        List<ServiceSession__c> actual = service.createSessionsFromSchedule(
+            schedule,
+            null
+        );
         Test.stopTest();
 
         System.assertEquals(

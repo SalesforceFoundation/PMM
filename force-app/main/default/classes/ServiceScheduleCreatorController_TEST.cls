@@ -21,6 +21,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         Test.startTest();
         ServiceScheduleModel actualModel = ServiceScheduleCreatorController.getServiceScheduleModel(
+            null,
             null
         );
         Test.stopTest();
@@ -247,7 +248,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         Test.startTest();
         try {
-            ServiceScheduleCreatorController.getServiceScheduleModel(null);
+            ServiceScheduleCreatorController.getServiceScheduleModel(null, null);
         } catch (Exception ex) {
             actualException = ex;
         }

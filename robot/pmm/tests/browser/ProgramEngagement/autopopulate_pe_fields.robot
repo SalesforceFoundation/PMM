@@ -45,7 +45,7 @@ Setup Test Data
 APEF1: Autopopulate fields when stage is set to Applied
      [Documentation]                         Autopopulates application date and PE name with anonymous when the stage is set as 
      ...                                     applied on new program engagment dialog
-     [tags]                                  W-037569    perm:admin   perm:manage    perm:deliver   feature:Program Engagement
+     [tags]                                  W-037569   quadrant:Q2   perm:admin   perm:manage    perm:deliver   feature:Program Engagement
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                            Program Engagement
@@ -61,7 +61,7 @@ APEF1: Autopopulate fields when stage is set to Applied
 APEF2: Autopopulate fields when stage is set to Completed
      [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
      ...                                     completed on new program engagment dialog
-     [tags]                                  W-037569       perm:admin   perm:manage     perm:deliver      feature:Program Engagement
+     [tags]                                  W-037569   quadrant:Q2   perm:admin   perm:manage   perm:deliver   feature:Program Engagement
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
@@ -77,7 +77,7 @@ APEF2: Autopopulate fields when stage is set to Completed
 APEF3: Autopopulate fields when stage is set to Withdrawn
      [Documentation]                         Autopopulates end date and PE name with anonymous when the stage is set as 
      ...                                     withdrawn on new program engagment dialog
-     [tags]                                  W-037569     perm:admin   perm:manage     perm:deliver   feature:Program Engagement
+     [tags]                                  W-037569   quadrant:Q2   perm:admin   perm:manage     perm:deliver   feature:Program Engagement
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
@@ -93,7 +93,7 @@ APEF3: Autopopulate fields when stage is set to Withdrawn
 APEF4: Autopopulate fields when stage is set to Active and Program start date is later than today
      [Documentation]                         Validates that start date is not set to today when stage is 'Active' and Program
      ...                                     start date is later than 'Today'
-     [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement
+     [tags]                                  W-8746330   quadrant:Q2   perm:admin   perm:manage     perm:deliver    feature:Program Engagement
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
@@ -108,7 +108,7 @@ APEF4: Autopopulate fields when stage is set to Active and Program start date is
 APEF5: Autopopulate fields when stage is set to Active and Program start date is today
      [Documentation]                         Validates that start date is set to today when stage is 'Active' and Program
      ...                                     start date is than 'Today'
-     [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement
+     [tags]                                  W-8746330   quadrant:Q2   perm:admin   perm:manage     perm:deliver    feature:Program Engagement
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement
@@ -123,7 +123,7 @@ APEF5: Autopopulate fields when stage is set to Active and Program start date is
 APEF6: Autopopulate fields when stage is set to Applied with Program start date is earlier than today
      [Documentation]                         Validates that application date is not set to today when stage is 'Active' and Program
      ...                                     start date is earlier than 'Today'
-     [tags]                                  W-8746330      perm:admin   perm:manage     perm:deliver    feature:Program Engagement
+     [tags]                                  W-8746330   quadrant:Q2   perm:admin   perm:manage     perm:deliver    feature:Program Engagement
      Go To Page                              Listing                         ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                             Program Engagement

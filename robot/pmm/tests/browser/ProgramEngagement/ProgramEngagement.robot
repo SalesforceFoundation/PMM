@@ -35,7 +35,7 @@ Setup Test Data
 PE1: Validate Waitlisted PE Listview
     [Documentation]                        This test opens the Waitlisted PE listview and verifies that it contains 
     ...                                    Client, Program and Stage fields
-    [tags]                                 perm:admin   perm:manage   perm:deliver   perm:view   feature:Program Engagement
+    [tags]                                 perm:admin   quadrant:Q2   perm:manage   perm:deliver   perm:view   feature:Program Engagement
     Go To Page                             Listing                               ${ns}ProgramEngagement__c
     Select Listview                        Waitlisted Program Engagements
     Page Should Contain                    Client
@@ -44,7 +44,7 @@ PE1: Validate Waitlisted PE Listview
 
 PE2: Create a new Program Engagement
      [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list.
-     [tags]                                  W-037565      perm:admin   perm:manage       perm:deliver    feature:Program Engagement
+     [tags]                                  W-037565   quadrant:Q2   perm:admin   perm:manage       perm:deliver    feature:Program Engagement
      Go To Page                              Listing                                ${ns}ProgramEngagement__c
      Click Object Button                     New
      Wait For Modal                          New                                    Program Engagement
@@ -66,7 +66,7 @@ PE2: Create a new Program Engagement
 PE3: Create Program Engagement with Auto Name Override
     [Documentation]                         Creates a Program Engagement on Program Record by clicking "New" button in Related list
      ...                                    and Checking Auto-Name Override checkbox. Verify PE name is same as what user added.
-    [tags]                                  W-037577        perm:admin   perm:manage      perm:deliver    feature:Program Engagement
+    [tags]                                  W-037577   quadrant:Q2   perm:admin   perm:manage      perm:deliver    feature:Program Engagement
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
@@ -85,7 +85,7 @@ PE3: Create Program Engagement with Auto Name Override
 PE4: Date validation for PE when start date is later than end date
      [Documentation]                        This test opens the new program engagement dialog and enters a end date earlier than start date
      ...                                    and verifies that an error message is displayed
-     [tags]                                 W-042238   perm:admin   perm:manage       perm:deliver    feature:Program Engagement
+     [tags]                                 W-042238   quadrant:Q2   perm:admin   perm:manage       perm:deliver    feature:Program Engagement
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement
@@ -104,7 +104,7 @@ PE5: Date validation when program engagement dates are not within program date r
      [Documentation]                        This test opens the program record, edits the start and end dates and goes to the PE listing
      ...                                    page, clicks on new and verifes that an error message is displayed when PE date 
      ...                                    range is outside the program date range 
-     [tags]                                 W-042238   perm:admin   perm:manage     perm:deliver    feature:Program Engagement
+     [tags]                                 W-042238   quadrant:Q2   perm:admin   perm:manage     perm:deliver    feature:Program Engagement
      Go To Page                             Details                                 Program__c                   object_id=${program}[Id]
      Click Quick Action Button              Edit
      Populate Lightning Fields              Start Date=12
@@ -129,7 +129,7 @@ PE5: Date validation when program engagement dates are not within program date r
 PE6: Validate program cohort on new PE dialog
      [Documentation]                        This test opens the new program engagement dialog, enters a cohort that does not lookup to the
      ...                                    program entered the dialog, validates that an error message is displayed when saved
-     [tags]                                 W-042238    perm:admin   perm:manage     perm:deliver     feature:Program Engagement
+     [tags]                                 W-042238   quadrant:Q2   perm:admin   perm:manage     perm:deliver     feature:Program Engagement
      Go To Page                             Listing                                ${ns}ProgramEngagement__c
      Click Object Button                    New
      Wait For Modal                         New                                    Program Engagement

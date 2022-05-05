@@ -23,7 +23,7 @@ Setup Test Data
 VPP1: View and Deliver Perm Test for Program
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Programs (View and Deliver Perm Set) 
-     [tags]                           unstable    perm:view    perm:deliver      feature:Program
+     [tags]                           unstable    quadrant:Q2   perm:view    perm:deliver      feature:Program
      Go To Page                              Listing                               ${ns}Program__c
      Page Should Not Contain Button          New
      Go To Page                              Details              Program__c                    object_id=${program}[Id]

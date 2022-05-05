@@ -47,7 +47,7 @@ NSS1: Create a New Service Schedule
     [Documentation]                        Navigates to service schedule listing page, clicks 'New' on the listing page and
     ...                                    creates a new record using the wizard,On Screen 3 validates the new field added to the fieldset
     ...                                    and details on service schedule record once saved
-    [tags]                                 W-8294332     perm:admin   perm:manage       feature:Service Schedule
+    [tags]                                 W-8294332     quadrant:Q3   perm:admin   perm:manage       feature:Service Schedule
     Run task                                add_fields_to_field_set
     ...                                     field_set=${ns}ProgramEngagement__c.${ns}SessionParticipantView
     ...                                     fields=${{ ["${ns}Role__c"]}}

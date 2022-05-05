@@ -18,7 +18,7 @@ import {
 import { NavigationMixin, CurrentPageReference } from "lightning/navigation";
 import { loadStyle } from "lightning/platformResourceLoader";
 
-import { getRecord } from "lightning/uiRecordApi";
+import { getRecord, getRecordNotifyChange } from "lightning/uiRecordApi";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
@@ -81,6 +81,7 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     @api omitProgramEngagementRoles;
     @api omitProgramEngagementStages;
 
+    @track omittedContactIds;
     @track serviceDeliveries;
     @track fieldSet;
     @track completeBucketedStatuses = [];
@@ -332,16 +333,16 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     handleSave() {
+        this.showSpinner = true;
         let rows = this.template.querySelectorAll("c-attendance-row");
-
         let editedRows = [];
-        let omittedContactIds = [];
+        this.omittedContactIds = [];
 
         rows.forEach(row => {
             let editedRow = row.getRow();
             if (editedRow) {
                 if (editedRow.rowDisabled) {
-                    omittedContactIds.push(
+                    this.omittedContactIds.push(
                         getChildObjectByName(editedRow, "Contact__r").Id
                     );
                 } else {
@@ -349,10 +350,6 @@ export default class Attendance extends NavigationMixin(LightningElement) {
                 }
             }
         });
-        omittedContactIds = JSON.stringify(omittedContactIds);
-        let serviceSession = this.getServiceSession();
-        serviceSession[OMITTED_CONTACT_IDS_FIELD.fieldApiName] = omittedContactIds;
-        this.showSpinner = true;
 
         upsertRows({
             serviceDeliveriesToUpsert: editedRows,
@@ -362,10 +359,13 @@ export default class Attendance extends NavigationMixin(LightningElement) {
                 rows.forEach(row => {
                     row.save();
                 });
-
-                updateServiceSession({ serviceSession });
+            })
+            .then(() => {
                 this.isUpdateMode = false;
                 this.showSuccessToast(editedRows.length);
+            })
+            .then(() => {
+                this.updateRecord();
             })
             .catch(error => {
                 handleError(error);
@@ -373,24 +373,25 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             .finally((this.showSpinner = false));
     }
 
-    getServiceSession() {
-        let fields = {};
-        fields[ID] = this.recordId;
-
-        if (!this.isPending) {
-            return fields;
+    async updateRecord() {
+        let serviceSession = {};
+        serviceSession[ID] = this.recordId;
+        serviceSession[OMITTED_CONTACT_IDS_FIELD.fieldApiName] = JSON.stringify(
+            this.omittedContactIds
+        );
+        if (this.isPending) {
+            let status = COMPLETE_STATUS;
+            if (
+                this.serviceSessionStatusForAfterSubmit &&
+                this.serviceSessionStatusForAfterSubmit !== ""
+            ) {
+                status = this.serviceSessionStatusForAfterSubmit;
+            }
+            serviceSession[this.fields.sessionStatus.fieldApiName] = status;
         }
 
-        let status = COMPLETE_STATUS;
-        if (
-            this.serviceSessionStatusForAfterSubmit &&
-            this.serviceSessionStatusForAfterSubmit !== ""
-        ) {
-            status = this.serviceSessionStatusForAfterSubmit;
-        }
-        fields[this.fields.sessionStatus.fieldApiName] = status;
-
-        return fields;
+        await updateServiceSession({ serviceSession });
+        getRecordNotifyChange([{ recordId: this.recordId }]);
     }
 
     handleUpdateClick() {
@@ -404,15 +405,20 @@ export default class Attendance extends NavigationMixin(LightningElement) {
     }
 
     initializeServiceDeliveries() {
-        let omittedContactIds = this.wiredServiceDeliveriesResult.data.omittedContactIds;
-        omittedContactIds = omittedContactIds ? JSON.parse(omittedContactIds) : [];
+        if (!this.omittedContactIds) {
+            this.omittedContactIds = this.wiredServiceDeliveriesResult.data.omittedContactIds;
+            this.omittedContactIds = this.omittedContactIds
+                ? JSON.parse(this.omittedContactIds)
+                : [];
+        }
+
         this.serviceDeliveries = this.wiredServiceDeliveriesResult.data.deliveries.map(
             (item, index) => ({
                 index,
                 ...item,
                 rowDisabled:
                     !item.Id &&
-                    omittedContactIds.includes(
+                    this.omittedContactIds.includes(
                         getChildObjectByName(item, "Contact__r").Id
                     ),
             })

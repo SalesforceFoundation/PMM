@@ -8,9 +8,7 @@
   -->
 
 <template>
-    <div
-        class="slds-box small-box slds-var-m-around_x-small slds-var-p-horizontal_medium"
-    >
+    <div class={style}>
         <lightning-record-edit-form
             record-id={recordId}
             object-api-name={serviceDeliveryObject}
@@ -53,88 +51,89 @@
                                         </div>
                                     </div>
                                 </template>
+                                <template if:false={localRecord.rowDisabled}>
+                                    <!-- QUANTITY FIELD, DYNAMIC INPUT/OUTPUT WITH CUSTOM LABEL -->
+                                    <template if:true={field.isQuantityField}>
+                                        <!-- INPUT -->
+                                        <template if:false={readOnly}>
+                                            <div
+                                                class="slds-form-element slds-form-element_stacked"
+                                            >
+                                                <lightning-input
+                                                    label={unitOfMeasurement}
+                                                    onchange={handleQuantityChange}
+                                                    type="number"
+                                                    min="0"
+                                                    step=".01"
+                                                    value={quantity}
+                                                    disabled={record.rowDisabled}
+                                                ></lightning-input>
+                                            </div>
+                                        </template>
 
-                                <!-- QUANTITY FIELD, DYNAMIC INPUT/OUTPUT WITH CUSTOM LABEL -->
-                                <template if:true={field.isQuantityField}>
-                                    <!-- INPUT -->
-                                    <template if:false={readOnly}>
-                                        <div
-                                            class="slds-form-element slds-form-element_stacked"
-                                        >
-                                            <lightning-input
-                                                label={unitOfMeasurement}
-                                                onchange={handleQuantityChange}
-                                                type="number"
-                                                min="0"
-                                                step=".01"
-                                                value={quantity}
+                                        <!-- OUTPUT -->
+                                        <template if:true={readOnly}>
+                                            <div
+                                                class="slds-form-element slds-form-element_stacked"
+                                            >
+                                                <label
+                                                    for={field.apiName}
+                                                    class="slds-form-element__label"
+                                                >
+                                                    {unitOfMeasurement}
+                                                </label>
+                                                <lightning-output-field
+                                                    id={field.name}
+                                                    variant="label-hidden"
+                                                    field-name={field.apiName}
+                                                ></lightning-output-field>
+                                            </div>
+                                        </template>
+                                    </template>
+
+                                    <!-- READ-ONLY FIELDS LIKE CREATED DATE -->
+                                    <!-- extra special handling because of output-field bug that gets created date label wrong -->
+                                    <template if:true={field.isOutputField}>
+                                        <template if:true={field.value}>
+                                            <div
+                                                class="slds-form-element slds-form-element_stacked"
+                                            >
+                                                <label
+                                                    for={field.apiName}
+                                                    class="slds-form-element__label"
+                                                >
+                                                    {field.label}
+                                                </label>
+                                                <lightning-output-field
+                                                    id={field.name}
+                                                    variant="label-hidden"
+                                                    field-name={field.apiName}
+                                                ></lightning-output-field>
+                                            </div>
+                                        </template>
+                                    </template>
+
+                                    <!-- ALL OTHER FIELDS WITHOUT SPECIAL HANDLING, DYNAMIC INPUT/OUTPUT -->
+                                    <template if:true={field.isNormalField}>
+                                        <!-- INPUT -->
+                                        <template if:false={readOnly}>
+                                            <lightning-input-field
+                                                field-name={field.apiName}
+                                                onchange={handleInputChange}
+                                                value={field.value}
+                                                variant={field.variant}
                                                 disabled={record.rowDisabled}
-                                            ></lightning-input>
-                                        </div>
-                                    </template>
-
-                                    <!-- OUTPUT -->
-                                    <template if:true={readOnly}>
-                                        <div
-                                            class="slds-form-element slds-form-element_stacked"
-                                        >
-                                            <label
-                                                for={field.apiName}
-                                                class="slds-form-element__label"
                                             >
-                                                {unitOfMeasurement}
-                                            </label>
+                                            </lightning-input-field>
+                                        </template>
+
+                                        <!-- OUTPUT -->
+                                        <template if:true={readOnly}>
                                             <lightning-output-field
                                                 id={field.name}
-                                                variant="label-hidden"
                                                 field-name={field.apiName}
                                             ></lightning-output-field>
-                                        </div>
-                                    </template>
-                                </template>
-
-                                <!-- READ-ONLY FIELDS LIKE CREATED DATE -->
-                                <!-- extra special handling because of output-field bug that gets created date label wrong -->
-                                <template if:true={field.isOutputField}>
-                                    <template if:true={field.value}>
-                                        <div
-                                            class="slds-form-element slds-form-element_stacked"
-                                        >
-                                            <label
-                                                for={field.apiName}
-                                                class="slds-form-element__label"
-                                            >
-                                                {field.label}
-                                            </label>
-                                            <lightning-output-field
-                                                id={field.name}
-                                                variant="label-hidden"
-                                                field-name={field.apiName}
-                                            ></lightning-output-field>
-                                        </div>
-                                    </template>
-                                </template>
-
-                                <!-- ALL OTHER FIELDS WITHOUT SPECIAL HANDLING, DYNAMIC INPUT/OUTPUT -->
-                                <template if:true={field.isNormalField}>
-                                    <!-- INPUT -->
-                                    <template if:false={readOnly}>
-                                        <lightning-input-field
-                                            field-name={field.apiName}
-                                            onchange={handleInputChange}
-                                            value={field.value}
-                                            variant={field.variant}
-                                            disabled={record.rowDisabled}
-                                        >
-                                        </lightning-input-field>
-                                    </template>
-
-                                    <!-- OUTPUT -->
-                                    <template if:true={readOnly}>
-                                        <lightning-output-field
-                                            id={field.name}
-                                            field-name={field.apiName}
-                                        ></lightning-output-field>
+                                        </template>
                                     </template>
                                 </template>
                             </lightning-layout-item>

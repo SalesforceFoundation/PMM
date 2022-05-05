@@ -84,7 +84,8 @@ public with sharing class ServiceDeliveryService {
                 fieldSet.getName(),
                 false
             ),
-            deliveries
+            deliveries,
+            session.OmittedContactIds__c
         );
     }
 
@@ -269,13 +270,17 @@ public with sharing class ServiceDeliveryService {
         public List<Map<String, Object>> fieldSet;
         @AuraEnabled
         public List<ServiceDelivery__c> deliveries;
+        @AuraEnabled
+        public String omittedContactIds;
 
         public Roster(
             List<Map<String, Object>> fieldSet,
-            List<ServiceDelivery__c> deliveries
+            List<ServiceDelivery__c> deliveries,
+            String omittedContactIds
         ) {
             this.fieldSet = fieldSet;
             this.deliveries = deliveries;
+            this.omittedContactIds = omittedContactIds;
         }
     }
 

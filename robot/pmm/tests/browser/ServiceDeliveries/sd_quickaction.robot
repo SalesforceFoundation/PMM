@@ -40,7 +40,7 @@ Setup Test Data
 SDQA1: Create a new service delivery on service delivery using quick action
     [Documentation]                This test loads the service delivery record, clicks on the new service delivery quick action
     ...                            and creates a new service delivery record.
-    [tags]                         W-9057513      perm:admin   perm:manage    perm:deliver    feature:Service Delivery
+    [tags]                         W-9057513   quadrant:Q2   perm:admin   perm:manage    perm:deliver    feature:Service Delivery
     Go To Page                     Details                        ServiceDelivery__c        object_id=${service_delivery}[Id]
     Verify Details                 Service Delivery Name          contains                  ${service_delivery}[Name]
     Click Quick Action Button      New Service Delivery

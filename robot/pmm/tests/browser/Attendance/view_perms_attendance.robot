@@ -36,7 +36,7 @@ Setup Test Data
 VPA1: View Perms Attendance Snapshot for Pending Status
     [Documentation]                        Logged in as a non admin user with view perm sets, navigates to service session details page, and 
     ...                                    validates that a warning message is displayed on attendance component.
-    [tags]                                 unstable         perm:view      feature:Service Session
+    [tags]                                 unstable   quadrant:Q2   perm:view   feature:Service Session
     Go To Page                             Details                        ServiceSession__c           object_id=${service_session1}[Id]
     Page Should Contain                    Track Attendance  
     Page Should Contain                    You don't have access to this information. Ask your admin for help.
@@ -44,7 +44,7 @@ VPA1: View Perms Attendance Snapshot for Pending Status
 VPA2: View Perms Attendance Snapshot for Complete Status
     [Documentation]                        Logged in as a non admin user with view perm sets, navigates to service session details page, and 
     ...                                    validates that a warning message is displayed on attendance component.
-    [tags]                                 unstable         perm:view      feature:Service Session
+    [tags]                                 unstable   quadrant:Q2   perm:view      feature:Service Session
     Go To Page                             Details                        ServiceSession__c           object_id=${service_session2}[Id]
     Page Should Contain                    Track Attendance  
     Page Should Not Contain Button         Update

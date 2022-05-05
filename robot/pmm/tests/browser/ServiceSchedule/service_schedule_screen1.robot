@@ -32,7 +32,7 @@ Setup Test Data
 SS1.1: Validate data on Screen1
     [Documentation]                        Validates that start date cannot be after end date
     ...                                    Validates that if Frequency=Daily/Weekly/Monthly, a session end time or session end after is set
-    [tags]                                 W-8445950       perm:admin   perm:manage        feature:Service Schedule
+    [tags]                                 W-8445950   quadrant:Q2   perm:admin   perm:manage        feature:Service Schedule
     Go To PMM App
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New

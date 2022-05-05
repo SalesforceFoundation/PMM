@@ -38,7 +38,7 @@ Setup Test Data
 *** Test Cases ***
 QA1: Add contact to program quick action
      [Documentation]                  Add a contact to a program using quick action and verify the record
-     [tags]                           W-037575    perm:admin   perm:manage      perm:deliver    feature:Program Engagement
+     [tags]                           W-037575    quadrant:Q2   perm:admin   perm:manage      perm:deliver    feature:Program Engagement
      Go To Page                       Details                                 Contact              object_id=${contact}[Id]
      Verify Details                   Name                                    contains             ${contact}[Name]
      Click Quick Action Button        Add Contact to Program
@@ -57,7 +57,7 @@ QA1: Add contact to program quick action
      
 QA2: Add service delivery on a contact
      [Documentation]                  Add a service delivery on a contact and verify the record
-     [tags]                           W-037575    perm:admin   perm:manage     perm:deliver    feature:Service Delivery
+     [tags]                           W-037575    quadrant:Q2   perm:admin   perm:manage     perm:deliver    feature:Service Delivery
      Go To Page                       Details                                 Contact                  object_id=${contact}[Id]
      Verify Details                   Name                                    contains             ${contact}[Name]
      Click Quick Action Button        Create New Service Delivery

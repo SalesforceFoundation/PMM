@@ -8,6 +8,9 @@
  */
 
 public with sharing class ServiceScheduleDomain {
+    @TestVisible
+    private ServiceSelector serviceSelector = new ServiceSelector();
+
     public void insertModel(ServiceScheduleModel model) {
         insertSchedule(model.serviceSchedule);
         setSessionDefaults(model);
@@ -74,39 +77,20 @@ public with sharing class ServiceScheduleDomain {
 
     private void generateParticipants(ServiceScheduleModel model) {
         Set<Id> participantContactIds = new Set<Id>();
-
-        List<ServiceParticipant__c> currentParticipants = new List<ServiceParticipant__c>();
         if (model.serviceSchedule.Id != null) {
-            // TODO: move this somewhere better, maybe ServiceScheduleSelector?
-            currentParticipants = [
-                SELECT Id, Contact__c
-                FROM ServiceParticipant__c
-                WHERE ServiceSchedule__c = :model.serviceSchedule.Id
-            ];
-        }
-        System.debug(
-            ' **** Model persist, tracking ' +
-            currentParticipants.size() +
-            ' existing participants'
-        );
-
-        for (ServiceParticipant__c participant : currentParticipants) {
-            participantContactIds.add(participant.Contact__c);
-            System.debug(
-                ' *** Tracking existing service participant for contact: ' +
-                participant.Contact__c
+            participantContactIds = new Set<Id>(
+                serviceSelector.getExistingParticipantContactIdsByScheduleId(
+                    model.serviceSchedule.Id
+                )
             );
         }
 
         for (ProgramEngagement__c engagement : model.selectedEngagements) {
             if (!participantContactIds.contains(engagement.Contact__c)) {
-                System.debug(' **** New Contact! ' + engagement.Contact__c);
                 model.serviceParticipants.add(
                     createServiceParticipant(engagement, model.serviceSchedule)
                 );
                 participantContactIds.add(engagement.Contact__c);
-            } else {
-                System.debug(' **** Duplicate Contact! ' + engagement.Contact__c);
             }
         }
     }

@@ -32,7 +32,7 @@ Setup Test Data
 VSP1: View Perm Test for Service Participant
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Service Participant (View Perm Set) 
-     [tags]                           unstable    perm:view    feature:Service Participant
+     [tags]                           unstable    quadrant:Q2   perm:view    feature:Service Participant
      Go To Page                              Listing                               ${ns}ServiceParticipant__c
      Page Should Not Contain Button          New
      Go To Page                              Details              ServiceParticipant__c                    object_id=${service_participant}[Id]

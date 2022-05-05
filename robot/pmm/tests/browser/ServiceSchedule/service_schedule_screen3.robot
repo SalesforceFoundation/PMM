@@ -43,7 +43,7 @@ Setup Test Data
 SSS3.1: Add/remove service participants on Screen3
     [Documentation]                        On service schedule wizard, add/remove service participants on screen 3 and validate that the
     ...                                    added participants are displayed on screen 4 and when the wizard is saved
-    [tags]                                  W-8449817    perm:admin    perm:manage     feature:Service Schedule
+    [tags]                                  W-8449817   quadrant:Q2   perm:admin    perm:manage   feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
@@ -74,7 +74,7 @@ SSS3.1: Add/remove service participants on Screen3
 SSS3.2: Warning when number of participants exceeds capacity
     [Documentation]                        On service schedule wizard, enter service participant capacity and validate that a warning
     ...                                    is displayed on Screen 3 when number of participants exceeds capacity
-    [tags]                                  W-8449817   perm:admin   perm:manage   feature:Service Schedule
+    [tags]                                  W-8449817   quadrant:Q2   perm:admin   perm:manage   feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
@@ -93,7 +93,7 @@ SSS3.2: Warning when number of participants exceeds capacity
 SSS3.3: Validate fields added to SessionParticipantView fieldset on Wizard
     [Documentation]               Adds a field to SessionParticipantView fieldset and validates that the field is displayed on the 
     ...                           Wizard Screen 3 and Screen 4.
-    [tags]                        W-9476493   perm:admin   feature:Service Schedule
+    [tags]                        W-9476493   quadrant:Q2   perm:admin   feature:Service Schedule
     Run task                            add_fields_to_field_set
     ...                                 field_set=${ns}ProgramEngagement__c.${ns}SessionParticipantView
     ...                                 fields=${{ ["${ns}Role__c"] }}

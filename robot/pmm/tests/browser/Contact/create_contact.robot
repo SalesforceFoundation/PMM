@@ -25,7 +25,7 @@ Setup Test Data
 *** Test Cases ***
 CC1: Create a Contact 
     [Documentation]                        This test creates a Contact and verifies the details of the contact
-    [tags]                                 perm:admin   perm:manage      perm:deliver    perm:view    feature:Contact
+    [tags]                                 perm:admin   quadrant:Q2   perm:manage   perm:deliver    perm:view    feature:Contact
     Go To Page                             Listing                              Contact
     Click Object Button                    New
     Load Page object                       NewContact                           Contact

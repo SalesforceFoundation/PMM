@@ -33,7 +33,7 @@ Setup Test Data
 NSP1: Create a new service participant
     [Documentation]                         Navigates to service participant listing page, clicks 'New' on the listing page and
     ...                                     creates a new record, validates the details on the service participant record
-    [tags]                                  W-8289333     perm:admin     perm:manage     perm:deliver      feature:Service Participant
+    [tags]                                  W-8289333   quadrant:Q2   perm:admin   perm:manage   perm:deliver   feature:Service Participant
      Go To Page                              Listing                                ${ns}ServiceParticipant__c
      Click Object Button                     New
      Wait For Modal                          New                                    Service Participant

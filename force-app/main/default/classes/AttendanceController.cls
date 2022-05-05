@@ -47,6 +47,15 @@ public with sharing class AttendanceController {
         }
     }
 
+    @AuraEnabled
+    public static void updateServiceSession(ServiceSession__c serviceSession) {
+        try {
+            sessionService.updateServiceSession(serviceSession);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
     @AuraEnabled(cacheable=true)
     public static Map<String, Boolean> checkFieldPermissions() {
         try {

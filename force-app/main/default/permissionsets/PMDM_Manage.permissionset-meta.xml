@@ -247,6 +247,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceDelivery__c.ServiceSchedule__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>ServiceParticipant__c.Contact__c</field>
         <readable>true</readable>
@@ -279,6 +284,16 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>ServiceSchedule__c.AllDay__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.AttendanceRate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.AttendanceSummary__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -319,6 +334,16 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>ServiceSchedule__c.MonthlyRecurrenceOption__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.NumAbsentServiceDeliveries__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.NumPresentServiceDeliveries__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

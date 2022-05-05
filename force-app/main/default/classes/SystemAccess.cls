@@ -33,23 +33,49 @@ public without sharing class SystemAccess {
         String lookupField,
         List<SObject> records
     ) {
-        // Find all records that have service delivery child records e.g.
-        // SELECT Id FROM Contact where Id in (SELECT Contact FROM ServiceDelivery__c
-        // WHERE Contact IN :records)
-        String query = queryBuilder
-            .reset()
-            .withSObjectType(sObjectType)
-            .withSelectFields(new List<String>{ 'Id' })
-            .addCondition(
-                'Id IN (SELECT ' +
-                lookupField +
-                ' FROM ' +
-                String.valueOf(ServiceDelivery__c.SObjectType) +
-                ' WHERE ' +
-                lookupField +
-                ' IN :records)'
-            )
-            .buildSoqlQuery();
+        String query;
+
+        if (sObjectType != ServiceSchedule__c.SObjectType) {
+            // Find all records that have service delivery child records e.g.
+            // SELECT Id FROM Contact where Id in (SELECT Contact FROM ServiceDelivery__c
+            // WHERE Contact IN :records)
+            query = queryBuilder
+                .reset()
+                .withSObjectType(sObjectType)
+                .withSelectFields(new List<String>{ 'Id' })
+                .addCondition(
+                    'Id IN (SELECT ' +
+                    lookupField +
+                    ' FROM ' +
+                    String.valueOf(ServiceDelivery__c.SObjectType) +
+                    ' WHERE ' +
+                    lookupField +
+                    ' IN :records)'
+                )
+                .buildSoqlQuery();
+        } else {
+            String sessionRelationshipName = ServiceDelivery__c.ServiceSession__c.getDescribe()
+                .getRelationshipName();
+
+            query = queryBuilder
+                .reset()
+                .withSObjectType(ServiceDelivery__c.SObjectType)
+                .withSelectFields(
+                    new List<String>{
+                        sessionRelationshipName +
+                        '.' +
+                        String.valueOf(ServiceSchedule__c.SObjectType)
+                    }
+                )
+                .addCondition(
+                    ' ' +
+                    sessionRelationshipName +
+                    '.' +
+                    String.valueOf(ServiceSchedule__c.SObjectType) +
+                    ' IN :records'
+                )
+                .buildSoqlQuery();
+        }
 
         return Database.query(query);
     }
@@ -121,7 +147,6 @@ public without sharing class SystemAccess {
         List<String> fields = new List<String>();
         fields.addAll(serviceDeliveryFields);
         fields.add(lookupField);
-
         return fields;
     }
 

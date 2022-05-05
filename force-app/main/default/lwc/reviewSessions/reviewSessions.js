@@ -85,7 +85,7 @@ export default class ReviewSessions extends LightningElement {
         return this._serviceSessions.map((session, index) => ({
             ...session,
             index: index,
-            alreadyCreatedCSSClass: session.Id ? "slds-color__background_gray-7" : "",
+            alreadyCreatedCSSClass: session.Id ? "slds-color__background_gray-5" : "",
             disableDeselect: session.Id ? true : false,
         }));
     }

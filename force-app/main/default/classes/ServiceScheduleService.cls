@@ -37,20 +37,10 @@ public with sharing class ServiceScheduleService {
             );
 
             loadAndPopulateSessionRecords(ssModel);
-            ssModel.selectedEngagements = getParticpantEngagementsByServiceScheduleId(
-                serviceScheduleId,
+            loadAndPopulateScheduleParticipants(
+                ssModel,
                 getSelectFieldsWithToLabel(spModel)
             );
-            /**
-            loadAndPopulateParticipantRecords(
-                ssModel.serviceSchedule.Service__c,
-                spModel
-            );
-            ssModel.serviceSessions = createSessionsFromSchedule(
-                ssModel.serviceSchedule,
-                ssModel.maxSessions
-            );
-             */
         }
         return ssModel;
     }
@@ -67,8 +57,8 @@ public with sharing class ServiceScheduleService {
         }
     }
 
-    private List<ProgramEngagement__c> getParticpantEngagementsByServiceScheduleId(
-        Id serviceScheduleId,
+    private void loadAndPopulateScheduleParticipants(
+        ServiceScheduleModel ssModel,
         Set<String> fieldNames
     ) {
         // TODO: Move to new ServiceParticipant Selector?
@@ -89,14 +79,23 @@ public with sharing class ServiceScheduleService {
                     ServiceParticipant__c.ProgramEngagement__c.getDescribe()
                 ))
         ) {
-            return null;
+            return;
         }
 
         List<ServiceParticipant__c> participants = [
-            SELECT ProgramEngagement__c
+            SELECT ProgramEngagement__c, Contact__c, Status__c
             FROM ServiceParticipant__c
-            WHERE ServiceSchedule__c = :serviceScheduleId
+            WHERE ServiceSchedule__c = :ssModel.serviceSchedule.Id
         ];
+
+        ssModel.serviceParticipants = participants;
+        System.debug(' **** Loaded ' + participants.size() + ' existing participants');
+        for (ServiceParticipant__c participant : participants) {
+            System.debug(
+                ' *** Loaded existing service participant for contact: ' +
+                participant.Contact__c
+            );
+        }
 
         Set<Id> programEngagementIds = new Set<Id>();
         for (ServiceParticipant__c participant : participants) {
@@ -108,7 +107,20 @@ public with sharing class ServiceScheduleService {
             fieldNames,
             progEngagementService.getActiveStages()
         );
-        return programEngagements;
+
+        System.debug(
+            ' **** Loaded ' +
+            programEngagements.size() +
+            ' existing engagements'
+        );
+        for (ProgramEngagement__c engagement : programEngagements) {
+            System.debug(
+                ' *** Loaded existing program engagement for contact: ' +
+                engagement.Contact__c
+            );
+        }
+
+        ssModel.selectedEngagements = programEngagements;
     }
 
     public List<Id> getExistingParticipantContactIds(Id scheduleId) {

@@ -119,7 +119,7 @@ public with sharing class ServiceScheduleModel {
     }
 
     public void loadFromDatabase(Id serviceScheduleId) {
-        // TODO: Move this to ServiceScheduleDomain
+        // TODO: Move this to ServiceScheduleSelector?
         serviceSchedule = [
             SELECT
                 Id,

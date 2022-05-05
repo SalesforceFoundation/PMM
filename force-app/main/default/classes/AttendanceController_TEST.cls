@@ -11,7 +11,12 @@
 public with sharing class AttendanceController_TEST {
     private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
     private static final String PENDING_BUCKET = 'ServiceSessionStatusPending';
-    private static BasicStub serviceStub = new BasicStub(ServiceDeliveryService.class);
+    private static BasicStub deliveryServiceStub = new BasicStub(
+        ServiceDeliveryService.class
+    );
+    private static BasicStub sessionServiceStub = new BasicStub(
+        ServiceSessionService.class
+    );
 
     @IsTest
     private static void shouldReturnServiceDeliveriesFromService() {
@@ -19,15 +24,16 @@ public with sharing class AttendanceController_TEST {
         List<ServiceDelivery__c> serviceDeliveriesToReturn = new List<ServiceDelivery__c>();
         ServiceDeliveryService.Roster rosterToReturn = new ServiceDeliveryService.Roster(
             null,
-            serviceDeliveriesToReturn
+            serviceDeliveriesToReturn,
+            null
         );
-        serviceStub.withReturnValue(
+        deliveryServiceStub.withReturnValue(
             generateRoster,
             new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
             rosterToReturn
         );
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
-        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) deliveryServiceStub.createMock();
 
         Test.startTest();
         System.assert(
@@ -37,7 +43,7 @@ public with sharing class AttendanceController_TEST {
         );
         Test.stopTest();
 
-        serviceStub.assertCalledWith(
+        deliveryServiceStub.assertCalledWith(
             generateRoster,
             new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
             new List<Object>{ sessionId, new ServiceDeliveryService.Filters('', '', '') }
@@ -48,11 +54,11 @@ public with sharing class AttendanceController_TEST {
     private static void shouldRethrowExceptionFromService() {
         String generateRoster = 'generateRoster';
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
-        serviceStub.withThrowException(
+        deliveryServiceStub.withThrowException(
             generateRoster,
             new List<Type>{ Id.class, ServiceDeliveryService.Filters.class }
         );
-        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) deliveryServiceStub.createMock();
         Exception actualException;
 
         Test.startTest();
@@ -64,12 +70,12 @@ public with sharing class AttendanceController_TEST {
         Test.stopTest();
 
         System.assertEquals(
-            serviceStub.testExceptionMessage,
+            deliveryServiceStub.testExceptionMessage,
             actualException.getMessage(),
             'Expected the controller to rethrow the exception from the service.'
         );
 
-        serviceStub.assertCalledWith(
+        deliveryServiceStub.assertCalledWith(
             generateRoster,
             new List<Type>{ Id.class, ServiceDeliveryService.Filters.class },
             new List<Object>{ sessionId, new ServiceDeliveryService.Filters('', '', '') }
@@ -81,13 +87,13 @@ public with sharing class AttendanceController_TEST {
         String methodName = 'upsertServiceDeliveries';
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>();
 
-        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
+        AttendanceController.service = (ServiceDeliveryService) deliveryServiceStub.createMock();
 
         Test.startTest();
         AttendanceController.upsertServiceDeliveries(deliveries);
         Test.stopTest();
 
-        serviceStub.assertCalledWith(
+        deliveryServiceStub.assertCalledWith(
             methodName,
             List<ServiceDelivery__c>.class,
             deliveries
@@ -99,8 +105,11 @@ public with sharing class AttendanceController_TEST {
         String methodName = 'upsertServiceDeliveries';
         List<ServiceDelivery__c> deliveries = new List<ServiceDelivery__c>();
 
-        serviceStub.withThrowException(methodName, List<ServiceDelivery__c>.class);
-        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
+        deliveryServiceStub.withThrowException(
+            methodName,
+            List<ServiceDelivery__c>.class
+        );
+        AttendanceController.service = (ServiceDeliveryService) deliveryServiceStub.createMock();
         Exception actualException;
 
         Test.startTest();
@@ -112,12 +121,12 @@ public with sharing class AttendanceController_TEST {
         Test.stopTest();
 
         System.assertEquals(
-            serviceStub.testExceptionMessage,
+            deliveryServiceStub.testExceptionMessage,
             actualException.getMessage(),
             'Expected the controller to rethrow the exception from the service.'
         );
 
-        serviceStub.assertCalledWith(
+        deliveryServiceStub.assertCalledWith(
             methodName,
             List<ServiceDelivery__c>.class,
             deliveries
@@ -128,14 +137,14 @@ public with sharing class AttendanceController_TEST {
     private static void shouldCallServiceToCheckFLS() {
         String methodName = 'checkFieldPermissions';
         Map<String, Boolean> expected = new Map<String, Boolean>();
-        serviceStub.withReturnValue(methodName, expected);
-        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
+        deliveryServiceStub.withReturnValue(methodName, expected);
+        AttendanceController.service = (ServiceDeliveryService) deliveryServiceStub.createMock();
 
         Test.startTest();
         Map<String, Boolean> actual = AttendanceController.checkFieldPermissions();
         Test.stopTest();
 
-        serviceStub.assertCalled(methodName);
+        deliveryServiceStub.assertCalled(methodName);
         System.assertEquals(
             expected,
             actual,
@@ -147,8 +156,8 @@ public with sharing class AttendanceController_TEST {
     private static void shouldRethrowExceptionFromServiceOnFLSCheck() {
         String methodName = 'checkFieldPermissions';
 
-        serviceStub.withThrowException(methodName);
-        AttendanceController.service = (ServiceDeliveryService) serviceStub.createMock();
+        deliveryServiceStub.withThrowException(methodName);
+        AttendanceController.service = (ServiceDeliveryService) deliveryServiceStub.createMock();
         Exception actualException;
         Map<String, Boolean> actual;
         Test.startTest();
@@ -160,13 +169,13 @@ public with sharing class AttendanceController_TEST {
         Test.stopTest();
 
         System.assertEquals(
-            serviceStub.testExceptionMessage,
+            deliveryServiceStub.testExceptionMessage,
             actualException.getMessage(),
             'Expected the controller to rethrow the exception from the service.'
         );
         System.assertEquals(null, actual);
 
-        serviceStub.assertCalled(methodName);
+        deliveryServiceStub.assertCalled(methodName);
     }
 
     @IsTest
@@ -226,5 +235,45 @@ public with sharing class AttendanceController_TEST {
             actualException instanceof AuraHandledException,
             actualException.getTypeName() + ': Expected an aura handled exception.'
         );
+    }
+
+    @IsTest
+    private static void shouldPassSessionToSessionServiceOnUpdate() {
+        String methodName = 'updateServiceSession';
+        ServiceSession__c session = new ServiceSession__c();
+
+        AttendanceController.sessionService = (ServiceSessionService) sessionServiceStub.createMock();
+
+        Test.startTest();
+        AttendanceController.updateServiceSession(session);
+        Test.stopTest();
+
+        sessionServiceStub.assertCalledWith(methodName, ServiceSession__c.class, session);
+    }
+
+    @IsTest
+    private static void shouldRethrowExceptionFromSessionServiceOnUpdate() {
+        String methodName = 'updateServiceSession';
+        ServiceSession__c session = new ServiceSession__c();
+
+        sessionServiceStub.withThrowException(methodName, ServiceSession__c.class);
+        AttendanceController.sessionService = (ServiceSessionService) sessionServiceStub.createMock();
+        Exception actualException;
+
+        Test.startTest();
+        try {
+            AttendanceController.updateServiceSession(session);
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            sessionServiceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+
+        sessionServiceStub.assertCalledWith(methodName, ServiceSession__c.class, session);
     }
 }

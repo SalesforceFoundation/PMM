@@ -83,13 +83,15 @@ export default class AttendanceRow extends LightningElement {
         return this.localRecord[this.fields.quantity.fieldApiName];
     }
 
+    get style() {
+        return (
+            "slds-box slds-var-m-around_x-small slds-var-p-horizontal_medium " +
+            (this.localRecord.rowDisabled ? "shaded-box" : "small-box")
+        );
+    }
+
     setValues() {
-        if (
-            this.localFieldSet &&
-            this.localFieldSet.length &&
-            this.record &&
-            !this.localRecord.rowDisabled
-        ) {
+        if (this.localFieldSet && this.localFieldSet.length && this.record) {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(field => {
                 field.value = this.record[field.apiName];
@@ -121,20 +123,5 @@ export default class AttendanceRow extends LightningElement {
     handleToggleButton() {
         this.localRecord.rowDisabled =
             this.localRecord.rowDisabled === true ? false : true;
-        if (this.localRecord.rowDisabled) {
-            let inputFields = [
-                ...this.template.querySelectorAll("lightning-input"),
-                ...this.template.querySelectorAll("lightning-input-field"),
-            ];
-            inputFields.forEach(field => {
-                field.value = null;
-            });
-
-            this.localRecord[this.fields.quantity.fieldApiName] = null;
-
-            this.localFieldSet.forEach(field => {
-                field.value = null;
-            });
-        }
     }
 }

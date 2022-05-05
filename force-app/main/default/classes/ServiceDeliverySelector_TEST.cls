@@ -131,6 +131,19 @@ public with sharing class ServiceDeliverySelector_TEST {
     }
 
     @IsTest
+    private static void shouldReturnNullWhenSessionNotFound() {
+        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
+
+        Test.startTest();
+        System.assertEquals(
+            null,
+            selector.getSession(sessionId),
+            'Expected the service to return null when a record is not found.'
+        );
+        Test.stopTest();
+    }
+
+    @IsTest
     private static void returnsEmptyDeliveryListWithoutReadAccess() {
         User standardUser = TestUtil.getTestUser();
         Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;

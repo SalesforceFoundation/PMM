@@ -12,6 +12,9 @@ public with sharing class ServiceSessionService {
     private ServiceSessionSelector serviceSessionSelector = new ServiceSessionSelector();
 
     @TestVisible
+    private ServiceSessionDomain serviceSessionDomain = new ServiceSessionDomain();
+
+    @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
     private static final String COMPLETE_BUCKET = 'ServiceSessionStatusComplete';
@@ -66,5 +69,9 @@ public with sharing class ServiceSessionService {
         }
 
         return buckets;
+    }
+
+    public void updateServiceSession(ServiceSession__c serviceSession) {
+        serviceSessionDomain.updateServiceSession(serviceSession);
     }
 }

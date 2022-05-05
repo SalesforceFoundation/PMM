@@ -43,7 +43,7 @@ Setup Test Data
 *** Test Cases ***
 DA1: Dim attendance rows and validate service deliveries are not created
     [Documentation]                 This test Dims an attendance row and validates that the toast message is displayed
-    [tags]                          W-8613706    perm:admin   perm:manage    perm:deliver   feature:Attendance
+    [tags]                          W-8613706    quadrant:Q2   perm:admin   perm:manage    perm:deliver   feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain Text        Track Attendance
     Dim attendance Row              ${contact1}[Name]         Select
@@ -54,7 +54,7 @@ DA1: Dim attendance rows and validate service deliveries are not created
 DA2: Validate Dim attendance icon is displayed only for newly added rows
     [Documentation]                 This test updates the attendance row and Submits. Creates a new Service participant and validates
     ...                             that the dim icon is displayed only for the newly added row.
-    [tags]                          W-8613706    perm:admin   perm:manage   perm:deliver   feature:Attendance
+    [tags]                          W-8613706    quadrant:Q2   perm:admin   perm:manage   perm:deliver   feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session3}[Id]
     Page Should Contain Text            Track Attendance
     Populate Attendance Field           ${contact1}[Name]       Hours                10
@@ -73,7 +73,7 @@ DA2: Validate Dim attendance icon is displayed only for newly added rows
 DA3: Dim attendance row and validate that the Quantity and Attendance Status is reset
     [Documentation]                 This test updates the attendance row, clicks on the Dim icon and validates that
     ...                             the data is reset when clicked on Submit
-    [tags]                          W-8613706    perm:admin   perm:manage     perm:deliver   feature:Attendance
+    [tags]                          W-8613706    quadrant:Q2   perm:admin   perm:manage   perm:deliver   feature:Attendance
     Go To Page                          Details         ServiceSession__c        object_id=${service_session2}[Id]
     Page Should Contain Text            Track Attendance
     Populate Attendance Field           ${contact1}[Name]      Hours                10

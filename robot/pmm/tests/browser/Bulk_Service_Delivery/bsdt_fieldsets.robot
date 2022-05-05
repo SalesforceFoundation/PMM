@@ -58,7 +58,7 @@ Setup Test Data
 BSDTF1: Switch to a fieldset without service field
     [Documentation]             Switch to a fieldset without service field and validate that the service field is
     ...                         displayed on BSDT
-    [tags]                      W-9654524    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                      W-9654524    quadrant:Q3   perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
     Click Dialog Button         Create by Individual
     Maximize Browser Window
@@ -82,7 +82,7 @@ BSDTF2: Switch fieldsets on wizard screen 4
     [Documentation]             Fieldset switching scenarios via group service delivery -
     ...                         a. Switch from fieldset with Contact+PE+Service fields to a fieldset with Service field
     ...                         b. Switch from fieldset with Service field to a fieldset with Contact field
-    [tags]                      W-9654524    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                      W-9654524    quadrant:Q3   perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     # Add Program Engagement field to alternate_no_service fieldset
     Run task                        add_fields_to_field_set
     ...                             field_set=${ns}ServiceDelivery__c.Alternate_no_service
@@ -130,7 +130,7 @@ BSDTF3: Switch fieldsets via create by individual
     [Documentation]             Fieldset switching scenarios via group service delivery -
     ...                         a. switch from fieldset with PE+Service fields to a fieldset with Contact+PE+Service field
     ...                         b. Switch from fieldset with Contact+PE+Service field to a fieldset with Contact+PE field
-    [tags]                      W-9654524    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                      W-9654524    quadrant:Q3   perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     # Add Program Engagement field to Alternate fieldset
     Run task                        add_fields_to_field_set
     ...                             field_set=${ns}ServiceDelivery__c.Alternate

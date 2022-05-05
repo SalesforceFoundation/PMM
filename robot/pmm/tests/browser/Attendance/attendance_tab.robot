@@ -20,6 +20,6 @@ Setup Test Data
 *** Test Cases ***
 AT1: Validate Attendance Tab
     [Documentation]                        Opens Attendance tab and confirms message on screen.
-    [tags]                                 W-9607506   perm:admin   perm:manage   perm:deliver   perm:view   feature:Attendance
+    [tags]                                 W-9607506   quadrant:Q2   perm:admin   perm:manage   perm:deliver   perm:view   feature:Attendance
     Select App From All Items              Attendance                         
     Page Should Contain                    This tab is used only for printing attendance from a Service Session page.

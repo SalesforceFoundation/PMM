@@ -25,7 +25,7 @@ Setup Test Data
 VPPC1: View and Deliver Perm Test for Program Cohort
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Program Cohort (View and Deliver Perm Set) 
-     [tags]                           unstable    perm:view    perm:deliver      feature:Program Cohort
+     [tags]                           unstable   quadrant:Q2   perm:view    perm:deliver      feature:Program Cohort
      Go To Page                              Listing                               ${ns}ProgramCohort__c
      Page Should Not Contain Button          New
      Go To Page                              Details              ProgramCohort__c                    object_id=${program_cohort}[Id]

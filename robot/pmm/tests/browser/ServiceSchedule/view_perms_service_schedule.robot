@@ -39,7 +39,7 @@ Setup Test Data
 VPSSS1: View Perms Add Service Participant quick action
     [Documentation]                        Logged in as a non admin user with view perm sets, navigates to service schedule details page, clicks on Add service
     ...                                    Participants quick action, and validates that a warning message is displayed
-    [tags]                                 unstable         perm:view      feature:Service Schedule 
+    [tags]                                 unstable   quadrant:Q2   perm:view      feature:Service Schedule 
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
     Click Quick Action Button               Add More Participants
     Page Should Contain                     You don't have access to this information. Ask your admin for help.

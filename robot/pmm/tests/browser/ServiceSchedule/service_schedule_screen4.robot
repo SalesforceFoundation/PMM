@@ -27,7 +27,7 @@ Setup Test Data
 SSS4.1: Verify screen4 when no sessions and participants are added
     [Documentation]                        On service schedule wizard, uncheck create service sessions checkbox and do not add service participants
     ...                                    and validate the message displayed on Screen 4
-    [tags]                                 W-8515142    perm:admin   perm:manage        feature:Service Schedule
+    [tags]                                 W-8515142    quadrant:Q2   perm:admin   perm:manage   feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c

@@ -47,7 +47,7 @@ Setup Test Data
 SSF1: Filter based on Program Cohort
     [Documentation]                        On service schedule wizard,filter based on program cohort and 
     ...                                    validate filtered results are displayed on screen 3
-    [tags]                                 W-9176285   perm:admin    perm:manage     feature:Service Schedule
+    [tags]                                 W-9176285   quadrant:Q2   perm:admin    perm:manage     feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
@@ -67,7 +67,7 @@ SSF1: Filter based on Program Cohort
 SSF2: Filter based on Client Name
     [Documentation]                        On service schedule wizard,filter based on client name and 
     ...                                    validate filtered results are displayed on screen 3
-    [tags]                                 W-9176285   perm:admin    perm:manage     feature:Service Schedule
+    [tags]                                 W-9176285   quadrant:Q2   perm:admin    perm:manage     feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
@@ -87,7 +87,7 @@ SSF2: Filter based on Client Name
 SSF3: Filter based on Stage
     [Documentation]                        On service schedule wizard,filter based on Stage and 
     ...                                    validate no results are displayed on screen 3
-    [tags]                                 W-9176285   perm:admin    perm:manage     feature:Service Schedule
+    [tags]                                 W-9176285   quadrant:Q2   perm:admin    perm:manage     feature:Service Schedule
     Go To Page                              Details                        Service__c           object_id=${service}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c

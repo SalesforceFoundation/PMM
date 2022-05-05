@@ -57,7 +57,7 @@ ISD1: Add service delivery on bulk service delivery
     [Documentation]             This test adds two service deliveries on bulk service delivery and 
     ...                         navigates to service delivery listview and verifies that the service delivery 
     ...                         records are displayed
-    [tags]                      W-040316    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                      W-040316    quadrant:Q2   perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
     Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
@@ -82,7 +82,7 @@ ISD1: Add service delivery on bulk service delivery
 ISD2: Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no
     ...                         services associated with the program.
-    [tags]                      W-040316     perm:admin   perm:manage     perm:deliver   feature:Service Delivery
+    [tags]                      W-040316     quadrant:Q2   perm:admin   perm:manage     perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
     Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact3}[FirstName] ${contact3}[LastName]
@@ -92,7 +92,7 @@ ISD2: Verify error message when there are no services associated with the progra
 ISD3: Delete service delivery on bsdt
     [Documentation]             This test creates a service delivery on BSDT and then deletes it, verifies
     ...                         that a warning dialog is displayed when deleted.
-    [tags]                      W-042916     perm:admin   perm:manage   feature:Service Delivery
+    [tags]                      W-042916     quadrant:Q2   perm:admin   perm:manage   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
     Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
@@ -112,7 +112,7 @@ ISD3: Delete service delivery on bsdt
 ISD4: Edit Service delivery on BSDT
     [Documentation]             Edits a service delivery row and validates that 'Edited' message is displayed
     ...                         and service delivery record is created when saved
-    [tags]                      W-9219421   perm:admin   perm:manage   perm:deliver   feature:Service Delivery
+    [tags]                      W-9219421   quadrant:Q2   perm:admin   perm:manage   perm:deliver   feature:Service Delivery
     Go To Page                  Custom                              Bulk_Service_Deliveries
     Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]

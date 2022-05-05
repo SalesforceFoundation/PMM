@@ -54,7 +54,7 @@ SSL1: Add Service Participant quick action
     Validate Participant Is Added           ${contact1}[Name]
     Validate Participant Is Added           ${contact2}[Name]
     Validate Participant Is Added           ${contact3}[Name]
-    Click Dialog Button                     Save
+    Click Modal Dialog Button               Save
     Wait Until Modal is Closed
     Page Should Contain                     ${service_participant1}[Name]
     Page Should Contain                     ${contact2}[Name] - ${service_schedule}[Name]

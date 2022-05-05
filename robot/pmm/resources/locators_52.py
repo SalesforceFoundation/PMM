@@ -53,6 +53,7 @@ pmm_lex_locators = {
         "override_checkbox": "//lightning-input[contains(@class,'slds-form-element_stacked')]/label[.//span[text()='{}']]/following-sibling::div/span/span",
         "input_text": "//lightning-input[contains(@class,'slds-form-element')][.//label[text()='{}']]/div/input[@class='slds-input']",
         "modal_button": "//button[contains(@class,'slds-button')]/span[text()='{}']",
+        "dialog_modal_button": "//lightning-button[@class='slds-var-m-left_x-small']/button[text()='{}']",
     },
     "related": {
         "button": "//article[contains(@class, 'slds-card slds-card_boundary')][.//span[@title='{}']]//button[text()='{}']",

@@ -8,11 +8,11 @@
  */
 
 import { LightningElement, api } from "lwc";
-import newServiceSchedule from "@salesforce/label/c.New_Service_Schedule";
+import addServiceSessions from "@salesforce/label/c.Add_More_Sessions";
 
 export default class ServiceScheduleAddSessionsWrapper extends LightningElement {
     @api recordId;
     @api isCommunity;
 
-    labels = { newServiceSchedule };
+    labels = { addServiceSessions };
 }

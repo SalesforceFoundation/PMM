@@ -59,6 +59,13 @@
         <shortDescription>Adding More Service Session Warning</shortDescription>
         <value>You&apos;re adding more than {0} sessions, so this will take some extra time to complete.</value>
     </labels>
+        <labels>
+        <fullName>Add_More_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add More Sessions title</shortDescription>
+        <value>Add More Sessions</value>
+    </labels>
     <labels>
         <fullName>Anonymous</fullName>
         <language>en_US</language>

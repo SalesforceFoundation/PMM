@@ -376,24 +376,6 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 SERVICE_FIELD.fieldApiName
             ] = this.serviceId;
         }
-
-        let flattenedSelectedEngagments = this.serviceScheduleModel.selectedEngagements.map(
-            engagement => {
-                // Flatten relationship fields
-                let programEngagement = { ...engagement };
-                for (const [field, value] of Object.entries(programEngagement)) {
-                    if (typeof value === "object") {
-                        for (const [parentField, parentValue] of Object.entries(value)) {
-                            programEngagement[field + parentField] = parentValue;
-                        }
-                    }
-                }
-
-                return programEngagement;
-            }
-        );
-
-        this.serviceScheduleModel.selectedEngagements = flattenedSelectedEngagments;
     }
 
     showModal() {

@@ -24,28 +24,12 @@ public with sharing class ServiceSessionSelector {
             return serviceSessions;
         }
 
-        Set<String> fields = new Set<String>();
-        fields.add(String.valueOf(ServiceSession__c.Id)); // Name is required
-        fields.add(String.valueOf(ServiceSession__c.Name)); // Name is required
-        fields.add(String.valueOf(ServiceSession__c.Status__c)); // Status is required
-        fields.add(String.valueOf(ServiceSession__c.SessionStart__c)); // Start date is used to group the records
-        fields.add(String.valueOf(ServiceSession__c.SessionEnd__c)); // Start date is used to group the records
-        fields.add(String.valueOf(ServiceSession__c.ServiceSchedule__c)); // Start date is used to group the records
-
-        QueryBuilder queryBuilder = new QueryBuilder()
-            .withSObjectType(ServiceSession__c.SObjectType)
-            .withSelectFields(new List<String>(fields));
-
-        queryBuilder.addCondition(
-            String.valueOf(ServiceSession__c.ServiceSchedule__c) +
-            ' = \'' +
-            serviceScheduleId +
-            '\''
-        );
-
-        queryBuilder.withOrderBy(String.valueOf(ServiceSession__c.SessionStart__c));
-
-        serviceSessions = Database.query(queryBuilder.buildSoqlQuery());
+        serviceSessions = [
+            SELECT Id, Name, Status__c, SessionStart__c, SessionEnd__c, ServiceSchedule__c
+            FROM ServiceSession__c
+            WHERE ServiceSchedule__c = :serviceScheduleId
+            ORDER BY SessionStart__c
+        ];
 
         return Security.stripInaccessible(AccessType.READABLE, serviceSessions)
             .getRecords();

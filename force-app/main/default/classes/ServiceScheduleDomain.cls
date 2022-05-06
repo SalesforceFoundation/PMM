@@ -125,7 +125,7 @@ public with sharing class ServiceScheduleDomain {
 
         if (!(hasObjectPermissions && hasFieldPermissions)) {
             throw new ServiceScheduleDomainException(
-                System.Label.Insert_Operation_Exception
+                System.Label.UpsertOperationException
             );
         }
     }

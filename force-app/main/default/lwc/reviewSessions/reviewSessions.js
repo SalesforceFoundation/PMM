@@ -70,11 +70,7 @@ export default class ReviewSessions extends LightningElement {
 
         this._serviceSessions = [...this._serviceScheduleModel.serviceSessions];
 
-        //if (!this._serviceSessions.length) {
         this.getSessions();
-        //} else {
-        //    this.handleDispatchLoadedEvent();
-        //}
     }
 
     get serviceSessions() {

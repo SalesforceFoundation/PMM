@@ -10,6 +10,10 @@
 public with sharing class ServiceScheduleModel {
     @TestVisible
     private FieldSetService fieldSetService = new FieldSetService();
+
+    @TestVisible
+    private ServiceScheduleSelector scheduleSelector = new ServiceScheduleSelector();
+
     private static final String SCHEDULE_FIELD_SET_NAME = 'ServiceScheduleInformation';
     private static final String PROGRAM_ENGAGEMENT_FIELD_SET_NAME = 'SessionParticipantView';
     private static final Integer DEFAULT_MAX_SESSIONS = 500;
@@ -112,38 +116,13 @@ public with sharing class ServiceScheduleModel {
 
     public ServiceScheduleModel(Id serviceScheduleId, Id recordTypeId) {
         if (serviceScheduleId == null) {
-            createNew(recordTypeId);
+            serviceSchedule = (ServiceSchedule__c) ServiceSchedule__c.SObjectType.newSObject(
+                recordTypeId,
+                true
+            );
         } else {
-            loadFromDatabase(serviceScheduleId);
+            serviceSchedule = scheduleSelector.getServiceScheduleById(serviceScheduleId);
         }
-    }
-
-    public void loadFromDatabase(Id serviceScheduleId) {
-        // TODO: Move this to ServiceScheduleSelector?
-        serviceSchedule = [
-            SELECT
-                Id,
-                Name,
-                AllDay__c,
-                CreateServiceSessionRecords__c,
-                DaysOfWeek__c,
-                DefaultServiceQuantity__c,
-                FirstSessionEnd__c,
-                FirstSessionStart__c,
-                Frequency__c,
-                Interval__c,
-                MonthlyRecurrenceOption__c,
-                NumberOfServiceSessions__c,
-                OtherServiceProvider__c,
-                ParticipantCapacity__c,
-                PrimaryServiceProvider__c,
-                ServiceScheduleEndDate__c,
-                ServiceScheduleEnds__c,
-                Service__c
-            FROM ServiceSchedule__c
-            WHERE Id = :serviceScheduleId
-            LIMIT 1
-        ];
 
         if (serviceSessions == null) {
             serviceSessions = new List<ServiceSession__c>();
@@ -156,33 +135,6 @@ public with sharing class ServiceScheduleModel {
         if (serviceParticipants == null) {
             serviceParticipants = new List<ServiceParticipant__c>();
         }
-        maxSessions = DEFAULT_MAX_SESSIONS;
-
-        labels.put('serviceSchedule', getServiceScheduleLabels());
-        labels.put('serviceSession', getServiceSessionLabels());
-        labels.put('serviceParticipant', getServiceParticipantLabels());
-
-        scheduleInformationFields = fieldSetService.getFieldSetForLWC(
-            String.valueOf(ServiceSchedule__c.SObjectType),
-            SCHEDULE_FIELD_SET_NAME,
-            false
-        );
-
-        engagementFields = fieldSetService.getFieldSetForLWC(
-            String.valueOf(ProgramEngagement__c.SObjectType),
-            PROGRAM_ENGAGEMENT_FIELD_SET_NAME,
-            true
-        );
-    }
-
-    public void createNew(Id recordTypeId) {
-        serviceSchedule = (ServiceSchedule__c) ServiceSchedule__c.SObjectType.newSObject(
-            recordTypeId,
-            true
-        );
-        serviceSessions = new List<ServiceSession__c>();
-        selectedEngagements = new List<ProgramEngagement__c>();
-        serviceParticipants = new List<ServiceParticipant__c>();
         maxSessions = DEFAULT_MAX_SESSIONS;
 
         labels.put('serviceSchedule', getServiceScheduleLabels());

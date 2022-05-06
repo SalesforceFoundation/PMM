@@ -8,9 +8,6 @@
  */
 
 public with sharing class ServiceScheduleDomain {
-    @TestVisible
-    private ServiceSelector serviceSelector = new ServiceSelector();
-
     public void insertModel(ServiceScheduleModel model) {
         insertSchedule(model.serviceSchedule);
         setSessionDefaults(model);

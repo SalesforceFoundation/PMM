@@ -76,22 +76,10 @@ public with sharing class ServiceScheduleDomain {
     }
 
     private void generateParticipants(ServiceScheduleModel model) {
-        Set<Id> participantContactIds = new Set<Id>();
-        if (model.serviceSchedule.Id != null) {
-            participantContactIds = new Set<Id>(
-                serviceSelector.getExistingParticipantContactIdsByScheduleId(
-                    model.serviceSchedule.Id
-                )
-            );
-        }
-
         for (ProgramEngagement__c engagement : model.selectedEngagements) {
-            if (!participantContactIds.contains(engagement.Contact__c)) {
-                model.serviceParticipants.add(
-                    createServiceParticipant(engagement, model.serviceSchedule)
-                );
-                participantContactIds.add(engagement.Contact__c);
-            }
+            model.serviceParticipants.add(
+                createServiceParticipant(engagement, model.serviceSchedule)
+            );
         }
     }
 

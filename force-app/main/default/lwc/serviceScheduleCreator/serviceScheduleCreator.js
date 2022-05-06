@@ -53,6 +53,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     _currentStep;
     _steps = new ProgressSteps();
     _serviceSchedules = [];
+    _netNewParticipantProgramEngagements;
 
     @wire(getServiceScheduleModel, {
         serviceScheduleId: "$serviceScheduleId",
@@ -220,6 +221,9 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             return;
         }
         this.isSaving = true;
+        if (this._netNewParticipantProgramEngagements) {
+            this.serviceScheduleModel.selectedEngagements = this._netNewParticipantProgramEngagements;
+        }
         persist({ model: this.serviceScheduleModel })
             .then(result => {
                 this._serviceSchedules.push(result.serviceSchedule);
@@ -293,6 +297,11 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
         if (!(participantSelector && participantSelector.selectedEngagements)) {
             return;
+        }
+
+        if (participantSelector.newParticipantsProgramEngagements) {
+            this._netNewParticipantProgramEngagements =
+                participantSelector.newParticipantsProgramEngagements;
         }
 
         this.hideSpinner = false;

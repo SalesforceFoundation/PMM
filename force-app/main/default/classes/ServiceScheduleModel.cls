@@ -203,50 +203,7 @@ public with sharing class ServiceScheduleModel {
     }
 
     public void addServiceSessions(List<ServiceSession__c> newServiceSessions) {
-        Set<ServiceSessionKey> sessionKeys = new Set<ServiceSessionKey>();
-        for (ServiceSession__c serviceSession : serviceSessions) {
-            sessionKeys.add(new ServiceSessionKey(serviceSession));
-        }
-
-        for (ServiceSession__c newServiceSession : newServiceSessions) {
-            if (!sessionKeys.contains(new ServiceSessionKey(newServiceSession))) {
-                serviceSessions.add(newServiceSession);
-            }
-        }
-    }
-
-    @TestVisible
-    private class ServiceSessionKey {
-        public Datetime sessionStart;
-        public Datetime sessionEnd;
-
-        public ServiceSessionKey(ServiceSession__c serviceSession) {
-            this(serviceSession.SessionStart__c, serviceSession.SessionEnd__c);
-        }
-
-        public ServiceSessionKey(Datetime sessionStart, Datetime sessionEnd) {
-            this.sessionStart = sessionStart;
-            this.sessionEnd = sessionEnd;
-        }
-
-        public Boolean equals(Object obj) {
-            ServiceSessionKey otherKey = (ServiceSessionKey) obj;
-
-            if (
-                sessionStart.day() == otherKey.sessionStart.day() &&
-                sessionStart.month() == otherKey.sessionStart.month() &&
-                sessionStart.year() == otherKey.sessionStart.year() &&
-                sessionStart.hour() == otherKey.sessionStart.hour() &&
-                sessionEnd.day() == otherKey.sessionEnd.day() &&
-                sessionEnd.month() == otherKey.sessionEnd.month() &&
-                sessionEnd.year() == otherKey.sessionEnd.year() &&
-                sessionEnd.hour() == otherKey.sessionEnd.hour()
-            ) {
-                System.debug(' **** KEYS EQUAL!');
-                return true;
-            }
-            return false;
-        }
+        serviceSessions.addAll(newServiceSessions);
     }
 
     private static Map<String, String> serviceScheduleLabels = new Map<String, String>{

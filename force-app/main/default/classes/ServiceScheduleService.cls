@@ -37,10 +37,6 @@ public with sharing class ServiceScheduleService {
             );
 
             loadAndPopulateSessionRecords(ssModel);
-            loadAndPopulateScheduleParticipants(
-                ssModel,
-                getSelectFieldsWithToLabel(spModel)
-            );
         }
         return ssModel;
     }
@@ -55,40 +51,6 @@ public with sharing class ServiceScheduleService {
             Database.rollback(savepoint);
             throw new ServiceScheduleServiceException(ex);
         }
-    }
-
-    private void loadAndPopulateScheduleParticipants(
-        ServiceScheduleModel ssModel,
-        Set<String> fieldNames
-    ) {
-        // TODO: Move to new ServiceParticipant Selector?
-        // ... or ProgramEngagementSelector?
-        if (
-            !(PermissionValidator.getInstance()
-                .hasObjectAccess(
-                    ServiceParticipant__c.SObjectType,
-                    PermissionValidator.CRUDAccessType.READABLE
-                ) &&
-            PermissionValidator.getInstance()
-                .hasObjectAccess(
-                    ProgramEngagement__c.SObjectType,
-                    PermissionValidator.CRUDAccessType.READABLE
-                ) &&
-            PermissionValidator.getInstance()
-                .hasFieldReadAccess(
-                    ServiceParticipant__c.ProgramEngagement__c.getDescribe()
-                ))
-        ) {
-            return;
-        }
-
-        List<ServiceParticipant__c> participants = [
-            SELECT ProgramEngagement__c, Contact__c, Status__c
-            FROM ServiceParticipant__c
-            WHERE ServiceSchedule__c = :ssModel.serviceSchedule.Id
-        ];
-
-        ssModel.serviceParticipants = participants;
     }
 
     public List<Id> getExistingParticipantContactIds(Id scheduleId) {

@@ -104,38 +104,4 @@ public with sharing class ProgramEngagementSelector {
         return Security.stripInaccessible(AccessType.READABLE, programEngagements)
             .getRecords();
     }
-
-    public List<ProgramEngagement__c> getProgramEngagementsById(
-        Set<Id> programEngagementIds,
-        Set<String> fields,
-        Set<String> stages
-    ) {
-        if (
-            !(Schema.SObjectType.ProgramEngagement__c.isAccessible() &&
-            PermissionValidator.getInstance()
-                .hasFieldReadAccess(ProgramEngagement__c.Program__c.getDescribe()) &&
-            PermissionValidator.getInstance()
-                .hasFieldReadAccess(ProgramEngagement__c.Stage__c.getDescribe()))
-        ) {
-            return new List<ProgramEngagement__c>();
-        }
-
-        Integer limitTo =
-            System.Limits.getLimitQueryRows() - System.Limits.getQueryRows();
-
-        queryBuilder
-            .reset()
-            .withSObjectType(ProgramEngagement__c.getSObjectType())
-            .withSelectFields(new List<String>(fields))
-            .addCondition('Id = :programEngagementIds')
-            .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages')
-            .withLimit(limitTo);
-
-        List<ProgramEngagement__c> programEngagements = Database.query(
-            queryBuilder.buildSoqlQuery()
-        );
-
-        return Security.stripInaccessible(AccessType.READABLE, programEngagements)
-            .getRecords();
-    }
 }

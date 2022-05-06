@@ -89,19 +89,6 @@ public with sharing class ServiceScheduleService {
         ];
 
         ssModel.serviceParticipants = participants;
-
-        Set<Id> programEngagementIds = new Set<Id>();
-        for (ServiceParticipant__c participant : participants) {
-            programEngagementIds.add(participant.ProgramEngagement__c);
-        }
-
-        List<ProgramEngagement__c> programEngagements = programEngagementSelector.getProgramEngagementsById(
-            programEngagementIds,
-            fieldNames,
-            progEngagementService.getActiveStages()
-        );
-
-        ssModel.selectedEngagements = programEngagements;
     }
 
     public List<Id> getExistingParticipantContactIds(Id scheduleId) {

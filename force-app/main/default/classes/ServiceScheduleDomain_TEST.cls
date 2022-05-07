@@ -44,6 +44,37 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
+    private static void shouldUpdateScheduleWithoutRelatedRecords() {
+        ServiceSchedule__c originalSchedule = [
+            SELECT Id, Name
+            FROM ServiceSchedule__c
+            LIMIT 1
+        ];
+
+        String originalName = originalSchedule.Name;
+
+        ServiceScheduleModel model = new ServiceScheduleModel(originalSchedule.Id, null);
+        model.serviceSchedule.Name = originalName + ' (Updated)';
+
+        Test.startTest();
+        domain.insertModel(model);
+
+        ServiceSchedule__c updatedSchedule = [
+            SELECT Id, Name
+            FROM ServiceSchedule__c
+            WHERE Id = :originalSchedule.Id
+            LIMIT 1
+        ];
+        Test.stopTest();
+
+        System.assertNotEquals(
+            updatedSchedule.Name,
+            originalSchedule.Name,
+            'Expected the schedule record to have been updated with a modified name.'
+        );
+    }
+
+    @IsTest
     private static void shouldInsertScheduleAndRelatedRecords() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();
@@ -252,6 +283,48 @@ private with sharing class ServiceScheduleDomain_TEST {
         Test.startTest();
         try {
             domain.insertModel(new ServiceScheduleModel());
+        } catch (Exception ex) {
+            dmlLimitAfter = System.Limits.getDmlStatements();
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof ServiceScheduleDomain.ServiceScheduleDomainException,
+            'Expected the domain to throw the exception.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Expected the exception to be thrown before any dml statements.'
+        );
+    }
+
+    @IsTest
+    private static void throwsExceptionOnUpdateWhenPermissionCheckFails() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+
+        ServiceSchedule__c expectedSchedule = [SELECT Id FROM ServiceSchedule__c LIMIT 1];
+
+        Test.startTest();
+        ServiceScheduleModel scheduleModel = new ServiceScheduleModel(
+            expectedSchedule.Id,
+            null
+        );
+
+        try {
+            domain.insertModel(scheduleModel);
         } catch (Exception ex) {
             dmlLimitAfter = System.Limits.getDmlStatements();
             actualException = ex;

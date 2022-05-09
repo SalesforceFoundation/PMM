@@ -18,25 +18,7 @@ public with sharing class ServiceScheduleSelector_TEST {
     @IsTest
     private static void testGetServiceScheduleById() {
         ServiceSchedule__c expectedSchedule = [
-            SELECT
-                Id,
-                Name,
-                AllDay__c,
-                CreateServiceSessionRecords__c,
-                DaysOfWeek__c,
-                DefaultServiceQuantity__c,
-                FirstSessionEnd__c,
-                FirstSessionStart__c,
-                Frequency__c,
-                Interval__c,
-                MonthlyRecurrenceOption__c,
-                NumberOfServiceSessions__c,
-                OtherServiceProvider__c,
-                ParticipantCapacity__c,
-                PrimaryServiceProvider__c,
-                ServiceScheduleEndDate__c,
-                ServiceScheduleEnds__c,
-                Service__c
+            SELECT Id, Name
             FROM ServiceSchedule__c
             LIMIT 1
         ];

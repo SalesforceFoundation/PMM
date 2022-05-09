@@ -33,7 +33,6 @@ export default class ReviewSessions extends LightningElement {
     sessionNameLabel;
     sessionStartLabel;
     sessionEndLabel;
-    sessionIdLabel;
     addSessionError;
     duration;
     addSessionStart;
@@ -134,10 +133,6 @@ export default class ReviewSessions extends LightningElement {
         return this._serviceScheduleModel.sessionFields.sessionEnd.apiName;
     }
 
-    getSessionIdFieldName() {
-        return this._serviceScheduleModel.sessionFields.id.apiName;
-    }
-
     setLabels() {
         this.objectName = this._serviceScheduleModel.labels.serviceSession.objectApiName;
         this.labels.addSession = this._serviceScheduleModel.labels.serviceSession.addSession;
@@ -145,7 +140,6 @@ export default class ReviewSessions extends LightningElement {
         this.sessionNameLabel = this._serviceScheduleModel.sessionFields.name.label;
         this.sessionStartLabel = this._serviceScheduleModel.sessionFields.sessionStart.label;
         this.sessionEndLabel = this._serviceScheduleModel.sessionFields.sessionEnd.label;
-        this.sessionIdLabel = this._serviceScheduleModel.sessionFields.id.label;
         this.limitMessage = format(MAX_SESSIONS_WARNING_LABEL, [
             this._serviceScheduleModel.maxSessions,
         ]);

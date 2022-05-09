@@ -85,10 +85,6 @@ public with sharing class ServiceScheduleModel {
         'name' => fieldSetService.getFieldForLWC(
             Schema.ServiceSession__c.Name.getDescribe()
         ),
-        'id' => fieldSetService.getFieldForLWC(Schema.ServiceSession__c.Id.getDescribe()),
-        'createdDate' => fieldSetService.getFieldForLWC(
-            Schema.ServiceSession__c.CreatedDate.getDescribe()
-        ),
         'sessionStart' => fieldSetService.getFieldForLWC(
             Schema.ServiceSession__c.SessionStart__c.getDescribe()
         ),

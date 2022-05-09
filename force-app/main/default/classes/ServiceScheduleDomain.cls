@@ -93,6 +93,7 @@ public with sharing class ServiceScheduleDomain {
         );
     }
 
+    @TestVisible
     private void validateUpdateAccess(List<SObject> sObjects) {
         if (sObjects == null || sObjects.isEmpty()) {
             return;

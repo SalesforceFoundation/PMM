@@ -19,6 +19,77 @@ public with sharing class ServiceSessionSelector_TEST {
     };
 
     @IsTest
+    private static void testGetSessionsForScheduleNoAccess() {
+        Id serviceScheduleId = [SELECT Id FROM ServiceSchedule__c LIMIT 1].Id;
+
+        List<ServiceSession__c> expectedSessions = [
+            SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
+            FROM ServiceSession__c
+            WHERE ServiceSchedule__c = :serviceScheduleId
+            ORDER BY SessionStart__c
+        ];
+
+        System.assert(
+            expectedSessions.size() > 0,
+            'There must be service session records for a valid test'
+        );
+
+        Test.startTest();
+        System.runAs(TestUtil.getTestUser()) {
+            ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
+            List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsForServiceSchedule(
+                serviceScheduleId
+            );
+            System.assertEquals(
+                new List<ServiceSession__c>(),
+                actualSessions,
+                'Expected the actual is an empty list of service sessions since the user does not have access to the object'
+            );
+        }
+
+        Test.stopTest();
+    }
+
+    @IsTest
+    private static void testGetServiceSessionsForServiceSchedule() {
+        Id serviceScheduleId = [SELECT Id FROM ServiceSchedule__c LIMIT 1].Id;
+
+        List<ServiceSession__c> expectedSessions = [
+            SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
+            FROM ServiceSession__c
+            WHERE ServiceSchedule__c = :serviceScheduleId
+            ORDER BY SessionStart__c
+        ];
+        Test.startTest();
+        ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
+        List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsForServiceSchedule(
+            serviceScheduleId
+        );
+        Test.stopTest();
+
+        System.assertNotEquals(
+            null,
+            serviceScheduleId,
+            'There must be a valid service schedule for the test to be valid'
+        );
+        System.assertEquals(
+            expectedSessions.size(),
+            actualSessions.size(),
+            'The expected number of session should have been returned'
+        );
+
+        Map<Id, ServiceSession__c> expectedSessionsById = new Map<Id, ServiceSession__c>(
+            expectedSessions
+        );
+        for (ServiceSession__c actualSession : actualSessions) {
+            System.assert(
+                expectedSessionsById.containsKey(actualSession.Id),
+                'Every returned service session should be found in the expected list'
+            );
+        }
+    }
+
+    @IsTest
     private static void testGetServiceSessionsForThisWeek() {
         final String dateLiteral = 'THIS_WEEK';
 

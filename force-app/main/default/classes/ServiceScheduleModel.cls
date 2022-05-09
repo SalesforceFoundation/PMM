@@ -124,17 +124,9 @@ public with sharing class ServiceScheduleModel {
             serviceSchedule = scheduleSelector.getServiceScheduleById(serviceScheduleId);
         }
 
-        if (serviceSessions == null) {
-            serviceSessions = new List<ServiceSession__c>();
-        }
-
-        if (selectedEngagements == null) {
-            selectedEngagements = new List<ProgramEngagement__c>();
-        }
-
-        if (serviceParticipants == null) {
-            serviceParticipants = new List<ServiceParticipant__c>();
-        }
+        serviceSessions = new List<ServiceSession__c>();
+        selectedEngagements = new List<ProgramEngagement__c>();
+        serviceParticipants = new List<ServiceParticipant__c>();
         maxSessions = DEFAULT_MAX_SESSIONS;
 
         labels.put('serviceSchedule', getServiceScheduleLabels());

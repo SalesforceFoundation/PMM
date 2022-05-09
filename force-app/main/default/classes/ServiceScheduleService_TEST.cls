@@ -21,10 +21,64 @@ public with sharing class ServiceScheduleService_TEST {
     private static BasicStub programSelectorStub = new BasicStub(ProgramSelector.class);
     private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
     private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
+    private static BasicStub serviceSessionSelectorStub = new BasicStub(
+        ServiceSessionSelector.class
+    );
 
     @TestSetup
     private static void setupTestData() {
         TestDataFactory.generateServiceData();
+        TestDataFactory.generateServiceScheduleData('Daily', System.today());
+    }
+
+    @IsTest
+    private static void shouldQuerySessionsWhenIdNotNull() {
+        Id serviceScheduleId = [SELECT Id FROM ServiceSchedule__c LIMIT 1].Id;
+
+        List<ServiceSession__c> expectedServiceSessions = new List<ServiceSession__c>();
+        ServiceSession__c servSesh = new ServiceSession__c(
+            Id = TestUtil.mockId(ServiceSession__c.SObjectType),
+            Name = 'Test Session',
+            Status__c = 'Pending',
+            SessionStart__c = Date.today(),
+            SessionEnd__c = Date.today().addDays(90),
+            ServiceSchedule__c = serviceScheduleId
+        );
+        expectedServiceSessions.add(servSesh);
+
+        serviceSessionSelectorStub.withReturnValue(
+            'getServiceSessionsForServiceSchedule',
+            Id.class,
+            expectedServiceSessions
+        );
+        service.serviceSessionSelector = (ServiceSessionSelector) serviceSessionSelectorStub.createMock();
+
+        Test.startTest();
+        ServiceScheduleModel actualModel = service.getServiceScheduleModel(
+            serviceScheduleId,
+            null
+        );
+
+        List<ServiceSession__c> actualServiceSessions = actualModel.serviceSessions;
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedServiceSessions.size(),
+            actualServiceSessions.size(),
+            'Model should contain the expected number of session (' +
+            expectedServiceSessions.size() +
+            ')'
+        );
+        Map<Id, ServiceSession__c> expectedSessionMap = new Map<Id, ServiceSession__c>(
+            expectedServiceSessions
+        );
+
+        for (ServiceSession__c actualSession : actualServiceSessions) {
+            System.assert(
+                expectedSessionMap.containsKey(actualsession.Id),
+                'Model should contain the expected sessions'
+            );
+        }
     }
 
     @IsTest

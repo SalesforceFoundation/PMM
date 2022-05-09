@@ -31,7 +31,9 @@ public with sharing class ServiceScheduleService {
             serviceScheduleId,
             recordTypeId
         );
+
         if (serviceScheduleId != null) {
+            //ssModel.loadFromServiceScheduleId(serviceScheduleId);
             SelectParticipantModel spModel = getSelectParticipantModel(
                 ssModel.serviceSchedule.Service__c
             );

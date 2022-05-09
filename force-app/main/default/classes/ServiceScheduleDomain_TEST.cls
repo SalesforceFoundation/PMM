@@ -344,6 +344,35 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
+    private static void doesNotThrowExceptionWhenNoData() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+
+        Test.startTest();
+        try {
+            domain.validateUpdateAccess(new List<SObject>());
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            actualException,
+            null,
+            'Should not throw except when empty list is sent to method.'
+        );
+    }
+
+    @IsTest
     private static void throwsDeleteExceptionWhenPermissionCheckFails() {
         String methodName = 'hasObjectAccess';
         Integer dmlLimitAfter;

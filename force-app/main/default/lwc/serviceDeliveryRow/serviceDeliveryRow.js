@@ -212,7 +212,7 @@ export default class ServiceDeliveryRow extends LightningElement {
             event.detail.value && event.detail.value.length
                 ? event.detail.value[0]
                 : undefined;
-        this.setDirty();
+        this.isDirty = true;
         this.resetError();
 
         if (fieldName === CONTACT_FIELD.fieldApiName) {
@@ -239,7 +239,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleComboChange(event) {
         let fieldName = event.target.name;
         let fieldVal = event.detail.value;
-        this.setDirty();
+        this.isDirty = true;
         this.resetError();
 
         if (fieldVal !== newProgramEngagement) {
@@ -343,12 +343,6 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleCloseModal() {
         const modal = this.template.querySelector("c-modal");
         modal.hide();
-    }
-
-    setDirty() {
-        this.isDirty = true;
-
-        this.dispatchEvent(new CustomEvent("edit"));
     }
 
     resetError() {
@@ -485,9 +479,10 @@ export default class ServiceDeliveryRow extends LightningElement {
             !this._defaultsSet
         ) {
             this._defaultsSet = true;
-            if ((this.isDirty || this.defaultValues.isDirty) && !this.isSaved) {
-                this.setDirty();
-            }
+            this.isDirty =
+                (this.isDirty || this.defaultValues.isDirty) && !this.isSaved
+                    ? true
+                    : false;
 
             this.fieldSet.forEach(member => {
                 for (let [fieldName, fieldValue] of Object.entries(this.defaultValues)) {

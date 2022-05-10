@@ -122,10 +122,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         return this.hideFooter; // reusing old api property name
     }
 
-    get isSaveDisabled() {
-        return this.targetSaveCount > 0;
-    }
-
     get rowCount() {
         return this.serviceDeliveries.length;
     }
@@ -145,8 +141,19 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this._nextIndex++;
     }
 
-    setTargetSaveCount() {
+    handleRowDelete(event) {
+        this.serviceDeliveries = this.serviceDeliveries.filter(function(obj) {
+            return obj.index !== event.detail;
+        });
+        if (this.serviceDeliveries.length <= 0) {
+            this.addDelivery();
+        }
+    }
+
+    handleSave() {
         let rows = this.template.querySelectorAll("c-service-delivery-row");
+
+        this.savedCount = 0;
         this.targetSaveCount = 0;
 
         rows.forEach(row => {
@@ -155,27 +162,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             }
             row.saveRow();
         });
-    }
-
-    handleRowDelete(event) {
-        this.serviceDeliveries = this.serviceDeliveries.filter(function(obj) {
-            return obj.index !== event.detail;
-        });
-        if (this.serviceDeliveries.length <= 0) {
-            this.addDelivery();
-        }
-
-        this.setTargetSaveCount();
-        console.log(this.targetSaveCount);
-    }
-
-    handleRowEdit() {
-        this.setTargetSaveCount();
-        console.log(this.targetSaveCount);
-    }
-
-    handleSave() {
-        this.savedCount = 0;
 
         if (this.targetSaveCount === 0) {
             this.dispatchEvent(new CustomEvent("done"));

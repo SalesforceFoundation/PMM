@@ -177,7 +177,7 @@
         <protected>true</protected>
         <shortDescription>There are no Service Delivery records to update.</shortDescription>
         <value>There are no Service Delivery records to update.</value>
-    </labels></labels>
+    </labels>
     <labels>
         <fullName>No_Participants_Header</fullName>
         <language>en_US</language>

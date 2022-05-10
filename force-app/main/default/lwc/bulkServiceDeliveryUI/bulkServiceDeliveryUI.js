@@ -11,6 +11,7 @@ import { LightningElement, api, track, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { handleError } from "c/util";
 import { loadStyle } from "lightning/platformResourceLoader";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import { ServiceDeliveryFieldSets } from "./serviceDeliveryFieldSets";
 
@@ -20,7 +21,7 @@ import save from "@salesforce/label/c.Save";
 import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
 import success from "@salesforce/label/c.Success";
-import serviceDeliveriesAdded from "@salesforce/label/c.Service_Deliveries_Added";
+import noServiceDeliveriesAdded from "@salesforce/label/c.Save_Service_Delivery_No_Rows";
 import required from "@salesforce/label/c.Required";
 import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 
@@ -57,7 +58,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         saving,
         required,
         success,
-        serviceDeliveriesAdded,
+        noServiceDeliveriesAdded,
         rowsWithErrors,
         save,
     };
@@ -164,8 +165,18 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         });
 
         if (this.targetSaveCount === 0) {
-            this.dispatchEvent(new CustomEvent("done"));
+            this.handleNoRows();
         }
+    }
+
+    handleNoRows() {
+        const event = new ShowToastEvent({
+            title: this.labels.success,
+            variant: "success",
+            message: noServiceDeliveriesAdded,
+        });
+        this.dispatchEvent(event);
+        this.dispatchEvent(new CustomEvent("done"));
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -174,6 +185,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             return;
         }
         this.savedCount++;
+
         if (this.savedCount === this.targetSaveCount) {
             this.dispatchEvent(new CustomEvent("done"));
         }

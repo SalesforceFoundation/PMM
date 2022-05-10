@@ -179,6 +179,13 @@
         <value>There are no Service Delivery records to update.</value>
     </labels>
     <labels>
+        <fullName>Save_Service_Delivery_No_Rows</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>There were no Service Delivery records to save.</shortDescription>
+        <value>There were no Service Delivery records to save.</value>
+    </labels>
+    <labels>
         <fullName>No_Participants_Header</fullName>
         <language>en_US</language>
         <protected>true</protected>

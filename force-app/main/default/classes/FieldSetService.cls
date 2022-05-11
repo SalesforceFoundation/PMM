@@ -8,9 +8,6 @@
  */
 
 public with sharing class FieldSetService {
-    @TestVisible
-    private Set<String> unsupportedFieldTypes = new Set<String>{ 'TIME' };
-
     public Map<String, Object> getFieldSetsByName(String objectName) {
         SObjectType sObjectType = Schema.getGlobalDescribe().get(objectName);
 
@@ -112,23 +109,20 @@ public with sharing class FieldSetService {
         List<FieldInfo> fieldInfos = new List<FieldInfo>();
 
         for (Schema.FieldSetMember memberField : fieldSet.fields) {
-            if (!fieldTypeIsSupported(memberField, allowRelationshipFields)) {
-                // Skipping unsupported field types and fields from related objects.
-                // NOTE: If we ever determine we want to allow reference fields
-                // we can overload this method with a Boolean flag
-                continue;
+            // Skipping fields from related objects when not allowed
+            if (allowRelationshipFields || !memberField.getFieldPath().contains('.')) {
+                FieldInfo fieldSetField = new FieldInfo(memberField);
+
+                DescribeFieldResult fieldDescribe = getCompoundFieldDescribe(
+                    objectDescribe,
+                    fieldSetField.getDescribe(),
+                    memberField.getFieldPath()
+                );
+
+                fieldSetField.setDescribe(fieldDescribe);
+
+                fieldInfos.add(fieldSetField);
             }
-            FieldInfo fieldSetField = new FieldInfo(memberField);
-
-            DescribeFieldResult fieldDescribe = getCompoundFieldDescribe(
-                objectDescribe,
-                fieldSetField.getDescribe(),
-                memberField.getFieldPath()
-            );
-
-            fieldSetField.setDescribe(fieldDescribe);
-
-            fieldInfos.add(fieldSetField);
         }
 
         return fieldInfos;
@@ -170,14 +164,6 @@ public with sharing class FieldSetService {
         }
 
         return getFieldInfos(objectDescribe, fieldSet, allowRelationshipFields);
-    }
-
-    private Boolean fieldTypeIsSupported(
-        Schema.FieldSetMember memberField,
-        Boolean allowRelationshipFields
-    ) {
-        return !(unsupportedFieldTypes.contains(memberField.getType().name()) ||
-        (!allowRelationshipFields && memberField.getFieldPath().contains('.')));
     }
 
     /**

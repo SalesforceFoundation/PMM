@@ -11,9 +11,9 @@ public with sharing class ServiceScheduleDomain {
     public void insertModel(ServiceScheduleModel model) {
         insertSchedule(model.serviceSchedule);
         setSessionDefaults(model);
-        insertRelatedRecords(model.serviceSessions);
+        insertRelatedRecords(stripPreExistingRecords(model.serviceSessions));
         generateParticipants(model);
-        insertRelatedRecords(model.serviceParticipants);
+        insertRelatedRecords(stripPreExistingRecords(model.serviceParticipants));
     }
 
     public void insertSchedule(ServiceSchedule__c schedule) {
@@ -40,17 +40,19 @@ public with sharing class ServiceScheduleDomain {
         delete sessionsToDelete;
     }
 
-    private void insertRelatedRecords(List<SObject> sObjects) {
+    private List<SObject> stripPreExistingRecords(List<SObject> sObjects) {
         List<SObject> sObjectsNotYetInserted = new List<SObject>();
         for (SObject sObj : sObjects) {
             if (sObj.Id == null) {
                 sObjectsNotYetInserted.add(sObj);
             }
         }
+        return sObjectsNotYetInserted;
+    }
 
-        validateCreateAccess(sObjectsNotYetInserted);
-
-        insert sObjectsNotYetInserted;
+    private void insertRelatedRecords(List<SObject> sObjects) {
+        validateCreateAccess(sObjects);
+        insert sObjects;
     }
 
     private void setSessionDefaults(ServiceScheduleModel model) {

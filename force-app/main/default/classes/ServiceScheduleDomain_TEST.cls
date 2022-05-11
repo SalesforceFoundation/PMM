@@ -19,7 +19,7 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
-    private static void shouldInsertScheduleWithoutRelatedRecords() {
+    private static void shouldupsertScheduleWithoutRelatedRecords() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();
         Service__c service = [SELECT Id, Program__c FROM Service__c LIMIT 1];
@@ -33,7 +33,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         model.serviceSchedule = schedule;
 
         Test.startTest();
-        domain.insertModel(model);
+        domain.commitChangesToModel(model);
         Test.stopTest();
 
         System.assertNotEquals(
@@ -57,7 +57,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         model.serviceSchedule.Name = originalName + ' (Updated)';
 
         Test.startTest();
-        domain.insertModel(model);
+        domain.commitChangesToModel(model);
 
         ServiceSchedule__c updatedSchedule = [
             SELECT Id, Name
@@ -75,7 +75,7 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
-    private static void shouldInsertScheduleAndRelatedRecords() {
+    private static void shouldupsertScheduleAndRelatedRecords() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
@@ -108,7 +108,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         model.serviceSchedule = schedule;
         model.serviceSessions = sessions;
         model.selectedEngagements = selectedEngagements;
-        domain.insertModel(model);
+        domain.commitChangesToModel(model);
         Test.stopTest();
 
         System.assert(
@@ -247,7 +247,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         Test.startTest();
         try {
             model.serviceSchedule = schedule;
-            domain.insertModel(model);
+            domain.commitChangesToModel(model);
         } catch (Exception ex) {
             actualException = ex;
         }
@@ -282,7 +282,7 @@ private with sharing class ServiceScheduleDomain_TEST {
 
         Test.startTest();
         try {
-            domain.insertModel(new ServiceScheduleModel());
+            domain.commitChangesToModel(new ServiceScheduleModel());
         } catch (Exception ex) {
             dmlLimitAfter = System.Limits.getDmlStatements();
             actualException = ex;
@@ -324,7 +324,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         );
 
         try {
-            domain.insertModel(scheduleModel);
+            domain.commitChangesToModel(scheduleModel);
         } catch (Exception ex) {
             dmlLimitAfter = System.Limits.getDmlStatements();
             actualException = ex;

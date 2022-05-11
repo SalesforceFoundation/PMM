@@ -47,7 +47,7 @@ public with sharing class ServiceScheduleService {
         Savepoint savepoint = Database.setSavepoint();
 
         try {
-            domain.insertModel(model);
+            domain.commitChangesToModel(model);
             return model;
         } catch (Exception ex) {
             Database.rollback(savepoint);

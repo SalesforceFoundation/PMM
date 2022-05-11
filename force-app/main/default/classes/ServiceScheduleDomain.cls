@@ -8,15 +8,15 @@
  */
 
 public with sharing class ServiceScheduleDomain {
-    public void insertModel(ServiceScheduleModel model) {
-        insertSchedule(model.serviceSchedule);
+    public void commitChangesToModel(ServiceScheduleModel model) {
+        upsertSchedule(model.serviceSchedule);
         setSessionDefaults(model);
         insertRelatedRecords(stripPreExistingRecords(model.serviceSessions));
         generateParticipants(model);
         insertRelatedRecords(stripPreExistingRecords(model.serviceParticipants));
     }
 
-    public void insertSchedule(ServiceSchedule__c schedule) {
+    public void upsertSchedule(ServiceSchedule__c schedule) {
         if (schedule.Id == null) {
             validateCreateAccess(new List<SObject>{ schedule });
             insert schedule;

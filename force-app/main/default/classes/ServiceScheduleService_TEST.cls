@@ -121,7 +121,7 @@ public with sharing class ServiceScheduleService_TEST {
 
     @IsTest
     private static void shouldProvideModelToDomainOnPersist() {
-        String methodName = 'insertModel';
+        String methodName = 'commitChangesToModel';
         ServiceScheduleModel model = new ServiceScheduleModel();
         service.domain = (ServiceScheduleDomain) domainStub.createMock();
 
@@ -134,7 +134,7 @@ public with sharing class ServiceScheduleService_TEST {
 
     @IsTest
     private static void shouldRollbackAndRethrowDomainException() {
-        String methodName = 'insertModel';
+        String methodName = 'commitChangesToModel';
         ServiceScheduleModel model = new ServiceScheduleModel();
         Exception actualException;
         Integer dmlLimitBefore;

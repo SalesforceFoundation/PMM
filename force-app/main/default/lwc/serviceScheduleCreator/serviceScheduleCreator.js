@@ -233,6 +233,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                     this.init();
                     this.isLoaded = true;
                     this.hideSpinner = true;
+                    this.serviceId = null;
                 } else {
                     this.handleClose();
                 }
@@ -355,21 +356,12 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         this.dispatchEvent(new CustomEvent("close", { bubbles: true }));
     }
 
-    reset() {
-        if (this._steps.all.length > 0) {
-            this._steps = new ProgressSteps();
-        }
-        this._steps.restart();
-        this._currentStep = undefined;
-
+    init() {
         this.isLoaded = false;
         this.hideSpinner = false;
         this.isSaving = false;
-        this._serviceSchedules = [];
-    }
-
-    init() {
-        this.reset();
+        this._steps.restart();
+        this._currentStep = undefined;
         this.serviceScheduleModel = JSON.parse(JSON.stringify(this.originalModel));
         if (this.serviceId) {
             this.serviceScheduleModel.serviceSchedule[

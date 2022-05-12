@@ -89,16 +89,16 @@ public with sharing class ProgramSelector_TEST {
             'Actual results not the same as expected results'
         );
 
-        for (ProgramCohort__c cohort : actualCohorts) {
+        for (ProgramCohort__c cohorts : actualCohorts) {
             System.assertEquals(
                 programId,
-                cohort.Program__c,
+                cohorts.Program__c,
                 'Actual results not the same as expected results'
             );
 
             System.assertEquals(
                 'Active',
-                cohort.Status__c,
+                cohorts.Status__c,
                 'Actual results not the same as expected results'
             );
         }

@@ -127,15 +127,13 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 this.serviceScheduleModel.labels.serviceParticipant
                     .addServiceParticipants,
                 new NavigationItems().addNext().addBack()
-            )
-            .addStep(
-                "",
-                this.labels.reviewSchedule,
-                new NavigationItems()
-                    .addNext(this.labels.saveNew, "neutral")
-                    .addBack()
-                    .addFinish(this.labels.save)
             );
+        let finalNavItems = new NavigationItems();
+        if (!this.editingExistingSchedule) {
+            finalNavItems.addNext(this.labels.saveNew, "neutral");
+        }
+        finalNavItems.addBack().addFinish(this.labels.save);
+        this._steps.addStep("", this.labels.reviewSchedule, finalNavItems);
     }
 
     @api

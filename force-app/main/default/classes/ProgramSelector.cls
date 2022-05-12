@@ -24,6 +24,8 @@ public with sharing class ProgramSelector {
 
         fields.add(String.valueOf(ProgramCohort__c.Id));
         fields.add(String.valueOf(ProgramCohort__c.Name));
+        fields.add(String.valueOf(ProgramCohort__c.Program__c));
+        fields.add(String.valueOf(ProgramCohort__c.Status__c));
 
         QueryBuilder queryBuilder = new QueryBuilder()
             .withSObjectType(ProgramCohort__c.SObjectType)
@@ -40,6 +42,7 @@ public with sharing class ProgramSelector {
             );
         }
 
+        System.debug('queryBuilder.buildSoqlQuery() : ' + queryBuilder.buildSoqlQuery());
         programCohorts = Database.query(queryBuilder.buildSoqlQuery());
 
         return Security.stripInaccessible(AccessType.READABLE, programCohorts)

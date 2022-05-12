@@ -45,6 +45,7 @@ const LASTDAY = "LastDayOfMonth";
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
 const DAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+const MULTI_SELECT_DELIM = ";";
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
     @api serviceId;
@@ -133,7 +134,9 @@ export default class NewServiceSchedule extends LightningElement {
         this.objectApiName = this._serviceScheduleModel.labels.serviceSchedule.objectApiName;
         this.requiredFields = this._serviceScheduleModel.scheduleRequiredFields;
         this.dateFields = this._serviceScheduleModel.scheduleRecurrenceDateFields;
-        this.picklistFields = this._serviceScheduleModel.scheduleRecurrencePicklistFields;
+        this.picklistFields = {
+            ...this._serviceScheduleModel.scheduleRecurrencePicklistFields,
+        };
         this.fieldSet = this._serviceScheduleModel.scheduleInformationFields;
 
         // Write values from service schedule to local properties
@@ -141,8 +144,17 @@ export default class NewServiceSchedule extends LightningElement {
             if (this._serviceScheduleModel.serviceSchedule.Frequency__c) {
                 this.picklistFields.frequency.value = this._serviceScheduleModel.serviceSchedule.Frequency__c;
             }
-            if (this._serviceScheduleModel.serviceSchedule.DaysOfWeek__ce) {
+            if (this._serviceScheduleModel.serviceSchedule.DaysOfWeek__c) {
                 this.picklistFields.daysOfWeek.value = this._serviceScheduleModel.serviceSchedule.DaysOfWeek__c;
+                let selectedValues = this.picklistFields.daysOfWeek.picklistValues.filter(
+                    option =>
+                        this._serviceScheduleModel.serviceSchedule.DaysOfWeek__c.split(
+                            MULTI_SELECT_DELIM
+                        ).includes(option.value)
+                );
+                selectedValues.forEach(element => {
+                    element.isSelected = true;
+                });
             }
         }
 
@@ -416,14 +428,16 @@ export default class NewServiceSchedule extends LightningElement {
             return;
         }
 
-        await getDayNum({ fullDateTime: this.dateFields.start.value }).then(
-            result => (this.picklistFields.daysOfWeek.value = result.toString())
-        );
+        if (!this.picklistFields.daysOfWeek.value) {
+            await getDayNum({ fullDateTime: this.dateFields.start.value }).then(
+                result => (this.picklistFields.daysOfWeek.value = result.toString())
+            );
+        }
     }
 
     handleDaysOfWeekChange(event) {
         this.picklistFields.daysOfWeek.value = event.detail.length
-            ? event.detail.map(selection => selection.value).join(";")
+            ? event.detail.map(selection => selection.value).join(MULTI_SELECT_DELIM)
             : undefined;
     }
 

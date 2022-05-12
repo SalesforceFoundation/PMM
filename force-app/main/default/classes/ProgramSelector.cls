@@ -42,7 +42,6 @@ public with sharing class ProgramSelector {
             );
         }
 
-        System.debug('queryBuilder.buildSoqlQuery() : ' + queryBuilder.buildSoqlQuery());
         programCohorts = Database.query(queryBuilder.buildSoqlQuery());
 
         return Security.stripInaccessible(AccessType.READABLE, programCohorts)

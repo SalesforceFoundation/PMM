@@ -563,6 +563,13 @@
         <value>No records selected</value>
     </labels>
     <labels>
+        <fullName>Only_Showing_Future_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Only showing sessions after today&apos;s date</shortDescription>
+        <value>Only showing sessions after today&apos;s date</value>
+    </labels>
+    <labels>
         <fullName>Owner_Field</fullName>
         <language>en_US</language>
         <protected>true</protected>

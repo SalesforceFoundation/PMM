@@ -152,6 +152,10 @@
                             title={serviceScheduleModel.labels.serviceSession.noSessionsAdded}
                         >
                         </c-scoped-notification>
+                        <c-scoped-notification
+                            if:true={editingExistingSchedule}
+                            title={labels.onlyShowingFutureSessionsMessage}
+                        ></c-scoped-notification>
                         <div
                             class="slds-box slds-p-around_none"
                             if:true={hasServiceSessions}

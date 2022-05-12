@@ -14,6 +14,7 @@ import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
 import DATE_AND_TIME from "@salesforce/label/c.Service_Schedule_Date_Time";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
+import ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE from "@salesforce/label/c.Only_Showing_Future_Sessions";
 
 export default class ServiceScheduleReview extends LightningElement {
     _serviceScheduleModel;
@@ -51,7 +52,15 @@ export default class ServiceScheduleReview extends LightningElement {
     labels = {
         totalSessions: TOTAL_SESSIONS_LABEL,
         dateAndTime: DATE_AND_TIME,
+        onlyShowingFutureSessionsMessage: ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE,
     };
+
+    get editingExistingSchedule() {
+        if (this._serviceScheduleModel.serviceSchedule.Id) {
+            return true;
+        }
+        return false;
+    }
 
     get reviewLabel() {
         return format(REVIEW_RECORDS, [

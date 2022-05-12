@@ -20,6 +20,7 @@ import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
 import CREATE_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Select_Create_Service_Session_Warning";
 import MAX_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Creating_Service_Session_Warning";
+import ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE from "@salesforce/label/c.Only_Showing_Future_Sessions";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
@@ -72,6 +73,13 @@ export default class ReviewSessions extends LightningElement {
         this.getSessions();
     }
 
+    get editingExistingSchedule() {
+        if (this._serviceScheduleModel.serviceSchedule.Id) {
+            return true;
+        }
+        return false;
+    }
+
     get serviceSessions() {
         this._serviceSessions.sort((a, b) => {
             return a[this.sessionStartFieldName] > b[this.sessionStartFieldName] ? 1 : -1;
@@ -101,6 +109,7 @@ export default class ReviewSessions extends LightningElement {
         totalSessions: TOTAL_SESSIONS_LABEL,
         addSession: ADD_RECORD_LABEL,
         reviewSessions: REVIEW_RECORDS,
+        onlyShowingFutureSessionsMessage: ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE,
         cancel: CANCEL_LABEL,
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,

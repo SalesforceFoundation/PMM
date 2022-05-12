@@ -15,7 +15,7 @@ public with sharing class ServiceSessionSelector {
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
-    public List<ServiceSession__c> getServiceSessionsForServiceSchedule(
+    public List<ServiceSession__c> getFutureServiceSessionsForServiceSchedule(
         Id serviceScheduleId
     ) {
         List<ServiceSession__c> serviceSessions = new List<ServiceSession__c>();
@@ -27,7 +27,7 @@ public with sharing class ServiceSessionSelector {
         serviceSessions = [
             SELECT Id, Name, Status__c, SessionStart__c, SessionEnd__c, ServiceSchedule__c
             FROM ServiceSession__c
-            WHERE ServiceSchedule__c = :serviceScheduleId
+            WHERE ServiceSchedule__c = :serviceScheduleId AND SessionStart__c > TODAY
             ORDER BY SessionStart__c
         ];
 

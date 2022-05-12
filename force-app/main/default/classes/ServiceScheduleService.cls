@@ -246,7 +246,7 @@ public with sharing class ServiceScheduleService {
     }
 
     private void loadAndPopulateSessionRecords(ServiceScheduleModel model) {
-        model.serviceSessions = serviceSessionSelector.getServiceSessionsForServiceSchedule(
+        model.serviceSessions = serviceSessionSelector.getFutureServiceSessionsForServiceSchedule(
             model.serviceSchedule.Id
         );
     }

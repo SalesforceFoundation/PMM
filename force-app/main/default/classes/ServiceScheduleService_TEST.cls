@@ -40,14 +40,14 @@ public with sharing class ServiceScheduleService_TEST {
             Id = TestUtil.mockId(ServiceSession__c.SObjectType),
             Name = 'Test Session',
             Status__c = 'Pending',
-            SessionStart__c = Date.today(),
-            SessionEnd__c = Date.today().addDays(90),
+            SessionStart__c = Date.today().addDays(1),
+            SessionEnd__c = Date.today().addDays(91),
             ServiceSchedule__c = serviceScheduleId
         );
         expectedServiceSessions.add(servSesh);
 
         serviceSessionSelectorStub.withReturnValue(
-            'getServiceSessionsForServiceSchedule',
+            'getFutureServiceSessionsForServiceSchedule',
             Id.class,
             expectedServiceSessions
         );

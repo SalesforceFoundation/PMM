@@ -19,13 +19,13 @@ public with sharing class ServiceSessionSelector_TEST {
     };
 
     @IsTest
-    private static void testGetSessionsForScheduleNoAccess() {
+    private static void testGetFutureSessionsForScheduleNoAccess() {
         Id serviceScheduleId = [SELECT Id FROM ServiceSchedule__c LIMIT 1].Id;
 
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
             FROM ServiceSession__c
-            WHERE ServiceSchedule__c = :serviceScheduleId
+            WHERE ServiceSchedule__c = :serviceScheduleId AND SessionStart__c > TODAY
             ORDER BY SessionStart__c
         ];
 
@@ -37,7 +37,7 @@ public with sharing class ServiceSessionSelector_TEST {
         Test.startTest();
         System.runAs(TestUtil.getTestUser()) {
             ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
-            List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsForServiceSchedule(
+            List<ServiceSession__c> actualSessions = sessionSelector.getFutureServiceSessionsForServiceSchedule(
                 serviceScheduleId
             );
             System.assertEquals(
@@ -51,18 +51,18 @@ public with sharing class ServiceSessionSelector_TEST {
     }
 
     @IsTest
-    private static void testGetServiceSessionsForServiceSchedule() {
+    private static void testGetFutureServiceSessionsForServiceSchedule() {
         Id serviceScheduleId = [SELECT Id FROM ServiceSchedule__c LIMIT 1].Id;
 
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
             FROM ServiceSession__c
-            WHERE ServiceSchedule__c = :serviceScheduleId
+            WHERE ServiceSchedule__c = :serviceScheduleId AND SessionStart__c > TODAY
             ORDER BY SessionStart__c
         ];
         Test.startTest();
         ServiceSessionSelector sessionSelector = new ServiceSessionSelector();
-        List<ServiceSession__c> actualSessions = sessionSelector.getServiceSessionsForServiceSchedule(
+        List<ServiceSession__c> actualSessions = sessionSelector.getFutureServiceSessionsForServiceSchedule(
             serviceScheduleId
         );
         Test.stopTest();

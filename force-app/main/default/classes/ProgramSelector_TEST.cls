@@ -18,28 +18,35 @@ public with sharing class ProgramSelector_TEST {
 
     @IsTest
     private static void testGetProgramCohortsFromProgramId() {
+        String methodName = 'getBuckets';
         TestDataFactory.generateProgramData();
+        Schema.SObjectType programCohortSObjType = ProgramCohort__c.SObjectType;
+        Schema.SObjectField statusField = ProgramCohort__c.Status__c;
 
         Id programId = TestDataFactory.programs[0].Id;
+
+        List<Bucket__mdt> cohortStatusBuckets = createBuckets();
+
+        //Insert a cohort with different status so we check that we return
+        //program cohorts in active status
+        ProgramCohort__c cohort = new ProgramCohort__c();
+        cohort.Name = 'New Cohort';
+        cohort.Program__c = programId;
+        cohort.StartDate__c = System.today();
+        cohort.Status__c = 'Planned';
+
+        insert cohort;
 
         List<ProgramCohort__c> cohorts = programSelector.getProgramCohortsFromProgramId(
             programId
         );
 
         System.assert(cohorts.size() > 0, 'Should return at least one cohort');
-
-        Set<Id> cohortIdsForProgram = new Set<Id>();
-        for (ProgramCohort__c cohort : TestDataFactory.programCohorts) {
-            if (cohort.Program__c == programId) {
-                cohortIdsForProgram.add(cohort.Id);
-            }
-        }
-        for (ProgramCohort__c cohort : cohorts) {
-            System.assert(
-                cohortIdsForProgram.contains(cohort.Id),
-                'Should return cohorts only for the requested program'
-            );
-        }
+        System.assertEquals(
+            'Planned',
+            cohorts[1].Status__c,
+            'Expected the status on the returned cohort record to be planned'
+        );
     }
 
     @IsTest
@@ -86,22 +93,20 @@ public with sharing class ProgramSelector_TEST {
         System.assertEquals(
             1,
             actualCohorts.size(),
-            'Actual results not the same as expected results'
+            'Should return atleast one active cohort'
         );
 
-        for (ProgramCohort__c cohorts : actualCohorts) {
-            System.assertEquals(
-                programId,
-                cohorts.Program__c,
-                'Actual results not the same as expected results'
-            );
+        System.assertEquals(
+            programId,
+            actualCohorts[0].Program__c,
+            'Expected the programId on the returned cohort record to be the same as the expectedProgramId'
+        );
 
-            System.assertEquals(
-                'Active',
-                cohorts.Status__c,
-                'Actual results not the same as expected results'
-            );
-        }
+        System.assertEquals(
+            'Active',
+            actualCohorts[0].Status__c,
+            'Expected the status on the returned cohort record to be active'
+        );
     }
 
     @IsTest
@@ -140,7 +145,6 @@ public with sharing class ProgramSelector_TEST {
             .withQualifiedApiName(Util.prefixNamespace('ProgramCohortStatuses'))
             .withField('Status__c')
             .withObject('ProgramCohort__c')
-            .withMockId()
             .build();
 
         List<BucketedValue__mdt> activeCohortValues = new List<BucketedValue__mdt>();

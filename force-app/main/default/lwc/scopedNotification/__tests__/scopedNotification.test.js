@@ -23,49 +23,71 @@ describe("c-scoped-notification", () => {
         });
     });
 
-    it("displays the info theme by default", async () => {
+    it("displays the info theme by default", () => {
         document.body.appendChild(element);
-        const icon = element.shadowRoot.querySelector("lightning-icon");
-        const themeDiv = element.shadowRoot.querySelector(".slds-theme_info");
-        const titlePara = element.shadowRoot.querySelector("p");
 
-        expect(themeDiv).toBeDefined();
-        expect(icon.iconName).toBe("utility:info");
-        expect(titlePara.textContent).toEqual("");
-        global.isAccessible(element);
-    });
-
-    it("displays the light info theme", async () => {
-        element.title = TITLE;
-        element.theme = "light";
-        document.body.appendChild(element);
-        const icon = element.shadowRoot.querySelector("lightning-icon");
-        const themeDiv = element.shadowRoot.querySelector(
-            "slds-scoped-notification_light"
-        );
-        const titlePara = element.shadowRoot.querySelector("p");
-
-        expect(themeDiv).toBeDefined();
-        expect(icon.iconName).toBe("utility:info");
-        expect(titlePara.textContent).toEqual(TITLE);
-        global.isAccessible(element);
-    });
-
-    it("displays the theme provided", () => {
-        const themes = ["warning", "info", "success", "error"];
-        element.title = TITLE;
-
-        themes.forEach(async theme => {
-            element.theme = theme;
-            document.body.appendChild(element);
+        return global.flushPromises().then(() => {
             const icon = element.shadowRoot.querySelector("lightning-icon");
-            const themeDiv = element.shadowRoot.querySelector(`.slds-theme_${theme}`);
+            const themeDiv = element.shadowRoot.querySelector(".slds-theme_info");
             const titlePara = element.shadowRoot.querySelector("p");
 
             expect(themeDiv).toBeDefined();
-            expect(icon.iconName).toBe(`utility:${theme}`);
+            expect(icon.iconName).toBe("utility:info");
+            expect(titlePara.textContent).toEqual("");
+            return global.isAccessible(element);
+        });
+    });
+
+    it("displays the light info theme", () => {
+        element.title = TITLE;
+        element.theme = "light";
+        document.body.appendChild(element);
+
+        return global.flushPromises().then(() => {
+            const icon = element.shadowRoot.querySelector("lightning-icon");
+            const themeDiv = element.shadowRoot.querySelector(
+                "slds-scoped-notification_light"
+            );
+            const titlePara = element.shadowRoot.querySelector("p");
+
+            expect(themeDiv).toBeDefined();
+            expect(icon.iconName).toBe("utility:info");
             expect(titlePara.textContent).toEqual(TITLE);
-            global.isAccessible(element);
+            return global.isAccessible(element);
+        });
+    });
+
+    it("displays the success theme", () => {
+        element.title = TITLE;
+        element.theme = "success";
+        document.body.appendChild(element);
+
+        return global.flushPromises().then(() => {
+            const icon = element.shadowRoot.querySelector("lightning-icon");
+            const themeDiv = element.shadowRoot.querySelector(".slds-theme_success");
+            const titlePara = element.shadowRoot.querySelector("p");
+
+            expect(themeDiv).toBeDefined();
+            expect(icon.iconName).toBe("utility:success");
+            expect(titlePara.textContent).toEqual(TITLE);
+            return global.isAccessible(element);
+        });
+    });
+
+    it("displays the error theme", () => {
+        element.title = TITLE;
+        element.theme = "error";
+        document.body.appendChild(element);
+
+        return global.flushPromises().then(() => {
+            const icon = element.shadowRoot.querySelector("lightning-icon");
+            const themeDiv = element.shadowRoot.querySelector(".slds-theme_error");
+            const titlePara = element.shadowRoot.querySelector("p");
+
+            expect(themeDiv).toBeDefined();
+            expect(icon.iconName).toBe("utility:error");
+            expect(titlePara.textContent).toEqual(TITLE);
+            return global.isAccessible(element);
         });
     });
 });

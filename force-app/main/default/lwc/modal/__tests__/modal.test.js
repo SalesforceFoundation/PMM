@@ -38,7 +38,7 @@ describe("c-modal", () => {
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             //verify that the header is displayed
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer).not.toBeNull();
@@ -47,7 +47,7 @@ describe("c-modal", () => {
             //verify that the header slot is not displayed because the header is present
             const slotContainer = element.shadowRoot.querySelector(".header-slot");
             expect(slotContainer).toBeNull();
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -78,11 +78,11 @@ describe("c-modal", () => {
         element.addEventListener("dialogclose", handler);
         buttonContainer.click();
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer.textContent).toBe(HEADER_STRING);
             expect(handler).toHaveBeenCalled();
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -91,7 +91,7 @@ describe("c-modal", () => {
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const headerContainer = element.shadowRoot.querySelector(".header-string");
             expect(headerContainer.textContent).toBe(HEADER_STRING);
 
@@ -99,8 +99,6 @@ describe("c-modal", () => {
             element.show();
             //verify that there is no CSS class present
             expect(modalContainer.classList.value).toBe("");
-            global.isAccessible(element);
-
             element.hide();
             //verify that the CSS class exists
             expect(modalContainer.classList.value).toBe(MODAL_HIDDEN);
@@ -108,12 +106,12 @@ describe("c-modal", () => {
     });
 
     // This jest test below validates that the component is accessible
-    it("is accessible", async () => {
+    it("is accessible", () => {
         const h2Container = element.shadowRoot.querySelector("h2");
         let slot = document.createElement("span");
         slot.textContent = "Test Accessibility";
         h2Container.attachShadow({ mode: "open" }).appendChild(slot.cloneNode(true));
-        // assert that DOM is accessible (using extended preset-rule)
-        global.isAccessible(element);
+
+        return global.isAccessible(element);
     });
 });

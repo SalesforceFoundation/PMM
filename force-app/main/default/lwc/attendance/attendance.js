@@ -157,6 +157,8 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         if (result.data) {
             this.hasReadPermissions = result.data.read;
             this.hasWritePermissions = result.data.write;
+        } else {
+            console.log(result.error);
         }
     }
 
@@ -172,17 +174,18 @@ export default class Attendance extends NavigationMixin(LightningElement) {
         if (result.data) {
             let schedule = getChildObjectByName(result.data.fields, "ServiceSchedule__r");
             let service = getChildObjectByName(schedule.value.fields, "Service__r");
-            this.unitOfMeasurement = service.value.fields[
-                UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName
-            ].value
-                ? service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName].value
-                : this.labels.quantity;
+            this.unitOfMeasurement =
+                service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName] &&
+                service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName].value
+                    ? service.value.fields[UNIT_MEASUREMENT_SERVICE_FIELD.fieldApiName]
+                          .value
+                    : this.labels.quantity;
             this.sessionStatus = result.data.fields[
                 this.fields.sessionStatus.fieldApiName
             ]
                 ? result.data.fields[this.fields.sessionStatus.fieldApiName].value
                 : undefined;
-        } else if (result.error) {
+        } else {
             console.log(result.error);
         }
     }
@@ -341,7 +344,6 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             }
         });
         this.showSpinner = true;
-
         upsertRows({
             serviceDeliveriesToUpsert: editedRows,
         })

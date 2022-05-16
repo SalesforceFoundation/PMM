@@ -25,7 +25,7 @@ describe("c-service-schedule-creator", () => {
         element.isCommunity = false;
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const modal = element.shadowRoot.querySelector("c-modal");
 
             // Modal will only display with a spinner loaded
@@ -33,14 +33,14 @@ describe("c-service-schedule-creator", () => {
             modal.dispatchEvent(new CustomEvent("dialogclose"));
 
             // TODO: Validate accessibility when each step is loads.
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
     it("modal does not appear in experience-cloud context and element is accessible", () => {
         element.isCommunity = true;
         document.body.appendChild(element);
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const modal = element.shadowRoot.querySelector("c-modal");
             expect(modal).toBeNull();
 
@@ -54,7 +54,7 @@ describe("c-service-schedule-creator", () => {
             slot.textContent = "Test Accessibility";
             h2Container.attachShadow({ mode: "open" }).appendChild(slot.cloneNode(true));
             // assert that DOM is accessible (using extended preset-rule)
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 });

@@ -29,16 +29,16 @@ describe("c-listViewSelector", () => {
         getListUiAdapter.emit(mockGetListViews);
     });
 
-    it("renders first list view returned as checked", async () => {
+    it("renders first list view returned as checked", () => {
         document.body.appendChild(element);
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const lightningMenuItem = element.shadowRoot.querySelector(
                 "lightning-menu-item"
             );
             expect(lightningMenuItem.label).toBe("All");
             expect(lightningMenuItem.checked).toBeTruthy();
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 });

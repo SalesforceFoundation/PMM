@@ -71,7 +71,7 @@ describe("c-new-program-engagement with a known contact", () => {
 
         element.showModal();
 
-        return global.flushPromises().then(async () => {
+        return global.flushPromises().then(() => {
             const inputFields = element.shadowRoot.querySelectorAll(
                 "lightning-input-field"
             );
@@ -86,7 +86,7 @@ describe("c-new-program-engagement with a known contact", () => {
                 index++;
             });
 
-            global.isAccessible(element);
+            return global.isAccessible(element);
         });
     });
 
@@ -113,22 +113,22 @@ describe("c-new-program-engagement with a known contact", () => {
                     new CustomEvent("success", { detail: recordId })
                 );
             })
-            .then(async () => {
+            .then(() => {
                 expect(handler).toHaveBeenCalled();
-                global.isAccessible(element);
             });
     });
 
     it("closes the modal when the close button is clicked", () => {
-        document.body.appendChild(element);
-        element.newContactMode = false;
-        element.showModal();
-
         const handler = jest.fn();
         element.addEventListener("cancel", handler);
+        element.newContactMode = false;
+        document.body.appendChild(element);
 
         return global
             .flushPromises()
+            .then(() => {
+                element.showModal();
+            })
             .then(() => {
                 let cancelButton = element.shadowRoot.querySelectorAll(
                     "lightning-button"
@@ -137,15 +137,8 @@ describe("c-new-program-engagement with a known contact", () => {
                 expect(cancelButton.label).toBe(cancel);
                 cancelButton.click();
             })
-            .then(async () => {
+            .then(() => {
                 expect(handler).toHaveBeenCalled();
-                global.isAccessible(element);
             });
-    });
-
-    it("is accessible", async () => {
-        document.body.appendChild(element);
-        // assert that DOM is accessible (using extended preset-rule)
-        global.isAccessible(element);
     });
 });

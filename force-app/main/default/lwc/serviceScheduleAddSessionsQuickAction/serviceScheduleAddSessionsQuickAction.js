@@ -10,7 +10,7 @@
 import { LightningElement, api } from "lwc";
 import addServiceSessions from "@salesforce/label/c.Add_More_Sessions";
 
-export default class ServiceScheduleAddSessionsWrapper extends LightningElement {
+export default class ServiceScheduleAddSessionsQuickAction extends LightningElement {
     @api recordId;
     @api isCommunity;
 

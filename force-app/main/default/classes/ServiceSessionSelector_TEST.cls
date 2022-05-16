@@ -72,6 +72,10 @@ public with sharing class ServiceSessionSelector_TEST {
             serviceScheduleId,
             'There must be a valid service schedule for the test to be valid'
         );
+        System.assert(
+            actualSessions.size() > 0,
+            'There must be a valid service schedule for the test to be valid'
+        );
         System.assertEquals(
             expectedSessions.size(),
             actualSessions.size(),

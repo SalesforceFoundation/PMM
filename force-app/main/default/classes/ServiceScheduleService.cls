@@ -27,20 +27,15 @@ public with sharing class ServiceScheduleService {
         Id serviceScheduleId,
         Id recordTypeId
     ) {
-        ServiceScheduleModel ssModel = new ServiceScheduleModel(
+        ServiceScheduleModel serviceScheduleModel = new ServiceScheduleModel(
             serviceScheduleId,
             recordTypeId
         );
 
         if (serviceScheduleId != null) {
-            //ssModel.loadFromServiceScheduleId(serviceScheduleId);
-            SelectParticipantModel spModel = getSelectParticipantModel(
-                ssModel.serviceSchedule.Service__c
-            );
-
-            loadAndPopulateSessionRecords(ssModel);
+            loadAndPopulateSessionRecords(serviceScheduleModel);
         }
-        return ssModel;
+        return serviceScheduleModel;
     }
 
     public ServiceScheduleModel persist(ServiceScheduleModel model) {

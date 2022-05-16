@@ -8,14 +8,16 @@
  */
 
 public with sharing class ServiceScheduleSelector {
-    public ServiceSchedule__c getServiceScheduleById(Id serviceScheduleId) {
-        List<ServiceSchedule__c> serviceSchedules = getServiceSchedulesById(
+    public ServiceSchedule__c getServiceScheduleFromId(Id serviceScheduleId) {
+        List<ServiceSchedule__c> serviceSchedules = getServiceSchedulesFromId(
             new Set<Id>{ serviceScheduleId }
         );
         return serviceSchedules.size() > 0 ? serviceSchedules[0] : null;
     }
 
-    public List<ServiceSchedule__c> getServiceSchedulesById(Set<Id> serviceScheduleIds) {
+    public List<ServiceSchedule__c> getServiceSchedulesFromId(
+        Set<Id> serviceScheduleIds
+    ) {
         List<ServiceSchedule__c> serviceSchedules = new List<ServiceSchedule__c>();
 
         if (Schema.SObjectType.ServiceSchedule__c.isAccessible()) {

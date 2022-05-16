@@ -117,7 +117,9 @@ public with sharing class ServiceScheduleModel {
                 true
             );
         } else {
-            serviceSchedule = scheduleSelector.getServiceScheduleById(serviceScheduleId);
+            serviceSchedule = scheduleSelector.getServiceScheduleFromId(
+                serviceScheduleId
+            );
         }
 
         serviceSessions = new List<ServiceSession__c>();

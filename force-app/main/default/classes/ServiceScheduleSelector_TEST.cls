@@ -16,7 +16,7 @@ public with sharing class ServiceScheduleSelector_TEST {
     }
 
     @IsTest
-    private static void testGetServiceScheduleById() {
+    private static void testgetServiceScheduleFromId() {
         ServiceSchedule__c expectedSchedule = [
             SELECT Id, Name
             FROM ServiceSchedule__c
@@ -25,7 +25,7 @@ public with sharing class ServiceScheduleSelector_TEST {
 
         Test.startTest();
         ServiceScheduleSelector scheduleSelector = new ServiceScheduleSelector();
-        ServiceSchedule__c actualSchedule = scheduleSelector.getServiceScheduleById(
+        ServiceSchedule__c actualSchedule = scheduleSelector.getServiceScheduleFromId(
             expectedSchedule.Id
         );
         Test.stopTest();
@@ -50,7 +50,7 @@ public with sharing class ServiceScheduleSelector_TEST {
         Test.startTest();
         System.runAs(TestUtil.getTestUser()) {
             ServiceScheduleSelector scheduleSelector = new ServiceScheduleSelector();
-            ServiceSchedule__c actualSchedule = scheduleSelector.getServiceScheduleById(
+            ServiceSchedule__c actualSchedule = scheduleSelector.getServiceScheduleFromId(
                 expectedSchedule.Id
             );
             Test.stopTest();

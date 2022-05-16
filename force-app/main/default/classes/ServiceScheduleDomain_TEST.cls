@@ -19,7 +19,7 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
-    private static void shouldupsertScheduleWithoutRelatedRecords() {
+    private static void shouldUpsertScheduleWithoutRelatedRecords() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();
         Service__c service = [SELECT Id, Program__c FROM Service__c LIMIT 1];

@@ -11,9 +11,9 @@ public with sharing class ServiceScheduleDomain {
     public void commitChangesToModel(ServiceScheduleModel model) {
         upsertSchedule(model.serviceSchedule);
         setSessionDefaults(model);
-        insertRelatedRecords(stripPreExistingRecords(model.serviceSessions));
+        insertRelatedRecords(stripExistingRecords(model.serviceSessions));
         generateParticipants(model);
-        insertRelatedRecords(stripPreExistingRecords(model.serviceParticipants));
+        insertRelatedRecords(stripExistingRecords(model.serviceParticipants));
     }
 
     public void upsertSchedule(ServiceSchedule__c schedule) {
@@ -40,7 +40,7 @@ public with sharing class ServiceScheduleDomain {
         delete sessionsToDelete;
     }
 
-    private List<SObject> stripPreExistingRecords(List<SObject> sObjects) {
+    private List<SObject> stripExistingRecords(List<SObject> sObjects) {
         List<SObject> sObjectsNotYetInserted = new List<SObject>();
         for (SObject sObj : sObjects) {
             if (sObj.Id == null) {

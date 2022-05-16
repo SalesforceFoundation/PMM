@@ -36,7 +36,7 @@ public with sharing class ServiceScheduleService_TEST {
         Id serviceScheduleId = [SELECT Id FROM ServiceSchedule__c LIMIT 1].Id;
 
         List<ServiceSession__c> expectedServiceSessions = new List<ServiceSession__c>();
-        ServiceSession__c servSesh = new ServiceSession__c(
+        ServiceSession__c serviceSession = new ServiceSession__c(
             Id = TestUtil.mockId(ServiceSession__c.SObjectType),
             Name = 'Test Session',
             Status__c = 'Pending',
@@ -44,7 +44,7 @@ public with sharing class ServiceScheduleService_TEST {
             SessionEnd__c = Date.today().addDays(91),
             ServiceSchedule__c = serviceScheduleId
         );
-        expectedServiceSessions.add(servSesh);
+        expectedServiceSessions.add(serviceSession);
 
         serviceSessionSelectorStub.withReturnValue(
             'getFutureServiceSessionsForServiceSchedule',
@@ -75,7 +75,7 @@ public with sharing class ServiceScheduleService_TEST {
 
         for (ServiceSession__c actualSession : actualServiceSessions) {
             System.assert(
-                expectedSessionMap.containsKey(actualsession.Id),
+                expectedSessionMap.containsKey(actualSession.Id),
                 'Model should contain the expected sessions'
             );
         }

@@ -99,7 +99,13 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     resetUI() {
         this.serviceDeliveries = [];
         this._nextIndex = 0;
-        this.addDelivery();
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(
+            function() {
+                this.addDelivery();
+            }.bind(this),
+            50
+        );
     }
 
     connectedCallback() {

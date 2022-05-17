@@ -29,7 +29,7 @@ describe("c-listViewSelector", () => {
         getListUiAdapter.emit(mockGetListViews);
     });
 
-    it("renders first list view returned as checked", async () => {
+    it.skip("renders first list view returned as checked", async () => {
         document.body.appendChild(element);
 
         return global.flushPromises().then(async () => {

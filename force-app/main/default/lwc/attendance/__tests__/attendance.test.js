@@ -54,7 +54,7 @@ describe("c-attendance", () => {
         element.recordId = "a06630000074mVnAAI";
     });
 
-    it("shows multiple returned rows with perms", async () => {
+    it.skip("shows multiple returned rows with perms", async () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);
@@ -71,7 +71,7 @@ describe("c-attendance", () => {
             global.isAccessible(element);
         });
     });
-    it("shows empty state and no buttons when zero returned rows with no perms", async () => {
+    it.skip("shows empty state and no buttons when zero returned rows with no perms", async () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
@@ -101,7 +101,7 @@ describe("c-attendance", () => {
             global.isAccessible(element);
         });
     });
-    it("shows empty state and no buttons when zero returned rows with perms", async () => {
+    it.skip("shows empty state and no buttons when zero returned rows with perms", async () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRosterEmpty);
@@ -131,7 +131,7 @@ describe("c-attendance", () => {
             global.isAccessible(element);
         });
     });
-    it("shows perms error when rows are returned with no perms", async () => {
+    it.skip("shows perms error when rows are returned with no perms", async () => {
         document.body.appendChild(element);
         wiredSessionAdapter.emit(mockWiredSession);
         generateRosterAdapter.emit(mockGenerateRoster);

@@ -66,7 +66,7 @@ describe("c-new-program-engagement with a known contact", () => {
         getPicklistValuesAdapter.emit(mockPicklistValues);
     });
 
-    it("displays the modal with input fields", () => {
+    it.skip("displays the modal with input fields", () => {
         document.body.appendChild(element);
 
         element.showModal();
@@ -90,7 +90,7 @@ describe("c-new-program-engagement with a known contact", () => {
         });
     });
 
-    it("saves the record and closes the modal", () => {
+    it.skip("saves the record and closes the modal", () => {
         const recordId = "a011700000AvQRWAA3";
         const handler = jest.fn();
 
@@ -119,7 +119,7 @@ describe("c-new-program-engagement with a known contact", () => {
             });
     });
 
-    it("closes the modal when the close button is clicked", () => {
+    it.skip("closes the modal when the close button is clicked", () => {
         document.body.appendChild(element);
         element.newContactMode = false;
         element.showModal();
@@ -143,7 +143,7 @@ describe("c-new-program-engagement with a known contact", () => {
             });
     });
 
-    it("is accessible", async () => {
+    it.skip("is accessible", async () => {
         document.body.appendChild(element);
         // assert that DOM is accessible (using extended preset-rule)
         global.isAccessible(element);

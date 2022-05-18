@@ -62,6 +62,14 @@ export default class ServiceScheduleReview extends LightningElement {
         return false;
     }
 
+    get serviceSessions() {
+        return this.serviceScheduleModel.serviceSessions.map((session, index) => ({
+            ...session,
+            index: index,
+            alreadyCreatedCSSClass: session.Id ? "slds-color__background_gray-5" : "",
+        }));
+    }
+
     get reviewLabel() {
         return format(REVIEW_RECORDS, [
             this._serviceScheduleModel.labels.serviceSchedule.objectLabel,
@@ -102,11 +110,13 @@ export default class ServiceScheduleReview extends LightningElement {
             {
                 label: this.sessionNameLabel,
                 fieldName: this._serviceScheduleModel.sessionFields.name.apiName,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 hideDefaultActions: true,
             },
             {
                 label: this.sessionStartLabel,
                 fieldName: this._serviceScheduleModel.sessionFields.sessionStart.apiName,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {
@@ -123,6 +133,7 @@ export default class ServiceScheduleReview extends LightningElement {
             {
                 label: this.sessionEndLabel,
                 fieldName: this._serviceScheduleModel.sessionFields.sessionEnd.apiName,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {

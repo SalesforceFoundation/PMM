@@ -21,7 +21,7 @@ public with sharing class ServiceScheduleSelector_TEST {
     }
 
     @IsTest
-    private static void testgetServiceScheduleFromId() {
+    private static void testGetServiceScheduleFromId() {
         ServiceSchedule__c expectedSchedule = [
             SELECT Id, Name
             FROM ServiceSchedule__c

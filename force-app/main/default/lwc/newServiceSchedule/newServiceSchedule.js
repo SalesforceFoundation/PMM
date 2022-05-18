@@ -305,13 +305,20 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     handleLoad() {
-        if (this.dateFields.end.value && !this.useMinimumStartAfterLastSession) {
+        if (this.dateFields.end.value && !this.editingExistingSchedule) {
             return;
         }
 
         this.template.querySelectorAll("lightning-input-field").forEach(field => {
             if (field.fieldName === this.dateFields.start.apiName) {
-                let initialStartDate = field.value;
+                let initialStartDate = new Date(field.value);
+                if (this.editingExistingSchedule) {
+                    let today = new Date();
+                    initialStartDate.setMonth(today.getMonth());
+                    initialStartDate.setDate(today.getDate());
+                    initialStartDate.setFullYear(today.getFullYear());
+                    console.log(initialStartDate);
+                }
                 if (this.useMinimumStartAfterLastSession) {
                     let minimumStartDateValue = new Date(
                         Date.parse(this.minimumStartDate) + 86400 * 1000
@@ -321,6 +328,7 @@ export default class NewServiceSchedule extends LightningElement {
                             ? initialStartDate
                             : minimumStartDateValue;
                 }
+
                 this.setFirstSessionStartTimeAndEndTime(initialStartDate);
             }
         });

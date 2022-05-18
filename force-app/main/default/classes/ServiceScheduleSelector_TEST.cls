@@ -9,6 +9,11 @@
 
 @IsTest
 public with sharing class ServiceScheduleSelector_TEST {
+    private static BasicStub permissionValidatorStub = new BasicStub(
+        PermissionValidator.class
+    );
+    private static ServiceScheduleSelector scheduleSelector = new ServiceScheduleSelector();
+
     @TestSetup
     private static void createScheduleData() {
         TestDataFactory.generateServiceData();
@@ -24,7 +29,6 @@ public with sharing class ServiceScheduleSelector_TEST {
         ];
 
         Test.startTest();
-        ServiceScheduleSelector scheduleSelector = new ServiceScheduleSelector();
         ServiceSchedule__c actualSchedule = scheduleSelector.getServiceScheduleFromId(
             expectedSchedule.Id
         );
@@ -47,19 +51,32 @@ public with sharing class ServiceScheduleSelector_TEST {
     private static void testGetServiceScheduleNoAccess() {
         ServiceSchedule__c expectedSchedule = [SELECT Id FROM ServiceSchedule__c LIMIT 1];
 
-        Test.startTest();
-        System.runAs(TestUtil.getTestUser()) {
-            ServiceScheduleSelector scheduleSelector = new ServiceScheduleSelector();
-            ServiceSchedule__c actualSchedule = scheduleSelector.getServiceScheduleFromId(
-                expectedSchedule.Id
-            );
-            Test.stopTest();
+        permissionValidatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
 
-            System.assertEquals(
-                null,
-                actualSchedule,
-                'Expected null ServiceSchedule__c since the user does not have access to the object'
-            );
-        }
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) permissionValidatorStub.createMock();
+        ServiceSchedule__c actualSchedule = scheduleSelector.getServiceScheduleFromId(
+            expectedSchedule.Id
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            null,
+            actualSchedule,
+            'Expected null ServiceSchedule__c since the user does not have access to the object'
+        );
+
+        permissionValidatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceSchedule__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            }
+        );
     }
 }

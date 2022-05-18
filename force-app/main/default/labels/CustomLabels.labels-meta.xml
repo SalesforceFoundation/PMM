@@ -657,8 +657,8 @@
         <fullName>Start_Date_After_Last_Session</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>{Start Date Label} must be before {Date of last session}</shortDescription>
-        <value>{0} must be after last session date of {1}</value>
+        <shortDescription>Enter a {Start Date Label} after {Date of last session}</shortDescription>
+        <value>Enter a {0} after {1}</value>
     </labels>    
     <labels>
         <fullName>Update</fullName>

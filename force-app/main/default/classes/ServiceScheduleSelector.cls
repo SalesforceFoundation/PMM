@@ -20,31 +20,39 @@ public with sharing class ServiceScheduleSelector {
     ) {
         List<ServiceSchedule__c> serviceSchedules = new List<ServiceSchedule__c>();
 
-        if (Schema.SObjectType.ServiceSchedule__c.isAccessible()) {
-            serviceSchedules = [
-                SELECT
-                    Id,
-                    Name,
-                    AllDay__c,
-                    CreateServiceSessionRecords__c,
-                    DaysOfWeek__c,
-                    DefaultServiceQuantity__c,
-                    FirstSessionEnd__c,
-                    FirstSessionStart__c,
-                    Frequency__c,
-                    Interval__c,
-                    MonthlyRecurrenceOption__c,
-                    NumberOfServiceSessions__c,
-                    OtherServiceProvider__c,
-                    ParticipantCapacity__c,
-                    PrimaryServiceProvider__c,
-                    ServiceScheduleEndDate__c,
-                    ServiceScheduleEnds__c,
-                    Service__c
-                FROM ServiceSchedule__c
-                WHERE Id = :serviceScheduleIds
-            ];
+        if (
+            !(PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceSchedule__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ))
+        ) {
+            return new List<ServiceSchedule__c>();
         }
+
+        serviceSchedules = [
+            SELECT
+                Id,
+                Name,
+                AllDay__c,
+                CreateServiceSessionRecords__c,
+                DaysOfWeek__c,
+                DefaultServiceQuantity__c,
+                FirstSessionEnd__c,
+                FirstSessionStart__c,
+                Frequency__c,
+                Interval__c,
+                MonthlyRecurrenceOption__c,
+                NumberOfServiceSessions__c,
+                OtherServiceProvider__c,
+                ParticipantCapacity__c,
+                PrimaryServiceProvider__c,
+                ServiceScheduleEndDate__c,
+                ServiceScheduleEnds__c,
+                Service__c
+            FROM ServiceSchedule__c
+            WHERE Id = :serviceScheduleIds
+        ];
 
         return Security.stripInaccessible(AccessType.READABLE, serviceSchedules)
             .getRecords();

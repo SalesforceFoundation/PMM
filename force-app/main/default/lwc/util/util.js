@@ -307,6 +307,20 @@ const prefixNamespace = value => {
     return namespace + value;
 };
 
+const formatTime = value => {
+    let ms = value % 1000;
+    value = (value - ms) / 1000;
+    let secs = value % 60;
+    value = (value - secs) / 60;
+    let mins = value % 60;
+    let hrs = (value - mins) / 60;
+    hrs = hrs < 10 ? "0" + hrs : hrs;
+    mins = mins < 10 ? "0" + mins : mins;
+    value = hrs + ":" + mins + ":00.000Z";
+
+    return value;
+};
+
 export {
     isString,
     showToast,
@@ -322,4 +336,5 @@ export {
     debouncify,
     createUUID,
     prefixNamespace,
+    formatTime,
 };

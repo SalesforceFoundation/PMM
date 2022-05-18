@@ -113,12 +113,18 @@ export default class NewServiceSchedule extends LightningElement {
     get minimumStartDate() {
         let minStartDatetime = new Date();
         if (this.useMinimumStartAfterLastSession) {
-            minStartDatetime = this._serviceScheduleModel.serviceSessions.reduce(function(
+            let lastSession = this._serviceScheduleModel.serviceSessions.reduce(function(
                 prev,
                 curr
             ) {
                 return prev.SessionEnd__c > curr.SessionEnd__c ? prev : curr;
-            }).SessionEnd__c;
+            });
+            // use the date values from session end in case session spans more than one calendar date
+            minStartDatetime = new Date(lastSession.SessionEnd__c);
+            minStartDatetime.setHours(new Date(lastSession.SessionStart__c).getHours());
+            minStartDatetime.setMinutes(
+                new Date(lastSession.SessionStart__c).getMinutes()
+            );
         }
         return minStartDatetime;
     }
@@ -178,7 +184,8 @@ export default class NewServiceSchedule extends LightningElement {
             datesValid = this.dateFields.start.value < this.dateFields.end.value;
             if (this.useMinimumStartAfterLastSession) {
                 startDateAfterLastSession =
-                    this.dateFields.start.value > this.minimumStartDate;
+                    new Date(this.dateFields.start.value) >
+                    new Date(this.minimumStartDate);
             }
         }
 

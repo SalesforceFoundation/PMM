@@ -313,8 +313,6 @@ private with sharing class ServiceScheduleDomain_TEST {
             false
         );
 
-        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
-
         ServiceSchedule__c expectedSchedule = [SELECT Id FROM ServiceSchedule__c LIMIT 1];
 
         Test.startTest();
@@ -322,6 +320,7 @@ private with sharing class ServiceScheduleDomain_TEST {
             expectedSchedule.Id,
             null
         );
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
 
         try {
             domain.commitChangesToModel(scheduleModel);

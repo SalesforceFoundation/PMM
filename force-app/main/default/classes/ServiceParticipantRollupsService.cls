@@ -35,7 +35,9 @@ public with sharing class ServiceParticipantRollupsService {
         }
     }
 
-    public void processDeletedServiceSchedules(List<ServiceParticipant__c> participants) {
+    public void processDeletedServiceParticipants(
+        List<ServiceParticipant__c> participants
+    ) {
         Set<Id> serviceScheduleIds = new Set<Id>();
         Map<Id, ServiceSchedule__c> serviceSchedules = new Map<Id, ServiceSchedule__c>();
 

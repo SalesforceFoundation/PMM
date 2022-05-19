@@ -21,7 +21,7 @@ describe("c-service-schedule-creator", () => {
         });
     });
 
-    it.skip("element is accessible", () => {
+    it("element is accessible", () => {
         document.body.appendChild(element);
 
         return global.flushPromises().then(async () => {

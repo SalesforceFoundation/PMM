@@ -21,7 +21,7 @@ describe("c-service-schedule-creator", () => {
         });
     });
 
-    it.skip("modal appears in non-experience-cloud context and element is accessible", () => {
+    it("modal appears in non-experience-cloud context and element is accessible", () => {
         element.isCommunity = false;
         document.body.appendChild(element);
 
@@ -37,7 +37,7 @@ describe("c-service-schedule-creator", () => {
         });
     });
 
-    it.skip("modal does not appear in experience-cloud context and element is accessible", () => {
+    it("modal does not appear in experience-cloud context and element is accessible", () => {
         element.isCommunity = true;
         document.body.appendChild(element);
         return global.flushPromises().then(async () => {

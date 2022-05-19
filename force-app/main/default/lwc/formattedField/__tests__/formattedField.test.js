@@ -14,7 +14,7 @@ let mockField;
 
 let mockRecord;
 
-describe.skip("c-formattedField", () => {
+describe("c-formattedField", () => {
     let element;
 
     afterEach(global.clearDOM);

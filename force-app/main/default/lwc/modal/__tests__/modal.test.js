@@ -26,7 +26,7 @@ describe("c-modal", () => {
         document.body.appendChild(element);
     });
 
-    it.skip("does not display the modal dialog by default based on the css class", () => {
+    it("does not display the modal dialog by default based on the css class", () => {
         return global.flushPromises().then(() => {
             const modalContainer = element.shadowRoot.querySelector("div");
             //verify that the css class on the outer div is modal-hidden by default
@@ -34,7 +34,7 @@ describe("c-modal", () => {
         });
     });
 
-    it.skip("displays header and does not display the slot when header property is not blank", () => {
+    it("displays header and does not display the slot when header property is not blank", () => {
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
 
@@ -51,7 +51,7 @@ describe("c-modal", () => {
         });
     });
 
-    it.skip("does not display header and displays the slot when header property is blank", () => {
+    it("does not display header and displays the slot when header property is blank", () => {
         //Since in this scenario we are testing that the header has to be empty accessiblity tests
         //will fail so for now not adding accessibility test until we fix the issue on the modal component
         return global.flushPromises().then(() => {
@@ -65,7 +65,7 @@ describe("c-modal", () => {
         });
     });
 
-    it.skip("closes the modal when the close button is clicked", () => {
+    it("closes the modal when the close button is clicked", () => {
         //Added the below header to make sure accessibility tests pass
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
@@ -86,7 +86,7 @@ describe("c-modal", () => {
         });
     });
 
-    it.skip("changes the css class when the modal is shown or hidden", () => {
+    it("changes the css class when the modal is shown or hidden", () => {
         //Added the below header to make sure accessibility tests pass
         const HEADER_STRING = "Modal Header";
         element.header = HEADER_STRING;
@@ -108,7 +108,7 @@ describe("c-modal", () => {
     });
 
     // This jest test below validates that the component is accessible
-    it.skip("is accessible", async () => {
+    it("is accessible", async () => {
         const h2Container = element.shadowRoot.querySelector("h2");
         let slot = document.createElement("span");
         slot.textContent = "Test Accessibility";

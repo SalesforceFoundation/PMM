@@ -18,8 +18,9 @@ public with sharing class ServiceParticipantTriggerHandler {
             }
             // when AFTER_UPDATE {
             // }
-            // when AFTER_DELETE {
-            // }
+            when AFTER_DELETE {
+                rollupsService.processDeletedServiceSchedules(Trigger.old);
+            }
             // when AFTER_UNDELETE {
             // }
             when else {

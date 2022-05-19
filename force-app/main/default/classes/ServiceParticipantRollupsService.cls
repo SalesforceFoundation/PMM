@@ -1,48 +1,75 @@
 public with sharing class ServiceParticipantRollupsService {
-    private Integer participantEnrolledCount = 0;
+    private static String ENROLLED = 'Enrolled';
 
     public void processInsertedParticipants(List<ServiceParticipant__c> participants) {
-        processServiceSchedules(participants);
-    }
-
-    private void processServiceSchedules(List<ServiceParticipant__c> participants) {
         Set<Id> serviceScheduleIds = new Set<Id>();
-        List<ServiceSchedule__c> serviceSchedules = new List<ServiceSchedule__c>();
+        Map<Id, ServiceSchedule__c> serviceSchedules = new Map<Id, ServiceSchedule__c>();
+        Map<Id, ServiceSchedule__c> schedules = new Map<Id, ServiceSchedule__c>();
 
         for (ServiceParticipant__c participant : participants) {
             serviceScheduleIds.add(participant.ServiceSchedule__c);
         }
 
-        List<ServiceSchedule__c> schedules = new List<ServiceSchedule__c>();
-
         schedules = getServiceSchedules(serviceScheduleIds);
 
-        for (ServiceSchedule__c schedule : schedules) {
-            for (ServiceParticipant__c participant : schedule.ServiceParticipants__r) {
-                if (participant.Status__c != 'Enrolled') {
-                    continue;
-                }
+        for (ServiceParticipant__c serviceParticipant : participants) {
+            ServiceSchedule__c schedule = schedules.get(
+                serviceParticipant.ServiceSchedule__c
+            );
 
-                if (schedule.ParticipantsEnrolled__c == null) {
-                    schedule.ParticipantsEnrolled__c = 0;
-                }
-                schedule.ParticipantsEnrolled__c++;
+            if (serviceParticipant.Status__c != ENROLLED) {
+                continue;
             }
-            serviceSchedules.add(schedule);
+
+            if (schedule.ParticipantsEnrolled__c == null) {
+                schedule.ParticipantsEnrolled__c = 0;
+            }
+
+            schedule.ParticipantsEnrolled__c++;
+
+            serviceSchedules.put(schedule.Id, schedule);
         }
 
         if (!serviceSchedules.isEmpty()) {
-            update serviceSchedules;
+            update serviceSchedules.values();
         }
     }
 
-    private List<ServiceSchedule__c> getServiceSchedules(Set<Id> scheduleIds) {
-        return new List<ServiceSchedule__c>(
+    public void processDeletedServiceSchedules(List<ServiceParticipant__c> participants) {
+        Set<Id> serviceScheduleIds = new Set<Id>();
+        Map<Id, ServiceSchedule__c> serviceSchedules = new Map<Id, ServiceSchedule__c>();
+
+        for (ServiceParticipant__c participant : participants) {
+            serviceScheduleIds.add(participant.ServiceSchedule__c);
+        }
+
+        Map<Id, ServiceSchedule__c> schedules = new Map<Id, ServiceSchedule__c>();
+
+        schedules = getServiceSchedules(serviceScheduleIds);
+
+        for (ServiceParticipant__c serviceParticipant : participants) {
+            ServiceSchedule__c schedule = schedules.get(
+                serviceParticipant.ServiceSchedule__c
+            );
+
+            if (serviceParticipant.Status__c != ENROLLED) {
+                continue;
+            }
+
+            schedule.ParticipantsEnrolled__c--;
+
+            serviceSchedules.put(schedule.Id, schedule);
+        }
+
+        if (!serviceSchedules.isEmpty()) {
+            update serviceSchedules.values();
+        }
+    }
+
+    private Map<Id, ServiceSchedule__c> getServiceSchedules(Set<Id> scheduleIds) {
+        return new Map<Id, ServiceSchedule__c>(
             [
-                SELECT
-                    Id,
-                    ParticipantsEnrolled__c,
-                    (SELECT Id, Status__c FROM ServiceParticipants__r)
+                SELECT Id, ParticipantsEnrolled__c
                 FROM ServiceSchedule__c
                 WHERE Id IN :scheduleIds
             ]

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
-    <actionSubtype>ScreenAction</actionSubtype>
+    <height>250</height>
     <label>Add More Sessions</label>
-    <lightningWebComponent>serviceScheduleAddSessionsQuickAction</lightningWebComponent>
+    <lightningComponent>addMoreSessions</lightningComponent>
     <optionsCreateFeedItem>false</optionsCreateFeedItem>
-    <type>LightningWebComponent</type>
+    <type>LightningComponent</type>
+    <width>-100</width>
 </QuickAction>

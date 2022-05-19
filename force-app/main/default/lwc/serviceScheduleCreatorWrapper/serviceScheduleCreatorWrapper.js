@@ -12,7 +12,6 @@ import newServiceSchedule from "@salesforce/label/c.New_Service_Schedule";
 
 export default class ServiceScheduleCreatorWrapper extends LightningElement {
     @api recordTypeId;
-    @api recordId;
     @api isCommunity;
     @api serviceId;
 

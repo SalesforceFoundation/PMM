@@ -365,6 +365,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
         if (this._steps.all.length > 0) {
             this._steps = new ProgressSteps();
+            this.addSteps();
         }
         this._steps.restart();
         this._currentStep = undefined;

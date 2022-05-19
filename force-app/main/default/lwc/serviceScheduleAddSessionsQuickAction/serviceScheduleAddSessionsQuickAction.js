@@ -14,7 +14,6 @@ import { loadStyle } from "lightning/platformResourceLoader";
 
 export default class ServiceScheduleAddSessionsQuickAction extends LightningElement {
     @api recordId;
-    @api isCommunity;
 
     labels = { addServiceSessions };
 

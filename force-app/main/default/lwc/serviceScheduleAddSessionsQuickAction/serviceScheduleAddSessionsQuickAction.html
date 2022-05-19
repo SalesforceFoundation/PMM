@@ -8,16 +8,13 @@
   -->
 
 <template>
-    <header class="slds-modal__header" if:false={isCommunity}>
+    <header class="slds-modal__header">
         <h2 class="slds-text-heading_medium slds-hyphenate header-string">
             {labels.addServiceSessions}
         </h2>
     </header>
 
     <div class="slds-modal__content slds-var-p-around_medium">
-        <c-service-schedule-creator
-            record-id={recordId}
-            is-community={isCommunity}
-        ></c-service-schedule-creator>
+        <c-service-schedule-creator record-id={recordId}></c-service-schedule-creator>
     </div>
 </template>

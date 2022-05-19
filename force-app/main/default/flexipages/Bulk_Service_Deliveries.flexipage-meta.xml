@@ -4,7 +4,6 @@
         <itemInstances>
             <componentInstance>
                 <componentName>bulkServiceDeliveryUI</componentName>
-                <identifier>bulkServiceDeliveryUI</identifier>
             </componentInstance>
         </itemInstances>
         <name>main</name>

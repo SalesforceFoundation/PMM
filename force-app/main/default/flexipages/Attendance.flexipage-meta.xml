@@ -4,7 +4,6 @@
         <itemInstances>
             <componentInstance>
                 <componentName>attendance</componentName>
-                <identifier>attendance</identifier>
             </componentInstance>
         </itemInstances>
         <name>main</name>

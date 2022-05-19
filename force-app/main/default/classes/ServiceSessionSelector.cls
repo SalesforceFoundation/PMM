@@ -27,7 +27,7 @@ public with sharing class ServiceSessionSelector {
         serviceSessions = [
             SELECT Id, Name, Status__c, SessionStart__c, SessionEnd__c, ServiceSchedule__c
             FROM ServiceSession__c
-            WHERE ServiceSchedule__c = :serviceScheduleId AND SessionStart__c > TODAY
+            WHERE ServiceSchedule__c = :serviceScheduleId AND SessionStart__c >= TODAY
             ORDER BY SessionStart__c
         ];
 

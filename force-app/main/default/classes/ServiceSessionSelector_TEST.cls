@@ -57,7 +57,7 @@ public with sharing class ServiceSessionSelector_TEST {
         List<ServiceSession__c> expectedSessions = [
             SELECT Id, Name, PrimaryServiceProvider__c, Status__c, SessionStart__c
             FROM ServiceSession__c
-            WHERE ServiceSchedule__c = :serviceScheduleId AND SessionStart__c > TODAY
+            WHERE ServiceSchedule__c = :serviceScheduleId AND SessionStart__c >= TODAY
             ORDER BY SessionStart__c
         ];
         Test.startTest();

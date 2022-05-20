@@ -8,13 +8,15 @@
  */
 
 import { LightningElement, api, track } from "lwc";
-import { format } from "c/util";
+import { format, formatTime } from "c/util";
 import REVIEW_RECORDS from "@salesforce/label/c.Review_Records";
 import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
 import DATE_AND_TIME from "@salesforce/label/c.Service_Schedule_Date_Time";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
 import ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE from "@salesforce/label/c.Only_Showing_Future_Sessions";
+
+const TIME = "TIME";
 
 export default class ServiceScheduleReview extends LightningElement {
     _serviceScheduleModel;
@@ -93,6 +95,11 @@ export default class ServiceScheduleReview extends LightningElement {
                       field.referenceNameField
                   ]
                 : this._serviceScheduleModel.serviceSchedule[field.apiName];
+
+            if (field.type === TIME && field.value >= 0) {
+                field.value = formatTime(field.value);
+                field.isTime = true;
+            }
         });
     }
 

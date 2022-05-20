@@ -8,7 +8,7 @@
  */
 
 import { LightningElement, track, api, wire } from "lwc";
-import { format } from "c/util";
+import { format, formatTime } from "c/util";
 import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
@@ -33,6 +33,8 @@ import save from "@salesforce/label/c.Save";
 import saveAndNew from "@salesforce/label/c.Save_New";
 import cantFind from "@salesforce/label/c.Cant_Find_Participant";
 import newLabel from "@salesforce/label/c.New";
+
+const TIME = "TIME";
 
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
@@ -203,6 +205,12 @@ export default class ParticipantSelector extends LightningElement {
                 // Flatten relationship fields
                 let programEngagement = { ...engagement };
                 for (const [field, value] of Object.entries(programEngagement)) {
+                    let isTimeField =
+                        this.fieldByFieldPath[field] &&
+                        this.fieldByFieldPath[field].type === TIME;
+                    if (isTimeField) {
+                        programEngagement[field] = formatTime(value);
+                    }
                     if (typeof value === "object") {
                         for (const [parentField, parentValue] of Object.entries(value)) {
                             programEngagement[field + parentField] = parentValue;

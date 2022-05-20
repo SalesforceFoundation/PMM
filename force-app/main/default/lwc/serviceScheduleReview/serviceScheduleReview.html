@@ -1,3 +1,4 @@
+<!-- sldsValidatorIgnore -->
 <!--
   - /*
   -  * Copyright (c) 2020, salesforce.com, inc.
@@ -102,7 +103,11 @@
                             class="slds-var-p-right_x-small"
                         >
                         </lightning-icon>
-                        {field.value}
+                        <lightning-formatted-time
+                            if:true={field.isTime}
+                            value={field.value}
+                        ></lightning-formatted-time>
+                        <template if:false={field.isTime}> {field.value} </template>
                     </template>
                 </c-output-field>
             </template>

@@ -59,6 +59,13 @@
         <shortDescription>Adding More Service Session Warning</shortDescription>
         <value>You&apos;re adding more than {0} sessions, so this will take some extra time to complete.</value>
     </labels>
+        <labels>
+        <fullName>Add_More_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add More Sessions title</shortDescription>
+        <value>Add More Sessions</value>
+    </labels>
     <labels>
         <fullName>Anonymous</fullName>
         <language>en_US</language>
@@ -191,6 +198,13 @@
         <protected>true</protected>
         <shortDescription>Supporting message for Attendance empty state</shortDescription>
         <value>After participants are added to this Service Schedule, track their attendance here.</value>
+    </labels>
+    <labels>
+        <fullName>Add_Sessions_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Adding Sessions to an existing schedule.</shortDescription>
+        <value>You are updating an existing schedule any changes you make here will be saved to the schedule record. Please note that you will only be able to add sessions after the most current existing sessions.</value>
     </labels>
     <labels>
         <fullName>Incorrect_Tab</fullName>
@@ -549,6 +563,13 @@
         <value>No records selected</value>
     </labels>
     <labels>
+        <fullName>Only_Showing_Future_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Only showing sessions on or after today&apos;s date</shortDescription>
+        <value>Only showing sessions after today&apos;s date</value>
+    </labels>
+    <labels>
         <fullName>Owner_Field</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -632,6 +653,20 @@
         <shortDescription>You have rows with errors</shortDescription>
         <value>There are Service Delivery rows with errors.</value>
     </labels>
+    <labels>
+        <fullName>Start_Date_After_Last_Session</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter a {Start Date Label} after {Date of last session}</shortDescription>
+        <value>Enter a {0} after {1}</value>
+    </labels> 
+    <labels>
+        <fullName>Start_Date_After_Today</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter a {Start Date Label} on or after today&apos;s date</shortDescription>
+        <value>Enter a {0} on or after today&apos;s date</value>
+    </labels>       
     <labels>
         <fullName>Update</fullName>
         <language>en_US</language>

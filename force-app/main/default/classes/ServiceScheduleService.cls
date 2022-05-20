@@ -17,19 +17,32 @@ public with sharing class ServiceScheduleService {
     @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();
     @TestVisible
+    private ServiceSessionSelector serviceSessionSelector = new ServiceSessionSelector();
+    @TestVisible
     private RecurrenceService recurrenceService = new RecurrenceService();
     private ProgramEngagementService progEngagementService = new ProgramEngagementService();
     private static final String ONE_TIME = 'One Time';
     @TestVisible
-    public ServiceScheduleModel getServiceScheduleModel(Id recordTypeId) {
-        return new ServiceScheduleModel(recordTypeId);
+    public ServiceScheduleModel getServiceScheduleModel(
+        Id serviceScheduleId,
+        Id recordTypeId
+    ) {
+        ServiceScheduleModel serviceScheduleModel = new ServiceScheduleModel(
+            serviceScheduleId,
+            recordTypeId
+        );
+
+        if (serviceScheduleId != null) {
+            loadAndPopulateSessionRecords(serviceScheduleModel);
+        }
+        return serviceScheduleModel;
     }
 
     public ServiceScheduleModel persist(ServiceScheduleModel model) {
         Savepoint savepoint = Database.setSavepoint();
 
         try {
-            domain.insertModel(model);
+            domain.commitChangesToModel(model);
             return model;
         } catch (Exception ex) {
             Database.rollback(savepoint);
@@ -87,7 +100,7 @@ public with sharing class ServiceScheduleService {
 
     public SelectParticipantModel getSelectParticipantModel(Id serviceId) {
         SelectParticipantModel model = new SelectParticipantModel();
-        populateRecords(serviceId, model);
+        loadAndPopulateParticipantRecords(serviceId, model);
         return model;
     }
 
@@ -98,7 +111,12 @@ public with sharing class ServiceScheduleService {
             return model;
         }
 
-        model.serviceSessions = getSessions(model.serviceSchedule, model.maxSessions);
+        List<ServiceSession__c> newServiceSessions = createSessionsFromSchedule(
+            model.serviceSchedule,
+            model.maxSessions
+        );
+
+        model.addServiceSessions(newServiceSessions);
         return model;
     }
 
@@ -158,7 +176,7 @@ public with sharing class ServiceScheduleService {
     }
 
     @TestVisible
-    private List<ServiceSession__c> getSessions(
+    private List<ServiceSession__c> createSessionsFromSchedule(
         ServiceSchedule__c schedule,
         Integer maxSessions
     ) {
@@ -222,7 +240,16 @@ public with sharing class ServiceScheduleService {
         return result;
     }
 
-    private void populateRecords(Id serviceId, SelectParticipantModel model) {
+    private void loadAndPopulateSessionRecords(ServiceScheduleModel model) {
+        model.serviceSessions = serviceSessionSelector.getFutureServiceSessionsForServiceSchedule(
+            model.serviceSchedule.Id
+        );
+    }
+
+    private void loadAndPopulateParticipantRecords(
+        Id serviceId,
+        SelectParticipantModel model
+    ) {
         model.program = programEngagementSelector.getProgramByServiceId(serviceId);
         if (model.program == null) {
             return;

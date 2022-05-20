@@ -19,7 +19,7 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
-    private static void shouldInsertScheduleWithoutRelatedRecords() {
+    private static void shouldUpsertScheduleWithoutRelatedRecords() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();
         Service__c service = [SELECT Id, Program__c FROM Service__c LIMIT 1];
@@ -33,7 +33,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         model.serviceSchedule = schedule;
 
         Test.startTest();
-        domain.insertModel(model);
+        domain.commitChangesToModel(model);
         Test.stopTest();
 
         System.assertNotEquals(
@@ -44,7 +44,38 @@ private with sharing class ServiceScheduleDomain_TEST {
     }
 
     @IsTest
-    private static void shouldInsertScheduleAndRelatedRecords() {
+    private static void shouldUpdateScheduleWithoutRelatedRecords() {
+        ServiceSchedule__c originalSchedule = [
+            SELECT Id, Name
+            FROM ServiceSchedule__c
+            LIMIT 1
+        ];
+
+        String originalName = originalSchedule.Name;
+
+        ServiceScheduleModel model = new ServiceScheduleModel(originalSchedule.Id, null);
+        model.serviceSchedule.Name = originalName + ' (Updated)';
+
+        Test.startTest();
+        domain.commitChangesToModel(model);
+
+        ServiceSchedule__c updatedSchedule = [
+            SELECT Id, Name
+            FROM ServiceSchedule__c
+            WHERE Id = :originalSchedule.Id
+            LIMIT 1
+        ];
+        Test.stopTest();
+
+        System.assertNotEquals(
+            updatedSchedule.Name,
+            originalSchedule.Name,
+            'Expected the schedule record to have been updated with a modified name.'
+        );
+    }
+
+    @IsTest
+    private static void shouldupsertScheduleAndRelatedRecords() {
         ServiceScheduleModel model = new ServiceScheduleModel();
         ServiceSchedule__c schedule = new ServiceSchedule__c();
         List<ServiceSession__c> sessions = new List<ServiceSession__c>();
@@ -77,7 +108,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         model.serviceSchedule = schedule;
         model.serviceSessions = sessions;
         model.selectedEngagements = selectedEngagements;
-        domain.insertModel(model);
+        domain.commitChangesToModel(model);
         Test.stopTest();
 
         System.assert(
@@ -216,7 +247,7 @@ private with sharing class ServiceScheduleDomain_TEST {
         Test.startTest();
         try {
             model.serviceSchedule = schedule;
-            domain.insertModel(model);
+            domain.commitChangesToModel(model);
         } catch (Exception ex) {
             actualException = ex;
         }
@@ -251,7 +282,7 @@ private with sharing class ServiceScheduleDomain_TEST {
 
         Test.startTest();
         try {
-            domain.insertModel(new ServiceScheduleModel());
+            domain.commitChangesToModel(new ServiceScheduleModel());
         } catch (Exception ex) {
             dmlLimitAfter = System.Limits.getDmlStatements();
             actualException = ex;
@@ -267,6 +298,76 @@ private with sharing class ServiceScheduleDomain_TEST {
             0,
             dmlLimitAfter,
             'Expected the exception to be thrown before any dml statements.'
+        );
+    }
+
+    @IsTest
+    private static void throwsExceptionOnUpdateWhenPermissionCheckFails() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        ServiceSchedule__c expectedSchedule = [SELECT Id FROM ServiceSchedule__c LIMIT 1];
+
+        Test.startTest();
+        ServiceScheduleModel scheduleModel = new ServiceScheduleModel(
+            expectedSchedule.Id,
+            null
+        );
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+
+        try {
+            domain.commitChangesToModel(scheduleModel);
+        } catch (Exception ex) {
+            dmlLimitAfter = System.Limits.getDmlStatements();
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof ServiceScheduleDomain.ServiceScheduleDomainException,
+            'Expected the domain to throw the exception.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Expected the exception to be thrown before any dml statements.'
+        );
+    }
+
+    @IsTest
+    private static void doesNotThrowExceptionWhenNoData() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+
+        Test.startTest();
+        try {
+            domain.validateUpdateAccess(new List<SObject>());
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            actualException,
+            null,
+            'Should not throw except when empty list is sent to method.'
         );
     }
 

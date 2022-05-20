@@ -20,6 +20,7 @@ import SAVE_NEW_LABEL from "@salesforce/label/c.Save_New";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
 import CREATE_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Select_Create_Service_Session_Warning";
 import MAX_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Creating_Service_Session_Warning";
+import ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE from "@salesforce/label/c.Only_Showing_Future_Sessions";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
@@ -69,11 +70,14 @@ export default class ReviewSessions extends LightningElement {
 
         this._serviceSessions = [...this._serviceScheduleModel.serviceSessions];
 
-        if (!this._serviceSessions.length) {
-            this.getSessions();
-        } else {
-            this.handleDispatchLoadedEvent();
+        this.getSessions();
+    }
+
+    get editingExistingSchedule() {
+        if (this._serviceScheduleModel.serviceSchedule.Id) {
+            return true;
         }
+        return false;
     }
 
     get serviceSessions() {
@@ -84,6 +88,8 @@ export default class ReviewSessions extends LightningElement {
         return this._serviceSessions.map((session, index) => ({
             ...session,
             index: index,
+            alreadyCreatedCSSClass: session.Id ? "slds-color__background_gray-5" : "",
+            disableDeselect: session.Id ? true : false,
         }));
     }
 
@@ -103,6 +109,7 @@ export default class ReviewSessions extends LightningElement {
         totalSessions: TOTAL_SESSIONS_LABEL,
         addSession: ADD_RECORD_LABEL,
         reviewSessions: REVIEW_RECORDS,
+        onlyShowingFutureSessionsMessage: ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE,
         cancel: CANCEL_LABEL,
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
@@ -164,11 +171,13 @@ export default class ReviewSessions extends LightningElement {
         const COLUMNS = [
             {
                 label: this.sessionNameLabel,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 fieldName: this._serviceScheduleModel.sessionFields.name.apiName,
                 hideDefaultActions: true,
             },
             {
                 label: this.sessionStartLabel,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 fieldName: this.sessionStartFieldName,
                 hideDefaultActions: true,
                 type: "date",
@@ -185,6 +194,7 @@ export default class ReviewSessions extends LightningElement {
             },
             {
                 label: this.sessionEndLabel,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 fieldName: this.sessionEndFieldName,
                 hideDefaultActions: true,
                 type: "date",
@@ -201,6 +211,7 @@ export default class ReviewSessions extends LightningElement {
             },
             {
                 label: "",
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 name: "delete",
                 type: "button-icon",
                 hideDefaultActions: true,
@@ -208,7 +219,7 @@ export default class ReviewSessions extends LightningElement {
                     iconName: "utility:clear",
                     variant: "bare",
                     iconPosition: "left",
-                    disabled: false,
+                    disabled: { fieldName: "disableDeselect" },
                 },
             },
         ];

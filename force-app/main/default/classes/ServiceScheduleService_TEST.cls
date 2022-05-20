@@ -21,10 +21,64 @@ public with sharing class ServiceScheduleService_TEST {
     private static BasicStub programSelectorStub = new BasicStub(ProgramSelector.class);
     private static BasicStub serviceSelectorStub = new BasicStub(ServiceSelector.class);
     private static BasicStub permValidatorStub = new BasicStub(PermissionValidator.class);
+    private static BasicStub serviceSessionSelectorStub = new BasicStub(
+        ServiceSessionSelector.class
+    );
 
     @TestSetup
     private static void setupTestData() {
         TestDataFactory.generateServiceData();
+        TestDataFactory.generateServiceScheduleData('Daily', System.today());
+    }
+
+    @IsTest
+    private static void shouldQuerySessionsWhenIdNotNull() {
+        Id serviceScheduleId = [SELECT Id FROM ServiceSchedule__c LIMIT 1].Id;
+
+        List<ServiceSession__c> expectedServiceSessions = new List<ServiceSession__c>();
+        ServiceSession__c serviceSession = new ServiceSession__c(
+            Id = TestUtil.mockId(ServiceSession__c.SObjectType),
+            Name = 'Test Session',
+            Status__c = 'Pending',
+            SessionStart__c = Date.today().addDays(1),
+            SessionEnd__c = Date.today().addDays(91),
+            ServiceSchedule__c = serviceScheduleId
+        );
+        expectedServiceSessions.add(serviceSession);
+
+        serviceSessionSelectorStub.withReturnValue(
+            'getFutureServiceSessionsForServiceSchedule',
+            Id.class,
+            expectedServiceSessions
+        );
+        service.serviceSessionSelector = (ServiceSessionSelector) serviceSessionSelectorStub.createMock();
+
+        Test.startTest();
+        ServiceScheduleModel actualModel = service.getServiceScheduleModel(
+            serviceScheduleId,
+            null
+        );
+
+        List<ServiceSession__c> actualServiceSessions = actualModel.serviceSessions;
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedServiceSessions.size(),
+            actualServiceSessions.size(),
+            'Model should contain the expected number of session (' +
+            expectedServiceSessions.size() +
+            ')'
+        );
+        Map<Id, ServiceSession__c> expectedSessionMap = new Map<Id, ServiceSession__c>(
+            expectedServiceSessions
+        );
+
+        for (ServiceSession__c actualSession : actualServiceSessions) {
+            System.assert(
+                expectedSessionMap.containsKey(actualSession.Id),
+                'Model should contain the expected sessions'
+            );
+        }
     }
 
     @IsTest
@@ -37,7 +91,7 @@ public with sharing class ServiceScheduleService_TEST {
         expectedModel.serviceSchedule = schedule;
 
         Test.startTest();
-        ServiceScheduleModel actualModel = service.getServiceScheduleModel(null);
+        ServiceScheduleModel actualModel = service.getServiceScheduleModel(null, null);
         Test.stopTest();
 
         // Because datetime includes seconds, this test can be flaky if they records are created 1 second apart.
@@ -67,7 +121,7 @@ public with sharing class ServiceScheduleService_TEST {
 
     @IsTest
     private static void shouldProvideModelToDomainOnPersist() {
-        String methodName = 'insertModel';
+        String methodName = 'commitChangesToModel';
         ServiceScheduleModel model = new ServiceScheduleModel();
         service.domain = (ServiceScheduleDomain) domainStub.createMock();
 
@@ -80,7 +134,7 @@ public with sharing class ServiceScheduleService_TEST {
 
     @IsTest
     private static void shouldRollbackAndRethrowDomainException() {
-        String methodName = 'insertModel';
+        String methodName = 'commitChangesToModel';
         ServiceScheduleModel model = new ServiceScheduleModel();
         Exception actualException;
         Integer dmlLimitBefore;
@@ -675,7 +729,10 @@ public with sharing class ServiceScheduleService_TEST {
         }
 
         Test.startTest();
-        List<ServiceSession__c> actual = service.getSessions(schedule, null);
+        List<ServiceSession__c> actual = service.createSessionsFromSchedule(
+            schedule,
+            null
+        );
         Test.stopTest();
 
         System.assertEquals(
@@ -958,7 +1015,7 @@ public with sharing class ServiceScheduleService_TEST {
         );
 
         // Step 1
-        ServiceScheduleModel model = service.getServiceScheduleModel(null);
+        ServiceScheduleModel model = service.getServiceScheduleModel(null, null);
         DateTime firstSessionStart = System.now();
         DateTime firstSessionEnd = System.now().addHours(2);
         ServiceSchedule__c schedule = new ServiceSchedule__c(
@@ -1059,7 +1116,10 @@ public with sharing class ServiceScheduleService_TEST {
         }
 
         Test.startTest();
-        List<ServiceSession__c> actual = service.getSessions(schedule, null);
+        List<ServiceSession__c> actual = service.createSessionsFromSchedule(
+            schedule,
+            null
+        );
         Test.stopTest();
 
         System.assertEquals(

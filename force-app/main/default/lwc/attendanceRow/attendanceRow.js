@@ -8,7 +8,7 @@
  */
 
 import { LightningElement, api, track } from "lwc";
-import { getChildObjectByName } from "c/util";
+import { getChildObjectByName, formatTime } from "c/util";
 import { getRecordNotifyChange } from "lightning/uiRecordApi";
 
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
@@ -20,6 +20,7 @@ import SKIP_LABEL from "@salesforce/label/c.Dont_Track_Attendance";
 
 // TODO: create design parameters for default status and "present" statuses
 const PRESENT_STATUS = "Present";
+const TIME = "TIME";
 
 export default class AttendanceRow extends LightningElement {
     @track localRecord;
@@ -95,6 +96,9 @@ export default class AttendanceRow extends LightningElement {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(field => {
                 field.value = this.record[field.apiName];
+                if (field.type === TIME && field.value >= 0) {
+                    field.value = formatTime(field.value);
+                }
             });
         }
     }

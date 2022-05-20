@@ -8,7 +8,7 @@
  */
 
 import { LightningElement, api, track, wire } from "lwc";
-import { format } from "c/util";
+import { format, formatTime } from "c/util";
 import { getRecord } from "lightning/uiRecordApi";
 import { loadStyle } from "lightning/platformResourceLoader";
 import getDayNum from "@salesforce/apex/ServiceScheduleCreatorController.getDayNum";
@@ -43,6 +43,7 @@ const LASTDAY = "LastDayOfMonth";
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
 const DAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+const TIME = "TIME";
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
     @api serviceId;
@@ -213,6 +214,10 @@ export default class NewServiceSchedule extends LightningElement {
                 let field = { ...member };
                 field.size = SMALL_SIZE;
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
+                if (field.type === TIME && field.value >= 0) {
+                    field.value = formatTime(field.value);
+                }
+
                 return field;
             });
 

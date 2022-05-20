@@ -22,6 +22,10 @@ import START_AFTER_LAST_SESSION_LABEL from "@salesforce/label/c.Start_Date_After
 import START_AFTER_TODAY_LABEL from "@salesforce/label/c.Start_Date_After_Today";
 import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
 import DEFAULT_SERVICE_QUANTITY from "@salesforce/schema/ServiceSchedule__c.DefaultServiceQuantity__c";
+import FREQUENCY from "@salesforce/schema/ServiceSchedule__c.Frequency__c";
+import DAYS_OF_WEEK from "@salesforce/schema/ServiceSchedule__c.DaysOfWeek__c";
+import SESSION_START from "@salesforce/schema/ServiceSession__c.SessionStart__c";
+import SESSION_END from "@salesforce/schema/ServiceSession__c.SessionEnd__c";
 import UNIT_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
 import EVERY_LABEL from "@salesforce/label/c.Every_Custom";
 import DAY_LABEL from "@salesforce/label/c.Day";
@@ -118,13 +122,17 @@ export default class NewServiceSchedule extends LightningElement {
                 prev,
                 curr
             ) {
-                return prev.SessionEnd__c > curr.SessionEnd__c ? prev : curr;
+                return prev[SESSION_END.fieldApiName] > curr[SESSION_END.fieldApiName]
+                    ? prev
+                    : curr;
             });
             // use the date values from session end in case session spans more than one calendar date
-            minStartDatetime = new Date(lastSession.SessionEnd__c);
-            minStartDatetime.setHours(new Date(lastSession.SessionStart__c).getHours());
+            minStartDatetime = new Date(lastSession[SESSION_END.fieldApiName]);
+            minStartDatetime.setHours(
+                new Date(lastSession[SESSION_START.fieldApiName]).getHours()
+            );
             minStartDatetime.setMinutes(
-                new Date(lastSession.SessionStart__c).getMinutes()
+                new Date(lastSession[SESSION_START.fieldApiName]).getMinutes()
             );
         }
         return minStartDatetime;
@@ -148,16 +156,22 @@ export default class NewServiceSchedule extends LightningElement {
 
         // Write values from service schedule to local properties
         if (this.editingExistingSchedule) {
-            if (this._serviceScheduleModel.serviceSchedule.Frequency__c) {
-                this.picklistFields.frequency.value = this._serviceScheduleModel.serviceSchedule.Frequency__c;
+            if (this._serviceScheduleModel.serviceSchedule[FREQUENCY.fieldApiName]) {
+                this.picklistFields.frequency.value = this._serviceScheduleModel.serviceSchedule[
+                    FREQUENCY.fieldApiName
+                ];
             }
-            if (this._serviceScheduleModel.serviceSchedule.DaysOfWeek__c) {
-                this.picklistFields.daysOfWeek.value = this._serviceScheduleModel.serviceSchedule.DaysOfWeek__c;
+            if (this._serviceScheduleModel.serviceSchedule[DAYS_OF_WEEK.fieldApiName]) {
+                this.picklistFields.daysOfWeek.value = this._serviceScheduleModel.serviceSchedule[
+                    DAYS_OF_WEEK.fieldApiName
+                ];
                 let selectedValues = this.picklistFields.daysOfWeek.picklistValues.filter(
                     option =>
-                        this._serviceScheduleModel.serviceSchedule.DaysOfWeek__c.split(
-                            MULTI_SELECT_DELIM
-                        ).includes(option.value)
+                        this._serviceScheduleModel.serviceSchedule[
+                            DAYS_OF_WEEK.fieldApiName
+                        ]
+                            .split(MULTI_SELECT_DELIM)
+                            .includes(option.value)
                 );
                 selectedValues.forEach(element => {
                     element.isSelected = true;

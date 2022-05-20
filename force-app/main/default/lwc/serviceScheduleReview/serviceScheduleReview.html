@@ -10,7 +10,6 @@
 
 <template>
     <c-section title={reviewLabel} if:true={isLoaded}></c-section>
-
     <lightning-layout
         multiple-rows="true"
         class="slds-var-p-around_small"
@@ -158,6 +157,10 @@
                             title={serviceScheduleModel.labels.serviceSession.noSessionsAdded}
                         >
                         </c-scoped-notification>
+                        <c-scoped-notification
+                            if:true={editingExistingSchedule}
+                            title={labels.onlyShowingFutureSessionsMessage}
+                        ></c-scoped-notification>
                         <div
                             class="slds-box slds-p-around_none"
                             if:true={hasServiceSessions}
@@ -165,7 +168,7 @@
                             <lightning-datatable
                                 key-field="Id"
                                 columns={sessionDataTableColumns}
-                                data={serviceScheduleModel.serviceSessions}
+                                data={serviceSessions}
                                 column-widths-mode="auto"
                                 resize-column-disabled
                                 hide-checkbox-column

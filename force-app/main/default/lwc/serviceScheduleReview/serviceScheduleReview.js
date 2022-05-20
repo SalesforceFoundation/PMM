@@ -14,6 +14,7 @@ import TOTAL_SESSIONS_LABEL from "@salesforce/label/c.Total_Sessions";
 import DATE_AND_TIME from "@salesforce/label/c.Service_Schedule_Date_Time";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 import CONTACT_OBJECT from "@salesforce/schema/Contact";
+import ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE from "@salesforce/label/c.Only_Showing_Future_Sessions";
 
 const TIME = "TIME";
 
@@ -53,7 +54,23 @@ export default class ServiceScheduleReview extends LightningElement {
     labels = {
         totalSessions: TOTAL_SESSIONS_LABEL,
         dateAndTime: DATE_AND_TIME,
+        onlyShowingFutureSessionsMessage: ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE,
     };
+
+    get editingExistingSchedule() {
+        if (this._serviceScheduleModel.serviceSchedule.Id) {
+            return true;
+        }
+        return false;
+    }
+
+    get serviceSessions() {
+        return this.serviceScheduleModel.serviceSessions.map((session, index) => ({
+            ...session,
+            index: index,
+            alreadyCreatedCSSClass: session.Id ? "slds-color__background_gray-5" : "",
+        }));
+    }
 
     get reviewLabel() {
         return format(REVIEW_RECORDS, [
@@ -100,11 +117,13 @@ export default class ServiceScheduleReview extends LightningElement {
             {
                 label: this.sessionNameLabel,
                 fieldName: this._serviceScheduleModel.sessionFields.name.apiName,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 hideDefaultActions: true,
             },
             {
                 label: this.sessionStartLabel,
                 fieldName: this._serviceScheduleModel.sessionFields.sessionStart.apiName,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {
@@ -121,6 +140,7 @@ export default class ServiceScheduleReview extends LightningElement {
             {
                 label: this.sessionEndLabel,
                 fieldName: this._serviceScheduleModel.sessionFields.sessionEnd.apiName,
+                cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 hideDefaultActions: true,
                 type: "date",
                 typeAttributes: {

@@ -279,6 +279,7 @@ export default class ParticipantSelector extends LightningElement {
         this.previouslySelectedEngagements = [...this.previouslySelectedEngagements];
         this.availableEngagementRows.forEach(row => {
             if (
+                this.existingContactIds &&
                 this.existingContactIds.includes(
                     row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
                 )

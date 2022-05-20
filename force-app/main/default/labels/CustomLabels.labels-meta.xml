@@ -659,7 +659,14 @@
         <protected>true</protected>
         <shortDescription>Enter a {Start Date Label} after {Date of last session}</shortDescription>
         <value>Enter a {0} after {1}</value>
-    </labels>    
+    </labels> 
+    <labels>
+        <fullName>Start_Date_After_Today</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter a {Start Date Label} on or after today&apos;s date</shortDescription>
+        <value>Enter a {0} on or after today&apos;s date</value>
+    </labels>       
     <labels>
         <fullName>Update</fullName>
         <language>en_US</language>

@@ -19,6 +19,7 @@ import LOCALE from "@salesforce/i18n/locale";
 import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
 import START_AFTER_LAST_SESSION_LABEL from "@salesforce/label/c.Start_Date_After_Last_Session";
+import START_AFTER_TODAY_LABEL from "@salesforce/label/c.Start_Date_After_Today";
 import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
 import DEFAULT_SERVICE_QUANTITY from "@salesforce/schema/ServiceSchedule__c.DefaultServiceQuantity__c";
 import UNIT_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
@@ -173,6 +174,7 @@ export default class NewServiceSchedule extends LightningElement {
         let errMessages = [];
         let datesValid = true;
         let startDateAfterLastSession = true;
+        let startDateAfterTodayWhenRequired = true;
 
         let isFormValid = [
             ...this.template.querySelectorAll("lightning-input-field"),
@@ -186,6 +188,10 @@ export default class NewServiceSchedule extends LightningElement {
                 startDateAfterLastSession =
                     new Date(this.dateFields.start.value) >
                     new Date(this.minimumStartDate);
+            }
+            if (this.editingExistingSchedule) {
+                startDateAfterTodayWhenRequired =
+                    new Date(this.dateFields.start.value) >= new Date();
             }
         }
 
@@ -215,6 +221,12 @@ export default class NewServiceSchedule extends LightningElement {
             );
         }
 
+        if (!startDateAfterTodayWhenRequired) {
+            errMessages.push(
+                format(START_AFTER_TODAY_LABEL, [this.dateFields.start.label])
+            );
+        }
+
         if (!hasEndCondition) {
             errMessages.push(NO_END_LABEL);
         }
@@ -229,6 +241,7 @@ export default class NewServiceSchedule extends LightningElement {
             isFormValid &&
             datesValid &&
             startDateAfterLastSession &&
+            startDateAfterTodayWhenRequired &&
             hasEndCondition &&
             hasDayOfWeek;
 

@@ -1,80 +1,69 @@
 public with sharing class ServiceParticipantRollupsService {
+    @TestVisible
+    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+
     private static String ENROLLED = 'Enrolled';
+    private static Set<String> FEATUREGATE_NAME = new Set<String>{
+        'ServiceParticipantsToServiceSchedule'
+    };
 
     public void processInsertedParticipants(List<ServiceParticipant__c> participants) {
+        Integer participantCount;
         Set<Id> serviceScheduleIds = new Set<Id>();
-        Map<Id, ServiceSchedule__c> serviceSchedules = new Map<Id, ServiceSchedule__c>();
+        List<ServiceSchedule__c> serviceSchedulesToUpdate = new List<ServiceSchedule__c>();
         Map<Id, ServiceSchedule__c> schedules = new Map<Id, ServiceSchedule__c>();
+        Boolean isfeatureGateActive = getFeatureGateStatus();
 
-        for (ServiceParticipant__c participant : participants) {
-            serviceScheduleIds.add(participant.ServiceSchedule__c);
-        }
-
-        schedules = getServiceSchedules(serviceScheduleIds);
-
-        for (ServiceParticipant__c serviceParticipant : participants) {
-            ServiceSchedule__c schedule = schedules.get(
-                serviceParticipant.ServiceSchedule__c
-            );
-
-            if (serviceParticipant.Status__c != ENROLLED) {
-                continue;
+        if (isfeatureGateActive) {
+            for (ServiceParticipant__c participant : participants) {
+                serviceScheduleIds.add(participant.ServiceSchedule__c);
             }
 
-            if (schedule.ParticipantsEnrolled__c == null) {
-                schedule.ParticipantsEnrolled__c = 0;
+            schedules = getServiceSchedules(serviceScheduleIds);
+
+            for (ServiceSchedule__c schedule : schedules.values()) {
+                participantCount = 0;
+                for (
+                    ServiceParticipant__c serviceParticipant : schedule.ServiceParticipants__r
+                ) {
+                    if (serviceParticipant.Status__c != ENROLLED) {
+                        continue;
+                    }
+                    participantCount++;
+                }
+                schedule.ParticipantsEnrolled__c = participantCount;
+                serviceSchedulesToUpdate.add(schedule);
             }
 
-            schedule.ParticipantsEnrolled__c++;
-
-            serviceSchedules.put(schedule.Id, schedule);
-        }
-
-        if (!serviceSchedules.isEmpty()) {
-            update serviceSchedules.values();
-        }
-    }
-
-    public void processDeletedServiceParticipants(
-        List<ServiceParticipant__c> participants
-    ) {
-        Set<Id> serviceScheduleIds = new Set<Id>();
-        Map<Id, ServiceSchedule__c> serviceSchedules = new Map<Id, ServiceSchedule__c>();
-
-        for (ServiceParticipant__c participant : participants) {
-            serviceScheduleIds.add(participant.ServiceSchedule__c);
-        }
-
-        Map<Id, ServiceSchedule__c> schedules = new Map<Id, ServiceSchedule__c>();
-
-        schedules = getServiceSchedules(serviceScheduleIds);
-
-        for (ServiceParticipant__c serviceParticipant : participants) {
-            ServiceSchedule__c schedule = schedules.get(
-                serviceParticipant.ServiceSchedule__c
-            );
-
-            if (serviceParticipant.Status__c != ENROLLED) {
-                continue;
+            if (!serviceSchedulesToUpdate.isEmpty()) {
+                update serviceSchedulesToUpdate;
             }
-
-            schedule.ParticipantsEnrolled__c--;
-
-            serviceSchedules.put(schedule.Id, schedule);
-        }
-
-        if (!serviceSchedules.isEmpty()) {
-            update serviceSchedules.values();
         }
     }
 
     private Map<Id, ServiceSchedule__c> getServiceSchedules(Set<Id> scheduleIds) {
         return new Map<Id, ServiceSchedule__c>(
             [
-                SELECT Id, ParticipantsEnrolled__c
+                SELECT
+                    Id,
+                    ParticipantsEnrolled__c,
+                    (SELECT Id, Status__c FROM ServiceParticipants__r)
                 FROM ServiceSchedule__c
                 WHERE Id IN :scheduleIds
             ]
         );
+    }
+
+    private Boolean getFeatureGateStatus() {
+        List<FeatureGate__mdt> features = CustomMetadataSelector.getInstance()
+            .getAllFeatureGates();
+
+        for (FeatureGate__mdt feature : features) {
+            if (feature.IsActive__c && FEATUREGATE_NAME.contains(feature.DeveloperName)) {
+                return feature.IsActive__c;
+            }
+        }
+
+        return false;
     }
 }

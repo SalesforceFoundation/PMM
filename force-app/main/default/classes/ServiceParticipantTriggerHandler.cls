@@ -16,13 +16,15 @@ public with sharing class ServiceParticipantTriggerHandler {
             when AFTER_INSERT {
                 rollupsService.processInsertedParticipants(Trigger.new);
             }
-            // when AFTER_UPDATE {
-            // }
-            when AFTER_DELETE {
-                rollupsService.processDeletedServiceParticipants(Trigger.old);
+            when AFTER_UPDATE {
+                rollupsService.processInsertedParticipants(Trigger.new);
             }
-            // when AFTER_UNDELETE {
-            // }
+            when AFTER_DELETE {
+                rollupsService.processInsertedParticipants(Trigger.old);
+            }
+            when AFTER_UNDELETE {
+                rollupsService.processInsertedParticipants(Trigger.new);
+            }
             when else {
                 return;
             }

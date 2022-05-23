@@ -71,6 +71,8 @@ export default class Modal extends LightningElement {
     @api show() {
         const outerDivEl = this.template.querySelector("div");
         outerDivEl.classList.remove(MODAL_HIDDEN);
+        const header = this.template.querySelector(".slds-text-heading_medium");
+        header.focus();
     }
 
     @api hide() {

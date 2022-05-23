@@ -22,16 +22,16 @@ public with sharing class ServiceParticipantTriggerHandler {
     private void delegate() {
         switch on Trigger.operationType {
             when AFTER_INSERT {
-                rollupsService.processInsertedParticipants(Trigger.new);
+                rollupsService.processParticipantRollups(Trigger.new);
             }
             when AFTER_UPDATE {
-                rollupsService.processInsertedParticipants(Trigger.new);
+                rollupsService.processParticipantRollups(Trigger.new);
             }
             when AFTER_DELETE {
-                rollupsService.processInsertedParticipants(Trigger.old);
+                rollupsService.processParticipantRollups(Trigger.old);
             }
             when AFTER_UNDELETE {
-                rollupsService.processInsertedParticipants(Trigger.new);
+                rollupsService.processParticipantRollups(Trigger.new);
             }
             when else {
                 return;

@@ -12,7 +12,7 @@ public with sharing class ServiceParticipantRollupsService {
         'ServiceParticipantsToServiceSchedule'
     };
 
-    public void processInsertedParticipants(List<ServiceParticipant__c> participants) {
+    public void processParticipantRollups(List<ServiceParticipant__c> participants) {
         Integer participantCount;
         Set<Id> serviceScheduleIds = new Set<Id>();
         List<ServiceSchedule__c> serviceSchedulesToUpdate = new List<ServiceSchedule__c>();

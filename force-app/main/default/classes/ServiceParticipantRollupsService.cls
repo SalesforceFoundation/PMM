@@ -1,7 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2022, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
 public with sharing class ServiceParticipantRollupsService {
-    @TestVisible
-    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
-
     private static String ENROLLED = 'Enrolled';
     private static Set<String> FEATUREGATE_NAME = new Set<String>{
         'ServiceParticipantsToServiceSchedule'

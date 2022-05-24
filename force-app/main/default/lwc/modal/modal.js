@@ -48,7 +48,9 @@ export default class Modal extends LightningElement {
             // eslint-disable-next-line @lwc/lwc/no-async-operation
             setTimeout(() => {
                 this.focus();
-            }, 1000);
+            }, 250); // Setting a time out for when the modal is being used
+            // as a page override. After the component loads something
+            // outside of the component is taking focus.
             return;
         }
         this._rendered = true;

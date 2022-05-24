@@ -45,10 +45,10 @@ export default class Modal extends LightningElement {
 
     renderedCallback() {
         if (!this._rendered && this.defaultVisible) {
-            // eslint-disable-next-line @lwc/lwc/no-async-operation
-            this.focus(); // The focus will be reset to the first element on the page on page refresh and will
+            // The focus will be reset to the first element on the page on page refresh and will
             // take focus away from the header. Page Loads and Refreshes:
             // https://www.lightningdesignsystem.com/accessibility/guidelines/global-focus/#page-loads-refreshes
+            this.focus();
             return;
         }
         this._rendered = true;

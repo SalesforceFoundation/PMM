@@ -43,6 +43,17 @@ export default class Modal extends LightningElement {
         return this._headerPrivate;
     }
 
+    renderedCallback() {
+        if (!this._rendered && this.defaultVisible) {
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(() => {
+                this.focus();
+            }, 1000);
+            return;
+        }
+        this._rendered = true;
+    }
+
     get modalCss() {
         return (
             "slds-modal slds-fade-in-open slds-align_absolute-center" +
@@ -71,8 +82,7 @@ export default class Modal extends LightningElement {
     @api show() {
         const outerDivEl = this.template.querySelector("div");
         outerDivEl.classList.remove(MODAL_HIDDEN);
-        const header = this.template.querySelector(".slds-text-heading_medium");
-        header.focus();
+        this.focus();
     }
 
     @api hide() {
@@ -93,5 +103,14 @@ export default class Modal extends LightningElement {
     handleSlotFooterChange() {
         const footerEl = this.template.querySelector("footer");
         footerEl.classList.remove(MODAL_HIDDEN);
+    }
+
+    focus() {
+        const header = this.template.querySelector("h2");
+        if (!header) {
+            return;
+        }
+
+        header.focus();
     }
 }

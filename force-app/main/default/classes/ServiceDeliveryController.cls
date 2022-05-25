@@ -9,7 +9,17 @@
 
 public with sharing class ServiceDeliveryController {
     public static ServiceService service = new ServiceService();
+    @TestVisible
+    private static ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
 
+    @AuraEnabled
+    public static Integer getNumberOfServiceDeliveriesForSession(Id sessionId) {
+        try {
+            return deliverySelector.getNumberOfServiceDeliveriesForSession(sessionId);
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+    }
     //removed cacheable = true so the picklist values will be rendered when
     //a new program engagement record is created
     @AuraEnabled

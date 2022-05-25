@@ -1,0 +1,43 @@
+<!--
+  - /*
+  -  * Copyright (c) 2022, salesforce.com, inc.
+  -  * All rights reserved.
+  -  * SPDX-License-Identifier: BSD-3-Clause
+  -  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  -  */
+  -->
+
+<template>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+            {labels.header}
+        </h2>
+    </header>
+    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+        <p>{numberOfDeliveries}</p>
+        <p>{labels.message}</p>
+        <template if:true={errorMessage}>
+            <c-scoped-notification
+                theme="error"
+                title={errorMessage}
+                class="slds-var-p-around_small"
+            ></c-scoped-notification
+        ></template>
+    </div>
+    <footer class="slds-modal__footer">
+        <lightning-button
+            onclick={handleCancel}
+            label={labels.cancel}
+            title={labels.cancel}
+        ></lightning-button>
+        <lightning-button
+            label={labels.delete}
+            title={labels.delete}
+            variant="brand"
+            onclick={handleDelete}
+            class="slds-m-left_x-small"
+            disabled={isDisabled}
+        >
+        </lightning-button>
+    </footer>
+</template>

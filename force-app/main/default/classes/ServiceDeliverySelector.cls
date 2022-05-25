@@ -10,6 +10,14 @@
 public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
+    public Integer getNumberOfServiceDeliveriesForSession(Id sessionId) {
+        return [
+            SELECT COUNT()
+            FROM ServiceDelivery__c
+            WHERE ServiceSession__c = :sessionId
+        ];
+    }
+
     public String getAttendanceFieldSetName(Id scheduleId) {
         // We want to bypass FLS because this is a system field that drives our UI
         List<ServiceSchedule__c> schedules = [

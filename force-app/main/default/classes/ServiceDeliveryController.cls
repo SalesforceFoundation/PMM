@@ -12,7 +12,24 @@ public with sharing class ServiceDeliveryController {
     @TestVisible
     private static ServiceDeliverySelector deliverySelector = new ServiceDeliverySelector();
 
+    @TestVisible
+    private static ServiceDeliveryDomain deliveryDomain = new ServiceDeliveryDomain();
+
     @AuraEnabled
+    public static Integer deleteServiceDeliveriesForSession(Id sessionId) {
+        try {
+            List<ServiceDelivery__c> deliveries = deliverySelector.getServiceDeliveriesForSession(
+                sessionId
+            );
+
+            deliveryDomain.deleteServiceDeliveries(deliveries);
+            return deliveries.size();
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
     public static Integer getNumberOfServiceDeliveriesForSession(Id sessionId) {
         try {
             return deliverySelector.getNumberOfServiceDeliveriesForSession(sessionId);
@@ -20,6 +37,7 @@ public with sharing class ServiceDeliveryController {
             throw Util.getAuraHandledException(e);
         }
     }
+
     //removed cacheable = true so the picklist values will be rendered when
     //a new program engagement record is created
     @AuraEnabled

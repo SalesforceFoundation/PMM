@@ -10,7 +10,7 @@
 import { LightningElement, api, wire } from "lwc";
 import { format, handleError } from "c/util";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import deleteSessionsAfter from "@salesforce/apex/ServiceScheduleCreatorController.deleteSessionsAfter";
+import deleteServiceDeliveries from "@salesforce/apex/ServiceDeliveryController.deleteServiceDeliveriesForSession";
 import getNumberOfDeliveries from "@salesforce/apex/ServiceDeliveryController.getNumberOfServiceDeliveriesForSession";
 
 import HEADER_LABEL from "@salesforce/label/c.Delete_Service_Deliveries";
@@ -35,6 +35,10 @@ export default class ServiceDeliveryDeleter extends LightningElement {
         successMessage: DELETE_SUCCESS,
     };
 
+    get confirmationMessage() {
+        return format(MESSAGE_LABEL, [this.numberOfDeliveries]);
+    }
+
     @wire(getNumberOfDeliveries, { sessionId: "$recordId" })
     wiredNumberOfDeliveries(result) {
         if (!result) {
@@ -50,7 +54,7 @@ export default class ServiceDeliveryDeleter extends LightningElement {
 
     handleDelete() {
         if (this.isValid) {
-            deleteSessionsAfter({ scheduleId: this.recordId, startDate: null })
+            deleteServiceDeliveries({ sessionId: this.recordId })
                 .then(result => {
                     this.showSuccessToast(result);
                     this.dispatchEvent(new CustomEvent("close"));

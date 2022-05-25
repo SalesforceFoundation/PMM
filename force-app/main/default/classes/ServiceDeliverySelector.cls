@@ -18,6 +18,10 @@ public with sharing class ServiceDeliverySelector {
         ];
     }
 
+    public List<ServiceDelivery__c> getServiceDeliveriesForSession(Id sessionId) {
+        return [SELECT Id FROM ServiceDelivery__c WHERE ServiceSession__c = :sessionId];
+    }
+
     public String getAttendanceFieldSetName(Id scheduleId) {
         // We want to bypass FLS because this is a system field that drives our UI
         List<ServiceSchedule__c> schedules = [

@@ -282,7 +282,7 @@
         <protected>true</protected>
         <shortDescription>Delete Future Service Sessions</shortDescription>
         <value>Delete Future Service Sessions</value>
-    </labels>
+    </labels>  
     <labels>
         <fullName>Delete_Service_Deliveries</fullName>
         <language>en_US</language>

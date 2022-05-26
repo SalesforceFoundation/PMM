@@ -16,7 +16,8 @@ public with sharing class TestUtil {
         'ServiceDeliveriesToContact',
         'ServiceDeliveriesToService',
         'ServiceDeliveriesToServiceSession',
-        'ServiceDeliveriesToProgramEngagement'
+        'ServiceDeliveriesToProgramEngagement',
+        'ServiceParticipantsToServiceSchedule'
     };
 
     public static final String TEST_USER_EMAIL = 'temptestuser@caseplan.example.com';

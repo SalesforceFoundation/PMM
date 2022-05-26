@@ -208,6 +208,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>ServiceDelivery__c.ServiceSchedule__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>ServiceDelivery__c.ServiceSession__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -219,11 +224,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>ServiceDelivery__c.UnitOfMeasurement__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ServiceDelivery__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -338,6 +338,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>ServiceSchedule__c.ParticipantsEnrolled__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>ServiceSchedule__c.PrimaryServiceProvider__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -413,6 +418,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Service__c.AttendanceFieldSet__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Service__c.AttendanceRate__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -434,11 +444,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Service__c.NumPresentServiceDeliveries__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Service__c.AttendanceFieldSet__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

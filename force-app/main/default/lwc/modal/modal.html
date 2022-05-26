@@ -30,16 +30,22 @@
                         size="large"
                     ></lightning-button-icon>
 
-                    <template if:true={hasHeaderString}>
-                        <h2 class="slds-text-heading_medium slds-hyphenate header-string">
-                            {header}
-                        </h2>
-                    </template>
-                    <template if:false={hasHeaderString}>
-                        <h2 class="slds-text-heading_medium slds-hyphenate header-slot">
-                            <slot name="header"></slot>
-                        </h2>
-                    </template>
+                    <h2 data-id="modal-heading-01" tabindex="-1">
+                        <template if:true={hasHeaderString}>
+                            <span
+                                class="slds-text-heading_medium slds-hyphenate header-string"
+                            >
+                                {header}
+                            </span>
+                        </template>
+                        <template if:false={hasHeaderString}>
+                            <span
+                                class="slds-text-heading_medium slds-hyphenate header-slot"
+                            >
+                                <slot name="header"></slot>
+                            </span>
+                        </template>
+                    </h2>
 
                     <p class="slds-m-top_x-small modal-hidden">
                         <slot name="tagline" onslotchange={handeSlotTaglineChange}></slot>

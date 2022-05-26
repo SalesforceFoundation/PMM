@@ -13,11 +13,11 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>RecentServiceSessionController</apexClass>
+        <apexClass>ProgramController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ProgramController</apexClass>
+        <apexClass>RecentServiceSessionController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -232,6 +232,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceDelivery__c.ServiceSchedule__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>ServiceDelivery__c.ServiceSession__c</field>
         <readable>true</readable>
@@ -244,11 +249,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>ServiceDelivery__c.UnitOfMeasurement__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ServiceDelivery__c.ServiceSchedule__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -362,6 +362,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>ServiceSchedule__c.ParticipantsEnrolled__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>ServiceSchedule__c.PrimaryServiceProvider__c</field>
         <readable>true</readable>
@@ -437,6 +442,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>Service__c.AttendanceFieldSet__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>Service__c.AttendanceRate__c</field>
         <readable>true</readable>
@@ -459,11 +469,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Service__c.NumPresentServiceDeliveries__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Service__c.AttendanceFieldSet__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

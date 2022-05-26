@@ -79,4 +79,76 @@ public with sharing class ServiceScheduleSelector_TEST {
             }
         );
     }
+
+    @IsTest
+    private static void testGetSchedulesWithParticipants() {
+        List<ServiceSchedule__c> expectedSchedule = [
+            SELECT
+                Id,
+                ParticipantsEnrolled__c,
+                (
+                    SELECT id, status__c
+                    FROM ServiceParticipants__r
+                    WHERE status__c = 'Enrolled'
+                )
+            FROM ServiceSchedule__c
+            LIMIT 1
+        ];
+
+        Test.startTest();
+        List<ServiceSchedule__c> actualSchedule = scheduleSelector.getSchedulesWithParticipants(
+            new Set<Id>{ expectedSchedule[0].Id }
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedSchedule[0].ParticipantsEnrolled__c,
+            actualSchedule[0].ParticipantsEnrolled__c,
+            'The enrolled participant count of the returned record should match the record we requested'
+        );
+    }
+
+    @IsTest
+    private static void testGetSchedulesWithParticipantsNoAccess() {
+        ServiceSchedule__c expectedSchedule = [
+            SELECT
+                Id,
+                ParticipantsEnrolled__c,
+                (
+                    SELECT id, status__c
+                    FROM ServiceParticipants__r
+                    WHERE status__c = 'Enrolled'
+                )
+            FROM ServiceSchedule__c
+            LIMIT 1
+        ];
+
+        permissionValidatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) permissionValidatorStub.createMock();
+        List<ServiceSchedule__c> actualSchedule = scheduleSelector.getSchedulesWithParticipants(
+            new Set<Id>{ expectedSchedule.Id }
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            0,
+            actualSchedule.size(),
+            'Expected no rows to be returned since the user does not have access to the object'
+        );
+
+        permissionValidatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceSchedule__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            }
+        );
+    }
 }

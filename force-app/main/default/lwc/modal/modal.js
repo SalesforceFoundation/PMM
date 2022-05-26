@@ -43,6 +43,17 @@ export default class Modal extends LightningElement {
         return this._headerPrivate;
     }
 
+    renderedCallback() {
+        if (!this._rendered && this.defaultVisible) {
+            // The focus will be reset to the first element on the page on page refresh and will
+            // take focus away from the header. Page Loads and Refreshes:
+            // https://www.lightningdesignsystem.com/accessibility/guidelines/global-focus/#page-loads-refreshes
+            this.focus();
+            return;
+        }
+        this._rendered = true;
+    }
+
     get modalCss() {
         return (
             "slds-modal slds-fade-in-open slds-align_absolute-center" +
@@ -71,6 +82,7 @@ export default class Modal extends LightningElement {
     @api show() {
         const outerDivEl = this.template.querySelector("div");
         outerDivEl.classList.remove(MODAL_HIDDEN);
+        this.focus();
     }
 
     @api hide() {
@@ -91,5 +103,14 @@ export default class Modal extends LightningElement {
     handleSlotFooterChange() {
         const footerEl = this.template.querySelector("footer");
         footerEl.classList.remove(MODAL_HIDDEN);
+    }
+
+    focus() {
+        const header = this.template.querySelector("h2");
+        if (!header) {
+            return;
+        }
+
+        header.focus();
     }
 }

@@ -10,6 +10,7 @@
 import { LightningElement, api, wire } from "lwc";
 import { format, handleError } from "c/util";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { refreshApex } from "@salesforce/apex";
 import deleteServiceDeliveries from "@salesforce/apex/ServiceDeliveryController.deleteServiceDeliveriesForSession";
 import getNumberOfDeliveries from "@salesforce/apex/ServiceDeliveryController.getNumberOfServiceDeliveriesForSession";
 
@@ -23,8 +24,8 @@ import DELETE_SUCCESS from "@salesforce/label/c.Delete_Sessions_Success";
 export default class ServiceDeliveryDeleter extends LightningElement {
     @api recordId;
     errorMessage;
-    isValid = true;
-    numberOfDeliveries;
+    numberOfDeliveries = 0;
+    wiredNumberOfDeliveriesResult;
 
     labels = {
         header: HEADER_LABEL,
@@ -44,6 +45,7 @@ export default class ServiceDeliveryDeleter extends LightningElement {
         if (!result) {
             return;
         }
+        this.wiredNumberOfDeliveriesResult = result;
 
         if (result.data) {
             this.numberOfDeliveries = result.data;
@@ -53,25 +55,16 @@ export default class ServiceDeliveryDeleter extends LightningElement {
     }
 
     handleDelete() {
-        if (this.isValid) {
+        if (this.hasServiceDeliveries) {
             deleteServiceDeliveries({ sessionId: this.recordId })
                 .then(result => {
                     this.showSuccessToast(result);
                     this.dispatchEvent(new CustomEvent("close"));
+                    refreshApex(this.wiredNumberOfDeliveriesResult);
                 })
                 .catch(error => {
                     handleError(error);
                 });
-        }
-    }
-
-    checkValidity() {
-        this.isValid = true;
-
-        if (this.isValid) {
-            this.errorMessage = undefined;
-        } else {
-            this.errorMessage = "error"; //this.labels.invalidDate;
         }
     }
 
@@ -88,7 +81,11 @@ export default class ServiceDeliveryDeleter extends LightningElement {
         this.dispatchEvent(event);
     }
 
+    get hasServiceDeliveries() {
+        return this.numberOfDeliveries > 0 ? true : false;
+    }
+
     get isDisabled() {
-        return !this.isValid;
+        return !this.hasServiceDeliveries;
     }
 }

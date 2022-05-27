@@ -11,6 +11,10 @@ public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
     public Integer getNumberOfServiceDeliveriesForSession(Id sessionId) {
+        if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
+            return 0;
+        }
+
         return [
             SELECT COUNT()
             FROM ServiceDelivery__c
@@ -19,6 +23,10 @@ public with sharing class ServiceDeliverySelector {
     }
 
     public List<ServiceDelivery__c> getServiceDeliveriesForSession(Id sessionId) {
+        if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
+            return new List<ServiceDelivery__c>();
+        }
+
         return [SELECT Id FROM ServiceDelivery__c WHERE ServiceSession__c = :sessionId];
     }
 

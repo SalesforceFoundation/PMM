@@ -14,7 +14,6 @@
         </h2>
     </header>
     <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-        <p>{confirmationMessage}</p>
         <template if:true={errorMessage}>
             <c-scoped-notification
                 theme="error"
@@ -22,6 +21,7 @@
                 class="slds-var-p-around_small"
             ></c-scoped-notification
         ></template>
+        {confirmationMessage}
     </div>
     <footer class="slds-modal__footer">
         <lightning-button

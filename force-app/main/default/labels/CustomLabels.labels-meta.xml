@@ -287,7 +287,7 @@
         <fullName>Delete_Service_Deliveries</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Delete Related Service Deliveries</shortDescription>
+        <shortDescription>Delete related Service Deliveries?</shortDescription>
         <value>Delete Related Service Deliveries</value>
     </labels>
         <labels>
@@ -295,7 +295,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Delete Related Service Deliveries Confirmation</shortDescription>
-        <value>Are you sure you want to delete all {0} service deliveries associated with this session? You will no longer be able to view or report on these service deliveries.</value>
+        <value>You are about to delete {0} Service Deliveries associated with this Service Session. You won&apos;t be able to view or report on the Service Deliveries later.</value>
     </labels>
     <labels>
         <fullName>Delete_Sessions_Success</fullName>

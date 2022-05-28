@@ -288,7 +288,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Delete related Service Deliveries?</shortDescription>
-        <value>Delete Related Service Deliveries</value>
+        <value>Delete Related Service Deliveries?</value>
     </labels>
         <labels>
         <fullName>Delete_Service_Deliveries_Confirm</fullName>

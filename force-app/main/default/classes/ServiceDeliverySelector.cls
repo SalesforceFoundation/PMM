@@ -11,7 +11,13 @@ public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
     public Integer getNumberOfServiceDeliveriesForSession(Id sessionId) {
-        if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
+        if (
+            !(PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ))
+        ) {
             return 0;
         }
 
@@ -23,7 +29,13 @@ public with sharing class ServiceDeliverySelector {
     }
 
     public List<ServiceDelivery__c> getServiceDeliveriesForSession(Id sessionId) {
-        if (!Schema.SObjectType.ServiceDelivery__c.isAccessible()) {
+        if (
+            !(PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ))
+        ) {
             return new List<ServiceDelivery__c>();
         }
 

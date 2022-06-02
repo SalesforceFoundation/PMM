@@ -1,17 +1,25 @@
 public with sharing class ServiceDelivery {
-    private ServiceDeliveryService deliveryService = new ServiceDeliveryService();
     private ServiceDelivery__c delivery;
+
+    private static final String ABSENT = 'Absent';
+    private static final String PRESENT = 'Present';
+    private static List<String> BUCKET_NAMES = new List<String>{ ABSENT, PRESENT };
+
+    private static Map<String, List<String>> statusBuckets = new ServiceDeliveryService()
+        .getStatusBuckets(BUCKET_NAMES);
+    private static List<String> presentStatuses = statusBuckets.get(PRESENT);
+    private static List<String> absentStatuses = statusBuckets.get(ABSENT);
 
     public ServiceDelivery(ServiceDelivery__c delivery) {
         this.delivery = delivery;
     }
 
     public Boolean isPresent() {
-        return deliveryService.presentStatuses.contains(delivery.AttendanceStatus__c);
+        return presentStatuses.contains(delivery.AttendanceStatus__c);
     }
 
     public Boolean isAbsent() {
-        return deliveryService.absentStatuses.contains(delivery.AttendanceStatus__c);
+        return absentStatuses.contains(delivery.AttendanceStatus__c);
     }
 
     public Boolean isDelivered() {

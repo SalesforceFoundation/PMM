@@ -12,8 +12,6 @@ public with sharing class ServiceDeliveryRollupsService_TEST {
     private static TestStub systemAccessStub;
     private static Date yesterday = System.today().addDays(-1);
     private static Id mockContactId = TestUtil.mockId(Contact.SObjectType);
-    private static List<String> attendanceStatuses = new ServiceDeliveryService()
-        .attendanceStatuses;
     private static List<ServiceDelivery__c> mockDeliveries = new List<ServiceDelivery__c>{
         new ServiceDelivery__c(
             AttendanceStatus__c = 'Present',

@@ -145,7 +145,7 @@ public with sharing class ServiceDeliveryController_TEST {
         System.assertEquals(
             expectedServiceDeliveries.size(),
             actualNumberDeleted,
-            'The controller should return that the expected count of deliveries were deleted'
+            'The controller should return the expected count of deliveries that were deleted'
         );
         domainStub.assertCalledWith(
             'deleteServiceDeliveries',

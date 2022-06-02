@@ -12,6 +12,96 @@ public with sharing class ServiceDeliveryController_TEST {
     private static BasicStub serviceStub = new BasicStub(ServiceService.class);
     private static BasicStub selectorStub = new BasicStub(ServiceDeliverySelector.class);
     private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
+    private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
+
+    @IsTest
+    private static void testCanDeleteServiceDeliveriesWithAccess() {
+        validatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            true
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        Boolean hasAccess = ServiceDeliveryController.canDeleteServiceDeliveries();
+        Test.stopTest();
+
+        System.assert(
+            hasAccess,
+            'Controller should allow delete when user has delete access on object.'
+        );
+
+        validatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceDelivery__c.SObjectType,
+                PermissionValidator.CRUDAccessType.DELETEABLE
+            }
+        );
+    }
+
+    @IsTest
+    private static void testCanDeleteServiceDeliveriesNoAccess() {
+        validatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        Boolean hasAccess = ServiceDeliveryController.canDeleteServiceDeliveries();
+        Test.stopTest();
+
+        System.assert(
+            !hasAccess,
+            'Controller should NOT allow delete when user lacks delete access on object.'
+        );
+
+        validatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceDelivery__c.SObjectType,
+                PermissionValidator.CRUDAccessType.DELETEABLE
+            }
+        );
+    }
+
+    @IsTest
+    private static void testCanDeleteServiceDeliveriesException() {
+        validatorStub.withThrowException(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        Exception actualException;
+        try {
+            Boolean hasAccess = ServiceDeliveryController.canDeleteServiceDeliveries();
+        } catch (Exception e) {
+            actualException = e;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            validatorStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the validator.'
+        );
+
+        validatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceDelivery__c.SObjectType,
+                PermissionValidator.CRUDAccessType.DELETEABLE
+            }
+        );
+    }
 
     @IsTest
     private static void testDeleteServiceDeliveriesForSessionException() {

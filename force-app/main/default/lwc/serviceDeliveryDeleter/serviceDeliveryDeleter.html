@@ -13,16 +13,20 @@
             {labels.header}
         </h2>
     </header>
-    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-        <template if:true={errorMessage}>
-            <c-scoped-notification
-                theme="error"
-                title={errorMessage}
-                class="slds-var-p-around_small"
-            ></c-scoped-notification
-        ></template>
-        {confirmationMessage}
-    </div>
+    <template if:true={isLoadingComplete}>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <template if:true={errorMessage}>
+                <c-scoped-notification
+                    theme="error"
+                    title={errorMessage}
+                    class="slds-var-p-around_small"
+                ></c-scoped-notification
+            ></template>
+            <template if:true={hasAccessToDelete}>
+                {confirmationMessage}
+            </template>
+        </div>
+    </template>
     <footer class="slds-modal__footer">
         <lightning-button
             onclick={handleCancel}
@@ -30,6 +34,7 @@
             title={labels.cancel}
         ></lightning-button>
         <lightning-button
+            if:true={hasAccessToDelete}
             label={labels.delete}
             title={labels.delete}
             variant="brand"

@@ -13,6 +13,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
 import deleteServiceDeliveries from "@salesforce/apex/ServiceDeliveryController.deleteServiceDeliveriesForSession";
 import getNumberOfDeliveries from "@salesforce/apex/ServiceDeliveryController.getNumberOfServiceDeliveriesForSession";
+import canDeleteServiceDeliveries from "@salesforce/apex/ServiceDeliveryController.canDeleteServiceDeliveries";
 
 import HEADER_LABEL from "@salesforce/label/c.Delete_Service_Deliveries";
 import MESSAGE_LABEL from "@salesforce/label/c.Delete_Service_Deliveries_Confirm";
@@ -20,12 +21,16 @@ import DELETE from "@salesforce/label/c.Delete";
 import CANCEL from "@salesforce/label/c.Cancel";
 import SUCCESS_LABEL from "@salesforce/label/c.Success";
 import DELETE_SUCCESS from "@salesforce/label/c.Delete_Sessions_Success";
+import NO_DELETE_PERMS from "@salesforce/label/c.Delete_Operation_Exception";
 
 export default class ServiceDeliveryDeleter extends LightningElement {
     @api recordId;
     errorMessage;
     numberOfDeliveries = 0;
+    hasAccessToDelete = false;
     wiredNumberOfDeliveriesResult;
+    permsLoaded = false;
+    numberOfDeliveriesLoaded = false;
 
     labels = {
         header: HEADER_LABEL,
@@ -34,14 +39,36 @@ export default class ServiceDeliveryDeleter extends LightningElement {
         delete: DELETE,
         cancel: CANCEL,
         successMessage: DELETE_SUCCESS,
+        noDeleteAccessMessage: NO_DELETE_PERMS,
     };
 
     get confirmationMessage() {
         return format(MESSAGE_LABEL, [this.numberOfDeliveries]);
     }
 
+    @wire(canDeleteServiceDeliveries)
+    wiredCanDeleteServiceDeliveries(result) {
+        this.permsLoaded = false;
+        if (!result) {
+            return;
+        }
+
+        if (result.data !== undefined) {
+            this.hasAccessToDelete = result.data;
+            if (this.hasAccessToDelete !== true) {
+                this.errorMessage = this.labels.noDeleteAccessMessage;
+            }
+        } else if (result.error && result.error.body) {
+            this.errorMessage = result.error.body;
+        } else if (result.error) {
+            console.log(result.error);
+        }
+        this.permsLoaded = true;
+    }
+
     @wire(getNumberOfDeliveries, { sessionId: "$recordId" })
     wiredNumberOfDeliveries(result) {
+        this.numberOfDeliveriesLoaded = false;
         if (!result) {
             return;
         }
@@ -52,6 +79,7 @@ export default class ServiceDeliveryDeleter extends LightningElement {
         } else if (result.error) {
             console.log(result.error);
         }
+        this.numberOfDeliveriesLoaded = true;
     }
 
     handleDelete() {
@@ -86,6 +114,10 @@ export default class ServiceDeliveryDeleter extends LightningElement {
     }
 
     get isDisabled() {
-        return !this.hasServiceDeliveries;
+        return !this.isLoadingComplete || !this.hasServiceDeliveries;
+    }
+
+    get isLoadingComplete() {
+        return this.permsLoaded && this.numberOfDeliveriesLoaded;
     }
 }

@@ -15,6 +15,24 @@ public with sharing class ServiceDeliveryController {
     @TestVisible
     private static ServiceDeliveryDomain deliveryDomain = new ServiceDeliveryDomain();
 
+    @AuraEnabled(cacheable=true)
+    public static Boolean canDeleteServiceDeliveries() {
+        try {
+            if (
+                !(PermissionValidator.getInstance()
+                    .hasObjectAccess(
+                        ServiceDelivery__c.SObjectType,
+                        PermissionValidator.CRUDAccessType.DELETEABLE
+                    ))
+            ) {
+                return false;
+            }
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+        return true;
+    }
+
     @AuraEnabled
     public static Integer deleteServiceDeliveriesForSession(Id sessionId) {
         try {

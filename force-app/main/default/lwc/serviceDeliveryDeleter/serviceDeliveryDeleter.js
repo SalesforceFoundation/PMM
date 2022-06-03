@@ -97,7 +97,7 @@ export default class ServiceDeliveryDeleter extends LightningElement {
     }
 
     handleCancel() {
-        this.dispatchEvent(new CustomEvent("close"));
+        this.dispatchEvent(new CustomEvent("cancel"));
     }
 
     showSuccessToast(numDeleted) {

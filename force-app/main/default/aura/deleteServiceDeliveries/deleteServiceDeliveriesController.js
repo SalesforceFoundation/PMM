@@ -9,6 +9,10 @@
 ({
     handleClose: function(component, event, helper) {
         $A.get("e.force:closeQuickAction").fire();
-        $A.get("e.force:refreshView").fire();
+        window.location.reload();
+    },
+
+    handleCancel: function(component, event, helper) {
+        $A.get("e.force:closeQuickAction").fire();
     }
 });

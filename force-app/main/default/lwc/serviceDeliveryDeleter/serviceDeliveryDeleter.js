@@ -58,8 +58,8 @@ export default class ServiceDeliveryDeleter extends LightningElement {
             if (this.hasAccessToDelete !== true) {
                 this.errorMessage = this.labels.noDeleteAccessMessage;
             }
-        } else if (result.error && result.error.body) {
-            this.errorMessage = result.error.body;
+        } else if (result.error && result.error.body && result.error.body.message) {
+            this.errorMessage = result.error.body.message;
         } else if (result.error) {
             console.log(result.error);
         }

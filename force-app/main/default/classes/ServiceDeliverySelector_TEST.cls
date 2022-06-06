@@ -19,6 +19,135 @@ public with sharing class ServiceDeliverySelector_TEST {
     }
 
     @IsTest
+    private static void testGetNumberOfServiceDeliveriesForSessionNoAccess() {
+        Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+
+        validatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        Integer actualNumberOfDeliveries = selector.getNumberOfServiceDeliveriesForSession(
+            sessionId
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            0,
+            actualNumberOfDeliveries,
+            'Expected 0 count of service deliveries since the user does not have access to the object'
+        );
+
+        validatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceDelivery__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            }
+        );
+    }
+
+    @IsTest
+    private static void testGetServiceDeliveriesForSessionNoAccess() {
+        Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+
+        validatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        List<ServiceDelivery__c> actualDeliveries = selector.getServiceDeliveriesForSession(
+            sessionId
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            0,
+            actualDeliveries.size(),
+            'Expected empty list of service deliveries since the user does not have access to the object'
+        );
+
+        validatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceDelivery__c.SObjectType,
+                PermissionValidator.CRUDAccessType.READABLE
+            }
+        );
+    }
+
+    @IsTest
+    private static void testGetNumberOfServiceDeliveriesForSession() {
+        Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+
+        Integer expectedNumberOfDeliveries = ([
+                SELECT Id
+                FROM ServiceDelivery__c
+                WHERE ServiceSession__c = :sessionId
+            ])
+            .size();
+        Test.startTest();
+        Integer actualNumberOfDeliveries = selector.getNumberOfServiceDeliveriesForSession(
+            sessionId
+        );
+        Test.stopTest();
+
+        System.assertNotEquals(
+            0,
+            actualNumberOfDeliveries,
+            'There should be more than 0 matching service deliveries for a valid test'
+        );
+
+        System.assertEquals(
+            expectedNumberOfDeliveries,
+            actualNumberOfDeliveries,
+            'The selector should have returned the expected count of service deliveries'
+        );
+    }
+
+    @IsTest
+    private static void testGetServiceDeliveriesForSession() {
+        Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;
+
+        List<ServiceDelivery__c> expectedDeliveries = [
+            SELECT Id
+            FROM ServiceDelivery__c
+            WHERE ServiceSession__c = :sessionId
+        ];
+        Test.startTest();
+        List<ServiceDelivery__c> actualDeliveries = selector.getServiceDeliveriesForSession(
+            sessionId
+        );
+        Test.stopTest();
+
+        System.assertNotEquals(
+            0,
+            actualDeliveries.size(),
+            'There should be more than 0 matching service deliveries for a valid test'
+        );
+
+        System.assertEquals(
+            expectedDeliveries.size(),
+            actualDeliveries.size(),
+            'The selector should have returned the expected count of service deliveries'
+        );
+
+        Set<Id> expectedDeliveryIds = new Map<Id, ServiceDelivery__c>(expectedDeliveries)
+            .keySet();
+        for (ServiceDelivery__c delivery : actualDeliveries) {
+            System.assert(expectedDeliveryIds.contains(delivery.Id));
+        }
+    }
+
+    @IsTest
     private static void getServiceDeliveriesFiltersWithClient() {
         List<ServiceDelivery__c> actualDeliveries;
         Id sessionId = [SELECT Id FROM ServiceSession__c LIMIT 1].Id;

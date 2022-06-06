@@ -12,6 +12,107 @@ private with sharing class ServiceDeliveryDomain_TEST {
     private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
 
     @IsTest
+    private static void shouldNotThrowExceptionWithoutDeletePermissionsOnEmptyList() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        List<ServiceDelivery__c> serviceDeliveriesToDelete = new List<ServiceDelivery__c>();
+
+        Test.startTest();
+        try {
+            new ServiceDeliveryDomain()
+                .deleteServiceDeliveries(serviceDeliveriesToDelete);
+            dmlLimitAfter = System.Limits.getDmlStatements();
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            null,
+            actualException,
+            'Did not expect the domain to throw the exception for an empty list.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Did not expect any dml statements for an empty list.'
+        );
+    }
+
+    @IsTest
+    private static void shouldDeleteServiceDeliveries() {
+        TestDataFactory.generateServiceData();
+
+        List<ServiceDelivery__c> existingServiceDeliveries = [
+            SELECT Id, Name
+            FROM ServiceDelivery__c
+        ];
+
+        Test.startTest();
+        new ServiceDeliveryDomain().deleteServiceDeliveries(existingServiceDeliveries);
+        Test.stopTest();
+
+        List<ServiceDelivery__c> serviceDeliveriesAfter = [
+            SELECT Id, Name
+            FROM ServiceDelivery__c
+        ];
+        System.assertEquals(
+            0,
+            serviceDeliveriesAfter.size(),
+            'Service Delivery reocords should have been deleted.'
+        );
+    }
+
+    @IsTest
+    private static void shouldThrowExceptionWhenDeletePermissionCheckFails() {
+        String methodName = 'hasObjectAccess';
+        Integer dmlLimitAfter;
+        Exception actualException;
+
+        validatorStub.withReturnValue(
+            methodName,
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        List<ServiceDelivery__c> serviceDeliveriesToDelete = new List<ServiceDelivery__c>{
+            new ServiceDelivery__c(Name = 'Test Upsert Failure.')
+        };
+
+        Test.startTest();
+        try {
+            new ServiceDeliveryDomain()
+                .deleteServiceDeliveries(serviceDeliveriesToDelete);
+        } catch (Exception ex) {
+            dmlLimitAfter = System.Limits.getDmlStatements();
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assert(
+            actualException instanceof ServiceDeliveryDomain.ServiceDeliveryDomainException,
+            'Expected the domain to throw the exception.'
+        );
+
+        System.assertEquals(
+            0,
+            dmlLimitAfter,
+            'Expected the exception to be thrown before any dml statements.'
+        );
+    }
+
+    @IsTest
     private static void shouldUpsertServiceDeliveries() {
         TestDataFactory.generateServiceData();
         Service__c service = [SELECT Id FROM Service__c LIMIT 1];

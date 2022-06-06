@@ -282,6 +282,20 @@
         <protected>true</protected>
         <shortDescription>Delete Future Service Sessions</shortDescription>
         <value>Delete Future Service Sessions</value>
+    </labels>  
+    <labels>
+        <fullName>Delete_Service_Deliveries</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete related Service Deliveries?</shortDescription>
+        <value>Delete Related Service Deliveries?</value>
+    </labels>
+        <labels>
+        <fullName>Delete_Service_Deliveries_Confirm</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete Related Service Deliveries Confirmation</shortDescription>
+        <value>You are about to delete {0} Service Deliveries associated with this Service Session. You won&apos;t be able to view or report on the Service Deliveries later.</value>
     </labels>
     <labels>
         <fullName>Delete_Sessions_Success</fullName>

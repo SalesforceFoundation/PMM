@@ -10,6 +10,268 @@
 @IsTest
 public with sharing class ServiceDeliveryController_TEST {
     private static BasicStub serviceStub = new BasicStub(ServiceService.class);
+    private static BasicStub selectorStub = new BasicStub(ServiceDeliverySelector.class);
+    private static BasicStub domainStub = new BasicStub(ServiceDeliveryDomain.class);
+    private static BasicStub validatorStub = new BasicStub(PermissionValidator.class);
+
+    @IsTest
+    private static void testCanDeleteServiceDeliveriesWithAccess() {
+        validatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            true
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        Boolean hasAccess = ServiceDeliveryController.canDeleteServiceDeliveries();
+        Test.stopTest();
+
+        System.assert(
+            hasAccess,
+            'Controller should allow delete when user has delete access on object.'
+        );
+
+        validatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceDelivery__c.SObjectType,
+                PermissionValidator.CRUDAccessType.DELETEABLE
+            }
+        );
+    }
+
+    @IsTest
+    private static void testCanDeleteServiceDeliveriesNoAccess() {
+        validatorStub.withReturnValue(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            false
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        Boolean hasAccess = ServiceDeliveryController.canDeleteServiceDeliveries();
+        Test.stopTest();
+
+        System.assert(
+            !hasAccess,
+            'Controller should NOT allow delete when user lacks delete access on object.'
+        );
+
+        validatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceDelivery__c.SObjectType,
+                PermissionValidator.CRUDAccessType.DELETEABLE
+            }
+        );
+    }
+
+    @IsTest
+    private static void testCanDeleteServiceDeliveriesException() {
+        validatorStub.withThrowException(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class }
+        );
+
+        Test.startTest();
+        PermissionValidator.instance = (PermissionValidator) validatorStub.createMock();
+        Exception actualException;
+        try {
+            Boolean hasAccess = ServiceDeliveryController.canDeleteServiceDeliveries();
+        } catch (Exception e) {
+            actualException = e;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            validatorStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the validator.'
+        );
+
+        validatorStub.assertCalledWith(
+            'hasObjectAccess',
+            new List<Type>{ SObjectType.class, PermissionValidator.CRUDAccessType.class },
+            new List<Object>{
+                ServiceDelivery__c.SObjectType,
+                PermissionValidator.CRUDAccessType.DELETEABLE
+            }
+        );
+    }
+
+    @IsTest
+    private static void testDeleteServiceDeliveriesForSessionException() {
+        List<ServiceDelivery__c> expectedServiceDeliveries = new List<ServiceDelivery__c>{
+            new ServiceDelivery__c(
+                Name = 'Test1',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            ),
+            new ServiceDelivery__c(
+                Name = 'Test2',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            ),
+            new ServiceDelivery__c(
+                Name = 'Test3',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            )
+        };
+        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
+        selectorStub.withReturnValue(
+            'getServiceDeliveriesForSession',
+            Id.class,
+            expectedServiceDeliveries
+        );
+
+        domainStub.withThrowException(
+            'deleteServiceDeliveries',
+            List<ServiceDelivery__c>.class
+        );
+
+        Test.startTest();
+        ServiceDeliveryController.deliverySelector = (ServiceDeliverySelector) selectorStub.createMock();
+        ServiceDeliveryController.deliveryDomain = (ServiceDeliveryDomain) domainStub.createMock();
+
+        Exception actualException;
+        try {
+            final Integer actualNumberDeleted = ServiceDeliveryController.deleteServiceDeliveriesForSession(
+                sessionId
+            );
+        } catch (Exception e) {
+            actualException = e;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            domainStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the domain.'
+        );
+        domainStub.assertCalledWith(
+            'deleteServiceDeliveries',
+            List<ServiceDelivery__c>.class,
+            expectedServiceDeliveries
+        );
+        selectorStub.assertCalledWith(
+            'getServiceDeliveriesForSession',
+            Id.class,
+            sessionId
+        );
+    }
+
+    @IsTest
+    private static void testGetNumberOfServiceDeliveriesForSessionException() {
+        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
+        selectorStub.withThrowException(
+            'getNumberOfServiceDeliveriesForSession',
+            Id.class
+        );
+
+        Test.startTest();
+        ServiceDeliveryController.deliverySelector = (ServiceDeliverySelector) selectorStub.createMock();
+        Exception actualException;
+        try {
+            final Integer actualNumberOfDeliveries = ServiceDeliveryController.getNumberOfServiceDeliveriesForSession(
+                sessionId
+            );
+        } catch (Exception e) {
+            actualException = e;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            selectorStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the selector.'
+        );
+
+        selectorStub.assertCalledWith(
+            'getNumberOfServiceDeliveriesForSession',
+            Id.class,
+            sessionId
+        );
+    }
+
+    @IsTest
+    private static void testDeleteServiceDeliveriesForSession() {
+        List<ServiceDelivery__c> expectedServiceDeliveries = new List<ServiceDelivery__c>{
+            new ServiceDelivery__c(
+                Name = 'Test1',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            ),
+            new ServiceDelivery__c(
+                Name = 'Test2',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            ),
+            new ServiceDelivery__c(
+                Name = 'Test3',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            )
+        };
+        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
+        selectorStub.withReturnValue(
+            'getServiceDeliveriesForSession',
+            Id.class,
+            expectedServiceDeliveries
+        );
+
+        domainStub.withReturnValue(
+            'deleteServiceDeliveries',
+            List<ServiceDelivery__c>.class,
+            null
+        );
+
+        Test.startTest();
+        ServiceDeliveryController.deliverySelector = (ServiceDeliverySelector) selectorStub.createMock();
+        ServiceDeliveryController.deliveryDomain = (ServiceDeliveryDomain) domainStub.createMock();
+        final Integer actualNumberDeleted = ServiceDeliveryController.deleteServiceDeliveriesForSession(
+            sessionId
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedServiceDeliveries.size(),
+            actualNumberDeleted,
+            'The controller should return the expected count of deliveries that were deleted'
+        );
+        domainStub.assertCalledWith(
+            'deleteServiceDeliveries',
+            List<ServiceDelivery__c>.class,
+            expectedServiceDeliveries
+        );
+        selectorStub.assertCalledWith(
+            'getServiceDeliveriesForSession',
+            Id.class,
+            sessionId
+        );
+    }
+
+    @IsTest
+    private static void testGetNumberOfServiceDeliveriesForSession() {
+        Integer expectedNumberOfDeliveries = 5;
+        Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);
+        selectorStub.withReturnValue(
+            'getNumberOfServiceDeliveriesForSession',
+            Id.class,
+            expectedNumberOfDeliveries
+        );
+
+        Test.startTest();
+        ServiceDeliveryController.deliverySelector = (ServiceDeliverySelector) selectorStub.createMock();
+        final Integer actualNumberOfDeliveries = ServiceDeliveryController.getNumberOfServiceDeliveriesForSession(
+            sessionId
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedNumberOfDeliveries,
+            actualNumberOfDeliveries,
+            'The controller should return the expected count of deliveries'
+        );
+    }
 
     @IsTest
     private static void testGetServicesAndEngagements() {

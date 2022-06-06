@@ -10,6 +10,38 @@
 public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
+    public Integer getNumberOfServiceDeliveriesForSession(Id sessionId) {
+        if (
+            !(PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ))
+        ) {
+            return 0;
+        }
+
+        return [
+            SELECT COUNT()
+            FROM ServiceDelivery__c
+            WHERE ServiceSession__c = :sessionId
+        ];
+    }
+
+    public List<ServiceDelivery__c> getServiceDeliveriesForSession(Id sessionId) {
+        if (
+            !(PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ))
+        ) {
+            return new List<ServiceDelivery__c>();
+        }
+
+        return [SELECT Id FROM ServiceDelivery__c WHERE ServiceSession__c = :sessionId];
+    }
+
     public String getAttendanceFieldSetName(Id scheduleId) {
         // We want to bypass FLS because this is a system field that drives our UI
         List<ServiceSchedule__c> schedules = [

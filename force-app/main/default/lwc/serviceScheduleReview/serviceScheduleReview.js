@@ -96,7 +96,7 @@ export default class ServiceScheduleReview extends LightningElement {
                   ]
                 : this._serviceScheduleModel.serviceSchedule[field.apiName];
 
-            if (field.type === TIME && field.value >= 0) {
+            if (field.type === TIME && field.value !== null && field.value >= 0) {
                 field.value = formatTime(field.value);
                 field.isTime = true;
             }

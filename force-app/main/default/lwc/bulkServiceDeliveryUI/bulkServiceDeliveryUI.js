@@ -137,7 +137,11 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     addDelivery() {
-        let serviceDelivery = { index: this._nextIndex, isDirty: false };
+        let serviceDelivery = {
+            index: this._nextIndex,
+            isDirty: false,
+            shouldFocus: true,
+        };
         if (this.applyDefaults || this.isModal) {
             Object.assign(serviceDelivery, this.defaultValues);
             serviceDelivery.Id = null;

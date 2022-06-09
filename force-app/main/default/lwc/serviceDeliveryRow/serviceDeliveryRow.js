@@ -75,6 +75,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api rowCount;
     @api isDirty = false;
     @api isError;
+    @api shouldFocus = false;
 
     @track fieldSet;
 
@@ -202,6 +203,27 @@ export default class ServiceDeliveryRow extends LightningElement {
             : this.serviceDeliveryFieldSets.currentFieldSetName;
         this.setCurrentFieldSet(fieldSetName);
         this.setDefaults();
+        this.handleFocus();
+    }
+
+    handleFocus() {
+        if (this.shouldFocus) {
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(
+                function() {
+                    this.focusFirstInput();
+                }.bind(this),
+                50
+            );
+            this.shouldFocus = false;
+        }
+    }
+
+    focusFirstInput() {
+        let firstInput = this.template.querySelector("lightning-input-field");
+        if (firstInput) {
+            firstInput.focus();
+        }
     }
 
     // Called by lightning input field; when selections are filtered they

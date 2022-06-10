@@ -70,7 +70,14 @@ export default class ReviewSessions extends LightningElement {
 
         this._serviceSessions = [...this._serviceScheduleModel.serviceSessions];
 
-        this.getSessions();
+        let hasNewSessions =
+            this._serviceSessions && this._serviceSessions.find(session => !session.Id);
+
+        if (!hasNewSessions) {
+            this.getSessions();
+        } else {
+            this.handleDispatchLoadedEvent();
+        }
     }
 
     get editingExistingSchedule() {
@@ -78,6 +85,10 @@ export default class ReviewSessions extends LightningElement {
             return true;
         }
         return false;
+    }
+
+    get hasServiceSessions() {
+        return this.serviceSessions.length > 0;
     }
 
     get serviceSessions() {

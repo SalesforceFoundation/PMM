@@ -96,7 +96,7 @@ export default class AttendanceRow extends LightningElement {
             this.localFieldSet = this.localFieldSet.map(a => ({ ...a }));
             this.localFieldSet.forEach(field => {
                 field.value = this.record[field.apiName];
-                if (field.type === TIME && field.value >= 0) {
+                if (field.type === TIME && field.value !== null && field.value >= 0) {
                     field.value = formatTime(field.value);
                 }
             });

@@ -14,12 +14,9 @@ public with sharing class ServiceDeliveryService {
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
     @TestVisible
     private FieldSetService fieldSetService = new FieldSetService();
-
     @TestVisible
     private ServiceDeliveryDomain domain = new ServiceDeliveryDomain();
-    private static final String ABSENT = 'Absent';
-    private static final String PRESENT = 'Present';
-    private static final String DEFAULT_STATUS = PRESENT;
+    private static final String DEFAULT_STATUS = 'Present';
     // While we allow the Attendance UI and the ultimate saved Service Delivery records
     // to be driven by a field set, the mapping from Service Participants to the seeded
     // Service Deliveries that appear in the Attendance UI is hard-coded here.
@@ -30,43 +27,6 @@ public with sharing class ServiceDeliveryService {
         ServiceParticipant__c.Contact__c => ServiceDelivery__c.Contact__c,
         ServiceParticipant__c.ProgramEngagement__c => ServiceDelivery__c.ProgramEngagement__c
     };
-
-    public List<String> presentStatuses {
-        get {
-            return statusBuckets.get(PRESENT);
-        }
-        set;
-    }
-
-    public List<String> absentStatuses {
-        get {
-            return statusBuckets.get(ABSENT);
-        }
-        set;
-    }
-
-    public List<String> attendanceStatuses {
-        get {
-            if (attendanceStatuses == null) {
-                attendanceStatuses = new List<String>();
-                attendanceStatuses.addAll(presentStatuses);
-                attendanceStatuses.addAll(absentStatuses);
-            }
-            return attendanceStatuses;
-        }
-        set;
-    }
-
-    @TestVisible
-    private Map<String, List<String>> statusBuckets {
-        get {
-            if (statusBuckets == null) {
-                statusBuckets = getStatusBuckets();
-            }
-            return statusBuckets;
-        }
-        set;
-    }
 
     public Roster generateRoster(Id sessionId, ServiceDeliveryService.Filters filters) {
         ServiceSession__c session = deliverySelector.getSession(sessionId);
@@ -242,8 +202,7 @@ public with sharing class ServiceDeliveryService {
         return (ServiceDelivery__c) deliveryRecord;
     }
 
-    private Map<String, List<String>> getStatusBuckets() {
-        List<String> bucketNames = new List<String>{ ABSENT, PRESENT };
+    public Map<String, List<String>> getStatusBuckets(List<String> bucketNames) {
         Map<String, List<String>> buckets = new Map<String, List<String>>();
 
         Schema.SObjectType serviceDeliverySObjType = ServiceDelivery__c.SObjectType;

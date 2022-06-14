@@ -81,7 +81,7 @@ public with sharing class ServiceDeliveryService_TEST {
         service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
 
         Test.startTest();
-        Map<String, List<String>> buckets = service.statusBuckets;
+        Map<String, List<String>> buckets = service.getStatusBuckets(bucketNames);
         Test.stopTest();
 
         for (String bucketName : bucketNames) {

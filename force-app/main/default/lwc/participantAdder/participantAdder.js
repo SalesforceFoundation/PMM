@@ -66,7 +66,7 @@ export default class ParticipantAdder extends LightningElement {
         }
     }
 
-    @wire(getServiceScheduleModel, { recordTypeId: null })
+    @wire(getServiceScheduleModel, { serviceScheduleId: "$recordId", recordTypeId: null })
     wireServiceScheduleModel(result) {
         if (!result) {
             return;

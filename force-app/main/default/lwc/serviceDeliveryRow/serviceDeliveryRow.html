@@ -41,6 +41,7 @@
                                                     {field.label}
                                                 </div>
                                                 <lightning-combobox
+                                                    aria-label={field.label}
                                                     name={field.apiName}
                                                     onchange={handleComboChange}
                                                     placeholder={field.placeholder}
@@ -62,6 +63,7 @@
                                                         {unitOfMeasureValue}
                                                     </div>
                                                     <lightning-input-field
+                                                        aria-label={field.label}
                                                         data-name={field.apiName}
                                                         field-name={field.apiName}
                                                         onchange={handleInputChange}
@@ -83,6 +85,7 @@
                                                         {field.label}
                                                     </div>
                                                     <lightning-input-field
+                                                        aria-label={field.label}
                                                         data-name={field.apiName}
                                                         field-name={field.apiName}
                                                         onchange={handleInputChange}
@@ -97,6 +100,7 @@
                                             <div
                                                 class="slds-text-color_error"
                                                 if:false={field.isAccessible}
+                                                aria-live={labels.fieldAccessError}
                                             >
                                                 {labels.fieldAccessError}
                                             </div>
@@ -112,7 +116,11 @@
                                         size="12"
                                         padding="around-small"
                                     >
-                                        <div class="slds-text-color_error" key={error}>
+                                        <div
+                                            class="slds-text-color_error"
+                                            key={error}
+                                            aria-live={errorMessage}
+                                        >
                                             {errorMessage}
                                         </div>
                                     </lightning-layout-item>

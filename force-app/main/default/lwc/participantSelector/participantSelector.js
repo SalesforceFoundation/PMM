@@ -33,6 +33,7 @@ import save from "@salesforce/label/c.Save";
 import saveAndNew from "@salesforce/label/c.Save_New";
 import cantFind from "@salesforce/label/c.Cant_Find_Participant";
 import newLabel from "@salesforce/label/c.New";
+import actionLabel from "@salesforce/label/c.Action";
 
 const TIME = "TIME";
 
@@ -82,6 +83,7 @@ export default class ParticipantSelector extends LightningElement {
         cancel,
         cantFind,
         newLabel,
+        actionLabel,
     };
 
     @api
@@ -320,7 +322,7 @@ export default class ParticipantSelector extends LightningElement {
             this.selectorColumns = [...this.columns];
 
             this.selectorColumns.push({
-                fieldName: "",
+                label: this.labels.actionLabel,
                 type: "button",
                 hideDefaultActions: true,
                 typeAttributes: {

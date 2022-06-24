@@ -21,6 +21,8 @@ import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Dat
 import CREATE_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Select_Create_Service_Session_Warning";
 import MAX_SESSIONS_WARNING_LABEL from "@salesforce/label/c.Creating_Service_Session_Warning";
 import ONLY_SHOWING_FUTURE_SESSIONS_MESSAGE from "@salesforce/label/c.Only_Showing_Future_Sessions";
+import REMOVE_LABEL from "@salesforce/label/c.Remove";
+import ACTION_LABEL from "@salesforce/label/c.Action";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
 
 export default class ReviewSessions extends LightningElement {
@@ -124,6 +126,8 @@ export default class ReviewSessions extends LightningElement {
         cancel: CANCEL_LABEL,
         save: SAVE_LABEL,
         saveNew: SAVE_NEW_LABEL,
+        remove: REMOVE_LABEL,
+        action: ACTION_LABEL,
     };
 
     getSessions() {
@@ -221,7 +225,7 @@ export default class ReviewSessions extends LightningElement {
                 },
             },
             {
-                label: "",
+                label: this.labels.action,
                 cellAttributes: { class: { fieldName: "alreadyCreatedCSSClass" } },
                 name: "delete",
                 type: "button-icon",
@@ -231,6 +235,8 @@ export default class ReviewSessions extends LightningElement {
                     variant: "bare",
                     iconPosition: "left",
                     disabled: { fieldName: "disableDeselect" },
+                    alternativeText: this.labels.remove,
+                    tabIndex: 0,
                 },
             },
         ];

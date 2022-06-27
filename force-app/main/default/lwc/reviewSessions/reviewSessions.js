@@ -236,7 +236,6 @@ export default class ReviewSessions extends LightningElement {
                     iconPosition: "left",
                     disabled: { fieldName: "disableDeselect" },
                     alternativeText: this.labels.remove,
-                    tabIndex: 0,
                 },
             },
         ];

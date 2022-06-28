@@ -1054,4 +1054,11 @@
         <shortDescription>Warning</shortDescription>
         <value>Warning</value>
     </labels>
+    <labels>
+        <fullName>Action</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Action</shortDescription>
+        <value>Action</value>
+    </labels>
 </CustomLabels>

@@ -34,6 +34,7 @@ import saveAndNew from "@salesforce/label/c.Save_New";
 import cantFind from "@salesforce/label/c.Cant_Find_Participant";
 import newLabel from "@salesforce/label/c.New";
 import actionLabel from "@salesforce/label/c.Action";
+import removeLabel from "@salesforce/label/c.Remove";
 
 const TIME = "TIME";
 
@@ -84,6 +85,7 @@ export default class ParticipantSelector extends LightningElement {
         cantFind,
         newLabel,
         actionLabel,
+        removeLabel,
     };
 
     @api
@@ -341,7 +343,7 @@ export default class ParticipantSelector extends LightningElement {
 
         this.selectedColumns = this.columns.slice(0, min);
         this.selectedColumns.push({
-            fieldName: "",
+            label: this.labels.actionLabel,
             type: "button-icon",
             hideDefaultActions: true,
             typeAttributes: {
@@ -349,6 +351,7 @@ export default class ParticipantSelector extends LightningElement {
                 variant: "bare",
                 iconPosition: "left",
                 disabled: { fieldName: "disableDeselect" },
+                alternativeText: this.labels.removeLabel,
             },
         });
     }

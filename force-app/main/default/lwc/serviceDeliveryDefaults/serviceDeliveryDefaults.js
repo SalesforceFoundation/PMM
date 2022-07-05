@@ -53,6 +53,27 @@ export default class ServiceDeliveryDefaults extends LightningElement {
         }
     }
 
+    connectedCallback() {
+        this.handleFocus();
+    }
+
+    handleFocus() {
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(
+            function() {
+                this.focusFirstInput();
+            }.bind(this),
+            300
+        );
+    }
+
+    focusFirstInput() {
+        let firstInput = this.template.querySelector("lightning-input-field");
+        if (firstInput) {
+            firstInput.focus();
+        }
+    }
+
     setUnitOfMeasurement(field) {
         let label;
         if (!field || !field.value) {

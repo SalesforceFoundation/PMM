@@ -11,10 +11,10 @@ import { LightningElement, api } from "lwc";
 
 export default class Section extends LightningElement {
     @api title;
-    @api grabFocus = false;
+    @api focusHeading = false;
 
     connectedCallback() {
-        if (this.grabFocus) {
+        if (this.focusHeading) {
             this.handleFocus();
         }
     }
@@ -23,9 +23,9 @@ export default class Section extends LightningElement {
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(
             function() {
-                let firstInput = this.template.querySelector("h3");
-                if (firstInput) {
-                    firstInput.focus();
+                let sectionHeading = this.template.querySelector("h3");
+                if (sectionHeading) {
+                    sectionHeading.focus();
                 }
             }.bind(this),
             50

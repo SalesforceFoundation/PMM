@@ -9,7 +9,7 @@
 
 <!-- sldsValidatorIgnore -->
 <template>
-    <c-section title={title} grab-focus if:true={isLoaded}></c-section>
+    <c-section title={title} focus-heading if:true={isLoaded}></c-section>
     <lightning-layout if:true={isLoaded} multiple-rows="true" horizontal-align="center">
         <lightning-layout-item
             if:true={showCapacityWarning}

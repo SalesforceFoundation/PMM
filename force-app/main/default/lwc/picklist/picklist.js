@@ -76,9 +76,6 @@ export default class Picklist extends LightningElement {
         this.options.forEach(option => {
             if (option.value === event.target.name) {
                 option.isSelected = !option.isSelected;
-                option.variant = option.isSelected
-                    ? SELECTED_VARIANT
-                    : UNSELECTED_VARIANT;
             }
         });
 

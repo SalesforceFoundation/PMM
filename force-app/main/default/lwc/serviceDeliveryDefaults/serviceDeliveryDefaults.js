@@ -1,6 +1,7 @@
 import { api, LightningElement, track, wire } from "lwc";
 import { getRecord } from "lightning/uiRecordApi";
 
+import ERROR_MSG from "@salesforce/label/c.Error";
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
@@ -21,6 +22,7 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     @track fieldSet;
 
     serviceId;
+    errorMessage;
     objectApiName = SERVICE_DELIVERY_OBJECT.objectApiName;
     fieldSetName = DEFAULT_FIELD_SET;
     serviceFieldName = SERVICE_FIELD.fieldApiName;
@@ -91,18 +93,24 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     @api
     getFields() {
         let fields = {};
+        let errorFields = [];
         let valid = true;
         this.template.querySelectorAll("lightning-input-field").forEach(inputField => {
-            valid = valid && inputField.reportValidity();
+            let isFieldValid = inputField.reportValidity();
+            valid = valid && isFieldValid;
+            if(!isFieldValid) {
+                errorFields.push(inputField.fieldName);
+            }
             fields[inputField.fieldName] = inputField.value;
         });
 
         if (!valid) {
+            this.errorMessage = ERROR_MSG;
+            console.log(errorFields);
             throw new Error(ERROR_MESSAGE);
         }
 
         fields[SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName] = this.fieldSetName;
-
         return fields;
     }
 

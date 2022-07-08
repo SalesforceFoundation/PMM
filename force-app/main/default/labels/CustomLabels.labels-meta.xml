@@ -151,10 +151,10 @@
         <value>Select at least one Contact to continue.</value>
     </labels>
     <labels>
-        <fullName>BSDT_DSDV_Error_Banner_Msg</fullName>
+        <fullName>BSDT_Error_Banner_Msg</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Error message when there are field level errors on Default Service Delivery Value screen.</shortDescription>
+        <shortDescription>Error message when there are field level errors on DSDV screen.</shortDescription>
         <value>Please correct the field-level errors before continuing.</value>
     </labels>
     <labels>

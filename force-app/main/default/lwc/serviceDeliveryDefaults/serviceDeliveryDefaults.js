@@ -93,14 +93,9 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     @api
     getFields() {
         let fields = {};
-        let errorFields = [];
         let valid = true;
         this.template.querySelectorAll("lightning-input-field").forEach(inputField => {
-            let isFieldValid = inputField.reportValidity();
-            valid = valid && isFieldValid;
-            if (!isFieldValid) {
-                errorFields.push(inputField.fieldName);
-            }
+            valid = valid && inputField.reportValidity();
             fields[inputField.fieldName] = inputField.value;
         });
 

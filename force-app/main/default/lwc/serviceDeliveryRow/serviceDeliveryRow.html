@@ -143,7 +143,7 @@
                                     ></lightning-spinner>
                                 </div>
                             </template>
-                            <template if:true={showSavedIcon} role="alert">
+                            <div if:true={showSavedIcon} role="alert">
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:success"
@@ -153,8 +153,8 @@
                                     title={labels.saved}
                                 ></lightning-icon>
                                 <span class="slds-var-p-left_small">{labels.saved}</span>
-                            </template>
-                            <template if:true={showModifiedIcon} role="alert">
+                            </div>
+                            <div if:true={showModifiedIcon} role="alert">
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:warning"
@@ -164,8 +164,8 @@
                                     title={labels.edited}
                                 ></lightning-icon>
                                 <span class="slds-var-p-left_small">{labels.edited}</span>
-                            </template>
-                            <template if:true={isError} role="alert">
+                            </div>
+                            <div if:true={isError} role="alert">
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:error"
@@ -175,7 +175,7 @@
                                     title={errorMessage}
                                 ></lightning-icon>
                                 <span class="slds-var-p-left_small">{labels.error}</span>
-                            </template>
+                            </div>
                         </lightning-layout-item>
                         <lightning-layout-item class="slds-text-align_right" size="4">
                             <lightning-button-icon

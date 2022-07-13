@@ -74,6 +74,13 @@
         <value>Anonymous</value>
     </labels>
     <labels>
+        <fullName>BSDT_Service_Fields_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service Field Message for BSDT</shortDescription>
+        <value>Note that fields might change based on your Service configuration.</value>
+    </labels>
+    <labels>
         <fullName>BSDT_Selected_Contacts</fullName>
         <language>en_US</language>
         <protected>true</protected>

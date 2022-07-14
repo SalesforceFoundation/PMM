@@ -357,7 +357,9 @@ export default class NewServiceSchedule extends LightningElement {
                     initialStartDate.setMonth(today.getMonth());
                     initialStartDate.setDate(today.getDate());
                     initialStartDate.setFullYear(today.getFullYear());
-                    this.handleMonthlyRecurrenceOptions(initialStartDate);
+                    if (this.isMonthly) {
+                        this.handleMonthlyRecurrenceOptions(initialStartDate);
+                    }
                 }
                 if (this.useMinimumStartAfterLastSession) {
                     let minimumStartDateValue = new Date(

@@ -21,6 +21,7 @@ import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
 import success from "@salesforce/label/c.Success";
 import serviceDeliveriesAdded from "@salesforce/label/c.Service_Deliveries_Added";
+import serviceFieldMessage from "@salesforce/label/c.BSDT_Service_Fields_Message";
 import required from "@salesforce/label/c.Required";
 import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 
@@ -58,6 +59,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         required,
         success,
         serviceDeliveriesAdded,
+        serviceFieldMessage,
         rowsWithErrors,
         save,
     };

@@ -74,6 +74,13 @@
         <value>Anonymous</value>
     </labels>
     <labels>
+        <fullName>BSDT_Service_Fields_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service Field Message for BSDT</shortDescription>
+        <value>The fields shown on this page depend on the Service you select.</value>
+    </labels>
+    <labels>
         <fullName>BSDT_Selected_Contacts</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -149,6 +156,13 @@
         <protected>true</protected>
         <shortDescription>Warning when no Contacts are selected for the BSDT Group Option</shortDescription>
         <value>Select at least one Contact to continue.</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Error_Banner_Msg</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service delivery default error banner message.</shortDescription>
+        <value>Something went wrong. Review the errors on this page.</value>
     </labels>
     <labels>
         <fullName>Cant_Find_Participant</fullName>

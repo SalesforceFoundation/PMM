@@ -1,6 +1,7 @@
 import { api, LightningElement, track, wire } from "lwc";
 import { getRecord } from "lightning/uiRecordApi";
 
+import BSDT_ERROR_MSG from "@salesforce/label/c.BSDT_Error_Banner_Msg";
 import SERVICE_DELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import CONTACT_FIELD from "@salesforce/schema/ServiceDelivery__c.Contact__c";
@@ -21,6 +22,7 @@ export default class ServiceDeliveryDefaults extends LightningElement {
     @track fieldSet;
 
     serviceId;
+    errorMessage;
     objectApiName = SERVICE_DELIVERY_OBJECT.objectApiName;
     fieldSetName = DEFAULT_FIELD_SET;
     serviceFieldName = SERVICE_FIELD.fieldApiName;
@@ -98,11 +100,11 @@ export default class ServiceDeliveryDefaults extends LightningElement {
         });
 
         if (!valid) {
+            this.errorMessage = BSDT_ERROR_MSG;
             throw new Error(ERROR_MESSAGE);
         }
 
         fields[SERVICE_DELIVERY_FIELD_SET_FIELD.fieldApiName] = this.fieldSetName;
-
         return fields;
     }
 

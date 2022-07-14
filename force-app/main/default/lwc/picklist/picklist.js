@@ -9,8 +9,6 @@
 
 import { LightningElement, api, track } from "lwc";
 
-const UNSELECTED_VARIANT = "neutral";
-const SELECTED_VARIANT = "brand";
 const MULTI_SELECT_DELIM = ";";
 
 export default class Picklist extends LightningElement {
@@ -59,7 +57,7 @@ export default class Picklist extends LightningElement {
                 value: picklistValue.value,
                 label: picklistValue.label,
                 isSelected: isSelected,
-                variant: isSelected ? SELECTED_VARIANT : UNSELECTED_VARIANT,
+                isChecked: isSelected,
             };
         });
     }
@@ -76,6 +74,7 @@ export default class Picklist extends LightningElement {
         this.options.forEach(option => {
             if (option.value === event.target.name) {
                 option.isSelected = !option.isSelected;
+                option.isChecked = true;
             }
         });
 

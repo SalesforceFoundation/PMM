@@ -1,6 +1,16 @@
 <template>
     <lightning-record-edit-form object-api-name={objectApiName} density="comfy">
         <lightning-layout multiple-rows="true">
+            <lightning-layout-item
+                size="12"
+                class="slds-var-p-bottom_small"
+                if:true={errorMessage}
+            >
+                <c-scoped-notification
+                    theme="error"
+                    title={errorMessage}
+                ></c-scoped-notification>
+            </lightning-layout-item>
             <lightning-layout-item size="12" class="slds-var-p-bottom_small">
                 <c-section title={labels.selectService} focus-heading></c-section>
             </lightning-layout-item>

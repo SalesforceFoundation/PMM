@@ -78,7 +78,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Service Field Message for BSDT</shortDescription>
-        <value>Note that fields might change based on your Service configuration.</value>
+        <value>The fields shown on this page depend on the Service you select.</value>
     </labels>
     <labels>
         <fullName>BSDT_Selected_Contacts</fullName>

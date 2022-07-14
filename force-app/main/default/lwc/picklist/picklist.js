@@ -57,7 +57,6 @@ export default class Picklist extends LightningElement {
                 value: picklistValue.value,
                 label: picklistValue.label,
                 isSelected: isSelected,
-                isChecked: isSelected,
             };
         });
     }
@@ -74,7 +73,6 @@ export default class Picklist extends LightningElement {
         this.options.forEach(option => {
             if (option.value === event.target.name) {
                 option.isSelected = !option.isSelected;
-                option.isChecked = true;
             }
         });
 

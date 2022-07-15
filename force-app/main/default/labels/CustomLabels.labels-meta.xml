@@ -594,8 +594,8 @@
         <fullName>Only_Showing_Future_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Only showing sessions on or after today&apos;s date</shortDescription>
-        <value>Only showing sessions after today&apos;s date</value>
+        <shortDescription>Only showing sessions on or after today&apos;s date cannot remove existing sessions.</shortDescription>
+        <value>Only showing sessions after today&apos;s date. Existing sessions cannot be removed or updated.</value>
     </labels>
     <labels>
         <fullName>Owner_Field</fullName>

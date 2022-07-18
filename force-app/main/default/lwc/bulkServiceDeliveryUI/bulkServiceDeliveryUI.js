@@ -153,10 +153,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     get savingCompleteToastVariant() {
         if (this.errorCount === 0) {
             return "success";
-        } else if (this.errorCount === this.currentSaveCount) {
-            return "error";
         }
-        return "warning";
+        return "error";
     }
 
     addDelivery() {

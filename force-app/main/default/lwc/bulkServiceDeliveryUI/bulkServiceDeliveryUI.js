@@ -9,7 +9,7 @@
 
 import { LightningElement, api, track, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
-import { handleError } from "c/util";
+import { handleError, showToast } from "c/util";
 import { loadStyle } from "lightning/platformResourceLoader";
 
 import { ServiceDeliveryFieldSets } from "./serviceDeliveryFieldSets";
@@ -46,7 +46,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
     serviceDeliveryFieldSets;
     savedCount;
+    errorCount;
     targetSaveCount;
+    currentSaveCount;
     isSaving = false;
     hideWizard = false;
     applyDefaults = false;
@@ -138,6 +140,20 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         return !this.isModal && !this.hideWizard;
     }
 
+    get savingCompleteMessage() {
+        let message = "text";
+        /**
+            "Attempted to save " +
+            this.currentSaveCount +
+            " new or modified rows. There were " +
+            this.savedCount +
+            " successful and " +
+            this.errorCount +
+            " errors. Consult invidivual rows for details.";
+        */
+        return message;
+    }
+
     addDelivery() {
         let serviceDelivery = {
             index: this._nextIndex,
@@ -162,15 +178,40 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         }
     }
 
+    savingComplete() {
+        if (this.currentSaveCount - this.savedCount - this.errorCount === 0) {
+            return true;
+        }
+        return false;
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    handleRowError(event) {
+        this.errorCount++;
+        if (this.savingComplete()) {
+            showToast(
+                this.labels.success,
+                this.savingCompleteMessage,
+                "success",
+                "dismissible"
+            );
+        }
+    }
+
     handleSave() {
         let rows = this.template.querySelectorAll("c-service-delivery-row");
 
         this.savedCount = 0;
+        this.errorCount = 0;
         this.targetSaveCount = 0;
+        this.currentSaveCount = 0;
 
         rows.forEach(row => {
             if (row.isDirty || row.isError) {
                 this.targetSaveCount++;
+            }
+            if (row.isDirty) {
+                this.currentSaveCount++;
             }
             row.saveRow();
         });
@@ -182,10 +223,21 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     // eslint-disable-next-line no-unused-vars
     handleRowSuccess(event) {
+        this.savedCount++;
+
+        if (this.savingComplete()) {
+            showToast(
+                this.labels.success,
+                this.savingCompleteMessage,
+                "success",
+                "dismissible"
+            );
+        }
+
         if (!this.isModal) {
             return;
         }
-        this.savedCount++;
+
         if (this.savedCount === this.targetSaveCount) {
             this.dispatchEvent(new CustomEvent("done"));
         }

@@ -188,23 +188,20 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         return false;
     }
 
+    showSaveSummaryToast() {
+        let toastVariant = this.savingCompleteToastVariant;
+        let toastTitle =
+            toastVariant === "success" ? this.labels.success : this.labels.rowsWithErrors;
+
+        showToast(toastTitle, this.savingCompleteMessage, toastVariant, "dismissible");
+    }
+
     // eslint-disable-next-line no-unused-vars
     handleRowError(event) {
         this.errorCount++;
 
         if (this.savingComplete()) {
-            let toastVariant = this.savingCompleteToastVariant;
-            let toastTitle =
-                toastVariant === "success"
-                    ? this.labels.success
-                    : this.labels.rowsWithErrors;
-
-            showToast(
-                toastTitle,
-                this.savingCompleteMessage,
-                toastVariant,
-                "dismissible"
-            );
+            this.showSaveSummaryToast();
         }
     }
 
@@ -236,17 +233,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.savedCount++;
 
         if (this.savingComplete()) {
-            let toastVariant = this.savingCompleteToastVariant;
-            let toastTitle =
-                toastVariant === "success"
-                    ? this.labels.success
-                    : this.labels.rowsWithErrors;
-            showToast(
-                toastTitle,
-                this.savingCompleteMessage,
-                toastVariant,
-                "dismissible"
-            );
+            this.showSaveSummaryToast();
         }
 
         if (this.savedCount === this.targetSaveCount) {

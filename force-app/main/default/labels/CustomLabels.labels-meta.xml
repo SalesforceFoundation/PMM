@@ -594,8 +594,8 @@
         <fullName>Only_Showing_Future_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Only showing sessions on or after today&apos;s date</shortDescription>
-        <value>Only showing sessions after today&apos;s date</value>
+        <shortDescription>Note about sessions displayed when adding sessions.</shortDescription>
+        <value>Showing all future Sessions. To modify previously added Sessions, go to the Service Sessions list.</value>
     </labels>
     <labels>
         <fullName>Owner_Field</fullName>

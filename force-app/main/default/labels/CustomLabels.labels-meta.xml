@@ -594,7 +594,7 @@
         <fullName>Only_Showing_Future_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Showing all future Sessions. To modify previously added Sessions, go to the Service Sessions list.</shortDescription>
+        <shortDescription>Note about sessions displayed when adding sessions.</shortDescription>
         <value>Showing all future Sessions. To modify previously added Sessions, go to the Service Sessions list.</value>
     </labels>
     <labels>

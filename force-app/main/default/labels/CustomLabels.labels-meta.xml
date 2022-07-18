@@ -80,6 +80,22 @@
         <shortDescription>Service Field Message for BSDT</shortDescription>
         <value>The fields shown on this page depend on the Service you select.</value>
     </labels>
+        /**
+            "Attempted to save " +
+            this.currentSaveCount +
+            " new or modified rows. There were " +
+            this.savedCount +
+            " successful and " +
+            this.errorCount +
+            " errors. Consult invidivual rows for details.";
+        */    
+    <labels>
+        <fullName>BSDT_Saving_Complete_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save Result Summary Message for BSDT</shortDescription>
+        <value>Attempted to save {0} new or modified rows, with {1} successful and {2} errors. Consult rows for details.</value>
+    </labels>
     <labels>
         <fullName>BSDT_Selected_Contacts</fullName>
         <language>en_US</language>

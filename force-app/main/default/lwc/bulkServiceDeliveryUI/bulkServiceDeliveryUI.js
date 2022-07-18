@@ -9,7 +9,7 @@
 
 import { LightningElement, api, track, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
-import { handleError, showToast } from "c/util";
+import { format, handleError, showToast } from "c/util";
 import { loadStyle } from "lightning/platformResourceLoader";
 
 import { ServiceDeliveryFieldSets } from "./serviceDeliveryFieldSets";
@@ -22,6 +22,7 @@ import saving from "@salesforce/label/c.Saving";
 import success from "@salesforce/label/c.Success";
 import serviceDeliveriesAdded from "@salesforce/label/c.Service_Deliveries_Added";
 import serviceFieldMessage from "@salesforce/label/c.BSDT_Service_Fields_Message";
+import savingCompleteMessage from "@salesforce/label/c.BSDT_Saving_Complete_Message";
 import required from "@salesforce/label/c.Required";
 import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 
@@ -62,6 +63,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         success,
         serviceDeliveriesAdded,
         serviceFieldMessage,
+        savingCompleteMessage,
         rowsWithErrors,
         save,
     };
@@ -141,17 +143,11 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     get savingCompleteMessage() {
-        let message = "text";
-        /**
-            "Attempted to save " +
-            this.currentSaveCount +
-            " new or modified rows. There were " +
-            this.savedCount +
-            " successful and " +
-            this.errorCount +
-            " errors. Consult invidivual rows for details.";
-        */
-        return message;
+        return format(this.labels.savingCompleteMessage, [
+            this.currentSaveCount,
+            this.savedCount,
+            this.errorCount,
+        ]);
     }
 
     addDelivery() {

@@ -206,7 +206,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     showSaveSummaryToast() {
         let toastVariant = this.savingCompleteToastVariant;
-        let toastTitle = toastVariant === "success" ? this.labels.success : ""; //this.labels.rowsWithErrors;
+        let toastTitle = toastVariant === "success" ? this.labels.success : "";
 
         showToast(toastTitle, this.savingCompleteMessage, toastVariant, "dismissible");
     }

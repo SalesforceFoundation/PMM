@@ -37,6 +37,7 @@ import actionLabel from "@salesforce/label/c.Action";
 import removeLabel from "@salesforce/label/c.Remove";
 
 const TIME = "TIME";
+const SEARCH_DELAY = 1000;
 
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
@@ -66,6 +67,9 @@ export default class ParticipantSelector extends LightningElement {
     rendered = false;
     offsetRows = 50;
     offset = this.offsetRows;
+    showSpinner = true;
+
+    _searchTimeout;
 
     labels = {
         selectContacts,
@@ -445,11 +449,29 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleInputChange(event) {
+        console.log("HandleInputChange");
         this.searchValue = event.target.value;
-        this.applyFilters();
+        this.debounceSearch();
+        // this.clearTimeout();
+        // this.applyFilters();
+    }
+
+    debounceSearch() {
+        console.log("DebounceSearch");
+        this.resetTimeout();
+        this._searchTimeout = setTimeout(this.applyFilters.bind(this), SEARCH_DELAY);
+    }
+
+    resetTimeout() {
+        console.log("ResetTimeout");
+        if (this._searchTimeout) {
+            clearTimeout(this._searchTimeout);
+        }
     }
 
     applyFilters() {
+        console.log("ApplyFilters");
+        // this.showSpinner = true;
         let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
 
         this.filteredEngagements = this.availableEngagementRows.filter(
@@ -466,6 +488,8 @@ export default class ParticipantSelector extends LightningElement {
             0,
             Math.min(this.filteredEngagements.length, this.offset)
         );
+
+        // this.showSpinner = false;
     }
 
     dispatchSelectEvent() {

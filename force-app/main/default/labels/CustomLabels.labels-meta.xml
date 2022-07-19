@@ -81,12 +81,19 @@
         <value>The fields shown on this page depend on the Service you select.</value>
     </labels> 
     <labels>
-        <fullName>BSDT_Saving_Complete_Message</fullName>
+        <fullName>BSDT_Saving_Complete_Success_Message</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Save Result Summary Message for BSDT</shortDescription>
-        <value>Attempted to save {0} new or modified rows, with {1} successful and {2} errors. Consult rows for details.</value>
+        <shortDescription>Save Success Summary Message for BSDT</shortDescription>
+        <value>{0} Service Deliveries were saved.</value>
     </labels>
+    <labels>
+        <fullName>BSDT_Saving_Complete_Failure_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save Failure Summary Message for BSDT</shortDescription>
+        <value>{0} Service Deliveries have errors and weren&apos;t saved.</value>
+    </labels>    
     <labels>
         <fullName>BSDT_Selected_Contacts</fullName>
         <language>en_US</language>

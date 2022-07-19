@@ -22,7 +22,8 @@ import saving from "@salesforce/label/c.Saving";
 import success from "@salesforce/label/c.Success";
 import serviceDeliveriesAdded from "@salesforce/label/c.Service_Deliveries_Added";
 import serviceFieldMessage from "@salesforce/label/c.BSDT_Service_Fields_Message";
-import savingCompleteMessage from "@salesforce/label/c.BSDT_Saving_Complete_Message";
+import savingCompleteSuccessMessage from "@salesforce/label/c.BSDT_Saving_Complete_Success_Message";
+import savingCompleteFailureMessage from "@salesforce/label/c.BSDT_Saving_Complete_Failure_Message";
 import required from "@salesforce/label/c.Required";
 import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 
@@ -63,7 +64,8 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         success,
         serviceDeliveriesAdded,
         serviceFieldMessage,
-        savingCompleteMessage,
+        savingCompleteSuccessMessage,
+        savingCompleteFailureMessage,
         rowsWithErrors,
         save,
     };
@@ -143,11 +145,25 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     get savingCompleteMessage() {
-        return format(this.labels.savingCompleteMessage, [
-            this.currentSaveCount,
-            this.savedCount,
-            this.errorCount,
-        ]);
+        let successSummary;
+        let failureSummary;
+        if (this.savedCount > 0) {
+            successSummary = format(this.labels.savingCompleteSuccessMessage, [
+                this.savedCount,
+            ]);
+        }
+
+        if (this.errorCount > 0) {
+            failureSummary = format(this.labels.savingCompleteFailureMessage, [
+                this.errorCount,
+            ]);
+        }
+        if (successSummary && failureSummary) {
+            return successSummary + " " + failureSummary;
+        } else if (successSummary) {
+            return successSummary;
+        }
+        return failureSummary;
     }
 
     get savingCompleteToastVariant() {
@@ -190,8 +206,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     showSaveSummaryToast() {
         let toastVariant = this.savingCompleteToastVariant;
-        let toastTitle =
-            toastVariant === "success" ? this.labels.success : this.labels.rowsWithErrors;
+        let toastTitle = toastVariant === "success" ? this.labels.success : ""; //this.labels.rowsWithErrors;
 
         showToast(toastTitle, this.savingCompleteMessage, toastVariant, "dismissible");
     }

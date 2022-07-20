@@ -91,7 +91,7 @@ export default class ParticipantSelector extends LightningElement {
         newLabel,
         actionLabel,
         removeLabel,
-        loading
+        loading,
     };
 
     @api
@@ -467,7 +467,7 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     async startFilter() {
-        this.displaySpinner()
+        this.displaySpinner();
         // Find a better way to do this instead of setTimeout inside setTimeout
         setTimeout(this.applyFilters.bind(this));
     }

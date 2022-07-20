@@ -470,7 +470,7 @@ export default class ParticipantSelector extends LightningElement {
 
     startFilter() {
         this.displaySpinner();
-        // Find a better way to do this instead of setTimeout inside setTimeout
+        
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(this.applyFilters.bind(this));
     }

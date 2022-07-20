@@ -84,8 +84,13 @@
                                             style="height: 331px"
                                             class="slds-border_top slds-var-m-top_xx-small slds-is-relative"
                                         >
-                                            <lightning-layout-item if:true={showSpinner} class="slds-is-absolute spinner-container">
-                                                <div class="slds-is-relative spinner-container">
+                                            <lightning-layout-item 
+                                                if:true={showSpinner} 
+                                                class="slds-is-absolute spinner-container"
+                                            >
+                                                <div 
+                                                    class="slds-is-relative spinner-container"
+                                                >
                                                     <lightning-spinner
                                                         alternative-text={labels.loading}
                                                         size="medium"

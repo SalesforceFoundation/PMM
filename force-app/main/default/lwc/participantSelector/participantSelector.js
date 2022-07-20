@@ -459,7 +459,7 @@ export default class ParticipantSelector extends LightningElement {
         this.resetTimeout();
 
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        this._searchTimeout = setTimeout(this.applyFilters.bind(this), SEARCH_DELAY);
+        this._searchTimeout = setTimeout(this.startFilter.bind(this), SEARCH_DELAY);
     }
 
     resetTimeout() {

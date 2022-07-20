@@ -79,7 +79,21 @@
         <protected>true</protected>
         <shortDescription>Service Field Message for BSDT</shortDescription>
         <value>The fields shown on this page depend on the Service you select.</value>
+    </labels> 
+    <labels>
+        <fullName>BSDT_Saving_Complete_Success_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save Success Summary Message for BSDT</shortDescription>
+        <value>{0} Service Deliveries were saved.</value>
     </labels>
+    <labels>
+        <fullName>BSDT_Saving_Complete_Failure_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save Failure Summary Message for BSDT</shortDescription>
+        <value>{0} Service Deliveries have errors and weren&apos;t saved.</value>
+    </labels>    
     <labels>
         <fullName>BSDT_Selected_Contacts</fullName>
         <language>en_US</language>
@@ -594,8 +608,8 @@
         <fullName>Only_Showing_Future_Sessions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Only showing sessions on or after today&apos;s date</shortDescription>
-        <value>Only showing sessions after today&apos;s date</value>
+        <shortDescription>Note about sessions displayed when adding sessions.</shortDescription>
+        <value>Showing all future Sessions. To modify previously added Sessions, go to the Service Sessions list.</value>
     </labels>
     <labels>
         <fullName>Owner_Field</fullName>

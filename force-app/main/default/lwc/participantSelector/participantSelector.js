@@ -457,7 +457,9 @@ export default class ParticipantSelector extends LightningElement {
 
     debounceSearch() {
         this.resetTimeout();
-        this._searchTimeout = setTimeout(this.startFilter.bind(this), SEARCH_DELAY);
+
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        this._searchTimeout = setTimeout(this.applyFilters.bind(this), SEARCH_DELAY);
     }
 
     resetTimeout() {
@@ -466,9 +468,10 @@ export default class ParticipantSelector extends LightningElement {
         }
     }
 
-    async startFilter() {
+    startFilter() {
         this.displaySpinner();
         // Find a better way to do this instead of setTimeout inside setTimeout
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(this.applyFilters.bind(this));
     }
 

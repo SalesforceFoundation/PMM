@@ -143,7 +143,7 @@
                                     ></lightning-spinner>
                                 </div>
                             </template>
-                            <template if:true={showSavedIcon} role="alert">
+                            <template if:true={showSavedIcon}>
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:success"
@@ -154,7 +154,7 @@
                                 ></lightning-icon>
                                 <span class="slds-var-p-left_small">{labels.saved}</span>
                             </template>
-                            <template if:true={showModifiedIcon} role="alert">
+                            <template if:true={showModifiedIcon}>
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:warning"
@@ -165,7 +165,7 @@
                                 ></lightning-icon>
                                 <span class="slds-var-p-left_small">{labels.edited}</span>
                             </template>
-                            <template if:true={isError} role="alert">
+                            <template if:true={isError}>
                                 <lightning-icon
                                     tabindex="0"
                                     icon-name="utility:error"

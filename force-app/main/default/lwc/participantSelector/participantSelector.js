@@ -16,6 +16,7 @@ import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorCo
 import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 
 import addRecord from "@salesforce/label/c.Add_Record";
+import loading from "@salesforce/label/c.Loading";
 import selectContacts from "@salesforce/label/c.BSDT_Select_Contacts";
 import selectedContacts from "@salesforce/label/c.BSDT_Selected_Contacts";
 import capacityWarning from "@salesforce/label/c.Participant_Capacity_Warning";
@@ -37,6 +38,7 @@ import actionLabel from "@salesforce/label/c.Action";
 import removeLabel from "@salesforce/label/c.Remove";
 
 const TIME = "TIME";
+const SEARCH_DELAY = 1000;
 
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
@@ -66,6 +68,9 @@ export default class ParticipantSelector extends LightningElement {
     rendered = false;
     offsetRows = 50;
     offset = this.offsetRows;
+    showSpinner = false;
+
+    _searchTimeout;
 
     labels = {
         selectContacts,
@@ -86,6 +91,7 @@ export default class ParticipantSelector extends LightningElement {
         newLabel,
         actionLabel,
         removeLabel,
+        loading,
     };
 
     @api
@@ -446,7 +452,25 @@ export default class ParticipantSelector extends LightningElement {
 
     handleInputChange(event) {
         this.searchValue = event.target.value;
-        this.applyFilters();
+        this.debounceSearch();
+    }
+
+    debounceSearch() {
+        this.resetTimeout();
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        this._searchTimeout = setTimeout(this.startFilter.bind(this), SEARCH_DELAY);
+    }
+
+    resetTimeout() {
+        if (this._searchTimeout) {
+            clearTimeout(this._searchTimeout);
+        }
+    }
+
+    startFilter() {
+        this.displaySpinner();
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(this.applyFilters.bind(this));
     }
 
     applyFilters() {
@@ -466,6 +490,16 @@ export default class ParticipantSelector extends LightningElement {
             0,
             Math.min(this.filteredEngagements.length, this.offset)
         );
+
+        this.hideSpinner();
+    }
+
+    displaySpinner() {
+        this.showSpinner = true;
+    }
+
+    hideSpinner() {
+        this.showSpinner = false;
     }
 
     dispatchSelectEvent() {

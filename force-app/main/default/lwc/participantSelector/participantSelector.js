@@ -457,7 +457,6 @@ export default class ParticipantSelector extends LightningElement {
 
     debounceSearch() {
         this.resetTimeout();
-
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this._searchTimeout = setTimeout(this.startFilter.bind(this), SEARCH_DELAY);
     }
@@ -470,7 +469,6 @@ export default class ParticipantSelector extends LightningElement {
 
     startFilter() {
         this.displaySpinner();
-        
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(this.applyFilters.bind(this));
     }
@@ -498,12 +496,10 @@ export default class ParticipantSelector extends LightningElement {
 
     displaySpinner() {
         this.showSpinner = true;
-        console.log("TRUE");
     }
 
     hideSpinner() {
         this.showSpinner = false;
-        console.log("FALSE");
     }
 
     dispatchSelectEvent() {

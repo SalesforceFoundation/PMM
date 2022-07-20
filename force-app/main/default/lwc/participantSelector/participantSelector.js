@@ -16,6 +16,7 @@ import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorCo
 import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 
 import addRecord from "@salesforce/label/c.Add_Record";
+import loading from "@salesforce/label/c.Loading";
 import selectContacts from "@salesforce/label/c.BSDT_Select_Contacts";
 import selectedContacts from "@salesforce/label/c.BSDT_Selected_Contacts";
 import capacityWarning from "@salesforce/label/c.Participant_Capacity_Warning";
@@ -67,7 +68,7 @@ export default class ParticipantSelector extends LightningElement {
     rendered = false;
     offsetRows = 50;
     offset = this.offsetRows;
-    showSpinner = true;
+    showSpinner = false;
 
     _searchTimeout;
 
@@ -90,6 +91,7 @@ export default class ParticipantSelector extends LightningElement {
         newLabel,
         actionLabel,
         removeLabel,
+        loading
     };
 
     @api
@@ -449,29 +451,28 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleInputChange(event) {
-        console.log("HandleInputChange");
         this.searchValue = event.target.value;
         this.debounceSearch();
-        // this.clearTimeout();
-        // this.applyFilters();
     }
 
     debounceSearch() {
-        console.log("DebounceSearch");
         this.resetTimeout();
-        this._searchTimeout = setTimeout(this.applyFilters.bind(this), SEARCH_DELAY);
+        this._searchTimeout = setTimeout(this.startFilter.bind(this), SEARCH_DELAY);
     }
 
     resetTimeout() {
-        console.log("ResetTimeout");
         if (this._searchTimeout) {
             clearTimeout(this._searchTimeout);
         }
     }
 
+    async startFilter() {
+        this.displaySpinner()
+        // Find a better way to do this instead of setTimeout inside setTimeout
+        setTimeout(this.applyFilters.bind(this));
+    }
+
     applyFilters() {
-        console.log("ApplyFilters");
-        // this.showSpinner = true;
         let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
 
         this.filteredEngagements = this.availableEngagementRows.filter(
@@ -489,7 +490,17 @@ export default class ParticipantSelector extends LightningElement {
             Math.min(this.filteredEngagements.length, this.offset)
         );
 
-        // this.showSpinner = false;
+        this.hideSpinner();
+    }
+
+    displaySpinner() {
+        this.showSpinner = true;
+        console.log("TRUE");
+    }
+
+    hideSpinner() {
+        this.showSpinner = false;
+        console.log("FALSE");
     }
 
     dispatchSelectEvent() {

@@ -59,6 +59,13 @@
         <shortDescription>Adding More Service Session Warning</shortDescription>
         <value>You&apos;re adding more than {0} sessions, so this will take some extra time to complete.</value>
     </labels>
+        <labels>
+        <fullName>Add_More_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add More Sessions title</shortDescription>
+        <value>Add More Sessions</value>
+    </labels>
     <labels>
         <fullName>Anonymous</fullName>
         <language>en_US</language>
@@ -66,6 +73,27 @@
         <shortDescription>Anonymous</shortDescription>
         <value>Anonymous</value>
     </labels>
+    <labels>
+        <fullName>BSDT_Service_Fields_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service Field Message for BSDT</shortDescription>
+        <value>The fields shown on this page depend on the Service you select.</value>
+    </labels> 
+    <labels>
+        <fullName>BSDT_Saving_Complete_Success_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save Success Summary Message for BSDT</shortDescription>
+        <value>{0} Service Deliveries were saved.</value>
+    </labels>
+    <labels>
+        <fullName>BSDT_Saving_Complete_Failure_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save Failure Summary Message for BSDT</shortDescription>
+        <value>{0} Service Deliveries have errors and weren&apos;t saved.</value>
+    </labels>    
     <labels>
         <fullName>BSDT_Selected_Contacts</fullName>
         <language>en_US</language>
@@ -144,6 +172,13 @@
         <value>Select at least one Contact to continue.</value>
     </labels>
     <labels>
+        <fullName>BSDT_Error_Banner_Msg</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service delivery default error banner message.</shortDescription>
+        <value>Something went wrong. Review the errors on this page.</value>
+    </labels>
+    <labels>
         <fullName>Cant_Find_Participant</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -191,6 +226,13 @@
         <protected>true</protected>
         <shortDescription>Supporting message for Attendance empty state</shortDescription>
         <value>After participants are added to this Service Schedule, track their attendance here.</value>
+    </labels>
+    <labels>
+        <fullName>Add_Sessions_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Supporting message for Adding Sessions to an existing schedule.</shortDescription>
+        <value>You are updating an existing schedule any changes you make here will be saved to the schedule record. Please note that you will only be able to add sessions after the most current existing sessions.</value>
     </labels>
     <labels>
         <fullName>Incorrect_Tab</fullName>
@@ -268,6 +310,20 @@
         <protected>true</protected>
         <shortDescription>Delete Future Service Sessions</shortDescription>
         <value>Delete Future Service Sessions</value>
+    </labels>  
+    <labels>
+        <fullName>Delete_Service_Deliveries</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete related Service Deliveries?</shortDescription>
+        <value>Delete Related Service Deliveries?</value>
+    </labels>
+        <labels>
+        <fullName>Delete_Service_Deliveries_Confirm</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete Related Service Deliveries Confirmation</shortDescription>
+        <value>You are about to delete {0} Service Deliveries associated with this Service Session. You won&apos;t be able to view or report on the Service Deliveries later.</value>
     </labels>
     <labels>
         <fullName>Delete_Sessions_Success</fullName>
@@ -549,6 +605,13 @@
         <value>No records selected</value>
     </labels>
     <labels>
+        <fullName>Only_Showing_Future_Sessions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Note about sessions displayed when adding sessions.</shortDescription>
+        <value>Showing all future Sessions. To modify previously added Sessions, go to the Service Sessions list.</value>
+    </labels>
+    <labels>
         <fullName>Owner_Field</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -632,6 +695,20 @@
         <shortDescription>You have rows with errors</shortDescription>
         <value>There are Service Delivery rows with errors.</value>
     </labels>
+    <labels>
+        <fullName>Start_Date_After_Last_Session</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter a {Start Date Label} after {Date of last session}</shortDescription>
+        <value>Enter a {0} after {1}</value>
+    </labels> 
+    <labels>
+        <fullName>Start_Date_After_Today</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter a {Start Date Label} on or after today&apos;s date</shortDescription>
+        <value>Enter a {0} on or after today&apos;s date</value>
+    </labels>       
     <labels>
         <fullName>Update</fullName>
         <language>en_US</language>
@@ -1004,5 +1081,12 @@
         <protected>true</protected>
         <shortDescription>Warning</shortDescription>
         <value>Warning</value>
+    </labels>
+    <labels>
+        <fullName>Action</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Action</shortDescription>
+        <value>Action</value>
     </labels>
 </CustomLabels>

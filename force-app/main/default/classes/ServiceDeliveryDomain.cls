@@ -28,6 +28,24 @@ public with sharing class ServiceDeliveryDomain {
         updateServiceDeliveries(deliveriesToUpdate);
     }
 
+    public void deleteServiceDeliveries(List<ServiceDelivery__c> serviceDeliveries) {
+        if (serviceDeliveries.isEmpty()) {
+            return;
+        }
+
+        if (
+            !PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.DELETEABLE
+                )
+        ) {
+            throw new ServiceDeliveryDomainException(Label.Delete_Operation_Exception);
+        }
+
+        delete serviceDeliveries;
+    }
+
     public void insertServiceDeliveries(List<ServiceDelivery__c> serviceDeliveries) {
         if (serviceDeliveries.isEmpty()) {
             return;

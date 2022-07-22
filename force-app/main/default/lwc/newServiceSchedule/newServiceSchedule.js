@@ -8,7 +8,7 @@
  */
 
 import { LightningElement, api, track, wire } from "lwc";
-import { format } from "c/util";
+import { format, formatTime } from "c/util";
 import { getRecord } from "lightning/uiRecordApi";
 import { loadStyle } from "lightning/platformResourceLoader";
 import getDayNum from "@salesforce/apex/ServiceScheduleCreatorController.getDayNum";
@@ -18,8 +18,14 @@ import LOCALE from "@salesforce/i18n/locale";
 
 import NO_END_LABEL from "@salesforce/label/c.Select_Service_Schedule_End_Date_Or_Service_Session_Number_Warning";
 import START_BEFORE_END_LABEL from "@salesforce/label/c.End_Date_After_Start_Date";
+import START_AFTER_LAST_SESSION_LABEL from "@salesforce/label/c.Start_Date_After_Last_Session";
+import START_AFTER_TODAY_LABEL from "@salesforce/label/c.Start_Date_After_Today";
 import DAY_REQUIRED_LABEL from "@salesforce/label/c.Day_Required_When_Weekly_Selected";
 import DEFAULT_SERVICE_QUANTITY from "@salesforce/schema/ServiceSchedule__c.DefaultServiceQuantity__c";
+import FREQUENCY from "@salesforce/schema/ServiceSchedule__c.Frequency__c";
+import DAYS_OF_WEEK from "@salesforce/schema/ServiceSchedule__c.DaysOfWeek__c";
+import SESSION_START from "@salesforce/schema/ServiceSession__c.SessionStart__c";
+import SESSION_END from "@salesforce/schema/ServiceSession__c.SessionEnd__c";
 import UNIT_MEASUREMENT_FIELD from "@salesforce/schema/Service__c.UnitOfMeasurement__c";
 import EVERY_LABEL from "@salesforce/label/c.Every_Custom";
 import DAY_LABEL from "@salesforce/label/c.Day";
@@ -31,6 +37,7 @@ import MONTHS_LABEL from "@salesforce/label/c.Months";
 import LAST_DAY_OF_MONTH_LABEL from "@salesforce/label/c.Last_Day_Of_Month";
 import MONTHLY_ON_DAY_LABEL from "@salesforce/label/c.Monthly_On_Day";
 import MONTHLY_ON_THE_LABEL from "@salesforce/label/c.Monthly_On_The";
+import ADD_SESSIONS_MESSAGE from "@salesforce/label/c.Add_Sessions_Message";
 
 const WEEKLY = "Weekly";
 const MONTHLY = "Monthly";
@@ -43,6 +50,9 @@ const LASTDAY = "LastDayOfMonth";
 const LARGE_SIZE = 12;
 const SMALL_SIZE = 6;
 const DAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+const MULTI_SELECT_DELIM = ";";
+const TIME = "TIME";
+
 export default class NewServiceSchedule extends LightningElement {
     @api recordTypeId;
     @api serviceId;
@@ -66,6 +76,7 @@ export default class NewServiceSchedule extends LightningElement {
         lastDayOfMonth: LAST_DAY_OF_MONTH_LABEL,
         monthlyOnDay: MONTHLY_ON_DAY_LABEL,
         monthlyOnThe: MONTHLY_ON_THE_LABEL,
+        addSessionsMessage: ADD_SESSIONS_MESSAGE,
     };
     sizes = {
         large: LARGE_SIZE,
@@ -88,6 +99,47 @@ export default class NewServiceSchedule extends LightningElement {
         return this._serviceScheduleModel;
     }
 
+    get editingExistingSchedule() {
+        if (this._serviceScheduleModel.serviceSchedule.Id) {
+            return true;
+        }
+        return false;
+    }
+
+    get useMinimumStartAfterLastSession() {
+        if (
+            this.editingExistingSchedule &&
+            this._serviceScheduleModel.serviceSessions &&
+            this._serviceScheduleModel.serviceSessions.length > 0
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    get minimumStartDate() {
+        let minStartDatetime = new Date();
+        if (this.useMinimumStartAfterLastSession) {
+            let lastSession = this._serviceScheduleModel.serviceSessions.reduce(function(
+                prev,
+                curr
+            ) {
+                return prev[SESSION_END.fieldApiName] > curr[SESSION_END.fieldApiName]
+                    ? prev
+                    : curr;
+            });
+            // use the date values from session end in case session spans more than one calendar date
+            minStartDatetime = new Date(lastSession[SESSION_END.fieldApiName]);
+            minStartDatetime.setHours(
+                new Date(lastSession[SESSION_START.fieldApiName]).getHours()
+            );
+            minStartDatetime.setMinutes(
+                new Date(lastSession[SESSION_START.fieldApiName]).getMinutes()
+            );
+        }
+        return minStartDatetime;
+    }
+
     set serviceScheduleModel(value) {
         // This is a nested object so the inner objects are still read only when using spread alone
         this._serviceScheduleModel = JSON.parse(JSON.stringify(value));
@@ -99,8 +151,35 @@ export default class NewServiceSchedule extends LightningElement {
         this.objectApiName = this._serviceScheduleModel.labels.serviceSchedule.objectApiName;
         this.requiredFields = this._serviceScheduleModel.scheduleRequiredFields;
         this.dateFields = this._serviceScheduleModel.scheduleRecurrenceDateFields;
-        this.picklistFields = this._serviceScheduleModel.scheduleRecurrencePicklistFields;
+        this.picklistFields = {
+            ...this._serviceScheduleModel.scheduleRecurrencePicklistFields,
+        };
         this.fieldSet = this._serviceScheduleModel.scheduleInformationFields;
+
+        // Write values from service schedule to local properties
+        if (this.editingExistingSchedule) {
+            if (this._serviceScheduleModel.serviceSchedule[FREQUENCY.fieldApiName]) {
+                this.picklistFields.frequency.value = this._serviceScheduleModel.serviceSchedule[
+                    FREQUENCY.fieldApiName
+                ];
+            }
+            if (this._serviceScheduleModel.serviceSchedule[DAYS_OF_WEEK.fieldApiName]) {
+                this.picklistFields.daysOfWeek.value = this._serviceScheduleModel.serviceSchedule[
+                    DAYS_OF_WEEK.fieldApiName
+                ];
+                let selectedValues = this.picklistFields.daysOfWeek.picklistValues.filter(
+                    option =>
+                        this._serviceScheduleModel.serviceSchedule[
+                            DAYS_OF_WEEK.fieldApiName
+                        ]
+                            .split(MULTI_SELECT_DELIM)
+                            .includes(option.value)
+                );
+                selectedValues.forEach(element => {
+                    element.isSelected = true;
+                });
+            }
+        }
 
         this.processFields();
 
@@ -110,6 +189,8 @@ export default class NewServiceSchedule extends LightningElement {
     @api reportValidity() {
         let errMessages = [];
         let datesValid = true;
+        let startDateAfterLastSession = true;
+        let startDateAfterTodayWhenRequired = true;
 
         let isFormValid = [
             ...this.template.querySelectorAll("lightning-input-field"),
@@ -119,6 +200,15 @@ export default class NewServiceSchedule extends LightningElement {
 
         if (this.dateFields.start.value) {
             datesValid = this.dateFields.start.value < this.dateFields.end.value;
+            if (this.useMinimumStartAfterLastSession) {
+                startDateAfterLastSession =
+                    new Date(this.dateFields.start.value) >
+                    new Date(this.minimumStartDate);
+            }
+            if (this.editingExistingSchedule) {
+                startDateAfterTodayWhenRequired =
+                    new Date(this.dateFields.start.value) >= new Date();
+            }
         }
 
         let hasEndCondition = this.validateServiceScheduleOnOrAfter();
@@ -138,6 +228,21 @@ export default class NewServiceSchedule extends LightningElement {
             );
         }
 
+        if (!startDateAfterLastSession) {
+            errMessages.push(
+                format(START_AFTER_LAST_SESSION_LABEL, [
+                    this.dateFields.start.label,
+                    new Date(this.minimumStartDate).toDateString(),
+                ])
+            );
+        }
+
+        if (!startDateAfterTodayWhenRequired) {
+            errMessages.push(
+                format(START_AFTER_TODAY_LABEL, [this.dateFields.start.label])
+            );
+        }
+
         if (!hasEndCondition) {
             errMessages.push(NO_END_LABEL);
         }
@@ -148,7 +253,13 @@ export default class NewServiceSchedule extends LightningElement {
 
         this.errorMessage = errMessages.join("\n");
 
-        this.isValid = isFormValid && datesValid && hasEndCondition && hasDayOfWeek;
+        this.isValid =
+            isFormValid &&
+            datesValid &&
+            startDateAfterLastSession &&
+            startDateAfterTodayWhenRequired &&
+            hasEndCondition &&
+            hasDayOfWeek;
 
         if (!this.isValid) {
             let layout = this.template.querySelector("lightning-layout");
@@ -178,7 +289,9 @@ export default class NewServiceSchedule extends LightningElement {
                 DEFAULT_SERVICE_QUANTITY.fieldApiName
             ] = this.defaultServiceQuantity;
         }
-
+        if (this._serviceScheduleModel.serviceSchedule.Id) {
+            serviceSchedule.Id = this._serviceScheduleModel.serviceSchedule.Id;
+        }
         return serviceSchedule;
     }
 
@@ -213,6 +326,10 @@ export default class NewServiceSchedule extends LightningElement {
                 let field = { ...member };
                 field.size = SMALL_SIZE;
                 field.value = this._serviceScheduleModel.serviceSchedule[field.apiName];
+                if (field.type === TIME && field.value !== null && field.value >= 0) {
+                    field.value = formatTime(field.value);
+                }
+
                 return field;
             });
 
@@ -228,13 +345,33 @@ export default class NewServiceSchedule extends LightningElement {
     }
 
     handleLoad() {
-        if (this.dateFields.end.value) {
+        if (this.dateFields.end.value && !this.editingExistingSchedule) {
             return;
         }
 
         this.template.querySelectorAll("lightning-input-field").forEach(field => {
             if (field.fieldName === this.dateFields.start.apiName) {
-                this.setFirstSessionStartTimeAndEndTime(field.value);
+                let initialStartDate = new Date(field.value);
+                if (this.editingExistingSchedule) {
+                    let today = new Date();
+                    initialStartDate.setMonth(today.getMonth());
+                    initialStartDate.setDate(today.getDate());
+                    initialStartDate.setFullYear(today.getFullYear());
+                    if (this.isMonthly) {
+                        this.handleMonthlyRecurrenceOptions(initialStartDate);
+                    }
+                }
+                if (this.useMinimumStartAfterLastSession) {
+                    let minimumStartDateValue = new Date(
+                        Date.parse(this.minimumStartDate) + 86400 * 1000
+                    );
+                    initialStartDate =
+                        initialStartDate > minimumStartDateValue
+                            ? initialStartDate
+                            : minimumStartDateValue;
+                }
+
+                this.setFirstSessionStartTimeAndEndTime(initialStartDate);
             }
         });
 
@@ -341,14 +478,16 @@ export default class NewServiceSchedule extends LightningElement {
             return;
         }
 
-        await getDayNum({ fullDateTime: this.dateFields.start.value }).then(
-            result => (this.picklistFields.daysOfWeek.value = result.toString())
-        );
+        if (!this.picklistFields.daysOfWeek.value) {
+            await getDayNum({ fullDateTime: this.dateFields.start.value }).then(
+                result => (this.picklistFields.daysOfWeek.value = result.toString())
+            );
+        }
     }
 
     handleDaysOfWeekChange(event) {
         this.picklistFields.daysOfWeek.value = event.detail.length
-            ? event.detail.map(selection => selection.value).join(";")
+            ? event.detail.map(selection => selection.value).join(MULTI_SELECT_DELIM)
             : undefined;
     }
 
@@ -365,8 +504,7 @@ export default class NewServiceSchedule extends LightningElement {
         if (!event.detail.value) {
             this.dateFields.end.value = null;
         } else {
-            this.dateFields.start.value = event.detail.value;
-            this.setFirstSessionStartTimeAndEndTime(this.dateFields.start.value);
+            this.setFirstSessionStartTimeAndEndTime(event.detail.value);
         }
         this.defaultDayOfWeek();
 

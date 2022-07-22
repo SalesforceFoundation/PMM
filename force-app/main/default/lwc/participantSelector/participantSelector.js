@@ -8,7 +8,7 @@
  */
 
 import { LightningElement, track, api, wire } from "lwc";
-import { format } from "c/util";
+import { format, formatTime } from "c/util";
 import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
@@ -16,6 +16,7 @@ import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorCo
 import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 
 import addRecord from "@salesforce/label/c.Add_Record";
+import loading from "@salesforce/label/c.Loading";
 import selectContacts from "@salesforce/label/c.BSDT_Select_Contacts";
 import selectedContacts from "@salesforce/label/c.BSDT_Selected_Contacts";
 import capacityWarning from "@salesforce/label/c.Participant_Capacity_Warning";
@@ -33,6 +34,11 @@ import save from "@salesforce/label/c.Save";
 import saveAndNew from "@salesforce/label/c.Save_New";
 import cantFind from "@salesforce/label/c.Cant_Find_Participant";
 import newLabel from "@salesforce/label/c.New";
+import actionLabel from "@salesforce/label/c.Action";
+import removeLabel from "@salesforce/label/c.Remove";
+
+const TIME = "TIME";
+const SEARCH_DELAY = 1000;
 
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
@@ -62,6 +68,9 @@ export default class ParticipantSelector extends LightningElement {
     rendered = false;
     offsetRows = 50;
     offset = this.offsetRows;
+    showSpinner = false;
+
+    _searchTimeout;
 
     labels = {
         selectContacts,
@@ -80,6 +89,9 @@ export default class ParticipantSelector extends LightningElement {
         cancel,
         cantFind,
         newLabel,
+        actionLabel,
+        removeLabel,
+        loading,
     };
 
     @api
@@ -203,6 +215,12 @@ export default class ParticipantSelector extends LightningElement {
                 // Flatten relationship fields
                 let programEngagement = { ...engagement };
                 for (const [field, value] of Object.entries(programEngagement)) {
+                    let isTimeField =
+                        this.fieldByFieldPath[field] &&
+                        this.fieldByFieldPath[field].type === TIME;
+                    if (isTimeField) {
+                        programEngagement[field] = formatTime(value);
+                    }
                     if (typeof value === "object") {
                         for (const [parentField, parentValue] of Object.entries(value)) {
                             programEngagement[field + parentField] = parentValue;
@@ -271,6 +289,7 @@ export default class ParticipantSelector extends LightningElement {
         this.previouslySelectedEngagements = [...this.previouslySelectedEngagements];
         this.availableEngagementRows.forEach(row => {
             if (
+                this.existingContactIds &&
                 this.existingContactIds.includes(
                     row[PROGRAM_ENGAGEMENT_CONTACT_FIELD.fieldApiName]
                 )
@@ -311,7 +330,7 @@ export default class ParticipantSelector extends LightningElement {
             this.selectorColumns = [...this.columns];
 
             this.selectorColumns.push({
-                fieldName: "",
+                label: this.labels.actionLabel,
                 type: "button",
                 hideDefaultActions: true,
                 typeAttributes: {
@@ -330,7 +349,7 @@ export default class ParticipantSelector extends LightningElement {
 
         this.selectedColumns = this.columns.slice(0, min);
         this.selectedColumns.push({
-            fieldName: "",
+            label: this.labels.actionLabel,
             type: "button-icon",
             hideDefaultActions: true,
             typeAttributes: {
@@ -338,6 +357,7 @@ export default class ParticipantSelector extends LightningElement {
                 variant: "bare",
                 iconPosition: "left",
                 disabled: { fieldName: "disableDeselect" },
+                alternativeText: this.labels.removeLabel,
             },
         });
     }
@@ -432,7 +452,25 @@ export default class ParticipantSelector extends LightningElement {
 
     handleInputChange(event) {
         this.searchValue = event.target.value;
-        this.applyFilters();
+        this.debounceSearch();
+    }
+
+    debounceSearch() {
+        this.resetTimeout();
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        this._searchTimeout = setTimeout(this.startFilter.bind(this), SEARCH_DELAY);
+    }
+
+    resetTimeout() {
+        if (this._searchTimeout) {
+            clearTimeout(this._searchTimeout);
+        }
+    }
+
+    startFilter() {
+        this.displaySpinner();
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(this.applyFilters.bind(this));
     }
 
     applyFilters() {
@@ -452,6 +490,16 @@ export default class ParticipantSelector extends LightningElement {
             0,
             Math.min(this.filteredEngagements.length, this.offset)
         );
+
+        this.hideSpinner();
+    }
+
+    displaySpinner() {
+        this.showSpinner = true;
+    }
+
+    hideSpinner() {
+        this.showSpinner = false;
     }
 
     dispatchSelectEvent() {

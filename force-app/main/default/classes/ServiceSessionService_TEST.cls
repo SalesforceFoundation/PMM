@@ -14,8 +14,12 @@ public with sharing class ServiceSessionService_TEST {
 
     private static TestStub bucketSelectorStub;
 
-    private static BasicStub serviceSelectorStub = new BasicStub(
+    private static BasicStub sessionSelectorStub = new BasicStub(
         ServiceSessionSelector.class
+    );
+
+    private static BasicStub sessionDomainStub = new BasicStub(
+        ServiceSessionDomain.class
     );
 
     private static ServiceSessionService service = new ServiceSessionService();
@@ -59,10 +63,10 @@ public with sharing class ServiceSessionService_TEST {
             new List<ServiceSession__c>{ expectedSessions[1] }
         );
 
-        serviceSelectorStub.withReturnValue(methodName, String.class, expectedSessions);
+        sessionSelectorStub.withReturnValue(methodName, String.class, expectedSessions);
 
         Test.startTest();
-        service.serviceSessionSelector = (ServiceSessionSelector) serviceSelectorStub.createMock();
+        service.serviceSessionSelector = (ServiceSessionSelector) sessionSelectorStub.createMock();
 
         Map<String, List<ServiceSession__c>> actual = service.getServiceSessionsByStartDate(
             dateLiteral
@@ -87,7 +91,7 @@ public with sharing class ServiceSessionService_TEST {
             'Actual result does not have the key'
         );
 
-        serviceSelectorStub.assertCalledWith(methodName, String.class, dateLiteral);
+        sessionSelectorStub.assertCalledWith(methodName, String.class, dateLiteral);
     }
 
     @IsTest
@@ -128,6 +132,24 @@ public with sharing class ServiceSessionService_TEST {
         );
 
         bucketSelectorStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void shouldSendSessionToDomainForUpdate() {
+        String updateServiceSession = 'updateServiceSession';
+        ServiceSession__c session = new ServiceSession__c();
+
+        service.serviceSessionDomain = (ServiceSessionDomain) sessionDomainStub.createMock();
+
+        Test.startTest();
+        service.updateServiceSession(session);
+        Test.stopTest();
+
+        sessionDomainStub.assertCalledWith(
+            updateServiceSession,
+            ServiceSession__c.class,
+            session
+        );
     }
 
     private static List<Bucket__mdt> createStatusBuckets() {

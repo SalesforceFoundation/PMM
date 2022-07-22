@@ -10,6 +10,10 @@
 public with sharing class ServiceScheduleModel {
     @TestVisible
     private FieldSetService fieldSetService = new FieldSetService();
+
+    @TestVisible
+    private ServiceScheduleSelector scheduleSelector = new ServiceScheduleSelector();
+
     private static final String SCHEDULE_FIELD_SET_NAME = 'ServiceScheduleInformation';
     private static final String PROGRAM_ENGAGEMENT_FIELD_SET_NAME = 'SessionParticipantView';
     private static final Integer DEFAULT_MAX_SESSIONS = 500;
@@ -103,14 +107,21 @@ public with sharing class ServiceScheduleModel {
     public List<Map<String, Object>> engagementFields = new List<Map<String, Object>>();
 
     public ServiceScheduleModel() {
-        this(null);
+        this(null, null);
     }
 
-    public ServiceScheduleModel(Id recordTypeId) {
-        serviceSchedule = (ServiceSchedule__c) ServiceSchedule__c.SObjectType.newSObject(
-            recordTypeId,
-            true
-        );
+    public ServiceScheduleModel(Id serviceScheduleId, Id recordTypeId) {
+        if (serviceScheduleId == null) {
+            serviceSchedule = (ServiceSchedule__c) ServiceSchedule__c.SObjectType.newSObject(
+                recordTypeId,
+                true
+            );
+        } else {
+            serviceSchedule = scheduleSelector.getServiceScheduleFromId(
+                serviceScheduleId
+            );
+        }
+
         serviceSessions = new List<ServiceSession__c>();
         selectedEngagements = new List<ProgramEngagement__c>();
         serviceParticipants = new List<ServiceParticipant__c>();
@@ -133,18 +144,23 @@ public with sharing class ServiceScheduleModel {
         );
     }
 
+    public void addServiceSessions(List<ServiceSession__c> newServiceSessions) {
+        serviceSessions.addAll(newServiceSessions);
+    }
+
     private static Map<String, String> serviceScheduleLabels = new Map<String, String>{
         'newServiceSchedule' => System.Label.New_Service_Schedule,
         'scheduleInformation' => System.Label.Service_Schedule_Information,
         'dateTime' => System.Label.Service_Schedule_Date_Time,
         'loading' => System.Label.Loading,
+        'scheduleInfo' => System.Label.Service_Schedule_Information,
         'addToServiceSchedule' => String.format(
             System.Label.Add_To_Record,
             new List<String>{ ServiceSchedule__c.SObjectType.getDescribe().getLabel() }
         ),
         'reviewSchedule' => String.format(
             System.Label.Review_Records,
-            new List<String>{ ServiceSession__c.SObjectType.getDescribe().getLabel() }
+            new List<String>{ ServiceSchedule__c.SObjectType.getDescribe().getLabel() }
         ),
         'serviceObjectApiName' => Service__c.SObjectType.getDescribe().getName()
     };

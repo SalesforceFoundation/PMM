@@ -7,6 +7,20 @@
  *
  */
 
-.small-box {
+.small-box,
+.shaded-box {
     padding: var(--lwc-varSpacingXxxSmall, 0.125rem);
+}
+.shaded-box {
+    background-image: linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.025) 25%,
+        transparent 0,
+        transparent 50%,
+        rgba(0, 0, 0, 0.025) 0,
+        rgba(0, 0, 0, 0.025) 75%,
+        transparent 0,
+        transparent
+    );
+    background-size: 64px 64px;
 }

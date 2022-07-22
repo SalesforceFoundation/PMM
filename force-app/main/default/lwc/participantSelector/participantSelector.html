@@ -9,7 +9,7 @@
 
 <!-- sldsValidatorIgnore -->
 <template>
-    <c-section title={title} if:true={isLoaded}></c-section>
+    <c-section title={title} focus-heading if:true={isLoaded}></c-section>
     <lightning-layout if:true={isLoaded} multiple-rows="true" horizontal-align="center">
         <lightning-layout-item
             if:true={showCapacityWarning}
@@ -82,8 +82,22 @@
                                     >
                                         <div
                                             style="height: 331px"
-                                            class="slds-border_top slds-var-m-top_xx-small"
+                                            class="slds-border_top slds-var-m-top_xx-small slds-is-relative"
                                         >
+                                            <lightning-layout-item
+                                                if:true={showSpinner}
+                                                class="slds-is-absolute spinner-container"
+                                            >
+                                                <div
+                                                    class="slds-is-relative spinner-container"
+                                                >
+                                                    <lightning-spinner
+                                                        alternative-text={labels.loading}
+                                                        size="medium"
+                                                        variant="brand"
+                                                    ></lightning-spinner>
+                                                </div>
+                                            </lightning-layout-item>
                                             <lightning-datatable
                                                 data={availableEngagementsForSelection}
                                                 key-field="Id"

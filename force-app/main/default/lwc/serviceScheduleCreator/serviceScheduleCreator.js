@@ -14,6 +14,7 @@ import { handleError } from "c/util";
 import { ProgressSteps } from "c/progressSteps";
 import { NavigationItems } from "c/navigationItems";
 import getServiceScheduleModel from "@salesforce/apex/ServiceScheduleCreatorController.getServiceScheduleModel";
+import getExistingParticipantContactIds from "@salesforce/apex/ServiceScheduleCreatorController.getExistingParticipantContactIds";
 import persist from "@salesforce/apex/ServiceScheduleCreatorController.persist";
 
 import SAVE_LABEL from "@salesforce/label/c.Save";
@@ -29,7 +30,9 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceSchedule__c.Service__c";
 export default class ServiceScheduleCreator extends NavigationMixin(LightningElement) {
     @track hideSpinner = false;
     @api recordTypeId;
+    @api recordId;
     @api isCommunity;
+    @track existingParticipants;
     isSaving = false;
     isLoaded = false;
     serviceScheduleModel;
@@ -50,13 +53,16 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     _currentStep;
     _steps = new ProgressSteps();
     _serviceSchedules = [];
+    _netNewParticipantProgramEngagements;
 
-    @wire(getServiceScheduleModel, { recordTypeId: "$recordTypeId" })
+    @wire(getServiceScheduleModel, {
+        serviceScheduleId: "$serviceScheduleId",
+        recordTypeId: "$serviceScheduleRecordTypeId",
+    })
     wireServiceScheduleModel(result) {
         if (!result) {
             return;
         }
-
         if (result.data) {
             this.originalModel = result.data;
             this.init();
@@ -67,6 +73,27 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
         } else if (result.error) {
             console.log(JSON.stringify(result.error));
         }
+    }
+
+    @wire(getExistingParticipantContactIds, { scheduleId: "$recordId" })
+    wiredExistingParticipants(result) {
+        if (!(result.data || result.error)) {
+            return;
+        }
+
+        if (result.data) {
+            this.existingParticipants = result.data; //cache for refreshing
+        } else {
+            console.log(JSON.stringify(result.error));
+        }
+    }
+
+    get serviceScheduleId() {
+        return this.recordId ? this.recordId : null;
+    }
+
+    get serviceScheduleRecordTypeId() {
+        return this.recordTypeId ? this.recordTypeId : null;
     }
 
     extractLabels(labels) {
@@ -89,7 +116,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     addSteps() {
         this._steps
-            .addStep("", this.labels.newSchedule, new NavigationItems().addNext())
+            .addStep("", this.labels.scheduleInfo, new NavigationItems().addNext())
             .addStep(
                 "",
                 this.serviceScheduleModel.labels.serviceSession.reviewSessions,
@@ -100,15 +127,13 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 this.serviceScheduleModel.labels.serviceParticipant
                     .addServiceParticipants,
                 new NavigationItems().addNext().addBack()
-            )
-            .addStep(
-                "",
-                this.labels.reviewSchedule,
-                new NavigationItems()
-                    .addNext(this.labels.saveNew, "neutral")
-                    .addBack()
-                    .addFinish(this.labels.save)
             );
+        let finalNavItems = new NavigationItems();
+        if (!this.editingExistingSchedule) {
+            finalNavItems.addNext(this.labels.saveNew, "neutral");
+        }
+        finalNavItems.addBack().addFinish(this.labels.save);
+        this._steps.addStep("", this.labels.reviewSchedule, finalNavItems);
     }
 
     @api
@@ -161,9 +186,20 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
     }
 
     get warningModal() {
-        return this.isCommunity
-            ? this.template.querySelector("c-modal")
-            : this.template.querySelector("c-modal c-modal");
+        return this.template
+            .querySelector('[data-id="warning-modal"]')
+            .querySelector("c-modal");
+    }
+
+    get editingExistingSchedule() {
+        if (
+            this.serviceScheduleModel &&
+            this.serviceScheduleModel.serviceSchedule &&
+            this.serviceScheduleModel.serviceSchedule.Id
+        ) {
+            return true;
+        }
+        return false;
     }
 
     handleNext() {
@@ -183,6 +219,9 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             return;
         }
         this.isSaving = true;
+        if (this._netNewParticipantProgramEngagements) {
+            this.serviceScheduleModel.selectedEngagements = this._netNewParticipantProgramEngagements;
+        }
         persist({ model: this.serviceScheduleModel })
             .then(result => {
                 this._serviceSchedules.push(result.serviceSchedule);
@@ -192,6 +231,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                     this.init();
                     this.isLoaded = true;
                     this.hideSpinner = true;
+                    this.serviceId = null;
                 } else {
                     this.handleClose();
                 }
@@ -228,6 +268,7 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
             // Ok to hardcode standard field, cannot import schema since we do not package record types
             this.serviceScheduleModel.serviceSchedule.RecordTypeId = this.recordTypeId;
         }
+
         this._serviceId = this.serviceScheduleModel.serviceSchedule[
             SERVICE_FIELD.fieldApiName
         ];
@@ -255,6 +296,11 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
         if (!(participantSelector && participantSelector.selectedEngagements)) {
             return;
+        }
+
+        if (participantSelector.newParticipantsProgramEngagements) {
+            this._netNewParticipantProgramEngagements =
+                participantSelector.newParticipantsProgramEngagements;
         }
 
         this.hideSpinner = false;
@@ -304,20 +350,36 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
 
     @api
     handleClose() {
-        this.navigate();
+        if (!this.editingExistingSchedule) {
+            this.navigate();
+        } else {
+            this.init();
+        }
         this.dispatchEvent(new CustomEvent("close", { bubbles: true }));
     }
 
-    init() {
+    reset() {
         this.isLoaded = false;
         this.hideSpinner = false;
         this.isSaving = false;
+
+        if (this._steps.all.length > 0) {
+            this._steps = new ProgressSteps();
+            this.addSteps();
+        }
         this._steps.restart();
         this._currentStep = undefined;
+        this._serviceSchedules = [];
+    }
+
+    init() {
+        this.reset();
         this.serviceScheduleModel = JSON.parse(JSON.stringify(this.originalModel));
-        this.serviceScheduleModel.serviceSchedule[
-            SERVICE_FIELD.fieldApiName
-        ] = this.serviceId;
+        if (this.serviceId) {
+            this.serviceScheduleModel.serviceSchedule[
+                SERVICE_FIELD.fieldApiName
+            ] = this.serviceId;
+        }
     }
 
     showModal() {

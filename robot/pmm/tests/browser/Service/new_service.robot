@@ -30,7 +30,7 @@ Setup Test Data
 NS1: Create Service from top nav
     [Documentation]                        This test creates Service record and verifies that the Service record
     ...                                    has all the values from the form
-    [tags]                                  perm:admin   perm:manage    feature:Service
+    [tags]                                  quadrant:Q2   perm:admin   perm:manage    feature:Service
      Go To Page                             Listing                     ${ns}Service__c
      Click Object Button                    New
      Load Page Object                       NewService                  ${ns}Service__c

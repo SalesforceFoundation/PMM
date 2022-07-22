@@ -30,7 +30,7 @@ Setup Test Data
 VSS1: View and Deliver Perm Test for Service Schedule
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Service Schedule(View and Deliver Perm Set)   
-     [tags]                           unstable    perm:view    perm:deliver      feature:ServiceSchedule
+     [tags]                           unstable   quadrant:Q2   perm:view    perm:deliver      feature:ServiceSchedule
      Go To Page                              Listing                               ${ns}ServiceSchedule__c
      Page Should Not Contain Button          New
      Go To Page                              Details              ServiceSchedule__c                    object_id=${service_schedule}[Id]

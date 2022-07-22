@@ -9,7 +9,7 @@
 
 import { LightningElement, api, track, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
-import { handleError } from "c/util";
+import { format, handleError, showToast } from "c/util";
 import { loadStyle } from "lightning/platformResourceLoader";
 
 import { ServiceDeliveryFieldSets } from "./serviceDeliveryFieldSets";
@@ -21,6 +21,9 @@ import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
 import success from "@salesforce/label/c.Success";
 import serviceDeliveriesAdded from "@salesforce/label/c.Service_Deliveries_Added";
+import serviceFieldMessage from "@salesforce/label/c.BSDT_Service_Fields_Message";
+import savingCompleteSuccessMessage from "@salesforce/label/c.BSDT_Saving_Complete_Success_Message";
+import savingCompleteFailureMessage from "@salesforce/label/c.BSDT_Saving_Complete_Failure_Message";
 import required from "@salesforce/label/c.Required";
 import rowsWithErrors from "@salesforce/label/c.Rows_With_Errors";
 
@@ -45,7 +48,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     serviceDeliveryObject = SERVICEDELIVERY_OBJECT;
     serviceDeliveryFieldSets;
     savedCount;
+    errorCount;
     targetSaveCount;
+    currentSaveCount;
     isSaving = false;
     hideWizard = false;
     applyDefaults = false;
@@ -58,6 +63,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         required,
         success,
         serviceDeliveriesAdded,
+        serviceFieldMessage,
+        savingCompleteSuccessMessage,
+        savingCompleteFailureMessage,
         rowsWithErrors,
         save,
     };
@@ -99,7 +107,13 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     resetUI() {
         this.serviceDeliveries = [];
         this._nextIndex = 0;
-        this.addDelivery();
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(
+            function() {
+                this.addDelivery();
+            }.bind(this),
+            50
+        );
     }
 
     connectedCallback() {
@@ -130,8 +144,41 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         return !this.isModal && !this.hideWizard;
     }
 
+    get savingCompleteMessage() {
+        let successSummary;
+        let failureSummary;
+        if (this.savedCount > 0) {
+            successSummary = format(this.labels.savingCompleteSuccessMessage, [
+                this.savedCount,
+            ]);
+        }
+
+        if (this.errorCount > 0) {
+            failureSummary = format(this.labels.savingCompleteFailureMessage, [
+                this.errorCount,
+            ]);
+        }
+        if (successSummary && failureSummary) {
+            return successSummary + " " + failureSummary;
+        } else if (successSummary) {
+            return successSummary;
+        }
+        return failureSummary;
+    }
+
+    get savingCompleteToastVariant() {
+        if (this.errorCount === 0) {
+            return "success";
+        }
+        return "error";
+    }
+
     addDelivery() {
-        let serviceDelivery = { index: this._nextIndex, isDirty: false };
+        let serviceDelivery = {
+            index: this._nextIndex,
+            isDirty: false,
+            shouldFocus: true,
+        };
         if (this.applyDefaults || this.isModal) {
             Object.assign(serviceDelivery, this.defaultValues);
             serviceDelivery.Id = null;
@@ -150,15 +197,43 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         }
     }
 
+    savingComplete() {
+        if (this.currentSaveCount - this.savedCount - this.errorCount === 0) {
+            return true;
+        }
+        return false;
+    }
+
+    showSaveSummaryToast() {
+        let toastVariant = this.savingCompleteToastVariant;
+        let toastTitle = toastVariant === "success" ? this.labels.success : "";
+
+        showToast(toastTitle, this.savingCompleteMessage, toastVariant, "dismissible");
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    handleRowError(event) {
+        this.errorCount++;
+
+        if (this.savingComplete()) {
+            this.showSaveSummaryToast();
+        }
+    }
+
     handleSave() {
         let rows = this.template.querySelectorAll("c-service-delivery-row");
 
         this.savedCount = 0;
+        this.errorCount = 0;
         this.targetSaveCount = 0;
+        this.currentSaveCount = 0;
 
         rows.forEach(row => {
             if (row.isDirty || row.isError) {
                 this.targetSaveCount++;
+            }
+            if (row.isDirty) {
+                this.currentSaveCount++;
             }
             row.saveRow();
         });
@@ -170,10 +245,12 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
     // eslint-disable-next-line no-unused-vars
     handleRowSuccess(event) {
-        if (!this.isModal) {
-            return;
-        }
         this.savedCount++;
+
+        if (this.savingComplete()) {
+            this.showSaveSummaryToast();
+        }
+
         if (this.savedCount === this.targetSaveCount) {
             this.dispatchEvent(new CustomEvent("done"));
         }

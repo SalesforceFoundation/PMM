@@ -54,7 +54,7 @@ Setup Test Data
 GSD1: Create service delivery using BSDT Wizard
     [Documentation]             Clicks on Create by Group on BSDT, selects default service delivery values, adds contact
     ...                         and creates service delivery using wizard
-    [tags]                      W-9118269    perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                      W-9118269   quadrant:Q3   perm:admin   perm:manage    perm:deliver   feature:Service Delivery
     Go To Page                      Custom                      Bulk_Service_Deliveries
     Click Dialog Button             Create by Group
     Page Should Contain Text        Default Service Delivery Values
@@ -89,7 +89,7 @@ GSD1: Create service delivery using BSDT Wizard
 GSD2: Filter on bsdt wizard based on Program Cohort
     [Documentation]                        On BSDT wizard contact selection screen,filter based on program cohort and 
     ...                                    validate filtered results are displayed on screen 3
-    [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt
+    [tags]                                 W-9303168   quadrant:Q2   perm:admin   perm:manage   feature:bsdt
     Go To Page                              Custom                      Bulk_Service_Deliveries
     Click Dialog Button                     Create by Group
     Page Should Contain Text                Default Service Delivery Values
@@ -108,7 +108,7 @@ GSD2: Filter on bsdt wizard based on Program Cohort
 GSD3: Filter on bsdt wizard based on Client Name
     [Documentation]                        On BSDT wizard contact selection screen,filter based on client name and 
     ...                                    validate filtered results are displayed on screen 3
-    [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt
+    [tags]                                 W-9303168   quadrant:Q2   perm:admin   perm:manage   feature:bsdt
     Go To Page                              Custom                      Bulk_Service_Deliveries
     Click Dialog Button                     Create by Group
     Page Should Contain Text                Default Service Delivery Values
@@ -127,7 +127,7 @@ GSD3: Filter on bsdt wizard based on Client Name
 GSD4: Filter on bsdt wizard based on Stage
     [Documentation]                        On BSDT wizard contact selection screen,filter based on Stage and 
     ...                                    validate no results are displayed on screen 3
-    [tags]                                 W-9303168   perm:admin   perm:manage   feature:bsdt
+    [tags]                                 W-9303168   quadrant:Q2   perm:admin   perm:manage   feature:bsdt
     Go To Page                              Custom                      Bulk_Service_Deliveries
     Click Dialog Button                     Create by Group
     Page Should Contain Text                Default Service Delivery Values

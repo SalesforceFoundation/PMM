@@ -17,6 +17,9 @@
 
         <lightning-card if:false={showWizard}>
             <div class="slds-var-p-horizontal_medium">
+                {labels.serviceFieldMessage}
+            </div>
+            <div class="slds-var-p-horizontal_medium">
                 <template if:true={serviceDeliveryFieldSets}>
                     <template for:each={serviceDeliveries} for:item="delivery">
                         <div
@@ -29,7 +32,9 @@
                                 index={delivery.index}
                                 onsuccess={handleRowSuccess}
                                 ondelete={handleRowDelete}
+                                onerror={handleRowError}
                                 row-count={rowCount}
+                                should-focus={delivery.shouldFocus}
                             ></c-service-delivery-row>
                         </div>
                     </template>

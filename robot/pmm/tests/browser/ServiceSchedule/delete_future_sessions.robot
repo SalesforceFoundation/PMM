@@ -40,7 +40,7 @@ Setup Test Data
 DFS1: Delete Future Service Sessions quick action
     [Documentation]                        Navigates to service schedule details page, clicks delete future service session button,
     ...                                    confirms session has been deleted.
-    [tags]                                 W-9597787     perm:admin   perm:manage    feature:Service Schedule 
+    [tags]                                 W-9597787   quadrant:Q2   perm:admin   perm:manage    feature:Service Schedule 
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule}[Id]
     Verify Details                          Service Schedule Name          contains                   ${service_schedule}[Name]
     Click Quick Action Button               Delete Future Service Sessions

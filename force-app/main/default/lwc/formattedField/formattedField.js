@@ -9,6 +9,7 @@
 
 import { LightningElement, api } from "lwc";
 import TIME_ZONE from "@salesforce/i18n/timeZone";
+import { formatTime } from "c/util";
 
 const NUMBER_TYPES = ["DOUBLE", "INTEGER", "LONG", "CURRENCY"];
 const DATE_TIME = "DATETIME";
@@ -71,15 +72,7 @@ export default class FormattedField extends LightningElement {
         }
 
         if (this.isTime) {
-            let ms = val % 1000;
-            val = (val - ms) / 1000;
-            let secs = val % 60;
-            val = (val - secs) / 60;
-            let mins = val % 60;
-            let hrs = (val - mins) / 60;
-            hrs = hrs < 10 ? "0" + hrs : hrs;
-            mins = mins < 10 ? "0" + mins : mins;
-            val = hrs + ":" + mins + ":00.000Z";
+            val = formatTime(val);
         }
 
         return val;

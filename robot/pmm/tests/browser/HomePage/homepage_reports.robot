@@ -19,19 +19,19 @@ Setup Test Data
 *** Test Cases ***
 HR1: Clients missing phone number report on Homepage
     [Documentation]             Go to homepage and validate 'Clients missing phone number' report is displayed
-    [tags]                      W-8956949   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
+    [tags]                      W-8956949   quadrant:Q2   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                  Home                    Homepage
     Maximize Browser Window
     Page Should Contain         Client Records Missing Phone
 
 HR2: Active Program Engagements report on Homepage
     [Documentation]             Go to homepage and validate 'Active Program Engagements' report is displayed
-    [tags]                      W-8956949   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
+    [tags]                      W-8956949   quadrant:Q2   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                  Home                    Homepage
     Page Should Contain         All Active Program Engagements 
 
 HR3: Services Delivered report on Homepage
     [Documentation]             Go to homepage and validate 'Services Delivered (Year to Date)' report is displayed
-    [tags]                      W-8956949   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
+    [tags]                      W-8956949   quadrant:Q2   perm:admin   perm:manage   perm:deliver   perm:view   feature:Homepage
     Go to Page                  Home                    Homepage
     Page Should Contain         Services Delivered (Year to Date)

@@ -15,6 +15,26 @@ public with sharing class ServiceSessionSelector {
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
+    public List<ServiceSession__c> getFutureServiceSessionsForServiceSchedule(
+        Id serviceScheduleId
+    ) {
+        List<ServiceSession__c> serviceSessions = new List<ServiceSession__c>();
+
+        if (!Schema.SObjectType.ServiceSession__c.isAccessible()) {
+            return serviceSessions;
+        }
+
+        serviceSessions = [
+            SELECT Id, Name, Status__c, SessionStart__c, SessionEnd__c, ServiceSchedule__c
+            FROM ServiceSession__c
+            WHERE ServiceSchedule__c = :serviceScheduleId AND SessionStart__c >= TODAY
+            ORDER BY SessionStart__c
+        ];
+
+        return Security.stripInaccessible(AccessType.READABLE, serviceSessions)
+            .getRecords();
+    }
+
     public List<ServiceSession__c> getServiceSessionsByStartDate(String dateLiteral) {
         List<ServiceSession__c> allSessions = new List<ServiceSession__c>();
         Set<String> allowedSessionStatuses = getAllowedServiceSessionStatusValues();

@@ -75,6 +75,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api rowCount;
     @api isDirty = false;
     @api isError;
+    @api shouldFocus = false;
 
     @track fieldSet;
 
@@ -202,6 +203,27 @@ export default class ServiceDeliveryRow extends LightningElement {
             : this.serviceDeliveryFieldSets.currentFieldSetName;
         this.setCurrentFieldSet(fieldSetName);
         this.setDefaults();
+        this.handleFocus();
+    }
+
+    handleFocus() {
+        if (this.shouldFocus) {
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(
+                function() {
+                    this.focusFirstInput();
+                }.bind(this),
+                50
+            );
+            this.shouldFocus = false;
+        }
+    }
+
+    focusFirstInput() {
+        let firstInput = this.template.querySelector("lightning-input-field");
+        if (firstInput) {
+            firstInput.focus();
+        }
     }
 
     // Called by lightning input field; when selections are filtered they
@@ -252,24 +274,26 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     handleSaveError(event) {
-        if (
-            JSON.stringify(event.detail).includes("UNABLE_TO_LOCK_ROW") &&
-            this.errorRetryCount < this.errorRetryMax
-        ) {
-            this.errorRetryCount++;
-            this.saveRow();
-            return;
+        if (!this.isError) {
+            if (
+                JSON.stringify(event.detail).includes("UNABLE_TO_LOCK_ROW") &&
+                this.errorRetryCount < this.errorRetryMax
+            ) {
+                this.errorRetryCount++;
+                this.saveRow();
+                return;
+            }
+
+            this.errorMessage = handleError(event, false, "dismissible", true);
+            this.errorRetryCount = 0;
+            this.isDirty = false;
+            this.isSaving = false;
+            this.isSaved = false;
+            this.isError = true;
+
+            event.detail.index = this.index;
+            this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
         }
-
-        this.errorMessage = handleError(event, false, "dismissible", true);
-        this.errorRetryCount = 0;
-        this.isDirty = false;
-        this.isSaving = false;
-        this.isSaved = false;
-        this.isError = true;
-
-        event.detail.index = this.index;
-        this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
     }
 
     handleSuccess(event) {
@@ -282,17 +306,29 @@ export default class ServiceDeliveryRow extends LightningElement {
     handleSubmit(event) {
         let fields = event.detail.fields;
 
-        if (this.programEngagementId) {
-            fields[PROGRAMENGAGEMENT_FIELD.fieldApiName] = this.programEngagementId;
+        if (this.hasProgramEngagementField && !this.programEngagementId) {
+            this.isError = true;
+            this.errorMessage = handleError(
+                this.labels.selectEngagement,
+                false,
+                "dismissible",
+                true
+            );
         }
 
-        if (this.serviceId) {
-            fields[SERVICE_FIELD.fieldApiName] = this.serviceId;
+        if (!this.isError) {
+            if (this.programEngagementId) {
+                fields[PROGRAMENGAGEMENT_FIELD.fieldApiName] = this.programEngagementId;
+            }
+
+            if (this.serviceId) {
+                fields[SERVICE_FIELD.fieldApiName] = this.serviceId;
+            }
+
+            this.template.querySelector("lightning-record-edit-form").submit(fields);
+
+            this.setSaving();
         }
-
-        this.template.querySelector("lightning-record-edit-form").submit(fields);
-
-        this.setSaving();
     }
 
     handleSaveNewPE(event) {

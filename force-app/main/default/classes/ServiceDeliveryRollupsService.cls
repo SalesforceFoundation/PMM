@@ -3,13 +3,15 @@ public with sharing class ServiceDeliveryRollupsService {
         Service__c.SObjectType => Service__c.NumPresentServiceDeliveries__c,
         Contact.SObjectType => Contact.NumPresentServiceDeliveries__c,
         ServiceSession__c.SObjectType => ServiceSession__c.NumPresentServiceDeliveries__c,
-        ProgramEngagement__c.SObjectType => ProgramEngagement__c.NumPresentServiceDeliveries__c
+        ProgramEngagement__c.SObjectType => ProgramEngagement__c.NumPresentServiceDeliveries__c,
+        ServiceSchedule__c.SObjectType => ServiceSchedule__c.NumPresentServiceDeliveries__c
     };
     private static final Map<SObjectType, SObjectField> NUM_ABSENT_FIELD_BY_SOBJECT_TYPE = new Map<SObjectType, SObjectField>{
         Service__c.SObjectType => Service__c.NumAbsentServiceDeliveries__c,
         Contact.SObjectType => Contact.NumAbsentServiceDeliveries__c,
         ServiceSession__c.SObjectType => ServiceSession__c.NumAbsentServiceDeliveries__c,
-        ProgramEngagement__c.SObjectType => ProgramEngagement__c.NumAbsentServiceDeliveries__c
+        ProgramEngagement__c.SObjectType => ProgramEngagement__c.NumAbsentServiceDeliveries__c,
+        ServiceSchedule__c.SObjectType => ServiceSchedule__c.NumAbsentServiceDeliveries__c
     };
     private static final Map<SObjectType, SObjectField> CONSECUTIVE_ABSENCES_FIELD_BY_SOBJECT_TYPE = new Map<SObjectType, SObjectField>{
         Contact.SObjectType => Contact.ConsecutiveAbsences__c,
@@ -23,13 +25,15 @@ public with sharing class ServiceDeliveryRollupsService {
         Contact.SObjectType => ServiceDelivery__c.Contact__c,
         ProgramEngagement__c.SObjectType => ServiceDelivery__c.ProgramEngagement__c,
         ServiceSession__c.SObjectType => ServiceDelivery__c.ServiceSession__c,
-        Service__c.SObjectType => ServiceDelivery__c.Service__c
+        Service__c.SObjectType => ServiceDelivery__c.Service__c,
+        ServiceSchedule__c.SObjectType => ServiceDelivery__c.ServiceSchedule__c
     };
     private static Map<String, SObjectField> LOOKUP_FIELD_BY_FEATURE = new Map<String, SObjectField>{
         'ServiceDeliveriesToContact' => ServiceDelivery__c.Contact__c,
         'ServiceDeliveriesToService' => ServiceDelivery__c.Service__c,
         'ServiceDeliveriesToServiceSession' => ServiceDelivery__c.ServiceSession__c,
-        'ServiceDeliveriesToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c
+        'ServiceDeliveriesToProgramEngagement' => ServiceDelivery__c.ProgramEngagement__c,
+        'ServiceDeliveriesToServiceSchedule' => ServiceDelivery__c.ServiceSchedule__c
     };
 
     @TestVisible
@@ -38,7 +42,8 @@ public with sharing class ServiceDeliveryRollupsService {
         ServiceDelivery__c.Contact__c => new Set<Id>(),
         ServiceDelivery__c.Service__c => new Set<Id>(),
         ServiceDelivery__c.ServiceSession__c => new Set<Id>(),
-        ServiceDelivery__c.ProgramEngagement__c => new Set<Id>()
+        ServiceDelivery__c.ProgramEngagement__c => new Set<Id>(),
+        ServiceDelivery__c.ServiceSchedule__c => new Set<Id>()
     };
     @TestVisible
     private Map<Id, RollupRecord> rollupRecordById = new Map<Id, RollupRecord>();
@@ -168,6 +173,7 @@ public with sharing class ServiceDeliveryRollupsService {
         SObjectField lookupField = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
             sObjectType
         );
+
         return systemAccess.getDeliveryRollupsQuery(String.valueOf(lookupField));
     }
 
@@ -237,6 +243,7 @@ public with sharing class ServiceDeliveryRollupsService {
         SObjectField lookupField = SERVICE_DELIVERY_LOOKUP_BY_PARENT_OBJECT.get(
             sObjectType
         );
+
         Set<Id> recordIdsWithoutDeliveries = new Set<Id>();
         List<SObject> recordsWithDeliveries = systemAccess.getParentsHavingDeliveries(
             sObjectType,
@@ -368,7 +375,6 @@ public with sharing class ServiceDeliveryRollupsService {
                 rollupRecord.process();
                 parentRecords.add(rollupRecord.getSObject());
             }
-
             systemAccess.updateRecords(parentRecords);
         }
     }

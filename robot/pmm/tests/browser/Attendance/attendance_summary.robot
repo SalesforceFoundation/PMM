@@ -76,7 +76,7 @@ Setup Test Data
 *** Test Cases ***
 AS1: Service attendance summary field
     [Documentation]                 This test updates attendance and validates the attendance summary field on a service record
-    [tags]                          W-9323278   perm:admin   perm:manage    feature:Attendance
+    [tags]                          W-9323278   quadrant:Q2   perm:admin   perm:manage    feature:Attendance
     Run Task                       deploy_cmdts
     Go To Page                     Details         ServiceSession__c        object_id=${service_session1}[Id]
     Page Should Contain Text       Track Attendance
@@ -89,7 +89,7 @@ AS1: Service attendance summary field
 
 AS2: Service session attendance summary field
     [Documentation]                 This test updates attendance and validates the attendance summary field on a service session record
-    [tags]                          W-9323278  perm:admin   perm:manage    feature:Attendance
+    [tags]                          W-9323278   quadrant:Q2   perm:admin   perm:manage    feature:Attendance
     Go To Page                     Details         ServiceSession__c        object_id=${service_session2}[Id]
     Page Should Contain Text       Track Attendance
     Populate Attendance Dropdown        ${contact1}[Name]      Attendance Status    Present
@@ -100,7 +100,7 @@ AS2: Service session attendance summary field
 
 AS3: Contact attendance summary field
     [Documentation]                This test updates attendance and validates the attendance summary field on a contact record
-    [tags]                         W-9323278   perm:admin   perm:manage    feature:Attendance
+    [tags]                         W-9323278   quadrant:Q2   perm:admin   perm:manage    feature:Attendance
     Go To Page                     Details         ServiceSession__c        object_id=${service_session3}[Id]
     Page Should Contain Text       Track Attendance
     Populate Attendance Dropdown        ${contact3}[Name]      Attendance Status    Present
@@ -116,7 +116,7 @@ AS3: Contact attendance summary field
 
 AS4: Program Engagement attendance summary field
     [Documentation]                 This test updates attendance and validates the attendance summary field on a program engagement record
-    [tags]                          W-9323278   perm:admin   perm:manage    feature:Attendance
+    [tags]                          W-9323278   quadrant:Q2   perm:admin   perm:manage    feature:Attendance
     Go To Page                     Details         ServiceSession__c        object_id=${service_session4}[Id]
     Page Should Contain Text       Track Attendance
     Populate Attendance Dropdown        ${contact5}[Name]      Attendance Status    Present

@@ -1,3 +1,4 @@
+<!-- sldsValidatorIgnore -->
 <!--
   - /*
   -  * Copyright (c) 2020, salesforce.com, inc.
@@ -8,7 +9,7 @@
   -->
 
 <template>
-    <c-section title={labels.reviewSessions} if:true={isLoaded}></c-section>
+    <c-section title={labels.reviewSessions} focus-heading if:true={isLoaded}></c-section>
     <lightning-layout
         multiple-rows="true"
         horizontal-align="center"
@@ -22,6 +23,16 @@
         >
             <c-scoped-notification title={limitMessage} theme="warning">
             </c-scoped-notification>
+        </lightning-layout-item>
+        <lightning-layout-item
+            size="10"
+            class="slds-var-m-top_large"
+            if:true={editingExistingSchedule}
+        >
+            <c-scoped-notification
+                if:true={editingExistingSchedule}
+                title={labels.onlyShowingFutureSessionsMessage}
+            ></c-scoped-notification>
         </lightning-layout-item>
         <lightning-layout-item size="10" class="slds-var-m-bottom_small">
             <lightning-layout horizontal-align="spread">
@@ -101,7 +112,7 @@
         <lightning-layout-item
             size="10"
             class="slds-box slds-p-around_none"
-            if:false={emptyMessage}
+            if:true={hasServiceSessions}
         >
             <lightning-datatable
                 key-field="Id"

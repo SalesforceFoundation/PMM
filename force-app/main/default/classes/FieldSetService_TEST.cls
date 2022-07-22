@@ -104,49 +104,6 @@ public with sharing class FieldSetService_TEST {
     }
 
     @IsTest
-    private static void shouldSkipUnsupportedFieldTypes() {
-        Test.startTest();
-
-        FieldSetService fieldSetService = new FieldSetService();
-        fieldSetService.unsupportedFieldTypes = new Set<String>{ 'DATE' };
-        Schema.FieldSet fieldSet = Schema.SObjectType.ProgramEngagement__c.FieldSets.CreateProgramEngagement;
-
-        List<Map<String, Object>> fieldsResult = fieldSetService.getFieldSetForLWC(
-            String.valueOf(ProgramEngagement__c.SObjectType),
-            fieldSet.getName(),
-            false
-        );
-
-        Test.stopTest();
-
-        Map<String, Map<String, Object>> fieldsResultByApiName = new Map<String, Map<String, Object>>();
-        for (Map<String, Object> fieldMap : fieldsResult) {
-            fieldsResultByApiName.put(String.valueof(fieldMap.get('apiName')), fieldMap);
-        }
-
-        for (Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
-            if (fieldSetMember.getType().name() == 'DATE') {
-                System.assert(
-                    !fieldsResultByApiName.containsKey(fieldSetMember.getFieldPath()),
-                    'The field should have been skipped: ' + fieldSetMember.getFieldPath()
-                );
-                continue;
-            }
-
-            System.assert(
-                fieldsResultByApiName.containsKey(fieldSetMember.getFieldPath()),
-                'The field should not have been skipped: ' + fieldSetMember.getFieldPath()
-            );
-        }
-
-        System.assertNotEquals(
-            fieldSet.getFields().size(),
-            fieldsResult.size(),
-            'Expected the fieldsResult size to be less than the fieldSet size.'
-        );
-    }
-
-    @IsTest
     private static void shouldReturnCompoundFieldDescribe() {
         String expectedFieldName = String.valueOf(Contact.MailingAddress);
         DescribeFieldResult actualField = new FieldSetService()

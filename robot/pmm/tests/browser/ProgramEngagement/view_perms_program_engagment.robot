@@ -27,7 +27,7 @@ Setup Test Data
 VPPE1: View Perm Test for Program Engagement
      [Documentation]                  Validates that New (Listing Page) and Edit buttons (Record Page) are not 
      ...                              displayed for Program Engagement (View Perm Set) 
-     [tags]                           unstable    perm:view    feature:Program Engagement
+     [tags]                           unstable    quadrant:Q2   perm:view    feature:Program Engagement
      Go To Page                              Listing                               ${ns}ProgramEngagement__c
      Page Should Not Contain Button          New
      Go To Page                              Details              ProgramEngagement__c                    object_id=${program_engagement}[Id]

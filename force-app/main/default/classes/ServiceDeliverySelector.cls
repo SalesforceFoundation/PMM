@@ -10,6 +10,38 @@
 public with sharing class ServiceDeliverySelector {
     private QueryBuilder queryBuilder = new QueryBuilder();
 
+    public Integer getNumberOfServiceDeliveriesForSession(Id sessionId) {
+        if (
+            !(PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ))
+        ) {
+            return 0;
+        }
+
+        return [
+            SELECT COUNT()
+            FROM ServiceDelivery__c
+            WHERE ServiceSession__c = :sessionId
+        ];
+    }
+
+    public List<ServiceDelivery__c> getServiceDeliveriesForSession(Id sessionId) {
+        if (
+            !(PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.READABLE
+                ))
+        ) {
+            return new List<ServiceDelivery__c>();
+        }
+
+        return [SELECT Id FROM ServiceDelivery__c WHERE ServiceSession__c = :sessionId];
+    }
+
     public String getAttendanceFieldSetName(Id scheduleId) {
         // We want to bypass FLS because this is a system field that drives our UI
         List<ServiceSchedule__c> schedules = [
@@ -105,6 +137,7 @@ public with sharing class ServiceDeliverySelector {
                 ServiceSchedule__c,
                 PrimaryServiceProvider__c,
                 SessionStart__c,
+                OmittedContactIds__c,
                 ServiceSchedule__r.Service__c,
                 ServiceSchedule__r.DefaultServiceQuantity__c
             FROM ServiceSession__c
@@ -112,10 +145,18 @@ public with sharing class ServiceDeliverySelector {
             LIMIT 1
         ];
 
-        return (ServiceSession__c) Security.stripInaccessible(
+        if (sessions.isEmpty()) {
+            return null;
+        }
+
+        ServiceSession__c strippedSession = (ServiceSession__c) Security.stripInaccessible(
                 AccessType.READABLE,
                 sessions
             )
             .getRecords()[0];
+
+        // We are intentionally bypassing security for this system level field
+        strippedSession.OmittedContactIds__c = sessions[0].OmittedContactIds__c;
+        return strippedSession;
     }
 }

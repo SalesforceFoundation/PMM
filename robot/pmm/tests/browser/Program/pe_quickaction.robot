@@ -40,7 +40,7 @@ Setup Test Data
 PEQA1: Add contact to program quick action on Program
      [Documentation]                  Add a contact to a program using quick action and verify that the Program Engagement
      ...                              related list is updated.
-     [tags]                           perm:admin    perm:manage    perm:deliver      feature:Program Engagment
+     [tags]                           perm:admin    quadrant:Q2   perm:manage   perm:deliver   feature:Program Engagment
      Go To Page                           Details                                 Program__c                    object_id=${program}[Id]
      Verify Details                       Program Name                            contains                      ${program}[Name]
      Click Quick Action Button            Add Contact to Program
@@ -62,7 +62,7 @@ PEQA1: Add contact to program quick action on Program
 PEQA2: Validate cohort and PE look up to the same program
      [Documentation]                This test loads the program record, clicks on add contact to program quick action. Verifies that
      ...                            an error message is displayed when program cohort and PE do not lookup to the same program
-     [tags]                         W-042769    perm:admin   perm:manage     perm:deliver   feature:Program Engagement
+     [tags]                         W-042769    quadrant:Q2   perm:admin   perm:manage     perm:deliver   feature:Program Engagement
      Go To Page                     Details                                  Program__c           object_id=${program}[Id]
      Verify Details                 Program Name                             contains             ${program}[Name]
      Click Quick Action Button      Add Contact to Program
@@ -76,7 +76,7 @@ PEQA2: Validate cohort and PE look up to the same program
 PEQA3: Autopopulate fields when stage is set to Applied and Start Date is today
      [Documentation]                Autopopulates PE name with anonymous and verifies that application date is not set to today when  
      ...                            the stage is set as applied and start date is set to today on new program engagment dialog
-     [tags]                         W-037569    perm:admin   perm:manage    perm:deliver     feature:Program Engagement
+     [tags]                         W-037569   quadrant:Q2   perm:admin   perm:manage    perm:deliver     feature:Program Engagement
      Go To Page                              Details                                  Program__c           object_id=${program}[Id]
      Verify Details                          Program Name                             contains             ${program}[Name]
      Click Quick Action Button               Add Contact to Program 

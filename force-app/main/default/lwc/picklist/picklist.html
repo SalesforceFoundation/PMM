@@ -5,30 +5,43 @@
   -  * SPDX-License-Identifier: BSD-3-Clause
   -  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
   -  */
-  -->
-
+-->
 <template>
     <div class="slds-var-p-bottom_small slds-var-p-left_xxx-small" if:true={options}>
-        <div class="slds-form-element" if:true={multiSelect}>
-            <label
-                class="slds-form-element__legend slds-form-element__label"
-                for="buttons"
-            >
-                {label}
-            </label>
-            <div class="slds-form-element__control">
-                <lightning-button-group id="buttons">
-                    <template for:each={options} for:item="option" if:true={options}>
-                        <lightning-button
-                            key={option.value}
-                            name={option.value}
-                            label={option.label}
-                            variant={option.variant}
-                            onclick={handleMultiSelectClick}
-                        ></lightning-button>
-                    </template>
-                </lightning-button-group>
-            </div>
+        <div if:true={multiSelect}>
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label">
+                    {label}
+                </legend>
+                <div class="slds-form-element__control">
+                    <div class="slds-checkbox_button-group">
+                        <template for:each={options} for:item="option" if:true={options}>
+                            <span
+                                class="slds-button slds-checkbox_button"
+                                key={option.value}
+                            >
+                                <input
+                                    type="checkbox"
+                                    value={option.value}
+                                    id={option.value}
+                                    name={option.value}
+                                    label={option.label}
+                                    onclick={handleMultiSelectClick}
+                                    checked={option.isSelected}
+                                />
+                                <label
+                                    class="slds-checkbox_button__label"
+                                    for={option.value}
+                                >
+                                    <span class="slds-checkbox_faux"
+                                        >{option.label}</span
+                                    ></label
+                                >
+                            </span>
+                        </template>
+                    </div>
+                </div>
+            </fieldset>
         </div>
         <lightning-radio-group
             if:false={multiSelect}

@@ -33,7 +33,7 @@ Setup Test Data
 CPC1: Create Program Cohort
      [Documentation]                        This test creates a program cohort and verifies the cohort
      ...                                    record matches the values entered in the form
-     [tags]                                 W-037572     perm:admin   perm:manage     feature:Program Cohort
+     [tags]                                 W-037572   quadrant:Q2   perm:admin   perm:manage     feature:Program Cohort
      Go To Page                             Listing                 ${ns}ProgramCohort__c   
      Click Object Button                    New
      Wait For Modal                         New                     Program Cohort
@@ -56,7 +56,7 @@ CPC1: Create Program Cohort
 CPC2: Date validation for cohort when Start date is later than end date
      [Documentation]                        This test opens the new program cohort dialog and enters a end date earlier than start date
      ...                                    and verifies that an error message is displayed
-     [tags]                                 W-037572    perm:admin   perm:manage      feature:Program Cohort
+     [tags]                                 W-037572    quadrant:Q2   perm:admin   perm:manage      feature:Program Cohort
      Go To Page                             Listing                 ${ns}ProgramCohort__c   
      Click Object Button                    New
      Wait For Modal                         New                     Program Cohort
@@ -74,7 +74,7 @@ CPC3: Date validation when cohort dates are not within program date range
      [Documentation]                        This test opens the program record, edits the start and end dates and opens new program
      ...                                    cohort dialog from related list and verifes that an error message is displayed when cohort date 
      ...                                    range is outside the program date range 
-     [tags]                                 W-037572    perm:admin   perm:manage      feature:Program Cohort
+     [tags]                                 W-037572   quadrant:Q2   perm:admin   perm:manage      feature:Program Cohort
      Go To Page                             Details                                 Program__c                   object_id=${program1}[Id]
      Click Quick Action Button              Edit
      Verify Current Page Title              Edit ${program1}[Name]
@@ -96,7 +96,7 @@ CPC3: Date validation when cohort dates are not within program date range
 CPC4: Create Program Engagement from Program Cohort Object
     [Documentation]                  On Program detail record, clicks New button on Service related list, populates the field on 
     ...                              the dialog and Saves. Validates that the Service related list is updated with the new record
-    [tags]                                  perm:admin   perm:manage   perm:deliver     feature:Program Engagement
+    [tags]                                  perm:admin   quadrant:Q2   perm:manage   perm:deliver     feature:Program Engagement
      Go To Page                             Details                      ProgramCohort__c            object_id=${program_cohort1}[Id]
      Page Should Contain                    ${program_cohort1}[Name]
      Click Wrapper Related List Button      Program Engagements          New

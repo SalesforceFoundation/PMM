@@ -1,13 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <gender>Masculine</gender>
-    <startsWith>Consonant</startsWith>
-    <caseValues>
-        <plural>false</plural>
-        <value>Portail de fonctionnalité</value>
-    </caseValues>
-    <caseValues>
-        <plural>true</plural>
-        <value>Portails de fonctionnalité</value>
-    </caseValues>
-</CustomObjectTranslation>
+<CustomObjectTranslation></CustomObjectTranslation>

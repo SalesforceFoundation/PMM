@@ -12,14 +12,4 @@
         <name>Name</name>
         <label>Nom du participant au service</label>
     </standardFields>
-    <gender>Masculine</gender>
-    <startsWith>Consonant</startsWith>
-    <caseValues>
-        <plural>false</plural>
-        <value>Participant au service</value>
-    </caseValues>
-    <caseValues>
-        <plural>true</plural>
-        <value>Participants au service</value>
-    </caseValues>
 </CustomObjectTranslation>

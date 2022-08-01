@@ -20,14 +20,4 @@
         <name>Name</name>
         <label>Nom du programme</label>
     </standardFields>
-    <gender>Masculine</gender>
-    <startsWith>Consonant</startsWith>
-    <caseValues>
-        <plural>false</plural>
-        <value>Programme</value>
-    </caseValues>
-    <caseValues>
-        <plural>true</plural>
-        <value>Programmes</value>
-    </caseValues>
 </CustomObjectTranslation>

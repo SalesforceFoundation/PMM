@@ -7,14 +7,4 @@
             <section>Custom Links</section>
         </sections>
     </layouts>
-    <gender>Masculine</gender>
-    <startsWith>Consonant</startsWith>
-    <caseValues>
-        <plural>false</plural>
-        <value>Compartiment</value>
-    </caseValues>
-    <caseValues>
-        <plural>true</plural>
-        <value>Compartiments</value>
-    </caseValues>
 </CustomObjectTranslation>

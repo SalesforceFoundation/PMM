@@ -10,6 +10,13 @@ pmm_lex_locators = {
     "text": "//*[contains(text(), '{}')]",
     "page_title": "//h2[contains(@class,'slds-text-heading') or contains(@class,'truncate title')]",
     "placeholder": "//*[contains(@placeholder,'{}')]",
+    "frame": "//iframe[contains(@id, '{}') or contains(@title, '{}') or contains(@name, '{}')]",
+    "frame_link": "//li[@data-node-id='CustomMetadata']//div[contains(@title, '{}')]//a",
+    "custom_metadata_button": "//div[@class='pbHeader']//div[@class='listHeader']//span//input[@title='{}']",
+    "custom_metadata_button_title": "//div[@class='pbHeader']//td/input[@title='{}']",
+    "custom_metadata_field": "//tr[.//td[contains(@class,'labelCol')]//label[text()='{}']]//td[contains(@class,'dataCol')]//input",
+    "custom_metadata_lookup_field": "//tr[.//td[contains(@class,'labelCol')]//label[text()='{}']]//td[@class='dataCol col02']//span//input",
+    "custom_metadata_link": "//div[@class='pbBody']//table//tbody//tr//td[@class='actionColumn']//a[contains(@title,'Bucketed Value')]",
     "placeholder_lookup": {
         "lookup1": "//div[@class='slds-lookup__result-text' and contains(text(), '{}')]",
         "lookup2": "//mark[text() = '{}']/ancestor::a",
@@ -110,6 +117,7 @@ pmm_lex_locators = {
         "first_session_end": "//lightning-input[contains(@class,'slds-form-element')][./descendant::*[text()='{}']]/descendant::div//input[@class='slds-input']",
         "remove_session": "//tr[@class='slds-hint-parent'][./th/descendant::*[text()='{}']]//lightning-primitive-cell-button/descendant::lightning-primitive-icon",
         "filter": "//div[contains(@class,'slds-form-element__control')]/input[@placeholder='Search this list']",
+        "wizard_radio_button": "//div[@class='slds-form-element__control']/span[@class='slds-radio']//span[@class='slds-radio_faux'][./following-sibling::span[@class='slds-form-element__label' and text()='{}']]",
     },
     "attendance": {
         "attendance_text": "//lightning-layout[.//div[contains(@id,'Contact') and text()='{}']]//lightning-input[@class='slds-form-element'][.//label[text()='{}']]//div/input",

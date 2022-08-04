@@ -584,9 +584,9 @@ class pmm(object):
         self.selenium.wait_until_page_contains_element(
             popup_loc, error="Dropdown options are not displayed"
         )
-        value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
-        actual_value = self.selenium.get_webelement(value_loc).text
         if status == "contains":
+            value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
+            actual_value = self.selenium.get_webelement(value_loc).text
             assert (
                 value in actual_value
             ), f"Dropdown should have contained {value}"

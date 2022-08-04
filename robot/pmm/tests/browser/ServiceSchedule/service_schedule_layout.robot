@@ -42,8 +42,6 @@ Setup Test Data
     Set suite variable              ${service_session1}
     ${service_session2} =           API Create Service Session          ${service_schedule1}[Id]     Pending
     Set suite variable              ${service_session2}
-   # API Update Records              ${ns}ServiceSession__c              ${service_session1}[Id]     ${ns}SessionStart__c=${start_date}
-    #API Update Records              ${ns}ServiceSession__c              ${service_session2}[Id]     ${ns}SessionStart__c=${start_date}
     ${session_start} =                 Get Current Date               result_format=%-m/%-d/%Y       increment=1 day
     Set suite variable              ${session_start}
     ${session_end} =                 Get Current Date               result_format=%-m/%-d/%Y          increment=10 days

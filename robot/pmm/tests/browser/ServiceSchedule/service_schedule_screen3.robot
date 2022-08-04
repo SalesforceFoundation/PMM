@@ -49,12 +49,13 @@ Setup Test Data
     ${program_cohort3} =            API Create Program Cohort           ${Program1}[Id]
     Set suite variable              ${program_cohort3}
     API Update Records              ${ns}ProgramCohort__c     ${program_cohort1}[Id]     ${ns}Status__c=Planned
-    ${program_engagement1} =        API Create Program Engagement   ${Program1}[Id]     ${contact1}[Id]      ${ns}ProgramCohort__c=${program_cohort1}[Id]
-    Set suite variable              ${program_engagement1}
-    ${program_engagement2} =        API Create Program Engagement   ${Program1}[Id]     ${contact2}[Id]      ${ns}ProgramCohort__c=${program_cohort2}[Id]
-    Set suite variable              ${program_engagement2}
-    ${program_engagement3} =        API Create Program Engagement   ${Program1}[Id]     ${contact3}[Id]      ${ns}ProgramCohort__c=${program_cohort3}[Id]
-    Set suite variable              ${program_engagement3}
+    ${program_engagement4} =        API Create Program Engagement   ${Program1}[Id]     ${contact1}[Id]      ${ns}ProgramCohort__c=${program_cohort1}[Id]
+    Set suite variable              ${program_engagement4}
+    ${program_engagement5} =        API Create Program Engagement   ${Program1}[Id]     ${contact2}[Id]      ${ns}ProgramCohort__c=${program_cohort2}[Id]
+    Set suite variable              ${program_engagement5}
+    ${program_engagement6} =        API Create Program Engagement   ${Program1}[Id]     ${contact3}[Id]      ${ns}ProgramCohort__c=${program_cohort3}[Id]
+    Set suite variable              ${program_engagement6}
+    API Update Records              ${ns}ProgramEngagement__c    ${program_engagement4}[Id]     ${ns}Stage__c=Waitlisted
 
 
 
@@ -133,8 +134,12 @@ SSS3.3: Validate fields added to SessionParticipantView fieldset on Wizard
     Page Should Contain                     Role
     Page Should Contain                     Volunteer
 
-Filter program cohort on Service Schedule wizard
+Setup custom bucketed values and validate on service schedule wizard
+    [Documentation]               Create custom bucketed values for Program Cohort Status and Program Engagement Stages and
+    ...                           validate the same on the participant selector component on service schedule
+    [tags]                        quadrant:Q3   perm:admin
     Setup Custom Metadata Bucketed Value    Planned    Planned   ProgramCohortStatusActive   Planned
+    Setup Custom Metadata Bucketed Value    Waitlisted    Waitlisted    Active    Waitlisted
     Go To Page                              Details    Service__c    object_id=${service1}[Id]
     Click Wrapper Related List Button       Service Schedules              New
     Current Page Should Be                  New                            ServiceSchedule__c
@@ -144,13 +149,14 @@ Filter program cohort on Service Schedule wizard
     Verify Wizard Screen Title              Review Service Sessions
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Add Service Participants
+    Page Should Contain                     Waitlisted
     Verify dropdown Options                 Filter by Program Cohort    contains    ${program_cohort1}[Name]
-    Sleep  2s
     Verify dropdown Options                 Filter by Program Cohort    does not contain    ${program_cohort2}[Name]
-    Sleep 2s
     Verify dropdown Options                 Filter by Program Cohort    does not contain    ${program_cohort3}[Name]
-    Sleep 2s
+    Select Service Participant              ${contact1}[Name]
+    Validate Participant Is Added           ${contact1}[Name]
     Click Dialog Button                     Next 
     Verify Wizard Screen Title              Review Service Schedule
     Click Dialog Button                     Save
     Wait Until Modal is Closed
+    Page Should Contain                     ${contact1}[Name] - ${service_schedule_name}

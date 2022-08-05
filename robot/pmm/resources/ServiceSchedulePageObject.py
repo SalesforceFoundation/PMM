@@ -166,10 +166,12 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
         self.selenium.get_webelement(locator).click()
         self.selenium.get_webelement(locator).send_keys(filter_value)
         self.selenium.wait_until_page_contains(filter_value)
-    
+
     def service_schedule_ends(self, option, value):
-        """ Selects service schedule end date on wizard """
-        locator = pmm_lex_locators["service_schedule"]["wizard_radio_button"].format(option)
+        """Selects service schedule end date on wizard"""
+        locator = pmm_lex_locators["service_schedule"]["wizard_radio_button"].format(
+            option
+        )
         self.selenium.set_focus_to_element(locator)
         self.selenium.get_webelement(locator).click()
         if option == "After":
@@ -178,6 +180,7 @@ class NewServiceSchedulePage(BasePMMPage, BasePage):
             self.pmm.select_date_from_datepicker("Service Schedule End Date", value)
         else:
             raise Exception("Enter valid Service Schedule End option")
+
 
 @pageobject("Details", "ServiceSchedule__c")
 class ServiceScheduleDetailPage(BasePMMPage, DetailPage):

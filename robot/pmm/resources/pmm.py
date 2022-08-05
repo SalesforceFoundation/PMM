@@ -478,9 +478,9 @@ class pmm(object):
         )
         search_input_box.send_keys(app_name)
         self.selenium.click_element(locator_app_name)
-    
+
     def format_all(self, loc, value):
-        """ Formats the given locator with the value for all {} occurrences """
+        """Formats the given locator with the value for all {} occurrences"""
         count = loc.count("{")
 
         if count == 1:
@@ -489,9 +489,9 @@ class pmm(object):
             return loc.format(value, value)
         elif count == 3:
             return loc.format(value, value, value)
-    
+
     def populate_setup_search_box(self, loc, value):
-        """Populates placeholder element with a value 
+        """Populates placeholder element with a value
         Finds the placeholder element, inputs value
         and waits for the suggestion and clicks on it
         """
@@ -501,15 +501,13 @@ class pmm(object):
         field.send_keys(value)
         time.sleep(2)
         field.send_keys(Keys.ENTER)
-        xpath_value = pmm_lex_locators[
-            "frame_link"
-        ].format(value)
+        xpath_value = pmm_lex_locators["frame_link"].format(value)
         element_menu = self.selenium.driver.find_element_by_xpath(xpath_value)
         self.salesforce._jsclick(element_menu)
         self.selenium.wait_until_location_contains(
             "/lightning/setup/CustomMetadata/home"
         )
-    
+
     def select_frame_with_value(self, value):
         """Selects frame identified by the given value
         value should be the 'id', 'title' or 'name' attribute value of the web element used to identify the frame
@@ -519,7 +517,7 @@ class pmm(object):
         self.selenium.select_frame(locator)
 
     def manage_records_bucketed_value(self):
-        """ click on Manage Records for Bucketed Value"""
+        """click on Manage Records for Bucketed Value"""
         self.select_frame_with_value(
             "All Custom Metadata Types ~ Salesforce - Developer Edition"
         )
@@ -528,21 +526,21 @@ class pmm(object):
         self.selenium.click_element(locator)
 
     def click_custom_metadata_button(self, button):
-        """ Clicks on a button within the custom metadata iFrame """
+        """Clicks on a button within the custom metadata iFrame"""
         if button == "New":
-            locator= pmm_lex_locators["custom_metadata_button"].format(button)
+            locator = pmm_lex_locators["custom_metadata_button"].format(button)
             self.select_frame_with_value(
-                "Bucketed Values ~ Salesforce - Developer Edition" 
+                "Bucketed Values ~ Salesforce - Developer Edition"
             )
             self.selenium.wait_until_page_contains_element(locator)
             self.selenium.click_element(locator)
         else:
-            locator= pmm_lex_locators["custom_metadata_button_title"].format(button)
+            locator = pmm_lex_locators["custom_metadata_button_title"].format(button)
             self.selenium.wait_until_page_contains_element(locator)
             self.selenium.click_element(locator)
- 
+
     def populate_bucketed_values(self, **kwargs):
-        """ Populates text field and lookup values within the custom metadata iFrame """
+        """Populates text field and lookup values within the custom metadata iFrame"""
         for key, value in kwargs.items():
             if key == "Label":
                 self.select_frame_with_value(
@@ -558,7 +556,9 @@ class pmm(object):
                     self.builtin.log(f"Element {key} not found")
             elif key == "Bucket":
                 print("test")
-                locator_value = pmm_lex_locators["custom_metadata_lookup_field"].format(key)
+                locator_value = pmm_lex_locators["custom_metadata_lookup_field"].format(
+                    key
+                )
                 if self.check_if_element_exists(locator_value):
                     self.selenium.get_webelement(locator_value).click()
                     self.selenium.set_focus_to_element(locator_value)
@@ -577,9 +577,9 @@ class pmm(object):
                     self.builtin.log(f"Element {key} not found")
             else:
                 raise Exception("Locator not found")
-    
+
     def verify_dropdown_options(self, dropdown, status, value):
-        """ Verifies if a picklist value is listed in a dropdown """
+        """Verifies if a picklist value is listed in a dropdown"""
         locator = pmm_lex_locators["new_record"]["dropdown_field"].format(dropdown)
         popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
         self.scroll_element_into_view(locator)
@@ -590,9 +590,7 @@ class pmm(object):
         if status == "contains":
             value_loc = pmm_lex_locators["new_record"]["dropdown_value"].format(value)
             actual_value = self.selenium.get_webelement(value_loc).text
-            assert (
-                value in actual_value
-            ), f"Dropdown should have contained {value}"
+            assert value in actual_value, f"Dropdown should have contained {value}"
         elif status == "does not contain":
             self.selenium.get_webelement(locator).click()
             self.selenium.page_should_not_contain_element(value)

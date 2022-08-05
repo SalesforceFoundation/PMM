@@ -542,39 +542,24 @@ class pmm(object):
     def populate_bucketed_values(self, **kwargs):
         """Populates text field and lookup values within the custom metadata iFrame"""
         for key, value in kwargs.items():
-            if key == "Label":
+            if key == "Bucket":
+                locator_field = pmm_lex_locators["custom_metadata_lookup_field"].format(
+                    key
+                )
+            elif key == "Label":
+                locator_field = pmm_lex_locators["custom_metadata_field"].format(key)
                 self.select_frame_with_value(
                     "Bucketed Value ~ Salesforce - Developer Edition"
                 )
-                locator_field = pmm_lex_locators["custom_metadata_field"].format(key)
-                if self.check_if_element_exists(locator_field):
-                    self.selenium.get_webelement(locator_field).click()
-                    self.selenium.set_focus_to_element(locator_field)
-                    self.selenium.clear_element_text(locator_field)
-                    self.selenium.get_webelement(locator_field).send_keys(value)
-                else:
-                    self.builtin.log(f"Element {key} not found")
-            elif key == "Bucket":
-                print("test")
-                locator_value = pmm_lex_locators["custom_metadata_lookup_field"].format(
-                    key
-                )
-                if self.check_if_element_exists(locator_value):
-                    self.selenium.get_webelement(locator_value).click()
-                    self.selenium.set_focus_to_element(locator_value)
-                    self.selenium.clear_element_text(locator_value)
-                    self.selenium.get_webelement(locator_value).send_keys(value)
-                else:
-                    self.builtin.log(f"Element {key} not found")
             elif key == "Bucketed Value Name" or "Value":
-                locator_field = pmm_lex_locators["custom_metadata_field"].format(key)
-                if self.check_if_element_exists(locator_field):
-                    self.selenium.get_webelement(locator_field).click()
-                    self.selenium.set_focus_to_element(locator_field)
-                    self.selenium.clear_element_text(locator_field)
-                    self.selenium.get_webelement(locator_field).send_keys(value)
-                else:
-                    self.builtin.log(f"Element {key} not found")
+                locator_field = pmm_lex_locators["custom_metadata_value"].format(key)
+            else:
+                self.builtin.log(f"Element {key} not found")
+            if self.check_if_element_exists(locator_field):
+                self.selenium.get_webelement(locator_field).click()
+                self.selenium.set_focus_to_element(locator_field)
+                self.selenium.clear_element_text(locator_field)
+                self.selenium.get_webelement(locator_field).send_keys(value)
             else:
                 raise Exception("Locator not found")
 

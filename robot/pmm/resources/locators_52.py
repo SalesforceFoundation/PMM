@@ -15,6 +15,7 @@ pmm_lex_locators = {
     "custom_metadata_button": "//div[@class='pbHeader']//div[@class='listHeader']//span//input[@title='{}']",
     "custom_metadata_button_title": "//div[@class='pbHeader']//td/input[@title='{}']",
     "custom_metadata_field": "//tr[.//td[contains(@class,'labelCol')]//label[text()='{}']]//td[contains(@class,'dataCol')]//input",
+    "custom_metadata_value": "//tr[.//td[contains(@class,'labelCol')]//label[text()='{}']]//td[contains(@class,'dataCol')]/div[@class='requiredInput']//input",
     "custom_metadata_lookup_field": "//tr[.//td[contains(@class,'labelCol')]//label[text()='{}']]//td[@class='dataCol col02']//span//input",
     "custom_metadata_link": "//div[@class='pbBody']//table//tbody//tr//td[@class='actionColumn']//a[contains(@title,'Bucketed Value')]",
     "placeholder_lookup": {

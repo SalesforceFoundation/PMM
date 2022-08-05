@@ -37,6 +37,19 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentInstanceProperties>
+                    <name>omitProgramEngagementRoles</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>omitProgramEngagementStages</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>omitServiceParticipantStatuses</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>serviceSessionStatusForAfterSubmit</name>
+                    <value>Complete</value>
+                </componentInstanceProperties>
                 <componentName>attendance</componentName>
             </componentInstance>
         </itemInstances>

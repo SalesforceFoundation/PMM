@@ -84,6 +84,8 @@ SSL2: Verify Upcoming Service Schedule listview
     Page Should Contain                    Participant Capacity
 
 Add more sessions on existing service schedule
+    [Documentation]                        Go to existing service schedule and add more sessions using the quick action button
+    [tags]                                 quadrant:Q3    perm:admin 
     Go To Page                              Details                        ServiceSchedule__c           object_id=${service_schedule1}[Id]
     Click Quick Action Button               Add More Sessions
     Load Page Object                        New             ServiceSchedule__c
@@ -100,4 +102,3 @@ Add more sessions on existing service schedule
     Click Dialog Button                     Save
     Wait Until Modal is Closed
     Page Should Contain                     ${session_start}: ${service_schedule1}[Name]
-

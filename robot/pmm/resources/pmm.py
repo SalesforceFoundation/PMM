@@ -491,7 +491,7 @@ class pmm(object):
             return loc.format(value, value, value)
     
     def populate_setup_search_box(self, loc, value):
-        """Populates placeholder element with a value
+        """Populates placeholder element with a value 
         Finds the placeholder element, inputs value
         and waits for the suggestion and clicks on it
         """
@@ -519,7 +519,7 @@ class pmm(object):
         self.selenium.select_frame(locator)
 
     def manage_records_bucketed_value(self):
-        """ click builder link on All Communities page"""
+        """ click on Manage Records for Bucketed Value"""
         self.select_frame_with_value(
             "All Custom Metadata Types ~ Salesforce - Developer Edition"
         )
@@ -528,6 +528,7 @@ class pmm(object):
         self.selenium.click_element(locator)
 
     def click_custom_metadata_button(self, button):
+        """ Clicks on a button within the custom metadata iFrame """
         if button == "New":
             locator= pmm_lex_locators["custom_metadata_button"].format(button)
             self.select_frame_with_value(
@@ -541,6 +542,7 @@ class pmm(object):
             self.selenium.click_element(locator)
  
     def populate_bucketed_values(self, **kwargs):
+        """ Populates text field and lookup values within the custom metadata iFrame """
         for key, value in kwargs.items():
             if key == "Label":
                 self.select_frame_with_value(
@@ -577,6 +579,7 @@ class pmm(object):
                 raise Exception("Locator not found")
     
     def verify_dropdown_options(self, dropdown, status, value):
+        """ Verifies if a picklist value is listed in a dropdown """
         locator = pmm_lex_locators["new_record"]["dropdown_field"].format(dropdown)
         popup_loc = pmm_lex_locators["new_record"]["dropdown_popup"]
         self.scroll_element_into_view(locator)

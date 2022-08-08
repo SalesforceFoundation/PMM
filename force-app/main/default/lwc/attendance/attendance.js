@@ -363,14 +363,15 @@ export default class Attendance extends NavigationMixin(LightningElement) {
             .then(() => {
                 this.isUpdateMode = false;
                 this.showSuccessToast(editedRows.length);
+                this.showSpinner = false;
             })
             .then(() => {
                 this.updateRecord();
             })
             .catch(error => {
                 handleError(error);
-            })
-            .finally((this.showSpinner = false));
+                this.showSpinner = false;
+            });
     }
 
     async updateRecord() {

@@ -4,10 +4,10 @@
     <label>サービススケジュールの終了</label>
     <picklistValues>
         <masterLabel>On</masterLabel>
-        <translation>オン</translation>
+        <translation>次の日付で</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>After</masterLabel>
-        <translation>後</translation>
+        <translation>次の回数のあと</translation>
     </picklistValues>
 </CustomFieldTranslation>

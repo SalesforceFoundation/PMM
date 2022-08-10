@@ -6,8 +6,8 @@
 /tasks/               @SalesforceFoundation/release-engineering-reviewers
 
 # Packaged Metadata
-/force-app/main/default/labels   @AndersonTarren @jessicahaas1 @smarovich
-/force-app/main/default/objects  @AndersonTarren @jessicahaas1 @smarovich
+/force-app/main/default/labels   @AndersonTarren @ptewson-sfdo @jencrabtree
+/force-app/main/default/objects  @AndersonTarren @ptewson-sfdo @jencrabtree
 
 # Actions
 /.github                @SalesforceFoundation/release-engineering-reviewers

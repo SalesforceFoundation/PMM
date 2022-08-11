@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>ApplicationDate__c</name>
-    <help>Wenn die Phase der Programmteilnahme &quot;Beworben&quot; ist, ist der Standardwert für das Bewerbungsdatum der heutige Tag, wenn im Feld keine Angabe gemacht wird.</help>
+    <help>Wenn die Phase der Programmteilnahme "Beworben" ist, ist der Standardwert für das Bewerbungsdatum der heutige Tag, wenn im Feld keine Angabe gemacht wird.</help>
     <label>Bewerbungsdatum</label>
 </CustomFieldTranslation>

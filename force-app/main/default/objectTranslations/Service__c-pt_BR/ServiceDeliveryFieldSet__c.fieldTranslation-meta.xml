@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>ServiceDeliveryFieldSet__c</name>
-    <label>Conj. campos de prestação de serviços</label>
+    <label>Conjunto de campos de prestação de serviços</label>
     <picklistValues>
         <masterLabel>Bulk Service Deliveries</masterLabel>
         <translation>Prestações de serviço em massa</translation>

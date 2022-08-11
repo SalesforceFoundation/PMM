@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>OmittedContactIds__c</name>
+    <help>Este campo é usado para rastrear que contatos foram omitidos da lista Atendimento. Este é um campo do sistema e não deve ser alterado manualmente.</help>
+    <label>IDs de contatos omitidos</label>
+</CustomFieldTranslation>

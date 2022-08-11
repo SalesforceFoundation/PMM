@@ -33,8 +33,24 @@
         <label>Está agregando más de {0} sesiones, de modo que esta operación tardará un tiempo adicional en completarse.</label>
     </customLabels>
     <customLabels>
+        <name>Add_More_Sessions</name>
+        <label>Agregar más sesiones</label>
+    </customLabels>
+    <customLabels>
         <name>Anonymous</name>
         <label>Anónima</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Service_Fields_Message</name>
+        <label>Los campos que se muestran en esta página dependen del servicio que seleccione.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Success_Message</name>
+        <label>Se guardaron {0} entregas de servicio.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Failure_Message</name>
+        <label>{0} entregas de servicio tienen errores y no se guardaron.</label>
     </customLabels>
     <customLabels>
         <name>BSDT_Selected_Contacts</name>
@@ -81,6 +97,10 @@
         <label>Seleccione al menos un contacto para continuar.</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Error_Banner_Msg</name>
+        <label>Algo falló. Revise los errores de esta página.</label>
+    </customLabels>
+    <customLabels>
         <name>Cant_Find_Participant</name>
         <label>¿No puede encontrar el participante correcto?</label>
     </customLabels>
@@ -107,6 +127,10 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>Después de que los participantes se agreguen a esta Programación de servicio, realice un seguimiento de su asistencia aquí.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Sessions_Message</name>
+        <label>Está actualizando una programación existente; cualquier cambio que realice aquí se guardará en el registro de la programación. Tenga en cuenta que solo podrá agregar sesiones después de las sesiones existentes más actuales.</label>
     </customLabels>
     <customLabels>
         <name>Incorrect_Tab</name>
@@ -151,6 +175,14 @@
     <customLabels>
         <name>Delete_Future_Sessions</name>
         <label>Eliminar sesiones de servicio futuras</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries</name>
+        <label>¿Eliminar entregas de servicio relacionadas?</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries_Confirm</name>
+        <label>Está a punto de eliminar {0} entregas de servicio asociadas con esta sesión de servicio. No podrá ver o crear informes sobre las entregas de servicio más tarde.</label>
     </customLabels>
     <customLabels>
         <name>Delete_Sessions_Success</name>
@@ -309,6 +341,10 @@
         <label>No se han seleccionado registros</label>
     </customLabels>
     <customLabels>
+        <name>Only_Showing_Future_Sessions</name>
+        <label>Mostrando todas las sesiones futuras. Para modificar sesiones agregadas anteriormente, vaya a la lista Sesiones de servicio.</label>
+    </customLabels>
+    <customLabels>
         <name>Owner_Field</name>
         <label>Propietario</label>
     </customLabels>
@@ -355,6 +391,14 @@
     <customLabels>
         <name>Rows_With_Errors</name>
         <label>Hay filas de la entrega de servicio con errores.</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Last_Session</name>
+        <label>Introduzca una {0} después de {1}</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Today</name>
+        <label>Introduzca una {0} el mismo día o después de la fecha de hoy</label>
     </customLabels>
     <customLabels>
         <name>Update</name>
@@ -554,7 +598,7 @@
     </customLabels>
     <customLabels>
         <name>New</name>
-        <label>Nuevo</label>
+        <label>Nueva</label>
     </customLabels>
     <customLabels>
         <name>UpsertOperationException</name>
@@ -563,6 +607,10 @@
     <customLabels>
         <name>Warning</name>
         <label>Advertencia</label>
+    </customLabels>
+    <customLabels>
+        <name>Action</name>
+        <label>Acción</label>
     </customLabels>
     <reportTypes>
         <name>Contacts_with_and_without_Program_Engagements</name>
@@ -601,11 +649,19 @@
         <label>Agregar contacto a programa</label>
     </quickActions>
     <quickActions>
+        <name>ServiceSession__c.Delete_All_Service_Deliveries</name>
+        <label>Eliminar entregas de servicio</label>
+    </quickActions>
+    <quickActions>
         <name>ServiceSchedule__c.Delete_Future_Sessions</name>
         <label>Eliminar sesiones de servicio futuras</label>
     </quickActions>
     <quickActions>
         <name>ServiceSchedule__c.Add_More_Participants</name>
         <label>Agregar más participantes</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Sessions</name>
+        <label>Agregar más sesiones</label>
     </quickActions>
 </Translations>

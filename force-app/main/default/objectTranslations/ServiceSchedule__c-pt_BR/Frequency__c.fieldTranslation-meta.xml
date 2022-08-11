@@ -4,7 +4,7 @@
     <label>Frequência</label>
     <picklistValues>
         <masterLabel>Daily</masterLabel>
-        <translation>Diária</translation>
+        <translation>Diário</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Weekly</masterLabel>

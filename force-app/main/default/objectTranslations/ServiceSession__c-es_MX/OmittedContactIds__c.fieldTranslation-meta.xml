@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>OmittedContactIds__c</name>
+    <help>Este campo se utiliza para seguir qué contactos se omitieron del listado de Asistencia. Este es un campo del sistema y no debe alterarse manualmente.</help>
+    <label>Identificadores de contactos omitidos</label>
+</CustomFieldTranslation>

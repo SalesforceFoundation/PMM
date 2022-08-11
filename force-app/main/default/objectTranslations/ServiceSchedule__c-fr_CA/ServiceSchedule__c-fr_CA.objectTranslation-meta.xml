@@ -20,4 +20,14 @@
         <name>Name</name>
         <label>Nom du calendrier de service</label>
     </standardFields>
+    <gender>Masculine</gender>
+    <startsWith>Consonant</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Calendrier de service</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Calendriers de service</value>
+    </caseValues>
 </CustomObjectTranslation>

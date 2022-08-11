@@ -16,4 +16,14 @@
         <name>Name</name>
         <label>Nom de la session de service</label>
     </standardFields>
+    <gender>Feminine</gender>
+    <startsWith>Consonant</startsWith>
+    <caseValues>
+        <plural>false</plural>
+        <value>Session de service</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Sessions de service</value>
+    </caseValues>
 </CustomObjectTranslation>

@@ -33,8 +33,24 @@
         <label>Sie fügen mehr als {0} Sitzungen hinzu, die Bearbeitung wird daher zusätzliche Zeit in Anspruch nehmen.</label>
     </customLabels>
     <customLabels>
+        <name>Add_More_Sessions</name>
+        <label>Weitere Sitzungen hinzufügen</label>
+    </customLabels>
+    <customLabels>
         <name>Anonymous</name>
         <label>Anonym</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Service_Fields_Message</name>
+        <label>Die auf dieser Seite angezeigten Felder hängen von der von Ihnen ausgewählten Leistung ab.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Success_Message</name>
+        <label>{0} erbrachte Leistungen wurden gespeichert.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Failure_Message</name>
+        <label>{0} erbrachte Leistungen wiesen Fehler auf und wurden nicht gespeichert.</label>
     </customLabels>
     <customLabels>
         <name>BSDT_Selected_Contacts</name>
@@ -81,6 +97,10 @@
         <label>Wählen Sie mindestens einen Kontakt aus, um fortzufahren.</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Error_Banner_Msg</name>
+        <label>Etwas ist schief gelaufen. Überprüfen Sie die Fehler auf dieser Seite.</label>
+    </customLabels>
+    <customLabels>
         <name>Cant_Find_Participant</name>
         <label>Können Sie den richtigen Teilnehmer nicht finden?</label>
     </customLabels>
@@ -107,6 +127,10 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>Nachdem diesem Leistungszeitplan Teilnehmer hinzugefügt wurden, verfolgen Sie ihre Anwesenheit hier nach.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Sessions_Message</name>
+        <label>Sie aktualisieren einen vorhandenen Zeitplan. Alle Änderungen, die Sie hier vornehmen, werden im Zeitplandatensatz gespeichert. Bitte beachten Sie, dass Sie Sitzungen nur nach den aktuellsten bestehenden Sitzungen hinzufügen können.</label>
     </customLabels>
     <customLabels>
         <name>Incorrect_Tab</name>
@@ -151,6 +175,14 @@
     <customLabels>
         <name>Delete_Future_Sessions</name>
         <label>Zukünftige Leistungssitzungen löschen</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries</name>
+        <label>Zugehörige erbrachte Leistungen löschen?</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries_Confirm</name>
+        <label>Sie sind im Begriff, {0} dieser Leistungssitzung zugeordnete erbrachte Leistungen zu löschen. Sie können diese erbrachten Leistungen dann später nicht mehr anzeigen oder in Berichten aufführen.</label>
     </customLabels>
     <customLabels>
         <name>Delete_Sessions_Success</name>
@@ -278,7 +310,7 @@
     </customLabels>
     <customLabels>
         <name>No_Service_On_BSDT</name>
-        <label>Das Feld &quot;Leistung&quot; muss im festgelegten Feld &quot;Massenerbringung von Leistungen&quot; enthalten sind, um Datensätze zu speichern. Bitten Sie Ihren Administrator um Hilfe.</label>
+        <label>Das Feld "Leistung" muss im festgelegten Feld "Massenerbringung von Leistungen" enthalten sind, um Datensätze zu speichern. Bitten Sie Ihren Administrator um Hilfe.</label>
     </customLabels>
     <customLabels>
         <name>No_Service_Participants_Created_Warning</name>
@@ -307,6 +339,10 @@
     <customLabels>
         <name>No_Records_Selected</name>
         <label>Keine Datensätze ausgewählt</label>
+    </customLabels>
+    <customLabels>
+        <name>Only_Showing_Future_Sessions</name>
+        <label>Alle zukünftigen Sitzungen werden angezeigt. Zum Ändern zuvor hinzugefügter Sitzungen wechseln Sie zur Liste "Leistungssitzungen".</label>
     </customLabels>
     <customLabels>
         <name>Owner_Field</name>
@@ -355,6 +391,14 @@
     <customLabels>
         <name>Rows_With_Errors</name>
         <label>Einige Zeilen mit Leistungserbringungen enthalten Fehler.</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Last_Session</name>
+        <label>{0} nach {1} eingeben</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Today</name>
+        <label>{0} am heutigen Datum oder später eingeben</label>
     </customLabels>
     <customLabels>
         <name>Update</name>
@@ -406,7 +450,7 @@
     </customLabels>
     <customLabels>
         <name>Select_Create_Service_Session_Warning</name>
-        <label>Das Erstellen von Leistungssitzungen ist nicht ausgewählt, daher werden automatisch keine Datensätze erstellt. Klicken Sie auf &quot;Leistungssitzung hinzufügen&quot;, um Datensätze für Leistungssitzungen manuell hinzuzufügen.</label>
+        <label>Das Erstellen von Leistungssitzungen ist nicht ausgewählt, daher werden automatisch keine Datensätze erstellt. Klicken Sie auf "Leistungssitzung hinzufügen", um Datensätze für Leistungssitzungen manuell hinzuzufügen.</label>
     </customLabels>
     <customLabels>
         <name>Select_Program_Engagement</name>
@@ -564,6 +608,10 @@
         <name>Warning</name>
         <label>Warnung</label>
     </customLabels>
+    <customLabels>
+        <name>Action</name>
+        <label>Aktion</label>
+    </customLabels>
     <reportTypes>
         <name>Contacts_with_and_without_Program_Engagements</name>
         <label>Kontakte mit und ohne Programmteilnahmen</label>
@@ -601,11 +649,19 @@
         <label>Kontakt zu Programm hinzufügen</label>
     </quickActions>
     <quickActions>
+        <name>ServiceSession__c.Delete_All_Service_Deliveries</name>
+        <label>Erbrachte Leistungen löschen</label>
+    </quickActions>
+    <quickActions>
         <name>ServiceSchedule__c.Delete_Future_Sessions</name>
         <label>Zukünftige Leistungssitzungen löschen</label>
     </quickActions>
     <quickActions>
         <name>ServiceSchedule__c.Add_More_Participants</name>
         <label>Weitere Teilnehmer hinzufügen</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Sessions</name>
+        <label>Weitere Sitzungen hinzufügen</label>
     </quickActions>
 </Translations>

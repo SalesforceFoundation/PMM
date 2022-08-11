@@ -2,5 +2,5 @@
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <name>AutonameOverride__c</name>
     <help>Quando isso estiver marcado, o Nome da prestação de serviços pode ser definido manualmente. O nome não será automaticamente.</help>
-    <label>Substituição automática de nome </label>
+    <label>Substituição automática de nome</label>
 </CustomFieldTranslation>

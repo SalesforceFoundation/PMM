@@ -4,7 +4,7 @@
     <label>Fim do cronograma de serviços</label>
     <picklistValues>
         <masterLabel>On</masterLabel>
-        <translation>Ativado</translation>
+        <translation>Em</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>After</masterLabel>

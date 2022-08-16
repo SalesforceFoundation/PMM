@@ -47,10 +47,10 @@
             <section>Custom Links</section>
         </sections>
     </layouts>
-    <nameFieldLabel>Nom de l&apos;engagement dans le programme</nameFieldLabel>
+    <nameFieldLabel>Nom de l'engagement dans le programme</nameFieldLabel>
     <standardFields>
         <name>Name</name>
-        <label>Nom de l&apos;engagement dans le programme</label>
+        <label>Nom de l'engagement dans le programme</label>
     </standardFields>
     <gender>Masculine</gender>
     <startsWith>Vowel</startsWith>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>ParticipantsEnrolled__c</name>
+    <help>Het totale aantal servicedeelnemers met de status Ingeschreven, gekoppeld aan deze serviceplanning</help>
+    <label>Ingeschreven deelnemers</label>
+</CustomFieldTranslation>

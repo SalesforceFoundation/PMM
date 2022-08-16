@@ -30,11 +30,27 @@
     </customLabels>
     <customLabels>
         <name>Adding_More_Service_Session_Warning</name>
-        <label>You&apos;re adding more than {0} sessions, so this will take some extra time to complete.</label>
+        <label>You're adding more than {0} sessions, so this will take some extra time to complete.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_More_Sessions</name>
+        <label>Add More Sessions</label>
     </customLabels>
     <customLabels>
         <name>Anonymous</name>
         <label>Anonymous</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Service_Fields_Message</name>
+        <label>The fields shown on this page depend on the Service you select.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Success_Message</name>
+        <label>{0} Service Deliveries were saved.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Failure_Message</name>
+        <label>{0} Service Deliveries have errors and weren't saved.</label>
     </customLabels>
     <customLabels>
         <name>BSDT_Selected_Contacts</name>
@@ -81,12 +97,16 @@
         <label>Select at least one Contact to continue.</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Error_Banner_Msg</name>
+        <label>Something went wrong. Review the errors on this page.</label>
+    </customLabels>
+    <customLabels>
         <name>Cant_Find_Participant</name>
-        <label>Can&apos;t find the right participant?</label>
+        <label>Can't find the right participant?</label>
     </customLabels>
     <customLabels>
         <name>Cant_Find_Contact</name>
-        <label>Can&apos;t find the right Contact?</label>
+        <label>Can't find the right Contact?</label>
     </customLabels>
     <customLabels>
         <name>TrackAttendance</name>
@@ -107,6 +127,10 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>After participants are added to this Service Schedule, track their attendance here.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Sessions_Message</name>
+        <label>You are updating an existing schedule any changes you make here will be saved to the schedule record. Please note that you will only be able to add sessions after the most current existing sessions.</label>
     </customLabels>
     <customLabels>
         <name>Incorrect_Tab</name>
@@ -130,7 +154,7 @@
     </customLabels>
     <customLabels>
         <name>Clicking_Back_Button_In_Modal_Warning</name>
-        <label>Changes you made on this page won&apos;t be saved.</label>
+        <label>Changes you made on this page won't be saved.</label>
     </customLabels>
     <customLabels>
         <name>Clone_Service_Participant</name>
@@ -151,6 +175,14 @@
     <customLabels>
         <name>Delete_Future_Sessions</name>
         <label>Delete Future Service Sessions</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries</name>
+        <label>Delete Related Service Deliveries?</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries_Confirm</name>
+        <label>You are about to delete {0} Service Deliveries associated with this Service Session. You won't be able to view or report on the Service Deliveries later.</label>
     </customLabels>
     <customLabels>
         <name>Delete_Sessions_Success</name>
@@ -186,7 +218,7 @@
     </customLabels>
     <customLabels>
         <name>Dont_Track_Attendance</name>
-        <label>Don&apos;t create an attendance service delivery for this person</label>
+        <label>Don't create an attendance service delivery for this person</label>
     </customLabels>
     <customLabels>
         <name>Enabled</name>
@@ -214,11 +246,11 @@
     </customLabels>
     <customLabels>
         <name>Insert_Operation_Exception</name>
-        <label>You can&apos;t add this record. Ask your admin for help.</label>
+        <label>You can't add this record. Ask your admin for help.</label>
     </customLabels>
     <customLabels>
         <name>Delete_Operation_Exception</name>
-        <label>You can&apos;t delete this record. Ask your admin for help.</label>
+        <label>You can't delete this record. Ask your admin for help.</label>
     </customLabels>
     <customLabels>
         <name>Time_Frame</name>
@@ -274,7 +306,7 @@
     </customLabels>
     <customLabels>
         <name>No_Permission_Message</name>
-        <label>You don&apos;t have access to this information. Ask your admin for help.</label>
+        <label>You don't have access to this information. Ask your admin for help.</label>
     </customLabels>
     <customLabels>
         <name>No_Service_On_BSDT</name>
@@ -302,11 +334,15 @@
     </customLabels>
     <customLabels>
         <name>NoFieldSetFound</name>
-        <label>{0} field set on the {1} object doesn&apos;t exist. Verify the field set name and try again.</label>
+        <label>{0} field set on the {1} object doesn't exist. Verify the field set name and try again.</label>
     </customLabels>
     <customLabels>
         <name>No_Records_Selected</name>
         <label>No records selected</label>
+    </customLabels>
+    <customLabels>
+        <name>Only_Showing_Future_Sessions</name>
+        <label>Showing all future Sessions. To modify previously added Sessions, go to the Service Sessions list.</label>
     </customLabels>
     <customLabels>
         <name>Owner_Field</name>
@@ -355,6 +391,14 @@
     <customLabels>
         <name>Rows_With_Errors</name>
         <label>There are Service Delivery rows with errors.</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Last_Session</name>
+        <label>Enter a {0} after {1}</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Today</name>
+        <label>Enter a {0} on or after today's date</label>
     </customLabels>
     <customLabels>
         <name>Update</name>
@@ -406,7 +450,7 @@
     </customLabels>
     <customLabels>
         <name>Select_Create_Service_Session_Warning</name>
-        <label>Create Service Sessions isn&apos;t selected, so no records will be automatically created. Click Add Service Session to manually add Service Session records.</label>
+        <label>Create Service Sessions isn't selected, so no records will be automatically created. Click Add Service Session to manually add Service Session records.</label>
     </customLabels>
     <customLabels>
         <name>Select_Program_Engagement</name>
@@ -530,7 +574,7 @@
     </customLabels>
     <customLabels>
         <name>TelemetryException</name>
-        <label>We couldn&apos;t collect telemetry metrics.</label>
+        <label>We couldn't collect telemetry metrics.</label>
     </customLabels>
     <customLabels>
         <name>This_Week</name>
@@ -550,7 +594,7 @@
     </customLabels>
     <customLabels>
         <name>Util_UnsupportedField</name>
-        <label>You can&apos;t access this field. Your Salesforce admin can help with that.</label>
+        <label>You can't access this field. Your Salesforce admin can help with that.</label>
     </customLabels>
     <customLabels>
         <name>New</name>
@@ -558,11 +602,15 @@
     </customLabels>
     <customLabels>
         <name>UpsertOperationException</name>
-        <label>You can&apos;t add or update this record. Your Salesforce admin can help with that.</label>
+        <label>You can't add or update this record. Your Salesforce admin can help with that.</label>
     </customLabels>
     <customLabels>
         <name>Warning</name>
         <label>Warning</label>
+    </customLabels>
+    <customLabels>
+        <name>Action</name>
+        <label>Action</label>
     </customLabels>
     <reportTypes>
         <name>Contacts_with_and_without_Program_Engagements</name>
@@ -601,11 +649,19 @@
         <label>Add Contact to Program</label>
     </quickActions>
     <quickActions>
+        <name>ServiceSession__c.Delete_All_Service_Deliveries</name>
+        <label>Delete Service Deliveries</label>
+    </quickActions>
+    <quickActions>
         <name>ServiceSchedule__c.Delete_Future_Sessions</name>
         <label>Delete Future Service Sessions</label>
     </quickActions>
     <quickActions>
         <name>ServiceSchedule__c.Add_More_Participants</name>
         <label>Add More Participants</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Sessions</name>
+        <label>Add More Sessions</label>
     </quickActions>
 </Translations>

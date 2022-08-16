@@ -33,12 +33,28 @@
         <label>Você está adicionando mais de {0} sessões. Isso vai levar algum tempo extra para ser concluído.</label>
     </customLabels>
     <customLabels>
+        <name>Add_More_Sessions</name>
+        <label>Adicionar mais sessões</label>
+    </customLabels>
+    <customLabels>
         <name>Anonymous</name>
         <label>Anônimo</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Service_Fields_Message</name>
+        <label>Os campos mostrados nesta página dependem do serviço que você selecionar.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Success_Message</name>
+        <label>{0} prestações de serviço foram salvas.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Failure_Message</name>
+        <label>{0} prestações de serviço têm erros e não foram salvas.</label>
+    </customLabels>
+    <customLabels>
         <name>BSDT_Selected_Contacts</name>
-        <label>Contatos selecionados.</label>
+        <label>Contatos selecionados</label>
     </customLabels>
     <customLabels>
         <name>BSDT_Group_Option_Title</name>
@@ -66,7 +82,7 @@
     </customLabels>
     <customLabels>
         <name>BSDT_Select_Service</name>
-        <label>Valores padrão de prestação de serviços </label>
+        <label>Valores padrão de prestação de serviços</label>
     </customLabels>
     <customLabels>
         <name>BSDT_Select_Contacts</name>
@@ -79,6 +95,10 @@
     <customLabels>
         <name>BSDT_Warning_No_Contacts</name>
         <label>Selecione pelo menos um Contato para continuar.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Error_Banner_Msg</name>
+        <label>Algo deu errado. Revise os erros nesta página.</label>
     </customLabels>
     <customLabels>
         <name>Cant_Find_Participant</name>
@@ -107,6 +127,10 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>Depois que os participantes forem adicionados a este Cronograma de serviços, acompanhe a atendimento deles aqui.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Sessions_Message</name>
+        <label>Você está atualizando um cronograma existente e quaisquer alterações que fizer aqui serão salvas no registro do cronograma. Você só poderá adicionar sessões após as mais recentes sessões existentes.</label>
     </customLabels>
     <customLabels>
         <name>Incorrect_Tab</name>
@@ -153,6 +177,14 @@
         <label>Excluir sessões de serviço futuras</label>
     </customLabels>
     <customLabels>
+        <name>Delete_Service_Deliveries</name>
+        <label>Excluir prestações de serviços relacionadas?</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries_Confirm</name>
+        <label>Você está prestes a excluir {0} prestações de serviços associadas a esta sessão de serviço. Você não poderá visualizar nem gerar relatórios sobre as prestações de serviços posteriormente.</label>
+    </customLabels>
+    <customLabels>
         <name>Delete_Sessions_Success</name>
         <label>{0} Sessões de serviço excluídas com sucesso.</label>
     </customLabels>
@@ -182,7 +214,7 @@
     </customLabels>
     <customLabels>
         <name>Done</name>
-        <label>Pronto</label>
+        <label>Concluído</label>
     </customLabels>
     <customLabels>
         <name>Dont_Track_Attendance</name>
@@ -238,7 +270,7 @@
     </customLabels>
     <customLabels>
         <name>Loading</name>
-        <label>Carregando</label>
+        <label>Carregamento</label>
     </customLabels>
     <customLabels>
         <name>Last_Day_Of_Month</name>
@@ -309,6 +341,10 @@
         <label>Nenhum registro selecionado</label>
     </customLabels>
     <customLabels>
+        <name>Only_Showing_Future_Sessions</name>
+        <label>Mostrando todas as Sessões futuras. Para modificar Sessões adicionadas anteriormente, acesse a lista Sessões de serviço.</label>
+    </customLabels>
+    <customLabels>
         <name>Owner_Field</name>
         <label>Proprietário</label>
     </customLabels>
@@ -355,6 +391,14 @@
     <customLabels>
         <name>Rows_With_Errors</name>
         <label>Existem linhas da Prestação de serviços com erros.</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Last_Session</name>
+        <label>Inserir {0} a seguir a {1}</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Today</name>
+        <label>Inserir {0} na data de hoje ou após</label>
     </customLabels>
     <customLabels>
         <name>Update</name>
@@ -482,7 +526,7 @@
     </customLabels>
     <customLabels>
         <name>Pin_List_View</name>
-        <label>Fixar modo de exibição de lista </label>
+        <label>Fixar modo de exibição de lista</label>
     </customLabels>
     <customLabels>
         <name>Pin_Title</name>
@@ -564,6 +608,10 @@
         <name>Warning</name>
         <label>Aviso</label>
     </customLabels>
+    <customLabels>
+        <name>Action</name>
+        <label>Ação</label>
+    </customLabels>
     <reportTypes>
         <name>Contacts_with_and_without_Program_Engagements</name>
         <label>Contatos com e sem Engajamentos em programas</label>
@@ -572,7 +620,7 @@
             <name>Contacts</name>
         </sections>
         <sections>
-            <label>Engajamentos em programas</label>
+            <label>Engajamentos de programa</label>
             <name>Program Engagements</name>
         </sections>
     </reportTypes>
@@ -601,11 +649,19 @@
         <label>Adicionar contato ao programa</label>
     </quickActions>
     <quickActions>
+        <name>ServiceSession__c.Delete_All_Service_Deliveries</name>
+        <label>Excluir prestações de serviços</label>
+    </quickActions>
+    <quickActions>
         <name>ServiceSchedule__c.Delete_Future_Sessions</name>
         <label>Excluir sessões de serviço futuras</label>
     </quickActions>
     <quickActions>
         <name>ServiceSchedule__c.Add_More_Participants</name>
         <label>Adicionar mais participantes</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Sessions</name>
+        <label>Adicionar mais sessões</label>
     </quickActions>
 </Translations>

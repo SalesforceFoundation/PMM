@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>OmittedContactIds__c</name>
+    <help>この項目は、参加者名簿から除外された取引先責任者を追跡するために使用します。これはシステム項目であるため、手作業での変更はしないでください。</help>
+    <label>除外された取引先責任者 ID</label>
+</CustomFieldTranslation>

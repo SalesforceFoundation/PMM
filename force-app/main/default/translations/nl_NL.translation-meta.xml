@@ -33,8 +33,24 @@
         <label>U voegt meer dan {0} sessies toe. Het voltooien kan dus iets langer duren.</label>
     </customLabels>
     <customLabels>
+        <name>Add_More_Sessions</name>
+        <label>Meer sessies toevoegen</label>
+    </customLabels>
+    <customLabels>
         <name>Anonymous</name>
         <label>Anoniem</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Service_Fields_Message</name>
+        <label>Welk veld op deze pagina wordt weergegeven, is afhankelijk van de service die je selecteert.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Success_Message</name>
+        <label>{0} serviceleveringen zijn opgeslagen.</label>
+    </customLabels>
+    <customLabels>
+        <name>BSDT_Saving_Complete_Failure_Message</name>
+        <label>{0} serviceleveringen bevatten fouten en zijn niet opgeslagen.</label>
     </customLabels>
     <customLabels>
         <name>BSDT_Selected_Contacts</name>
@@ -81,6 +97,10 @@
         <label>Selecteer ten minste één contactpersoon om door te gaan.</label>
     </customLabels>
     <customLabels>
+        <name>BSDT_Error_Banner_Msg</name>
+        <label>Er is iets misgegaan. Bekijk de fouten op deze pagina.</label>
+    </customLabels>
+    <customLabels>
         <name>Cant_Find_Participant</name>
         <label>Kunt u de juiste deelnemer niet vinden?</label>
     </customLabels>
@@ -107,6 +127,10 @@
     <customLabels>
         <name>No_Participants_Message</name>
         <label>Nadat deelnemers zijn toegevoegd aan deze serviceplanning, kunt u hun aanwezigheid hier bijhouden.</label>
+    </customLabels>
+    <customLabels>
+        <name>Add_Sessions_Message</name>
+        <label>U werkt een bestaande planning bij. Alle wijzigingen die u hier aanbrengt, worden opgeslagen in de planningsrecord. U kunt alleen sessies toevoegen die plaatsvinden na alle reeds ingeplande sessies.</label>
     </customLabels>
     <customLabels>
         <name>Incorrect_Tab</name>
@@ -138,7 +162,7 @@
     </customLabels>
     <customLabels>
         <name>Close</name>
-        <label>Gesloten</label>
+        <label>Sluiten</label>
     </customLabels>
     <customLabels>
         <name>Confirm_Delete</name>
@@ -151,6 +175,14 @@
     <customLabels>
         <name>Delete_Future_Sessions</name>
         <label>Toekomstige servicesessies verwijderen</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries</name>
+        <label>Gerelateerde serviceleveringen verwijderen?</label>
+    </customLabels>
+    <customLabels>
+        <name>Delete_Service_Deliveries_Confirm</name>
+        <label>U staat op het punt om {0} serviceleveringen te verwijderen die zijn gekoppeld aan deze servicesessie. U kunt later de serviceleveringen niet bekijken en er geen rapporten voor maken.</label>
     </customLabels>
     <customLabels>
         <name>Delete_Sessions_Success</name>
@@ -278,7 +310,7 @@
     </customLabels>
     <customLabels>
         <name>No_Service_On_BSDT</name>
-        <label>Het veld Services moet worden opgenomen in het veld &apos;Serviceleveringen in bulk&apos; om records te kunnen opslaan. Vraag uw beheerder om hulp.</label>
+        <label>Het veld Services moet worden opgenomen in het veld 'Serviceleveringen in bulk' om records te kunnen opslaan. Vraag uw beheerder om hulp.</label>
     </customLabels>
     <customLabels>
         <name>No_Service_Participants_Created_Warning</name>
@@ -307,6 +339,10 @@
     <customLabels>
         <name>No_Records_Selected</name>
         <label>Geen records geselecteerd</label>
+    </customLabels>
+    <customLabels>
+        <name>Only_Showing_Future_Sessions</name>
+        <label>Alle toekomstige sessies worden weergegeven. Voor het bewerken van eerder toegevoegde sessies gaat u naar de lijst Servicesessies.</label>
     </customLabels>
     <customLabels>
         <name>Owner_Field</name>
@@ -355,6 +391,14 @@
     <customLabels>
         <name>Rows_With_Errors</name>
         <label>Er zijn serviceleveringsrijen met fouten.</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Last_Session</name>
+        <label>Voer een {0} in na {1}</label>
+    </customLabels>
+    <customLabels>
+        <name>Start_Date_After_Today</name>
+        <label>Voer een {0} in op of na de datum van vandaag</label>
     </customLabels>
     <customLabels>
         <name>Update</name>
@@ -406,7 +450,7 @@
     </customLabels>
     <customLabels>
         <name>Select_Create_Service_Session_Warning</name>
-        <label>&apos;Servicesessies maken&apos; is niet geselecteerd, dus er worden geen automatische records gemaakt. Klik op &apos;Servicesessie toevoegen&apos; om handmatig servicesessierecords toe te voegen.</label>
+        <label>'Servicesessies maken' is niet geselecteerd, dus er worden geen automatische records gemaakt. Klik op 'Servicesessie toevoegen' om handmatig servicesessierecords toe te voegen.</label>
     </customLabels>
     <customLabels>
         <name>Select_Program_Engagement</name>
@@ -422,11 +466,11 @@
     </customLabels>
     <customLabels>
         <name>SkipToStartLink</name>
-        <label>Doorgaan naar begin van lijst</label>
+        <label>Overslaan naar begin van lijst</label>
     </customLabels>
     <customLabels>
         <name>SkipToEndLink</name>
-        <label>Doorgaan naar einde van lijst</label>
+        <label>Overslaan naar einde van lijst</label>
     </customLabels>
     <customLabels>
         <name>Day_Required_When_Weekly_Selected</name>
@@ -564,6 +608,10 @@
         <name>Warning</name>
         <label>Waarschuwing</label>
     </customLabels>
+    <customLabels>
+        <name>Action</name>
+        <label>Actie</label>
+    </customLabels>
     <reportTypes>
         <name>Contacts_with_and_without_Program_Engagements</name>
         <label>Contactpersonen met en zonder programmabetrokkenheden</label>
@@ -601,11 +649,19 @@
         <label>Contactpersoon toevoegen aan programma</label>
     </quickActions>
     <quickActions>
+        <name>ServiceSession__c.Delete_All_Service_Deliveries</name>
+        <label>Serviceleveringen verwijderen</label>
+    </quickActions>
+    <quickActions>
         <name>ServiceSchedule__c.Delete_Future_Sessions</name>
         <label>Toekomstige servicesessies verwijderen</label>
     </quickActions>
     <quickActions>
         <name>ServiceSchedule__c.Add_More_Participants</name>
         <label>Meer deelnemers toevoegen</label>
+    </quickActions>
+    <quickActions>
+        <name>ServiceSchedule__c.Add_More_Sessions</name>
+        <label>Meer sessies toevoegen</label>
     </quickActions>
 </Translations>

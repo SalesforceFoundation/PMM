@@ -4,7 +4,7 @@
     <label>Statut</label>
     <picklistValues>
         <masterLabel>Waitlisted</masterLabel>
-        <translation>En liste d&apos;attente</translation>
+        <translation>En liste d'attente</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Enrolled</masterLabel>

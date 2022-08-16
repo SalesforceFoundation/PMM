@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>OmittedContactIds__c</name>
+    <help>Dit veld wordt gebruikt om bij te houden welke contactpersonen zijn weggelaten van het deelnameoverzicht. Dit is een systeemveld en mag niet handmatig worden gewijzigd.</help>
+    <label>Weggelaten contactpersoon-ID's</label>
+</CustomFieldTranslation>

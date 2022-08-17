@@ -78,6 +78,16 @@
                                     </lightning-layout-item>
                                     <lightning-layout-item
                                         size="12"
+                                        class="slds-var-p-bottom_small"
+                                        if:true={showLimitInfo}
+                                    >
+                                        <c-scoped-notification
+                                            theme="info"
+                                            title={none}
+                                        ></c-scoped-notification>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item
+                                        size="12"
                                         if:false={noRecordsFound}
                                     >
                                         <div

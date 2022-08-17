@@ -72,7 +72,8 @@ public with sharing class ProgramEngagementSelector {
     public List<ProgramEngagement__c> getProgramEngagementsByProgramId(
         Id programId,
         Set<String> fields,
-        Set<String> stages
+        Set<String> stages,
+        Integer engagementLimit
     ) {
         if (
             !(Schema.SObjectType.ProgramEngagement__c.isAccessible() &&
@@ -84,8 +85,8 @@ public with sharing class ProgramEngagementSelector {
             return new List<ProgramEngagement__c>();
         }
 
-        Integer limitTo =
-            System.Limits.getLimitQueryRows() - System.Limits.getQueryRows();
+        // Integer limitTo =
+        //     System.Limits.getLimitQueryRows() - System.Limits.getQueryRows();
 
         queryBuilder
             .reset()
@@ -95,7 +96,7 @@ public with sharing class ProgramEngagementSelector {
                 String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
             )
             .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages')
-            .withLimit(limitTo);
+            .withLimit(engagementLimit);
 
         List<ProgramEngagement__c> programEngagements = Database.query(
             queryBuilder.buildSoqlQuery()

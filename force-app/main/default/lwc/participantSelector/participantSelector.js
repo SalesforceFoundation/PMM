@@ -39,6 +39,7 @@ import removeLabel from "@salesforce/label/c.Remove";
 
 const TIME = "TIME";
 const SEARCH_DELAY = 1000;
+const ENGAGEMENT_LIMIT = 10;
 
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;
@@ -69,6 +70,7 @@ export default class ParticipantSelector extends LightningElement {
     offsetRows = 50;
     offset = this.offsetRows;
     showSpinner = false;
+    showLimitInfo = false;
 
     _searchTimeout;
 
@@ -161,7 +163,7 @@ export default class ParticipantSelector extends LightningElement {
         return `${name} (${this.participantCount}/${this.capacity})`;
     }
 
-    @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
+    @wire(getSelectParticipantModel, { serviceId: "$serviceId", engagementLimit: (ENGAGEMENT_LIMIT + 1)})
     dataSetup(result) {
         this.wiredData = result;
         if (!(result.data || result.error)) {
@@ -169,6 +171,7 @@ export default class ParticipantSelector extends LightningElement {
         }
 
         if (result.data) {
+            this.showLimitInfo = (result.data.programEngagements.length > ENGAGEMENT_LIMIT);
             this.loadTable(result.data);
             this.loadTableRows(result.data);
             this.loadPreviousSelections();
@@ -207,7 +210,7 @@ export default class ParticipantSelector extends LightningElement {
 
     loadTableRows(data) {
         let selectedIds = this.selectedEngagements.map(engagement => engagement.Id);
-        this.allEngagements = data.programEngagements.slice(0);
+        this.allEngagements = data.programEngagements.slice(0, ENGAGEMENT_LIMIT);
 
         this.availableEngagementRows = this.allEngagements
             .filter(engagement => !selectedIds.includes(engagement.Id))

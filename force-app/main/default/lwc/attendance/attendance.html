@@ -34,14 +34,14 @@
         <lightning-card>
             <lightning-layout
                 multiple-rows="true"
-                class="slds-var-p-horizontal_medium"
-                vertical-align="center"
+                class="slds-var-p-horizontal_medium slds-var-p-bottom_large"
+                vertical-align="end"
             >
                 <lightning-layout-item
                     size="12"
                     large-device-size="6"
                     flexibility="grow"
-                    class="slds-var-m-bottom_small"
+                    class="slds-var-m-bottom_x-small"
                 >
                     <header class="slds-media slds-media_center slds-has-flexi-truncate">
                         <div class="slds-media__figure">
@@ -65,9 +65,8 @@
                 </lightning-layout-item>
                 <lightning-layout-item alignment-bump="left"></lightning-layout-item>
                 <lightning-layout-item>
-                    <lightning-layout vertical-align="center">
-                        <lightning-layout-item
-                            class="slds-var-p-right_small slds-var-m-bottom_medium"
+                    <lightning-layout vertical-align="end">
+                        <lightning-layout-item class="slds-var-p-right_small"
                             ><lightning-combobox
                                 id="sort"
                                 label={labels.sortBy}
@@ -75,7 +74,6 @@
                                 options={options}
                                 onchange={handleSortOption}
                                 aria-labelledby="sortLabel"
-                                class="slds-p-bottom_x-small"
                             ></lightning-combobox
                         ></lightning-layout-item>
                         <lightning-layout-item

@@ -23,7 +23,7 @@
                     >
                         <template for:each={fieldSet} for:item="field">
                             <lightning-layout-item
-                                size="12"
+                                size={field.size}
                                 small-device-size="6"
                                 medium-device-size="3"
                                 large-device-size="3"
@@ -34,22 +34,39 @@
                             >
                                 <!-- CONTACT FIELD, ALWAYS OUTPUT, CUSTOM VALUE -->
                                 <template if:true={field.isContactField}>
-                                    <div
-                                        class="slds-form-element slds-form-element_stacked"
-                                    >
-                                        <label
-                                            for={field.apiName}
-                                            class="slds-form-element__label"
+                                    <lightning-layout>
+                                        <lightning-layout-item>
+                                            <div
+                                                class="slds-form-element slds-form-element_stacked"
+                                            >
+                                                <label
+                                                    for={field.apiName}
+                                                    class="slds-form-element__label"
+                                                >
+                                                    {field.label}
+                                                </label>
+                                                <div
+                                                    class="slds-form-element__static"
+                                                    id={field.apiName}
+                                                >
+                                                    {name}
+                                                </div>
+                                            </div></lightning-layout-item
                                         >
-                                            {field.label}
-                                        </label>
-                                        <div
-                                            class="slds-form-element__static"
-                                            id={field.apiName}
+                                        <lightning-layout-item
+                                            class="slds-hide_small"
+                                            alignment-bump="left"
                                         >
-                                            {name}
-                                        </div>
-                                    </div>
+                                            <lightning-button-icon-stateful
+                                                icon-name="utility:block_visitor"
+                                                size="medium"
+                                                alternative-text={labels.skip}
+                                                onclick={handleToggleButton}
+                                                selected={record.rowDisabled}
+                                                aria-label={labels.skip}
+                                            ></lightning-button-icon-stateful
+                                        ></lightning-layout-item>
+                                    </lightning-layout>
                                 </template>
                                 <template if:false={localRecord.rowDisabled}>
                                     <!-- QUANTITY FIELD, DYNAMIC INPUT/OUTPUT WITH CUSTOM LABEL -->
@@ -142,7 +159,7 @@
                 </lightning-layout-item>
                 <!-- SKIP PARTICIPANT TOGGLE -->
                 <lightning-layout-item
-                    class="slds-var-p-around_medium"
+                    class="slds-var-p-around_medium slds-show_small"
                     flexibility="auto, no-grow"
                     alignment-bump="left"
                     if:true={showSkip}

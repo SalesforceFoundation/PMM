@@ -32,47 +32,72 @@
         </lightning-card>
 
         <lightning-card>
-            <div slot="title">
-                <lightning-icon icon-name="custom:custom15" size="small"></lightning-icon>
-                <span class="slds-var-p-left_x-small">
-                    {labels.trackAttendance}
-                </span>
-            </div>
-
-            <div slot="actions">
-                <lightning-layout vertical-align="center">
-                    <lightning-layout-item
-                        class="slds-var-p-right_small slds-var-m-bottom_medium"
-                        ><lightning-combobox
-                            id="sort"
-                            label={labels.sortBy}
-                            value={sortAttendanceBy}
-                            options={options}
-                            onchange={handleSortOption}
-                            aria-labelledby="sortLabel"
-                            class="slds-p-bottom_x-small"
-                        ></lightning-combobox
-                    ></lightning-layout-item>
-                    <lightning-layout-item
-                        ><lightning-button
-                            onclick={handleUpdateClick}
-                            variant="neutral"
-                            label={labels.update}
-                            title={labels.update}
-                            if:true={showUpdateButton}
-                        ></lightning-button
-                    ></lightning-layout-item>
-                    <lightning-layout-item>
-                        <lightning-button
-                            onclick={handlePrintClick}
-                            variant="neutral"
-                            label={printButtonLabel}
-                            title={printButtonLabel}
-                            if:true={showPrintButton}
-                        ></lightning-button
-                    ></lightning-layout-item>
-                </lightning-layout>
-            </div>
+            <lightning-layout
+                multiple-rows="true"
+                class="slds-var-p-horizontal_medium slds-var-p-bottom_large"
+                vertical-align="end"
+            >
+                <lightning-layout-item
+                    size="12"
+                    large-device-size="6"
+                    flexibility="grow"
+                    class="slds-var-m-bottom_x-small"
+                >
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <lightning-icon
+                                icon-name="custom:custom15"
+                                size="small"
+                            ></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+                                <a
+                                    href="#"
+                                    class="slds-card__header-link slds-truncate"
+                                    title={labels.trackAttendance}
+                                >
+                                    <span>{labels.trackAttendance}</span>
+                                </a>
+                            </h2>
+                        </div>
+                    </header>
+                </lightning-layout-item>
+                <lightning-layout-item alignment-bump="left"></lightning-layout-item>
+                <lightning-layout-item>
+                    <lightning-layout vertical-align="end">
+                        <lightning-layout-item class="slds-var-p-right_small"
+                            ><lightning-combobox
+                                id="sort"
+                                label={labels.sortBy}
+                                value={sortAttendanceBy}
+                                options={options}
+                                onchange={handleSortOption}
+                                aria-labelledby="sortLabel"
+                            ></lightning-combobox
+                        ></lightning-layout-item>
+                        <lightning-layout-item
+                            ><lightning-button
+                                onclick={handleUpdateClick}
+                                variant="neutral"
+                                label={labels.update}
+                                title={labels.update}
+                                if:true={showUpdateButton}
+                            ></lightning-button
+                        ></lightning-layout-item>
+                        <lightning-layout-item>
+                            <lightning-button
+                                onclick={handlePrintClick}
+                                variant="neutral"
+                                label={printButtonLabel}
+                                title={printButtonLabel}
+                                if:true={showPrintButton}
+                                class="hide-on-phone"
+                            ></lightning-button
+                        ></lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
 
             <div class="slds-border_top">
                 <template if:true={showSpinner}>

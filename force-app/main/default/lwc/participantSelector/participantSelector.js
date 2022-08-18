@@ -39,7 +39,7 @@ import removeLabel from "@salesforce/label/c.Remove";
 
 const TIME = "TIME";
 const SEARCH_DELAY = 1000;
-const ENGAGEMENT_LIMIT = 10;
+const ENGAGEMENT_LIMIT = 1000;
 
 export default class ParticipantSelector extends LightningElement {
     @api serviceId;

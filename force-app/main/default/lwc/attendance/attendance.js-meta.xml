@@ -14,6 +14,10 @@
             <objects>
                 <object>ServiceSession__c</object>
             </objects>
+            <supportedFormFactors>
+                <supportedFormFactor type="Large" />
+                <supportedFormFactor type="Small" />
+            </supportedFormFactors>
             <property name="serviceSessionStatusForAfterSubmit" 
                       label="Status for Service Session after attendance is submitted"
                       datasource="apex://ServiceSessionStatusPicklist"

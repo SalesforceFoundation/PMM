@@ -17,7 +17,7 @@ import { ServiceDeliveryFieldSets } from "./serviceDeliveryFieldSets";
 
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
 import addEntry from "@salesforce/label/c.Add_Entry";
-import notAvailablePhone from "@salesforce/label/c.Not_Available_MobileApp";
+import featureOnlyWebApp from "@salesforce/label/c.Feature_Only_Webapp";
 import save from "@salesforce/label/c.Save";
 import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
@@ -60,7 +60,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     labels = {
         addEntry,
         addServiceDelivery,
-        notAvailablePhone,
+        featureOnlyWebApp,
         saved,
         saving,
         required,

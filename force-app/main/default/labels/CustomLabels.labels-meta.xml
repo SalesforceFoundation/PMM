@@ -1090,10 +1090,10 @@
         <value>Action</value>
     </labels>
     <labels>
-        <fullName>Not_Available_MobileApp</fullName>
+        <fullName>Feature_Only_Webapp</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Not available on the mobile app</shortDescription>
-        <value>This feature is not available on the mobile app</value>
+        <shortDescription>This feature is only available on the web application</shortDescription>
+        <value>This feature is only available on the web application.</value>
     </labels>
 </CustomLabels>

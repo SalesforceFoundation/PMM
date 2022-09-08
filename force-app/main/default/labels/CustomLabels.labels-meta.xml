@@ -1089,4 +1089,11 @@
         <shortDescription>Action</shortDescription>
         <value>Action</value>
     </labels>
+    <labels>
+        <fullName>Not_Available_MobileApp</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Not available on the mobile app</shortDescription>
+        <value>This feature is not available on the mobile app</value>
+    </labels>
 </CustomLabels>

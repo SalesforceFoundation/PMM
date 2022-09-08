@@ -1089,4 +1089,11 @@
         <shortDescription>Action</shortDescription>
         <value>Action</value>
     </labels>
+    <labels>
+        <fullName>Feature_Only_Webapp</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This feature is only available on the web application</shortDescription>
+        <value>This feature is only available on the web application.</value>
+    </labels>
 </CustomLabels>

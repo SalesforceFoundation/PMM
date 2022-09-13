@@ -84,8 +84,17 @@ public with sharing class ProgramEngagementSelector {
             return new List<ProgramEngagement__c>();
         }
 
-        Integer limitTo =
-            System.Limits.getLimitQueryRows() - System.Limits.getQueryRows();
+        Integer limitTo = 1000;
+        String soslFindClause = 'test';
+        String programEngagementName = Schema.SObjectType.ProgramEngagement__c.getName();
+        //Convert to SOSL
+        /*
+        List<List<sObject>> searchList = [
+            FIND :soslFindClause
+            IN ALL FIELDS
+            RETURNING ProgramEngagement__c(Name, Industry WHERE Industry = 'Apparel')
+        ];
+        */
 
         queryBuilder
             .reset()
@@ -101,7 +110,31 @@ public with sharing class ProgramEngagementSelector {
             queryBuilder.buildSoqlQuery()
         );
 
+        //END Convert
+
         return Security.stripInaccessible(AccessType.READABLE, programEngagements)
             .getRecords();
+    }
+
+    private String buildProgramEngagementQuery(
+        String searchText,
+        List<String> fields,
+        Id programId,
+        Set<String> stages
+    ) {
+        return String.format(
+            'FIND :searchText IN ALL FIELDS RETURNING {0}({1} {2} {3})',
+            new List<String>{
+                Schema.SObjectType.ProgramEngagement__c.getName(),
+                String.join(fields, ', '),
+                ' WHERE ' +
+                String.valueOf(ProgramEngagement__c.Program__c) +
+                ' = :programId' +
+                ' AND ' +
+                String.valueOf(ProgramEngagement__c.Stage__c) +
+                ' IN :stages',
+                ' LIMIT ' + 1000
+            }
+        );
     }
 }

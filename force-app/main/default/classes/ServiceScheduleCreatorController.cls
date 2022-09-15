@@ -47,9 +47,23 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static SelectParticipantModel getSelectParticipantModel(Id serviceId) {
+    public static SelectParticipantModel getSelectParticipantModel(
+        Id serviceId,
+        String searchText,
+        String cohortId
+    ) {
+        System.debug(cohortId);
+        System.debug('Controller');
+        Id cohortIdConvert = null;
+        if (cohortId != null && cohortId != '') {
+            cohortIdConvert = (Id) cohortId;
+        }
         try {
-            return service.getSelectParticipantModel(serviceId);
+            return service.getSelectParticipantModel(
+                serviceId,
+                searchText,
+                cohortIdConvert
+            );
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

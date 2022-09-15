@@ -55,8 +55,8 @@ export default class ParticipantSelector extends LightningElement {
     @track cohorts;
     @track availableEngagementsForSelection = [];
 
-    searchValue;
-    cohortId;
+    searchValue = "";
+    cohortId = "";
     programName;
     programId;
     addToServiceButtonLabel;
@@ -161,9 +161,14 @@ export default class ParticipantSelector extends LightningElement {
         return `${name} (${this.participantCount}/${this.capacity})`;
     }
 
-    @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
+    @wire(getSelectParticipantModel, {
+        serviceId: "$serviceId",
+        searchText: "$searchValue",
+        cohortId: "$cohortId",
+    })
     dataSetup(result) {
         this.wiredData = result;
+        console.log("Wired Results : getSelectParticipantModel", result);
         if (!(result.data || result.error)) {
             return;
         }
@@ -364,8 +369,9 @@ export default class ParticipantSelector extends LightningElement {
 
     handleCohortChange(event) {
         this.cohortId = event.detail.value;
-
-        this.applyFilters();
+        console.log(this.cohortId);
+        refreshApex(this.wiredData);
+        //this.applyFilters();
     }
 
     handleSelectAll() {
@@ -468,9 +474,10 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     startFilter() {
-        this.displaySpinner();
+        //this.displaySpinner();
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        setTimeout(this.applyFilters.bind(this));
+        //setTimeout(this.applyFilters.bind(this));
+        refreshApex(this.wiredData);
     }
 
     applyFilters() {

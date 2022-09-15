@@ -72,7 +72,9 @@ public with sharing class ProgramEngagementSelector {
     public List<ProgramEngagement__c> getProgramEngagementsByProgramId(
         Id programId,
         Set<String> fields,
-        Set<String> stages
+        Set<String> stages,
+        String searchText,
+        Id cohortId
     ) {
         if (
             !(Schema.SObjectType.ProgramEngagement__c.isAccessible() &&
@@ -85,54 +87,72 @@ public with sharing class ProgramEngagementSelector {
         }
 
         Integer limitTo = 1000;
-        String soslFindClause = 'test';
         String programEngagementName = Schema.SObjectType.ProgramEngagement__c.getName();
-        //Convert to SOSL
-        /*
-        List<List<sObject>> searchList = [
-            FIND :soslFindClause
-            IN ALL FIELDS
-            RETURNING ProgramEngagement__c(Name, Industry WHERE Industry = 'Apparel')
-        ];
-        */
+        List<ProgramEngagement__c> programEngagements;
+        System.debug('Search Text : ' + searchText);
+        if (searchText == null || searchText == '') {
+            queryBuilder
+                .reset()
+                .withSObjectType(ProgramEngagement__c.getSObjectType())
+                .withSelectFields(new List<String>(fields))
+                .addCondition(
+                    String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
+                )
+                .addCondition(
+                    String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages'
+                )
+                .withLimit(limitTo);
+            if (cohortId != null) {
+                queryBuilder.addCondition(
+                    String.valueOf(ProgramEngagement__c.ProgramCohort__c) + ' = :cohortId'
+                );
+            }
 
-        queryBuilder
-            .reset()
-            .withSObjectType(ProgramEngagement__c.getSObjectType())
-            .withSelectFields(new List<String>(fields))
-            .addCondition(
-                String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
-            )
-            .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages')
-            .withLimit(limitTo);
-
-        List<ProgramEngagement__c> programEngagements = Database.query(
-            queryBuilder.buildSoqlQuery()
-        );
-
-        //END Convert
-
+            programEngagements = Database.query(queryBuilder.buildSoqlQuery());
+        } else {
+            String soslQuery = buildProgramEngagementQuery(
+                searchText,
+                fields,
+                programId,
+                stages,
+                cohortId
+            );
+            System.debug(searchText);
+            System.debug(fields);
+            System.debug(programId);
+            System.debug(soslQuery);
+            List<List<SObject>> soslResults = Search.query(soslQuery);
+            programEngagements = (List<ProgramEngagement__c>) soslResults[0];
+            System.debug(programEngagements);
+        }
         return Security.stripInaccessible(AccessType.READABLE, programEngagements)
             .getRecords();
     }
 
-    private String buildProgramEngagementQuery(
+    public String buildProgramEngagementQuery(
         String searchText,
-        List<String> fields,
+        Set<String> fields,
         Id programId,
-        Set<String> stages
+        Set<String> stages,
+        Id cohortId
     ) {
+        String whereClause =
+            ' WHERE ' +
+            String.valueOf(ProgramEngagement__c.Program__c) +
+            ' = :programId' +
+            ' AND ' +
+            String.valueOf(ProgramEngagement__c.Stage__c) +
+            ' IN :stages ';
+        if (cohortId != null) {
+            whereClause +=
+                String.valueOf(ProgramEngagement__c.ProgramCohort__c) + ' =: cohortId ';
+        }
         return String.format(
             'FIND :searchText IN ALL FIELDS RETURNING {0}({1} {2} {3})',
             new List<String>{
                 Schema.SObjectType.ProgramEngagement__c.getName(),
-                String.join(fields, ', '),
-                ' WHERE ' +
-                String.valueOf(ProgramEngagement__c.Program__c) +
-                ' = :programId' +
-                ' AND ' +
-                String.valueOf(ProgramEngagement__c.Stage__c) +
-                ' IN :stages',
+                String.join(new List<String>(fields), ', '),
+                whereClause,
                 ' LIMIT ' + 1000
             }
         );

@@ -124,10 +124,6 @@ public with sharing class ProgramEngagementSelector {
             .getRecords();
     }
 
-    //New plan.  Dual SOSL query (contact, pe) - then a SOQL query to bring it all in.
-    //Contact would result in contact id.  Combined with the program id would give us PEs.
-    //PE would result in PEIDs used directly
-
     private Set<Id> getEngagementIdsBySearchTerm(
         String searchText,
         Set<String> fields,
@@ -135,41 +131,8 @@ public with sharing class ProgramEngagementSelector {
         Set<String> stages,
         Id cohortId
     ) {
-        Set<Id> resultIds = new Set<Id>();
-        List<List<SObject>> soslResult = searchEngagementsSOSL(
-            searchText,
-            fields,
-            programId,
-            stages,
-            cohortId
-        );
+        searchText = String.escapeSingleQuotes(searchText);
 
-        //Process PEs
-        List<ProgramEngagement__c> pes = (List<ProgramEngagement__c>) soslResult[0];
-        resultIds.addAll((new Map<Id, SObject>(pes)).keySet());
-
-        //Process Contacts
-        List<Contact> contacts = (List<Contact>) soslResult[1];
-        Set<Id> contactIds = (new Map<Id, SObject>(contacts)).keySet();
-
-        for (ProgramEngagement__c pe : [
-            SELECT Id
-            FROM ProgramEngagement__c
-            WHERE Contact__c IN :contactIds AND Program__c = :programId
-        ]) {
-            resultIds.add(pe.Id);
-        }
-
-        return resultIds;
-    }
-
-    private List<List<SObject>> searchEngagementsSOSL(
-        String searchText,
-        Set<String> fields,
-        Id programId,
-        Set<String> stages,
-        Id cohortId
-    ) {
         String whereClause =
             ' WHERE ' +
             String.valueOf(ProgramEngagement__c.Program__c) +
@@ -183,6 +146,7 @@ public with sharing class ProgramEngagementSelector {
                 String.valueOf(ProgramEngagement__c.ProgramCohort__c) +
                 ' =: cohortId ';
         }
+
         String queryString = String.format(
             'FIND :searchText IN ALL FIELDS RETURNING {0}({1} {2}), Contact(FirstName, LastName, Email)',
             new List<String>{
@@ -192,6 +156,28 @@ public with sharing class ProgramEngagementSelector {
             }
         );
 
-        return Search.query(queryString);
+        return getEngagementIdsFromSOSLResult(programId, Search.query(queryString));
+    }
+
+    private Set<Id> getEngagementIdsFromSOSLResult(
+        Id programId,
+        List<List<SObject>> soslResult
+    ) {
+        Set<Id> resultIds = new Set<Id>();
+        List<ProgramEngagement__c> engagements = (List<ProgramEngagement__c>) soslResult[0];
+        resultIds.addAll((new Map<Id, SObject>(engagements)).keySet());
+
+        List<Contact> contacts = (List<Contact>) soslResult[1];
+        Set<Id> contactIds = (new Map<Id, SObject>(contacts)).keySet();
+
+        for (ProgramEngagement__c engagement : [
+            SELECT Id
+            FROM ProgramEngagement__c
+            WHERE Contact__c IN :contactIds AND Program__c = :programId
+        ]) {
+            resultIds.add(engagement.Id);
+        }
+
+        return resultIds;
     }
 }

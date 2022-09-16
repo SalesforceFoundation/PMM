@@ -368,9 +368,9 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleCohortChange(event) {
+        this.displaySpinner();
         this.cohortId = event.detail.value;
-        console.log(this.cohortId);
-        refreshApex(this.wiredData);
+        //refreshApex(this.wiredData);
         //this.applyFilters();
     }
 
@@ -457,14 +457,21 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleInputChange(event) {
-        this.searchValue = event.target.value;
-        this.debounceSearch();
+        console.log("handleInputChange", this.searchValue.length);
+        if (event.target && event.target.value && event.target.value.length > 2) {
+            this.debounceSearch(event.target.value);
+        } else {
+            this.searchValue = "";
+        }
     }
 
-    debounceSearch() {
+    debounceSearch(searchValue) {
         this.resetTimeout();
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        this._searchTimeout = setTimeout(this.startFilter.bind(this), SEARCH_DELAY);
+        this._searchTimeout = setTimeout(
+            this.startFilter.bind(this, searchValue),
+            SEARCH_DELAY
+        );
     }
 
     resetTimeout() {
@@ -473,31 +480,33 @@ export default class ParticipantSelector extends LightningElement {
         }
     }
 
-    startFilter() {
-        //this.displaySpinner();
+    startFilter(searchValue) {
+        this.displaySpinner();
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        //setTimeout(this.applyFilters.bind(this));
-        refreshApex(this.wiredData);
+        setTimeout(this.doFilters.bind(this, searchValue));
+    }
+
+    doFilters(searchValue) {
+        this.searchValue = searchValue;
+        //this.hideSpinner();
     }
 
     applyFilters() {
-        let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
+        // this.filteredEngagements = this.availableEngagementRows.filter(
+        //     row =>
+        //         JSON.stringify(row)
+        //             .toLowerCase()
+        //             .includes(searchText) &&
+        //         (this.cohortId
+        //             ? row[this.fields.programCohort.apiName] === this.cohortId
+        //             : true)
+        // );
 
-        this.filteredEngagements = this.availableEngagementRows.filter(
-            row =>
-                JSON.stringify(row)
-                    .toLowerCase()
-                    .includes(searchText) &&
-                (this.cohortId
-                    ? row[this.fields.programCohort.apiName] === this.cohortId
-                    : true)
-        );
-
+        this.filteredEngagements = this.availableEngagementRows;
         this.availableEngagementsForSelection = this.filteredEngagements.slice(
             0,
             Math.min(this.filteredEngagements.length, this.offset)
         );
-
         this.hideSpinner();
     }
 

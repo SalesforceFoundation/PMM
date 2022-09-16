@@ -89,47 +89,81 @@ public with sharing class ProgramEngagementSelector {
         Integer limitTo = 1000;
         String programEngagementName = Schema.SObjectType.ProgramEngagement__c.getName();
         List<ProgramEngagement__c> programEngagements;
-        System.debug('Search Text : ' + searchText);
-        if (searchText == null || searchText == '') {
-            queryBuilder
-                .reset()
-                .withSObjectType(ProgramEngagement__c.getSObjectType())
-                .withSelectFields(new List<String>(fields))
-                .addCondition(
-                    String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
-                )
-                .addCondition(
-                    String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages'
-                )
-                .withLimit(limitTo);
-            if (cohortId != null) {
-                queryBuilder.addCondition(
-                    String.valueOf(ProgramEngagement__c.ProgramCohort__c) + ' = :cohortId'
-                );
-            }
+        Set<Id> targetIds;
 
-            programEngagements = Database.query(queryBuilder.buildSoqlQuery());
-        } else {
-            String soslQuery = buildProgramEngagementQuery(
+        queryBuilder
+            .reset()
+            .withSObjectType(ProgramEngagement__c.getSObjectType())
+            .withSelectFields(new List<String>(fields))
+            .addCondition(
+                String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
+            )
+            .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages')
+            .withLimit(limitTo);
+        if (cohortId != null) {
+            queryBuilder.addCondition(
+                String.valueOf(ProgramEngagement__c.ProgramCohort__c) + ' = :cohortId'
+            );
+        }
+        if (searchText != null && searchText != '') {
+            targetIds = getEngagementIdsBySearchTerm(
                 searchText,
                 fields,
                 programId,
                 stages,
                 cohortId
             );
-            System.debug(searchText);
-            System.debug(fields);
-            System.debug(programId);
-            System.debug(soslQuery);
-            List<List<SObject>> soslResults = Search.query(soslQuery);
-            programEngagements = (List<ProgramEngagement__c>) soslResults[0];
-            System.debug(programEngagements);
+            queryBuilder.addCondition(
+                String.valueOf(ProgramEngagement__c.Id) + ' = :targetIds'
+            );
         }
+
+        programEngagements = Database.query(queryBuilder.buildSoqlQuery());
+
         return Security.stripInaccessible(AccessType.READABLE, programEngagements)
             .getRecords();
     }
 
-    public String buildProgramEngagementQuery(
+    //New plan.  Dual SOSL query (contact, pe) - then a SOQL query to bring it all in.
+    //Contact would result in contact id.  Combined with the program id would give us PEs.
+    //PE would result in PEIDs used directly
+
+    private Set<Id> getEngagementIdsBySearchTerm(
+        String searchText,
+        Set<String> fields,
+        Id programId,
+        Set<String> stages,
+        Id cohortId
+    ) {
+        Set<Id> resultIds = new Set<Id>();
+        List<List<SObject>> soslResult = searchEngagementsSOSL(
+            searchText,
+            fields,
+            programId,
+            stages,
+            cohortId
+        );
+
+        //Process PEs
+        List<ProgramEngagement__c> pes = (List<ProgramEngagement__c>) soslResult[0];
+        resultIds.addAll((new Map<Id, SObject>(pes)).keySet());
+
+        //Process Contacts
+        List<Contact> contacts = (List<Contact>) soslResult[1];
+        Set<Id> contactIds = (new Map<Id, SObject>(contacts)).keySet();
+
+        for (ProgramEngagement__c pe : [
+            SELECT Id
+            FROM ProgramEngagement__c
+            WHERE Contact__c IN :contactIds AND Program__c = :programId
+        ]) {
+            resultIds.add(pe.Id);
+        }
+
+        return resultIds;
+    }
+
+    private List<List<SObject>> searchEngagementsSOSL(
         String searchText,
         Set<String> fields,
         Id programId,
@@ -145,16 +179,19 @@ public with sharing class ProgramEngagementSelector {
             ' IN :stages ';
         if (cohortId != null) {
             whereClause +=
-                String.valueOf(ProgramEngagement__c.ProgramCohort__c) + ' =: cohortId ';
+                ' AND ' +
+                String.valueOf(ProgramEngagement__c.ProgramCohort__c) +
+                ' =: cohortId ';
         }
-        return String.format(
-            'FIND :searchText IN ALL FIELDS RETURNING {0}({1} {2} {3})',
+        String queryString = String.format(
+            'FIND :searchText IN ALL FIELDS RETURNING {0}({1} {2}), Contact(FirstName, LastName, Email)',
             new List<String>{
                 Schema.SObjectType.ProgramEngagement__c.getName(),
                 String.join(new List<String>(fields), ', '),
-                whereClause,
-                ' LIMIT ' + 1000
+                whereClause
             }
         );
+
+        return Search.query(queryString);
     }
 }

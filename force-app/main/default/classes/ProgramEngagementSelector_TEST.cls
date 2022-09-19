@@ -94,7 +94,9 @@ public with sharing class ProgramEngagementSelector_TEST {
                 'Name',
                 String.valueOf(ProgramEngagement__c.ProgramCohort__c)
             },
-            ACTIVE_ENGAGEMENT_STAGES
+            ACTIVE_ENGAGEMENT_STAGES,
+            null,
+            null
         );
         Test.stopTest();
         System.assert(
@@ -112,6 +114,121 @@ public with sharing class ProgramEngagementSelector_TEST {
             'Expected that both the actual and expected list are associated to the same program cohort'
         );
     }
+    //Tarren Start
+
+    @IsTest
+    private static void testGetProgramEngagementsByProgramIdWithSearch() {
+        Program__c program = [SELECT Id, Name FROM Program__c LIMIT 1];
+
+        List<ProgramEngagement__c> expected = new List<ProgramEngagement__c>(
+            [
+                SELECT Id, Contact__r.Name, Contact__r.Email, Stage__c, ProgramCohort__c
+                FROM ProgramEngagement__c
+                WHERE
+                    Stage__c IN :ACTIVE_ENGAGEMENT_STAGES
+                    AND Program__c = :program.Id
+                    AND Contact__r.Name LIKE '%Contact%'
+            ]
+        );
+
+        //Search results must be populated manually for SOSL
+        List<Id> soslTestIds = new List<Id>{ expected[0].Id };
+
+        for (Contact con : [
+            SELECT Id, Name, Email
+            FROM Contact
+            WHERE Name LIKE '%Contact%'
+        ]) {
+            soslTestIds.add(con.Id);
+        }
+        Test.setFixedSearchResults(soslTestIds);
+
+        Test.startTest();
+
+        ProgramEngagementSelector selector = new ProgramEngagementSelector();
+        List<ProgramEngagement__c> actual = selector.getProgramEngagementsByProgramId(
+            program.Id,
+            new Set<String>{
+                'Name',
+                String.valueOf(ProgramEngagement__c.ProgramCohort__c)
+            },
+            ACTIVE_ENGAGEMENT_STAGES,
+            'Test Contact',
+            null
+        );
+        Test.stopTest();
+
+        System.assert(
+            !actual.isEmpty(),
+            'Expected at least one program engagement to be returned.'
+        );
+        System.assertEquals(
+            expected.size(),
+            actual.size(),
+            'Expected that both the actual and expected list size are the same'
+        );
+    }
+
+    @IsTest
+    private static void testGetProgramEngagementsByProgramIdWithSeaerchAndCohort() {
+        Program__c program = [SELECT Id, Name FROM Program__c LIMIT 1];
+        ProgramCohort__c cohort = [
+            SELECT Id, Name
+            FROM ProgramCohort__c
+            WHERE Program__c = :program.Id
+            LIMIT 1
+        ];
+
+        List<ProgramEngagement__c> expected = new List<ProgramEngagement__c>(
+            [
+                SELECT Id, Contact__r.Name, Contact__r.Email, Stage__c, ProgramCohort__c
+                FROM ProgramEngagement__c
+                WHERE
+                    Stage__c IN :ACTIVE_ENGAGEMENT_STAGES
+                    AND Program__c = :program.Id
+                    AND ProgramCohort__c = :cohort.Id
+            ]
+        );
+
+        //Search results must be populated manually for SOSL
+        List<Id> soslTestIds = new List<Id>{ expected[0].Id };
+
+        for (Contact con : [
+            SELECT Id, Name, Email
+            FROM Contact
+            WHERE Name LIKE '%Contact%'
+        ]) {
+            soslTestIds.add(con.Id);
+        }
+        Test.setFixedSearchResults(soslTestIds);
+
+        Test.startTest();
+
+        ProgramEngagementSelector selector = new ProgramEngagementSelector();
+        List<ProgramEngagement__c> actual = selector.getProgramEngagementsByProgramId(
+            program.Id,
+            new Set<String>{
+                'Name',
+                String.valueOf(ProgramEngagement__c.ProgramCohort__c)
+            },
+            ACTIVE_ENGAGEMENT_STAGES,
+            'Test Contact',
+            cohort.Id
+        );
+        Test.stopTest();
+
+        System.assert(
+            !actual.isEmpty(),
+            'Expected at least one program engagement to be returned.'
+        );
+        System.assertEquals(
+            expected.size(),
+            actual.size(),
+            'Expected that both the actual and expected list size are the same'
+        );
+    }
+
+    //Tarren End
 
     @IsTest
     private static void testGetProgramEngagementsByProgramIdNoAccess() {
@@ -145,7 +262,9 @@ public with sharing class ProgramEngagementSelector_TEST {
             List<ProgramEngagement__c> actual = selector.getProgramEngagementsByProgramId(
                 program.Id,
                 new Set<String>{ 'Name' },
-                ACTIVE_ENGAGEMENT_STAGES
+                ACTIVE_ENGAGEMENT_STAGES,
+                null,
+                null
             );
             System.assertEquals(
                 new List<ProgramEngagement__c>(),

@@ -491,14 +491,20 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         SelectParticipantModel modelToReturn = new SelectParticipantModel();
         String methodName = 'getSelectParticipantModel';
 
-        serviceStub.withReturnValue(methodName, Id.class, modelToReturn);
+        serviceStub.withReturnValue(
+            methodName,
+            new List<Type>{ Id.class, String.class, Id.class },
+            modelToReturn
+        );
 
         Test.startTest();
 
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         SelectParticipantModel actual = ServiceScheduleCreatorController.getSelectParticipantModel(
-            serviceId
+            serviceId,
+            null,
+            null
         );
 
         Test.stopTest();
@@ -514,7 +520,55 @@ public with sharing class ServiceScheduleCreatorController_TEST {
             'Expected the model returned from the service is what is returned by the controller'
         );
 
-        serviceStub.assertCalledWith(methodName, Id.class, serviceId);
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ Id.class, String.class, Id.class },
+            new List<Object>{ serviceId, null, null }
+        );
+    }
+
+    @IsTest
+    private static void testGetSelectParticipantModelWithSearchAndCohort() {
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
+        Id cohortId = TestUtil.mockId(ProgramCohort__c.SObjectType);
+        String searchString = 'Test';
+        SelectParticipantModel modelToReturn = new SelectParticipantModel();
+        String methodName = 'getSelectParticipantModel';
+
+        serviceStub.withReturnValue(
+            methodName,
+            new List<Type>{ Id.class, String.class, Id.class },
+            modelToReturn
+        );
+
+        Test.startTest();
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        SelectParticipantModel actual = ServiceScheduleCreatorController.getSelectParticipantModel(
+            serviceId,
+            searchString,
+            cohortId
+        );
+
+        Test.stopTest();
+
+        System.assertNotEquals(
+            null,
+            actual,
+            'Expected that actual participant model is not null'
+        );
+        System.assertEquals(
+            true,
+            modelToReturn === actual,
+            'Expected the model returned from the service is what is returned by the controller'
+        );
+
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ Id.class, String.class, Id.class },
+            new List<Object>{ serviceId, searchString, cohortId }
+        );
     }
 
     @IsTest
@@ -524,13 +578,18 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         SelectParticipantModel actual;
         Exception actualException;
 
-        serviceStub.withThrowException(methodName, Id.class);
+        serviceStub.withThrowException(
+            methodName,
+            new List<Type>{ Id.class, String.class, Id.class }
+        );
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
         Test.startTest();
         try {
             actual = ServiceScheduleCreatorController.getSelectParticipantModel(
-                serviceId
+                serviceId,
+                null,
+                null
             );
         } catch (Exception e) {
             actualException = e;
@@ -545,7 +604,11 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         System.assertEquals(null, actual, 'Expected that the actual value is null');
 
-        serviceStub.assertCalledWith(methodName, Id.class, serviceId);
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ Id.class, String.class, Id.class },
+            new List<Object>{ serviceId, null, null }
+        );
     }
 
     @IsTest

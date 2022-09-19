@@ -171,7 +171,6 @@ export default class ParticipantSelector extends LightningElement {
     })
     dataSetup(result) {
         this.wiredData = result;
-        console.log("Wired Results : getSelectParticipantModel", result);
         if (!(result.data || result.error)) {
             return;
         }

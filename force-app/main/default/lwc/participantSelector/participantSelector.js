@@ -371,8 +371,10 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleCohortChange(event) {
-        this.displaySpinner();
-        this.cohortId = event.detail.value;
+        if (this.cohortId !== event.detail.value) {
+            this.displaySpinner();
+            this.cohortId = event.detail.value;
+        }
     }
 
     handleSelectAll() {

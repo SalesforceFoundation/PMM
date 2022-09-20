@@ -115,7 +115,7 @@ public with sharing class ProgramEngagementSelector {
                 cohortId
             );
             queryBuilder.addCondition(
-                String.valueOf(ProgramEngagement__c.Id) + ' = :targetIds'
+                String.valueOf(ProgramEngagement__c.Id) + ' IN :targetIds'
             );
         }
 

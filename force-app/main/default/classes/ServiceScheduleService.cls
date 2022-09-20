@@ -266,7 +266,6 @@ public with sharing class ServiceScheduleService {
             model.program.Id
         );
 
-        System.debug('Service2');
         model.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
             model.program.Id,
             getSelectFieldsWithToLabel(model),

@@ -460,7 +460,6 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleInputChange(event) {
-        console.log("handleInputChange", this.searchValue.length);
         if (event.target && event.target.value && event.target.value.length > 2) {
             this.debounceSearch(event.target.value);
         } else {
@@ -486,12 +485,11 @@ export default class ParticipantSelector extends LightningElement {
     startFilter(searchValue) {
         this.displaySpinner();
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        setTimeout(this.doFilters.bind(this, searchValue));
+        setTimeout(this.updateSearchValue.bind(this, searchValue));
     }
 
-    doFilters(searchValue) {
+    updateSearchValue(searchValue) {
         this.searchValue = searchValue;
-        //this.hideSpinner();
     }
 
     applyFilters() {

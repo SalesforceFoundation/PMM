@@ -76,6 +76,8 @@ public with sharing class ProgramEngagementSelector {
         String searchText,
         Id cohortId
     ) {
+        final Integer LIMIT_TO = 1000;
+
         if (
             !(Schema.SObjectType.ProgramEngagement__c.isAccessible() &&
             PermissionValidator.getInstance()
@@ -86,7 +88,6 @@ public with sharing class ProgramEngagementSelector {
             return new List<ProgramEngagement__c>();
         }
 
-        Integer limitTo = 1000;
         String programEngagementName = Schema.SObjectType.ProgramEngagement__c.getName();
         List<ProgramEngagement__c> programEngagements;
         Set<Id> targetIds;
@@ -99,7 +100,7 @@ public with sharing class ProgramEngagementSelector {
                 String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
             )
             .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages')
-            .withLimit(limitTo);
+            .withLimit(LIMIT_TO);
         if (cohortId != null) {
             queryBuilder.addCondition(
                 String.valueOf(ProgramEngagement__c.ProgramCohort__c) + ' = :cohortId'

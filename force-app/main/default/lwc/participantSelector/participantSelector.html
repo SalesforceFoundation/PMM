@@ -80,24 +80,10 @@
                                         size="12"
                                         if:true={show1kMessage}
                                     >
-                                        <div
-                                            class="slds-notify slds-notify_alert slds-alert_warning"
-                                            role="alert"
-                                        >
-                                            <span
-                                                class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
-                                            >
-                                                <lightning-icon
-                                                    tabindex="0"
-                                                    icon-name="utility:warning"
-                                                    size="x-small"
-                                                    variant="warning"
-                                                ></lightning-icon>
-                                            </span>
-                                            <h2>
-                                                {labels.tooManyResults}
-                                            </h2>
-                                        </div>
+                                        <c-scoped-notification
+                                            theme="warning"
+                                            title={labels.tooManyResults}
+                                        ></c-scoped-notification>
                                     </lightning-layout-item>
                                     <lightning-layout-item
                                         size="12"

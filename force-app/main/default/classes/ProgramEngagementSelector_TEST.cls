@@ -114,7 +114,6 @@ public with sharing class ProgramEngagementSelector_TEST {
             'Expected that both the actual and expected list are associated to the same program cohort'
         );
     }
-    //Tarren Start
 
     @IsTest
     private static void testGetProgramEngagementsByProgramIdWithSearch() {
@@ -227,8 +226,6 @@ public with sharing class ProgramEngagementSelector_TEST {
             'Expected that both the actual and expected list size are the same'
         );
     }
-
-    //Tarren End
 
     @IsTest
     private static void testGetProgramEngagementsByProgramIdNoAccess() {

@@ -1101,6 +1101,6 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Too many results returned from participant selector</shortDescription>
-        <value>More than 1000 results found, refine by searching or filtering by Program Cohort</value>
+        <value>Program has more than 1,000 enrolled participants. Refine the results by searching or filtering by Program Cohort.</value>
     </labels>
 </CustomLabels>

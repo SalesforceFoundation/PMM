@@ -103,7 +103,6 @@ public with sharing class ServiceScheduleService {
         String searchText,
         Id cohortId
     ) {
-        System.debug('Service');
         SelectParticipantModel model = new SelectParticipantModel();
         loadAndPopulateParticipantRecords(serviceId, model, searchText, cohortId);
         return model;

@@ -52,18 +52,11 @@ public with sharing class ServiceScheduleCreatorController {
         String searchText,
         String cohortId
     ) {
-        System.debug(cohortId);
-        System.debug('Controller');
-        Id cohortIdConvert = null;
-        if (cohortId != null && cohortId != '') {
-            cohortIdConvert = (Id) cohortId;
+        if (cohortId == '') {
+            cohortId = null;
         }
         try {
-            return service.getSelectParticipantModel(
-                serviceId,
-                searchText,
-                cohortIdConvert
-            );
+            return service.getSelectParticipantModel(serviceId, searchText, cohortId);
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

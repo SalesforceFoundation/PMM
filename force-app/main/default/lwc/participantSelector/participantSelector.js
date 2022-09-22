@@ -57,6 +57,7 @@ export default class ParticipantSelector extends LightningElement {
     @track availableEngagementsForSelection = [];
 
     searchValue = "";
+    wiredSearchValue = "";
     cohortId = "";
     programName;
     programId;
@@ -166,7 +167,7 @@ export default class ParticipantSelector extends LightningElement {
 
     @wire(getSelectParticipantModel, {
         serviceId: "$serviceId",
-        searchText: "$searchValue",
+        searchText: "$wiredSearchValue",
         cohortId: "$cohortId",
     })
     dataSetup(result) {
@@ -460,20 +461,21 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleInputChange(event) {
-        if (event.target && event.target.value && event.target.value.length > 2) {
-            this.debounceSearch(event.target.value);
+        if (event.target && event.target.value) {
+            this.searchValue = event.target.value;
+            if (this.searchValue.length === 0 || this.searchValue.length > 2) {
+                this.debounceSearch();
+            }
         } else {
             this.searchValue = "";
+            this.debounceSearch();
         }
     }
 
-    debounceSearch(searchValue) {
+    debounceSearch() {
         this.resetTimeout();
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        this._searchTimeout = setTimeout(
-            this.startFilter.bind(this, searchValue),
-            SEARCH_DELAY
-        );
+        this._searchTimeout = setTimeout(this.startFilter.bind(this), SEARCH_DELAY);
     }
 
     resetTimeout() {
@@ -482,14 +484,14 @@ export default class ParticipantSelector extends LightningElement {
         }
     }
 
-    startFilter(searchValue) {
+    startFilter() {
         this.displaySpinner();
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        setTimeout(this.updateSearchValue.bind(this, searchValue));
+        setTimeout(this.updateSearchValue.bind(this));
     }
 
-    updateSearchValue(searchValue) {
-        this.searchValue = searchValue;
+    updateSearchValue() {
+        this.wiredSearchValue = this.searchValue;
     }
 
     applyFilters() {

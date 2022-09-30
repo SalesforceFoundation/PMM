@@ -528,6 +528,49 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
+    private static void testGetSelectParticipantModelWithEmptyCohort() {
+        Id serviceId = TestUtil.mockId(Service__c.SObjectType);
+        String searchString = 'Test';
+        SelectParticipantModel modelToReturn = new SelectParticipantModel();
+        String methodName = 'getSelectParticipantModel';
+
+        serviceStub.withReturnValue(
+            methodName,
+            new List<Type>{ Id.class, String.class, Id.class },
+            modelToReturn
+        );
+
+        Test.startTest();
+
+        ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
+
+        SelectParticipantModel actual = ServiceScheduleCreatorController.getSelectParticipantModel(
+            serviceId,
+            searchString,
+            ''
+        );
+
+        Test.stopTest();
+
+        System.assertNotEquals(
+            null,
+            actual,
+            'Expected that actual participant model is not null'
+        );
+        System.assertEquals(
+            true,
+            modelToReturn === actual,
+            'Expected the model returned from the service is what is returned by the controller'
+        );
+
+        serviceStub.assertCalledWith(
+            methodName,
+            new List<Type>{ Id.class, String.class, Id.class },
+            new List<Object>{ serviceId, searchString, null }
+        );
+    }
+
+    @IsTest
     private static void testGetSelectParticipantModelWithSearchAndCohort() {
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);
         Id cohortId = TestUtil.mockId(ProgramCohort__c.SObjectType);

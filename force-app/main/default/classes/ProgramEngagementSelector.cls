@@ -106,7 +106,7 @@ public with sharing class ProgramEngagementSelector {
                 String.valueOf(ProgramEngagement__c.ProgramCohort__c) + ' = :cohortId'
             );
         }
-        if (searchText != null && searchText != '') {
+        if (!String.isBlank(searchText)) {
             targetIds = getEngagementIdsBySearchTerm(
                 searchText,
                 fields,
@@ -132,8 +132,10 @@ public with sharing class ProgramEngagementSelector {
         Set<String> stages,
         Id cohortId
     ) {
+        final Integer SEARCH_LIMIT = 1000;
         searchText = String.escapeSingleQuotes(searchText);
 
+        String peSearchString = 'FIND :searchText IN ALL FIELDS RETURNING {0}({1} {2} LIMIT :SEARCH_LIMIT)';
         String whereClause =
             ' WHERE ' +
             String.valueOf(ProgramEngagement__c.Program__c) +
@@ -149,7 +151,7 @@ public with sharing class ProgramEngagementSelector {
         }
 
         String queryString = String.format(
-            'FIND :searchText IN ALL FIELDS RETURNING {0}({1} {2}), Contact(FirstName, LastName, Email)',
+            peSearchString,
             new List<String>{
                 Schema.SObjectType.ProgramEngagement__c.getName(),
                 String.join(new List<String>(fields), ', '),
@@ -157,18 +159,29 @@ public with sharing class ProgramEngagementSelector {
             }
         );
 
-        return getEngagementIdsFromSOSLResult(programId, Search.query(queryString));
+        List<List<SObject>> engagementResult = Search.query(queryString);
+        List<List<SObject>> contactResult = [
+            FIND :searchText
+            IN ALL FIELDS
+            RETURNING
+                Contact(FirstName, LastName, Email ORDER BY LastName LIMIT :SEARCH_LIMIT)
+        ];
+
+        return getEngagementIdsFromSOSLResult(
+            programId,
+            engagementResult[0],
+            contactResult[0]
+        );
     }
 
     private Set<Id> getEngagementIdsFromSOSLResult(
         Id programId,
-        List<List<SObject>> soslResult
+        List<ProgramEngagement__c> engagements,
+        List<Contact> contacts
     ) {
         Set<Id> resultIds = new Set<Id>();
-        List<ProgramEngagement__c> engagements = (List<ProgramEngagement__c>) soslResult[0];
         resultIds.addAll((new Map<Id, SObject>(engagements)).keySet());
 
-        List<Contact> contacts = (List<Contact>) soslResult[1];
         Set<Id> contactIds = (new Map<Id, SObject>(contacts)).keySet();
 
         for (ProgramEngagement__c engagement : [

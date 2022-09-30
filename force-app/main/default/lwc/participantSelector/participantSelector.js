@@ -463,7 +463,7 @@ export default class ParticipantSelector extends LightningElement {
     handleInputChange(event) {
         if (event.target && event.target.value) {
             this.searchValue = event.target.value;
-            if (this.searchValue.length === 0 || this.searchValue.length > 2) {
+            if (this.searchValue.length !== 1) {
                 this.debounceSearch();
             }
         } else {

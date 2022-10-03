@@ -440,10 +440,13 @@ export default class ParticipantSelector extends LightningElement {
 
             this.selectedEngagements = tempSelectedEngagements;
 
-            this.availableEngagementRows = [
-                ...this.availableEngagementRows,
-                event.detail.row,
-            ];
+            //Verify the deselected row is in the current dataset before displaying
+            if (this.allEngagements.some(row => row.Id === event.detail.row.Id)) {
+                this.availableEngagementRows = [
+                    ...this.availableEngagementRows,
+                    event.detail.row,
+                ];
+            }
             this.sortData(this.availableEngagementRows);
 
             //filter previouslySelectedEngagements to remove program engagement that we deselected so it does not add the deselected value back

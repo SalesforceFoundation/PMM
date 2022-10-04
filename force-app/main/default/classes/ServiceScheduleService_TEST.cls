@@ -906,7 +906,13 @@ public with sharing class ServiceScheduleService_TEST {
 
         programEngagementSelectorStub.withReturnValue(
             programEngagementsMethodName,
-            new List<Type>{ Id.class, Set<String>.class, Set<String>.class },
+            new List<Type>{
+                Id.class,
+                Set<String>.class,
+                Set<String>.class,
+                String.class,
+                Id.class
+            },
             programEngagementsToReturn
         );
 
@@ -920,7 +926,11 @@ public with sharing class ServiceScheduleService_TEST {
         service.programSelector = (ProgramSelector) programSelectorStub.createMock();
 
         Test.startTest();
-        SelectParticipantModel actual = service.getSelectParticipantModel(serviceId);
+        SelectParticipantModel actual = service.getSelectParticipantModel(
+            serviceId,
+            null,
+            null
+        );
         Test.stopTest();
 
         System.assertNotEquals(
@@ -968,11 +978,19 @@ public with sharing class ServiceScheduleService_TEST {
 
         programEngagementSelectorStub.assertCalledWith(
             programEngagementsMethodName,
-            new List<Type>{ Id.class, Set<String>.class, Set<String>.class },
+            new List<Type>{
+                Id.class,
+                Set<String>.class,
+                Set<String>.class,
+                String.class,
+                Id.class
+            },
             new List<Object>{
                 programId,
                 service.getSelectFieldsWithToLabel(actual),
-                new Set<String>{ 'Active', 'Enrolled' }
+                new Set<String>{ 'Active', 'Enrolled' },
+                null,
+                null
             }
         );
 
@@ -983,7 +1001,9 @@ public with sharing class ServiceScheduleService_TEST {
     private static void shouldReturnNullProgramWhenProgramNotFound() {
         Test.startTest();
         SelectParticipantModel actualModel = service.getSelectParticipantModel(
-            TestUtil.mockId(Service__c.SObjectType)
+            TestUtil.mockId(Service__c.SObjectType),
+            null,
+            null
         );
         Test.stopTest();
 
@@ -1051,7 +1071,9 @@ public with sharing class ServiceScheduleService_TEST {
 
         // Step 3
         SelectParticipantModel participantModel = service.getSelectParticipantModel(
-            serviceId
+            serviceId,
+            null,
+            null
         );
         System.assert(
             !participantModel.programEngagements.isEmpty(),

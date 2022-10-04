@@ -98,9 +98,13 @@ public with sharing class ServiceScheduleService {
         domain.insertParticipants(engagements, schedule);
     }
 
-    public SelectParticipantModel getSelectParticipantModel(Id serviceId) {
+    public SelectParticipantModel getSelectParticipantModel(
+        Id serviceId,
+        String searchText,
+        Id cohortId
+    ) {
         SelectParticipantModel model = new SelectParticipantModel();
-        loadAndPopulateParticipantRecords(serviceId, model);
+        loadAndPopulateParticipantRecords(serviceId, model, searchText, cohortId);
         return model;
     }
 
@@ -248,7 +252,9 @@ public with sharing class ServiceScheduleService {
 
     private void loadAndPopulateParticipantRecords(
         Id serviceId,
-        SelectParticipantModel model
+        SelectParticipantModel model,
+        String searchText,
+        Id cohortId
     ) {
         model.program = programEngagementSelector.getProgramByServiceId(serviceId);
         if (model.program == null) {
@@ -262,7 +268,9 @@ public with sharing class ServiceScheduleService {
         model.programEngagements = programEngagementSelector.getProgramEngagementsByProgramId(
             model.program.Id,
             getSelectFieldsWithToLabel(model),
-            progEngagementService.getActiveStages()
+            progEngagementService.getActiveStages(),
+            searchText,
+            cohortId
         );
     }
 

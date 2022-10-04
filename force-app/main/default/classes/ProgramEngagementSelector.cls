@@ -72,8 +72,12 @@ public with sharing class ProgramEngagementSelector {
     public List<ProgramEngagement__c> getProgramEngagementsByProgramId(
         Id programId,
         Set<String> fields,
-        Set<String> stages
+        Set<String> stages,
+        String searchText,
+        Id cohortId
     ) {
+        final Integer LIMIT_TO = 1000;
+
         if (
             !(Schema.SObjectType.ProgramEngagement__c.isAccessible() &&
             PermissionValidator.getInstance()
@@ -84,8 +88,9 @@ public with sharing class ProgramEngagementSelector {
             return new List<ProgramEngagement__c>();
         }
 
-        Integer limitTo =
-            System.Limits.getLimitQueryRows() - System.Limits.getQueryRows();
+        String programEngagementName = Schema.SObjectType.ProgramEngagement__c.getName();
+        List<ProgramEngagement__c> programEngagements;
+        Set<Id> targetIds;
 
         queryBuilder
             .reset()
@@ -95,13 +100,98 @@ public with sharing class ProgramEngagementSelector {
                 String.valueOf(ProgramEngagement__c.Program__c) + ' = :programId'
             )
             .addCondition(String.valueOf(ProgramEngagement__c.Stage__c) + ' IN :stages')
-            .withLimit(limitTo);
+            .withLimit(LIMIT_TO);
+        if (cohortId != null) {
+            queryBuilder.addCondition(
+                String.valueOf(ProgramEngagement__c.ProgramCohort__c) + ' = :cohortId'
+            );
+        }
+        if (!String.isBlank(searchText)) {
+            targetIds = getEngagementIdsBySearchTerm(
+                searchText,
+                fields,
+                programId,
+                stages,
+                cohortId
+            );
+            queryBuilder.addCondition(
+                String.valueOf(ProgramEngagement__c.Id) + ' IN :targetIds'
+            );
+        }
 
-        List<ProgramEngagement__c> programEngagements = Database.query(
-            queryBuilder.buildSoqlQuery()
-        );
+        programEngagements = Database.query(queryBuilder.buildSoqlQuery());
 
         return Security.stripInaccessible(AccessType.READABLE, programEngagements)
             .getRecords();
+    }
+
+    private Set<Id> getEngagementIdsBySearchTerm(
+        String searchText,
+        Set<String> fields,
+        Id programId,
+        Set<String> stages,
+        Id cohortId
+    ) {
+        final Integer SEARCH_LIMIT = 1000;
+        searchText = String.escapeSingleQuotes(searchText);
+
+        String peSearchString = 'FIND :searchText IN ALL FIELDS RETURNING {0}({1} {2} LIMIT :SEARCH_LIMIT)';
+        String whereClause =
+            ' WHERE ' +
+            String.valueOf(ProgramEngagement__c.Program__c) +
+            ' = :programId' +
+            ' AND ' +
+            String.valueOf(ProgramEngagement__c.Stage__c) +
+            ' IN :stages ';
+        if (cohortId != null) {
+            whereClause +=
+                ' AND ' +
+                String.valueOf(ProgramEngagement__c.ProgramCohort__c) +
+                ' =: cohortId ';
+        }
+
+        String queryString = String.format(
+            peSearchString,
+            new List<String>{
+                Schema.SObjectType.ProgramEngagement__c.getName(),
+                String.join(new List<String>(fields), ', '),
+                whereClause
+            }
+        );
+
+        List<List<SObject>> engagementResult = Search.query(queryString);
+        List<List<SObject>> contactResult = [
+            FIND :searchText
+            IN ALL FIELDS
+            RETURNING
+                Contact(FirstName, LastName, Email ORDER BY LastName LIMIT :SEARCH_LIMIT)
+        ];
+
+        return getEngagementIdsFromSOSLResult(
+            programId,
+            engagementResult[0],
+            contactResult[0]
+        );
+    }
+
+    private Set<Id> getEngagementIdsFromSOSLResult(
+        Id programId,
+        List<ProgramEngagement__c> engagements,
+        List<Contact> contacts
+    ) {
+        Set<Id> resultIds = new Set<Id>();
+        resultIds.addAll((new Map<Id, SObject>(engagements)).keySet());
+
+        Set<Id> contactIds = (new Map<Id, SObject>(contacts)).keySet();
+
+        for (ProgramEngagement__c engagement : [
+            SELECT Id
+            FROM ProgramEngagement__c
+            WHERE Contact__c IN :contactIds AND Program__c = :programId
+        ]) {
+            resultIds.add(engagement.Id);
+        }
+
+        return resultIds;
     }
 }

@@ -52,6 +52,42 @@ public with sharing class ProgramEngagementService_TEST {
         bucketSelectorStub.assertCalledAsExpected();
     }
 
+    @IsTest
+    private static void shouldGetActiveStagesWithLabels() {
+        List<String> bucketNames = new List<String>{ 'Active' };
+
+        Schema.SObjectType programEngagementSObjType = ProgramEngagement__c.SObjectType;
+        Schema.SObjectField stageField = ProgramEngagement__c.Stage__c;
+
+        List<Bucket__mdt> stageBuckets = createBuckets();
+
+        bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
+            .when(
+                'getBuckets',
+                List<String>.class,
+                Schema.SObjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, programEngagementSObjType, stageField)
+            .thenReturn(stageBuckets)
+            .build();
+
+        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
+
+        Map<String, String> expectedStageMap = new Map<String, String>();
+        expectedStageMap.put('Active', 'Active');
+        expectedStageMap.put('Enrolled', 'Enrolled');
+
+        Test.startTest();
+        Map<String, String> actualStageMap = service.getActiveStagesWithLabels();
+        Test.stopTest();
+        System.assertEquals(
+            expectedStageMap.size(),
+            actualStageMap.size(),
+            'Returned incorrect number of mappings'
+        );
+    }
+
     private static List<Bucket__mdt> createBuckets() {
         BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
             .withDeveloperName('ProgramEngagementStage')

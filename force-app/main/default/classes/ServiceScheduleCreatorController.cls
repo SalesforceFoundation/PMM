@@ -10,6 +10,8 @@
 public with sharing class ServiceScheduleCreatorController {
     @TestVisible
     private static ServiceScheduleService service = new ServiceScheduleService();
+    @TestVisible
+    private static ProgramEngagementService peService = new ProgramEngagementService();
 
     @AuraEnabled(cacheable=true)
     public static ServiceScheduleModel getServiceScheduleModel(
@@ -47,16 +49,31 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled(cacheable=true)
+    public static Map<String, String> getActiveStages() {
+        try {
+            return peService.getActiveStagesWithLabels();
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
     public static SelectParticipantModel getSelectParticipantModel(
         Id serviceId,
         String searchText,
+        String stage,
         String cohortId
     ) {
         if (cohortId == '') {
             cohortId = null;
         }
         try {
-            return service.getSelectParticipantModel(serviceId, searchText, cohortId);
+            return service.getSelectParticipantModel(
+                serviceId,
+                searchText,
+                stage,
+                cohortId
+            );
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

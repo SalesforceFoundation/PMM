@@ -12,6 +12,7 @@ import { format, formatTime } from "c/util";
 import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
+import getActiveStages from "@salesforce/apex/ServiceScheduleCreatorController.getActiveStages";
 
 import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 
@@ -26,6 +27,7 @@ import none from "@salesforce/label/c.None";
 import noRecordsFound from "@salesforce/label/c.No_Records_Found";
 import noRecordsSelected from "@salesforce/label/c.No_Records_Selected";
 import filterByRecord from "@salesforce/label/c.Filter_By_Record";
+import filterByStage from "@salesforce/label/c.Filter_By_Stage";
 import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
 import add from "@salesforce/label/c.Add";
 import addAll from "@salesforce/label/c.Add_All";
@@ -59,6 +61,7 @@ export default class ParticipantSelector extends LightningElement {
     searchValue = "";
     wiredSearchValue = "";
     cohortId = "";
+    selectedStage = "";
     programName;
     programId;
     addToServiceButtonLabel;
@@ -72,6 +75,7 @@ export default class ParticipantSelector extends LightningElement {
     offset = this.offsetRows;
     showSpinner = false;
     show1kMessage = false;
+    stageOptions;
 
     _searchTimeout;
 
@@ -96,6 +100,7 @@ export default class ParticipantSelector extends LightningElement {
         removeLabel,
         loading,
         tooManyResults,
+        filterByStage,
     };
 
     @api
@@ -111,6 +116,20 @@ export default class ParticipantSelector extends LightningElement {
             }
         });
         return result;
+    }
+
+    get controlSize() {
+        if (this.stageOptions && this.stageOptions.length > 2) {
+            return 5;
+        }
+        return 6;
+    }
+
+    get showStageInput() {
+        if (this.stageOptions && this.stageOptions.length > 2) {
+            return true;
+        }
+        return false;
     }
 
     get showCapacityWarning() {
@@ -165,9 +184,17 @@ export default class ParticipantSelector extends LightningElement {
         return `${name} (${this.participantCount}/${this.capacity})`;
     }
 
+    @wire(getActiveStages, {})
+    setupStages(result) {
+        if (result.data) {
+            this.loadStageOptions(result.data);
+        }
+    }
+
     @wire(getSelectParticipantModel, {
         serviceId: "$serviceId",
         searchText: "$wiredSearchValue",
+        stage: "$selectedStage",
         cohortId: "$cohortId",
     })
     dataSetup(result) {
@@ -310,6 +337,16 @@ export default class ParticipantSelector extends LightningElement {
         this.handleSelectParticipants();
     }
 
+    loadStageOptions(data) {
+        this.stageOptions = Object.entries(data).map(([key, value]) => {
+            let newObj = {};
+            newObj.label = value;
+            newObj.value = key;
+            return newObj;
+        });
+        this.stageOptions.unshift({ label: this.labels.none, value: "" });
+    }
+
     loadProgramCohorts(data) {
         this.cohorts = data.programCohorts.slice(0);
         this.searchOptions = this.cohorts.map(element => {
@@ -369,6 +406,13 @@ export default class ParticipantSelector extends LightningElement {
                 alternativeText: this.labels.removeLabel,
             },
         });
+    }
+
+    handleStageChange(event) {
+        if (this.selectedStage !== event.detail.value) {
+            this.displaySpinner();
+            this.selectedStage = event.detail.value;
+        }
     }
 
     handleCohortChange(event) {

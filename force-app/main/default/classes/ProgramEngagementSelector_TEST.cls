@@ -124,9 +124,9 @@ public with sharing class ProgramEngagementSelector_TEST {
                 SELECT Id, Contact__r.Name, Contact__r.Email, Stage__c, ProgramCohort__c
                 FROM ProgramEngagement__c
                 WHERE
-                    Stage__c IN :ACTIVE_ENGAGEMENT_STAGES
-                    AND Program__c = :program.Id
+                    Program__c = :program.Id
                     AND Contact__r.Name LIKE '%Contact%'
+                    AND Stage__c = 'Enrolled'
             ]
         );
 
@@ -151,7 +151,7 @@ public with sharing class ProgramEngagementSelector_TEST {
                 'Name',
                 String.valueOf(ProgramEngagement__c.ProgramCohort__c)
             },
-            ACTIVE_ENGAGEMENT_STAGES,
+            new Set<String>{ 'Enrolled' },
             'Test Contact',
             null
         );

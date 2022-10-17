@@ -44,7 +44,7 @@ public with sharing class ProgramEngagementService {
         return activeStages;
     }
 
-    public Map<String, String> getActiveStagesWithLabels() {
+    public Map<String, String> getActiveStagesByValue() {
         Set<String> apiNames = activeStages;
         Map<String, String> result = new Map<String, String>();
         Schema.DescribeFieldResult fieldResult = ProgramEngagement__c.Stage__c.getDescribe();

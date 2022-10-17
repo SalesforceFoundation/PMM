@@ -53,33 +53,16 @@ public with sharing class ProgramEngagementService_TEST {
     }
 
     @IsTest
-    private static void shouldGetActiveStagesWithLabels() {
-        List<String> bucketNames = new List<String>{ 'Active' };
-
+    private static void shouldGetActiveStagesByValue() {
         Schema.SObjectType programEngagementSObjType = ProgramEngagement__c.SObjectType;
         Schema.SObjectField stageField = ProgramEngagement__c.Stage__c;
-
-        List<Bucket__mdt> stageBuckets = createBuckets();
-
-        bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
-            .when(
-                'getBuckets',
-                List<String>.class,
-                Schema.SObjectType.class,
-                Schema.SObjectField.class
-            )
-            .calledWith(bucketNames, programEngagementSObjType, stageField)
-            .thenReturn(stageBuckets)
-            .build();
-
-        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
 
         Map<String, String> expectedStageMap = new Map<String, String>();
         expectedStageMap.put('Active', 'Active');
         expectedStageMap.put('Enrolled', 'Enrolled');
 
         Test.startTest();
-        Map<String, String> actualStageMap = service.getActiveStagesWithLabels();
+        Map<String, String> actualStageMap = service.getActiveStagesByValue();
         Test.stopTest();
         System.assertEquals(
             expectedStageMap.size(),

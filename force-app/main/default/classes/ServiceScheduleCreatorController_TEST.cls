@@ -16,7 +16,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
     @IsTest
     private static void shouldGetActiveStages() {
-        String methodName = 'getActiveStagesWithLabels';
+        String methodName = 'getActiveStagesByValue';
         Map<String, String> expectedStageMap = new Map<String, String>{
             'Active' => 'Active',
             'Enrolled' => 'Enrolled'
@@ -39,7 +39,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
     @IsTest
     private static void shouldGetActiveStagesException() {
-        String methodName = 'getActiveStagesWithLabels';
+        String methodName = 'getActiveStagesByValue';
         peServiceStub.withThrowException(methodName);
         Exception actualException;
 

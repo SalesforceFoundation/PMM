@@ -51,7 +51,7 @@ public with sharing class ServiceScheduleCreatorController {
     @AuraEnabled(cacheable=true)
     public static Map<String, String> getActiveStages() {
         try {
-            return peService.getActiveStagesWithLabels();
+            return peService.getActiveStagesByValue();
         } catch (Exception ex) {
             throw Util.getAuraHandledException(ex);
         }

@@ -27,7 +27,6 @@ import none from "@salesforce/label/c.None";
 import noRecordsFound from "@salesforce/label/c.No_Records_Found";
 import noRecordsSelected from "@salesforce/label/c.No_Records_Selected";
 import filterByRecord from "@salesforce/label/c.Filter_By_Record";
-import filterByStage from "@salesforce/label/c.Filter_By_Stage";
 import noContactsSelected from "@salesforce/label/c.No_Service_Participants_Created_Warning";
 import add from "@salesforce/label/c.Add";
 import addAll from "@salesforce/label/c.Add_All";
@@ -100,7 +99,6 @@ export default class ParticipantSelector extends LightningElement {
         removeLabel,
         loading,
         tooManyResults,
-        filterByStage,
     };
 
     @api
@@ -238,6 +236,7 @@ export default class ParticipantSelector extends LightningElement {
         this.labels.filterByCohort = format(filterByRecord, [
             this.objectLabels.programCohort.objectLabel,
         ]);
+        this.labels.filterByStage = format(filterByRecord, [this.fields.stage.label]);
     }
 
     loadTableRows(data) {

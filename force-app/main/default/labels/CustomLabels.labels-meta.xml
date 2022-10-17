@@ -413,8 +413,8 @@
         <fullName>Filter_by_Record</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Filter by {SObject Label}</shortDescription>
-        <value>Filter by {0}</value>
+        <shortDescription>Filter by: {SObject Label}</shortDescription>
+        <value>Filter by: {0}</value>
     </labels>
     <labels>
         <fullName>Filter_by_Stage</fullName>

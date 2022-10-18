@@ -62,6 +62,55 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     }
 
     @IsTest
+    private static void shouldGetProgramEngagementById() {
+        String methodName = 'getProgramEngagementById';
+        Id peId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+        ProgramEngagement__c expected = new ProgramEngagement__c();
+        expected.Id = peId;
+
+        peServiceStub.withReturnValue(methodName, new List<Type>{ Id.class }, expected);
+        ServiceScheduleCreatorController.peService = (ProgramEngagementService) peServiceStub.createMock();
+
+        Test.startTest();
+        ProgramEngagement__c actual = ServiceScheduleCreatorController.getProgramEngagementById(
+            peId
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Expected Program Engagement was not returned'
+        );
+        peServiceStub.assertCalled(methodName, new List<Type>{ Id.class });
+    }
+
+    @IsTest
+    private static void shouldGetProgramEngagementByIdException() {
+        String methodName = 'getProgramEngagementById';
+        peServiceStub.withThrowException(methodName, new List<Type>{ Id.class });
+        Exception actualException;
+        Id peId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+        ProgramEngagement__c actual;
+        ServiceScheduleCreatorController.peService = (ProgramEngagementService) peServiceStub.createMock();
+
+        Test.startTest();
+        try {
+            actual = ServiceScheduleCreatorController.getProgramEngagementById(peId);
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            peServiceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+        peServiceStub.assertCalled(methodName, new List<Type>{ Id.class });
+    }
+
+    @IsTest
     private static void shouldGetModelFromService() {
         String methodName = 'getServiceScheduleModel';
         ServiceScheduleModel modelToReturn = new ServiceScheduleModel();

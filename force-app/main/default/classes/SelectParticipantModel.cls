@@ -29,9 +29,6 @@ public with sharing class SelectParticipantModel {
         ),
         'programCohort' => fieldSetService.getFieldForLWC(
             Schema.ProgramEngagement__c.ProgramCohort__c.getDescribe()
-        ),
-        'stage' => fieldSetService.getFieldForLWC(
-            Schema.ProgramEngagement__c.Stage__c.getDescribe()
         )
     };
     private Map<String, Map<String, Object>> scheduleFields = new Map<String, Map<String, Object>>{

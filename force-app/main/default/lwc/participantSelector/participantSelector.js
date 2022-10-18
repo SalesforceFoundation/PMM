@@ -13,6 +13,7 @@ import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
 import getActiveStages from "@salesforce/apex/ServiceScheduleCreatorController.getActiveStages";
+import getProgramEngagementById from "@salesforce/apex/ServiceScheduleCreatorController.getProgramEngagementById";
 
 import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 
@@ -38,6 +39,7 @@ import newLabel from "@salesforce/label/c.New";
 import actionLabel from "@salesforce/label/c.Action";
 import removeLabel from "@salesforce/label/c.Remove";
 import tooManyResults from "@salesforce/label/c.Too_Many_Participants";
+import { handleError } from "c/util";
 
 const TIME = "TIME";
 const SEARCH_DELAY = 1000;
@@ -236,7 +238,9 @@ export default class ParticipantSelector extends LightningElement {
         this.labels.filterByCohort = format(filterByRecord, [
             this.objectLabels.programCohort.objectLabel,
         ]);
-        this.labels.filterByStage = format(filterByRecord, [this.fields.stage.label]);
+        this.labels.filterByStage = format(filterByRecord, [
+            this.fields.engagementStage.label,
+        ]);
     }
 
     loadTableRows(data) {
@@ -249,23 +253,26 @@ export default class ParticipantSelector extends LightningElement {
             .map(engagement => {
                 // Flatten relationship fields
                 let programEngagement = { ...engagement };
-                for (const [field, value] of Object.entries(programEngagement)) {
-                    let isTimeField =
-                        this.fieldByFieldPath[field] &&
-                        this.fieldByFieldPath[field].type === TIME;
-                    if (isTimeField) {
-                        programEngagement[field] = formatTime(value);
-                    }
-                    if (typeof value === "object") {
-                        for (const [parentField, parentValue] of Object.entries(value)) {
-                            programEngagement[field + parentField] = parentValue;
-                        }
-                    }
-                }
-
-                return programEngagement;
+                return this.flattenProgramEngagement(programEngagement);
             });
         this.sortData(this.availableEngagementRows);
+    }
+
+    flattenProgramEngagement(programEngagement) {
+        for (const [field, value] of Object.entries(programEngagement)) {
+            let isTimeField =
+                this.fieldByFieldPath[field] &&
+                this.fieldByFieldPath[field].type === TIME;
+            if (isTimeField) {
+                programEngagement[field] = formatTime(value);
+            }
+            if (typeof value === "object") {
+                for (const [parentField, parentValue] of Object.entries(value)) {
+                    programEngagement[field + parentField] = parentValue;
+                }
+            }
+        }
+        return programEngagement;
     }
 
     dispatchLoaded() {
@@ -290,9 +297,26 @@ export default class ParticipantSelector extends LightningElement {
         this.processNewParticipant(event.detail);
     }
 
-    async processNewParticipant(id) {
+    async processNewParticipant(peId) {
         await refreshApex(this.wiredData);
-        this.handleSelectById(id);
+        let row = this.availableEngagementRows.find(element => element.Id === peId);
+        if (row) {
+            this.handleSelectById(peId);
+        } else {
+            this.loadNewProgramEngagement(peId);
+        }
+    }
+
+    loadNewProgramEngagement(peId) {
+        getProgramEngagementById({ peId })
+            .then(result => {
+                let thisPE = this.flattenProgramEngagement(result);
+                this.availableEngagementRows.push(thisPE);
+                this.handleSelectById(peId);
+            })
+            .catch(error => {
+                handleError(error);
+            });
     }
 
     handleLoadMore() {

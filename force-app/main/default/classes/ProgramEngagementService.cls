@@ -10,6 +10,8 @@
 public with sharing class ProgramEngagementService {
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+    @TestVisible
+    private ProgramEngagementSelector selector = new ProgramEngagementSelector();
 
     @TestVisible
     private Set<String> activeStages {
@@ -55,5 +57,9 @@ public with sharing class ProgramEngagementService {
             }
         }
         return result;
+    }
+
+    public ProgramEngagement__c getProgramEngagementById(Id peId) {
+        return selector.getProgramEngagementById(peId);
     }
 }

@@ -35,6 +35,15 @@ public with sharing class ServiceScheduleCreatorController {
     }
 
     @AuraEnabled
+    public static ProgramEngagement__c getProgramEngagementById(Id peId) {
+        try {
+            return peService.getProgramEngagementById(peId);
+        } catch (Exception ex) {
+            throw Util.getAuraHandledException(ex);
+        }
+    }
+
+    @AuraEnabled
     // Doing fls checks in the validateCreateAccess method in the domain
     /* sfca-disable-stack ApexFlsViolationRule */
     public static void addParticipants(

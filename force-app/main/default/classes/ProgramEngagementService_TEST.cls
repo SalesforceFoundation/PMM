@@ -10,6 +10,7 @@
 @IsTest
 public with sharing class ProgramEngagementService_TEST {
     private static TestStub bucketSelectorStub;
+    private static TestStub peSelectorStub;
 
     private static ProgramEngagementService service = new ProgramEngagementService();
 
@@ -68,6 +69,30 @@ public with sharing class ProgramEngagementService_TEST {
             expectedStageMap.size(),
             actualStageMap.size(),
             'Returned incorrect number of mappings'
+        );
+    }
+
+    @IsTest
+    private static void shouldGetProgramEngagementById() {
+        Id peId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+        ProgramEngagement__c expected = new ProgramEngagement__c();
+        expected.Id = peId;
+
+        peSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
+            .when('getProgramEngagementById', Id.class)
+            .calledWith(peId)
+            .thenReturn(expected)
+            .build();
+        service.selector = (ProgramEngagementSelector) peSelectorStub.create();
+
+        Test.startTest();
+        ProgramEngagement__c actual = service.getProgramEngagementById(peId);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Did not return the expected Program Engagement'
         );
     }
 

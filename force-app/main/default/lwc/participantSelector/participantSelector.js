@@ -12,6 +12,8 @@ import { format, formatTime } from "c/util";
 import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
+import getActiveStages from "@salesforce/apex/ServiceScheduleCreatorController.getActiveStages";
+import getProgramEngagementById from "@salesforce/apex/ServiceScheduleCreatorController.getProgramEngagementById";
 
 import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 
@@ -37,6 +39,7 @@ import newLabel from "@salesforce/label/c.New";
 import actionLabel from "@salesforce/label/c.Action";
 import removeLabel from "@salesforce/label/c.Remove";
 import tooManyResults from "@salesforce/label/c.Too_Many_Participants";
+import { handleError } from "c/util";
 
 const TIME = "TIME";
 const SEARCH_DELAY = 1000;
@@ -59,6 +62,7 @@ export default class ParticipantSelector extends LightningElement {
     searchValue = "";
     wiredSearchValue = "";
     cohortId = "";
+    selectedStage = "";
     programName;
     programId;
     addToServiceButtonLabel;
@@ -72,6 +76,7 @@ export default class ParticipantSelector extends LightningElement {
     offset = this.offsetRows;
     showSpinner = false;
     show1kMessage = false;
+    stageOptions;
 
     _searchTimeout;
 
@@ -111,6 +116,20 @@ export default class ParticipantSelector extends LightningElement {
             }
         });
         return result;
+    }
+
+    get controlSize() {
+        if (this.stageOptions && this.stageOptions.length > 2) {
+            return 5;
+        }
+        return 6;
+    }
+
+    get showStageInput() {
+        if (this.stageOptions && this.stageOptions.length > 2) {
+            return true;
+        }
+        return false;
     }
 
     get showCapacityWarning() {
@@ -165,9 +184,17 @@ export default class ParticipantSelector extends LightningElement {
         return `${name} (${this.participantCount}/${this.capacity})`;
     }
 
+    @wire(getActiveStages, {})
+    setupStages(result) {
+        if (result.data) {
+            this.loadStageOptions(result.data);
+        }
+    }
+
     @wire(getSelectParticipantModel, {
         serviceId: "$serviceId",
         searchText: "$wiredSearchValue",
+        stage: "$selectedStage",
         cohortId: "$cohortId",
     })
     dataSetup(result) {
@@ -211,6 +238,9 @@ export default class ParticipantSelector extends LightningElement {
         this.labels.filterByCohort = format(filterByRecord, [
             this.objectLabels.programCohort.objectLabel,
         ]);
+        this.labels.filterByStage = format(filterByRecord, [
+            this.fields.engagementStage.label,
+        ]);
     }
 
     loadTableRows(data) {
@@ -223,23 +253,26 @@ export default class ParticipantSelector extends LightningElement {
             .map(engagement => {
                 // Flatten relationship fields
                 let programEngagement = { ...engagement };
-                for (const [field, value] of Object.entries(programEngagement)) {
-                    let isTimeField =
-                        this.fieldByFieldPath[field] &&
-                        this.fieldByFieldPath[field].type === TIME;
-                    if (isTimeField) {
-                        programEngagement[field] = formatTime(value);
-                    }
-                    if (typeof value === "object") {
-                        for (const [parentField, parentValue] of Object.entries(value)) {
-                            programEngagement[field + parentField] = parentValue;
-                        }
-                    }
-                }
-
-                return programEngagement;
+                return this.flattenProgramEngagement(programEngagement);
             });
         this.sortData(this.availableEngagementRows);
+    }
+
+    flattenProgramEngagement(programEngagement) {
+        for (const [field, value] of Object.entries(programEngagement)) {
+            let isTimeField =
+                this.fieldByFieldPath[field] &&
+                this.fieldByFieldPath[field].type === TIME;
+            if (isTimeField) {
+                programEngagement[field] = formatTime(value);
+            }
+            if (typeof value === "object") {
+                for (const [parentField, parentValue] of Object.entries(value)) {
+                    programEngagement[field + parentField] = parentValue;
+                }
+            }
+        }
+        return programEngagement;
     }
 
     dispatchLoaded() {
@@ -264,9 +297,26 @@ export default class ParticipantSelector extends LightningElement {
         this.processNewParticipant(event.detail);
     }
 
-    async processNewParticipant(id) {
+    async processNewParticipant(peId) {
         await refreshApex(this.wiredData);
-        this.handleSelectById(id);
+        let row = this.availableEngagementRows.find(element => element.Id === peId);
+        if (row) {
+            this.handleSelectById(peId);
+        } else {
+            this.loadNewProgramEngagement(peId);
+        }
+    }
+
+    loadNewProgramEngagement(peId) {
+        getProgramEngagementById({ peId })
+            .then(result => {
+                let thisPE = this.flattenProgramEngagement(result);
+                this.availableEngagementRows.push(thisPE);
+                this.handleSelectById(peId);
+            })
+            .catch(error => {
+                handleError(error);
+            });
     }
 
     handleLoadMore() {
@@ -308,6 +358,16 @@ export default class ParticipantSelector extends LightningElement {
             }
         });
         this.handleSelectParticipants();
+    }
+
+    loadStageOptions(data) {
+        this.stageOptions = Object.entries(data).map(([key, value]) => {
+            let newObj = {};
+            newObj.label = value;
+            newObj.value = key;
+            return newObj;
+        });
+        this.stageOptions.unshift({ label: this.labels.none, value: "" });
     }
 
     loadProgramCohorts(data) {
@@ -369,6 +429,13 @@ export default class ParticipantSelector extends LightningElement {
                 alternativeText: this.labels.removeLabel,
             },
         });
+    }
+
+    handleStageChange(event) {
+        if (this.selectedStage !== event.detail.value) {
+            this.displaySpinner();
+            this.selectedStage = event.detail.value;
+        }
     }
 
     handleCohortChange(event) {

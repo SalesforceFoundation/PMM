@@ -31,6 +31,39 @@ public with sharing class ProgramEngagementSelector {
             .getRecords();
     }
 
+    public ProgramEngagement__c getProgramEngagementById(Id peId) {
+        if (
+            !(Schema.SObjectType.ProgramEngagement__c.isAccessible() &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(ProgramEngagement__c.Contact__c.getDescribe()) &&
+            PermissionValidator.getInstance()
+                .hasFieldReadAccess(ProgramEngagement__c.Program__c.getDescribe()))
+        ) {
+            return null;
+        }
+
+        List<ProgramEngagement__c> queriedEngagements = [
+            SELECT
+                Id,
+                Name,
+                Program__c,
+                Program__r.Name,
+                ProgramCohort__c,
+                Stage__c,
+                Contact__c,
+                Contact__r.Name,
+                Contact__r.Email
+            FROM ProgramEngagement__c
+            WHERE Id = :peId
+        ];
+        List<ProgramEngagement__c> securityResult = Security.stripInaccessible(
+                AccessType.READABLE,
+                queriedEngagements
+            )
+            .getRecords();
+        return securityResult.isEmpty() ? null : securityResult[0];
+    }
+
     // Using strip inaccessible and performing access checks for
     // all fields involved in the query. Id, Name must be true if object
     // access is true.

@@ -75,6 +75,54 @@ public with sharing class ProgramEngagementSelector_TEST {
     }
 
     @IsTest
+    private static void testGetProgramEngagementsById() {
+        ProgramEngagement__c expected = [
+            SELECT Id, Name
+            FROM ProgramEngagement__c
+            LIMIT 1
+        ][0];
+
+        Test.startTest();
+        ProgramEngagementSelector selector = new ProgramEngagementSelector();
+        ProgramEngagement__c actual = selector.getProgramEngagementById(expected.Id);
+        Test.stopTest();
+        System.assertEquals(expected.Id, actual.Id);
+    }
+
+    @IsTest
+    private static void testGetProgramEngagementsByIdNoAccess() {
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+        Integer random = Integer.valueOf(math.rint(math.random() * 1000000));
+        User u = new User(
+            Alias = 'stand',
+            Email = 'standarduser2@' + random + '.example.com',
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'StandardUser',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            ProfileId = p.Id,
+            TimeZoneSidKey = 'America/Los_Angeles',
+            UserName = 'standarduser2@' + random + '.example.com'
+        );
+
+        ProgramEngagement__c engagement = [
+            SELECT Id, Name
+            FROM ProgramEngagement__c
+            LIMIT 1
+        ][0];
+
+        Test.startTest();
+        System.runAs(u) {
+            ProgramEngagementSelector selector = new ProgramEngagementSelector();
+            ProgramEngagement__c actual = selector.getProgramEngagementById(
+                engagement.Id
+            );
+            System.assertEquals(null, actual);
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
     private static void testGetProgramEngagementsByProgramId() {
         Program__c program = [SELECT Id, Name FROM Program__c LIMIT 1];
 
@@ -124,9 +172,9 @@ public with sharing class ProgramEngagementSelector_TEST {
                 SELECT Id, Contact__r.Name, Contact__r.Email, Stage__c, ProgramCohort__c
                 FROM ProgramEngagement__c
                 WHERE
-                    Stage__c IN :ACTIVE_ENGAGEMENT_STAGES
-                    AND Program__c = :program.Id
+                    Program__c = :program.Id
                     AND Contact__r.Name LIKE '%Contact%'
+                    AND Stage__c = 'Enrolled'
             ]
         );
 
@@ -151,7 +199,7 @@ public with sharing class ProgramEngagementSelector_TEST {
                 'Name',
                 String.valueOf(ProgramEngagement__c.ProgramCohort__c)
             },
-            ACTIVE_ENGAGEMENT_STAGES,
+            new Set<String>{ 'Enrolled' },
             'Test Contact',
             null
         );

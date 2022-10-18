@@ -10,6 +10,105 @@
 @IsTest
 public with sharing class ServiceScheduleCreatorController_TEST {
     private static BasicStub serviceStub = new BasicStub(ServiceScheduleService.class);
+    private static BasicStub peServiceStub = new BasicStub(
+        ProgramEngagementService.class
+    );
+
+    @IsTest
+    private static void shouldGetActiveStages() {
+        String methodName = 'getActiveStagesByValue';
+        Map<String, String> expectedStageMap = new Map<String, String>{
+            'Active' => 'Active',
+            'Enrolled' => 'Enrolled'
+        };
+
+        peServiceStub.withReturnValue(methodName, expectedStageMap);
+        ServiceScheduleCreatorController.peService = (ProgramEngagementService) peServiceStub.createMock();
+
+        Test.startTest();
+        Map<String, String> actualStageMap = ServiceScheduleCreatorController.getActiveStages();
+        Test.stopTest();
+
+        System.assertEquals(
+            expectedStageMap,
+            actualStageMap,
+            'Expected stage map was not returned'
+        );
+        peServiceStub.assertCalled(methodName);
+    }
+
+    @IsTest
+    private static void shouldGetActiveStagesException() {
+        String methodName = 'getActiveStagesByValue';
+        peServiceStub.withThrowException(methodName);
+        Exception actualException;
+
+        ServiceScheduleCreatorController.peService = (ProgramEngagementService) peServiceStub.createMock();
+        Map<String, String> actualStageMap;
+        Test.startTest();
+        try {
+            actualStageMap = ServiceScheduleCreatorController.getActiveStages();
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            peServiceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+        peServiceStub.assertCalled(methodName);
+    }
+
+    @IsTest
+    private static void shouldGetProgramEngagementById() {
+        String methodName = 'getProgramEngagementById';
+        Id peId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+        ProgramEngagement__c expected = new ProgramEngagement__c();
+        expected.Id = peId;
+
+        peServiceStub.withReturnValue(methodName, new List<Type>{ Id.class }, expected);
+        ServiceScheduleCreatorController.peService = (ProgramEngagementService) peServiceStub.createMock();
+
+        Test.startTest();
+        ProgramEngagement__c actual = ServiceScheduleCreatorController.getProgramEngagementById(
+            peId
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Expected Program Engagement was not returned'
+        );
+        peServiceStub.assertCalled(methodName, new List<Type>{ Id.class });
+    }
+
+    @IsTest
+    private static void shouldGetProgramEngagementByIdException() {
+        String methodName = 'getProgramEngagementById';
+        peServiceStub.withThrowException(methodName, new List<Type>{ Id.class });
+        Exception actualException;
+        Id peId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+        ProgramEngagement__c actual;
+        ServiceScheduleCreatorController.peService = (ProgramEngagementService) peServiceStub.createMock();
+
+        Test.startTest();
+        try {
+            actual = ServiceScheduleCreatorController.getProgramEngagementById(peId);
+        } catch (Exception ex) {
+            actualException = ex;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            peServiceStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the service.'
+        );
+        peServiceStub.assertCalled(methodName, new List<Type>{ Id.class });
+    }
 
     @IsTest
     private static void shouldGetModelFromService() {
@@ -493,7 +592,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         serviceStub.withReturnValue(
             methodName,
-            new List<Type>{ Id.class, String.class, Id.class },
+            new List<Type>{ Id.class, String.class, String.class, Id.class },
             modelToReturn
         );
 
@@ -503,6 +602,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         SelectParticipantModel actual = ServiceScheduleCreatorController.getSelectParticipantModel(
             serviceId,
+            null,
             null,
             null
         );
@@ -522,8 +622,8 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         serviceStub.assertCalledWith(
             methodName,
-            new List<Type>{ Id.class, String.class, Id.class },
-            new List<Object>{ serviceId, null, null }
+            new List<Type>{ Id.class, String.class, String.class, Id.class },
+            new List<Object>{ serviceId, null, null, null }
         );
     }
 
@@ -531,12 +631,13 @@ public with sharing class ServiceScheduleCreatorController_TEST {
     private static void testGetSelectParticipantModelWithEmptyCohort() {
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);
         String searchString = 'Test';
+        String stageString = '';
         SelectParticipantModel modelToReturn = new SelectParticipantModel();
         String methodName = 'getSelectParticipantModel';
 
         serviceStub.withReturnValue(
             methodName,
-            new List<Type>{ Id.class, String.class, Id.class },
+            new List<Type>{ Id.class, String.class, String.class, Id.class },
             modelToReturn
         );
 
@@ -547,6 +648,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         SelectParticipantModel actual = ServiceScheduleCreatorController.getSelectParticipantModel(
             serviceId,
             searchString,
+            stageString,
             ''
         );
 
@@ -565,8 +667,8 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         serviceStub.assertCalledWith(
             methodName,
-            new List<Type>{ Id.class, String.class, Id.class },
-            new List<Object>{ serviceId, searchString, null }
+            new List<Type>{ Id.class, String.class, String.class, Id.class },
+            new List<Object>{ serviceId, searchString, null, null }
         );
     }
 
@@ -575,12 +677,13 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         Id serviceId = TestUtil.mockId(Service__c.SObjectType);
         Id cohortId = TestUtil.mockId(ProgramCohort__c.SObjectType);
         String searchString = 'Test';
+        String stageString = '';
         SelectParticipantModel modelToReturn = new SelectParticipantModel();
         String methodName = 'getSelectParticipantModel';
 
         serviceStub.withReturnValue(
             methodName,
-            new List<Type>{ Id.class, String.class, Id.class },
+            new List<Type>{ Id.class, String.class, String.class, Id.class },
             modelToReturn
         );
 
@@ -591,6 +694,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         SelectParticipantModel actual = ServiceScheduleCreatorController.getSelectParticipantModel(
             serviceId,
             searchString,
+            stageString,
             cohortId
         );
 
@@ -609,8 +713,8 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         serviceStub.assertCalledWith(
             methodName,
-            new List<Type>{ Id.class, String.class, Id.class },
-            new List<Object>{ serviceId, searchString, cohortId }
+            new List<Type>{ Id.class, String.class, String.class, Id.class },
+            new List<Object>{ serviceId, searchString, stageString, cohortId }
         );
     }
 
@@ -623,7 +727,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         serviceStub.withThrowException(
             methodName,
-            new List<Type>{ Id.class, String.class, Id.class }
+            new List<Type>{ Id.class, String.class, String.class, Id.class }
         );
         ServiceScheduleCreatorController.service = (ServiceScheduleService) serviceStub.createMock();
 
@@ -631,6 +735,7 @@ public with sharing class ServiceScheduleCreatorController_TEST {
         try {
             actual = ServiceScheduleCreatorController.getSelectParticipantModel(
                 serviceId,
+                null,
                 null,
                 null
             );
@@ -649,8 +754,8 @@ public with sharing class ServiceScheduleCreatorController_TEST {
 
         serviceStub.assertCalledWith(
             methodName,
-            new List<Type>{ Id.class, String.class, Id.class },
-            new List<Object>{ serviceId, null, null }
+            new List<Type>{ Id.class, String.class, String.class, Id.class },
+            new List<Object>{ serviceId, null, null, null }
         );
     }
 

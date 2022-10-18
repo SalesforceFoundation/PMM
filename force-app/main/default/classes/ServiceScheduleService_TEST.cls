@@ -929,6 +929,7 @@ public with sharing class ServiceScheduleService_TEST {
         SelectParticipantModel actual = service.getSelectParticipantModel(
             serviceId,
             null,
+            null,
             null
         );
         Test.stopTest();
@@ -1003,6 +1004,7 @@ public with sharing class ServiceScheduleService_TEST {
         SelectParticipantModel actualModel = service.getSelectParticipantModel(
             TestUtil.mockId(Service__c.SObjectType),
             null,
+            'Active',
             null
         );
         Test.stopTest();
@@ -1072,6 +1074,7 @@ public with sharing class ServiceScheduleService_TEST {
         // Step 3
         SelectParticipantModel participantModel = service.getSelectParticipantModel(
             serviceId,
+            null,
             null,
             null
         );

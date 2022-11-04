@@ -28,35 +28,23 @@ export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
     async openSSModal() {
         const result = await SSModal.open({
             size: "large",
-            description: "Accessible description of modal's purpose",
+            description: "TODO",
             onnavigate: event => {
-                console.log("heard navigate from modal parent ", event);
                 this.navigateToRecord(event.detail.recordId, event.detail.objectApiName);
             },
             onclose: e => {
-                // stop further propagation of the event
-                console.log("heard close event", e.detail);
                 e.stopPropagation();
-                // hand off to separate function to process
-                // result of the event (see above in this example)
-                //this.handleSelectEvent(e.detail);
-
-                // or proxy to be handled above by dispatching
-                // another custom event to pass on the event
-                // this.dispatchEvent(e);
             },
         });
         // if modal closed with X button, promise returns result = 'undefined'
         // if modal closed with OK button, promise returns result = 'okay'
         if (result === undefined) {
-            console.log("Closed with x");
             this.navigateToList();
         }
     }
 
-    //Need to refactor serviceschedule__c hardcode
+    //TODO: Need to refactor serviceschedule__c hardcode
     navigateToList() {
-        console.log("Called navigate to list ");
         this[NavigationMixin.Navigate]({
             type: "standard__objectPage",
             attributes: {
@@ -70,7 +58,6 @@ export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
     }
 
     navigateToRecord(recordId, objectApiName) {
-        console.log("Navigate to Record", recordId, objectApiName);
         this[NavigationMixin.Navigate]({
             type: "standard__recordPage",
             attributes: {

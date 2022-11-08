@@ -9,8 +9,11 @@
 
 import { LightningElement, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
+import { prefixNamespace } from "c/util";
 import newServiceSchedule from "@salesforce/label/c.New_Service_Schedule";
+import serviceScheduleWizard from "@salesforce/label/c.Service_Schedule_Wizard";
 import SSModal from "c/serviceScheduleCreatorModal";
+const SERVICE_SCHEDULE = "ServiceSchedule__c";
 export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
     LightningElement
 ) {
@@ -18,7 +21,7 @@ export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
     @api isCommunity;
     @api serviceId;
 
-    labels = { newServiceSchedule };
+    labels = { newServiceSchedule, serviceScheduleWizard };
     connectedCallback() {
         if (!this.isCommunity) {
             this.openSSModal();
@@ -28,7 +31,7 @@ export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
     async openSSModal() {
         const result = await SSModal.open({
             size: "large",
-            description: "TODO",
+            description: this.labels.serviceScheduleWizard,
             onnavigate: event => {
                 this.navigateToRecord(event.detail.recordId, event.detail.objectApiName);
             },
@@ -37,18 +40,16 @@ export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
             },
         });
         // if modal closed with X button, promise returns result = 'undefined'
-        // if modal closed with OK button, promise returns result = 'okay'
         if (result === undefined) {
             this.navigateToList();
         }
     }
 
-    //TODO: Need to refactor serviceschedule__c hardcode
     navigateToList() {
         this[NavigationMixin.Navigate]({
             type: "standard__objectPage",
             attributes: {
-                objectApiName: "ServiceSchedule__c",
+                objectApiName: prefixNamespace(SERVICE_SCHEDULE),
                 actionName: "list",
             },
             state: {

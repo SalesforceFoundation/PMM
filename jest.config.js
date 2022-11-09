@@ -9,7 +9,7 @@ module.exports = {
         "^lightning/modalFooter$":
             "<rootDir>/force-app/main/default/lwc/__tests__/lightning/modalFooter/modalFooter",
         "^lightning/modal$":
-            "<rootDir>/force-app/main/default/lwc/__tests__/lightning//modal"
+            "<rootDir>/force-app/main/default/lwc/__tests__/lightning/modal/modal"
     },
     testPathIgnorePatterns: ["force-app/main/default/lwc/__tests__/", ".cci"],
     reporters: ["default", "jest-junit"],

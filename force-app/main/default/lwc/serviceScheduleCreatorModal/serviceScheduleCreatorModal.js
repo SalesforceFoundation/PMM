@@ -28,6 +28,4 @@ export default class ServiceScheduleCreatorModal extends NavigationMixin(Lightni
         );
         this.close("success");
     }
-
-    //Core Bug for Navigation: https://gus.lightning.force.com/lightning/r/ADM_Work__c/a07EE00001576TTYAY/view
 }

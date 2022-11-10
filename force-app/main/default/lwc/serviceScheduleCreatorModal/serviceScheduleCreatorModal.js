@@ -12,7 +12,6 @@ export default class ServiceScheduleCreatorModal extends NavigationMixin(Lightni
     @api content;
     serviceId;
     recordTypeId;
-    ssCreator;
     isCommunity = false;
 
     handleNavigate(event) {

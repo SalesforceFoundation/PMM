@@ -9,11 +9,11 @@
 
 import { LightningElement, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
-import { prefixNamespace } from "c/util";
+import SERVICE_SCHEDULE from "@salesforce/schema/ServiceSchedule__c";
 import newServiceSchedule from "@salesforce/label/c.New_Service_Schedule";
 import serviceScheduleWizard from "@salesforce/label/c.Service_Schedule_Wizard";
 import SSModal from "c/serviceScheduleCreatorModal";
-const SERVICE_SCHEDULE = "ServiceSchedule__c";
+
 export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
     LightningElement
 ) {
@@ -49,7 +49,7 @@ export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
         this[NavigationMixin.Navigate]({
             type: "standard__objectPage",
             attributes: {
-                objectApiName: prefixNamespace(SERVICE_SCHEDULE),
+                objectApiName: SERVICE_SCHEDULE.objectApiName,
                 actionName: "list",
             },
             state: {

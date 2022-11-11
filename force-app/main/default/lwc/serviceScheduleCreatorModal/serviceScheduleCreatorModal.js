@@ -8,11 +8,9 @@ export default class ServiceScheduleCreatorModal extends NavigationMixin(Lightni
     labels = {
         newServiceSchedule,
     };
-    // Data is passed to api properties via .open({ options: [] })
-    @api content;
-    serviceId;
-    recordTypeId;
-    isCommunity = false;
+    @api serviceId;
+    @api recordTypeId;
+    @api isCommunity = false;
 
     handleNavigate(event) {
         const recordId = event.detail.recordId;

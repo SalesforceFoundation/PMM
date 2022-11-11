@@ -32,6 +32,9 @@ export default class ServiceScheduleCreatorWrapper extends NavigationMixin(
         const result = await SSModal.open({
             size: "large",
             description: this.labels.serviceScheduleWizard,
+            recordTypeId: this.recordTypeId,
+            serviceId: this.serviceId,
+            isCommunity: this.isCommunity,
             onnavigate: event => {
                 this.navigateToRecord(event.detail.recordId, event.detail.objectApiName);
             },

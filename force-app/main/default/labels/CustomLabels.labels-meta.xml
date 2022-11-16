@@ -1110,4 +1110,11 @@
         <shortDescription>Too many results returned from participant selector</shortDescription>
         <value>The results have returned more than a 1000 participants. Refine the results by searching or filtering by Program Cohort.</value>
     </labels>
+    <labels>
+        <fullName>Service_Schedule_Wizard</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Service Schedule Wizard</shortDescription>
+        <value>Service Schedule Wizard</value>
+    </labels>
 </CustomLabels>

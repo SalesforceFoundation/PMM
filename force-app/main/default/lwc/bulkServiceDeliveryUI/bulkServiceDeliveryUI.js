@@ -103,7 +103,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     set defaultValues(value) {
         let serviceDelivery = this.serviceDeliveries[0];
         this._defaultValues = value;
-        Object.assign(serviceDelivery, this._defaultValues);
+        if (serviceDelivery) {
+            Object.assign(serviceDelivery, this._defaultValues);
+        }
     }
 
     @api

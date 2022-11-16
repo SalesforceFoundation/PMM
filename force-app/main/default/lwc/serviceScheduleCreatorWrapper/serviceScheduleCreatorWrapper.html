@@ -8,20 +8,6 @@
   -->
 
 <template>
-    <c-modal
-        header={labels.newServiceSchedule}
-        default-visible="true"
-        size="large"
-        if:false={isCommunity}
-        ondialogclose={handleClose}
-    >
-        <c-service-schedule-creator
-            service-id={serviceId}
-            record-type-id={recordTypeId}
-            is-community={isCommunity}
-        ></c-service-schedule-creator>
-    </c-modal>
-
     <c-service-schedule-creator
         service-id={serviceId}
         record-type-id={recordTypeId}

@@ -99,6 +99,10 @@ export default class AttendanceRow extends LightningElement {
                 if (field.type === TIME && field.value !== null && field.value >= 0) {
                     field.value = formatTime(field.value);
                 }
+                field.size = 6;
+                if (field.isContactField) {
+                    field.size = 12;
+                }
             });
         }
     }

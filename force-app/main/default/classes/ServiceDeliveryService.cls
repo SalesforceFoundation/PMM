@@ -182,12 +182,17 @@ public with sharing class ServiceDeliveryService {
         ServiceParticipant__c participant
     ) {
         SObject particpantRecord = participant;
+
+        Date deliveryDate = session.SessionStart__c == null
+            ? null
+            : session.SessionStart__c.date();
+
         SObject deliveryRecord = new ServiceDelivery__c(
             ServiceSession__c = session.Id,
             AttendanceStatus__c = DEFAULT_STATUS,
             Contact__r = participant.Contact__r,
             Service_Provider__c = session.PrimaryServiceProvider__c,
-            DeliveryDate__c = Date.valueOf(session.SessionStart__c),
+            DeliveryDate__c = deliveryDate,
             Service__c = session.ServiceSchedule__r.Service__c,
             Quantity__c = session.ServiceSchedule__r.DefaultServiceQuantity__c
         );

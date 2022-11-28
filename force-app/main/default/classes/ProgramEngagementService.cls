@@ -10,6 +10,8 @@
 public with sharing class ProgramEngagementService {
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+    @TestVisible
+    private ProgramEngagementSelector selector = new ProgramEngagementSelector();
 
     @TestVisible
     private Set<String> activeStages {
@@ -42,5 +44,22 @@ public with sharing class ProgramEngagementService {
         }
 
         return activeStages;
+    }
+
+    public Map<String, String> getActiveStagesByValue() {
+        Set<String> apiNames = activeStages;
+        Map<String, String> result = new Map<String, String>();
+        Schema.DescribeFieldResult fieldResult = ProgramEngagement__c.Stage__c.getDescribe();
+        List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
+        for (Schema.PicklistEntry f : ple) {
+            if (apiNames.contains(f.getValue())) {
+                result.put(f.getValue(), f.getLabel());
+            }
+        }
+        return result;
+    }
+
+    public ProgramEngagement__c getProgramEngagementById(Id peId) {
+        return selector.getProgramEngagementById(peId);
     }
 }

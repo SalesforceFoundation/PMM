@@ -12,6 +12,8 @@ import { format, formatTime } from "c/util";
 import { refreshApex } from "@salesforce/apex";
 
 import getSelectParticipantModel from "@salesforce/apex/ServiceScheduleCreatorController.getSelectParticipantModel";
+import getActiveStages from "@salesforce/apex/ServiceScheduleCreatorController.getActiveStages";
+import getProgramEngagementById from "@salesforce/apex/ServiceScheduleCreatorController.getProgramEngagementById";
 
 import PROGRAM_ENGAGEMENT_CONTACT_FIELD from "@salesforce/schema/ProgramEngagement__c.Contact__c";
 
@@ -36,6 +38,8 @@ import cantFind from "@salesforce/label/c.Cant_Find_Participant";
 import newLabel from "@salesforce/label/c.New";
 import actionLabel from "@salesforce/label/c.Action";
 import removeLabel from "@salesforce/label/c.Remove";
+import tooManyResults from "@salesforce/label/c.Too_Many_Participants";
+import { handleError } from "c/util";
 
 const TIME = "TIME";
 const SEARCH_DELAY = 1000;
@@ -55,8 +59,10 @@ export default class ParticipantSelector extends LightningElement {
     @track cohorts;
     @track availableEngagementsForSelection = [];
 
-    searchValue;
-    cohortId;
+    searchValue = "";
+    wiredSearchValue = "";
+    cohortId = "";
+    selectedStage = "";
     programName;
     programId;
     addToServiceButtonLabel;
@@ -69,6 +75,8 @@ export default class ParticipantSelector extends LightningElement {
     offsetRows = 50;
     offset = this.offsetRows;
     showSpinner = false;
+    show1kMessage = false;
+    stageOptions;
 
     _searchTimeout;
 
@@ -92,6 +100,7 @@ export default class ParticipantSelector extends LightningElement {
         actionLabel,
         removeLabel,
         loading,
+        tooManyResults,
     };
 
     @api
@@ -107,6 +116,20 @@ export default class ParticipantSelector extends LightningElement {
             }
         });
         return result;
+    }
+
+    get controlSize() {
+        if (this.stageOptions && this.stageOptions.length > 2) {
+            return 5;
+        }
+        return 6;
+    }
+
+    get showStageInput() {
+        if (this.stageOptions && this.stageOptions.length > 2) {
+            return true;
+        }
+        return false;
     }
 
     get showCapacityWarning() {
@@ -161,7 +184,19 @@ export default class ParticipantSelector extends LightningElement {
         return `${name} (${this.participantCount}/${this.capacity})`;
     }
 
-    @wire(getSelectParticipantModel, { serviceId: "$serviceId" })
+    @wire(getActiveStages, {})
+    setupStages(result) {
+        if (result.data) {
+            this.loadStageOptions(result.data);
+        }
+    }
+
+    @wire(getSelectParticipantModel, {
+        serviceId: "$serviceId",
+        searchText: "$wiredSearchValue",
+        stage: "$selectedStage",
+        cohortId: "$cohortId",
+    })
     dataSetup(result) {
         this.wiredData = result;
         if (!(result.data || result.error)) {
@@ -203,34 +238,41 @@ export default class ParticipantSelector extends LightningElement {
         this.labels.filterByCohort = format(filterByRecord, [
             this.objectLabels.programCohort.objectLabel,
         ]);
+        this.labels.filterByStage = format(filterByRecord, [
+            this.fields.engagementStage.label,
+        ]);
     }
 
     loadTableRows(data) {
         let selectedIds = this.selectedEngagements.map(engagement => engagement.Id);
         this.allEngagements = data.programEngagements.slice(0);
+        this.show1kMessage = this.allEngagements.length >= 1000 ? true : false;
 
         this.availableEngagementRows = this.allEngagements
             .filter(engagement => !selectedIds.includes(engagement.Id))
             .map(engagement => {
                 // Flatten relationship fields
                 let programEngagement = { ...engagement };
-                for (const [field, value] of Object.entries(programEngagement)) {
-                    let isTimeField =
-                        this.fieldByFieldPath[field] &&
-                        this.fieldByFieldPath[field].type === TIME;
-                    if (isTimeField) {
-                        programEngagement[field] = formatTime(value);
-                    }
-                    if (typeof value === "object") {
-                        for (const [parentField, parentValue] of Object.entries(value)) {
-                            programEngagement[field + parentField] = parentValue;
-                        }
-                    }
-                }
-
-                return programEngagement;
+                return this.flattenProgramEngagement(programEngagement);
             });
         this.sortData(this.availableEngagementRows);
+    }
+
+    flattenProgramEngagement(programEngagement) {
+        for (const [field, value] of Object.entries(programEngagement)) {
+            let isTimeField =
+                this.fieldByFieldPath[field] &&
+                this.fieldByFieldPath[field].type === TIME;
+            if (isTimeField) {
+                programEngagement[field] = formatTime(value);
+            }
+            if (typeof value === "object") {
+                for (const [parentField, parentValue] of Object.entries(value)) {
+                    programEngagement[field + parentField] = parentValue;
+                }
+            }
+        }
+        return programEngagement;
     }
 
     dispatchLoaded() {
@@ -255,9 +297,26 @@ export default class ParticipantSelector extends LightningElement {
         this.processNewParticipant(event.detail);
     }
 
-    async processNewParticipant(id) {
+    async processNewParticipant(peId) {
         await refreshApex(this.wiredData);
-        this.handleSelectById(id);
+        let row = this.availableEngagementRows.find(element => element.Id === peId);
+        if (row) {
+            this.handleSelectById(peId);
+        } else {
+            this.loadNewProgramEngagement(peId);
+        }
+    }
+
+    loadNewProgramEngagement(peId) {
+        getProgramEngagementById({ peId })
+            .then(result => {
+                let thisPE = this.flattenProgramEngagement(result);
+                this.availableEngagementRows.push(thisPE);
+                this.handleSelectById(peId);
+            })
+            .catch(error => {
+                handleError(error);
+            });
     }
 
     handleLoadMore() {
@@ -299,6 +358,16 @@ export default class ParticipantSelector extends LightningElement {
             }
         });
         this.handleSelectParticipants();
+    }
+
+    loadStageOptions(data) {
+        this.stageOptions = Object.entries(data).map(([key, value]) => {
+            let newObj = {};
+            newObj.label = value;
+            newObj.value = key;
+            return newObj;
+        });
+        this.stageOptions.unshift({ label: this.labels.none, value: "" });
     }
 
     loadProgramCohorts(data) {
@@ -362,10 +431,18 @@ export default class ParticipantSelector extends LightningElement {
         });
     }
 
-    handleCohortChange(event) {
-        this.cohortId = event.detail.value;
+    handleStageChange(event) {
+        if (this.selectedStage !== event.detail.value) {
+            this.displaySpinner();
+            this.selectedStage = event.detail.value;
+        }
+    }
 
-        this.applyFilters();
+    handleCohortChange(event) {
+        if (this.cohortId !== event.detail.value) {
+            this.displaySpinner();
+            this.cohortId = event.detail.value;
+        }
     }
 
     handleSelectAll() {
@@ -430,10 +507,13 @@ export default class ParticipantSelector extends LightningElement {
 
             this.selectedEngagements = tempSelectedEngagements;
 
-            this.availableEngagementRows = [
-                ...this.availableEngagementRows,
-                event.detail.row,
-            ];
+            //Verify the deselected row is in the current dataset before displaying
+            if (this.allEngagements.some(row => row.Id === event.detail.row.Id)) {
+                this.availableEngagementRows = [
+                    ...this.availableEngagementRows,
+                    event.detail.row,
+                ];
+            }
             this.sortData(this.availableEngagementRows);
 
             //filter previouslySelectedEngagements to remove program engagement that we deselected so it does not add the deselected value back
@@ -451,8 +531,15 @@ export default class ParticipantSelector extends LightningElement {
     }
 
     handleInputChange(event) {
-        this.searchValue = event.target.value;
-        this.debounceSearch();
+        if (event.target && event.target.value) {
+            this.searchValue = event.target.value;
+            if (this.searchValue.length !== 1) {
+                this.debounceSearch();
+            }
+        } else {
+            this.searchValue = "";
+            this.debounceSearch();
+        }
     }
 
     debounceSearch() {
@@ -470,27 +557,19 @@ export default class ParticipantSelector extends LightningElement {
     startFilter() {
         this.displaySpinner();
         // eslint-disable-next-line @lwc/lwc/no-async-operation
-        setTimeout(this.applyFilters.bind(this));
+        setTimeout(this.updateSearchValue.bind(this));
+    }
+
+    updateSearchValue() {
+        this.wiredSearchValue = this.searchValue;
     }
 
     applyFilters() {
-        let searchText = this.searchValue ? this.searchValue.toLowerCase() : "";
-
-        this.filteredEngagements = this.availableEngagementRows.filter(
-            row =>
-                JSON.stringify(row)
-                    .toLowerCase()
-                    .includes(searchText) &&
-                (this.cohortId
-                    ? row[this.fields.programCohort.apiName] === this.cohortId
-                    : true)
-        );
-
+        this.filteredEngagements = this.availableEngagementRows;
         this.availableEngagementsForSelection = this.filteredEngagements.slice(
             0,
             Math.min(this.filteredEngagements.length, this.offset)
         );
-
         this.hideSpinner();
     }
 

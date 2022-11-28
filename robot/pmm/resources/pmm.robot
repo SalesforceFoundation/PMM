@@ -163,6 +163,19 @@ API Update Records
     &{Id} =                 Get From List  ${records}  0
     [return]                &{Id}
 
+Setup Custom Metadata Bucketed Value
+    [Arguments]             ${Label}    ${Bucketed Value Name}   ${Bucket}    ${Value}
+    Go To Setup Home
+    Wait Until Loading Is Complete
+    Populate Setup Search Box          Quick Find          Custom Metadata Types
+    Manage Records Bucketed Value
+    Click Custom Metadata Button       New
+    Populate Bucketed Values           Label=${Label}
+    ...                                Bucketed Value Name=${Bucketed Value Name}
+    ...                                Bucket=${Bucket}
+    ...                                Value=${Value}
+    Click Custom Metadata Button       Save
+
 Capture Screenshot and Delete Records and Close Browser
     [Documentation]         This keyword will capture a screenshot before closing the browser and deleting records when test fails
     Run Keyword If Any Tests Failed      Capture Page Screenshot

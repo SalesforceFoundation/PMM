@@ -28,6 +28,15 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>force:detailPanel</componentName>
+            </componentInstance>
+        </itemInstances>
+        <name>sidebar</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>relatedListComponentOverride</name>
                     <value>NONE</value>
@@ -46,19 +55,31 @@
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>force:detailPanel</componentName>
-            </componentInstance>
-        </itemInstances>
-        <name>sidebar</name>
-        <type>Region</type>
-    </flexiPageRegions>
     <masterLabel>Service Schedule Record Page</masterLabel>
     <sobjectType>ServiceSchedule__c</sobjectType>
     <template>
         <name>flexipage:recordHomeLeftSidebarTemplateDesktop</name>
+        <properties>
+            <name>actionNames</name>
+            <valueList>
+                <valueListItems>
+                    <value>Edit</value>
+                </valueListItems>
+                <valueListItems>
+                    <value>Clone</value>
+                </valueListItems>
+                <valueListItems>
+                    <value>ServiceSchedule__c.Delete_Future_Sessions</value>
+                </valueListItems>
+                <valueListItems>
+                    <value>Delete</value>
+                </valueListItems>
+            </valueList>
+        </properties>
+        <properties>
+            <name>enablePageActionConfig</name>
+            <value>true</value>
+        </properties>
     </template>
     <type>RecordPage</type>
 </FlexiPage>

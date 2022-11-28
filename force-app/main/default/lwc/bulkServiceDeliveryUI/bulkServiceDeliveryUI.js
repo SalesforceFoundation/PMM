@@ -11,11 +11,13 @@ import { LightningElement, api, track, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { format, handleError, showToast } from "c/util";
 import { loadStyle } from "lightning/platformResourceLoader";
+import FORM_FACTOR_NAME from "@salesforce/client/formFactor";
 
 import { ServiceDeliveryFieldSets } from "./serviceDeliveryFieldSets";
 
 import addServiceDelivery from "@salesforce/label/c.Add_Service_Delivery";
 import addEntry from "@salesforce/label/c.Add_Entry";
+import featureOnlyWebApp from "@salesforce/label/c.Feature_Only_Webapp";
 import save from "@salesforce/label/c.Save";
 import saved from "@salesforce/label/c.Saved";
 import saving from "@salesforce/label/c.Saving";
@@ -58,6 +60,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     labels = {
         addEntry,
         addServiceDelivery,
+        featureOnlyWebApp,
         saved,
         saving,
         required,
@@ -100,7 +103,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     set defaultValues(value) {
         let serviceDelivery = this.serviceDeliveries[0];
         this._defaultValues = value;
-        Object.assign(serviceDelivery, this._defaultValues);
+        if (serviceDelivery) {
+            Object.assign(serviceDelivery, this._defaultValues);
+        }
     }
 
     @api
@@ -131,7 +136,9 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             url => (this.url = url)
         );
     }
-
+    get isPhone() {
+        return FORM_FACTOR_NAME === "Small";
+    }
     get isModal() {
         return this.hideFooter; // reusing old api property name
     }

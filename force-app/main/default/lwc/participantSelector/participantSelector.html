@@ -28,7 +28,10 @@
                     class="slds-var-p-right_small slds-var-p-top_xx-small"
                 >
                     <lightning-layout multiple-rows="true">
-                        <lightning-layout-item size="6" class="slds-var-p-bottom_small">
+                        <lightning-layout-item
+                            size={controlSize}
+                            class="slds-var-p-bottom_small"
+                        >
                             <lightning-input
                                 type="String"
                                 label={objectLabels.program.objectLabel}
@@ -37,12 +40,20 @@
                                 disabled
                             ></lightning-input>
                         </lightning-layout-item>
-                        <lightning-layout-item size="6">
+                        <lightning-layout-item size={controlSize}>
                             <lightning-combobox
                                 label={labels.filterByCohort}
                                 options={searchOptions}
                                 onchange={handleCohortChange}
-                                value={selectedCohortId}
+                                placeholder={labels.none}
+                                class="slds-var-p-right_medium"
+                            ></lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="2" if:true={showStageInput}>
+                            <lightning-combobox
+                                label={labels.filterByStage}
+                                options={stageOptions}
+                                onchange={handleStageChange}
                                 placeholder={labels.none}
                             ></lightning-combobox>
                         </lightning-layout-item>
@@ -78,8 +89,14 @@
                                     </lightning-layout-item>
                                     <lightning-layout-item
                                         size="12"
-                                        if:false={noRecordsFound}
+                                        if:true={show1kMessage}
                                     >
+                                        <c-scoped-notification
+                                            theme="info"
+                                            title={labels.tooManyResults}
+                                        ></c-scoped-notification>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12">
                                         <div
                                             style="height: 331px"
                                             class="slds-border_top slds-var-m-top_xx-small slds-is-relative"
@@ -109,18 +126,15 @@
                                                 onrowaction={handleSelectParticipant}
                                                 enable-infinite-loading={enableInfiniteLoading}
                                                 onloadmore={handleLoadMore}
+                                                if:false={noRecordsFound}
                                             ></lightning-datatable>
-                                        </div>
-                                    </lightning-layout-item>
-                                    <lightning-layout-item
-                                        if:true={noRecordsFound}
-                                        size="12"
-                                    >
-                                        <div
-                                            class="slds-text-align_center slds-text-heading_small slds-border_top slds-border_bottom slds-var-p-top_small"
-                                            style="height: 331px"
-                                        >
-                                            {labels.noRecordsFound}
+                                            <div
+                                                class="slds-text-align_center slds-text-heading_small slds-border_top slds-border_bottom slds-var-p-top_small"
+                                                style="height: 331px"
+                                                if:true={noRecordsFound}
+                                            >
+                                                {labels.noRecordsFound}
+                                            </div>
                                         </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item

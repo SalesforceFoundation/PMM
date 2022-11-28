@@ -414,6 +414,15 @@ export default class ServiceScheduleCreator extends NavigationMixin(LightningEle
                 actionName: "view",
             },
         });
+        this.dispatchEvent(
+            new CustomEvent("navigate", {
+                bubbles: true,
+                detail: {
+                    recordId,
+                    objectApiName,
+                },
+            })
+        );
     }
 
     navigateToList() {

@@ -10,6 +10,7 @@
 @IsTest
 public with sharing class ProgramEngagementService_TEST {
     private static TestStub bucketSelectorStub;
+    private static TestStub peSelectorStub;
 
     private static ProgramEngagementService service = new ProgramEngagementService();
 
@@ -50,6 +51,49 @@ public with sharing class ProgramEngagementService_TEST {
             );
         }
         bucketSelectorStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void shouldGetActiveStagesByValue() {
+        Schema.SObjectType programEngagementSObjType = ProgramEngagement__c.SObjectType;
+        Schema.SObjectField stageField = ProgramEngagement__c.Stage__c;
+
+        Map<String, String> expectedStageMap = new Map<String, String>();
+        expectedStageMap.put('Active', 'Active');
+        expectedStageMap.put('Enrolled', 'Enrolled');
+
+        Test.startTest();
+        Map<String, String> actualStageMap = service.getActiveStagesByValue();
+        Test.stopTest();
+        System.assertEquals(
+            expectedStageMap.size(),
+            actualStageMap.size(),
+            'Returned incorrect number of mappings'
+        );
+    }
+
+    @IsTest
+    private static void shouldGetProgramEngagementById() {
+        Id peId = TestUtil.mockId(ProgramEngagement__c.SObjectType);
+        ProgramEngagement__c expected = new ProgramEngagement__c();
+        expected.Id = peId;
+
+        peSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
+            .when('getProgramEngagementById', Id.class)
+            .calledWith(peId)
+            .thenReturn(expected)
+            .build();
+        service.selector = (ProgramEngagementSelector) peSelectorStub.create();
+
+        Test.startTest();
+        ProgramEngagement__c actual = service.getProgramEngagementById(peId);
+        Test.stopTest();
+
+        System.assertEquals(
+            expected,
+            actual,
+            'Did not return the expected Program Engagement'
+        );
     }
 
     private static List<Bucket__mdt> createBuckets() {

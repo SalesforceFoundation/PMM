@@ -38,6 +38,26 @@ Setup Test Data
     ${service_schedule_name} =      Generate New String
     Set suite variable              ${service_schedule_name}
 
+    ${program1} =                    API Create Program
+    Set suite variable              ${program1}
+    ${service1} =                    API Create Service                  ${Program1}[Id]
+    Set suite variable              ${service1}
+    ${program_cohort1} =            API Create Program Cohort           ${Program1}[Id]
+    Set suite variable              ${program_cohort1}
+    ${program_cohort2} =            API Create Program Cohort           ${Program1}[Id]
+    Set suite variable              ${program_cohort2}
+    ${program_cohort3} =            API Create Program Cohort           ${Program1}[Id]
+    Set suite variable              ${program_cohort3}
+    API Update Records              ${ns}ProgramCohort__c     ${program_cohort1}[Id]     ${ns}Status__c=Planned
+    ${program_engagement4} =        API Create Program Engagement   ${Program1}[Id]     ${contact1}[Id]      ${ns}ProgramCohort__c=${program_cohort1}[Id]
+    Set suite variable              ${program_engagement4}
+    ${program_engagement5} =        API Create Program Engagement   ${Program1}[Id]     ${contact2}[Id]      ${ns}ProgramCohort__c=${program_cohort2}[Id]
+    Set suite variable              ${program_engagement5}
+    ${program_engagement6} =        API Create Program Engagement   ${Program1}[Id]     ${contact3}[Id]      ${ns}ProgramCohort__c=${program_cohort3}[Id]
+    Set suite variable              ${program_engagement6}
+    API Update Records              ${ns}ProgramEngagement__c    ${program_engagement4}[Id]     ${ns}Stage__c=Waitlisted
+
+
 
 *** Test Cases ***
 SSS3.1: Add/remove service participants on Screen3
@@ -113,3 +133,30 @@ SSS3.3: Validate fields added to SessionParticipantView fieldset on Wizard
     Verify Wizard Screen Title              Review Service Schedule
     Page Should Contain                     Role
     Page Should Contain                     Volunteer
+
+Setup custom bucketed values and validate on service schedule wizard
+    [Documentation]               Create custom bucketed values for Program Cohort Status and Program Engagement Stages and
+    ...                           validate the same on the participant selector component on service schedule
+    [tags]                        quadrant:Q3   perm:admin
+    Setup Custom Metadata Bucketed Value    Planned    Planned   ProgramCohortStatusActive   Planned
+    Setup Custom Metadata Bucketed Value    Waitlisted    Waitlisted    Active    Waitlisted
+    Go To Page                              Details    Service__c    object_id=${service1}[Id]
+    Click Wrapper Related List Button       Service Schedules              New
+    Current Page Should Be                  New                            ServiceSchedule__c
+    Verify Wizard Screen Title              Service Schedule Information
+    Populate Field                          Service Schedule Name           ${service_schedule_name}
+    Click Dialog Button                     Next
+    Verify Wizard Screen Title              Review Service Sessions
+    Click Dialog Button                     Next
+    Verify Wizard Screen Title              Add Service Participants
+    Page Should Contain                     Waitlisted
+    Verify dropdown Options                 Filter by Program Cohort    contains    ${program_cohort1}[Name]
+    Verify dropdown Options                 Filter by Program Cohort    does not contain    ${program_cohort2}[Name]
+    Verify dropdown Options                 Filter by Program Cohort    does not contain    ${program_cohort3}[Name]
+    Select Service Participant              ${contact1}[Name]
+    Validate Participant Is Added           ${contact1}[Name]
+    Click Dialog Button                     Next 
+    Verify Wizard Screen Title              Review Service Schedule
+    Click Dialog Button                     Save
+    Wait Until Modal is Closed
+    Page Should Contain                     ${contact1}[Name] - ${service_schedule_name}

@@ -1,0 +1,12 @@
+<template>
+    <lightning-modal-header label={labels.newServiceSchedule}></lightning-modal-header>
+    <lightning-modal-body>
+        <c-service-schedule-creator
+            service-id={serviceId}
+            record-type-id={recordTypeId}
+            is-community={isCommunity}
+            onclose={handleClose}
+            onnavigate={handleNavigate}
+        ></c-service-schedule-creator>
+    </lightning-modal-body>
+</template>

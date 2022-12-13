@@ -234,7 +234,11 @@
     </customLabels>
     <customLabels>
         <name>Filter_by_Record</name>
-        <label>Filteren op {0}</label>
+        <label>Filteren op: {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Stage</name>
+        <label>Filteren op fase</label>
     </customLabels>
     <customLabels>
         <name>Finish</name>
@@ -611,6 +615,18 @@
     <customLabels>
         <name>Action</name>
         <label>Actie</label>
+    </customLabels>
+    <customLabels>
+        <name>Feature_Only_Webapp</name>
+        <label>Deze voorziening is uitsluitend beschikbaar in de webtoepassing.</label>
+    </customLabels>
+    <customLabels>
+        <name>Too_Many_Participants</name>
+        <label>De resultaten hebben meer dan 1000 deelnemers geretourneerd. Verfijn de resultaten door te zoeken of filteren op programmacohort.</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Wizard</name>
+        <label>Wizard voor serviceplanning</label>
     </customLabels>
     <reportTypes>
         <name>Contacts_with_and_without_Program_Engagements</name>

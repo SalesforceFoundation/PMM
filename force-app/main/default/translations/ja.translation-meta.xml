@@ -234,7 +234,11 @@
     </customLabels>
     <customLabels>
         <name>Filter_by_Record</name>
-        <label>{0} で絞り込み</label>
+        <label>検索条件: {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Stage</name>
+        <label>フェーズによる絞り込み</label>
     </customLabels>
     <customLabels>
         <name>Finish</name>
@@ -611,6 +615,18 @@
     <customLabels>
         <name>Action</name>
         <label>アクション</label>
+    </customLabels>
+    <customLabels>
+        <name>Feature_Only_Webapp</name>
+        <label>この機能は、Web アプリケーションでのみ使用できます。</label>
+    </customLabels>
+    <customLabels>
+        <name>Too_Many_Participants</name>
+        <label>結果に 1000 人を超える参加者が返されました。プログラムコホートで検索または絞り込んで、結果を絞り込んでください。</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Wizard</name>
+        <label>サービススケジュールウィザード</label>
     </customLabels>
     <reportTypes>
         <name>Contacts_with_and_without_Program_Engagements</name>

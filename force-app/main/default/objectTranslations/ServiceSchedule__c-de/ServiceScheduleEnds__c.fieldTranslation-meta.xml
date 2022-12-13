@@ -4,7 +4,7 @@
     <label>Ende des Leistungszeitplans</label>
     <picklistValues>
         <masterLabel>On</masterLabel>
-        <translation>Ein</translation>
+        <translation>Am</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>After</masterLabel>

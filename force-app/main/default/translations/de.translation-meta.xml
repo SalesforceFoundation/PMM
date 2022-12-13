@@ -234,7 +234,11 @@
     </customLabels>
     <customLabels>
         <name>Filter_by_Record</name>
-        <label>Nach {0} filtern</label>
+        <label>Filtern nach: {0}</label>
+    </customLabels>
+    <customLabels>
+        <name>Filter_by_Stage</name>
+        <label>Nach Phase filtern</label>
     </customLabels>
     <customLabels>
         <name>Finish</name>
@@ -611,6 +615,18 @@
     <customLabels>
         <name>Action</name>
         <label>Aktion</label>
+    </customLabels>
+    <customLabels>
+        <name>Feature_Only_Webapp</name>
+        <label>Dieses Feature ist nur in der Webanwendung verfügbar.</label>
+    </customLabels>
+    <customLabels>
+        <name>Too_Many_Participants</name>
+        <label>Die Ergebnisse haben mehr als 1.000 Teilnehmer zurückgegeben. Schränken Sie die Ergebnisse ein, indem Sie nach der Programmuntergruppe suchen oder filtern.</label>
+    </customLabels>
+    <customLabels>
+        <name>Service_Schedule_Wizard</name>
+        <label>Leistungszeitplan-Assistent</label>
     </customLabels>
     <reportTypes>
         <name>Contacts_with_and_without_Program_Engagements</name>

@@ -19,6 +19,7 @@ public with sharing class ServiceSelector {
             SELECT Id, Name, Program__c
             FROM Service__c
             WHERE Program__c IN :programIds
+            ORDER BY Name
         ];
 
         return Security.stripInaccessible(AccessType.READABLE, queriedServices)
@@ -39,6 +40,7 @@ public with sharing class ServiceSelector {
                     FROM ProgramEngagement__c
                     WHERE Id = :programEngagementId
                 )
+            ORDER BY Name
         ];
 
         return Security.stripInaccessible(AccessType.READABLE, services).getRecords();

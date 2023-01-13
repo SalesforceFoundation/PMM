@@ -41,9 +41,8 @@ public with sharing class ProgramSelector {
                 ' IN :allowedProgramCohortStatuses'
             );
         }
-        queryBuilder.withOrderBy(String.valueOf(ProgramCohort__c.Name));
         programCohorts = Database.query(queryBuilder.buildSoqlQuery());
-
+        programCohorts.sort();
         return Security.stripInaccessible(AccessType.READABLE, programCohorts)
             .getRecords();
     }

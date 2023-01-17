@@ -26,7 +26,7 @@ public with sharing class ProgramEngagementSelector {
             FROM ProgramEngagement__c
             WHERE Contact__c = :contactId
         ];
-
+        queriedEngagements.sort();
         return Security.stripInaccessible(AccessType.READABLE, queriedEngagements)
             .getRecords();
     }

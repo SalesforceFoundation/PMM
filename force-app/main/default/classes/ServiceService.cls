@@ -10,6 +10,8 @@
 public with sharing class ServiceService {
     public ServiceService() {
     }
+    @TestVisible
+    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
     @TestVisible
     private FieldSetService fieldSetService = new FieldSetService();
@@ -20,10 +22,44 @@ public with sharing class ServiceService {
     @TestVisible
     private ProgramEngagementSelector engagementSelector = new ProgramEngagementSelector();
 
+    @TestVisible
+    private Set<String> activeStatuses {
+        get {
+            if (activeStatuses == null) {
+                activeStatuses = getactiveStatuses();
+            }
+            return activeStatuses;
+        }
+        set;
+    }
+
+    private Set<String> getActiveStatuses() {
+        List<String> bucketNames = new List<String>{ 'ServiceStatusActive' };
+        Set<String> activeStatuses = new Set<String>();
+
+        Schema.SObjectType serviceSObjType = Service__c.SObjectType;
+        Schema.SObjectField statusField = Service__c.Status__c;
+
+        for (
+            Bucket__mdt bucket : bucketSelector.getBuckets(
+                bucketNames,
+                serviceSObjType,
+                statusField
+            )
+        ) {
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                activeStatuses.add(value.Value__c);
+            }
+        }
+
+        return activeStatuses;
+    }
+
     public Map<String, List<Object>> getServicesEngagementsByContactId(Id contactId) {
         Set<Id> programIds = new Set<Id>();
         String serviceProgram = Schema.SObjectType.Service__c.Fields.Program__c.getName();
         String engageProgram = Schema.SObjectType.ProgramEngagement__c.Fields.Program__c.getName();
+        Set<String> activeServiceStatuses = activeStatuses;
 
         Map<String, List<Object>> result = new Map<String, List<Object>>();
         result.put('engagements', new List<Object>());
@@ -40,7 +76,10 @@ public with sharing class ServiceService {
         }
 
         for (Service__c service : serviceSelector.getServicesByProgramIds(programIds)) {
-            result.get('services').add(convertObjectToOption(service, serviceProgram));
+            if (activeServiceStatuses.contains(service.Status__c)) {
+                result.get('services')
+                    .add(convertObjectToOption(service, serviceProgram));
+            }
         }
 
         return result;

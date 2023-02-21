@@ -16,7 +16,7 @@ public with sharing class ServiceSelector {
             return new List<Service__c>();
         }
         List<Service__c> queriedServices = [
-            SELECT Id, Name, Program__c
+            SELECT Id, Name, Program__c, Status__c
             FROM Service__c
             WHERE Program__c IN :programIds
         ];

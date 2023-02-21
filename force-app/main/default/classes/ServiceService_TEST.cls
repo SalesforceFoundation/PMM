@@ -37,10 +37,23 @@ public with sharing class ServiceService_TEST {
             UnitOfMeasurement__c = 'Hours'
         );
 
+        Service__c service2 = new Service__c(
+            Id = TestUtil.mockId(Service__c.SObjectType),
+            Name = 'Service 2',
+            Program__c = program1.Id,
+            Status__c = 'Planned',
+            UnitOfMeasurement__c = 'Hours'
+        );
+
         List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>{
             engagement1
         };
-        List<Service__c> services = new List<Service__c>{ service1 };
+        List<Service__c> services = new List<Service__c>{ service1, service2 };
+        List<String> bucketNames = new List<String>{ 'ServiceStatusActive' };
+        Schema.SObjectType serviceSObjType = Service__c.SObjectType;
+        Schema.SObjectField statusField = Service__c.Status__c;
+        List<Bucket__mdt> statusBuckets = createBuckets();
+
         TestStub engagementSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
             .when('getProgramEngagementsByContactId', Id.class)
             .calledWith(contactId)
@@ -51,10 +64,21 @@ public with sharing class ServiceService_TEST {
             .calledWith(new Set<Id>{ program1.Id })
             .thenReturn(services)
             .build();
+        TestStub bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
+            .when(
+                'getBuckets',
+                List<String>.class,
+                Schema.SObjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, serviceSObjType, statusField)
+            .thenReturn(statusBuckets)
+            .build();
 
         ServiceService service = new ServiceService();
         service.serviceSelector = (ServiceSelector) serviceSelectorStub.create();
         service.engagementSelector = (ProgramEngagementSelector) engagementSelectorStub.create();
+        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
 
         Test.startTest();
         Map<String, List<Object>> actual = service.getServicesEngagementsByContactId(
@@ -73,8 +97,15 @@ public with sharing class ServiceService_TEST {
             System.assert(!objList.isEmpty());
         }
 
+        System.assertEquals(
+            1,
+            actual.get('services').size(),
+            'Only active services should be returned'
+        );
+
         engagementSelectorStub.assertCalledAsExpected();
         serviceSelectorStub.assertCalledAsExpected();
+        bucketSelectorStub.assertCalledAsExpected();
     }
 
     @IsTest
@@ -700,5 +731,36 @@ public with sharing class ServiceService_TEST {
         }
 
         fieldSetServiceStub.assertCalledAsExpected();
+    }
+
+    private static List<Bucket__mdt> createBuckets() {
+        BucketedField__mdt bucketedField = (BucketedField__mdt) new TestUtil.BucketedFieldBuilder()
+            .withDeveloperName('ServiceStatuses')
+            .withQualifiedApiName(Util.prefixNamespace('ServiceStatuses'))
+            .withField('Status__c')
+            .withObject('Service__c')
+            .withMockId()
+            .build();
+
+        List<BucketedValue__mdt> activeValues = new List<BucketedValue__mdt>();
+        activeValues.add(
+            (BucketedValue__mdt) new TestUtil.BucketedValueBuilder()
+                .withDeveloperName('ServiceStatusActive')
+                .withQualifiedApiName(Util.prefixNamespace('ServiceStatusActive'))
+                .withBucket('ServiceStatusActive')
+                .withValue('Active')
+                .withMockId()
+                .build()
+        );
+
+        Bucket__mdt activeBucket = (Bucket__mdt) new TestUtil.BucketBuilder()
+            .withBucketedField(bucketedField)
+            .withBucketedValues(activeValues)
+            .withDeveloperName('ServiceStatusActive')
+            .withQualifiedApiName(Util.prefixNamespace('ServiceStatusActive'))
+            .withMockId()
+            .build();
+
+        return new List<Bucket__mdt>{ activeBucket };
     }
 }

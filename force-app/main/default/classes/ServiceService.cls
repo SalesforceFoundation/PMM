@@ -10,6 +10,7 @@
 public with sharing class ServiceService {
     public ServiceService() {
     }
+
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
@@ -18,6 +19,9 @@ public with sharing class ServiceService {
 
     @TestVisible
     private ServiceSelector serviceSelector = new ServiceSelector();
+
+    @TestVisible
+    private ProgramEngagementService engagementService = new ProgramEngagementService();
 
     @TestVisible
     private ProgramEngagementSelector engagementSelector = new ProgramEngagementSelector();
@@ -60,6 +64,7 @@ public with sharing class ServiceService {
         String serviceProgram = Schema.SObjectType.Service__c.Fields.Program__c.getName();
         String engageProgram = Schema.SObjectType.ProgramEngagement__c.Fields.Program__c.getName();
         Set<String> activeServiceStatuses = activeStatuses;
+        Set<String> activeProgramEngagementStages = engagementService.getActiveStages();
 
         Map<String, List<Object>> result = new Map<String, List<Object>>();
         result.put('engagements', new List<Object>());
@@ -70,9 +75,11 @@ public with sharing class ServiceService {
                 contactId
             )
         ) {
-            programIds.add(engagement.Program__c);
-            result.get('engagements')
-                .add(convertObjectToOption(engagement, engageProgram));
+            if (activeProgramEngagementStages.contains(engagement.Stage__c)) {
+                programIds.add(engagement.Program__c);
+                result.get('engagements')
+                    .add(convertObjectToOption(engagement, engageProgram));
+            }
         }
 
         for (Service__c service : serviceSelector.getServicesByProgramIds(programIds)) {

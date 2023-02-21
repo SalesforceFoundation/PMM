@@ -23,6 +23,14 @@ public with sharing class ServiceService_TEST {
 
         ProgramEngagement__c engagement1 = new ProgramEngagement__c(
             Name = 'Engagement 1',
+            Stage__c = 'Active',
+            Contact__c = contactId,
+            Program__c = program1.Id,
+            Role__c = 'Client'
+        );
+
+        ProgramEngagement__c engagement2 = new ProgramEngagement__c(
+            Name = 'Engagement 2',
             Stage__c = 'Enrolled',
             Contact__c = contactId,
             Program__c = program1.Id,
@@ -46,14 +54,21 @@ public with sharing class ServiceService_TEST {
         );
 
         List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>{
-            engagement1
+            engagement1,
+            engagement2
         };
         List<Service__c> services = new List<Service__c>{ service1, service2 };
         List<String> bucketNames = new List<String>{ 'ServiceStatusActive' };
         Schema.SObjectType serviceSObjType = Service__c.SObjectType;
         Schema.SObjectField statusField = Service__c.Status__c;
         List<Bucket__mdt> statusBuckets = createBuckets();
+        Set<String> activeStages = new Set<String>{ 'Active' };
 
+        TestStub engagementServiceStub = new StubBuilder(ProgramEngagementService.class)
+            .when('getActiveStages')
+            .called()
+            .thenReturn(activeStages)
+            .build();
         TestStub engagementSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
             .when('getProgramEngagementsByContactId', Id.class)
             .calledWith(contactId)
@@ -79,6 +94,7 @@ public with sharing class ServiceService_TEST {
         service.serviceSelector = (ServiceSelector) serviceSelectorStub.create();
         service.engagementSelector = (ProgramEngagementSelector) engagementSelectorStub.create();
         service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
+        service.engagementService = (ProgramEngagementService) engagementServiceStub.create();
 
         Test.startTest();
         Map<String, List<Object>> actual = service.getServicesEngagementsByContactId(
@@ -99,8 +115,14 @@ public with sharing class ServiceService_TEST {
 
         System.assertEquals(
             1,
+            actual.get('engagements').size(),
+            'Only active Program Engagements should be returned'
+        );
+
+        System.assertEquals(
+            1,
             actual.get('services').size(),
-            'Only active services should be returned'
+            'Only active Services should be returned'
         );
 
         engagementSelectorStub.assertCalledAsExpected();

@@ -11,6 +11,15 @@ public with sharing class ServiceService {
     public ServiceService() {
     }
 
+    private static final String SERVICE_STATUS_ACTIVE = 'ServiceStatusActive';
+    private static final String ENGAGEMENTS = 'engagements';
+    private static final String SERVICES = 'services';
+    private static final String LABEL = 'label';
+    private static final String VALUE = 'value';
+    private static final String NAME = 'Name';
+    private static final String Id = 'Id';
+    private static final String PROGRAM = 'program';
+
     @TestVisible
     private FieldBucketSelector bucketSelector = new FieldBucketSelector();
 
@@ -30,7 +39,7 @@ public with sharing class ServiceService {
     private Set<String> activeStatuses {
         get {
             if (activeStatuses == null) {
-                activeStatuses = getactiveStatuses();
+                activeStatuses = getActiveStatuses();
             }
             return activeStatuses;
         }
@@ -38,7 +47,7 @@ public with sharing class ServiceService {
     }
 
     private Set<String> getActiveStatuses() {
-        List<String> bucketNames = new List<String>{ 'ServiceStatusActive' };
+        List<String> bucketNames = new List<String>{ SERVICE_STATUS_ACTIVE };
         Set<String> activeStatuses = new Set<String>();
 
         Schema.SObjectType serviceSObjType = Service__c.SObjectType;
@@ -67,25 +76,30 @@ public with sharing class ServiceService {
         Set<String> activeProgramEngagementStages = engagementService.getActiveStages();
 
         Map<String, List<Object>> result = new Map<String, List<Object>>();
-        result.put('engagements', new List<Object>());
-        result.put('services', new List<Object>());
+        result.put(ENGAGEMENTS, new List<Object>());
+        result.put(SERVICES, new List<Object>());
 
         for (
             ProgramEngagement__c engagement : engagementSelector.getProgramEngagementsByContactId(
                 contactId
             )
         ) {
-            if (activeProgramEngagementStages.contains(engagement.Stage__c)) {
+            if (
+                activeProgramEngagementStages.isEmpty() ||
+                activeProgramEngagementStages.contains(engagement.Stage__c)
+            ) {
                 programIds.add(engagement.Program__c);
-                result.get('engagements')
+                result.get(ENGAGEMENTS)
                     .add(convertObjectToOption(engagement, engageProgram));
             }
         }
 
         for (Service__c service : serviceSelector.getServicesByProgramIds(programIds)) {
-            if (activeServiceStatuses.contains(service.Status__c)) {
-                result.get('services')
-                    .add(convertObjectToOption(service, serviceProgram));
+            if (
+                activeServiceStatuses.isEmpty() ||
+                activeServiceStatuses.contains(service.Status__c)
+            ) {
+                result.get(SERVICES).add(convertObjectToOption(service, serviceProgram));
             }
         }
 
@@ -94,9 +108,9 @@ public with sharing class ServiceService {
 
     private Map<String, String> convertObjectToOption(sObject obj, String programField) {
         Map<String, String> result = new Map<String, String>();
-        result.put('label', (String) obj.get('Name'));
-        result.put('value', (String) obj.get('Id'));
-        result.put('program', (String) obj.get(programField));
+        result.put(LABEL, (String) obj.get(NAME));
+        result.put(VALUE, (String) obj.get(ID));
+        result.put(PROGRAM, (String) obj.get(programField));
         return result;
     }
 

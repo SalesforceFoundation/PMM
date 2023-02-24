@@ -10,7 +10,131 @@
 @isTest
 public with sharing class ServiceService_TEST {
     @IsTest
-    private static void testGetServicesEngagementsByContactId() {
+    private static void testGetServicesEngagementsByContactIdFeatureOn() {
+        Id contactId = TestUtil.mockId(Contact.SObjectType);
+
+        Program__c program1 = new Program__c(
+            Id = TestUtil.mockId(Program__c.SObjectType),
+            Name = 'Program 1',
+            Status__c = 'Active',
+            StartDate__c = Date.today(),
+            EndDate__c = Date.today().addDays(30)
+        );
+
+        ProgramEngagement__c engagement1 = new ProgramEngagement__c(
+            Name = 'Engagement 1',
+            Stage__c = 'Active',
+            Contact__c = contactId,
+            Program__c = program1.Id,
+            Role__c = 'Client'
+        );
+
+        ProgramEngagement__c engagement2 = new ProgramEngagement__c(
+            Name = 'Engagement 2',
+            Stage__c = 'Enrolled',
+            Contact__c = contactId,
+            Program__c = program1.Id,
+            Role__c = 'Client'
+        );
+
+        Service__c service1 = new Service__c(
+            Id = TestUtil.mockId(Service__c.SObjectType),
+            Name = 'Service 1',
+            Program__c = program1.Id,
+            Status__c = 'Active',
+            UnitOfMeasurement__c = 'Hours'
+        );
+
+        Service__c service2 = new Service__c(
+            Id = TestUtil.mockId(Service__c.SObjectType),
+            Name = 'Service 2',
+            Program__c = program1.Id,
+            Status__c = 'Planned',
+            UnitOfMeasurement__c = 'Hours'
+        );
+
+        List<ProgramEngagement__c> engagements = new List<ProgramEngagement__c>{
+            engagement1,
+            engagement2
+        };
+        List<Service__c> services = new List<Service__c>{ service1, service2 };
+        List<String> bucketNames = new List<String>{ 'ServiceStatusActive' };
+        Schema.SObjectType serviceSObjType = Service__c.SObjectType;
+        Schema.SObjectField statusField = Service__c.Status__c;
+        List<Bucket__mdt> statusBuckets = createBuckets();
+        Set<String> activeStages = new Set<String>{ 'Active' };
+
+        TestStub engagementServiceStub = new StubBuilder(ProgramEngagementService.class)
+            .when('getActiveStages')
+            .called()
+            .thenReturn(activeStages)
+            .build();
+        TestStub engagementSelectorStub = new StubBuilder(ProgramEngagementSelector.class)
+            .when('getProgramEngagementsByContactId', Id.class)
+            .calledWith(contactId)
+            .thenReturn(engagements)
+            .build();
+        TestStub serviceSelectorStub = new StubBuilder(ServiceSelector.class)
+            .when('getServicesByProgramIds', Set<Id>.class)
+            .calledWith(new Set<Id>{ program1.Id })
+            .thenReturn(services)
+            .build();
+        TestStub bucketSelectorStub = new StubBuilder(FieldBucketSelector.class)
+            .when(
+                'getBuckets',
+                List<String>.class,
+                Schema.SObjectType.class,
+                Schema.SObjectField.class
+            )
+            .calledWith(bucketNames, serviceSObjType, statusField)
+            .thenReturn(statusBuckets)
+            .build();
+
+        ServiceService service = new ServiceService();
+        service.serviceSelector = (ServiceSelector) serviceSelectorStub.create();
+        service.engagementSelector = (ProgramEngagementSelector) engagementSelectorStub.create();
+        service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
+        service.engagementService = (ProgramEngagementService) engagementServiceStub.create();
+
+        // By turning off none, we turn on all
+        TestUtil.turnOffFeatureGates(new Set<String>{});
+
+        Test.startTest();
+        Map<String, List<Object>> actual = service.getServicesEngagementsByContactId(
+            contactId
+        );
+        Test.stopTest();
+
+        Set<String> expectedKeySet = new Set<String>{ 'engagements', 'services' };
+        System.assertEquals(
+            expectedKeySet,
+            actual.keySet(),
+            'Expected both keys to be returned.'
+        );
+
+        for (List<Object> objList : actual.values()) {
+            System.assert(!objList.isEmpty());
+        }
+
+        System.assertEquals(
+            1,
+            actual.get('engagements').size(),
+            'Only active Program Engagements should be returned'
+        );
+
+        System.assertEquals(
+            1,
+            actual.get('services').size(),
+            'Only active Services should be returned'
+        );
+
+        engagementSelectorStub.assertCalledAsExpected();
+        serviceSelectorStub.assertCalledAsExpected();
+        bucketSelectorStub.assertCalledAsExpected();
+    }
+
+    @IsTest
+    private static void testGetServicesEngagementsByContactIdFeatureOff() {
         Id contactId = TestUtil.mockId(Contact.SObjectType);
 
         Program__c program1 = new Program__c(
@@ -114,15 +238,15 @@ public with sharing class ServiceService_TEST {
         }
 
         System.assertEquals(
-            1,
+            2,
             actual.get('engagements').size(),
-            'Only active Program Engagements should be returned'
+            'All Program Engagements should be returned'
         );
 
         System.assertEquals(
-            1,
+            2,
             actual.get('services').size(),
-            'Only active Services should be returned'
+            'All Services should be returned'
         );
 
         engagementSelectorStub.assertCalledAsExpected();

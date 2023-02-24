@@ -74,7 +74,9 @@ public with sharing class ServiceService {
             .getAllFeatureGates();
 
         for (FeatureGate__mdt feature : features) {
-            if (feature.IsActive__c && BSDT_ACTIVE_FILTER == feature.DeveloperName) {
+            if (
+                feature.IsActive__c && BSDT_ACTIVE_FILTER.contains(feature.DeveloperName)
+            ) {
                 return feature.IsActive__c;
             }
         }
@@ -86,9 +88,14 @@ public with sharing class ServiceService {
         Set<Id> programIds = new Set<Id>();
         String serviceProgram = Schema.SObjectType.Service__c.Fields.Program__c.getName();
         String engageProgram = Schema.SObjectType.ProgramEngagement__c.Fields.Program__c.getName();
-        Set<String> activeServiceStatuses = activeStatuses;
-        Set<String> activeProgramEngagementStages = engagementService.getActiveStages();
+        Set<String> activeServiceStatuses = new Set<String>();
+        Set<String> activeProgramEngagementStages = new Set<String>();
         Boolean bsdtFilterIsActive = isBsdtActiveFilterActive();
+
+        if (bsdtFilterIsActive) {
+            activeServiceStatuses = getActiveStatuses();
+            activeProgramEngagementStages = engagementService.getActiveStages();
+        }
 
         Map<String, List<Object>> result = new Map<String, List<Object>>();
         result.put(ENGAGEMENTS, new List<Object>());
@@ -100,9 +107,8 @@ public with sharing class ServiceService {
             )
         ) {
             if (
-                !bsdtFilterIsActive ||
-                (activeProgramEngagementStages.isEmpty() ||
-                activeProgramEngagementStages.contains(engagement.Stage__c))
+                activeProgramEngagementStages.isEmpty() ||
+                activeProgramEngagementStages.contains(engagement.Stage__c)
             ) {
                 programIds.add(engagement.Program__c);
                 result.get(ENGAGEMENTS)
@@ -112,9 +118,8 @@ public with sharing class ServiceService {
 
         for (Service__c service : serviceSelector.getServicesByProgramIds(programIds)) {
             if (
-                !bsdtFilterIsActive ||
-                (activeServiceStatuses.isEmpty() ||
-                activeServiceStatuses.contains(service.Status__c))
+                activeServiceStatuses.isEmpty() ||
+                activeServiceStatuses.contains(service.Status__c)
             ) {
                 result.get(SERVICES).add(convertObjectToOption(service, serviceProgram));
             }

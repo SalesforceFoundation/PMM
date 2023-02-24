@@ -254,7 +254,6 @@ public with sharing class ServiceService_TEST {
 
         engagementSelectorStub.assertCalledAsExpected();
         serviceSelectorStub.assertCalledAsExpected();
-        bucketSelectorStub.assertCalledAsExpected();
     }
 
     @IsTest

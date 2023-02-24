@@ -69,14 +69,12 @@ public with sharing class ServiceService {
         return activeStatuses;
     }
 
-    private Boolean getActiveFilterFeatureGateStatus() {
+    private Boolean isBsdtActiveFilterActive() {
         List<FeatureGate__mdt> features = CustomMetadataSelector.getInstance()
             .getAllFeatureGates();
 
         for (FeatureGate__mdt feature : features) {
-            if (
-                feature.IsActive__c && BSDT_ACTIVE_FILTER.contains(feature.DeveloperName)
-            ) {
+            if (feature.IsActive__c && BSDT_ACTIVE_FILTER == feature.DeveloperName) {
                 return feature.IsActive__c;
             }
         }
@@ -90,7 +88,7 @@ public with sharing class ServiceService {
         String engageProgram = Schema.SObjectType.ProgramEngagement__c.Fields.Program__c.getName();
         Set<String> activeServiceStatuses = activeStatuses;
         Set<String> activeProgramEngagementStages = engagementService.getActiveStages();
-        Boolean bsdtFilterIsActive = getActiveFilterFeatureGateStatus();
+        Boolean bsdtFilterIsActive = isBsdtActiveFilterActive();
 
         Map<String, List<Object>> result = new Map<String, List<Object>>();
         result.put(ENGAGEMENTS, new List<Object>());

@@ -135,6 +135,7 @@ public with sharing class ServiceService_TEST {
 
     @IsTest
     private static void testGetServicesEngagementsByContactIdFeatureOff() {
+        final String BSDT_ACTIVE_FILTER = 'BSDTActiveFilter';
         Id contactId = TestUtil.mockId(Contact.SObjectType);
 
         Program__c program1 = new Program__c(
@@ -219,6 +220,8 @@ public with sharing class ServiceService_TEST {
         service.engagementSelector = (ProgramEngagementSelector) engagementSelectorStub.create();
         service.bucketSelector = (FieldBucketSelector) bucketSelectorStub.create();
         service.engagementService = (ProgramEngagementService) engagementServiceStub.create();
+
+        TestUtil.turnOffFeatureGates(new Set<String>{ BSDT_ACTIVE_FILTER });
 
         Test.startTest();
         Map<String, List<Object>> actual = service.getServicesEngagementsByContactId(

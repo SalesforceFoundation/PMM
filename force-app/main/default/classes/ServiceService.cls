@@ -93,7 +93,7 @@ public with sharing class ServiceService {
         Boolean bsdtFilterIsActive = isBsdtActiveFilterActive();
 
         if (bsdtFilterIsActive) {
-            activeServiceStatuses = getActiveStatuses();
+            activeServiceStatuses = activeStatuses;
             activeProgramEngagementStages = engagementService.getActiveStages();
         }
 

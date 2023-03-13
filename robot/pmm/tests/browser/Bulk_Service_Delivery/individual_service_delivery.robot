@@ -35,6 +35,19 @@ Setup Test Data
     ${service1} =               API Create Service              ${Program1}[Id]
     Set suite variable          ${service1}
 
+
+    ${contact4} =               API Create Contact
+    Set suite variable          ${contact4}
+    ${program4} =               API Create Program
+    Set suite variable          ${program4}
+    ${service4} =               API Create Service                  ${Program4}[Id]
+    Set suite variable          ${service4}
+    API Update Records          ${ns}Service__c    ${service4}[Id]     ${ns}Status__c=Canceled
+    ${program_engagement4} =    API Create Program Engagement   ${Program4}[Id]     ${contact4}[Id]
+    Set suite variable          ${program_engagement4}
+    API Update Records          ${ns}ProgramEngagement__c    ${program_engagement4}[Id]     ${ns}Stage__c=Withdrawn
+
+
     ${contact2} =               API Create Contact
     Set suite variable          ${contact2}
     ${program2} =               API Create Program
@@ -43,6 +56,7 @@ Setup Test Data
     Set suite variable          ${program_engagement2}
     ${service2} =               API Create Service              ${Program2}[Id]
     Set suite variable          ${service2}
+
 
     ${contact3} =               API Create Contact
     Set suite variable          ${contact3}
@@ -57,7 +71,9 @@ ISD1: Add service delivery on bulk service delivery
     [Documentation]             This test adds two service deliveries on bulk service delivery and 
     ...                         navigates to service delivery listview and verifies that the service delivery 
     ...                         records are displayed
-    [tags]                      W-040316    quadrant:Q2   perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    [tags]                      W-040316    quadrant:Q3   perm:admin   perm:manage    perm:deliver   feature:Service Delivery
+    Setup Custom Metadata Bucketed Value    Canceled Service    Canceled_Service    	ServiceStatusActive     Canceled 
+    Setup Custom Metadata Bucketed Value    PE:Withdrawn    PE_Withrawn    	Active     Withdrawn 
     Go To Page                  Custom                              Bulk_Service_Deliveries
     Click Dialog Button         Create by Individual
     Populate Bsdt Lookup        1           Client                  ${contact1}[FirstName] ${contact1}[LastName]
@@ -69,15 +85,21 @@ ISD1: Add service delivery on bulk service delivery
     Populate Bsdt Dropdown      2           Program Engagement      ${program_engagement2}[Name]
     Populate Bsdt Dropdown      2           Service                 ${service2}[Name]
     Populate Bsdt Field         2           Quantity                ${quantity2}
+    Click Bsdt Button           Add Entry
+    Populate Bsdt Lookup        3           Client                  ${contact4}[FirstName] ${contact4}[LastName]
+    Populate Bsdt Dropdown      3           Program Engagement      ${program_engagement4}[Name]
+    Populate Bsdt Dropdown      3           Service                 ${service4}[Name]
+    Populate Bsdt Field         3           Quantity                ${quantity2}
     Click Bsdt Button           Save
     Verify Persist Save Icon    1           Saved
     Verify Persist Save Icon    2           Saved
+    Verify Persist Save Icon    3           Saved
     Go To Page                  Listing                             ${ns}ServiceDelivery__c
     Page Should Contain         ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
     Page Should Contain         ${contact2}[FirstName] ${contact2}[LastName] ${today}: ${service2}[Name]
     Click Listview Link         ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
     Verify Details              Service Delivery Name           contains              ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service1}[Name]
-    Save Current Record ID For Deletion     ${ns}ServiceDelivery__c
+
 
 ISD2: Verify error message when there are no services associated with the program
     [Documentation]             This test verifies that an error message is displayed when there are no

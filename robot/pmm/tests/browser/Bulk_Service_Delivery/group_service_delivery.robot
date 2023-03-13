@@ -70,6 +70,33 @@ Setup Test Data
     API Update Records              ${ns}ProgramEngagement__c    ${program_engagement4}[Id]     ${ns}Stage__c=Applied
 
 *** Test Cases ***
+Setup custom bucketed values and validate on participant selector component
+    [Documentation]               Create custom bucketed values for Program Cohort Status and Program Engagement Stages and
+    ...                           validate the same on the participant selector component on BSDT
+    [tags]                        quadrant:Q3   perm:admin
+    Setup Custom Metadata Bucketed Value    Completed    Completed   ProgramCohortStatusActive   Completed
+    Setup Custom Metadata Bucketed Value    Applied    Applied    Active    Applied
+    Go To Page                              Custom                      Bulk_Service_Deliveries
+    Click Dialog Button                     Create by Group
+    Page Should Contain Text                Default Service Delivery Values
+    Populate Lookup Field                   Service     ${service1}[Name]
+    Page Should Contain                     ${service1}[${ns}UnitOfMeasurement__c]
+    Populate Field                          Quantity    ${quantity}
+    Click Dialog Button                     Next
+    Page Should Contain Text                Contact Selection
+    Load Page Object                        New         ServiceSchedule__c
+    Page Should Contain                     Applied
+    Verify dropdown Options                 Filter by: Program Cohort    contains    ${program_cohort1}[Name]
+    sleep    3s
+    Verify dropdown Options                 Filter by: Program Cohort    does not contain    ${program_cohort2}[Name]
+    sleep    3s
+    Verify dropdown Options                 Filter by: Program Cohort    does not contain    ${program_cohort3}[Name]
+    sleep    3s
+    Select Service Participant              ${contact1}[Name]
+    Validate Participant Is Added           ${contact1}[Name]
+    Click Dialog Button                     Next
+    Page Should Contain                     Delivery Date
+    
 GSD1: Create service delivery using BSDT Wizard
     [Documentation]             Clicks on Create by Group on BSDT, selects default service delivery values, adds contact
     ...                         and creates service delivery using wizard
@@ -97,13 +124,12 @@ GSD1: Create service delivery using BSDT Wizard
     Verify Details                  Service Delivery Name   contains   ${contact1}[FirstName] ${contact1}[LastName] ${today}: ${service}[Name]
     Verify Details                  Quantity                contains   ${quantity}.00
     Verify Details                  Unit of Measurement     contains   ${service}[${ns}UnitOfMeasurement__c]
-    Save Current Record ID For Deletion        ${ns}ServiceDelivery__c
     Go To Page                      Listing    ${ns}ServiceDelivery__c
     Click Listview Link             ${contact2}[FirstName] ${contact2}[LastName] ${today}: ${service}[Name]
     Verify Details                  Service Delivery Name   contains   ${contact2}[FirstName] ${contact2}[LastName] ${today}: ${service}[Name]
     Verify Details                  Quantity                contains   ${quantity}.00
     Verify Details                  Unit of Measurement     contains   ${service}[${ns}UnitOfMeasurement__c]
-    Save Current Record ID For Deletion        ${ns}ServiceDelivery__c
+
 
 GSD2: Filter on bsdt wizard based on Program Cohort
     [Documentation]                        On BSDT wizard contact selection screen,filter based on program cohort and 
@@ -159,31 +185,3 @@ GSD4: Filter on bsdt wizard based on Stage
     Page Should Contain                     No records selected
     Filter Participants                     Applied
     Page Should Contain                     No records found.
-
-Setup custom bucketed values and validate on participant selector component
-    [Documentation]               Create custom bucketed values for Program Cohort Status and Program Engagement Stages and
-    ...                           validate the same on the participant selector component on BSDT
-    [tags]                        quadrant:Q3   perm:admin
-    Setup Custom Metadata Bucketed Value    Completed    Completed   ProgramCohortStatusActive   Completed
-    Setup Custom Metadata Bucketed Value    Applied    Applied    Active    Applied
-    Go To Page                              Custom                      Bulk_Service_Deliveries
-    Click Dialog Button                     Create by Group
-    Page Should Contain Text                Default Service Delivery Values
-    Populate Lookup Field                   Service     ${service1}[Name]
-    Page Should Contain                     ${service1}[${ns}UnitOfMeasurement__c]
-    Populate Field                          Quantity    ${quantity}
-    Click Dialog Button                     Next
-    Page Should Contain Text                Contact Selection
-    Load Page Object                        New         ServiceSchedule__c
-    Page Should Contain                     Applied
-    Verify dropdown Options                 Filter by Program Cohort    contains    ${program_cohort1}[Name]
-    sleep    3s
-    Verify dropdown Options                 Filter by Program Cohort    does not contain    ${program_cohort2}[Name]
-    sleep    3s
-    Verify dropdown Options                 Filter by Program Cohort    does not contain    ${program_cohort3}[Name]
-    sleep    3s
-    Select Service Participant              ${contact1}[Name]
-    Validate Participant Is Added           ${contact1}[Name]
-    Click Dialog Button                     Next
-    Page Should Contain                     Delivery Date
-

@@ -1,4 +1,4 @@
-minimum_cumulusci_version: "3.36.0"
+minimum_cumulusci_version: 3.74.0
 project:
     name: PMM
     package:
@@ -220,6 +220,11 @@ tasks:
         options:
             path: unpackaged/config/customer_profiles
 
+    github_release:
+        options:
+            release_content: |
+                Check out the Salesforce Release Notes on [Salesforce Help & Training](https://sfdc.co/bnL4Cb).
+
 flows:
     make_community:
         steps:
@@ -438,6 +443,11 @@ flows:
                 ui_options:
                     reports:
                         name: "Deploy Folder of Unmanaged Reports"
+
+    release_production:
+        steps:
+            3:
+                task: None
 
 plans:
     install:

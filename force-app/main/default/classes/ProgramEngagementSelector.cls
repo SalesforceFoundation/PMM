@@ -22,11 +22,11 @@ public with sharing class ProgramEngagementSelector {
         }
 
         List<ProgramEngagement__c> queriedEngagements = [
-            SELECT Id, Name, Program__c, Program__r.Name
+            SELECT Id, Name, Program__c, Program__r.Name, Stage__c
             FROM ProgramEngagement__c
             WHERE Contact__c = :contactId
         ];
-
+        queriedEngagements.sort();
         return Security.stripInaccessible(AccessType.READABLE, queriedEngagements)
             .getRecords();
     }

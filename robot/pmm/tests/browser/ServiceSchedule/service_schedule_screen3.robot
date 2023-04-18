@@ -150,9 +150,9 @@ Setup custom bucketed values and validate on service schedule wizard
     Click Dialog Button                     Next
     Verify Wizard Screen Title              Add Service Participants
     Page Should Contain                     Waitlisted
-    Verify dropdown Options                 Filter by Program Cohort    contains    ${program_cohort1}[Name]
-    Verify dropdown Options                 Filter by Program Cohort    does not contain    ${program_cohort2}[Name]
-    Verify dropdown Options                 Filter by Program Cohort    does not contain    ${program_cohort3}[Name]
+    Verify dropdown Options                 Filter by: Program Cohort    contains    ${program_cohort1}[Name]
+    Verify dropdown Options                 Filter by: Program Cohort    does not contain    ${program_cohort2}[Name]
+    Verify dropdown Options                 Filter by: Program Cohort    does not contain    ${program_cohort3}[Name]
     Select Service Participant              ${contact1}[Name]
     Validate Participant Is Added           ${contact1}[Name]
     Click Dialog Button                     Next 

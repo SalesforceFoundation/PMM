@@ -348,6 +348,7 @@ class pmm(object):
         self.selenium.wait_until_element_is_enabled(
             locator, error="Button is not enabled"
         )
+        self.scroll_element_into_view(locator)
         self.selenium.set_focus_to_element(locator)
         element = self.selenium.driver.find_element_by_xpath(locator)
         self.selenium.driver.execute_script("arguments[0].click()", element)
@@ -527,6 +528,7 @@ class pmm(object):
 
     def click_custom_metadata_button(self, button):
         """Clicks on a button within the custom metadata iFrame"""
+        time.sleep(3)
         if button == "New":
             locator = pmm_lex_locators["custom_metadata_button"].format(button)
             self.select_frame_with_value(

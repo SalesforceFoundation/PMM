@@ -11,6 +11,19 @@ public with sharing class ServiceService {
     public ServiceService() {
     }
 
+    private static final String SERVICE_STATUS_ACTIVE = 'ServiceStatusActive';
+    private static final String ENGAGEMENTS = 'engagements';
+    private static final String SERVICES = 'services';
+    private static final String LABEL = 'label';
+    private static final String VALUE = 'value';
+    private static final String NAME = 'Name';
+    private static final String Id = 'Id';
+    private static final String PROGRAM = 'program';
+    private static final String BSDT_ACTIVE_FILTER = 'BSDTActiveFilter';
+
+    @TestVisible
+    private FieldBucketSelector bucketSelector = new FieldBucketSelector();
+
     @TestVisible
     private FieldSetService fieldSetService = new FieldSetService();
 
@@ -18,29 +31,98 @@ public with sharing class ServiceService {
     private ServiceSelector serviceSelector = new ServiceSelector();
 
     @TestVisible
+    private ProgramEngagementService engagementService = new ProgramEngagementService();
+
+    @TestVisible
     private ProgramEngagementSelector engagementSelector = new ProgramEngagementSelector();
+
+    @TestVisible
+    private Set<String> activeStatuses {
+        get {
+            if (activeStatuses == null) {
+                activeStatuses = getActiveStatuses();
+            }
+            return activeStatuses;
+        }
+        set;
+    }
+
+    private Set<String> getActiveStatuses() {
+        List<String> bucketNames = new List<String>{ SERVICE_STATUS_ACTIVE };
+        Set<String> activeStatuses = new Set<String>();
+
+        Schema.SObjectType serviceSObjType = Service__c.SObjectType;
+        Schema.SObjectField statusField = Service__c.Status__c;
+
+        for (
+            Bucket__mdt bucket : bucketSelector.getBuckets(
+                bucketNames,
+                serviceSObjType,
+                statusField
+            )
+        ) {
+            for (BucketedValue__mdt value : bucket.BucketedValues__r) {
+                activeStatuses.add(value.Value__c);
+            }
+        }
+
+        return activeStatuses;
+    }
+
+    private Boolean isBsdtActiveFilterActive() {
+        List<FeatureGate__mdt> features = CustomMetadataSelector.getInstance()
+            .getAllFeatureGates();
+
+        for (FeatureGate__mdt feature : features) {
+            if (
+                feature.IsActive__c && BSDT_ACTIVE_FILTER.contains(feature.DeveloperName)
+            ) {
+                return feature.IsActive__c;
+            }
+        }
+
+        return false;
+    }
 
     public Map<String, List<Object>> getServicesEngagementsByContactId(Id contactId) {
         Set<Id> programIds = new Set<Id>();
         String serviceProgram = Schema.SObjectType.Service__c.Fields.Program__c.getName();
         String engageProgram = Schema.SObjectType.ProgramEngagement__c.Fields.Program__c.getName();
+        Set<String> activeServiceStatuses = new Set<String>();
+        Set<String> activeProgramEngagementStages = new Set<String>();
+        Boolean bsdtFilterIsActive = isBsdtActiveFilterActive();
+
+        if (bsdtFilterIsActive) {
+            activeServiceStatuses = activeStatuses;
+            activeProgramEngagementStages = engagementService.getActiveStages();
+        }
 
         Map<String, List<Object>> result = new Map<String, List<Object>>();
-        result.put('engagements', new List<Object>());
-        result.put('services', new List<Object>());
+        result.put(ENGAGEMENTS, new List<Object>());
+        result.put(SERVICES, new List<Object>());
 
         for (
             ProgramEngagement__c engagement : engagementSelector.getProgramEngagementsByContactId(
                 contactId
             )
         ) {
-            programIds.add(engagement.Program__c);
-            result.get('engagements')
-                .add(convertObjectToOption(engagement, engageProgram));
+            if (
+                activeProgramEngagementStages.isEmpty() ||
+                activeProgramEngagementStages.contains(engagement.Stage__c)
+            ) {
+                programIds.add(engagement.Program__c);
+                result.get(ENGAGEMENTS)
+                    .add(convertObjectToOption(engagement, engageProgram));
+            }
         }
 
         for (Service__c service : serviceSelector.getServicesByProgramIds(programIds)) {
-            result.get('services').add(convertObjectToOption(service, serviceProgram));
+            if (
+                activeServiceStatuses.isEmpty() ||
+                activeServiceStatuses.contains(service.Status__c)
+            ) {
+                result.get(SERVICES).add(convertObjectToOption(service, serviceProgram));
+            }
         }
 
         return result;
@@ -48,9 +130,9 @@ public with sharing class ServiceService {
 
     private Map<String, String> convertObjectToOption(sObject obj, String programField) {
         Map<String, String> result = new Map<String, String>();
-        result.put('label', (String) obj.get('Name'));
-        result.put('value', (String) obj.get('Id'));
-        result.put('program', (String) obj.get(programField));
+        result.put(LABEL, (String) obj.get(NAME));
+        result.put(VALUE, (String) obj.get(ID));
+        result.put(PROGRAM, (String) obj.get(programField));
         return result;
     }
 

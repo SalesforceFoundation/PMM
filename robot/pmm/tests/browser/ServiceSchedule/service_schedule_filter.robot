@@ -59,7 +59,7 @@ SSF1: Filter based on Program Cohort
     Verify Wizard Screen Title              Add Service Participants
     Page Should Contain                     ${service_schedule_name}
     Page Should Contain                     No records selected
-    Select Value From Dropdown              Filter by Program Cohort        ${program_cohort2}[Name]
+    Select Value From Dropdown              Filter by: Program Cohort        ${program_cohort2}[Name]
     Page Should Not Contain                 ${contact1}[Name]
     Page Should Not Contain                 ${contact2}[Name]
     Page Should Contain Text                ${contact3}[Name]

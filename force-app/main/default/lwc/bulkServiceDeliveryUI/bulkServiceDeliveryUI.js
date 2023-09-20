@@ -180,6 +180,10 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         return "error";
     }
 
+    get isSaveDisabled() {
+        return this.isSaving;
+    }
+
     addDelivery() {
         let serviceDelivery = {
             index: this._nextIndex,
@@ -230,6 +234,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     handleSave() {
         let rows = this.template.querySelectorAll("c-service-delivery-row");
 
+        this.isSaving = true;
         this.savedCount = 0;
         this.errorCount = 0;
         this.targetSaveCount = 0;
@@ -247,6 +252,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
         if (this.targetSaveCount === 0) {
             this.dispatchEvent(new CustomEvent("done"));
+            this.isSaving = false;
         }
     }
 
@@ -260,6 +266,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
         if (this.savedCount === this.targetSaveCount) {
             this.dispatchEvent(new CustomEvent("done"));
+            this.isSaving = false;
         }
     }
 

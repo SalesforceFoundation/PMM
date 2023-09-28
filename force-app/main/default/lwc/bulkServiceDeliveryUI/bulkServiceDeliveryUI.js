@@ -225,16 +225,15 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     // eslint-disable-next-line no-unused-vars
     handleRowError(event) {
         this.errorCount++;
-
         if (this.savingComplete()) {
             this.showSaveSummaryToast();
+            this.isSaving = false;
         }
     }
 
     handleSave() {
         let rows = this.template.querySelectorAll("c-service-delivery-row");
 
-        this.isSaving = true;
         this.savedCount = 0;
         this.errorCount = 0;
         this.targetSaveCount = 0;
@@ -246,13 +245,13 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             }
             if (row.isDirty) {
                 this.currentSaveCount++;
+                this.isSaving = true;
             }
             row.saveRow();
         });
 
         if (this.targetSaveCount === 0) {
             this.dispatchEvent(new CustomEvent("done"));
-            this.isSaving = false;
         }
     }
 
@@ -262,11 +261,11 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
 
         if (this.savingComplete()) {
             this.showSaveSummaryToast();
+            this.isSaving = false;
         }
 
         if (this.savedCount === this.targetSaveCount) {
             this.dispatchEvent(new CustomEvent("done"));
-            this.isSaving = false;
         }
     }
 

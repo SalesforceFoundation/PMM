@@ -48,7 +48,7 @@ Setup Test Data
 UA1: Update attendance when service session status is Pending
     [Documentation]                 This test updates attendance for a service session record with Pending Status
     [tags]                          W-8607484   perm:admin   perm:manage    feature:Attendance
-    Go To Page                      Details         ServiceSession__c        object_id=${service_session1}[Id]         
+    Go To Page                      Details         ServiceSession__c    quadrant:Q2    object_id=${service_session1}[Id]         
     Populate Attendance Field           ${contact1}[Name]      Hours                10
     Populate Attendance Dropdown        ${contact1}[Name]      Attendance Status    Present
     Populate Attendance Field           ${contact2}[Name]       Hours                10
@@ -66,7 +66,7 @@ UA1: Update attendance when service session status is Pending
     
 UA2: Update attendance when service session status is Complete
     [Documentation]                 This test updates attendance for a service session record with Complete Status
-    [tags]                          W-8611541    perm:admin   perm:manage     feature:Attendance
+    [tags]                          W-8611541    perm:admin   perm:manage   quadrant:Q2    feature:Attendance
     Go To Page                      Details         ServiceSession__c        object_id=${service_session2}[Id]
     Click Dialog Button             Update
     Page Should Contain             Track Attendance         
@@ -84,7 +84,7 @@ UA2: Update attendance when service session status is Complete
 
 UA3: Validate fields added to AttendanceServiceDeliveries Fieldset
     [Documentation]                 This test updates attendance for a service session record with Complete Status
-    [tags]                          W-9505038    quadrant:Q2   perm:admin   feature:Attendance
+    [tags]                          W-9505038    quadrant:Q2   perm:admin   quadrant:Q3   feature:Attendance
     Run task                            add_fields_to_field_set
     ...                                 field_set=${ns}ServiceDelivery__c.${ns}Attendance_Service_Deliveries
     ...                                 fields=${{ ["${ns}Service_Provider__c"] }}

@@ -13,6 +13,7 @@
  */
 public with sharing class TestUtil {
     private static final Set<String> featureGateNames = new Set<String>{
+        'BSDTActiveFilter',
         'ServiceDeliveriesToContact',
         'ServiceDeliveriesToService',
         'ServiceDeliveriesToServiceSession',

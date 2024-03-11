@@ -1,3 +1,5 @@
+#GUSINFO:NPC Asteroids, SFDO Program Management Module
+
 # Python
 *.py                  @SalesforceFoundation/release-engineering-reviewers
 

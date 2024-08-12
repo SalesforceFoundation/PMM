@@ -437,6 +437,8 @@ flows:
                 task: update_dependencies
             2:
                 task: install_managed
+                options:
+                    security_type: NONE
             3:
                 task: deploy_customer_profiles
                 ui_options:

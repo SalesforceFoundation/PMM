@@ -196,8 +196,7 @@ public with sharing class ProgramEngagementSelector {
         List<List<SObject>> contactResult = [
             FIND :searchText
             IN ALL FIELDS
-            RETURNING
-                Contact(FirstName, LastName, Email LIMIT :SEARCH_LIMIT)
+            RETURNING Contact(FirstName, LastName, Email LIMIT :SEARCH_LIMIT)
         ];
 
         return getEngagementIdsFromSOSLResult(

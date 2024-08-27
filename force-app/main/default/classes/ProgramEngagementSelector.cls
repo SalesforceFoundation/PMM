@@ -197,7 +197,7 @@ public with sharing class ProgramEngagementSelector {
             FIND :searchText
             IN ALL FIELDS
             RETURNING
-                Contact(FirstName, LastName, Email ORDER BY LastName LIMIT :SEARCH_LIMIT)
+                Contact(FirstName, LastName, Email LIMIT :SEARCH_LIMIT)
         ];
 
         return getEngagementIdsFromSOSLResult(

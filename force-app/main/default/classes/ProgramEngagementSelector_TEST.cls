@@ -173,7 +173,6 @@ public with sharing class ProgramEngagementSelector_TEST {
                 FROM ProgramEngagement__c
                 WHERE
                     Program__c = :program.Id
-                    AND Contact__r.Name LIKE '%Contact%'
                     AND Stage__c = 'Enrolled'
             ]
         );
@@ -184,7 +183,6 @@ public with sharing class ProgramEngagementSelector_TEST {
         for (Contact con : [
             SELECT Id, Name, Email
             FROM Contact
-            WHERE Name LIKE '%Contact%'
         ]) {
             soslTestIds.add(con.Id);
         }
@@ -243,7 +241,6 @@ public with sharing class ProgramEngagementSelector_TEST {
         for (Contact con : [
             SELECT Id, Name, Email
             FROM Contact
-            WHERE Name LIKE '%Contact%'
         ]) {
             soslTestIds.add(con.Id);
         }

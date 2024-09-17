@@ -39,7 +39,7 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
 import getFieldSets from "@salesforce/apex/ServiceDeliveryController.getServiceDeliveryFieldSets";
-import updateRows from "@salesforce/apex/ServiceDeliveryController.upsertServiceDeliveries";
+import upsertRows from "@salesforce/apex/ServiceDeliveryController.upsertServiceDeliveries";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
@@ -268,7 +268,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     upsertDeliveries(deliveries) {
-        updateRows({
+        upsertRows({
             serviceDeliveries: deliveries,
             allOrNone: false,
         })
@@ -290,7 +290,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             deliveries[i].result = results[i];
             resultByIndex[deliveries[i].index] = deliveries[i];
         }
-        console.log("find results: ", JSON.stringify(resultByIndex));
         return resultByIndex;
     }
 

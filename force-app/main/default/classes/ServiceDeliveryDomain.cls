@@ -51,15 +51,7 @@ public with sharing class ServiceDeliveryDomain {
             return;
         }
 
-        if (
-            !PermissionValidator.getInstance()
-                .hasObjectAccess(
-                    ServiceDelivery__c.SObjectType,
-                    PermissionValidator.CRUDAccessType.CREATEABLE
-                )
-        ) {
-            throw new ServiceDeliveryDomainException(Label.UpsertOperationException);
-        }
+        validateInsertAccess();
 
         insert Security.stripInaccessible(AccessType.CREATABLE, serviceDeliveries)
             .getRecords();
@@ -70,6 +62,47 @@ public with sharing class ServiceDeliveryDomain {
             return;
         }
 
+        validateUpdateAccess();
+
+        update Security.stripInaccessible(AccessType.UPDATABLE, serviceDeliveries)
+            .getRecords();
+    }
+
+    public List<Database.UpsertResult> upsertServiceDeliveries(
+        List<ServiceDelivery__c> serviceDeliveries,
+        Boolean allOrNone
+    ) {
+        Boolean hasNewRecords = false;
+        Boolean hasExistingRecords = false;
+
+        for (ServiceDelivery__c delivery : serviceDeliveries) {
+            if (!hasNewRecords && delivery.Id == null) {
+                hasNewRecords = true;
+            } else if (!hasExistingRecords && delivery.Id != null) {
+                hasExistingRecords = true;
+            }
+            if (hasNewRecords && hasExistingRecords) {
+                break;
+            }
+        }
+
+        if (hasNewRecords) {
+            validateInsertAccess();
+        }
+
+        if (hasExistingRecords) {
+            validateUpdateAccess();
+        }
+
+        List<Database.UpsertResult> saveResults = Database.upsert(
+            Security.stripInaccessible(AccessType.UPSERTABLE, serviceDeliveries)
+                .getRecords(),
+            allOrNone
+        );
+        return saveResults;
+    }
+
+    private void validateUpdateAccess() {
         if (
             !PermissionValidator.getInstance()
                 .hasObjectAccess(
@@ -79,8 +112,17 @@ public with sharing class ServiceDeliveryDomain {
         ) {
             throw new ServiceDeliveryDomainException(Label.UpsertOperationException);
         }
+    }
 
-        update Security.stripInaccessible(AccessType.UPDATABLE, serviceDeliveries)
-            .getRecords();
+    private void validateInsertAccess() {
+        if (
+            !PermissionValidator.getInstance()
+                .hasObjectAccess(
+                    ServiceDelivery__c.SObjectType,
+                    PermissionValidator.CRUDAccessType.CREATEABLE
+                )
+        ) {
+            throw new ServiceDeliveryDomainException(Label.UpsertOperationException);
+        }
     }
 }

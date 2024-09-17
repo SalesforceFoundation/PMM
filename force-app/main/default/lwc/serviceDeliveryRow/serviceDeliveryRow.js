@@ -59,6 +59,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         this._defaultValues = Object.assign(this.defaultValues, value);
         this._defaultsSet = false;
         this.setDefaults();
+
         if (value.Id === null) {
             // this allows full clear of the first row when the modal reopens
             this.isSaved = false;
@@ -75,6 +76,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     @api rowCount;
     @api isDirty = false;
     @api isError;
+    @api errorByField;
     @api shouldFocus = false;
 
     @track fieldSet;
@@ -175,14 +177,70 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     @api
-    saveRow() {
-        if (!this.isDirty) {
-            return;
+    get row() {
+        let row = {};
+
+        if (this.recordId) {
+            row.Id = this.recordId;
         }
-        let deliverySubmit = this.template.querySelector(".sd-submit");
-        if (deliverySubmit) {
-            deliverySubmit.click();
+
+        let comboboxes = this.template.querySelectorAll("lightning-combobox");
+        if (comboboxes && comboboxes.length > 0) {
+            comboboxes.forEach(combobox => {
+                row[combobox.name] = combobox.value;
+            });
         }
+
+        let inputFields = this.template.querySelectorAll("lightning-input-field");
+        if (inputFields && inputFields.length > 0) {
+            inputFields.forEach(field => {
+                row[field.fieldName] = field.value;
+            });
+        }
+
+        if (this.programEngagementId) {
+            row[PROGRAMENGAGEMENT_FIELD.fieldApiName] = this.programEngagementId;
+        }
+
+        if (this.serviceId) {
+            row[SERVICE_FIELD.fieldApiName] = this.serviceId;
+        }
+
+        row.isError = this.reportValidity();
+        return row;
+    }
+
+    @api
+    reportValidity() {
+        if (this.hasProgramEngagementField && !this.programEngagementId) {
+            this.isError = true;
+            this.errorMessage = handleError(
+                this.labels.selectEngagement,
+                false,
+                "dismissible",
+                true
+            );
+        }
+
+        let comboboxes = this.template.querySelectorAll("lightning-combobox");
+        if (comboboxes?.length > 0) {
+            comboboxes.forEach(combobox => {
+                if (!combobox.reportValidity()) {
+                    this.isError = true;
+                }
+            });
+        }
+
+        let inputFields = this.template.querySelectorAll("lightning-input-field");
+        if (inputFields?.length > 0) {
+            inputFields.forEach(field => {
+                if (!field.reportValidity()) {
+                    this.isError = true;
+                }
+            });
+        }
+
+        return this.isError;
     }
 
     get isDeleteDisabled() {
@@ -273,62 +331,59 @@ export default class ServiceDeliveryRow extends LightningElement {
         this.setDisabledAttribute();
     }
 
-    handleSaveError(event) {
-        if (!this.isError) {
-            if (
-                JSON.stringify(event.detail).includes("UNABLE_TO_LOCK_ROW") &&
-                this.errorRetryCount < this.errorRetryMax
-            ) {
-                this.errorRetryCount++;
-                this.saveRow();
-                return;
+    @api
+    handleSaveErrors(errors) {
+        if (!errors?.length || this.isError) {
+            return;
+        }
+
+        this.errorByField = new Map();
+        errors.forEach(e => {
+            if (e.fields?.length > 0) {
+                e.fields.forEach(field => {
+                    this.errorByField.set(field, e.message);
+                });
             }
+        });
 
-            this.errorMessage = handleError(event, false, "dismissible", true);
-            this.errorRetryCount = 0;
-            this.isDirty = false;
-            this.isSaving = false;
-            this.isSaved = false;
-            this.isError = true;
+        this.setCustomValidity();
+        this.errorMessage = handleError(errors, false, "dismissible", false);
 
-            event.detail.index = this.index;
-            this.dispatchEvent(new CustomEvent("error", { detail: event.detail }));
+        this.isDirty = false;
+        this.isSaving = false;
+        this.isSaved = false;
+        this.isError = true;
+    }
+
+    setCustomValidity() {
+        if (this.errorByField?.size > 0) {
+            this.errorByField.keys().forEach(fieldName => {
+                const input = this.template.querySelector(`[data-name=${fieldName}]`);
+                if (input && typeof input.setErrors) {
+                    const outputErrors = {
+                        body: {
+                            output: {
+                                fieldErrors: {},
+                            },
+                        },
+                    };
+                    outputErrors.body.output.fieldErrors[fieldName] = [
+                        { message: this.errorByField.get(fieldName) },
+                    ];
+                    input.setErrors(outputErrors);
+                } else if (input && typeof input.setCustomValidity) {
+                    input.setCustomValidity(this.errorByField.get(fieldName));
+                }
+            });
         }
     }
 
-    handleSuccess(event) {
-        this.recordId = event.detail.id;
+    @api
+    handleSuccess(savedRow) {
+        this.recordId = savedRow.id;
         this.setSaved();
         this.setDisabledAttribute();
-        fireEvent(this.pageRef, "serviceDeliveryUpsert", event.detail);
-    }
-
-    handleSubmit(event) {
-        let fields = event.detail.fields;
-
-        if (this.hasProgramEngagementField && !this.programEngagementId) {
-            this.isError = true;
-            this.errorMessage = handleError(
-                this.labels.selectEngagement,
-                false,
-                "dismissible",
-                true
-            );
-        }
-
-        if (!this.isError) {
-            if (this.programEngagementId) {
-                fields[PROGRAMENGAGEMENT_FIELD.fieldApiName] = this.programEngagementId;
-            }
-
-            if (this.serviceId) {
-                fields[SERVICE_FIELD.fieldApiName] = this.serviceId;
-            }
-
-            this.template.querySelector("lightning-record-edit-form").submit(fields);
-
-            this.setSaving();
-        }
+        fireEvent(this.pageRef, "serviceDeliveryUpsert", savedRow);
     }
 
     handleSaveNewPE(event) {
@@ -384,6 +439,18 @@ export default class ServiceDeliveryRow extends LightningElement {
     resetError() {
         this.isError = false;
         this.errorMessage = "";
+
+        if (this.errorByField?.size > 0) {
+            this.errorByField.keys().forEach(fieldName => {
+                const field = this.template.querySelector(`[data-name=${fieldName}]`);
+                if (field && typeof field.setErrors === "function") {
+                    field.setErrors("");
+                } else if (field && typeof field.setCustomValidity === "function") {
+                    field.setCustomValidity("");
+                }
+            });
+        }
+        this.errorByField = undefined;
     }
 
     resetQuantityLabel() {
@@ -569,6 +636,7 @@ export default class ServiceDeliveryRow extends LightningElement {
         }
     }
 
+    @api
     setSaving() {
         this.saveMessage = "...";
         this.isSaving = true;

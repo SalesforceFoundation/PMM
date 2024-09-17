@@ -186,6 +186,14 @@ const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) 
             message = error.body.map(e => e.message).join(", ");
         } else if (error.body && typeof error.body.message === "string") {
             message = error.body.message;
+        } else if (Array.isArray(error)) {
+            // databse save result errors
+            message = error.map(e => {
+                return (e.fields?.length > 0 ? e.fields.join() + ": " : "") + e.message;
+            });
+            if (!returnAsArray || fireShowToast) {
+                message.join("; ");
+            }
         } else if (
             error.detail &&
             error.detail.output &&

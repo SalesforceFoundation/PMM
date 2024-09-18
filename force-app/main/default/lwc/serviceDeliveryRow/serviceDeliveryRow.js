@@ -358,8 +358,8 @@ export default class ServiceDeliveryRow extends LightningElement {
     setCustomValidity() {
         if (this.errorByField?.size > 0) {
             this.errorByField.keys().forEach(fieldName => {
-                const input = this.template.querySelector(`[data-name=${fieldName}]`);
-                if (input && typeof input.setErrors) {
+                const input = this.getFieldInput(fieldName);
+                if (input && typeof input.setErrors === "function") {
                     const outputErrors = {
                         body: {
                             output: {
@@ -371,11 +371,18 @@ export default class ServiceDeliveryRow extends LightningElement {
                         { message: this.errorByField.get(fieldName) },
                     ];
                     input.setErrors(outputErrors);
-                } else if (input && typeof input.setCustomValidity) {
+                } else if (input && typeof input.setCustomValidity === "function") {
                     input.setCustomValidity(this.errorByField.get(fieldName));
+                    input.reportValidity();
                 }
             });
         }
+    }
+
+    getFieldInput(fieldName) {
+        return this.template.querySelector(
+            `[data-name=${fieldName}], [name=${fieldName}]`
+        );
     }
 
     @api
@@ -442,11 +449,12 @@ export default class ServiceDeliveryRow extends LightningElement {
 
         if (this.errorByField?.size > 0) {
             this.errorByField.keys().forEach(fieldName => {
-                const field = this.template.querySelector(`[data-name=${fieldName}]`);
-                if (field && typeof field.setErrors === "function") {
-                    field.setErrors("");
-                } else if (field && typeof field.setCustomValidity === "function") {
-                    field.setCustomValidity("");
+                const input = this.getFieldInput(fieldName);
+                if (input && typeof input.setErrors === "function") {
+                    input.setErrors("");
+                } else if (input && typeof input.setCustomValidity === "function") {
+                    input.setCustomValidity("");
+                    input.reportValidity();
                 }
             });
         }

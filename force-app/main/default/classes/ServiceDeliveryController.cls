@@ -34,6 +34,20 @@ public with sharing class ServiceDeliveryController {
     }
 
     @AuraEnabled
+    public static String upsertServiceDeliveries(
+        List<ServiceDelivery__c> serviceDeliveries,
+        Boolean allOrNone
+    ) {
+        try {
+            List<Database.UpsertResult> results = deliveryDomain
+                .upsertServiceDeliveries(serviceDeliveries, allOrNone);
+            return JSON.serialize(results);
+        } catch (Exception e) {
+            throw Util.getAuraHandledException(e);
+        }
+    }
+
+    @AuraEnabled
     public static Integer deleteServiceDeliveriesForSession(Id sessionId) {
         try {
             List<ServiceDelivery__c> deliveries = deliverySelector.getServiceDeliveriesForSession(

@@ -250,6 +250,86 @@ public with sharing class ServiceDeliveryController_TEST {
     }
 
     @IsTest
+    private static void testUpsertServiceDeliveries() {
+        List<ServiceDelivery__c> serviceDeliveries = new List<ServiceDelivery__c>{
+            new ServiceDelivery__c(
+                Name = 'Test1',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            ),
+            new ServiceDelivery__c(
+                Name = 'Test2',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            ),
+            new ServiceDelivery__c(
+                Name = 'Test3',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            )
+        };
+
+        domainStub.withReturnValue(
+            'upsertServiceDeliveries',
+            new List<Type>{ List<Database.UpsertResult>.class, Boolean.class },
+            null
+        );
+
+        Test.startTest();
+        ServiceDeliveryController.deliveryDomain = (ServiceDeliveryDomain) domainStub.createMock();
+        ServiceDeliveryController.upsertServiceDeliveries(serviceDeliveries, false);
+        Test.stopTest();
+
+        domainStub.assertCalledWith(
+            'upsertServiceDeliveries',
+            new List<Type>{ List<ServiceDelivery__c>.class, Boolean.class },
+            new List<Object>{ serviceDeliveries, false }
+        );
+    }
+
+    @IsTest
+    private static void testUpsertServiceDeliveriesException() {
+        List<ServiceDelivery__c> serviceDeliveries = new List<ServiceDelivery__c>{
+            new ServiceDelivery__c(
+                Name = 'Test1',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            ),
+            new ServiceDelivery__c(
+                Name = 'Test2',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            ),
+            new ServiceDelivery__c(
+                Name = 'Test3',
+                Id = TestUtil.mockId(ServiceDelivery__c.SObjectType)
+            )
+        };
+
+        domainStub.withThrowException(
+            'upsertServiceDeliveries',
+            new List<Type>{ List<ServiceDelivery__c>.class, Boolean.class }
+        );
+
+        Test.startTest();
+        ServiceDeliveryController.deliveryDomain = (ServiceDeliveryDomain) domainStub.createMock();
+
+        Exception actualException;
+        try {
+            ServiceDeliveryController.upsertServiceDeliveries(serviceDeliveries, false);
+        } catch (Exception e) {
+            actualException = e;
+        }
+        Test.stopTest();
+
+        System.assertEquals(
+            domainStub.testExceptionMessage,
+            actualException.getMessage(),
+            'Expected the controller to rethrow the exception from the domain.'
+        );
+        domainStub.assertCalledWith(
+            'upsertServiceDeliveries',
+            new List<Type>{ List<ServiceDelivery__c>.class, Boolean.class },
+            new List<Object>{ serviceDeliveries, false }
+        );
+    }
+
+    @IsTest
     private static void testGetNumberOfServiceDeliveriesForSession() {
         Integer expectedNumberOfDeliveries = 5;
         Id sessionId = TestUtil.mockId(ServiceSession__c.SObjectType);

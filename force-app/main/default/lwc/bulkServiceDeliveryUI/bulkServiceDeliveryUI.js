@@ -39,6 +39,7 @@ import SERVICE_FIELD from "@salesforce/schema/ServiceDelivery__c.Service__c";
 import SERVICEDELIVERY_OBJECT from "@salesforce/schema/ServiceDelivery__c";
 
 import getFieldSets from "@salesforce/apex/ServiceDeliveryController.getServiceDeliveryFieldSets";
+import upsertRows from "@salesforce/apex/ServiceDeliveryController.upsertServiceDeliveries";
 
 import pmmFolder from "@salesforce/resourceUrl/pmm";
 export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElement) {
@@ -208,13 +209,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         }
     }
 
-    savingComplete() {
-        if (this.currentSaveCount - this.savedCount - this.errorCount === 0) {
-            return true;
-        }
-        return false;
-    }
-
     showSaveSummaryToast() {
         let toastVariant = this.savingCompleteToastVariant;
         let toastTitle = toastVariant === "success" ? this.labels.success : "";
@@ -222,50 +216,94 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         showToast(toastTitle, this.savingCompleteMessage, toastVariant, "dismissible");
     }
 
-    // eslint-disable-next-line no-unused-vars
-    handleRowError(event) {
-        this.errorCount++;
-        if (this.savingComplete()) {
-            this.showSaveSummaryToast();
-            this.isSaving = false;
-        }
-    }
-
     handleSave() {
         let rows = this.template.querySelectorAll("c-service-delivery-row");
+        let deliveries = [];
 
         this.savedCount = 0;
         this.errorCount = 0;
         this.targetSaveCount = 0;
-        this.currentSaveCount = 0;
 
         rows.forEach(row => {
             if (row.isDirty || row.isError) {
                 this.targetSaveCount++;
             }
+
             if (row.isDirty) {
-                this.currentSaveCount++;
-                this.isSaving = true;
+                let delivery = row.row;
+                delivery.index = row.index;
+                if (!delivery.isError) {
+                    deliveries.push(delivery);
+                    row.setSaving();
+                } else {
+                    this.errorCount++;
+                }
             }
-            row.saveRow();
         });
 
         if (this.targetSaveCount === 0) {
             this.dispatchEvent(new CustomEvent("done"));
+            return;
         }
+
+        this.upsertDeliveries(deliveries);
     }
 
-    // eslint-disable-next-line no-unused-vars
-    handleRowSuccess(event) {
-        this.savedCount++;
-
-        if (this.savingComplete()) {
-            this.showSaveSummaryToast();
-            this.isSaving = false;
+    upsertDeliveries(deliveries) {
+        if (deliveries.length === 0) {
+            return;
         }
 
-        if (this.savedCount === this.targetSaveCount) {
-            this.dispatchEvent(new CustomEvent("done"));
+        this.isSaving = true;
+        upsertRows({
+            serviceDeliveries: deliveries,
+            allOrNone: false,
+        })
+            .then(results => {
+                let resultByIndex = this.processResults(results, deliveries);
+                this.updateRows(resultByIndex);
+            })
+            .catch(error => {
+                handleError(error);
+            })
+            .finally(() => {
+                this.isSaving = false;
+                this.showSaveSummaryToast();
+                this.dispatchEvent(new CustomEvent("done"));
+            });
+    }
+
+    processResults(results, deliveries) {
+        let resultByIndex = {};
+        results = JSON.parse(results);
+
+        for (let i = 0; i < deliveries.length; i++) {
+            deliveries[i].id = results[i].id;
+            deliveries[i].result = results[i];
+            resultByIndex[deliveries[i].index] = deliveries[i];
+        }
+        return resultByIndex;
+    }
+
+    updateRows(resultByIndex) {
+        let rows = this.template.querySelectorAll("c-service-delivery-row");
+        if (rows) {
+            rows.forEach(row => {
+                if (
+                    row.isDirty &&
+                    Object.prototype.hasOwnProperty.call(resultByIndex, row.index)
+                ) {
+                    let delivery = resultByIndex[row.index];
+
+                    if (delivery.result.success) {
+                        this.savedCount++;
+                        row.handleSuccess(delivery);
+                    } else {
+                        this.errorCount++;
+                        row.handleSaveErrors(delivery.result.errors);
+                    }
+                }
+            });
         }
     }
 

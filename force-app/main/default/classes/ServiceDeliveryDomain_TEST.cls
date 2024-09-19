@@ -160,6 +160,59 @@ private with sharing class ServiceDeliveryDomain_TEST {
     }
 
     @IsTest
+    private static void shouldReturnUpsertResultsOnUpsertServiceDeliveriesWithAllOrNone() {
+        TestDataFactory.generateServiceData();
+        Service__c service = [SELECT Id FROM Service__c LIMIT 1];
+
+        List<ServiceDelivery__c> existingServiceDeliveries = [
+            SELECT Id, Name
+            FROM ServiceDelivery__c
+        ];
+        for (ServiceDelivery__c delivery : existingServiceDeliveries) {
+            System.assertNotEquals('Upserted', delivery.Name);
+            delivery.Name = 'Upserted';
+            delivery.AutonameOverride__c = true;
+        }
+
+        ServiceDelivery__c newServiceDelivery = new ServiceDelivery__c(
+            Name = 'Upserted',
+            AutonameOverride__c = true,
+            Service__c = service.Id
+        );
+
+        List<ServiceDelivery__c> serviceDeliveriesToUpsert = new List<ServiceDelivery__c>();
+        serviceDeliveriesToUpsert.addAll(existingServiceDeliveries);
+        serviceDeliveriesToUpsert.add(newServiceDelivery);
+
+        Test.startTest();
+        List<Database.UpsertResult> results = new ServiceDeliveryDomain()
+            .upsertServiceDeliveries(serviceDeliveriesToUpsert, false);
+        Test.stopTest();
+
+        List<ServiceDelivery__c> serviceDeliveriesAfter = [
+            SELECT Id, Name
+            FROM ServiceDelivery__c
+        ];
+        System.assertEquals(
+            existingServiceDeliveries.size() + 1,
+            serviceDeliveriesAfter.size(),
+            'One new record should be inserted.'
+        );
+        System.assertEquals(
+            serviceDeliveriesAfter.size(),
+            results.size(),
+            'Results should be returned for each record upserted.'
+        );
+        for (ServiceDelivery__c delivery : serviceDeliveriesAfter) {
+            System.assertEquals(
+                'Upserted',
+                delivery.Name,
+                'All records should be renamed.'
+            );
+        }
+    }
+
+    @IsTest
     private static void shouldThrowExceptionWhenInsertPermissionCheckFails() {
         String methodName = 'hasObjectAccess';
         Integer dmlLimitAfter;

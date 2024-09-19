@@ -210,7 +210,6 @@ export default class ServiceDeliveryRow extends LightningElement {
         return row;
     }
 
-    @api
     reportValidity() {
         if (this.hasProgramEngagementField && !this.programEngagementId) {
             this.isError = true;
@@ -346,13 +345,12 @@ export default class ServiceDeliveryRow extends LightningElement {
             }
         });
 
-        this.setCustomValidity();
         this.errorMessage = handleError(errors, false, "dismissible", false);
-
         this.isDirty = false;
         this.isSaving = false;
         this.isSaved = false;
         this.isError = true;
+        this.setCustomValidity();
     }
 
     setCustomValidity() {

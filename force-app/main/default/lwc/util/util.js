@@ -187,7 +187,7 @@ const handleError = (error, fireShowToast = true, showToastMode, returnAsArray) 
         } else if (error.body && typeof error.body.message === "string") {
             message = error.body.message;
         } else if (Array.isArray(error)) {
-            // databse save result errors
+            // database save result errors
             message = error.map(e => {
                 return (e.fields?.length > 0 ? e.fields.join() + ": " : "") + e.message;
             });

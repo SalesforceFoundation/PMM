@@ -259,7 +259,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         });
 
         this.currentSaveCount = deliveries.length;
-        if (this.targetSaveCount === 0 || this.currentSaveCount === 0) {
+        if (this.targetSaveCount === 0) {
             this.dispatchEvent(new CustomEvent("done"));
             return;
         }

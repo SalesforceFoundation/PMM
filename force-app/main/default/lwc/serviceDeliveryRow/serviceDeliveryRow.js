@@ -378,9 +378,7 @@ export default class ServiceDeliveryRow extends LightningElement {
     }
 
     getFieldInput(fieldName) {
-        return this.template.querySelector(
-            `[data-name=${fieldName}], [name=${fieldName}]`
-        );
+        return this.template.querySelector(`[data-name=${fieldName}]`);
     }
 
     @api

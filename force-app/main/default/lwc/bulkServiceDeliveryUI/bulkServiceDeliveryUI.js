@@ -209,27 +209,11 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         }
     }
 
-    savingComplete() {
-        if (this.currentSaveCount - this.savedCount - this.errorCount === 0) {
-            return true;
-        }
-        return false;
-    }
-
     showSaveSummaryToast() {
         let toastVariant = this.savingCompleteToastVariant;
         let toastTitle = toastVariant === "success" ? this.labels.success : "";
 
         showToast(toastTitle, this.savingCompleteMessage, toastVariant, "dismissible");
-    }
-
-    // eslint-disable-next-line no-unused-vars
-    handleRowError(event) {
-        this.errorCount++;
-        if (this.savingComplete()) {
-            this.showSaveSummaryToast();
-            this.isSaving = false;
-        }
     }
 
     handleSave() {
@@ -239,7 +223,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
         this.savedCount = 0;
         this.errorCount = 0;
         this.targetSaveCount = 0;
-        this.currentSaveCount = 0;
 
         rows.forEach(row => {
             if (row.isDirty || row.isError) {
@@ -258,7 +241,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             }
         });
 
-        this.currentSaveCount = deliveries.length;
         if (this.targetSaveCount === 0) {
             this.dispatchEvent(new CustomEvent("done"));
             return;
@@ -268,6 +250,11 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
     }
 
     upsertDeliveries(deliveries) {
+        if (deliveries.length === 0) {
+            return;
+        }
+
+        this.isSaving = true;
         upsertRows({
             serviceDeliveries: deliveries,
             allOrNone: false,
@@ -278,6 +265,11 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
             })
             .catch(error => {
                 handleError(error);
+            })
+            .finally(() => {
+                this.isSaving = false;
+                this.showSaveSummaryToast();
+                this.dispatchEvent(new CustomEvent("done"));
             });
     }
 
@@ -304,6 +296,7 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                     let delivery = resultByIndex[row.index];
 
                     if (delivery.result.success) {
+                        this.savedCount++;
                         row.handleSuccess(delivery);
                     } else {
                         this.errorCount++;
@@ -311,20 +304,6 @@ export default class BulkServiceDeliveryUI extends NavigationMixin(LightningElem
                     }
                 }
             });
-        }
-    }
-
-    // eslint-disable-next-line no-unused-vars
-    handleRowSuccess(event) {
-        this.savedCount++;
-
-        if (this.savingComplete()) {
-            this.showSaveSummaryToast();
-            this.isSaving = false;
-        }
-
-        if (this.savedCount === this.targetSaveCount) {
-            this.dispatchEvent(new CustomEvent("done"));
         }
     }
 

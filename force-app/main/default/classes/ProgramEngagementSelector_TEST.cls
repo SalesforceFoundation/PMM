@@ -171,21 +171,14 @@ public with sharing class ProgramEngagementSelector_TEST {
             [
                 SELECT Id, Contact__r.Name, Contact__r.Email, Stage__c, ProgramCohort__c
                 FROM ProgramEngagement__c
-                WHERE
-                    Program__c = :program.Id
-                    AND Contact__r.Name LIKE '%Contact%'
-                    AND Stage__c = 'Enrolled'
+                WHERE Program__c = :program.Id AND Stage__c = 'Enrolled'
             ]
         );
 
         //Search results must be populated manually for SOSL
         List<Id> soslTestIds = new List<Id>{ expected[0].Id };
 
-        for (Contact con : [
-            SELECT Id, Name, Email
-            FROM Contact
-            WHERE Name LIKE '%Contact%'
-        ]) {
+        for (Contact con : [SELECT Id, Name, Email FROM Contact]) {
             soslTestIds.add(con.Id);
         }
         Test.setFixedSearchResults(soslTestIds);
@@ -240,11 +233,7 @@ public with sharing class ProgramEngagementSelector_TEST {
         //Search results must be populated manually for SOSL
         List<Id> soslTestIds = new List<Id>{ expected[0].Id };
 
-        for (Contact con : [
-            SELECT Id, Name, Email
-            FROM Contact
-            WHERE Name LIKE '%Contact%'
-        ]) {
+        for (Contact con : [SELECT Id, Name, Email FROM Contact]) {
             soslTestIds.add(con.Id);
         }
         Test.setFixedSearchResults(soslTestIds);

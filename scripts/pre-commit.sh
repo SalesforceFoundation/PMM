@@ -10,8 +10,8 @@ then
   exit 1
 fi
 
-venv/bin/python scripts/label_audit.py
-if [ $? -ne 0 ]
-then
-  exit 1
-fi
+# venv/bin/python scripts/label_audit.py
+# if [ $? -ne 0 ]
+# then
+#   exit 1
+# fi

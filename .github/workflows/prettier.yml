@@ -7,7 +7,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '14'
+          node-version: '16'
       - name: Determine Node Version
         id: node-version
         run: |

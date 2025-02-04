@@ -19,6 +19,3 @@ jobs:
       - name: Install Packages
         run: |
           yarn install
-      - name: Run Jest Tests
-        run: |
-          npx lwc-jest

@@ -4,7 +4,7 @@ Program Management Module (PMM) is a standard framework that connects all progra
 
 **FOR USERS**
 
-* Ask questions or get help in Program Management Module (https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) customer group
+* Ask questions or get help in Program Management Module (https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) customer groups
 * View known issues (https://trailblazer.salesforce.com/issues_index?tag=SFDO%20Program%20Management%20Module?) 
 * Check out the Idea Exchange and log feature requests (https://ideas.salesforce.com/s/search#t=All&sort=relevancy) 
 * View User Documentation (https://powerofus.force.com/PMM_Documentation)

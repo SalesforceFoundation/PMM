@@ -19,3 +19,6 @@ jobs:
       - name: Install Packages
         run: |
           yarn install
+      - name: prettier
+        run: |
+          npx prettier "**/*.{apex,yml,yaml,json}" --check

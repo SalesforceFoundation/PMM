@@ -11,7 +11,6 @@ Program Management Module (PMM) is a standard framework that connects all progra
 * Check out existing bugs (https://github.com/SalesforceFoundation/pmm/labels/bug)
 * Review Release Notes and Beta Releases (https://github.com/SalesforceFoundation/PMM/releases)
 
-
 **FOR DEVELOPERS**
 Program Management Module is released under the open source BSD license (see link below for additional license information). Contributions (code and otherwise) are welcome and encouraged. Please see the project wiki (https://github.com/SalesforceFoundation/PMM/wiki) for additional information.
 

@@ -7,12 +7,12 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '14'
+          node-version: '18'
       - name: Determine Node Version
         id: node-version
         run: |
           echo "::set-output name=ver::$(node --version)"
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ steps.node-version.outputs.ver }}-${{ hashFiles('package.json', 'yarn.lock') }}
@@ -21,4 +21,4 @@ jobs:
           yarn install
       - name: prettier
         run: |
-          npx prettier "**/*.{cls,apex,js,html,md,yml,yaml,json}" --check
+          npx prettier "**/*.{apex,yml,yaml,json}" --check

@@ -1,16 +1,15 @@
 ![Program Management Module](https://user-images.githubusercontent.com/16351719/80386516-172f2580-886d-11ea-8d0d-8467353b3cc6.png)
 
-Program Management Module (PMM) is a standard framework that connects all program delivery tools across our nonprofit ecosystem. The framework outlines a standard data architecture that will make it easier for nonprofits to centralize and connect the tools they are using to manage the core of what they do—program delivery. PMM was created to be general enough to reflect the wide variety of programs nonprofits are delivering, whether working with clients or running an environmental advocacy program. It is free, open source, and, although a separate package, it serves as an extension of Salesforce.org’s Nonprofit Success Pack (NPSP).
+Program Management Module (PMM) is a standard framework that connects all program delivery tools across our nonprofit ecosystem. The framework outlines a standard data architecture that will make it easier for nonprofits to centralize and connect the tools they are using to manage the core of what they do—program delivery. PMM was created to be general enough to reflect the wide variety of programs nonprofits are delivering, whether working with clients or running an environmental advocacy program. It is free, open-source, and, although a separate package, it serves as an extension of Salesforce.org’s Nonprofit Success Pack (NPSP).
 
 **FOR USERS**
 
-* Ask questions or get help in Program Management Module (https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) customer group
+* Ask questions or get help in Program Management Module (https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHjiSAE) customer groups
 * View known issues (https://trailblazer.salesforce.com/issues_index?tag=SFDO%20Program%20Management%20Module?) 
 * Check out the Idea Exchange and log feature requests (https://ideas.salesforce.com/s/search#t=All&sort=relevancy) 
 * View User Documentation (https://powerofus.force.com/PMM_Documentation)
 * Check out existing bugs (https://github.com/SalesforceFoundation/pmm/labels/bug)
 * Review Release Notes and Beta Releases (https://github.com/SalesforceFoundation/PMM/releases)
-
 
 **FOR DEVELOPERS**
 Program Management Module is released under the open source BSD license (see link below for additional license information). Contributions (code and otherwise) are welcome and encouraged. Please see the project wiki (https://github.com/SalesforceFoundation/PMM/wiki) for additional information.
